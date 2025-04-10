@@ -35,6 +35,9 @@ def setup_logging(file_path=None, output_dir=None):
         file_path: The source file path (used to determine log file name)
         output_dir: Directory to store log files (default: use file's directory)
     """
+    # 重置日志系统 - 需要添加这个才能多次配置
+    logging.root.handlers = []
+    
     # Ensure output directory exists
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
@@ -55,15 +58,31 @@ def setup_logging(file_path=None, output_dir=None):
     log_file = os.path.join(output_dir, f"{input_name}.log")
     
     # Configure logging
-    # print(f"Logging to {log_file}")
-    # breakpoint()
-    log_file = "/data/coding/3.log"
-    logging.basicConfig(
-        filename=log_file,
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    vlog(f"Logging to {log_file}", logging.INFO)
+    
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+    
+    # 使用try/except支持不同Python版本
+    try:
+        logging.basicConfig(
+            filename=log_file,
+            level=logging.DEBUG,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S',
+            force=True  # Python 3.8+ 支持force参数
+        )
+    except TypeError:
+        # 低于Python 3.8的版本不支持force参数
+        logging.basicConfig(
+            filename=log_file,
+            level=logging.DEBUG,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+    
+    logging.info(f"Log file initialized at {datetime.datetime.now().isoformat()}")
+    for handler in logging.root.handlers:
+        handler.flush()
     
     return log_file
 
@@ -89,6 +108,9 @@ def vlog(message, level=logging.INFO):
         logging.error(message)
     elif level == logging.CRITICAL:
         logging.critical(message)
+    
+    for handler in logging.root.handlers:
+        handler.flush()
 
 def extract_error_type(error):
     """
