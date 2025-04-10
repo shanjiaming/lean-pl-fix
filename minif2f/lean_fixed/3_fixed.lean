@@ -26,13 +26,13 @@ theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
   (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
   -- First, simplify the surface area equation h₂ by dividing both sides by 6
   have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    omega
+    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
     rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
     exact h₂
   
   -- From the volume of the original cube (y³ = 1), we get y = 1
   have h₄ : y = 1 := by
-    ring_nf
+    nlinarith
   
   -- Substitute y = 1 into the simplified equation x² = 2y²
   have h₅ : x ^ 2 = 2 := by

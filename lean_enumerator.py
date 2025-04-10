@@ -24,7 +24,7 @@ repl.start()
 logger = get_logger('tyrell')
 
 # Global flag for verbose text output
-VERBOSE_OUTPUT = True  # Changed default to True
+VERBOSE_OUTPUT = True  # Default is True, can be disabled with --no-verbose
 
 # Setup logging
 def setup_logging(file_path=None, output_dir=None):
@@ -35,28 +35,37 @@ def setup_logging(file_path=None, output_dir=None):
         file_path: The source file path (used to determine log file name)
         output_dir: Directory to store log files (default: use file's directory)
     """
+    # Ensure output directory exists
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+    else:
+        # If no output directory specified, use current directory
+        output_dir = os.getcwd()
+    
+    # Determine log file name
     if file_path:
-        # Get file base name
+        # Get file base name from input file
         input_basename = os.path.basename(file_path)
         input_name = os.path.splitext(input_basename)[0]
-        
-        # Ensure output directory exists
-        os.makedirs(output_dir, exist_ok=True)
-        
-        # Create log file with timestamp
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_file = os.path.join(output_dir, f"{input_name}_{timestamp}.log")
-        
-        # Configure logging
-        logging.basicConfig(
-            filename=log_file,
-            level=logging.DEBUG,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
-        
-        return log_file
-    return None
+    else:
+        # Use a default name if no file path provided
+        input_name = "default"
+    
+    # Create log file without timestamp
+    log_file = os.path.join(output_dir, f"{input_name}.log")
+    
+    # Configure logging
+    # print(f"Logging to {log_file}")
+    # breakpoint()
+    log_file = "/data/coding/3.log"
+    logging.basicConfig(
+        filename=log_file,
+        level=logging.DEBUG,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    return log_file
 
 # Log function for verbose output
 def vlog(message, level=logging.INFO):
@@ -986,19 +995,21 @@ def main():
     parser.add_argument('--json-output', action='store_true', dest='json_output', 
                       help='Output results in JSON format (default)', default=True)
     parser.add_argument('--text-output', action='store_true', dest='text_output',
-                      help='Output detailed text information in addition to JSON')
+                      help='Output detailed text information (default: enabled)', default=True)
+    parser.add_argument('--no-verbose', action='store_true', dest='no_verbose',
+                      help='Disable detailed verbose output')
     parser.add_argument('--json-file', type=str, help='Save JSON output to specified file (default: auto-generate based on input file)')
     parser.add_argument('--no-log', action='store_true', help='Disable JSON log file creation')
-    parser.add_argument('--output-dir', type=str, help='Directory to store output files (default: ./lean_fixed or based on input file)')
+    parser.add_argument('--output-dir', type=str, help='Directory to store output files (default: ./minif2f/lean_fixed or based on input file)')
     args = parser.parse_args()
     
     # Both JSON output and text output can be enabled simultaneously
     json_output = args.json_output
     text_output = args.text_output
     
-    # Set global verbose output flag - keep VERBOSE_OUTPUT always True
+    # Set global verbose output flag based on text_output and no_verbose parameters
     global VERBOSE_OUTPUT
-    # VERBOSE_OUTPUT = text_output  # Removed this line to keep verbose always on
+    VERBOSE_OUTPUT = text_output and not args.no_verbose
     
     # Check command line arguments
     if args.file:
@@ -1013,12 +1024,14 @@ def main():
         # Use user-specified output directory
         output_dir = args.output_dir
     else:
-        # Default: create a lean_fixed directory in the current directory
-        output_dir = os.path.join(os.getcwd(), "lean_fixed")
+        # Default: create lean_fixed directory in the minif2f directory
+        output_dir = os.path.join(os.getcwd(), "minif2f", "lean_fixed")
     
     # Setup logging
     log_file = setup_logging(file_path, output_dir)
-    vlog(f"Log file created at: {log_file}")
+    vlog(f"===== LOG FILE LOCATION =====")
+    vlog(f"Detailed log file created at: {log_file}")
+    vlog(f"===============================")
     
     # Read file
     try:
@@ -1204,6 +1217,12 @@ def main():
         
         if text_output:
             vlog(error_msg)
+    
+    # Remind user of log file location at the end
+    if log_file and text_output:
+        vlog("\n===== LOG FILE LOCATION =====")
+        vlog(f"Detailed log file is available at: {log_file}")
+        vlog(f"===============================")
 
 if __name__ == '__main__':
     main()
