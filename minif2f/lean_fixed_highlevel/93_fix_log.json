@@ -1,0 +1,177 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/93.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/93_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Evaluate $\\left\\lceil\\sqrt{27}\\right\\rceil - \\left\\lfloor\\sqrt{26}\\right\\rfloor$. Show that it is 1.-/\ntheorem mathd_algebra_151 : Int.ceil (Real.sqrt 27) - Int.floor (Real.sqrt 26) = 1 := by\n  -- First, we compute approximate values of sqrt(26) and sqrt(27) to understand their range\n  -- We know that 5^2 = 25 and 6^2 = 36, so both sqrt(26) and sqrt(27) are between 5 and 6\n\n  -- Let's first establish that 5 < sqrt(26) < 6\n  have h26_gt_5 : (5 : \u211d) < Real.sqrt 26 := by\n    rw [lt_sqrt (by norm_num) (by norm_num)]\n    norm_num\n  have h26_lt_6 : Real.sqrt 26 < 6 := by\n    rw [sqrt_lt (by norm_num) (by norm_num)]\n    norm_num\n\n  -- Similarly, establish that 5 < sqrt(27) < 6\n  have h27_gt_5 : (5 : \u211d) < Real.sqrt 27 := by\n    rw [lt_sqrt (by norm_num) (by norm_num)]\n    norm_num\n  have h27_lt_6 : Real.sqrt 27 < 6 := by\n    rw [sqrt_lt (by norm_num) (by norm_num)]\n    norm_num\n\n  -- Now we can compute the floor and ceiling values\n  -- Since 5 < sqrt(26) < 6, its floor must be 5\n  have floor_sqrt26 : Int.floor (Real.sqrt 26) = 5 := by\n    apply Int.floor_eq_iff.mpr\n    constructor\n    \u00b7 exact h26_gt_5\n    \u00b7 exact h26_lt_6\n\n  -- Similarly, since 5 < sqrt(27) < 6, we need to determine if it's less than or greater than 5.2\n  -- Because 5.2^2 = 27.04 > 27, we know sqrt(27) < 5.2\n  -- But we need more precision to determine the ceiling\n  -- Compute 5.196^2 \u2248 27 (since 3*3*3 = 27 and sqrt(3) \u2248 1.732, so 3*sqrt(3) \u2248 5.196)\n  -- More precisely, let's show sqrt(27) > 5.196\n\n  have h27_gt_5196 : (5196/1000 : \u211d) < Real.sqrt 27 := by\n    rw [lt_sqrt (by norm_num) (by norm_num)]\n    norm_num\n    norm_cast\n    rw [div_pow, Rat.cast_pow, Rat.cast_ofNat]\n    norm_num\n\n  -- Since 5.196 < sqrt(27) < 5.2 < 6, the ceiling must be 6\n  have ceil_sqrt27 : Int.ceil (Real.sqrt 27) = 6 := by\n    apply Int.ceil_eq_iff.mpr\n    constructor\n    \u00b7 exact h27_lt_6\n    \u00b7 have : (6 : \u211d) - 1 = 5 := by norm_num\n      rw [this]\n      exact h27_gt_5196.trans (by norm_num)\n\n  -- Now we can compute the original expression\n  rw [ceil_sqrt27, floor_sqrt26]\n  -- 6 - 5 = 1\n  norm_num",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Evaluate $\\left\\lceil\\sqrt{27}\\right\\rceil - \\left\\lfloor\\sqrt{26}\\right\\rfloor$. Show that it is 1.-/\ntheorem mathd_algebra_151 : Int.ceil (Real.sqrt 27) - Int.floor (Real.sqrt 26) = 1 := by\n  -- First, we compute approximate values of sqrt(26) and sqrt(27) to understand their range\n  -- We know that 5^2 = 25 and 6^2 = 36, so both sqrt(26) and sqrt(27) are between 5 and 6\n\n  -- Let's first establish that 5 < sqrt(26) < 6\n  have h26_gt_5 : (5 : \u211d) < Real.sqrt 26 := by\n    rw [lt_sqrt (by norm_num) (by norm_num)]\n    norm_num\n  have h26_lt_6 : Real.sqrt 26 < 6 := by\n    rw [sqrt_lt (by norm_num) (by norm_num)]\n    norm_num\n\n  -- Similarly, establish that 5 < sqrt(27) < 6\n  have h27_gt_5 : (5 : \u211d) < Real.sqrt 27 := by\n    rw [lt_sqrt (by norm_num) (by norm_num)]\n    norm_num\n  have h27_lt_6 : Real.sqrt 27 < 6 := by\n    rw [sqrt_lt (by norm_num) (by norm_num)]\n    norm_num\n\n  -- Now we can compute the floor and ceiling values\n  -- Since 5 < sqrt(26) < 6, its floor must be 5\n  have floor_sqrt26 : Int.floor (Real.sqrt 26) = 5 := by\n    apply Int.floor_eq_iff.mpr\n    constructor\n    \u00b7 exact h26_gt_5\n    \u00b7 exact h26_lt_6\n\n  -- Similarly, since 5 < sqrt(27) < 6, we need to determine if it's less than or greater than 5.2\n  -- Because 5.2^2 = 27.04 > 27, we know sqrt(27) < 5.2\n  -- But we need more precision to determine the ceiling\n  -- Compute 5.196^2 \u2248 27 (since 3*3*3 = 27 and sqrt(3) \u2248 1.732, so 3*sqrt(3) \u2248 5.196)\n  -- More precisely, let's show sqrt(27) > 5.196\n\n  have h27_gt_5196 : (5196/1000 : \u211d) < Real.sqrt 27 := by\n    rw [lt_sqrt (by norm_num) (by norm_num)]\n    norm_num\n    norm_cast\n    rw [div_pow, Rat.cast_pow, Rat.cast_ofNat]\n    norm_num\n\n  -- Since 5.196 < sqrt(27) < 5.2 < 6, the ceiling must be 6\n  have ceil_sqrt27 : Int.ceil (Real.sqrt 27) = 6 := by\n    apply Int.ceil_eq_iff.mpr\n    constructor\n    \u00b7 exact h27_lt_6\n    \u00b7 have : (6 : \u211d) - 1 = 5 := by norm_num\n      rw [this]\n      exact h27_gt_5196.trans (by norm_num)\n\n  -- Now we can compute the original expression\n  rw [ceil_sqrt27, floor_sqrt26]\n  -- 6 - 5 = 1\n  norm_num",
+  "statistics": {
+    "original_errors": 13,
+    "fixed_errors": 0,
+    "failed_errors": 13,
+    "remaining_errors": 13,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 8,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  lt_sqrt ?m.164\nterm has type\n  ?m.162 < \u221a?m.163 \u2194 ?m.162 ^ 2 < ?m.163",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.062772989273071
+      },
+      {
+        "line": 8,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.213\n\u22a2 5 < \u221a26",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.951711654663086
+      },
+      {
+        "line": 8,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\n\u22a2 0 \u2264 ?m.162",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.9482622146606445
+      },
+      {
+        "line": 16,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  lt_sqrt ?m.2183\nterm has type\n  ?m.2181 < \u221a?m.2182 \u2194 ?m.2181 ^ 2 < ?m.2182",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.9952003955841064
+      },
+      {
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.2232\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\n\u22a2 5 < \u221a27",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.980529546737671
+      },
+      {
+        "line": 16,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\n\u22a2 0 \u2264 ?m.2181",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.9882869720458984
+      },
+      {
+        "line": 27,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h26_gt_5\nhas type\n  5 < \u221a26 : Prop\nbut is expected to have type\n  \u21915 \u2264 \u221a26 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.281667470932007
+      },
+      {
+        "line": 28,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h26_lt_6\nhas type\n  \u221a26 < 6 : Prop\nbut is expected to have type\n  \u221a26 < \u21915 + 1 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.3410279750823975
+      },
+      {
+        "line": 37,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  lt_sqrt ?m.3940\nterm has type\n  ?m.3938 < \u221a?m.3939 \u2194 ?m.3938 ^ 2 < ?m.3939",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.541350841522217
+      },
+      {
+        "line": 37,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.3989\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqrt26 : \u230a\u221a26\u230b = 5\n\u22a2 5196 / 1000 < \u221a27",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.5208752155303955
+      },
+      {
+        "line": 37,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqrt26 : \u230a\u221a26\u230b = 5\n\u22a2 0 \u2264 ?m.3938",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.521481990814209
+      },
+      {
+        "line": 47,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h27_lt_6\nhas type\n  \u221a27 < 6 : Prop\nbut is expected to have type\n  \u21916 - 1 < \u221a27 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.6294779777526855
+      },
+      {
+        "line": 49,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  6 - 1\ncase right\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqrt26 : \u230a\u221a26\u230b = 5\nh27_gt_5196 : 5196 / 1000 < \u221a27\nthis : 6 - 1 = 5\n\u22a2 \u221a27 \u2264 \u21916",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.612812519073486
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 8,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  lt_sqrt ?m.164\nterm has type\n  ?m.162 < \u221a?m.163 \u2194 ?m.162 ^ 2 < ?m.163"
+      },
+      {
+        "line": 8,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.213\n\u22a2 5 < \u221a26"
+      },
+      {
+        "line": 8,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\n\u22a2 0 \u2264 ?m.162"
+      },
+      {
+        "line": 16,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  lt_sqrt ?m.2183\nterm has type\n  ?m.2181 < \u221a?m.2182 \u2194 ?m.2181 ^ 2 < ?m.2182"
+      },
+      {
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.2232\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\n\u22a2 5 < \u221a27"
+      },
+      {
+        "line": 16,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\n\u22a2 0 \u2264 ?m.2181"
+      },
+      {
+        "line": 27,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h26_gt_5\nhas type\n  5 < \u221a26 : Prop\nbut is expected to have type\n  \u21915 \u2264 \u221a26 : Prop"
+      },
+      {
+        "line": 28,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h26_lt_6\nhas type\n  \u221a26 < 6 : Prop\nbut is expected to have type\n  \u221a26 < \u21915 + 1 : Prop"
+      },
+      {
+        "line": 37,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  lt_sqrt ?m.3940\nterm has type\n  ?m.3938 < \u221a?m.3939 \u2194 ?m.3938 ^ 2 < ?m.3939"
+      },
+      {
+        "line": 37,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.3989\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqrt26 : \u230a\u221a26\u230b = 5\n\u22a2 5196 / 1000 < \u221a27"
+      },
+      {
+        "line": 37,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqrt26 : \u230a\u221a26\u230b = 5\n\u22a2 0 \u2264 ?m.3938"
+      },
+      {
+        "line": 47,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h27_lt_6\nhas type\n  \u221a27 < 6 : Prop\nbut is expected to have type\n  \u21916 - 1 < \u221a27 : Prop"
+      },
+      {
+        "line": 49,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  6 - 1\ncase right\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqrt26 : \u230a\u221a26\u230b = 5\nh27_gt_5196 : 5196 / 1000 < \u221a27\nthis : 6 - 1 = 5\n\u22a2 \u221a27 \u2264 \u21916"
+      }
+    ],
+    "total_time": 55.750125885009766
+  },
+  "message": "Original code error count: 13\n\u274c Fixed error 1/13: Could not generate fix for error at line 8 \u00abfunction_expected\u00bb (after 4.06s)\n\u274c Fixed error 2/13: Could not generate fix for error at line 8 \u00abrewrite_failed\u00bb (after 3.95s)\n\u274c Fixed error 3/13: Could not generate fix for error at line 8 \u00abother_error\u00bb (after 3.95s)\n\u274c Fixed error 4/13: Could not generate fix for error at line 16 \u00abfunction_expected\u00bb (after 4.00s)\n\u274c Fixed error 5/13: Could not generate fix for error at line 16 \u00abrewrite_failed\u00bb (after 3.98s)\n\u274c Fixed error 6/13: Could not generate fix for error at line 16 \u00abother_error\u00bb (after 3.99s)\n\u274c Fixed error 7/13: Could not generate fix for error at line 27 \u00abtype_mismatch\u00bb (after 4.28s)\n\u274c Fixed error 8/13: Could not generate fix for error at line 28 \u00abtype_mismatch\u00bb (after 4.34s)\n\u274c Fixed error 9/13: Could not generate fix for error at line 37 \u00abfunction_expected\u00bb (after 4.54s)\n\u274c Fixed error 10/13: Could not generate fix for error at line 37 \u00abrewrite_failed\u00bb (after 4.52s)\n\u274c Fixed error 11/13: Could not generate fix for error at line 37 \u00abother_error\u00bb (after 4.52s)\n\u274c Fixed error 12/13: Could not generate fix for error at line 47 \u00abtype_mismatch\u00bb (after 4.63s)\n\u274c Fixed error 13/13: Could not generate fix for error at line 49 \u00abrewrite_failed\u00bb (after 4.61s)\n\n=== Fix statistics ===\nOriginal error count: 13\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 13\nRemaining errors: 13\nTotal time: 55.75 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 8\n   Error type: function_expected\n   Original error message: function expected at\n  lt_sqrt ?m.164\nterm has type\n  ?m.162 < \u221a?m.163 \u2194 ?m.162 ^ 2 < ?m.163...\n   Failure reason: Could not generate fix\n   Time: 4.06 seconds\n\nFailed fix 2:\n   Line: 8\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.213\n\u22a2 5 < \u221a26...\n   Failure reason: Could not generate fix\n   Time: 3.95 seconds\n\nFailed fix 3:\n   Line: 8\n   Error type: other_error\n   Original error message: unsolved goals\n\u22a2 0 \u2264 ?m.162...\n   Failure reason: Could not generate fix\n   Time: 3.95 seconds\n\nFailed fix 4:\n   Line: 16\n   Error type: function_expected\n   Original error message: function expected at\n  lt_sqrt ?m.2183\nterm has type\n  ?m.2181 < \u221a?m.2182 \u2194 ?m.2181 ^ 2 < ?m.2182...\n   Failure reason: Could not generate fix\n   Time: 4.00 seconds\n\nFailed fix 5:\n   Line: 16\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.2232\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 ...\n   Failure reason: Could not generate fix\n   Time: 3.98 seconds\n\nFailed fix 6:\n   Line: 16\n   Error type: other_error\n   Original error message: unsolved goals\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\n\u22a2 0 \u2264 ?m.2181...\n   Failure reason: Could not generate fix\n   Time: 3.99 seconds\n\nFailed fix 7:\n   Line: 27\n   Error type: type_mismatch\n   Original error message: type mismatch\n  h26_gt_5\nhas type\n  5 < \u221a26 : Prop\nbut is expected to have type\n  \u21915 \u2264 \u221a26 : Prop...\n   Failure reason: Could not generate fix\n   Time: 4.28 seconds\n\nFailed fix 8:\n   Line: 28\n   Error type: type_mismatch\n   Original error message: type mismatch\n  h26_lt_6\nhas type\n  \u221a26 < 6 : Prop\nbut is expected to have type\n  \u221a26 < \u21915 + 1 : Pro...\n   Failure reason: Could not generate fix\n   Time: 4.34 seconds\n\nFailed fix 9:\n   Line: 37\n   Error type: function_expected\n   Original error message: function expected at\n  lt_sqrt ?m.3940\nterm has type\n  ?m.3938 < \u221a?m.3939 \u2194 ?m.3938 ^ 2 < ?m.3939...\n   Failure reason: Could not generate fix\n   Time: 4.54 seconds\n\nFailed fix 10:\n   Line: 37\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.3989\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 ...\n   Failure reason: Could not generate fix\n   Time: 4.52 seconds\n\nFailed fix 11:\n   Line: 37\n   Error type: other_error\n   Original error message: unsolved goals\nh26_gt_5 : 5 < \u221a26\nh26_lt_6 : \u221a26 < 6\nh27_gt_5 : 5 < \u221a27\nh27_lt_6 : \u221a27 < 6\nfloor_sqr...\n   Failure reason: Could not generate fix\n   Time: 4.52 seconds\n\nFailed fix 12:\n   Line: 47\n   Error type: type_mismatch\n   Original error message: type mismatch\n  h27_lt_6\nhas type\n  \u221a27 < 6 : Prop\nbut is expected to have type\n  \u21916 - 1 < \u221a27 : Pro...\n   Failure reason: Could not generate fix\n   Time: 4.63 seconds\n\nFailed fix 13:\n   Line: 49\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  6 - 1\ncase ...\n   Failure reason: Could not generate fix\n   Time: 4.61 seconds"
+}

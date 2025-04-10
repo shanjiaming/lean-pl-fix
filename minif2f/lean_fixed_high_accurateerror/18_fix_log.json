@@ -1,0 +1,138 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/18.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/18_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Evaluate: $\\left( \\frac{1}{2} + \\frac{1}{3} \\right) \\left( \\frac{1}{2} - \\frac{1}{3} \\right)$ Show that it is \\frac{5}{36}.-/\ntheorem mathd_algebra_462 : ((1 : \u211a) / 2 + 1 / 3) * (1 / 2 - 1 / 3) = 5 / 36 := by\n  -- First, let's simplify the expression by recognizing it as a difference of squares pattern: (a + b)(a - b) = a\u00b2 - b\u00b2\n  -- Here, a = 1/2 and b = 1/3\n  -- So we can rewrite the original expression as (1/2)\u00b2 - (1/3)\u00b2\n  \n  -- Step 1: Apply the difference of squares identity\n  have h1 : ((1 : \u211a)/2 + 1/3) * (1/2 - 1/3) = (1/2)^2 - (1/3)^2 := by\n    -- This follows from the algebraic identity (a + b)(a - b) = a\u00b2 - b\u00b2\n    exact sub_eq_add_neg (1/2)^2 (1/3)^2 \u25b8 (mul_add (1/2) (1/3) (1/2 - 1/3)).symm\n\n  -- Step 2: Compute (1/2)\u00b2\n  have h2 : (1/2 : \u211a)^2 = 1/4 := by\n    -- Squaring a fraction means squaring both numerator and denominator\n    -- (1/2)\u00b2 = (1\u00b2)/(2\u00b2) = 1/4\n    rw [pow_two, mul_rat, one_mul]\n    norm_num\n\n  -- Step 3: Compute (1/3)\u00b2\n  have h3 : (1/3 : \u211a)^2 = 1/9 := by\n    -- Similarly, (1/3)\u00b2 = (1\u00b2)/(3\u00b2) = 1/9\n    rw [pow_two, mul_rat, one_mul]\n    norm_num\n\n  -- Step 4: Substitute the squared terms back into the expression\n  have h4 : (1/2 : \u211a)^2 - (1/3)^2 = 1/4 - 1/9 := by\n    -- Replace (1/2)\u00b2 with 1/4 and (1/3)\u00b2 with 1/9\n    rw [h2, h3]\n\n  -- Step 5: Find a common denominator (36) for the subtraction\n  have h5 : (1/4 : \u211a) - 1/9 = (9 - 4)/36 := by\n    -- Convert both fractions to have denominator 36:\n    -- 1/4 = 9/36 and 1/9 = 4/36\n    -- So 1/4 - 1/9 = 9/36 - 4/36 = (9-4)/36 = 5/36\n    rw [sub_eq_add_neg, add_rat, neg_rat]\n    -- Find common denominator\n    rw [\u2190 Rat.div_num_den (1/4), \u2190 Rat.div_num_den (-(1/9))]\n    simp only [Rat.num_neg, Rat.den_neg]\n    rw [Rat.add_def'' (num := 1) (den := 4) (num := -1) (den := 9)]\n    -- Simplify the resulting fraction\n    norm_num\n\n  -- Step 6: Simplify the numerator (9 - 4 = 5)\n  have h6 : (9 - 4)/36 = 5/36 := by\n    -- Direct computation of the numerator\n    norm_num\n\n  -- Step 7: Chain all the equalities together to complete the proof\n  rw [h1, h4, h5, h6]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Evaluate: $\\left( \\frac{1}{2} + \\frac{1}{3} \\right) \\left( \\frac{1}{2} - \\frac{1}{3} \\right)$ Show that it is \\frac{5}{36}.-/\ntheorem mathd_algebra_462 : ((1 : \u211a) / 2 + 1 / 3) * (1 / 2 - 1 / 3) = 5 / 36 := by\n  -- First, let's simplify the expression by recognizing it as a difference of squares pattern: (a + b)(a - b) = a\u00b2 - b\u00b2\n  -- Here, a = 1/2 and b = 1/3\n  -- So we can rewrite the original expression as (1/2)\u00b2 - (1/3)\u00b2\n  \n  -- Step 1: Apply the difference of squares identity\n  have h1 : ((1 : \u211a)/2 + 1/3) * (1/2 - 1/3) = (1/2)^2 - (1/3)^2 := by\n    -- This follows from the algebraic identity (a + b)(a - b) = a\u00b2 - b\u00b2\n    exact sub_eq_add_neg (1/2)^2 (1/3)^2 \u25b8 (mul_add (1/2) (1/3) (1/2 - 1/3)).symm\n\n  -- Step 2: Compute (1/2)\u00b2\n  have h2 : (1/2 : \u211a)^2 = 1/4 := by\n    -- Squaring a fraction means squaring both numerator and denominator\n    -- (1/2)\u00b2 = (1\u00b2)/(2\u00b2) = 1/4\n    rw [pow_two, mul_rat, one_mul]\n    norm_num\n\n  -- Step 3: Compute (1/3)\u00b2\n  have h3 : (1/3 : \u211a)^2 = 1/9 := by\n    -- Similarly, (1/3)\u00b2 = (1\u00b2)/(3\u00b2) = 1/9\n    rw [pow_two, mul_rat, one_mul]\n    norm_num\n\n  -- Step 4: Substitute the squared terms back into the expression\n  have h4 : (1/2 : \u211a)^2 - (1/3)^2 = 1/4 - 1/9 := by\n    -- Replace (1/2)\u00b2 with 1/4 and (1/3)\u00b2 with 1/9\n    rw [h2, h3]\n\n  -- Step 5: Find a common denominator (36) for the subtraction\n  have h5 : (1/4 : \u211a) - 1/9 = (9 - 4)/36 := by\n    -- Convert both fractions to have denominator 36:\n    -- 1/4 = 9/36 and 1/9 = 4/36\n    -- So 1/4 - 1/9 = 9/36 - 4/36 = (9-4)/36 = 5/36\n    rw [sub_eq_add_neg, add_rat, neg_rat]\n    -- Find common denominator\n    rw [\u2190 Rat.div_num_den (1/4), \u2190 Rat.div_num_den (-(1/9))]\n    simp only [Rat.num_neg, Rat.den_neg]\n    rw [Rat.add_def'' (num := 1) (den := 4) (num := -1) (den := 9)]\n    -- Simplify the resulting fraction\n    norm_num\n\n  -- Step 6: Simplify the numerator (9 - 4 = 5)\n  have h6 : (9 - 4)/36 = 5/36 := by\n    -- Direct computation of the numerator\n    norm_num\n\n  -- Step 7: Chain all the equalities together to complete the proof\n  norm_num",
+  "statistics": {
+    "original_errors": 10,
+    "fixed_errors": 1,
+    "failed_errors": 9,
+    "remaining_errors": 9,
+    "fix_rate": 0.1,
+    "successful_fixes": [
+      {
+        "line": 49,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (9 - 4) / 36\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\nh2 : (1 / 2) ^ 2 = 1 / 4\nh3 : (1 / 3) ^ 2 = 1 / 9\nh4 : (1 / 2) ^ 2 - (1 / 3) ^ 2 = 1 / 4 - 1 / 9\nh5 : 1 / 4 - 1 / 9 = (9 - 4) / 36\nh6 : (9 - 4) / 36 = 5 / 36\n\u22a2 (9 - 4) / 36 = 5 / 36",
+        "fix_snippet": "norm_num",
+        "fixed_line": "  norm_num",
+        "fix_time": 2.927781581878662
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 10,
+        "error_type": "failed_to_synthesize",
+        "original_error_message": "failed to synthesize\n  SubNegMonoid \u2115\nuse `set_option diagnostics true` to get diagnostic information",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 5.11790132522583
+      },
+      {
+        "line": 10,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  2\nterm has type\n  ?m.5424",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.974743604660034
+      },
+      {
+        "line": 10,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  HPow.hPow \u22ef\nargument\n  sub_eq_add_neg (1 / 2)\nhas type\n  \u2200 (b : \u2115), 1 / 2 - b = 1 / 2 + -b : Prop\nbut is expected to have type\n  ?m.1745 : Type ?u.1508",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 5.066789865493774
+      },
+      {
+        "line": 16,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'mul_rat'",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.682102203369141
+      },
+      {
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.7467\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\n\u22a2 1 / 2 * (1 / 2) = 1 / 4",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.5982747077941895
+      },
+      {
+        "line": 22,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'mul_rat'",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.719130277633667
+      },
+      {
+        "line": 22,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.8052\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\nh2 : (1 / 2) ^ 2 = 1 / 4\n\u22a2 1 / 3 * (1 / 3) = 1 / 9",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 4.651494741439819
+      },
+      {
+        "line": 35,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'add_rat'",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 5.257501840591431
+      },
+      {
+        "line": 35,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.9242\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\nh2 : (1 / 2) ^ 2 = 1 / 4\nh3 : (1 / 3) ^ 2 = 1 / 9\nh4 : (1 / 2) ^ 2 - (1 / 3) ^ 2 = 1 / 4 - 1 / 9\n\u22a2 1 / 4 + -(1 / 9) = (9 - 4) / 36",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 5.280768394470215
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 10,
+        "error_type": "failed_to_synthesize",
+        "original_error_message": "failed to synthesize\n  SubNegMonoid \u2115\nuse `set_option diagnostics true` to get diagnostic information"
+      },
+      {
+        "line": 10,
+        "error_type": "function_expected",
+        "original_error_message": "function expected at\n  2\nterm has type\n  ?m.5424"
+      },
+      {
+        "line": 10,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  HPow.hPow \u22ef\nargument\n  sub_eq_add_neg (1 / 2)\nhas type\n  \u2200 (b : \u2115), 1 / 2 - b = 1 / 2 + -b : Prop\nbut is expected to have type\n  ?m.1745 : Type ?u.1508"
+      },
+      {
+        "line": 16,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'mul_rat'"
+      },
+      {
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.7467\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\n\u22a2 1 / 2 * (1 / 2) = 1 / 4"
+      },
+      {
+        "line": 22,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'mul_rat'"
+      },
+      {
+        "line": 22,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.8052\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\nh2 : (1 / 2) ^ 2 = 1 / 4\n\u22a2 1 / 3 * (1 / 3) = 1 / 9"
+      },
+      {
+        "line": 35,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'add_rat'"
+      },
+      {
+        "line": 35,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.9242\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 / 3) = (1 / 2) ^ 2 - (1 / 3) ^ 2\nh2 : (1 / 2) ^ 2 = 1 / 4\nh3 : (1 / 3) ^ 2 = 1 / 9\nh4 : (1 / 2) ^ 2 - (1 / 3) ^ 2 = 1 / 4 - 1 / 9\n\u22a2 1 / 4 + -(1 / 9) = (9 - 4) / 36"
+      }
+    ],
+    "total_time": 47.65084719657898
+  },
+  "message": "Original code error count: 10\n\u274c Fixed error 1/10: Could not generate fix for error at line 10 \u00abfailed_to_synthesize\u00bb (after 5.12s)\n\u274c Fixed error 2/10: Could not generate fix for error at line 10 \u00abfunction_expected\u00bb (after 4.97s)\n\u274c Fixed error 3/10: Could not generate fix for error at line 10 \u00abtype_mismatch\u00bb (after 5.07s)\n\u274c Fixed error 4/10: Could not generate fix for error at line 16 \u00abunknown_identifier\u00bb (after 4.68s)\n\u274c Fixed error 5/10: Could not generate fix for error at line 16 \u00abrewrite_failed\u00bb (after 4.60s)\n\u274c Fixed error 6/10: Could not generate fix for error at line 22 \u00abunknown_identifier\u00bb (after 4.72s)\n\u274c Fixed error 7/10: Could not generate fix for error at line 22 \u00abrewrite_failed\u00bb (after 4.65s)\n\u274c Fixed error 8/10: Could not generate fix for error at line 35 \u00abunknown_identifier\u00bb (after 5.26s)\n\u274c Fixed error 9/10: Could not generate fix for error at line 35 \u00abrewrite_failed\u00bb (after 5.28s)\n\u2705 Fixed error 10/10: Successfully fixed error at line 49 \u00abrewrite_failed\u00bb (in 2.93s)\n\n=== Fix statistics ===\nOriginal error count: 10\nFixed errors: 1 (Fix rate: 0.1000)\nFailed errors: 9\nRemaining errors: 9\nTotal time: 47.65 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 49\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (9 - 4) / 3...\n   Fix snippet: norm_num\n   Fixed line:   norm_num\n   Time: 2.93 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 10\n   Error type: failed_to_synthesize\n   Original error message: failed to synthesize\n  SubNegMonoid \u2115\nuse `set_option diagnostics true` to get diagnostic informatio...\n   Failure reason: Could not generate fix\n   Time: 5.12 seconds\n\nFailed fix 2:\n   Line: 10\n   Error type: function_expected\n   Original error message: function expected at\n  2\nterm has type\n  ?m.5424...\n   Failure reason: Could not generate fix\n   Time: 4.97 seconds\n\nFailed fix 3:\n   Line: 10\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  HPow.hPow \u22ef\nargument\n  sub_eq_add_neg (1 / 2)\nhas type\n  \u2200 (b : \u2115), 1 / ...\n   Failure reason: Could not generate fix\n   Time: 5.07 seconds\n\nFailed fix 4:\n   Line: 16\n   Error type: unknown_identifier\n   Original error message: unknown identifier 'mul_rat'...\n   Failure reason: Could not generate fix\n   Time: 4.68 seconds\n\nFailed fix 5:\n   Line: 16\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.7467\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 ...\n   Failure reason: Could not generate fix\n   Time: 4.60 seconds\n\nFailed fix 6:\n   Line: 22\n   Error type: unknown_identifier\n   Original error message: unknown identifier 'mul_rat'...\n   Failure reason: Could not generate fix\n   Time: 4.72 seconds\n\nFailed fix 7:\n   Line: 22\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.8052\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 ...\n   Failure reason: Could not generate fix\n   Time: 4.65 seconds\n\nFailed fix 8:\n   Line: 35\n   Error type: unknown_identifier\n   Original error message: unknown identifier 'add_rat'...\n   Failure reason: Could not generate fix\n   Time: 5.26 seconds\n\nFailed fix 9:\n   Line: 35\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.9242\nh1 : (1 / 2 + 1 / 3) * (1 / 2 - 1 ...\n   Failure reason: Could not generate fix\n   Time: 5.28 seconds"
+}

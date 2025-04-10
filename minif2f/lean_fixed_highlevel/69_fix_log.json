@@ -1,0 +1,57 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/69.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/69_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Let $x$ be a positive real number. Show that $2 - \\sqrt{2} \\geq 2 - x - \\frac{1}{2x}$.-/\ntheorem algebra_amgm_faxinrrp2msqrt2geq2mxm1div2x :\n    \u2200 x > 0, 2 - Real.sqrt 2 \u2265 2 - x - 1 / (2 * x) := by\n  -- Introduce the positive real number x\n  intro x hx\n  -- The inequality can be simplified by subtracting 2 from both sides\n  -- Original: 2 - \u221a2 \u2265 2 - x - 1/(2x)\n  -- Simplified: -\u221a2 \u2265 -x - 1/(2x)\n  -- Which is equivalent to: x + 1/(2x) \u2265 \u221a2\n  -- So we'll prove this equivalent inequality instead\n  suffices x + 1 / (2 * x) \u2265 Real.sqrt 2 by linarith\n  -- To prove x + 1/(2x) \u2265 \u221a2, we'll use the AM-GM inequality\n  -- First, let's rewrite 1/(2x) as (1/2)*(1/x) for clarity\n  have : 1 / (2 * x) = (1/2) * (1/x) := by field_simp; ring\n  rw [this]\n  -- Now consider the two terms: x and (1/2)*(1/x)\n  -- Their arithmetic mean is (x + (1/2)*(1/x))/2\n  -- Their geometric mean is \u221a(x * (1/2)*(1/x)) = \u221a(1/2) = 1/\u221a2\n  -- By AM-GM inequality: (x + (1/2)*(1/x))/2 \u2265 \u221a(x * (1/2)*(1/x))\n  have amgm := Real.arith_mean_geom_mean (a := x) (b := (1/2)*(1/x)) (ha := hx) (hb := by positivity)\n  -- Simplify the geometric mean side: \u221a(x * (1/2)*(1/x)) = \u221a(1/2) = 1/\u221a2\n  simp at amgm\n  -- Now we have: (x + (1/2)*(1/x)) \u2265 2*(1/\u221a2) = \u221a2\n  -- Because 2/\u221a2 = (\u221a2 * \u221a2)/\u221a2 = \u221a2\n  rw [\u2190 div_eq_mul_inv, div_sqrt] at amgm\n  -- Now amgm exactly matches our goal\n  exact amgm",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Let $x$ be a positive real number. Show that $2 - \\sqrt{2} \\geq 2 - x - \\frac{1}{2x}$.-/\ntheorem algebra_amgm_faxinrrp2msqrt2geq2mxm1div2x :\n    \u2200 x > 0, 2 - Real.sqrt 2 \u2265 2 - x - 1 / (2 * x) := by\n  -- Introduce the positive real number x\n  intro x hx\n  -- The inequality can be simplified by subtracting 2 from both sides\n  -- Original: 2 - \u221a2 \u2265 2 - x - 1/(2x)\n  -- Simplified: -\u221a2 \u2265 -x - 1/(2x)\n  -- Which is equivalent to: x + 1/(2x) \u2265 \u221a2\n  -- So we'll prove this equivalent inequality instead\n  suffices x + 1 / (2 * x) \u2265 Real.sqrt 2 by linarith\n  -- To prove x + 1/(2x) \u2265 \u221a2, we'll use the AM-GM inequality\n  -- First, let's rewrite 1/(2x) as (1/2)*(1/x) for clarity\n  have : 1 / (2 * x) = (1/2) * (1/x) := by field_simp; ring\n  rw [this]\n  -- Now consider the two terms: x and (1/2)*(1/x)\n  -- Their arithmetic mean is (x + (1/2)*(1/x))/2\n  -- Their geometric mean is \u221a(x * (1/2)*(1/x)) = \u221a(1/2) = 1/\u221a2\n  -- By AM-GM inequality: (x + (1/2)*(1/x))/2 \u2265 \u221a(x * (1/2)*(1/x))\n  have amgm := Real.arith_mean_geom_mean (a := x) (b := (1/2)*(1/x)) (ha := hx) (hb := by positivity)\n  -- Simplify the geometric mean side: \u221a(x * (1/2)*(1/x)) = \u221a(1/2) = 1/\u221a2\n  simp at amgm\n  -- Now we have: (x + (1/2)*(1/x)) \u2265 2*(1/\u221a2) = \u221a2\n  -- Because 2/\u221a2 = (\u221a2 * \u221a2)/\u221a2 = \u221a2\n  rw [\u2190 div_eq_mul_inv, div_sqrt] at amgm\n  -- Now amgm exactly matches our goal\n  exact amgm",
+  "statistics": {
+    "original_errors": 3,
+    "fixed_errors": 0,
+    "failed_errors": 3,
+    "remaining_errors": 3,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 3,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx : \u211d\nhx : x > 0\nthis : 1 / (2 * x) = 1 / 2 * (1 / x)\n\u22a2 x + 1 / 2 * (1 / x) \u2265 \u221a2",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.4395558834075928
+      },
+      {
+        "line": 14,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 5.022248268127441
+      },
+      {
+        "line": 20,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Real.arith_mean_geom_mean'",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 6.404931545257568
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 14,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved"
+      },
+      {
+        "line": 20,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Real.arith_mean_geom_mean'"
+      },
+      {
+        "line": 3,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx : \u211d\nhx : x > 0\nthis : 1 / (2 * x) = 1 / 2 * (1 / x)\n\u22a2 x + 1 / 2 * (1 / x) \u2265 \u221a2"
+      }
+    ],
+    "total_time": 15.411515712738037
+  },
+  "message": "Original code error count: 3\n\u274c Fixed error 1/3: Could not generate fix for error at line 3 \u00abother_error\u00bb (after 3.44s)\n\u274c Fixed error 2/3: Could not generate fix for error at line 14 \u00abno_goals_to_solve\u00bb (after 5.02s)\n\u274c Fixed error 3/3: Could not generate fix for error at line 20 \u00abunknown_constant\u00bb (after 6.40s)\n\n=== Fix statistics ===\nOriginal error count: 3\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 3\nRemaining errors: 3\nTotal time: 15.41 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 3\n   Error type: other_error\n   Original error message: unsolved goals\nx : \u211d\nhx : x > 0\nthis : 1 / (2 * x) = 1 / 2 * (1 / x)\n\u22a2 x + 1 / 2 * (1 / x) \u2265 \u221a2...\n   Failure reason: Could not generate fix\n   Time: 3.44 seconds\n\nFailed fix 2:\n   Line: 14\n   Error type: no_goals_to_solve\n   Original error message: no goals to be solved...\n   Failure reason: Could not generate fix\n   Time: 5.02 seconds\n\nFailed fix 3:\n   Line: 20\n   Error type: unknown_constant\n   Original error message: unknown constant 'Real.arith_mean_geom_mean'...\n   Failure reason: Could not generate fix\n   Time: 6.40 seconds"
+}

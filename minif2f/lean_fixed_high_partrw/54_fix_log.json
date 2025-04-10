@@ -1,0 +1,42 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/54.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/54_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disables the heartbeat limit to prevent timeout during execution\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nAt each basketball practice last week, Jenny made twice as many free throws as she made at the previous practice. \nAt her fifth practice she made 48 free throws. How many free throws did she make at the first practice? \nShow that it is 3.\n-/\ntheorem mathd_algebra_455 (x : \u211d) (h\u2080 : 2 * (2 * (2 * (2 * x))) = 48) : x = 3 := by\n  -- The problem describes a geometric progression where each term is double the previous one\n  -- Let's break down the given equation which represents the 5th practice (after 4 doublings):\n  -- Practice 1: x\n  -- Practice 2: 2x\n  -- Practice 3: 2*(2x) = 4x\n  -- Practice 4: 2*(4x) = 8x\n  -- Practice 5: 2*(8x) = 16x = 48 (given in h\u2080)\n  \n  -- First, simplify the left-hand side of the equation h\u2080\n  have h\u2081 : 2 * (2 * (2 * (2 * x))) = 16 * x := by\n    -- Step-by-step simplification:\n    -- Start with the innermost multiplication\n    have step1 : 2 * x = 2 * x := by rfl\n    -- Multiply by next 2\n    have step2 : 2 * (2 * x) = 4 * x := by ring\n    -- Multiply by next 2\n    have step3 : 2 * (2 * (2 * x)) = 8 * x := by rw [step2]; ring\n    -- Multiply by final 2\n    have step4 : 2 * (2 * (2 * (2 * x))) = 16 * x := by rw [step3]; ring\n    -- Use the final step\n    exact step4\n  \n  -- Now rewrite the original hypothesis h\u2080 using the simplified form\n  rw [h\u2081] at h\u2080\n  -- Now we have h\u2080: 16 * x = 48\n  \n  -- To solve for x, we'll divide both sides by 16\n  have h\u2082 : x = 48 / 16 := by\n    -- Apply the property that if a * x = b then x = b / a (for a \u2260 0)\n    exact (eq_div_iff (by norm_num)).mpr h\u2080\n  \n  -- Simplify the division 48/16\n  have h\u2083 : 48 / 16 = 3 := by norm_num\n  \n  -- Combine the results to prove x = 3\n  rw [h\u2082, h\u2083]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disables the heartbeat limit to prevent timeout during execution\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nAt each basketball practice last week, Jenny made twice as many free throws as she made at the previous practice. \nAt her fifth practice she made 48 free throws. How many free throws did she make at the first practice? \nShow that it is 3.\n-/\ntheorem mathd_algebra_455 (x : \u211d) (h\u2080 : 2 * (2 * (2 * (2 * x))) = 48) : x = 3 := by\n  -- The problem describes a geometric progression where each term is double the previous one\n  -- Let's break down the given equation which represents the 5th practice (after 4 doublings):\n  -- Practice 1: x\n  -- Practice 2: 2x\n  -- Practice 3: 2*(2x) = 4x\n  -- Practice 4: 2*(4x) = 8x\n  -- Practice 5: 2*(8x) = 16x = 48 (given in h\u2080)\n  \n  -- First, simplify the left-hand side of the equation h\u2080\n  have h\u2081 : 2 * (2 * (2 * (2 * x))) = 16 * x := by\n    -- Step-by-step simplification:\n    -- Start with the innermost multiplication\n    have step1 : 2 * x = 2 * x := by rfl\n    -- Multiply by next 2\n    have step2 : 2 * (2 * x) = 4 * x := by ring\n    -- Multiply by next 2\n    have step3 : 2 * (2 * (2 * x)) = 8 * x := by rw [step2]; ring\n    -- Multiply by final 2\n    have step4 : 2 * (2 * (2 * (2 * x))) = 16 * x := by rw [step3]; ring\n    -- Use the final step\n    exact step4\n  \n  -- Now rewrite the original hypothesis h\u2080 using the simplified form\n  rw [h\u2081] at h\u2080\n  -- Now we have h\u2080: 16 * x = 48\n  \n  -- To solve for x, we'll divide both sides by 16\n  have h\u2082 : x = 48 / 16 := by\n    -- Apply the property that if a * x = b then x = b / a (for a \u2260 0)\n    linarith\n  \n  -- Simplify the division 48/16\n  have h\u2083 : 48 / 16 = 3 := by norm_num\n  \n  -- Combine the results to prove x = 3\n  rw [h\u2082, h\u2083]",
+  "statistics": {
+    "original_errors": 2,
+    "fixed_errors": 1,
+    "failed_errors": 1,
+    "remaining_errors": 1,
+    "fix_rate": 0.5,
+    "successful_fixes": [
+      {
+        "line": 36,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  (eq_div_iff ?m.1821).mpr h\u2080\nargument\n  h\u2080\nhas type\n  16 * x = 48 : Prop\nbut is expected to have type\n  x * 16 = 48 : Prop",
+        "fix_snippet": "linarith",
+        "fixed_line": "    linarith",
+        "fix_time": 44.838452100753784
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  48 / 16\nx : \u211d\nh\u2080 : 16 * x = 48\nh\u2081 : 2 * (2 * (2 * (2 * x))) = 16 * x\nh\u2082 : x = 48 / 16\nh\u2083 : 48 / 16 = 3\n\u22a2 48 / 16 = 3",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 80.82113242149353
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  48 / 16\nx : \u211d\nh\u2080 : 16 * x = 48\nh\u2081 : 2 * (2 * (2 * (2 * x))) = 16 * x\nh\u2082 : x = 48 / 16\nh\u2083 : 48 / 16 = 3\n\u22a2 48 / 16 = 3"
+      }
+    ],
+    "total_time": 126.03322887420654
+  },
+  "message": "Original code error count: 2\n\u2705 Fixed error 1/2: Successfully fixed error at line 36 \u00abtype_mismatch\u00bb (in 44.84s)\n\u274c Fixed error 2/2: Could not generate fix for error at line 42 \u00abrewrite_failed\u00bb (after 80.82s)\n\n=== Fix statistics ===\nOriginal error count: 2\nFixed errors: 1 (Fix rate: 0.5000)\nFailed errors: 1\nRemaining errors: 1\nTotal time: 126.03 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 36\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  (eq_div_iff ?m.1821).mpr h\u2080\nargument\n  h\u2080\nhas type\n  16 * x = 48 : Prop\n...\n   Fix snippet: linarith\n   Fixed line:     linarith\n   Time: 44.84 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 42\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  48 / 16\nx :...\n   Failure reason: Could not generate fix\n   Time: 80.82 seconds"
+}

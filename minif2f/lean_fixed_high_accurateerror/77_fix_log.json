@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "file_path": "/data/coding/minif2f/lean_code/77.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/77_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $Q = 11-5i$, $E = 11+5i$, and $D = 2i$, find $Q\\cdot E \\cdot D$. Show that it is 292i.-/\ntheorem mathd_algebra_192 (q e d : \u2102) (h\u2080 : q = 11 - 5 * Complex.I) (h\u2081 : e = 11 + 5 * Complex.I)\n    (h\u2082 : d = 2 * Complex.I) : q * e * d = 292 * Complex.I := by\n  -- First, substitute the given values of q, e, and d into the expression q * e * d\n  rw [h\u2080, h\u2081, h\u2082]\n  -- Now we need to compute (11 - 5i) * (11 + 5i) * (2i)\n  \n  -- Step 1: Multiply the first two complex numbers (11 - 5i) and (11 + 5i)\n  -- This is a difference of squares: (a - b)(a + b) = a\u00b2 - b\u00b2\n  -- Here a = 11, b = 5i, so we get 11\u00b2 - (5i)\u00b2\n  have step1 : (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 11^2 - (5 * Complex.I)^2 := by\n    exact mul_self_sub_mul_self (11) (5 * Complex.I)\n  \n  -- Simplify 11\u00b2 - (5i)\u00b2\n  -- 11\u00b2 = 121, (5i)\u00b2 = 25i\u00b2 = 25*(-1) = -25 (since i\u00b2 = -1)\n  -- So 11\u00b2 - (5i)\u00b2 = 121 - (-25) = 146\n  have step2 : 11^2 - (5 * Complex.I)^2 = 146 := by\n    simp only [pow_two]\n    rw [mul_mul_mul_comm, Complex.I_mul_I]\n    simp\n    norm_num\n  \n  -- Combine step1 and step2 to show the product of first two terms is 146\n  have step3 : (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 146 := by\n    rw [step1, step2]\n  \n  -- Now multiply this result by the third term 2i\n  -- We have 146 * 2i = 292i\n  have step4 : 146 * (2 * Complex.I) = 292 * Complex.I := by\n    norm_num\n    rw [mul_assoc]\n  \n  -- Combine all steps to complete the proof\n  rw [step3]\n  exact step4",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $Q = 11-5i$, $E = 11+5i$, and $D = 2i$, find $Q\\cdot E \\cdot D$. Show that it is 292i.-/\ntheorem mathd_algebra_192 (q e d : \u2102) (h\u2080 : q = 11 - 5 * Complex.I) (h\u2081 : e = 11 + 5 * Complex.I)\n    (h\u2082 : d = 2 * Complex.I) : q * e * d = 292 * Complex.I := by\n  -- First, substitute the given values of q, e, and d into the expression q * e * d\n  rw [h\u2080, h\u2081, h\u2082]\n  -- Now we need to compute (11 - 5i) * (11 + 5i) * (2i)\n  \n  -- Step 1: Multiply the first two complex numbers (11 - 5i) and (11 + 5i)\n  -- This is a difference of squares: (a - b)(a + b) = a\u00b2 - b\u00b2\n  -- Here a = 11, b = 5i, so we get 11\u00b2 - (5i)\u00b2\n  have step1 : (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 11^2 - (5 * Complex.I)^2 := by\n    ring\n  \n  -- Simplify 11\u00b2 - (5i)\u00b2\n  -- 11\u00b2 = 121, (5i)\u00b2 = 25i\u00b2 = 25*(-1) = -25 (since i\u00b2 = -1)\n  -- So 11\u00b2 - (5i)\u00b2 = 121 - (-25) = 146\n  have step2 : 11^2 - (5 * Complex.I)^2 = 146 := by\n    simp only [pow_two]\n    rw [mul_mul_mul_comm, Complex.I_mul_I]\n    simp\n    norm_num\n  \n  -- Combine step1 and step2 to show the product of first two terms is 146\n  have step3 : (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 146 := by\n    rw [step1, step2]\n  \n  -- Now multiply this result by the third term 2i\n  -- We have 146 * 2i = 292i\n  have step4 : 146 * (2 * Complex.I) = 292 * Complex.I := by\n    norm_num\n    ring\n  \n  -- Combine all steps to complete the proof\n  rw [step3]\n  exact step4",
+  "statistics": {
+    "original_errors": 2,
+    "fixed_errors": 2,
+    "failed_errors": 0,
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes": [
+      {
+        "line": 12,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  mul_self_sub_mul_self 11 (5 * Complex.I)\nhas type\n  11 * 11 - 5 * Complex.I * (5 * Complex.I) = (11 + 5 * Complex.I) * (11 - 5 * Complex.I) : Prop\nbut is expected to have type\n  (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 11 ^ 2 - (5 * Complex.I) ^ 2 : Prop",
+        "fix_snippet": "ring",
+        "fixed_line": "    ring",
+        "fix_time": 8.678440809249878
+      },
+      {
+        "line": 31,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b * ?c\nq e d : \u2102\nh\u2080 : q = 11 - 5 * Complex.I\nh\u2081 : e = 11 + 5 * Complex.I\nh\u2082 : d = 2 * Complex.I\nstep1 : (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 11 ^ 2 - (5 * Complex.I) ^ 2\nstep2 : 11 ^ 2 - (5 * Complex.I) ^ 2 = 146\nstep3 : (11 - 5 * Complex.I) * (11 + 5 * Complex.I) = 146\n\u22a2 146 * (2 * Complex.I) = 292 * Complex.I",
+        "fix_snippet": "ring",
+        "fixed_line": "    ring",
+        "fix_time": 8.673931121826172
+      }
+    ],
+    "failed_fixes": [],
+    "remaining_errors_details": [],
+    "total_time": 18.562174081802368
+  },
+  "message": "Original code error count: 2\n\u2705 Fixed error 1/2: Successfully fixed error at line 12 \u00abtype_mismatch\u00bb (in 8.68s)\n\u2705 Fixed error 2/2: Successfully fixed error at line 31 \u00abrewrite_failed\u00bb (in 8.67s)\n\n=== Fix statistics ===\nOriginal error count: 2\nFixed errors: 2 (Fix rate: 1.0000)\nFailed errors: 0\nRemaining errors: 0\nTotal time: 18.56 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 12\n   Error type: type_mismatch\n   Original error message: type mismatch\n  mul_self_sub_mul_self 11 (5 * Complex.I)\nhas type\n  11 * 11 - 5 * Complex.I * (5 * C...\n   Fix snippet: ring\n   Fixed line:     ring\n   Time: 8.68 seconds\n\nFix 2:\n   Line: 31\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b * ?...\n   Fix snippet: ring\n   Fixed line:     ring\n   Time: 8.67 seconds"
+}

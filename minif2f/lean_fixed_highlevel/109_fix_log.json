@@ -1,0 +1,33 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/109.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/109_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Let $P(n)$ and $S(n)$ denote the product and the sum, respectively, of the digits\nof the integer $n$. For example, $P(23) = 6$ and $S(23) = 5$. Suppose $N$ is a\ntwo-digit number such that $N = P(N)+S(N)$. What is the units digit of $N$?\n\n$\\text{(A)}\\ 2\\qquad \\text{(B)}\\ 3\\qquad \\text{(C)}\\ 6\\qquad \\text{(D)}\\ 8\\qquad \\text{(E)}\\ 9$ Show that it is (\\text{E})9.-/\ntheorem amc12_2001_p2 (a b n : \u2115) (h\u2080 : 1 \u2264 a \u2227 a \u2264 9) (h\u2081 : 0 \u2264 b \u2227 b \u2264 9) (h\u2082 : n = 10 * a + b)\n  (h\u2083 : n = a * b + a + b) : b = 9 := by\n  -- First, substitute the expression for n from h\u2082 into the equation h\u2083\n  rw [h\u2082] at h\u2083\n  -- Now we have: 10 * a + b = a * b + a + b\n  -- Simplify the equation by subtracting b from both sides\n  simp at h\u2083\n  -- Equation becomes: 10 * a = a * b + a\n  -- Factor out a on the right side: 10 * a = a * (b + 1)\n  rw [mul_add] at h\u2083\n  simp at h\u2083\n  -- Since a is between 1 and 9 (from h\u2080), we can divide both sides by a\n  have h\u2084 : a \u2260 0 := by linarith [h\u2080.1]\n  -- Division gives us: 10 = b + 1\n  rw [\u2190 mul_right_inj' h\u2084] at h\u2083\n  simp at h\u2083\n  -- Now we have b + 1 = 10\n  -- Subtract 1 from both sides to solve for b\n  rw [add_left_inj] at h\u2083\n  -- Final equation: b = 9\n  exact h\u2083",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Let $P(n)$ and $S(n)$ denote the product and the sum, respectively, of the digits\nof the integer $n$. For example, $P(23) = 6$ and $S(23) = 5$. Suppose $N$ is a\ntwo-digit number such that $N = P(N)+S(N)$. What is the units digit of $N$?\n\n$\\text{(A)}\\ 2\\qquad \\text{(B)}\\ 3\\qquad \\text{(C)}\\ 6\\qquad \\text{(D)}\\ 8\\qquad \\text{(E)}\\ 9$ Show that it is (\\text{E})9.-/\ntheorem amc12_2001_p2 (a b n : \u2115) (h\u2080 : 1 \u2264 a \u2227 a \u2264 9) (h\u2081 : 0 \u2264 b \u2227 b \u2264 9) (h\u2082 : n = 10 * a + b)\n  (h\u2083 : n = a * b + a + b) : b = 9 := by\n  -- First, substitute the expression for n from h\u2082 into the equation h\u2083\n  rw [h\u2082] at h\u2083\n  -- Now we have: 10 * a + b = a * b + a + b\n  -- Simplify the equation by subtracting b from both sides\n  simp at h\u2083\n  -- Equation becomes: 10 * a = a * b + a\n  -- Factor out a on the right side: 10 * a = a * (b + 1)\n  rw [mul_add] at h\u2083\n  simp at h\u2083\n  -- Since a is between 1 and 9 (from h\u2080), we can divide both sides by a\n  have h\u2084 : a \u2260 0 := by linarith [h\u2080.1]\n  -- Division gives us: 10 = b + 1\n  rw [\u2190 mul_right_inj' h\u2084] at h\u2083\n  simp at h\u2083\n  -- Now we have b + 1 = 10\n  -- Subtract 1 from both sides to solve for b\n  rw [add_left_inj] at h\u2083\n  -- Final equation: b = 9\n  exact h\u2083",
+  "statistics": {
+    "original_errors": 1,
+    "fixed_errors": 0,
+    "failed_errors": 1,
+    "remaining_errors": 1,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 15,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * (?b + ?c)\na b n : \u2115\nh\u2080 : 1 \u2264 a \u2227 a \u2264 9\nh\u2081 : 0 \u2264 b \u2227 b \u2264 9\nh\u2082 : n = 10 * a + b\nh\u2083 : 10 * a = a * b + a\n\u22a2 b = 9",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 3.2536466121673584
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 15,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * (?b + ?c)\na b n : \u2115\nh\u2080 : 1 \u2264 a \u2227 a \u2264 9\nh\u2081 : 0 \u2264 b \u2227 b \u2264 9\nh\u2082 : n = 10 * a + b\nh\u2083 : 10 * a = a * b + a\n\u22a2 b = 9"
+      }
+    ],
+    "total_time": 3.435612201690674
+  },
+  "message": "Original code error count: 1\n\u274c Fixed error 1/1: Could not generate fix for error at line 15 \u00abrewrite_failed\u00bb (after 3.25s)\n\n=== Fix statistics ===\nOriginal error count: 1\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 1\nRemaining errors: 1\nTotal time: 3.44 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 15\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * (?b + ...\n   Failure reason: Could not generate fix\n   Time: 3.25 seconds"
+}

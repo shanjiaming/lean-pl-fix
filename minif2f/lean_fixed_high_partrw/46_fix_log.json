@@ -1,0 +1,45 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/46.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/46_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for any real-valued function $a$ on the natural numbers such that $\\forall i \\in \\mathbb{N}, a_i \\geq 0$, \n    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \\geq n$.-/\ntheorem algebra_amgm_prod1toneq1_sum1tongeqn (a : \u2115 \u2192 NNReal) (n : \u2115)\n    (h\u2080 : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a \u2265 n := by\n  -- First, we'll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality\n  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is \u2265 geometric mean\n  have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)\n  \n  -- Simplify the arithmetic mean (left side of AM-GM inequality)\n  -- The arithmetic mean is (sum a_i)/n\n  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n\u207b\u00b9 : NNReal) := by\n    simp only [NNReal.div_def]\n  \n  -- Simplify the geometric mean (right side of AM-GM inequality)\n  -- The geometric mean is (prod a_i)^(1/n)\n  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n\u207b\u00b9 : NNReal) = \n      (1 : NNReal) ^ (n\u207b\u00b9 : NNReal) := by\n    -- Substitute h\u2080 which states that the product equals 1\n    rw [h\u2080]\n  \n  -- Since 1 raised to any power is 1, we can further simplify the geometric mean\n  have geom_mean_simplified : (1 : NNReal) ^ (n\u207b\u00b9 : NNReal) = 1 := by\n    exact NNReal.one_rpow _\n  \n  -- Combine the geometric mean simplifications\n  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified\n  \n  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means\n  rw [arith_mean, geom_mean_final] at amgm_ineq\n  \n  -- Now we have: (sum a_i) * n\u207b\u00b9 \u2265 1\n  -- Multiply both sides by n (which is positive since n is a natural number)\n  -- Note: multiplication by n is order-preserving since n > 0\n  have n_pos : n > 0 \u2228 n = 0 := by\n    exact Nat.eq_zero_or_pos n\n  cases n_pos with\n  | inl hn_pos =>\n    -- Case when n > 0\n    have multiply_both_sides := mul_le_mul_right' amgm_ineq (n : NNReal)\n    -- Simplify: (sum a_i) * n\u207b\u00b9 * n = sum a_i\n    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n\u207b\u00b9 : NNReal) * n = \n        Finset.sum (Finset.range n) a := by\n      rw [mul_assoc, inv_mul_cancel, mul_one]\n      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)\n    -- Simplify: 1 * n = n\n    have rhs_simplified : (1 : NNReal) * n = n := by\n      simp only [one_mul]\n    -- Rewrite the inequality with these simplifications\n    rw [lhs_simplified, rhs_simplified] at multiply_both_sides\n    exact multiply_both_sides\n  | inr hn_zero =>\n    -- Case when n = 0\n    -- Both sides become 0, and 0 \u2265 0 is trivially true\n    rw [hn_zero]\n    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for any real-valued function $a$ on the natural numbers such that $\\forall i \\in \\mathbb{N}, a_i \\geq 0$, \n    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \\geq n$.-/\ntheorem algebra_amgm_prod1toneq1_sum1tongeqn (a : \u2115 \u2192 NNReal) (n : \u2115)\n    (h\u2080 : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a \u2265 n := by\n  -- First, we'll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality\n  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is \u2265 geometric mean\n  have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)\n  \n  -- Simplify the arithmetic mean (left side of AM-GM inequality)\n  -- The arithmetic mean is (sum a_i)/n\n  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n\u207b\u00b9 : NNReal) := by\n    simp only [NNReal.div_def]\n  \n  -- Simplify the geometric mean (right side of AM-GM inequality)\n  -- The geometric mean is (prod a_i)^(1/n)\n  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n\u207b\u00b9 : NNReal) = \n      (1 : NNReal) ^ (n\u207b\u00b9 : NNReal) := by\n    -- Substitute h\u2080 which states that the product equals 1\n    rw [h\u2080]\n  \n  -- Since 1 raised to any power is 1, we can further simplify the geometric mean\n  have geom_mean_simplified : (1 : NNReal) ^ (n\u207b\u00b9 : NNReal) = 1 := by\n    exact NNReal.one_rpow _\n  \n  -- Combine the geometric mean simplifications\n  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified\n  \n  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means\n  rw [arith_mean, geom_mean_final] at amgm_ineq\n  \n  -- Now we have: (sum a_i) * n\u207b\u00b9 \u2265 1\n  -- Multiply both sides by n (which is positive since n is a natural number)\n  -- Note: multiplication by n is order-preserving since n > 0\n  have n_pos : n > 0 \u2228 n = 0 := by\n    exact Nat.eq_zero_or_pos n\n  cases n_pos with\n  | inl hn_pos =>\n    -- Case when n > 0\n    have multiply_both_sides := mul_le_mul_right' amgm_ineq (n : NNReal)\n    -- Simplify: (sum a_i) * n\u207b\u00b9 * n = sum a_i\n    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n\u207b\u00b9 : NNReal) * n = \n        Finset.sum (Finset.range n) a := by\n      rw [mul_assoc, inv_mul_cancel, mul_one]\n      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)\n    -- Simplify: 1 * n = n\n    have rhs_simplified : (1 : NNReal) * n = n := by\n      simp only [one_mul]\n    -- Rewrite the inequality with these simplifications\n    rw [lhs_simplified, rhs_simplified] at multiply_both_sides\n    exact multiply_both_sides\n  | inr hn_zero =>\n    -- Case when n = 0\n    -- Both sides become 0, and 0 \u2265 0 is trivially true\n    rw [hn_zero]\n    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]",
+  "statistics": {
+    "original_errors": 2,
+    "fixed_errors": 0,
+    "failed_errors": 2,
+    "remaining_errors": 2,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 4,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\na : \u2115 \u2192 NNReal\nn : \u2115\nh\u2080 : (Finset.range n).prod a = 1\n\u22a2 (Finset.range n).sum a \u2265 \u2191n",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 7.387259244918823
+      },
+      {
+        "line": 7,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.le_geom_mean_arith_mean'",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 12.143709659576416
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 7,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.le_geom_mean_arith_mean'"
+      },
+      {
+        "line": 4,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\na : \u2115 \u2192 NNReal\nn : \u2115\nh\u2080 : (Finset.range n).prod a = 1\n\u22a2 (Finset.range n).sum a \u2265 \u2191n"
+      }
+    ],
+    "total_time": 19.596885681152344
+  },
+  "message": "Original code error count: 2\n\u274c Fixed error 1/2: Could not generate fix for error at line 4 \u00abother_error\u00bb (after 7.39s)\n\u274c Fixed error 2/2: Could not generate fix for error at line 7 \u00abunknown_constant\u00bb (after 12.14s)\n\n=== Fix statistics ===\nOriginal error count: 2\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 2\nRemaining errors: 2\nTotal time: 19.60 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 4\n   Error type: other_error\n   Original error message: unsolved goals\na : \u2115 \u2192 NNReal\nn : \u2115\nh\u2080 : (Finset.range n).prod a = 1\n\u22a2 (Finset.range n).sum a \u2265 \u2191n...\n   Failure reason: Could not generate fix\n   Time: 7.39 seconds\n\nFailed fix 2:\n   Line: 7\n   Error type: unknown_constant\n   Original error message: unknown constant 'Finset.le_geom_mean_arith_mean'...\n   Failure reason: Could not generate fix\n   Time: 12.14 seconds"
+}

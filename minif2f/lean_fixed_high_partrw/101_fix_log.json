@@ -1,0 +1,33 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/101.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/101_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the $x$-coordinate for the $x$-intercept of the line containing the points $(7,4)$ and $(6,3)$? Show that it is 3.-/\ntheorem mathd_algebra_43 (a b : \u211d) (f : \u211d \u2192 \u211d) (h\u2080 : \u2200 x, f x = a * x + b) (h\u2081 : f 7 = 4)\n  (h\u2082 : f 6 = 3) : f 3 = 0 := by\n  -- First, we'll find the slope (a) of the line using the two given points\n  -- From h\u2080, we know f is a linear function of form f(x) = a*x + b\n  -- We have two equations from the given points:\n  -- 1) f(7) = a*7 + b = 4 (from h\u2081)\n  -- 2) f(6) = a*6 + b = 3 (from h\u2082)\n  \n  -- Subtract equation 2 from equation 1 to eliminate b and find a:\n  -- (a*7 + b) - (a*6 + b) = 4 - 3 \u2192 a = 1\n  have h\u2083 : a = 1 := by\n    -- Apply the function definition to both points\n    rw [h\u2080] at h\u2081 h\u2082\n    -- Now h\u2081: a*7 + b = 4, h\u2082: a*6 + b = 3\n    -- Subtract h\u2082 from h\u2081 to eliminate b\n    linear_combination h\u2081 - h\u2082\n  \n  -- Now that we know a = 1, we can find b using one of the equations\n  -- Using h\u2082: 1*6 + b = 3 \u2192 b = -3\n  have h\u2084 : b = -3 := by\n    -- Substitute a = 1 into h\u2082\n    rw [h\u2083, h\u2080] at h\u2082\n    -- Now h\u2082: 1*6 + b = 3 \u2192 6 + b = 3\n    linarith\n  \n  -- Now we have the complete function: f(x) = 1*x - 3\n  -- To find the x-intercept, we solve f(x) = 0\n  -- 1*x - 3 = 0 \u2192 x = 3\n  -- Therefore, f(3) should be 0\n  -- Let's verify this:\n  rw [h\u2080, h\u2083, h\u2084]  -- Substitute a = 1 and b = -3 into the function definition\n  -- Now the goal is 1*3 - 3 = 0\n  norm_num  -- Simplifies the arithmetic to 0 = 0",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the $x$-coordinate for the $x$-intercept of the line containing the points $(7,4)$ and $(6,3)$? Show that it is 3.-/\ntheorem mathd_algebra_43 (a b : \u211d) (f : \u211d \u2192 \u211d) (h\u2080 : \u2200 x, f x = a * x + b) (h\u2081 : f 7 = 4)\n  (h\u2082 : f 6 = 3) : f 3 = 0 := by\n  -- First, we'll find the slope (a) of the line using the two given points\n  -- From h\u2080, we know f is a linear function of form f(x) = a*x + b\n  -- We have two equations from the given points:\n  -- 1) f(7) = a*7 + b = 4 (from h\u2081)\n  -- 2) f(6) = a*6 + b = 3 (from h\u2082)\n  \n  -- Subtract equation 2 from equation 1 to eliminate b and find a:\n  -- (a*7 + b) - (a*6 + b) = 4 - 3 \u2192 a = 1\n  have h\u2083 : a = 1 := by\n    -- Apply the function definition to both points\n    rw [h\u2080] at h\u2081 h\u2082\n    -- Now h\u2081: a*7 + b = 4, h\u2082: a*6 + b = 3\n    -- Subtract h\u2082 from h\u2081 to eliminate b\n    linear_combination h\u2081 - h\u2082\n  \n  -- Now that we know a = 1, we can find b using one of the equations\n  -- Using h\u2082: 1*6 + b = 3 \u2192 b = -3\n  have h\u2084 : b = -3 := by\n    -- Substitute a = 1 into h\u2082\n    rw [h\u2083, h\u2080] at h\u2082\n    -- Now h\u2082: 1*6 + b = 3 \u2192 6 + b = 3\n    linarith\n  \n  -- Now we have the complete function: f(x) = 1*x - 3\n  -- To find the x-intercept, we solve f(x) = 0\n  -- 1*x - 3 = 0 \u2192 x = 3\n  -- Therefore, f(3) should be 0\n  -- Let's verify this:\n  rw [h\u2080, h\u2083, h\u2084]  -- Substitute a = 1 and b = -3 into the function definition\n  -- Now the goal is 1*3 - 3 = 0\n  norm_num  -- Simplifies the arithmetic to 0 = 0",
+  "statistics": {
+    "original_errors": 1,
+    "fixed_errors": 0,
+    "failed_errors": 1,
+    "remaining_errors": 1,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 23,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a\na b : \u211d\nf : \u211d \u2192 \u211d\nh\u2080 : \u2200 (x : \u211d), f x = a * x + b\nh\u2081 : f 7 = 4\nh\u2082 : f 6 = 3\nh\u2083 : a = 1\n\u22a2 b = -3",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 24.568719148635864
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 23,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a\na b : \u211d\nf : \u211d \u2192 \u211d\nh\u2080 : \u2200 (x : \u211d), f x = a * x + b\nh\u2081 : f 7 = 4\nh\u2082 : f 6 = 3\nh\u2083 : a = 1\n\u22a2 b = -3"
+      }
+    ],
+    "total_time": 24.710519790649414
+  },
+  "message": "Original code error count: 1\n\u274c Fixed error 1/1: Could not generate fix for error at line 23 \u00abrewrite_failed\u00bb (after 24.57s)\n\n=== Fix statistics ===\nOriginal error count: 1\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 1\nRemaining errors: 1\nTotal time: 24.71 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 23\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a\na b : \u211d\nf...\n   Failure reason: Could not generate fix\n   Time: 24.57 seconds"
+}

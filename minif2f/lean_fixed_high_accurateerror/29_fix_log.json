@@ -1,0 +1,33 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/29.lean",
+  "output_file": "/data/coding/minif2f/lean_code/../lean_fixed/29_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disables the heartbeat limit to prevent timeout during execution\n\nopen BigOperators Real Nat Topology Rat  -- Opens various namespaces for mathematical notations\n\n/-- \nSimplify (9 - 4i) - (-3 - 4i). Show that it is 12.\nThis theorem proves that the difference between two complex numbers q and e equals 12,\nwhere q is defined as 9 - 4i and e is defined as -3 - 4i.\n-/\ntheorem mathd_algebra_48 (q e : \u2102) (h\u2080 : q = 9 - 4 * Complex.I) (h\u2081 : e = -3 - 4 * Complex.I) :\n  q - e = 12 := by\n  -- First, we substitute the definitions of q and e from the hypotheses\n  rw [h\u2080, h\u2081]  -- Rewrites q and e using their definitions in h\u2080 and h\u2081\n  -- Now the goal becomes: (9 - 4*I) - (-3 - 4*I) = 12\n  \n  -- Next, we simplify the subtraction of complex numbers\n  -- We distribute the subtraction operation\n  simp only [sub_eq_add_neg]  -- Converts subtraction to addition of negative\n  -- Goal becomes: (9 - 4*I) + -(-3 - 4*I) = 12\n  \n  -- Simplify the negation of the second complex number\n  simp only [neg_sub]  -- Applies the property -(a - b) = -a + b\n  -- Goal becomes: (9 - 4*I) + (3 + 4*I) = 12\n  \n  -- Now we remove the parentheses and regroup terms\n  simp only [add_sub]  -- Distributes the addition over subtraction\n  -- Goal becomes: 9 - 4*I + 3 + 4*I = 12\n  \n  -- Combine like terms (real parts and imaginary parts)\n  ring  -- The 'ring' tactic solves goals in commutative rings by normalization\n  -- This successfully simplifies the left side to 12, matching the right side\n  \n  -- No more goals left, so the proof is complete",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disables the heartbeat limit to prevent timeout during execution\n\nopen BigOperators Real Nat Topology Rat  -- Opens various namespaces for mathematical notations\n\n/-- \nSimplify (9 - 4i) - (-3 - 4i). Show that it is 12.\nThis theorem proves that the difference between two complex numbers q and e equals 12,\nwhere q is defined as 9 - 4i and e is defined as -3 - 4i.\n-/\ntheorem mathd_algebra_48 (q e : \u2102) (h\u2080 : q = 9 - 4 * Complex.I) (h\u2081 : e = -3 - 4 * Complex.I) :\n  q - e = 12 := by\n  -- First, we substitute the definitions of q and e from the hypotheses\n  rw [h\u2080, h\u2081]  -- Rewrites q and e using their definitions in h\u2080 and h\u2081\n  -- Now the goal becomes: (9 - 4*I) - (-3 - 4*I) = 12\n  \n  -- Next, we simplify the subtraction of complex numbers\n  -- We distribute the subtraction operation\n  simp only [sub_eq_add_neg]  -- Converts subtraction to addition of negative\n  -- Goal becomes: (9 - 4*I) + -(-3 - 4*I) = 12\n  \n  -- Simplify the negation of the second complex number\n  simp only [neg_sub]  -- Applies the property -(a - b) = -a + b\n  -- Goal becomes: (9 - 4*I) + (3 + 4*I) = 12\n  \n  -- Now we remove the parentheses and regroup terms\n  simp only [add_sub]  -- Distributes the addition over subtraction\n  -- Goal becomes: 9 - 4*I + 3 + 4*I = 12\n  \n  -- Combine like terms (real parts and imaginary parts)\n  ring  -- The 'ring' tactic solves goals in commutative rings by normalization\n  -- This successfully simplifies the left side to 12, matching the right side\n  \n  -- No more goals left, so the proof is complete",
+  "statistics": {
+    "original_errors": 1,
+    "fixed_errors": 0,
+    "failed_errors": 1,
+    "remaining_errors": 1,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 18,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 1.2555716037750244
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 18,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress"
+      }
+    ],
+    "total_time": 1.3266568183898926
+  },
+  "message": "Original code error count: 1\n\u274c Fixed error 1/1: Could not generate fix for error at line 18 \u00absimp_failed\u00bb (after 1.26s)\n\n=== Fix statistics ===\nOriginal error count: 1\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 1\nRemaining errors: 1\nTotal time: 1.33 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 18\n   Error type: simp_failed\n   Original error message: simp made no progress...\n   Failure reason: Could not generate fix\n   Time: 1.26 seconds"
+}
