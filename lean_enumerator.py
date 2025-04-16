@@ -1177,7 +1177,7 @@ def main():
         file_path = args.file
     else:
         # Use original default path
-        file_path = "/data/coding/minif2f/lean_code/5.lean"
+        file_path = "/data/coding/minif2f/lean_code/1.lean"
         vlog("No file path provided, using default path: " + file_path)
     
     # Determine output directory

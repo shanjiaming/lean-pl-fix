@@ -70,17 +70,9 @@ theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
 # a = server.run(Command(cmd=proof_code, env=header.env))
 # a = server.run(Command(path= "/data/coding/minif2f/lean_code/112.lean"))
 
-cmddd=r"""import Mathlib
+cmddd="""import Mathlib
 open Lean
-
-run_cmd do
-  let env ← Lean.getEnv
-  let name := ``add_comm
-  let module? := env.getModuleFor? name
-  logInfo m!"{module?}" -- some (Mathlib.Algebra.Group.Defs)
-  let name := `not_a_theorem
-  let module? := env.getModuleFor? name
-  logInfo m!"{module?}" -- none"""
+"""
 
 response = server.run(Command(cmd=cmddd))
 print(response)
