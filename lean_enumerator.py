@@ -8,7 +8,7 @@ from Trinity.tyrell.decider import Example, ExampleDecider
 from Trinity.tyrell.synthesizer import Synthesizer
 from Trinity.tyrell.logger import get_logger
 
-from lean_api import repl
+from lean_interact_api import repl
 import json
 import re
 import sys
@@ -17,6 +17,7 @@ import time  # Import time module for timing
 import argparse  # Add argparse support for command line arguments
 import logging   # Import logging module for vlog
 import datetime  # Import datetime for log file naming
+from typing import List, Tuple, Dict, Optional, Any
 
 # Start the REPL
 repl.start()
@@ -69,7 +70,8 @@ def setup_logging(file_path=None, output_dir=None):
             level=logging.DEBUG,
             format='%(asctime)s - %(levelname)s - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S',
-            force=True  # Python 3.8+ 支持force参数
+            force=True,  # Python 3.8+ 支持force参数
+            filemode="w"
         )
     except TypeError:
         # 低于Python 3.8的版本不支持force参数
@@ -77,7 +79,8 @@ def setup_logging(file_path=None, output_dir=None):
             filename=log_file,
             level=logging.DEBUG,
             format='%(asctime)s - %(levelname)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
+            datefmt='%Y-%m-%d %H:%M:%S',
+            filemode="w"
         )
     
     logging.info(f"Log file initialized at {datetime.datetime.now().isoformat()}")
@@ -95,8 +98,8 @@ def vlog(message, level=logging.INFO):
         message: Message to log
         level: Logging level
     """
-    if VERBOSE_OUTPUT:
-        print(message)
+    # if VERBOSE_OUTPUT:
+        # print(message)
     
     if level == logging.DEBUG:
         logging.debug(message)
@@ -111,6 +114,102 @@ def vlog(message, level=logging.INFO):
     
     for handler in logging.root.handlers:
         handler.flush()
+
+# 适配新API的错误处理函数
+def parse_all_errors(result) -> List[Dict]:
+    """
+    Parse all error messages from the Lean output
+    
+    Args:
+        result: Result from execute or check
+        
+    Returns:
+        List of error dictionaries
+    """
+    errors = []
+    
+    try:
+        if "messages" in result:
+            for error_msg in result["messages"]:
+                # 适配新API的消息格式
+                if hasattr(error_msg, 'start_pos'):
+                    start_pos = {'line': error_msg.start_pos.line, 'column': error_msg.start_pos.column}
+                    end_pos = {'line': error_msg.end_pos.line, 'column': error_msg.end_pos.column} if hasattr(error_msg, 'end_pos') else None
+                    
+                    error = {
+                        'line': start_pos['line'],
+                        'column': start_pos['column'],
+                        'end_line': end_pos['line'] if end_pos else -1,
+                        'end_column': end_pos['column'] if end_pos else -1,
+                        'message': error_msg.data,
+                        'severity': error_msg.severity if hasattr(error_msg, 'severity') else "error",
+                    }
+                    
+                    errors.append(error)
+                # 兼容旧格式的消息
+                else:
+                    start_pos = error_msg.get("pos", {})
+                    end_pos = error_msg.get("endPos", {})
+                    
+                    error = {
+                        'line': start_pos.get("line", -1),
+                        'column': start_pos.get("column", -1),
+                        'end_line': end_pos.get("line", -1) if end_pos else -1,
+                        'end_column': end_pos.get("column", -1) if end_pos else -1,
+                        'message': error_msg.get("data", ""),
+                        'severity': error_msg.get("severity", "error"),
+                    }
+                    
+                    errors.append(error)
+    except Exception as e:
+        print(f"Error parsing error messages: {str(e)}")
+        
+    return errors
+
+# 适配新API的错误定位函数
+def locate_error(code) -> Tuple[bool, Optional[int], Optional[str]]:
+    """
+    Run code and find where the error is
+    
+    Returns:
+        Tuple[bool, int, str]: (has_error, error_line, error_message)
+    """
+    # Execute the code
+    result = repl.execute(code)
+    
+    if "messages" not in result or not result["messages"]:
+        return False, None, None
+    
+    try:
+        # Parse error information
+        if "messages" in result and len(result["messages"]) > 0:
+            error_msg = result["messages"][0]
+            
+            # 适配新API的消息格式
+            if hasattr(error_msg, 'start_pos'):
+                error_line = error_msg.start_pos.line
+                end_line = error_msg.end_pos.line if hasattr(error_msg, 'end_pos') else error_line
+                error_message = error_msg.data
+            # 兼容旧格式的消息
+            else:
+                start_pos = error_msg.get("pos", {})
+                end_pos = error_msg.get("endPos", {})
+                error_line = start_pos.get("line", -1)
+                end_line = end_pos.get("line", -1) if end_pos else -1
+                error_message = error_msg.get("data", "")
+            
+            # Only handle errors where pos and endPos are on the same line
+            if error_line == end_line and error_line > 0:
+                return True, error_line, error_message
+            else:
+                print(f"Error spans multiple lines or line number is abnormal: {error_line} -> {end_line}")
+                return False, None, None
+        else:
+            print("No error messages found")
+            return False, None, None
+    except Exception as e:
+        print(f"Error parsing error information: {str(e)}")
+        return False, None, None
 
 def extract_error_type(error):
     """
@@ -327,11 +426,11 @@ def evaluate_fix(original_code, fixed_code, targeted_line, targeted_error_messag
     """
     # Get all errors in the original code
     original_result = repl.execute(original_code)
-    original_errors = repl.parse_all_errors(original_result)
+    original_errors = parse_all_errors(original_result)
     
     # Get all errors in the fixed code
     fixed_result = repl.execute(fixed_code)
-    fixed_errors = repl.parse_all_errors(fixed_result)
+    fixed_errors = parse_all_errors(fixed_result)
     
     # Display error statistics
     if not is_checker_mode:
@@ -456,14 +555,14 @@ def prepare_code_for_synthesis(full_code, target_error_line=None):
         error_line = target_error_line
         # Still check to confirm this line actually has an error
         result = repl.execute(code_without_head)
-        errors = repl.parse_all_errors(result)
+        errors = parse_all_errors(result)
         target_errors = [e for e in errors if e['line'] == target_error_line]
         
         if not target_errors:
             if VERBOSE_OUTPUT:
                 vlog(f"Warning: No errors found at specified line {target_error_line}")
             # Try falling back to automatic location
-            has_error, auto_error_line, error_message = repl.locate_error(code_without_head)
+            has_error, auto_error_line, error_message = locate_error(code_without_head)
             if has_error:
                 if VERBOSE_OUTPUT:
                     vlog(f"Automatically located error at line: {auto_error_line}")
@@ -479,7 +578,7 @@ def prepare_code_for_synthesis(full_code, target_error_line=None):
                 vlog(f"Found error at specified line: {error_message}")
     else:
         # Use code without header for error location
-        has_error, error_line, error_message = repl.locate_error(code_without_head)
+        has_error, error_line, error_message = locate_error(code_without_head)
         
         if not has_error:
             if VERBOSE_OUTPUT:
@@ -526,8 +625,26 @@ def checker(s, before, indentation, original_error_content, after, original_erro
     # Build original code - including original error line
     original_code = before + indentation + original_error_content + after
     
+    # Check if the line contains "by " and handle replacement accordingly
+    if "by " in original_error_content:
+        # Find the position of "by " in the line
+        by_pos = original_error_content.find("by ")
+        # Get the part before "by "
+        before_by = original_error_content[:by_pos + 3]
+        # Find the position of the first right parenthesis after "by "
+        right_paren_pos = original_error_content.find(")", by_pos + 3)
+        if right_paren_pos != -1:
+            # If there's a right parenthesis, only replace up to that point
+            fixed_line = before_by + s + original_error_content[right_paren_pos:]
+        else:
+            # If no right parenthesis, replace everything after "by "
+            fixed_line = before_by + s
+    else:
+        # Original behavior - replace the whole line
+        fixed_line = s
+    
     # Combine fixed code
-    fixed_code = before + indentation + s + after
+    fixed_code = before + indentation + fixed_line + after
     
     if VERBOSE_OUTPUT:
         vlog(f"Testing fragment: {s}")
@@ -640,6 +757,18 @@ def synthesize_fix(code, target_error_line=None):
     # Start timing
     start_time = time.time()
     
+    # Get Tyrell spec file path from arguments
+    spec_file = get_spec_path()
+    if not os.path.exists(spec_file):
+        # Fallback if the specified file doesn't exist
+        vlog(f"Warning: Tyrell spec file not found at {spec_file}, falling back to default semantic/lean.tyrell", logging.WARNING)
+        spec_file = 'semantic/lean.tyrell'
+        if not os.path.exists(spec_file):
+            vlog(f"Error: Default Tyrell spec file {spec_file} also not found!", logging.ERROR)
+            # End timing early if spec is missing
+            elapsed_time = time.time() - start_time
+            return None, False, f"Tyrell spec file {spec_file} not found", elapsed_time, []
+
     # Extract header and code without header
     header_code, code_without_head = repl.extract_header(code)
     
@@ -666,12 +795,21 @@ def synthesize_fix(code, target_error_line=None):
     
     # Get error statistics for original code
     result = repl.execute(code_without_head)
-    original_errors = repl.parse_all_errors(result)
+    original_errors = parse_all_errors(result)
     original_error_count = len(original_errors)
     
-    # Parse spec
-    logger.info('Parsing spec file...')
-    spec = S.parse_file('semantic/lean.tyrell')
+    # Parse spec using the path from arguments
+    logger.info(f'Parsing spec file: {spec_file}...')
+    try:
+        spec = S.parse_file(spec_file)
+    except FileNotFoundError:
+        vlog(f"Error: Tyrell spec file {spec_file} not found during parsing!", logging.ERROR)
+        elapsed_time = time.time() - start_time
+        return None, False, f"Tyrell spec file {spec_file} not found", elapsed_time, []
+    except Exception as e:
+        vlog(f"Error parsing Tyrell spec file {spec_file}: {str(e)}", logging.ERROR)
+        elapsed_time = time.time() - start_time
+        return None, False, f"Error parsing Tyrell spec file {spec_file}: {str(e)}", elapsed_time, []
     logger.info('Parsing successful')
 
     # Build interpreter and synthesizer
@@ -836,7 +974,7 @@ def synthesize_all_fixes(code):
     
     # Get all errors from original code
     result = repl.execute(code_without_head)
-    original_errors = repl.parse_all_errors(result)
+    original_errors = parse_all_errors(result)
     original_error_count = len(original_errors)
     
     # Output all original error details
@@ -937,7 +1075,7 @@ def synthesize_all_fixes(code):
     # Final check
     _, final_code_without_head = repl.extract_header(current_code)
     final_result = repl.execute(final_code_without_head)
-    final_errors = repl.parse_all_errors(final_result)
+    final_errors = parse_all_errors(final_result)
     
     # Record remaining errors
     remaining_errors_details = []
@@ -1023,6 +1161,7 @@ def main():
     parser.add_argument('--json-file', type=str, help='Save JSON output to specified file (default: auto-generate based on input file)')
     parser.add_argument('--no-log', action='store_true', help='Disable JSON log file creation')
     parser.add_argument('--output-dir', type=str, help='Directory to store output files (default: ./minif2f/lean_fixed or based on input file)')
+    parser.add_argument('--tyrell-spec', type=str, help='Path to the Tyrell specification file', default='semantic/lean.tyrell')
     args = parser.parse_args()
     
     # Both JSON output and text output can be enabled simultaneously
@@ -1038,7 +1177,7 @@ def main():
         file_path = args.file
     else:
         # Use original default path
-        file_path = "/data/coding/minif2f/lean_code/3.lean"
+        file_path = "/data/coding/minif2f/lean_code/5.lean"
         vlog("No file path provided, using default path: " + file_path)
     
     # Determine output directory
@@ -1124,7 +1263,7 @@ def main():
             vlog(success_msg)
         return
     
-    original_errors = repl.parse_all_errors(result)
+    original_errors = parse_all_errors(result)
     if text_output:
         vlog(f"Original code contains {len(original_errors)} errors:")
         for i, error in enumerate(original_errors, 1):
@@ -1245,6 +1384,12 @@ def main():
         vlog("\n===== LOG FILE LOCATION =====")
         vlog(f"Detailed log file is available at: {log_file}")
         vlog(f"===============================")
+
+def get_spec_path():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--tyrell-spec', type=str, help='Path to the Tyrell specification file', default='semantic/lean.tyrell')
+    args, _ = parser.parse_known_args() # Parse only known args to avoid conflicts
+    return args.tyrell_spec
 
 if __name__ == '__main__':
     main()

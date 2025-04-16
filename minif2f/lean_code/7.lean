@@ -5,51 +5,60 @@ set_option maxHeartbeats 0
 
 open BigOperators Real Nat Topology Rat
 
-/-- 
-What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
-
-$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
-Show that it is \mathrm{(C)}.
-
-Proof outline:
-1. Let y be the side length of the original cube (volume = 1)
-2. Compute y from the volume equation y³ = 1
-3. Compute the surface area of original cube: 6y²
-4. The new cube has surface area twice this: 2*(6y²) = 12y²
-5. Let x be the side length of the new cube
-6. Set up equation for new cube's surface area: 6x² = 12y²
-7. Solve for x in terms of y
-8. Compute volume of new cube: x³
-9. Show this equals 2√2
--/
-theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
-  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
-  -- First, simplify the surface area equation h₂ by dividing both sides by 6
-  have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
-    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
-    exact h₂
-  
-  -- From the volume of the original cube (y³ = 1), we get y = 1
-  have h₄ : y = 1 := by
-    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
-  
-  -- Substitute y = 1 into the simplified equation x² = 2y²
-  have h₅ : x ^ 2 = 2 := by
-    rw [h₄, pow_two, mul_one] at h₃
-    exact h₃
-  
-  -- Since x > 0, we can take square root of both sides to get x = √2
-  have h₆ : x = Real.sqrt 2 := by
-    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
-  
-  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
-  rw [h₆, ← pow_three_sqrt_two]
-  
-  -- Helper lemma to show (√2)³ = 2 * √2
-  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
-    ring
-  
-  -- Apply the helper lemma to complete the proof
-  exact pow_three_sqrt_two
+/-- For what real value of $k$ is $\frac{13-\sqrt{131}}{4}$ a root of $2x^2-13x+k$? Show that it is $\frac{19}{4}$.-/
+theorem mathd_algebra_116 (k x : ℝ) (h₀ : x = (13 - Real.sqrt 131) / 4)
+    (h₁ : 2 * x ^ 2 - 13 * x + k = 0) : k = 19 / 4 := by
+  -- First, we substitute the value of x from h₀ into the equation h₁
+  rw [h₀] at h₁
+  -- Now simplify the equation by expanding the terms
+  -- We'll compute 2*x^2 - 13*x + k = 0 step by step
+  -- Start by expanding x^2 where x = (13 - √131)/4
+  have h₂ : x ^ 2 = ((13 - Real.sqrt 131) / 4) ^ 2 := by rw [h₀]
+  -- Compute the square of the numerator and denominator separately
+  have h₃ : ((13 - Real.sqrt 131) / 4) ^ 2 = (13 - Real.sqrt 131) ^ 2 / 16 := by ring
+  -- Expand the squared term in the numerator
+  have h₄ : (13 - Real.sqrt 131) ^ 2 = 13^2 - 2*13*Real.sqrt 131 + (Real.sqrt 131)^2 := by ring
+  -- Compute each term in the expansion
+  have h₅ : 13^2 = 169 := by norm_num
+  have h₆ : 2*13*Real.sqrt 131 = 26*Real.sqrt 131 := by ring
+  have h₇ : (Real.sqrt 131)^2 = 131 := by exact Real.sq_sqrt (by norm_num : 0 ≤ 131)
+  -- Combine these results to simplify the numerator
+  have h₈ : (13 - Real.sqrt 131) ^ 2 = 169 - 26*Real.sqrt 131 + 131 := by rw [h₄, h₅, h₆, h₇]
+  -- Combine the constant terms
+  have h₉ : 169 + 131 = 300 := by norm_num
+  have h₁₀ : (13 - Real.sqrt 131) ^ 2 = 300 - 26*Real.sqrt 131 := by rw [h₈, h₉]
+  -- Now we can rewrite x^2
+  have h₁₁ : x ^ 2 = (300 - 26*Real.sqrt 131)/16 := by rw [h₂, h₃, h₁₀]
+  -- Compute 2*x^2 by multiplying both sides by 2
+  have h₁₂ : 2 * x ^ 2 = 2 * (300 - 26*Real.sqrt 131)/16 := by rw [h₁₁]
+  -- Simplify the fraction
+  have h₁₃ : 2 * (300 - 26*Real.sqrt 131)/16 = (600 - 52*Real.sqrt 131)/16 := by ring
+  have h₁₄ : 2 * x ^ 2 = (600 - 52*Real.sqrt 131)/16 := by rw [h₁₂, h₁₃]
+  -- Now compute 13*x using the original expression for x
+  have h₁₅ : 13 * x = 13 * (13 - Real.sqrt 131)/4 := by rw [h₀]
+  -- Simplify the numerator
+  have h₁₆ : 13 * (13 - Real.sqrt 131) = 169 - 13*Real.sqrt 131 := by ring
+  have h₁₇ : 13 * x = (169 - 13*Real.sqrt 131)/4 := by rw [h₁₅, h₁₆]
+  -- To combine terms, we'll need common denominators (16)
+  -- Convert 13*x to have denominator 16
+  have h₁₈ : (169 - 13*Real.sqrt 131)/4 = (676 - 52*Real.sqrt 131)/16 := by ring
+  have h₁₉ : 13 * x = (676 - 52*Real.sqrt 131)/16 := by rw [h₁₇, h₁₈]
+  -- Now rewrite the original equation h₁ using our simplified terms
+  have h₂₀ : (600 - 52*Real.sqrt 131)/16 - (676 - 52*Real.sqrt 131)/16 + k = 0 := by
+    rw [← h₁₄, ← h₁₉]
+    exact h₁
+  -- Combine the fractions
+  have h₂₁ : ((600 - 52*Real.sqrt 131) - (676 - 52*Real.sqrt 131)) / 16 + k = 0 := by
+    rw [sub_div]
+    exact h₂₀
+  -- Simplify the numerator
+  have h₂₂ : (600 - 52*Real.sqrt 131 - 676 + 52*Real.sqrt 131) = -76 := by ring
+  -- Substitute back into the equation
+  have h₂₃ : (-76)/16 + k = 0 := by rw [h₂₁, h₂₂]
+  -- Simplify the fraction
+  have h₂₄ : -76/16 = -19/4 := by norm_num
+  have h₂₅ : -19/4 + k = 0 := by rw [← h₂₄] at h₂₃
+  -- Solve for k
+  have h₂₆ : k = 19/4 := by linarith
+  -- Our goal is exactly h₂₆
+  exact h₂₆

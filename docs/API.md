@@ -4,37 +4,40 @@
 
 ## 核心模块
 
-### LakeREPL (lean_api.py)
+### Lean REPL 接口
 
-Lean REPL交互接口，用于与Lean引擎通信。
+#### `lean_api.py`
 
-#### 主要方法
+封装了与Lean REPL的交互。该模块现在尝试优先使用 `lean-interact` 库（如果已安装）以提高稳定性和健壮性，如果 `lean-interact` 不可用，则回退到基于 `pty` 的传统实现。
 
-##### `LakeREPL.__init__(work_dir=None)`
+##### 主要类: `LakeREPL`
+
+###### `LakeREPL.__init__(work_dir=None, use_header_mode=True)`
 
 初始化Lean REPL接口。
 
 **参数**:
 - `work_dir` (str, optional): REPL进程的工作目录
+- `use_header_mode` (bool, optional): 是否启用头部处理模式（提取并复用 import/open/set_option 语句）。默认为 `True`。
 
-##### `LakeREPL.start()`
+###### `LakeREPL.start()`
 
-启动Lake REPL进程。
+启动Lake REPL进程或 `lean-interact` 服务器。
 
 **返回值**:
-- `bool`: 进程是否成功启动
+- `bool`: 进程/服务器是否成功启动
 
-##### `LakeREPL.execute(code)`
+###### `LakeREPL.execute(code)`
 
-执行Lean代码并返回解析后的输出。
+执行Lean代码并返回解析后的输出。如果 `use_header_mode` 为 `True`，会自动处理头部。
 
 **参数**:
 - `code` (str): 要执行的Lean代码
 
 **返回值**:
-- `Dict`: 包含错误或结果信息的解析输出
+- `Dict`: 包含环境信息 (`env`) 和消息列表 (`messages`) 的解析输出。失败时返回包含 `error` 键的字典。
 
-##### `LakeREPL.check(code)`
+###### `LakeREPL.check(code)`
 
 检查代码是否包含错误。
 
@@ -44,7 +47,7 @@ Lean REPL交互接口，用于与Lean引擎通信。
 **返回值**:
 - `Tuple[bool, Dict]`: (是否有效, 结果或错误信息)
 
-##### `LakeREPL.extract_header(full_code)`
+###### `LakeREPL.extract_header(full_code)`
 
 从代码中提取头部部分（import, set_option, open语句）。
 
@@ -54,31 +57,49 @@ Lean REPL交互接口，用于与Lean引擎通信。
 **返回值**:
 - `Tuple[str, str]`: (头部代码, 不含头部的代码)
 
-##### `LakeREPL.locate_error(code)`
+###### `LakeREPL.locate_error(code)`
 
-运行代码并找出错误位置。
+运行代码并找出第一个错误的位置。
 
 **返回值**:
 - `Tuple[bool, Optional[int], Optional[str]]`: (有错误, 错误行, 错误消息)
 
-##### `LakeREPL.parse_all_errors(result)`
+###### `LakeREPL.parse_all_errors(result)`
 
-解析Lean输出中的所有错误消息。
+解析 `execute` 或 `check` 返回结果中的所有错误消息。
 
 **参数**:
-- `result`: 来自execute或check的结果
+- `result` (Dict): 来自 execute 或 check 的结果字典
 
 **返回值**:
-- `List[Dict]`: 错误字典列表
+- `List[Dict]`: 错误字典列表，每个字典包含 `line`, `column`, `message`, `severity` 等键。
 
-##### `LakeREPL.end()`
+###### `LakeREPL.end()`
 
-终止Lake REPL进程。
+终止Lake REPL进程或关闭 `lean-interact` 服务器。
 
 **返回值**:
 - `bool`: 是否成功终止
 
-### 错误分析 (lean_enumerator.py)
+#### `lean_interact_api.py`
+
+一个更现代的 REPL 接口实现，专门使用 `lean-interact` 库。提供与 `lean_api.py` 类似的接口，但底层实现不同，通常更稳定。
+
+##### 主要类: `REPLInstance`
+
+###### `REPLInstance.__init__(work_dir=None, use_header_mode=True)`
+
+初始化基于 `lean-interact` 的 REPL 实例并启动服务器。
+
+**参数**:
+- `work_dir` (str, optional): REPL进程的工作目录 (传递给 `LeanREPLConfig`)
+- `use_header_mode` (bool, optional): 是否启用头部处理模式。默认为 `True`。
+
+###### 其他方法
+
+提供与 `lean_api.LakeREPL` 类似的方法，如 `start()`, `execute(code)`, `check(code)`, `extract_header(full_code)`, `locate_error(code)`, `parse_all_errors(result)`, `end()`。接口设计保持兼容。
+
+### 错误修复与合成 (lean_enumerator.py)
 
 #### `extract_error_type(error)`
 
@@ -95,19 +116,17 @@ Lean REPL交互接口，用于与Lean引擎通信。
 - `type_mismatch`: 类型不匹配错误
 - `syntax_error`: 语法错误
 - `rewrite_failed`: 重写策略失败
-- 以及其他40多种错误类型
+- 以及其他多种错误类型
 
 #### `similar_error_types(error1, error2)`
 
-比较两个错误是否完全相同（通过比较它们的位置和消息）。
+比较两个错误是否完全相同（主要通过比较它们的位置）。
 
 **参数**:
 - `error1`, `error2` (Dict): 两个错误字典
 
 **返回值**:
-- `bool`: 如果它们是完全相同的错误则返回True
-
-### 代码处理
+- `bool`: 如果它们是相似错误（位置相同）则返回True
 
 #### `prepare_code_for_synthesis(full_code, target_error_line=None)`
 
@@ -120,25 +139,23 @@ Lean REPL交互接口，用于与Lean引擎通信。
 **返回值**:
 - `Tuple[str, str, str, str, int]`: (错误行之前部分, 错误行缩进, 原始错误行内容, 错误行之后部分, 错误行号)
 
-### 评估修复
-
 #### `evaluate_fix(original_code, fixed_code, targeted_line, targeted_error_message=None, is_checker_mode=False)`
 
-评估修复是否解决了目标错误。
+评估修复是否解决了目标错误，并且没有引入新错误。
 
 **参数**:
-- `original_code` (str): 原始代码
-- `fixed_code` (str): 修复后的代码
+- `original_code` (str): 原始代码（不含头部）
+- `fixed_code` (str): 修复后的代码（不含头部）
 - `targeted_line` (int): 目标错误行号
-- `targeted_error_message` (str, optional): 要修复的错误消息特征
+- `targeted_error_message` (str, optional): 要修复的错误消息特征 (当前未使用)
 - `is_checker_mode` (bool): 是否在合成过程中的快速检查模式
 
 **返回值**:
-- `Tuple[bool, list]`: (修复是否成功解决了错误, 修复后代码中的错误列表)
+- `Tuple[bool, list]`: (修复是否成功解决了错误且未引入新错误, 修复后代码中的错误列表)
 
 #### `checker(s, before, indentation, original_error_content, after, original_error_line)`
 
-测试合成的代码片段是否修复了错误。
+测试合成的代码片段（`s`）是否修复了错误，是 `evaluate_fix` 的内部调用接口，供 Tyrell `Decider` 使用。
 
 **参数**:
 - `s` (str): 要测试的修复代码片段
@@ -149,136 +166,167 @@ Lean REPL交互接口，用于与Lean引擎通信。
 - `original_error_line` (int): 原始错误行号
 
 **返回值**:
-- `bool`: 修复是否解决了错误
-
-### 合成修复
+- `bool`: 修复是否有效（目标错误消失且无新错误）
 
 #### `synthesize_fix(code, target_error_line=None)`
 
-修复给定代码中的特定错误。
+修复给定代码中的特定错误（通常是第一个错误，或指定的 `target_error_line`）。
 
 **参数**:
-- `code` (str): 要修复的代码
+- `code` (str): 要修复的完整代码 (含头部)
 - `target_error_line` (int, optional): 要修复的错误行，如果未提供则查找第一个错误
 
 **返回值**:
-- `Tuple[str, bool, str, float, List]`: (修复后的代码, 成功标志, 消息, 耗时, 修复错误列表)
+- `Tuple[str, bool, str, float, List]`: (修复后的完整代码, 成功标志, 消息, 耗时, 修复后剩余错误列表)
 
 #### `synthesize_all_fixes(code)`
 
 尝试修复代码中的每个错误，逐个处理。
 
 **参数**:
-- `code` (str): 原始代码，可能带有头部
+- `code` (str): 原始完整代码 (含头部)
 
 **返回值**:
-- `Tuple[str, bool, str, Dict]`: (修复后的代码, 是否成功, 文本消息, JSON兼容的统计字典)
+- `Tuple[str, bool, str, Dict]`: (最终修复后的完整代码, 是否所有错误都修复成功, 文本消息总结, JSON兼容的统计字典)
 
-## 辅助工具
+## 辅助工具脚本
 
-### 批量处理 (lean_batch_enumerator.py)
+### 路径收集 (collectpath.py)
 
-#### `repair_file(file_path)`
+用于从 Lean 文件中提取标识符，并使用 Lean REPL 查询这些标识符的定义所在的库模块路径。
 
-处理单个文件的修复任务。
+#### 主要函数
 
-**参数**:
-- `file_path` (str): 要修复的Lean文件路径
+##### `collect_paths_from_file(file_path, output_file, batch_size=40)`
+
+处理单个 Lean 文件，将找到的 `identifier: module_path` 映射保存到 `output_file`。
+
+##### `collect_paths_from_directory(directory_path, output_dir, batch_size=40)`
+
+处理指定目录中的所有 `.lean` 文件，为每个文件生成一个单独的 JSON 输出（包含其标识符的模块路径映射），保存在 `output_dir` 中。
+
+##### `main()`
+
+处理命令行参数并调用相应函数。
+
+**命令行参数**:
+- `--file`: 要处理的单个 Lean 文件路径。
+- `--dir`: 要处理的 Lean 文件目录路径。
+- `--output`: （与 `--file` 配合使用）指定输出 JSON 文件的路径。
+- `--output-dir`: （与 `--dir` 配合使用）指定输出目录，用于存放每个输入文件对应的 JSON 结果。
+- `--batch-size`: 每次向 REPL 查询的标识符数量。
+
+### 定理静态过滤 (static_theorem_filter.py)
+
+根据库文件的静态分析（正则表达式匹配 `theorem` 和 `lemma` 关键字）来筛选定理。
+
+#### 主要函数
+
+##### `module_to_path(module_name, base_path)`
+
+将 Lean 模块名转换为文件系统路径。
+
+##### `extract_theorems_from_file(file_path)`
+
+使用正则表达式从单个 Lean 文件内容中提取 `theorem` 和 `lemma` 声明的名称。
+
+##### `main()`
+
+处理命令行参数，读取输入的 `identifier: module_path` JSON 文件，扫描相应库文件，过滤出包含定理声明的库及其定理，并将结果保存到输出 JSON 文件。
+
+**命令行参数**:
+- `input_json`: 输入的 JSON 文件路径 (`identifier: module_path` 格式)。
+- `output_json`: 输出 JSON 文件路径，包含 `selected_library_modules` 和 `theorems` 列表。
+
+### Tyrell 文件更新 (update_tyrell_theorems.py)
+
+使用 JSON 文件中的定理列表更新 Tyrell 规范文件 (`.tyrell`) 中的 `enum Theorem` 部分。
+
+#### 主要函数
+
+##### `read_theorems_from_json(json_path)`
+
+从 JSON 文件读取定理列表。
+
+##### `read_tyrell_content(tyrell_path)`
+
+读取原始 Tyrell 文件内容。
+
+##### `format_theorems_for_tyrell(theorems)`
+
+将定理列表格式化为 Tyrell `enum` 要求的格式。
+
+##### `update_tyrell_file(original_content, formatted_theorems)`
+
+替换 Tyrell 文件内容中的 `enum Theorem` 块。
+
+##### `save_updated_tyrell(content, output_path)`
+
+保存更新后的 Tyrell 内容。
+
+##### `main()`
+
+处理命令行参数，执行批量更新或单个文件更新。
+
+**命令行参数**:
+- `--json-input-dir`: 包含输入 JSON 文件（定理列表）的目录（用于批量处理）。
+- `--tyrell-input`: 原始 Tyrell 文件路径（作为模板）。
+- `--tyrell-output-dir`: 保存更新后的 Tyrell 文件的目录（用于批量处理）。
+
+*(注意：旧的单文件处理参数已被移除，脚本现在主要用于批量处理)*
+
+### 批量修复 (lean_batch_enumerator.py)
+
+#### `repair_file(file_path, output_dir)`
+
+处理单个文件的修复任务，并在成功时在 `output_dir` 中创建标记文件。
 
 #### `main()`
 
-批处理主函数，处理命令行参数并执行批量修复。
+批处理主函数，处理命令行参数并使用 `concurrent.futures` 并行调用 `lean_enumerator.py` 来修复指定目录中的所有 `.lean` 文件。
 
 **命令行参数**:
-- `--input_dir`: 包含.lean文件的输入目录
-- `--max_workers`: 最大并行处理数量
+- `--input_dir`: 包含 `.lean` 文件的输入目录。
+- `--output_dir`: 用于存储 `.done` 标记文件的目录。
+- `--max_workers`: 最大并行处理数量。
 
 ### 日志分析 (log_analyzer.py)
 
 #### `collect_log_files()`
 
-收集所有JSON日志文件。
-
-**返回值**:
-- `List[str]`: 日志文件路径列表
+收集指定目录下的所有 `_fix_log.json` 日志文件。
 
 #### `parse_log_file(file_path)`
 
 解析单个日志文件并提取统计信息。
 
-**参数**:
-- `file_path` (str): 日志文件路径
-
-**返回值**:
-- `Dict`: 包含统计信息的字典，或者在解析失败时为None
-
 #### `analyze_logs(log_data)`
 
-分析日志数据并生成统计信息。
-
-**参数**:
-- `log_data` (List[Dict]): 日志数据列表
-
-**返回值**:
-- `Dict`: 包含各种统计指标的字典
+分析日志数据列表并生成包含各种统计指标（如总体修复率、按错误类型统计、时间统计等）的字典。
 
 #### `print_analysis(analysis)`
 
-打印分析结果。
-
-**参数**:
-- `analysis` (Dict): 分析结果字典
+将分析结果以易读的格式打印到控制台。
 
 #### `generate_plots(analysis, output_dir, log_data)`
 
-生成可视化图表。
-
-**参数**:
-- `analysis` (Dict): 分析结果字典
-- `output_dir` (str): 输出目录
-- `log_data` (List[Dict]): 原始日志数据
+根据分析结果生成各种统计图表（如饼图、柱状图、直方图）并保存到 `output_dir`。
 
 #### `save_report_to_file(analysis, output_file)`
 
-将分析结果保存到文本文件。
-
-**参数**:
-- `analysis` (Dict): 分析结果字典
-- `output_file` (str): 输出文件路径
+将详细的分析报告保存到文本文件。
 
 #### `save_json_report(analysis, output_file)`
 
-将分析结果保存到JSON文件。
+将分析结果字典保存为 JSON 文件。
 
-**参数**:
-- `analysis` (Dict): 分析结果字典
-- `output_file` (str): 输出文件路径
+#### `main()`
 
-## 解释器类
+处理命令行参数，执行日志收集、解析、分析、报告生成和图表绘制。
 
-### `ToyInterpreter`
-
-基于Tyrell框架的后序解释器实现，用于评估可能的修复方案。
-
-#### 构造函数
-
-##### `ToyInterpreter.__init__(before, indentation, original_error_content, after, error_line)`
-
-初始化解释器。
-
-**参数**:
-- `before` (str): 错误行之前的代码
-- `indentation` (str): 错误行缩进
-- `original_error_content` (str): 原始错误行内容
-- `after` (str): 错误行之后的代码
-- `error_line` (int): 错误行号
-
-#### 主要方法
-
-- `eval_rw(node, args)`: 评估重写策略，返回`rw [args[0]]`
-- `eval_use_theorem_tactic(node, args)`: 评估定理应用策略，根据参数返回相应的战术
-- `eval_oneline(node, args)`: 评估单行修复，直接返回`args[0]`
-- `eval_checker(node, args)`: 检查给定修复是否有效，如果有效则保存该解决方案
+**命令行参数**:
+- `--input-dir` 或 `-i`: 包含 JSON 日志文件的输入目录。
+- `--output-dir` 或 `-o`: 存储分析结果（报告、图表）的目录。
 
 ## 工作流程
 

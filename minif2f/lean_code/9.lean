@@ -5,51 +5,44 @@ set_option maxHeartbeats 0
 
 open BigOperators Real Nat Topology Rat
 
-/-- 
-What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
-
-$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
-Show that it is \mathrm{(C)}.
-
-Proof outline:
-1. Let y be the side length of the original cube (volume = 1)
-2. Compute y from the volume equation y³ = 1
-3. Compute the surface area of original cube: 6y²
-4. The new cube has surface area twice this: 2*(6y²) = 12y²
-5. Let x be the side length of the new cube
-6. Set up equation for new cube's surface area: 6x² = 12y²
-7. Solve for x in terms of y
-8. Compute volume of new cube: x³
-9. Show this equals 2√2
--/
-theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
-  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
-  -- First, simplify the surface area equation h₂ by dividing both sides by 6
-  have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
-    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
-    exact h₂
-  
-  -- From the volume of the original cube (y³ = 1), we get y = 1
-  have h₄ : y = 1 := by
-    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
-  
-  -- Substitute y = 1 into the simplified equation x² = 2y²
-  have h₅ : x ^ 2 = 2 := by
-    rw [h₄, pow_two, mul_one] at h₃
-    exact h₃
-  
-  -- Since x > 0, we can take square root of both sides to get x = √2
-  have h₆ : x = Real.sqrt 2 := by
-    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
-  
-  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
-  rw [h₆, ← pow_three_sqrt_two]
-  
-  -- Helper lemma to show (√2)³ = 2 * √2
-  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
-    ring
-  
-  -- Apply the helper lemma to complete the proof
-  exact pow_three_sqrt_two
+/-- What is the greatest common factor of $20 !$ and $200,\!000$?  (Reminder: If $n$ is a positive integer, then $n!$ stands for the product $1\cdot 2\cdot 3\cdot \cdots \cdot (n-1)\cdot n$.) Show that it is 40,\!000.-/
+theorem mathd_numbertheory_169 : Nat.gcd 20! 200000 = 40000 := by
+  -- Compute the prime factorizations of 200000 and 20!
+  have h200000 : 200000 = 2^6 * 5^5 := by norm_num
+  -- The exponent of 2 in 20! is ∑_{k=1}^∞ floor(20 / 2^k) = 10 + 5 + 2 + 1 = 18
+  have h2_fact : Nat.factorization (20 !) 2 = 18 := by
+    rw [Nat.prime_factorial_iff two_prime]
+    simp only [Nat.prime_two, Nat.cast_ofNat, Nat.factorial_eq_prod, Nat.prod_factorization_eq_prod_pow]
+    norm_num
+  -- The exponent of 5 in 20! is ∑_{k=1}^∞ floor(20 / 5^k) = 4 + 0 = 4
+  have h5_fact : Nat.factorization (20 !) 5 = 4 := by
+    rw [Nat.prime_factorial_iff (by exact Nat.prime_five)]
+    simp only [Nat.prime_five, Nat.cast_ofNat, Nat.factorial_eq_prod, Nat.prod_factorization_eq_prod_pow]
+    norm_num
+  -- The gcd is the product of the minimum exponents for each prime
+  -- For 2: min(18, 6) = 6
+  -- For 5: min(4, 5) = 4
+  -- Other primes have exponent 0 in 200000, so they don't contribute to the gcd
+  rw [Nat.gcd_eq_of_factorization_le (a := 20!) (b := 200000)]
+  -- Simplify the factorization expression
+  simp only [h200000, Nat.factorization_pow, Nat.factorization_mul, Nat.factorization_of_prime Nat.prime_two,
+    Nat.factorization_of_prime (by exact Nat.prime_five), h2_fact, h5_fact]
+  -- The gcd's factorization is 2^6 * 5^4
+  have hgcd : 40000 = 2^6 * 5^4 := by norm_num
+  -- Apply the factorization to the gcd
+  rw [hgcd, Nat.factorization_mul, Nat.factorization_pow, Nat.factorization_pow,
+    Nat.factorization_of_prime Nat.prime_two, Nat.factorization_of_prime (by exact Nat.prime_five)]
+  -- Simplify the exponents
+  simp only [Nat.prime_two, Nat.prime_five, Nat.cast_ofNat, ite_true, Finsupp.coe_add, Pi.add_apply,
+    Finsupp.coe_smul, Finsupp.coe_zero, Pi.zero_apply, Pi.smul_apply, smul_eq_mul, mul_one]
+  -- The exponents for 2 and 5 match
+  congr
+  -- No other primes contribute to the gcd
+  ext p
+  simp only [Finsupp.coe_zero, Pi.zero_apply]
+  -- Show that for primes other than 2 and 5, the exponent is 0
+  by_cases hp : p = 2 ∨ p = 5
+  · cases hp with
+    | inl h => simp [h]
+    | inr h => simp [h]
+  · simp [hp]

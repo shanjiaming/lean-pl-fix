@@ -13,6 +13,7 @@
 
 - [使用示例](Examples.md) - 详细的使用场景和示例
 - [API文档](API.md) - 核心函数和模块的详细说明
+- [定理分析器](LeanTheoremAnalyzer.md) - Lean文件中mathlib定理的分析工具
 
 ### 技术文档
 
@@ -34,6 +35,12 @@ pip install -r requirements.txt
 
 ```bash
 python lean_enumerator.py path/to/your/file.lean
+```
+
+分析Lean文件中使用的mathlib定理：
+
+```bash
+python lean_theorem_analyzer.py path/to/your/file.lean
 ```
 
 ### 批量处理

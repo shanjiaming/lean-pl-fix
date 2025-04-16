@@ -1,0 +1,2609 @@
+2025-04-13 14:16:58 - INFO - Log file initialized at 2025-04-13T14:16:58.356469
+2025-04-13 14:16:58 - INFO - ===== LOG FILE LOCATION =====
+2025-04-13 14:16:58 - INFO - Detailed log file created at: /data/coding/minif2f/lean_fixed/46.log
+2025-04-13 14:16:58 - INFO - ===============================
+2025-04-13 14:16:58 - INFO - Original code:
+2025-04-13 14:16:58 - INFO - ----------------------------------------
+2025-04-13 14:16:58 - INFO - import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+/-- Show that for any real-valued function $a$ on the natural numbers such that $\forall i \in \mathbb{N}, a_i \geq 0$, 
+    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \geq n$.-/
+theorem algebra_amgm_prod1toneq1_sum1tongeqn (a : ℕ → NNReal) (n : ℕ)
+    (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+  -- First, we'll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality
+  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is ≥ geometric mean
+  have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+  
+  -- Simplify the arithmetic mean (left side of AM-GM inequality)
+  -- The arithmetic mean is (sum a_i)/n
+  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) := by
+    simp only [NNReal.div_def]
+  
+  -- Simplify the geometric mean (right side of AM-GM inequality)
+  -- The geometric mean is (prod a_i)^(1/n)
+  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n⁻¹ : NNReal) = 
+      (1 : NNReal) ^ (n⁻¹ : NNReal) := by
+    -- Substitute h₀ which states that the product equals 1
+    rw [h₀]
+  
+  -- Since 1 raised to any power is 1, we can further simplify the geometric mean
+  have geom_mean_simplified : (1 : NNReal) ^ (n⁻¹ : NNReal) = 1 := by
+    exact NNReal.one_rpow _
+  
+  -- Combine the geometric mean simplifications
+  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified
+  
+  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means
+  rw [arith_mean, geom_mean_final] at amgm_ineq
+  
+  -- Now we have: (sum a_i) * n⁻¹ ≥ 1
+  -- Multiply both sides by n (which is positive since n is a natural number)
+  -- Note: multiplication by n is order-preserving since n > 0
+  have n_pos : n > 0 ∨ n = 0 := by
+    exact Nat.eq_zero_or_pos n
+  cases n_pos with
+  | inl hn_pos =>
+    -- Case when n > 0
+    have multiply_both_sides := mul_le_mul_right' amgm_ineq (n : NNReal)
+    -- Simplify: (sum a_i) * n⁻¹ * n = sum a_i
+    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) * n = 
+        Finset.sum (Finset.range n) a := by
+      rw [mul_assoc, inv_mul_cancel, mul_one]
+      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)
+    -- Simplify: 1 * n = n
+    have rhs_simplified : (1 : NNReal) * n = n := by
+      simp only [one_mul]
+    -- Rewrite the inequality with these simplifications
+    rw [lhs_simplified, rhs_simplified] at multiply_both_sides
+    exact multiply_both_sides
+  | inr hn_zero =>
+    -- Case when n = 0
+    -- Both sides become 0, and 0 ≥ 0 is trivially true
+    rw [hn_zero]
+    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]
+2025-04-13 14:16:58 - INFO - ----------------------------------------
+2025-04-13 14:16:58 - INFO - 
+Checking original code for all errors...
+2025-04-13 14:18:38 - INFO - Original code contains 2 errors:
+2025-04-13 14:18:38 - INFO - Error 1: line 7, type: unknown_constant, message: unknown constant 'Finset.le_geom_mean_arith_mean'...
+2025-04-13 14:18:38 - INFO - Error 2: line 4, type: other_error, message: unsolved goals
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n...
+2025-04-13 14:18:38 - INFO - 
+Starting multi-error continuous repair process...
+2025-04-13 14:18:38 - INFO - 
+===== Starting to fix all errors =====
+2025-04-13 14:18:39 - INFO - 
+Found 2 original errors:
+2025-04-13 14:18:39 - INFO - Error 1: line 7, type: unknown_constant, message: unknown constant 'Finset.le_geom_mean_arith_mean'...
+2025-04-13 14:18:39 - INFO - Error 2: line 4, type: other_error, message: unsolved goals
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n...
+2025-04-13 14:18:39 - INFO - 
+Trying to fix error 1/2: line 4, type: other_error
+2025-04-13 14:18:39 - INFO - Error message: unsolved goals
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n...
+2025-04-13 14:18:39 - INFO - Removed header content, remaining 55 lines of code
+2025-04-13 14:18:39 - INFO - Using specified target error line: 4
+2025-04-13 14:18:40 - INFO - Found error at specified line: unsolved goals
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:18:40 - INFO - Error at line 4: unsolved goals
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:18:40 - INFO - 
+==================================================
+2025-04-13 14:18:40 - INFO - Code prepared, starting synthesis
+2025-04-13 14:18:40 - INFO - Before part: /-- Show that for any real-valued function $a$ on the natural numbers such that $\forall i \in \mathbb{N}, a_i \geq 0$, 
+    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \geq n$.-/
+theorem algebra_amgm_prod1toneq1_sum1tongeqn (a : ℕ → NNReal) (n : ℕ)
+2025-04-13 14:18:40 - INFO - Error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:40 - INFO - After part: -- First, we'll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality
+  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is ≥ geometric mean
+  have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+  
+  -- Simplify the arithmetic mean (left side of AM-GM inequality)
+  -- The arithmetic mean is (sum a_i)/n
+  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) := by
+    simp only [NNReal.div_def]
+  
+  -- Simplify the geometric mean (right side of AM-GM inequality)
+  -- The geometric mean is (prod a_i)^(1/n)
+  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n⁻¹ : NNReal) = 
+      (1 : NNReal) ^ (n⁻¹ : NNReal) := by
+    -- Substitute h₀ which states that the product equals 1
+    rw [h₀]
+  
+  -- Since 1 raised to any power is 1, we can further simplify the geometric mean
+  have geom_mean_simplified : (1 : NNReal) ^ (n⁻¹ : NNReal) = 1 := by
+    exact NNReal.one_rpow _
+  
+  -- Combine the geometric mean simplifications
+  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified
+  
+  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means
+  rw [arith_mean, geom_mean_final] at amgm_ineq
+  
+  -- Now we have: (sum a_i) * n⁻¹ ≥ 1
+  -- Multiply both sides by n (which is positive since n is a natural number)
+  -- Note: multiplication by n is order-preserving since n > 0
+  have n_pos : n > 0 ∨ n = 0 := by
+    exact Nat.eq_zero_or_pos n
+  cases n_pos with
+  | inl hn_pos =>
+    -- Case when n > 0
+    have multiply_both_sides := mul_le_mul_right' amgm_ineq (n : NNReal)
+    -- Simplify: (sum a_i) * n⁻¹ * n = sum a_i
+    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) * n = 
+        Finset.sum (Finset.range n) a := by
+      rw [mul_assoc, inv_mul_cancel, mul_one]
+      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)
+    -- Simplify: 1 * n = n
+    have rhs_simplified : (1 : NNReal) * n = n := by
+      simp only [one_mul]
+    -- Rewrite the inequality with these simplifications
+    rw [lhs_simplified, rhs_simplified] at multiply_both_sides
+    exact multiply_both_sides
+  | inr hn_zero =>
+    -- Case when n = 0
+    -- Both sides become 0, and 0 ≥ 0 is trivially true
+    rw [hn_zero]
+    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]
+2025-04-13 14:18:40 - INFO - ==================================================
+
+2025-04-13 14:18:41 - INFO - Testing fragment: rw [left_distrib]
+2025-04-13 14:18:41 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:43 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:43 - DEBUG - === New errors detail ===
+2025-04-13 14:18:43 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:43 - INFO - Testing fragment: rw [right_distrib]
+2025-04-13 14:18:43 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:45 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:45 - DEBUG - === New errors detail ===
+2025-04-13 14:18:45 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:45 - INFO - Testing fragment: rw [distrib_three_right]
+2025-04-13 14:18:45 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:47 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:47 - DEBUG - === New errors detail ===
+2025-04-13 14:18:47 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:47 - INFO - Testing fragment: rw [add_one_mul]
+2025-04-13 14:18:47 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:49 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:49 - DEBUG - === New errors detail ===
+2025-04-13 14:18:49 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:49 - INFO - Testing fragment: rw [mul_add_one]
+2025-04-13 14:18:49 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:51 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:51 - DEBUG - === New errors detail ===
+2025-04-13 14:18:51 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:51 - INFO - Testing fragment: rw [one_add_mul]
+2025-04-13 14:18:51 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:53 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:53 - DEBUG - === New errors detail ===
+2025-04-13 14:18:53 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:53 - INFO - Testing fragment: rw [mul_one_add]
+2025-04-13 14:18:53 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:55 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:55 - DEBUG - === New errors detail ===
+2025-04-13 14:18:55 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:55 - INFO - Testing fragment: rw [two_mul]
+2025-04-13 14:18:55 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:57 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:57 - DEBUG - === New errors detail ===
+2025-04-13 14:18:57 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:57 - INFO - Testing fragment: rw [mul_two]
+2025-04-13 14:18:57 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:18:59 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:18:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:18:59 - DEBUG - === New errors detail ===
+2025-04-13 14:18:59 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:18:59 - INFO - Testing fragment: rw [mul_boole]
+2025-04-13 14:18:59 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:01 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:01 - DEBUG - === New errors detail ===
+2025-04-13 14:19:01 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:01 - INFO - Testing fragment: rw [boole_mul]
+2025-04-13 14:19:01 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:03 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:03 - DEBUG - === New errors detail ===
+2025-04-13 14:19:03 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:03 - INFO - Testing fragment: rw [add_mul_self_eq]
+2025-04-13 14:19:03 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:05 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:05 - DEBUG - === New errors detail ===
+2025-04-13 14:19:05 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:05 - INFO - Testing fragment: rw [neg_mul]
+2025-04-13 14:19:05 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:07 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:07 - DEBUG - === New errors detail ===
+2025-04-13 14:19:07 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:07 - INFO - Testing fragment: rw [mul_neg]
+2025-04-13 14:19:07 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:09 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:09 - DEBUG - === New errors detail ===
+2025-04-13 14:19:09 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:09 - INFO - Testing fragment: rw [neg_mul_neg]
+2025-04-13 14:19:09 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:11 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:11 - DEBUG - === New errors detail ===
+2025-04-13 14:19:11 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:11 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
+2025-04-13 14:19:11 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:13 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:13 - DEBUG - === New errors detail ===
+2025-04-13 14:19:13 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:13 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
+2025-04-13 14:19:13 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:15 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:15 - DEBUG - === New errors detail ===
+2025-04-13 14:19:15 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:15 - INFO - Testing fragment: rw [neg_mul_comm]
+2025-04-13 14:19:15 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:17 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:17 - DEBUG - === New errors detail ===
+2025-04-13 14:19:17 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:17 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
+2025-04-13 14:19:17 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:19 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:19 - DEBUG - === New errors detail ===
+2025-04-13 14:19:19 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:19 - INFO - Testing fragment: rw [mul_neg_one]
+2025-04-13 14:19:19 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:21 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:21 - DEBUG - === New errors detail ===
+2025-04-13 14:19:21 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:21 - INFO - Testing fragment: rw [neg_one_mul]
+2025-04-13 14:19:21 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:23 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:23 - DEBUG - === New errors detail ===
+2025-04-13 14:19:23 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:23 - INFO - Testing fragment: rw [mul_sub_left_distrib]
+2025-04-13 14:19:23 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:25 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:25 - DEBUG - === New errors detail ===
+2025-04-13 14:19:25 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:25 - INFO - Testing fragment: rw [mul_sub_right_distrib]
+2025-04-13 14:19:25 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:27 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:27 - DEBUG - === New errors detail ===
+2025-04-13 14:19:27 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:27 - INFO - Testing fragment: rw [sub_one_mul]
+2025-04-13 14:19:27 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:29 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:29 - DEBUG - === New errors detail ===
+2025-04-13 14:19:29 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:29 - INFO - Testing fragment: rw [mul_sub_one]
+2025-04-13 14:19:29 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:31 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:31 - DEBUG - === New errors detail ===
+2025-04-13 14:19:31 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:31 - INFO - Testing fragment: rw [one_sub_mul]
+2025-04-13 14:19:31 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:33 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:33 - DEBUG - === New errors detail ===
+2025-04-13 14:19:33 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:33 - INFO - Testing fragment: rw [mul_one_sub]
+2025-04-13 14:19:33 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:35 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:35 - DEBUG - === New errors detail ===
+2025-04-13 14:19:35 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:35 - INFO - Testing fragment: rw [mul_left_cancel]
+2025-04-13 14:19:35 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:37 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:37 - DEBUG - === New errors detail ===
+2025-04-13 14:19:37 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:37 - INFO - Testing fragment: rw [mul_left_cancel_iff]
+2025-04-13 14:19:37 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:39 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:39 - DEBUG - === New errors detail ===
+2025-04-13 14:19:39 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:39 - INFO - Testing fragment: rw [mul_right_injective]
+2025-04-13 14:19:39 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:41 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:41 - DEBUG - === New errors detail ===
+2025-04-13 14:19:41 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:41 - INFO - Testing fragment: rw [mul_right_inj]
+2025-04-13 14:19:41 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:43 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:43 - DEBUG - === New errors detail ===
+2025-04-13 14:19:43 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:43 - INFO - Testing fragment: rw [mul_ne_mul_right]
+2025-04-13 14:19:43 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:45 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:45 - DEBUG - === New errors detail ===
+2025-04-13 14:19:45 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:45 - INFO - Testing fragment: rw [mul_right_cancel]
+2025-04-13 14:19:45 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:47 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:47 - DEBUG - === New errors detail ===
+2025-04-13 14:19:47 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:47 - INFO - Testing fragment: rw [mul_right_cancel_iff]
+2025-04-13 14:19:47 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:49 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:49 - DEBUG - === New errors detail ===
+2025-04-13 14:19:49 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:49 - INFO - Testing fragment: rw [mul_left_injective]
+2025-04-13 14:19:49 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:51 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:51 - DEBUG - === New errors detail ===
+2025-04-13 14:19:51 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:51 - INFO - Testing fragment: rw [mul_left_inj]
+2025-04-13 14:19:51 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:53 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:53 - DEBUG - === New errors detail ===
+2025-04-13 14:19:53 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:53 - INFO - Testing fragment: rw [mul_ne_mul_left]
+2025-04-13 14:19:53 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:55 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:55 - DEBUG - === New errors detail ===
+2025-04-13 14:19:55 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:55 - INFO - Testing fragment: rw [mul_assoc]
+2025-04-13 14:19:55 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:57 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:57 - DEBUG - === New errors detail ===
+2025-04-13 14:19:57 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:57 - INFO - Testing fragment: rw [mul_comm]
+2025-04-13 14:19:57 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:19:59 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:19:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:19:59 - DEBUG - === New errors detail ===
+2025-04-13 14:19:59 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:19:59 - INFO - Testing fragment: rw [MulOneClass]
+2025-04-13 14:19:59 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:01 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:01 - DEBUG - === New errors detail ===
+2025-04-13 14:20:01 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:01 - INFO - Testing fragment: rw [one_mul]
+2025-04-13 14:20:01 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:03 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:03 - DEBUG - === New errors detail ===
+2025-04-13 14:20:03 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:03 - INFO - Testing fragment: rw [mul_one]
+2025-04-13 14:20:03 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:05 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:05 - DEBUG - === New errors detail ===
+2025-04-13 14:20:05 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:05 - INFO - Testing fragment: rw [npowRec_add]
+2025-04-13 14:20:05 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:07 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:07 - DEBUG - === New errors detail ===
+2025-04-13 14:20:07 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:07 - INFO - Testing fragment: rw [npowRec_succ]
+2025-04-13 14:20:07 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:09 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:09 - DEBUG - === New errors detail ===
+2025-04-13 14:20:09 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:09 - INFO - Testing fragment: rw [npowRec'_succ]
+2025-04-13 14:20:09 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:11 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:11 - DEBUG - === New errors detail ===
+2025-04-13 14:20:11 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:11 - INFO - Testing fragment: rw [npowRec'_two_mul]
+2025-04-13 14:20:11 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:13 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:13 - DEBUG - === New errors detail ===
+2025-04-13 14:20:13 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:13 - INFO - Testing fragment: rw [npowRec'_mul_comm]
+2025-04-13 14:20:13 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:15 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:15 - DEBUG - === New errors detail ===
+2025-04-13 14:20:15 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:15 - INFO - Testing fragment: rw [npowRec_eq]
+2025-04-13 14:20:15 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:17 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:17 - DEBUG - === New errors detail ===
+2025-04-13 14:20:17 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:17 - INFO - Testing fragment: rw [npowBinRec]
+2025-04-13 14:20:17 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:19 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:19 - DEBUG - === New errors detail ===
+2025-04-13 14:20:19 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:19 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
+2025-04-13 14:20:19 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:21 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:21 - DEBUG - === New errors detail ===
+2025-04-13 14:20:21 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:21 - INFO - Testing fragment: rw [npow_eq_pow]
+2025-04-13 14:20:21 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:23 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:23 - DEBUG - === New errors detail ===
+2025-04-13 14:20:23 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:23 - INFO - Testing fragment: rw [pow_zero]
+2025-04-13 14:20:23 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:25 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:25 - DEBUG - === New errors detail ===
+2025-04-13 14:20:25 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:25 - INFO - Testing fragment: rw [pow_succ]
+2025-04-13 14:20:25 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:27 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:27 - DEBUG - === New errors detail ===
+2025-04-13 14:20:27 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:27 - INFO - Testing fragment: rw [inv_inv]
+2025-04-13 14:20:27 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:20:29 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:20:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:20:29 - DEBUG - === New errors detail ===
+2025-04-13 14:20:29 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:20:29 - INFO - Testing fragment: rw [exists_zpow_surjective]
+2025-04-13 14:20:29 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:21:03 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:21:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:21:03 - DEBUG - === New errors detail ===
+2025-04-13 14:21:03 - DEBUG - New Error 1: line 4, type: syntax_error, message: unexpected token 'have'; expected ':'
+2025-04-13 14:21:03 - INFO - Testing fragment: rw [zpow_eq_pow]
+2025-04-13 14:21:03 - INFO - Original error line:     (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+2025-04-13 14:25:11 - INFO - Synthesis failed: ('Execution failed', 'Execution timed out after 200.0 seconds. Partial output:\n{"cmd": "/-- Show that for any real-valued function $a$ on the natural numbers such that $\\\\forall i \\\\in \\\\mathbb{N}, a_i \\\\geq 0$, \\n    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \\\\geq n$.-/\\ntheorem algebra_amgm_prod1toneq1_sum1tongeqn (a : ℕ → NNReal) (n : ℕ)\\n    (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by\\n  -- First, we\'ll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality\\n  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is ≥ geometric mean\\n  have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)\\n  \\n  -- Simplify the arithmetic mean (left side of AM-GM inequality)\\n  -- The arithmetic mean is (sum a_i)/n\\n  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) := by\\n    simp only [NNReal.div_def]\\n  \\n  -- Simplify the geometric mean (right side of AM-GM inequality)\\n  -- The geometric mean is (prod a_i)^(1/n)\\n  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n⁻¹ : NNReal) = \\n      (1 : NNReal) ^ (n⁻¹ : NNReal) := by\\n    -- Substitute h₀ which states that the product equals 1\\n    rw [h₀]\\n  \\n  -- Since 1 raised to any power is 1, we can further simplify the geometric mean\\n  have geom_mean_simplified : (1 : NNReal) ^ (n⁻¹ : NNReal) = 1 := by\\n    exact NNReal.one_rpow _\\n  \\n  -- Combine the geometric mean simplifications\\n  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified\\n  \\n  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means\\n  rw [arith_mean, geom_mean_final] at amgm_ineq\\n  \\n  -- Now we have: (sum a_i) * n⁻¹ ≥ 1\\n  -- Multiply both sides by n (which is positive since n is a natural number)\\n  -- Note: multiplication by n is order-preserving since n > 0\\n  have n_pos : n > 0 ∨ n = 0 := by\\n    exact Nat.eq_zero_or_pos n\\n  cases n_pos with\\n  | inl hn_pos =>\\n    -- Case when n > 0\\n    have multiply_both_sides := mul_le_mul_right\' amgm_ineq (n : NNReal)\\n    -- Simplify: (sum a_i) * n⁻¹ * n = sum a_i\\n    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) * n = \\n        Finset.sum (Finset.range n) a := by\\n      rw [mul_assoc, inv_mul_cancel, mul_one]\\n      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)\\n    -- Simplify: 1 * n = n\\n    have rhs_simplified : (1 : NNReal) * n = n := by\\n      simp only [one_mul]\\n    -- Rewrite the inequality with these simplifications\\n    rw [lhs_simplified, rhs_simplified] at multiply_both_sides\\n    exact multiply_both_sides\\n  | inr hn_zero =>\\n    -- Case when n = 0\\n    -- Both sides become 0, and 0 ≥ 0 is trivially true\\n    rw [hn_zero]\\n    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]", "env": 0}\r\n\r\n')
+2025-04-13 14:25:11 - INFO - Failed attempt time: 392.27 seconds
+2025-04-13 14:25:11 - INFO - ❌ Could not generate fix for error at line 4
+2025-04-13 14:25:11 - INFO - 
+Trying to fix error 2/2: line 7, type: unknown_constant
+2025-04-13 14:25:11 - INFO - Error message: unknown constant 'Finset.le_geom_mean_arith_mean'...
+2025-04-13 14:25:11 - INFO - Removed header content, remaining 55 lines of code
+2025-04-13 14:25:11 - INFO - Using specified target error line: 7
+2025-04-13 14:25:16 - INFO - Found error at specified line: unknown constant 'Finset.le_geom_mean_arith_mean'
+2025-04-13 14:25:16 - INFO - Error at line 7: unknown constant 'Finset.le_geom_mean_arith_mean'
+2025-04-13 14:25:16 - INFO - 
+==================================================
+2025-04-13 14:25:16 - INFO - Code prepared, starting synthesis
+2025-04-13 14:25:16 - INFO - Before part: /-- Show that for any real-valued function $a$ on the natural numbers such that $\forall i \in \mathbb{N}, a_i \geq 0$, 
+    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \geq n$.-/
+theorem algebra_amgm_prod1toneq1_sum1tongeqn (a : ℕ → NNReal) (n : ℕ)
+    (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+  -- First, we'll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality
+  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is ≥ geometric mean
+2025-04-13 14:25:16 - INFO - Error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:16 - INFO - After part: -- Simplify the arithmetic mean (left side of AM-GM inequality)
+  -- The arithmetic mean is (sum a_i)/n
+  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) := by
+    simp only [NNReal.div_def]
+  
+  -- Simplify the geometric mean (right side of AM-GM inequality)
+  -- The geometric mean is (prod a_i)^(1/n)
+  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n⁻¹ : NNReal) = 
+      (1 : NNReal) ^ (n⁻¹ : NNReal) := by
+    -- Substitute h₀ which states that the product equals 1
+    rw [h₀]
+  
+  -- Since 1 raised to any power is 1, we can further simplify the geometric mean
+  have geom_mean_simplified : (1 : NNReal) ^ (n⁻¹ : NNReal) = 1 := by
+    exact NNReal.one_rpow _
+  
+  -- Combine the geometric mean simplifications
+  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified
+  
+  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means
+  rw [arith_mean, geom_mean_final] at amgm_ineq
+  
+  -- Now we have: (sum a_i) * n⁻¹ ≥ 1
+  -- Multiply both sides by n (which is positive since n is a natural number)
+  -- Note: multiplication by n is order-preserving since n > 0
+  have n_pos : n > 0 ∨ n = 0 := by
+    exact Nat.eq_zero_or_pos n
+  cases n_pos with
+  | inl hn_pos =>
+    -- Case when n > 0
+    have multiply_both_sides := mul_le_mul_right' amgm_ineq (n : NNReal)
+    -- Simplify: (sum a_i) * n⁻¹ * n = sum a_i
+    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) * n = 
+        Finset.sum (Finset.range n) a := by
+      rw [mul_assoc, inv_mul_cancel, mul_one]
+      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)
+    -- Simplify: 1 * n = n
+    have rhs_simplified : (1 : NNReal) * n = n := by
+      simp only [one_mul]
+    -- Rewrite the inequality with these simplifications
+    rw [lhs_simplified, rhs_simplified] at multiply_both_sides
+    exact multiply_both_sides
+  | inr hn_zero =>
+    -- Case when n = 0
+    -- Both sides become 0, and 0 ≥ 0 is trivially true
+    rw [hn_zero]
+    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]
+2025-04-13 14:25:16 - INFO - ==================================================
+
+2025-04-13 14:25:17 - INFO - Testing fragment: rw [left_distrib]
+2025-04-13 14:25:17 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:19 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:19 - DEBUG - === New errors detail ===
+2025-04-13 14:25:19 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + ?c)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:19 - INFO - Testing fragment: rw [right_distrib]
+2025-04-13 14:25:19 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:21 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:21 - DEBUG - === New errors detail ===
+2025-04-13 14:25:21 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:21 - INFO - Testing fragment: rw [distrib_three_right]
+2025-04-13 14:25:21 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:23 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:23 - DEBUG - === New errors detail ===
+2025-04-13 14:25:23 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b + ?c) * ?d
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:23 - INFO - Testing fragment: rw [add_one_mul]
+2025-04-13 14:25:23 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:25 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:25 - DEBUG - === New errors detail ===
+2025-04-13 14:25:25 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + 1) * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:25 - INFO - Testing fragment: rw [mul_add_one]
+2025-04-13 14:25:25 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:27 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:27 - DEBUG - === New errors detail ===
+2025-04-13 14:25:27 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + 1)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:27 - INFO - Testing fragment: rw [one_add_mul]
+2025-04-13 14:25:27 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:29 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:29 - DEBUG - === New errors detail ===
+2025-04-13 14:25:29 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 + ?a) * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:29 - INFO - Testing fragment: rw [mul_one_add]
+2025-04-13 14:25:29 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:31 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:31 - DEBUG - === New errors detail ===
+2025-04-13 14:25:31 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 + ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:31 - INFO - Testing fragment: rw [two_mul]
+2025-04-13 14:25:31 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:33 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:33 - DEBUG - === New errors detail ===
+2025-04-13 14:25:33 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  2 * ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:33 - INFO - Testing fragment: rw [mul_two]
+2025-04-13 14:25:33 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:35 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:35 - DEBUG - === New errors detail ===
+2025-04-13 14:25:35 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * 2
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:35 - INFO - Testing fragment: rw [mul_boole]
+2025-04-13 14:25:35 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:37 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:37 - DEBUG - === New errors detail ===
+2025-04-13 14:25:37 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * if ?P then 1 else 0
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:37 - INFO - Testing fragment: rw [boole_mul]
+2025-04-13 14:25:37 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:39 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:39 - DEBUG - === New errors detail ===
+2025-04-13 14:25:39 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (if ?P then 1 else 0) * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:39 - INFO - Testing fragment: rw [add_mul_self_eq]
+2025-04-13 14:25:39 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:41 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:41 - DEBUG - === New errors detail ===
+2025-04-13 14:25:41 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * (?a + ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:41 - INFO - Testing fragment: rw [neg_mul]
+2025-04-13 14:25:41 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:43 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:43 - DEBUG - === New errors detail ===
+2025-04-13 14:25:43 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:43 - INFO - Testing fragment: rw [mul_neg]
+2025-04-13 14:25:43 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:45 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:45 - DEBUG - === New errors detail ===
+2025-04-13 14:25:45 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:45 - INFO - Testing fragment: rw [neg_mul_neg]
+2025-04-13 14:25:45 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:47 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:47 - DEBUG - === New errors detail ===
+2025-04-13 14:25:47 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * -?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:47 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
+2025-04-13 14:25:47 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:49 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:49 - DEBUG - === New errors detail ===
+2025-04-13 14:25:49 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:49 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
+2025-04-13 14:25:49 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:51 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:51 - DEBUG - === New errors detail ===
+2025-04-13 14:25:51 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:51 - INFO - Testing fragment: rw [neg_mul_comm]
+2025-04-13 14:25:51 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:53 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:53 - DEBUG - === New errors detail ===
+2025-04-13 14:25:53 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:53 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
+2025-04-13 14:25:53 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:55 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:55 - DEBUG - === New errors detail ===
+2025-04-13 14:25:55 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:55 - INFO - Testing fragment: rw [mul_neg_one]
+2025-04-13 14:25:55 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:57 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:57 - DEBUG - === New errors detail ===
+2025-04-13 14:25:57 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:57 - INFO - Testing fragment: rw [neg_one_mul]
+2025-04-13 14:25:57 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:25:59 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:25:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:25:59 - DEBUG - === New errors detail ===
+2025-04-13 14:25:59 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:25:59 - INFO - Testing fragment: rw [mul_sub_left_distrib]
+2025-04-13 14:25:59 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:01 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:01 - DEBUG - === New errors detail ===
+2025-04-13 14:26:01 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ?c)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:01 - INFO - Testing fragment: rw [mul_sub_right_distrib]
+2025-04-13 14:26:01 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:03 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:03 - DEBUG - === New errors detail ===
+2025-04-13 14:26:03 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - ?b) * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:03 - INFO - Testing fragment: rw [sub_one_mul]
+2025-04-13 14:26:03 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:05 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:05 - DEBUG - === New errors detail ===
+2025-04-13 14:26:05 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - 1) * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:05 - INFO - Testing fragment: rw [mul_sub_one]
+2025-04-13 14:26:05 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:07 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:07 - DEBUG - === New errors detail ===
+2025-04-13 14:26:07 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - 1)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:07 - INFO - Testing fragment: rw [one_sub_mul]
+2025-04-13 14:26:07 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:09 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:09 - DEBUG - === New errors detail ===
+2025-04-13 14:26:09 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 - ?a) * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:09 - INFO - Testing fragment: rw [mul_one_sub]
+2025-04-13 14:26:09 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:11 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:11 - DEBUG - === New errors detail ===
+2025-04-13 14:26:11 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 - ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:11 - INFO - Testing fragment: rw [mul_left_cancel]
+2025-04-13 14:26:11 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:13 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:13 - DEBUG - === New errors detail ===
+2025-04-13 14:26:13 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.430
+from equation
+  ?m.430 = ?m.431
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:13 - INFO - Testing fragment: rw [mul_left_cancel_iff]
+2025-04-13 14:26:13 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:15 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:15 - DEBUG - === New errors detail ===
+2025-04-13 14:26:15 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.429 * ?m.430 = ?m.429 * ?m.431
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:15 - INFO - Testing fragment: rw [mul_right_injective]
+2025-04-13 14:26:15 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:17 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:17 - DEBUG - === New errors detail ===
+2025-04-13 14:26:17 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:17 - INFO - Testing fragment: rw [mul_right_inj]
+2025-04-13 14:26:17 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:19 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:19 - DEBUG - === New errors detail ===
+2025-04-13 14:26:19 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b = ?a * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:19 - INFO - Testing fragment: rw [mul_ne_mul_right]
+2025-04-13 14:26:19 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:21 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:21 - DEBUG - === New errors detail ===
+2025-04-13 14:26:21 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b ≠ ?a * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:21 - INFO - Testing fragment: rw [mul_right_cancel]
+2025-04-13 14:26:21 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:23 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:23 - DEBUG - === New errors detail ===
+2025-04-13 14:26:23 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.429
+from equation
+  ?m.429 = ?m.431
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:23 - INFO - Testing fragment: rw [mul_right_cancel_iff]
+2025-04-13 14:26:23 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:25 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:25 - DEBUG - === New errors detail ===
+2025-04-13 14:26:25 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.430 * ?m.429 = ?m.431 * ?m.429
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:25 - INFO - Testing fragment: rw [mul_left_injective]
+2025-04-13 14:26:25 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:27 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:27 - DEBUG - === New errors detail ===
+2025-04-13 14:26:27 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:27 - INFO - Testing fragment: rw [mul_left_inj]
+2025-04-13 14:26:27 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:29 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:29 - DEBUG - === New errors detail ===
+2025-04-13 14:26:29 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a = ?c * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:29 - INFO - Testing fragment: rw [mul_ne_mul_left]
+2025-04-13 14:26:29 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:31 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:31 - DEBUG - === New errors detail ===
+2025-04-13 14:26:31 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a ≠ ?c * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:31 - INFO - Testing fragment: rw [mul_assoc]
+2025-04-13 14:26:31 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:33 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:33 - DEBUG - === New errors detail ===
+2025-04-13 14:26:33 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:33 - INFO - Testing fragment: rw [mul_comm]
+2025-04-13 14:26:33 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:35 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:35 - DEBUG - === New errors detail ===
+2025-04-13 14:26:35 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:35 - INFO - Testing fragment: rw [MulOneClass]
+2025-04-13 14:26:35 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:37 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:37 - DEBUG - === New errors detail ===
+2025-04-13 14:26:37 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:37 - INFO - Testing fragment: rw [one_mul]
+2025-04-13 14:26:37 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:39 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:39 - DEBUG - === New errors detail ===
+2025-04-13 14:26:39 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:39 - INFO - Testing fragment: rw [mul_one]
+2025-04-13 14:26:39 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:41 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:41 - DEBUG - === New errors detail ===
+2025-04-13 14:26:41 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:41 - INFO - Testing fragment: rw [npowRec_add]
+2025-04-13 14:26:41 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:43 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:43 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:43 - DEBUG - === New errors detail ===
+2025-04-13 14:26:43 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-13 14:26:43 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:43 - INFO - Testing fragment: rw [npowRec_succ]
+2025-04-13 14:26:43 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:45 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:45 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:45 - DEBUG - === New errors detail ===
+2025-04-13 14:26:45 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-13 14:26:45 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:45 - INFO - Testing fragment: rw [npowRec'_succ]
+2025-04-13 14:26:45 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:47 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:47 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:47 - DEBUG - === New errors detail ===
+2025-04-13 14:26:47 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-13 14:26:47 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:47 - INFO - Testing fragment: rw [npowRec'_two_mul]
+2025-04-13 14:26:47 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:49 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:49 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:49 - DEBUG - === New errors detail ===
+2025-04-13 14:26:49 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-13 14:26:49 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:49 - INFO - Testing fragment: rw [npowRec'_mul_comm]
+2025-04-13 14:26:49 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:51 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:51 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:51 - DEBUG - === New errors detail ===
+2025-04-13 14:26:51 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-13 14:26:51 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:51 - INFO - Testing fragment: rw [npowRec_eq]
+2025-04-13 14:26:51 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:53 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:53 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:53 - DEBUG - === New errors detail ===
+2025-04-13 14:26:53 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-13 14:26:53 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:53 - INFO - Testing fragment: rw [npowBinRec]
+2025-04-13 14:26:53 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:55 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:55 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:55 - DEBUG - === New errors detail ===
+2025-04-13 14:26:55 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-13 14:26:55 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:55 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
+2025-04-13 14:26:55 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:57 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:26:57 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:26:57 - DEBUG - === New errors detail ===
+2025-04-13 14:26:57 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-13 14:26:57 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:57 - INFO - Testing fragment: rw [npow_eq_pow]
+2025-04-13 14:26:57 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:26:59 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:26:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:26:59 - DEBUG - === New errors detail ===
+2025-04-13 14:26:59 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Monoid.npow ?n ?x
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:26:59 - INFO - Testing fragment: rw [pow_zero]
+2025-04-13 14:26:59 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:01 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:01 - DEBUG - === New errors detail ===
+2025-04-13 14:27:01 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:01 - INFO - Testing fragment: rw [pow_succ]
+2025-04-13 14:27:01 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:03 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:03 - DEBUG - === New errors detail ===
+2025-04-13 14:27:03 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ (?n + 1)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:03 - INFO - Testing fragment: rw [inv_inv]
+2025-04-13 14:27:03 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:05 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:05 - DEBUG - === New errors detail ===
+2025-04-13 14:27:05 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:05 - INFO - Testing fragment: rw [exists_zpow_surjective]
+2025-04-13 14:27:05 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:07 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:27:07 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:27:07 - DEBUG - === New errors detail ===
+2025-04-13 14:27:07 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-13 14:27:07 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:07 - INFO - Testing fragment: rw [zpow_eq_pow]
+2025-04-13 14:27:07 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:09 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:09 - DEBUG - === New errors detail ===
+2025-04-13 14:27:09 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  DivInvMonoid.zpow ?n ?x
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:09 - INFO - Testing fragment: rw [zpow_zero]
+2025-04-13 14:27:09 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:11 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:11 - DEBUG - === New errors detail ===
+2025-04-13 14:27:11 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:11 - INFO - Testing fragment: rw [zpow_natCast]
+2025-04-13 14:27:11 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:13 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:13 - DEBUG - === New errors detail ===
+2025-04-13 14:27:13 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ↑?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:13 - INFO - Testing fragment: rw [zpow_negSucc]
+2025-04-13 14:27:13 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:15 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:15 - DEBUG - === New errors detail ===
+2025-04-13 14:27:15 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ Int.negSucc ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:15 - INFO - Testing fragment: rw [negSucc_zsmul]
+2025-04-13 14:27:15 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:17 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:17 - DEBUG - === New errors detail ===
+2025-04-13 14:27:17 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Int.negSucc ?n • ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:17 - INFO - Testing fragment: rw [div_eq_mul_inv]
+2025-04-13 14:27:17 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:19 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:19 - DEBUG - === New errors detail ===
+2025-04-13 14:27:19 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:19 - INFO - Testing fragment: rw [inv_eq_one_div]
+2025-04-13 14:27:19 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:21 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:21 - DEBUG - === New errors detail ===
+2025-04-13 14:27:21 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:21 - INFO - Testing fragment: rw [mul_div_assoc]
+2025-04-13 14:27:21 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:23 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:23 - DEBUG - === New errors detail ===
+2025-04-13 14:27:23 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:23 - INFO - Testing fragment: rw [one_div]
+2025-04-13 14:27:23 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:25 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:25 - DEBUG - === New errors detail ===
+2025-04-13 14:27:25 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:25 - INFO - Testing fragment: rw [inv_one]
+2025-04-13 14:27:25 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:27 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:27 - DEBUG - === New errors detail ===
+2025-04-13 14:27:27 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:27 - INFO - Testing fragment: rw [mul_inv_rev]
+2025-04-13 14:27:27 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:29 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:29 - DEBUG - === New errors detail ===
+2025-04-13 14:27:29 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a * ?b)⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:29 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_right]
+2025-04-13 14:27:29 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:31 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:31 - DEBUG - === New errors detail ===
+2025-04-13 14:27:31 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.428⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:31 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_left]
+2025-04-13 14:27:31 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:33 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:33 - DEBUG - === New errors detail ===
+2025-04-13 14:27:33 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.429⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:33 - INFO - Testing fragment: rw [eq_inv_of_mul_eq_one_left]
+2025-04-13 14:27:33 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:35 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:35 - DEBUG - === New errors detail ===
+2025-04-13 14:27:35 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.428
+from equation
+  ?m.428 = ?m.429⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:35 - INFO - Testing fragment: rw [inv_mul_cancel]
+2025-04-13 14:27:35 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:37 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:37 - DEBUG - === New errors detail ===
+2025-04-13 14:27:37 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.428⁻¹ * ?m.428
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:37 - INFO - Testing fragment: rw [inv_eq_of_mul]
+2025-04-13 14:27:37 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:39 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:27:39 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:27:39 - DEBUG - === New errors detail ===
+2025-04-13 14:27:39 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-13 14:27:39 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:39 - INFO - Testing fragment: rw [mul_inv_cancel]
+2025-04-13 14:27:39 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:41 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:41 - DEBUG - === New errors detail ===
+2025-04-13 14:27:41 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.428 * ?m.428⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:41 - INFO - Testing fragment: rw [div_self']
+2025-04-13 14:27:41 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:43 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:43 - DEBUG - === New errors detail ===
+2025-04-13 14:27:43 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:43 - INFO - Testing fragment: rw [inv_mul_cancel_left]
+2025-04-13 14:27:43 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:45 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:45 - DEBUG - === New errors detail ===
+2025-04-13 14:27:45 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹ * (?a * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:45 - INFO - Testing fragment: rw [mul_inv_cancel_left]
+2025-04-13 14:27:45 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:47 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:47 - DEBUG - === New errors detail ===
+2025-04-13 14:27:47 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?a⁻¹ * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:47 - INFO - Testing fragment: rw [mul_inv_cancel_right]
+2025-04-13 14:27:47 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:49 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:49 - DEBUG - === New errors detail ===
+2025-04-13 14:27:49 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?b⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:49 - INFO - Testing fragment: rw [mul_div_cancel_right]
+2025-04-13 14:27:49 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:51 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:51 - DEBUG - === New errors detail ===
+2025-04-13 14:27:51 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:51 - INFO - Testing fragment: rw [inv_mul_cancel_right]
+2025-04-13 14:27:51 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:53 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:53 - DEBUG - === New errors detail ===
+2025-04-13 14:27:53 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹ * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:53 - INFO - Testing fragment: rw [div_mul_cancel]
+2025-04-13 14:27:53 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:56 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:56 - DEBUG - === New errors detail ===
+2025-04-13 14:27:56 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:56 - INFO - Testing fragment: rw [<- left_distrib]
+2025-04-13 14:27:56 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:27:58 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:27:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:27:58 - DEBUG - === New errors detail ===
+2025-04-13 14:27:58 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:27:58 - INFO - Testing fragment: rw [<- right_distrib]
+2025-04-13 14:27:58 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:00 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:00 - DEBUG - === New errors detail ===
+2025-04-13 14:28:00 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c + ?b * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:00 - INFO - Testing fragment: rw [<- distrib_three_right]
+2025-04-13 14:28:00 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:02 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:02 - DEBUG - === New errors detail ===
+2025-04-13 14:28:02 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?d + ?b * ?d + ?c * ?d
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:02 - INFO - Testing fragment: rw [<- add_one_mul]
+2025-04-13 14:28:02 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:04 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:04 - DEBUG - === New errors detail ===
+2025-04-13 14:28:04 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:04 - INFO - Testing fragment: rw [<- mul_add_one]
+2025-04-13 14:28:04 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:06 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:06 - DEBUG - === New errors detail ===
+2025-04-13 14:28:06 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:06 - INFO - Testing fragment: rw [<- one_add_mul]
+2025-04-13 14:28:06 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:08 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:08 - DEBUG - === New errors detail ===
+2025-04-13 14:28:08 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b + ?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:08 - INFO - Testing fragment: rw [<- mul_one_add]
+2025-04-13 14:28:08 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:10 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:10 - DEBUG - === New errors detail ===
+2025-04-13 14:28:10 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a + ?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:10 - INFO - Testing fragment: rw [<- two_mul]
+2025-04-13 14:28:10 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:12 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:12 - DEBUG - === New errors detail ===
+2025-04-13 14:28:12 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:12 - INFO - Testing fragment: rw [<- mul_two]
+2025-04-13 14:28:12 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:14 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:14 - DEBUG - === New errors detail ===
+2025-04-13 14:28:14 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:14 - INFO - Testing fragment: rw [<- mul_boole]
+2025-04-13 14:28:14 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:16 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:16 - DEBUG - === New errors detail ===
+2025-04-13 14:28:16 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:16 - INFO - Testing fragment: rw [<- boole_mul]
+2025-04-13 14:28:16 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:18 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:18 - DEBUG - === New errors detail ===
+2025-04-13 14:28:18 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:18 - INFO - Testing fragment: rw [<- add_mul_self_eq]
+2025-04-13 14:28:18 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:20 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:20 - DEBUG - === New errors detail ===
+2025-04-13 14:28:20 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?a + 2 * ?a * ?b + ?b * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:20 - INFO - Testing fragment: rw [<- neg_mul]
+2025-04-13 14:28:20 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:22 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:22 - DEBUG - === New errors detail ===
+2025-04-13 14:28:22 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:22 - INFO - Testing fragment: rw [<- mul_neg]
+2025-04-13 14:28:22 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:24 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:24 - DEBUG - === New errors detail ===
+2025-04-13 14:28:24 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:24 - INFO - Testing fragment: rw [<- neg_mul_neg]
+2025-04-13 14:28:24 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:26 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:26 - DEBUG - === New errors detail ===
+2025-04-13 14:28:26 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:26 - INFO - Testing fragment: rw [<- neg_mul_eq_neg_mul]
+2025-04-13 14:28:26 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:28 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:28 - DEBUG - === New errors detail ===
+2025-04-13 14:28:28 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:28 - INFO - Testing fragment: rw [<- neg_mul_eq_mul_neg]
+2025-04-13 14:28:28 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:30 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:30 - DEBUG - === New errors detail ===
+2025-04-13 14:28:30 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:30 - INFO - Testing fragment: rw [<- neg_mul_comm]
+2025-04-13 14:28:30 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:32 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:32 - DEBUG - === New errors detail ===
+2025-04-13 14:28:32 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:32 - INFO - Testing fragment: rw [<- neg_eq_neg_one_mul]
+2025-04-13 14:28:32 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:34 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:34 - DEBUG - === New errors detail ===
+2025-04-13 14:28:34 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:34 - INFO - Testing fragment: rw [<- mul_neg_one]
+2025-04-13 14:28:34 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:36 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:36 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:36 - DEBUG - === New errors detail ===
+2025-04-13 14:28:36 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:36 - INFO - Testing fragment: rw [<- neg_one_mul]
+2025-04-13 14:28:36 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:38 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:38 - DEBUG - === New errors detail ===
+2025-04-13 14:28:38 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:38 - INFO - Testing fragment: rw [<- mul_sub_left_distrib]
+2025-04-13 14:28:38 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:40 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:40 - DEBUG - === New errors detail ===
+2025-04-13 14:28:40 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:40 - INFO - Testing fragment: rw [<- mul_sub_right_distrib]
+2025-04-13 14:28:40 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:42 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:42 - DEBUG - === New errors detail ===
+2025-04-13 14:28:42 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c - ?b * ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:42 - INFO - Testing fragment: rw [<- sub_one_mul]
+2025-04-13 14:28:42 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:44 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:44 - DEBUG - === New errors detail ===
+2025-04-13 14:28:44 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:44 - INFO - Testing fragment: rw [<- mul_sub_one]
+2025-04-13 14:28:44 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:46 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:46 - DEBUG - === New errors detail ===
+2025-04-13 14:28:46 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:46 - INFO - Testing fragment: rw [<- one_sub_mul]
+2025-04-13 14:28:46 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:48 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:48 - DEBUG - === New errors detail ===
+2025-04-13 14:28:48 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b - ?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:48 - INFO - Testing fragment: rw [<- mul_one_sub]
+2025-04-13 14:28:48 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:50 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:50 - DEBUG - === New errors detail ===
+2025-04-13 14:28:50 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a - ?a * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:50 - INFO - Testing fragment: rw [<- mul_left_cancel]
+2025-04-13 14:28:50 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:52 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:52 - DEBUG - === New errors detail ===
+2025-04-13 14:28:52 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.431
+from equation
+  ?m.431 = ?m.430
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:52 - INFO - Testing fragment: rw [<- mul_left_cancel_iff]
+2025-04-13 14:28:52 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:54 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:54 - DEBUG - === New errors detail ===
+2025-04-13 14:28:54 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.430 = ?m.431
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:54 - INFO - Testing fragment: rw [<- mul_right_injective]
+2025-04-13 14:28:54 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:56 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:56 - DEBUG - === New errors detail ===
+2025-04-13 14:28:56 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:56 - INFO - Testing fragment: rw [<- mul_right_inj]
+2025-04-13 14:28:56 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:28:58 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:28:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:28:58 - DEBUG - === New errors detail ===
+2025-04-13 14:28:58 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b = ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:28:58 - INFO - Testing fragment: rw [<- mul_ne_mul_right]
+2025-04-13 14:28:58 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:00 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:00 - DEBUG - === New errors detail ===
+2025-04-13 14:29:00 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:00 - INFO - Testing fragment: rw [<- mul_right_cancel]
+2025-04-13 14:29:00 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:02 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:02 - DEBUG - === New errors detail ===
+2025-04-13 14:29:02 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.431
+from equation
+  ?m.431 = ?m.429
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:02 - INFO - Testing fragment: rw [<- mul_right_cancel_iff]
+2025-04-13 14:29:02 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:04 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:04 - DEBUG - === New errors detail ===
+2025-04-13 14:29:04 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.430 = ?m.431
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:04 - INFO - Testing fragment: rw [<- mul_left_injective]
+2025-04-13 14:29:04 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:06 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:06 - DEBUG - === New errors detail ===
+2025-04-13 14:29:06 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:06 - INFO - Testing fragment: rw [<- mul_left_inj]
+2025-04-13 14:29:06 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:08 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:08 - DEBUG - === New errors detail ===
+2025-04-13 14:29:08 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b = ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:08 - INFO - Testing fragment: rw [<- mul_ne_mul_left]
+2025-04-13 14:29:08 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:10 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:10 - DEBUG - === New errors detail ===
+2025-04-13 14:29:10 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:10 - INFO - Testing fragment: rw [<- mul_assoc]
+2025-04-13 14:29:10 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:12 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:12 - DEBUG - === New errors detail ===
+2025-04-13 14:29:12 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b * ?c)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:12 - INFO - Testing fragment: rw [<- mul_comm]
+2025-04-13 14:29:12 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:14 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:14 - DEBUG - === New errors detail ===
+2025-04-13 14:29:14 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:14 - INFO - Testing fragment: rw [<- MulOneClass]
+2025-04-13 14:29:14 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:16 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:16 - DEBUG - === New errors detail ===
+2025-04-13 14:29:16 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:16 - INFO - Testing fragment: rw [<- one_mul]
+2025-04-13 14:29:16 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:18 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:18 - DEBUG - === New errors detail ===
+2025-04-13 14:29:18 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = 1 * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:18 - INFO - Testing fragment: rw [<- mul_one]
+2025-04-13 14:29:18 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:20 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:20 - DEBUG - === New errors detail ===
+2025-04-13 14:29:20 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * 1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:20 - INFO - Testing fragment: rw [<- npowRec_add]
+2025-04-13 14:29:20 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:22 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:22 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:22 - DEBUG - === New errors detail ===
+2025-04-13 14:29:22 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-13 14:29:22 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:22 - INFO - Testing fragment: rw [<- npowRec_succ]
+2025-04-13 14:29:22 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:24 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:24 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:24 - DEBUG - === New errors detail ===
+2025-04-13 14:29:24 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-13 14:29:24 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:24 - INFO - Testing fragment: rw [<- npowRec'_succ]
+2025-04-13 14:29:24 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:26 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:26 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:26 - DEBUG - === New errors detail ===
+2025-04-13 14:29:26 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-13 14:29:26 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:26 - INFO - Testing fragment: rw [<- npowRec'_two_mul]
+2025-04-13 14:29:26 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:28 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:28 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:28 - DEBUG - === New errors detail ===
+2025-04-13 14:29:28 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-13 14:29:28 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:28 - INFO - Testing fragment: rw [<- npowRec'_mul_comm]
+2025-04-13 14:29:28 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:30 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:30 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:30 - DEBUG - === New errors detail ===
+2025-04-13 14:29:30 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-13 14:29:30 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:30 - INFO - Testing fragment: rw [<- npowRec_eq]
+2025-04-13 14:29:30 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:32 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:32 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:32 - DEBUG - === New errors detail ===
+2025-04-13 14:29:32 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-13 14:29:32 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:32 - INFO - Testing fragment: rw [<- npowBinRec]
+2025-04-13 14:29:32 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:34 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:34 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:34 - DEBUG - === New errors detail ===
+2025-04-13 14:29:34 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-13 14:29:34 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:34 - INFO - Testing fragment: rw [<- npowRec_eq_npowBinRec]
+2025-04-13 14:29:34 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:36 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:36 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:36 - DEBUG - === New errors detail ===
+2025-04-13 14:29:36 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-13 14:29:36 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:36 - INFO - Testing fragment: rw [<- npow_eq_pow]
+2025-04-13 14:29:36 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:38 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:38 - DEBUG - === New errors detail ===
+2025-04-13 14:29:38 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:38 - INFO - Testing fragment: rw [<- pow_zero]
+2025-04-13 14:29:38 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:40 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:40 - DEBUG - === New errors detail ===
+2025-04-13 14:29:40 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:40 - INFO - Testing fragment: rw [<- pow_succ]
+2025-04-13 14:29:40 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:42 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:42 - DEBUG - === New errors detail ===
+2025-04-13 14:29:42 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n * ?a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:42 - INFO - Testing fragment: rw [<- inv_inv]
+2025-04-13 14:29:42 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:44 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:44 - DEBUG - === New errors detail ===
+2025-04-13 14:29:44 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a⁻¹⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:44 - INFO - Testing fragment: rw [<- exists_zpow_surjective]
+2025-04-13 14:29:44 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:46 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:29:46 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:29:46 - DEBUG - === New errors detail ===
+2025-04-13 14:29:46 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-13 14:29:46 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:46 - INFO - Testing fragment: rw [<- zpow_eq_pow]
+2025-04-13 14:29:46 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:48 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:48 - DEBUG - === New errors detail ===
+2025-04-13 14:29:48 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:48 - INFO - Testing fragment: rw [<- zpow_zero]
+2025-04-13 14:29:48 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:50 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:50 - DEBUG - === New errors detail ===
+2025-04-13 14:29:50 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:50 - INFO - Testing fragment: rw [<- zpow_natCast]
+2025-04-13 14:29:50 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:52 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:52 - DEBUG - === New errors detail ===
+2025-04-13 14:29:52 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:52 - INFO - Testing fragment: rw [<- zpow_negSucc]
+2025-04-13 14:29:52 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:54 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:54 - DEBUG - === New errors detail ===
+2025-04-13 14:29:54 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a ^ (?n + 1))⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:54 - INFO - Testing fragment: rw [<- negSucc_zsmul]
+2025-04-13 14:29:54 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:56 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:56 - DEBUG - === New errors detail ===
+2025-04-13 14:29:56 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -((?n + 1) • ?a)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:56 - INFO - Testing fragment: rw [<- div_eq_mul_inv]
+2025-04-13 14:29:56 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:29:58 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:29:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:29:58 - DEBUG - === New errors detail ===
+2025-04-13 14:29:58 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:29:58 - INFO - Testing fragment: rw [<- inv_eq_one_div]
+2025-04-13 14:29:58 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:00 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:00 - DEBUG - === New errors detail ===
+2025-04-13 14:30:00 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?x
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:00 - INFO - Testing fragment: rw [<- mul_div_assoc]
+2025-04-13 14:30:00 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:02 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:02 - DEBUG - === New errors detail ===
+2025-04-13 14:30:02 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b / ?c)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:02 - INFO - Testing fragment: rw [<- one_div]
+2025-04-13 14:30:02 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:04 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:04 - DEBUG - === New errors detail ===
+2025-04-13 14:30:04 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:04 - INFO - Testing fragment: rw [<- inv_one]
+2025-04-13 14:30:04 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:06 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:06 - DEBUG - === New errors detail ===
+2025-04-13 14:30:06 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:06 - INFO - Testing fragment: rw [<- mul_inv_rev]
+2025-04-13 14:30:06 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:08 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:08 - DEBUG - === New errors detail ===
+2025-04-13 14:30:08 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b⁻¹ * ?a⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:08 - INFO - Testing fragment: rw [<- inv_eq_of_mul_eq_one_right]
+2025-04-13 14:30:08 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:10 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:10 - DEBUG - === New errors detail ===
+2025-04-13 14:30:10 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.429
+from equation
+  ?m.429 = ?m.428⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:10 - INFO - Testing fragment: rw [<- inv_eq_of_mul_eq_one_left]
+2025-04-13 14:30:10 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:12 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:12 - DEBUG - === New errors detail ===
+2025-04-13 14:30:12 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.428
+from equation
+  ?m.428 = ?m.429⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:12 - INFO - Testing fragment: rw [<- eq_inv_of_mul_eq_one_left]
+2025-04-13 14:30:12 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:14 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:14 - DEBUG - === New errors detail ===
+2025-04-13 14:30:14 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.429⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:14 - INFO - Testing fragment: rw [<- inv_mul_cancel]
+2025-04-13 14:30:14 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:16 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:16 - DEBUG - === New errors detail ===
+2025-04-13 14:30:16 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:16 - INFO - Testing fragment: rw [<- inv_eq_of_mul]
+2025-04-13 14:30:16 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:18 - INFO - Testing fix: Original errors: 2, Fixed errors: 2
+2025-04-13 14:30:18 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 14:30:18 - DEBUG - === New errors detail ===
+2025-04-13 14:30:18 - DEBUG - New Error 1: line 7, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-13 14:30:18 - DEBUG - New Error 2: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.425
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:18 - INFO - Testing fragment: rw [<- mul_inv_cancel]
+2025-04-13 14:30:18 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:20 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:20 - DEBUG - === New errors detail ===
+2025-04-13 14:30:20 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:20 - INFO - Testing fragment: rw [<- div_self']
+2025-04-13 14:30:20 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:22 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:22 - DEBUG - === New errors detail ===
+2025-04-13 14:30:22 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:22 - INFO - Testing fragment: rw [<- inv_mul_cancel_left]
+2025-04-13 14:30:22 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:24 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:24 - DEBUG - === New errors detail ===
+2025-04-13 14:30:24 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?b
+from equation
+  ?b = ?a⁻¹ * (?a * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:24 - INFO - Testing fragment: rw [<- mul_inv_cancel_left]
+2025-04-13 14:30:24 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:26 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:26 - DEBUG - === New errors detail ===
+2025-04-13 14:30:26 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?b
+from equation
+  ?b = ?a * (?a⁻¹ * ?b)
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:26 - INFO - Testing fragment: rw [<- mul_inv_cancel_right]
+2025-04-13 14:30:26 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:28 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:28 - DEBUG - === New errors detail ===
+2025-04-13 14:30:28 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * ?b * ?b⁻¹
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:28 - INFO - Testing fragment: rw [<- mul_div_cancel_right]
+2025-04-13 14:30:28 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:30 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:30 - DEBUG - === New errors detail ===
+2025-04-13 14:30:30 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * ?b / ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:30 - INFO - Testing fragment: rw [<- inv_mul_cancel_right]
+2025-04-13 14:30:30 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:32 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:32 - DEBUG - === New errors detail ===
+2025-04-13 14:30:32 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * ?b⁻¹ * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:32 - INFO - Testing fragment: rw [<- div_mul_cancel]
+2025-04-13 14:30:32 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:34 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:34 - DEBUG - === New errors detail ===
+2025-04-13 14:30:34 - DEBUG - New Error 1: line 7, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a / ?b * ?b
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n
+2025-04-13 14:30:34 - INFO - Testing fragment: simp
+2025-04-13 14:30:34 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:36 - INFO - Testing fix: Original errors: 2, Fixed errors: 6
+2025-04-13 14:30:36 - INFO - Result: False (introduced 5 new errors)
+2025-04-13 14:30:36 - DEBUG - === New errors detail ===
+2025-04-13 14:30:36 - DEBUG - New Error 1: line 12, type: unknown_constant, message: unknown constant 'NNReal.div_def'
+2025-04-13 14:30:36 - DEBUG - New Error 2: line 12, type: simp_failed, message: simp made no progress
+2025-04-13 14:30:36 - DEBUG - New Error 3: line 16, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.3342
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:36 - DEBUG - New Error 4: line 19, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (Finset.range n).prod a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+arith_mean : (Finset.range n).sum a / ↑n = (Finset.range n).sum a * (↑n)⁻¹
+⊢ sorryAx (Sort ?u.3095) true
+2025-04-13 14:30:36 - DEBUG - New Error 5: line 22, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.3509
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:36 - INFO - Testing fragment: field_simp
+2025-04-13 14:30:36 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:38 - INFO - Testing fix: Original errors: 2, Fixed errors: 6
+2025-04-13 14:30:38 - INFO - Result: False (introduced 5 new errors)
+2025-04-13 14:30:38 - DEBUG - === New errors detail ===
+2025-04-13 14:30:38 - DEBUG - New Error 1: line 12, type: unknown_constant, message: unknown constant 'NNReal.div_def'
+2025-04-13 14:30:38 - DEBUG - New Error 2: line 12, type: simp_failed, message: simp made no progress
+2025-04-13 14:30:38 - DEBUG - New Error 3: line 16, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.3912
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:38 - DEBUG - New Error 4: line 19, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (Finset.range n).prod a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+arith_mean : (Finset.range n).sum a / ↑n = (Finset.range n).sum a * (↑n)⁻¹
+⊢ sorryAx (Sort ?u.3665) true
+2025-04-13 14:30:38 - DEBUG - New Error 5: line 22, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.4079
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:38 - INFO - Testing fragment: norm_num
+2025-04-13 14:30:38 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:40 - INFO - Testing fix: Original errors: 2, Fixed errors: 6
+2025-04-13 14:30:40 - INFO - Result: False (introduced 5 new errors)
+2025-04-13 14:30:40 - DEBUG - === New errors detail ===
+2025-04-13 14:30:40 - DEBUG - New Error 1: line 12, type: unknown_constant, message: unknown constant 'NNReal.div_def'
+2025-04-13 14:30:40 - DEBUG - New Error 2: line 12, type: simp_failed, message: simp made no progress
+2025-04-13 14:30:40 - DEBUG - New Error 3: line 16, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.3609
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:40 - DEBUG - New Error 4: line 19, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (Finset.range n).prod a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+arith_mean : (Finset.range n).sum a / ↑n = (Finset.range n).sum a * (↑n)⁻¹
+⊢ sorryAx (Sort ?u.3362) true
+2025-04-13 14:30:40 - DEBUG - New Error 5: line 22, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.3776
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:40 - INFO - Testing fragment: ring
+2025-04-13 14:30:40 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:42 - INFO - Testing fix: Original errors: 2, Fixed errors: 7
+2025-04-13 14:30:42 - INFO - Result: False (introduced 6 new errors)
+2025-04-13 14:30:42 - DEBUG - === New errors detail ===
+2025-04-13 14:30:42 - DEBUG - New Error 1: line 7, type: ring_failed, message: Try this: ring_nf
+2025-04-13 14:30:42 - DEBUG - New Error 2: line 12, type: unknown_constant, message: unknown constant 'NNReal.div_def'
+2025-04-13 14:30:42 - DEBUG - New Error 3: line 12, type: simp_failed, message: simp made no progress
+2025-04-13 14:30:42 - DEBUG - New Error 4: line 16, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.6941
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:42 - DEBUG - New Error 5: line 19, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (Finset.range n).prod a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+arith_mean : (Finset.range n).sum a / ↑n = (Finset.range n).sum a * (↑n)⁻¹
+⊢ sorryAx (Sort ?u.6694) true
+2025-04-13 14:30:42 - DEBUG - New Error 6: line 22, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.7108
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:42 - INFO - Testing fragment: ring_nf
+2025-04-13 14:30:42 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:44 - INFO - Testing fix: Original errors: 2, Fixed errors: 6
+2025-04-13 14:30:44 - INFO - Result: False (introduced 5 new errors)
+2025-04-13 14:30:44 - DEBUG - === New errors detail ===
+2025-04-13 14:30:44 - DEBUG - New Error 1: line 12, type: unknown_constant, message: unknown constant 'NNReal.div_def'
+2025-04-13 14:30:44 - DEBUG - New Error 2: line 12, type: simp_failed, message: simp made no progress
+2025-04-13 14:30:44 - DEBUG - New Error 3: line 16, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.6941
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:44 - DEBUG - New Error 4: line 19, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (Finset.range n).prod a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+arith_mean : (Finset.range n).sum a / ↑n = (Finset.range n).sum a * (↑n)⁻¹
+⊢ sorryAx (Sort ?u.6694) true
+2025-04-13 14:30:44 - DEBUG - New Error 5: line 22, type: failed_to_synthesize, message: failed to synthesize
+  HPow NNReal NNReal ?m.7108
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 14:30:44 - INFO - Testing fragment: omega
+2025-04-13 14:30:44 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:46 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:46 - DEBUG - === New errors detail ===
+2025-04-13 14:30:46 - DEBUG - New Error 1: line 7, type: other_error, message: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+2025-04-13 14:30:46 - INFO - Testing fragment: linarith
+2025-04-13 14:30:46 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:48 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:48 - DEBUG - === New errors detail ===
+2025-04-13 14:30:48 - DEBUG - New Error 1: line 7, type: linarith_failed, message: linarith failed to find a contradiction
+case a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+a✝ : ↑n > (Finset.range n).sum a
+⊢ False
+failed
+2025-04-13 14:30:48 - INFO - Testing fragment: nlinarith
+2025-04-13 14:30:48 - INFO - Original error line:   have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+2025-04-13 14:30:50 - INFO - Testing fix: Original errors: 2, Fixed errors: 1
+2025-04-13 14:30:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 14:30:50 - DEBUG - === New errors detail ===
+2025-04-13 14:30:50 - DEBUG - New Error 1: line 7, type: linarith_failed, message: linarith failed to find a contradiction
+case a
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+a✝ : ↑n > (Finset.range n).sum a
+⊢ False
+failed
+2025-04-13 14:30:50 - INFO - Failed attempt time: 338.55 seconds
+2025-04-13 14:30:50 - INFO - ❌ Could not generate fix for error at line 7
+2025-04-13 14:30:51 - INFO - 
+===== Fix attempt completed =====
+2025-04-13 14:30:51 - INFO - Original errors: 2
+2025-04-13 14:30:51 - INFO - Fixed errors: 0
+2025-04-13 14:30:51 - INFO - Failed errors: 2
+2025-04-13 14:30:51 - INFO - Remaining errors: 2
+2025-04-13 14:30:51 - INFO - Total time: 732.82 seconds
+2025-04-13 14:30:51 - INFO - 
+Final fixed code:
+2025-04-13 14:30:51 - INFO - ----------------------------------------
+2025-04-13 14:30:51 - INFO - /-- Show that for any real-valued function $a$ on the natural numbers such that $\forall i \in \mathbb{N}, a_i \geq 0$, 
+    if $prod_{i=0}^{n-1} a_i = 1$, then $sum_{i=0}^{n-1} a_i \geq n$.-/
+theorem algebra_amgm_prod1toneq1_sum1tongeqn (a : ℕ → NNReal) (n : ℕ)
+    (h₀ : Finset.prod (Finset.range n) a = 1) : Finset.sum (Finset.range n) a ≥ n := by
+  -- First, we'll use the Arithmetic Mean-Geometric Mean (AM-GM) inequality
+  -- The AM-GM inequality states that for non-negative real numbers, the arithmetic mean is ≥ geometric mean
+  have amgm_ineq := Finset.le_geom_mean_arith_mean (Finset.range n) a (fun _ _ => NNReal.zero_le _) (fun _ _ => le_rfl)
+  
+  -- Simplify the arithmetic mean (left side of AM-GM inequality)
+  -- The arithmetic mean is (sum a_i)/n
+  have arith_mean : (Finset.sum (Finset.range n) a) / n = (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) := by
+    simp only [NNReal.div_def]
+  
+  -- Simplify the geometric mean (right side of AM-GM inequality)
+  -- The geometric mean is (prod a_i)^(1/n)
+  have geom_mean : (Finset.prod (Finset.range n) a) ^ (n⁻¹ : NNReal) = 
+      (1 : NNReal) ^ (n⁻¹ : NNReal) := by
+    -- Substitute h₀ which states that the product equals 1
+    rw [h₀]
+  
+  -- Since 1 raised to any power is 1, we can further simplify the geometric mean
+  have geom_mean_simplified : (1 : NNReal) ^ (n⁻¹ : NNReal) = 1 := by
+    exact NNReal.one_rpow _
+  
+  -- Combine the geometric mean simplifications
+  have geom_mean_final := Eq.trans geom_mean geom_mean_simplified
+  
+  -- Rewrite the AM-GM inequality using our simplified arithmetic and geometric means
+  rw [arith_mean, geom_mean_final] at amgm_ineq
+  
+  -- Now we have: (sum a_i) * n⁻¹ ≥ 1
+  -- Multiply both sides by n (which is positive since n is a natural number)
+  -- Note: multiplication by n is order-preserving since n > 0
+  have n_pos : n > 0 ∨ n = 0 := by
+    exact Nat.eq_zero_or_pos n
+  cases n_pos with
+  | inl hn_pos =>
+    -- Case when n > 0
+    have multiply_both_sides := mul_le_mul_right' amgm_ineq (n : NNReal)
+    -- Simplify: (sum a_i) * n⁻¹ * n = sum a_i
+    have lhs_simplified : (Finset.sum (Finset.range n) a) * (n⁻¹ : NNReal) * n = 
+        Finset.sum (Finset.range n) a := by
+      rw [mul_assoc, inv_mul_cancel, mul_one]
+      exact NNReal.nat_cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hn_pos)
+    -- Simplify: 1 * n = n
+    have rhs_simplified : (1 : NNReal) * n = n := by
+      simp only [one_mul]
+    -- Rewrite the inequality with these simplifications
+    rw [lhs_simplified, rhs_simplified] at multiply_both_sides
+    exact multiply_both_sides
+  | inr hn_zero =>
+    -- Case when n = 0
+    -- Both sides become 0, and 0 ≥ 0 is trivially true
+    rw [hn_zero]
+    simp only [Finset.range_zero, Finset.sum_empty, Finset.prod_empty, le_refl]
+2025-04-13 14:30:51 - INFO - ----------------------------------------
+2025-04-13 14:30:51 - INFO - 
+Detailed error repair report:
+2025-04-13 14:30:51 - INFO - Original code error count: 2
+❌ Fixed error 1/2: Could not generate fix for error at line 4 «other_error» (after 392.27s)
+❌ Fixed error 2/2: Could not generate fix for error at line 7 «unknown_constant» (after 338.55s)
+
+=== Fix statistics ===
+Original error count: 2
+Fixed errors: 0 (Fix rate: 0.0000)
+Failed errors: 2
+Remaining errors: 2
+Total time: 732.82 seconds
+
+=== Failed fix details ===
+
+Failed fix 1:
+   Line: 4
+   Error type: other_error
+   Original error message: unsolved goals
+a : ℕ → NNReal
+n : ℕ
+h₀ : (Finset.range n).prod a = 1
+⊢ (Finset.range n).sum a ≥ ↑n...
+   Failure reason: Could not generate fix
+   Time: 392.27 seconds
+
+Failed fix 2:
+   Line: 7
+   Error type: unknown_constant
+   Original error message: unknown constant 'Finset.le_geom_mean_arith_mean'...
+   Failure reason: Could not generate fix
+   Time: 338.55 seconds
+2025-04-13 14:30:51 - INFO - 
+Fixed code saved to: /data/coding/minif2f/lean_fixed/46_fixed.lean
+2025-04-13 14:30:51 - INFO - JSON log saved to: /data/coding/minif2f/lean_fixed/46_fix_log.json
+2025-04-13 14:30:51 - INFO - 
+===== LOG FILE LOCATION =====
+2025-04-13 14:30:51 - INFO - Detailed log file is available at: /data/coding/minif2f/lean_fixed/46.log
+2025-04-13 14:30:51 - INFO - ===============================

@@ -8,70 +8,99 @@ import argparse
 import subprocess
 import concurrent.futures
 
-def repair_file(file_path):
-    """简单地调用lean_enumerator.py处理一个文件"""
+# Define the base directory for Tyrell specification files
+TYRELL_SPEC_DIR = "minif2f/tyrell_batch_output"
+
+def repair_file(file_path, output_dir):
+    # Get the file name
     filename = os.path.basename(file_path)
-    print(f"开始处理: {filename}")
+    print(f"Processing: {filename}")
     
-    # 直接调用lean_enumerator.py修复文件
+    # Construct the corresponding Tyrell spec file path
+    input_name = os.path.splitext(filename)[0]
+    tyrell_file = os.path.join(TYRELL_SPEC_DIR, f"{input_name}_static_filtered.tyrell")
+    
+    # Check if the Tyrell spec file exists
+    if not os.path.exists(tyrell_file):
+        print(f"❌ {filename} processing failed - Tyrell spec file not found: {tyrell_file}")
+        return # Skip processing if spec file is missing
+    
+    # Call lean_enumerator.py to process the file, passing the specific tyrell spec
+    cmd = [
+        sys.executable,
+        "lean_enumerator.py",
+        file_path,
+        "--tyrell-spec", tyrell_file,
+        "--output-dir", output_dir, # Pass output dir for logs/results
+        "--no-verbose" # Optional: reduce noise during batch processing
+    ]
     process = subprocess.Popen(
-        [sys.executable, "lean_enumerator.py", file_path],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
     )
+    stdout, stderr = process.communicate()
     
-    # 等待处理完成
-    process.communicate()
-    
-    # 简单检查是否成功（基于返回码）
     if process.returncode == 0:
-        print(f"✅ {filename} 处理完成")
+        print(f"✅ {filename} processed successfully")
+        # Create a marker file in the output folder to indicate the file has been processed
+        marker_file = os.path.join(output_dir, filename + ".done")
+        with open(marker_file, "w") as f:
+            f.write("done")
     else:
-        print(f"❌ {filename} 处理失败")
+        print(f"❌ {filename} processing failed")
+        if stderr:
+            print("Error message:")
+            print(stderr)
 
 def main():
-    parser = argparse.ArgumentParser(description="简单批量修复Lean文件")
+    parser = argparse.ArgumentParser(description="Batch process Lean files")
     parser.add_argument("--input_dir", type=str, default="/data/coding/minif2f/lean_code",
-                        help="包含.lean文件的输入目录")
-    parser.add_argument("--max_workers", type=int, default=40,
-                        help="最大并行处理数量")
-    
+                        help="Directory containing .lean files")
+    parser.add_argument("--output_dir", type=str, default="/data/coding/minif2f/lean_fixed",
+                        help="Directory to store marker files for processed files")
+    parser.add_argument("--max_workers", type=int, default=20,
+                        help="Maximum number of parallel tasks")
     args = parser.parse_args()
     
-    print(f"开始扫描目录: {args.input_dir}")
+    print(f"Scanning input directory: {args.input_dir}")
     
-    # 获取所有.lean文件
+    # Create output directory if it doesn't exist
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir, exist_ok=True)
+    
+    # List all .lean files in the input directory
     lean_files = glob.glob(os.path.join(args.input_dir, "*.lean"))
     lean_files.sort()
     
     if not lean_files:
-        print(f"错误: 目录 {args.input_dir} 中未找到任何.lean文件!")
+        print(f"Error: No .lean files found in {args.input_dir}!")
         return
+
+    # Filter out files that have already been processed based on the marker file in the output directory
+    files_to_process = []
+    for file_path in lean_files:
+        marker_file = os.path.join(args.output_dir, os.path.basename(file_path) + ".done")
+        if os.path.exists(marker_file):
+            print(f"Skipping already processed file: {os.path.basename(file_path)}")
+        else:
+            files_to_process.append(file_path)
     
-    print(f"找到 {len(lean_files)} 个Lean文件需要处理")
-    print(f"使用 {args.max_workers} 个并行任务")
+    print(f"Total Lean files: {len(lean_files)}; Files to process: {len(files_to_process)}")
+    print(f"Using {args.max_workers} parallel tasks")
     
-    # 记录开始时间
     start_time = time.time()
-    
-    # 并行处理所有文件
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.max_workers) as executor:
-        futures = {executor.submit(repair_file, file_path): file_path for file_path in lean_files}
-        
-        # 简单显示进度
+        futures = {executor.submit(repair_file, file_path, args.output_dir): file_path for file_path in files_to_process}
         completed = 0
         for future in concurrent.futures.as_completed(futures):
             completed += 1
             file_path = futures[future]
-            filename = os.path.basename(file_path)
-            
-            # 显示简单进度
-            print(f"进度: {completed}/{len(lean_files)} - 完成 {filename}")
+            print(f"Progress: {completed}/{len(files_to_process)} - {os.path.basename(file_path)} completed")
     
-    # 显示总用时
     elapsed_time = time.time() - start_time
-    print(f"\n所有文件处理完成! 总用时: {elapsed_time:.2f}秒")
+    print(f"\nAll files processed! Total time: {elapsed_time:.2f} seconds")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,2533 @@
+2025-04-13 15:01:47 - INFO - Log file initialized at 2025-04-13T15:01:47.402800
+2025-04-13 15:01:47 - INFO - ===== LOG FILE LOCATION =====
+2025-04-13 15:01:47 - INFO - Detailed log file created at: /data/coding/minif2f/lean_fixed/90.log
+2025-04-13 15:01:47 - INFO - ===============================
+2025-04-13 15:01:47 - INFO - Original code:
+2025-04-13 15:01:47 - INFO - ----------------------------------------
+2025-04-13 15:01:47 - INFO - import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+/-- If $f(x)=4x^3+1$, find $f^{-1}(33)$. Show that it is 2.-/
+theorem mathd_algebra_393 (σ : Equiv ℝ ℝ) (h₀ : ∀ x, σ.1 x = 4 * x ^ 3 + 1) : σ.2 33 = 2 := by
+  -- We need to show that the inverse function σ⁻¹ maps 33 to 2
+  -- First, let's extract the forward function f from σ
+  let f := σ.1
+  
+  -- The given hypothesis tells us f(x) = 4x³ + 1 for all x
+  have hf : ∀ x, f x = 4 * x ^ 3 + 1 := h₀
+  
+  -- To find f⁻¹(33), we need to find x such that f(x) = 33
+  -- Let's set up the equation 4x³ + 1 = 33
+  have eq : 4 * (2:ℝ) ^ 3 + 1 = 33 := by
+    -- Calculate 2^3 = 8
+    have h1 : (2:ℝ) ^ 3 = 8 := by norm_num
+    -- Substitute back: 4*8 + 1 = 33
+    rw [h1]
+    norm_num
+  
+  -- Now we know f(2) = 33 by the equation above and hf
+  have f2 : f 2 = 33 := by rw [hf, eq]
+  
+  -- Since σ is an equivalence (bijection), the inverse is well-defined
+  -- The inverse function property tells us that if f(a) = b, then f⁻¹(b) = a
+  -- Therefore, since f(2) = 33, we have f⁻¹(33) = 2
+  -- In Lean, σ.2 is the inverse function, so we need to show σ.2 33 = 2
+  
+  -- Use the fact that σ is an equivalence to relate f and its inverse
+  have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+  
+  -- Apply this property at x = 2
+  have key : σ.2 (f 2) = 2 := inv_prop 2
+  
+  -- Now substitute f 2 with 33 using the f2 equality
+  rw [f2] at key
+  
+  -- The key now exactly matches our goal: σ.2 33 = 2
+  exact key
+2025-04-13 15:01:47 - INFO - ----------------------------------------
+2025-04-13 15:01:47 - INFO - 
+Checking original code for all errors...
+2025-04-13 15:01:54 - INFO - Original code contains 1 errors:
+2025-04-13 15:01:54 - INFO - Error 1: line 28, type: unknown_identifier, message: unknown identifier 'x'...
+2025-04-13 15:01:54 - INFO - 
+Starting multi-error continuous repair process...
+2025-04-13 15:01:54 - INFO - 
+===== Starting to fix all errors =====
+2025-04-13 15:01:55 - INFO - 
+Found 1 original errors:
+2025-04-13 15:01:55 - INFO - Error 1: line 28, type: unknown_identifier, message: unknown identifier 'x'...
+2025-04-13 15:01:55 - INFO - 
+Trying to fix error 1/1: line 28, type: unknown_identifier
+2025-04-13 15:01:55 - INFO - Error message: unknown identifier 'x'...
+2025-04-13 15:01:55 - INFO - Removed header content, remaining 37 lines of code
+2025-04-13 15:01:55 - INFO - Using specified target error line: 28
+2025-04-13 15:01:56 - INFO - Found error at specified line: unknown identifier 'x'
+2025-04-13 15:01:56 - INFO - Error at line 28: unknown identifier 'x'
+2025-04-13 15:01:56 - INFO - 
+==================================================
+2025-04-13 15:01:56 - INFO - Code prepared, starting synthesis
+2025-04-13 15:01:56 - INFO - Before part: /-- If $f(x)=4x^3+1$, find $f^{-1}(33)$. Show that it is 2.-/
+theorem mathd_algebra_393 (σ : Equiv ℝ ℝ) (h₀ : ∀ x, σ.1 x = 4 * x ^ 3 + 1) : σ.2 33 = 2 := by
+  -- We need to show that the inverse function σ⁻¹ maps 33 to 2
+  -- First, let's extract the forward function f from σ
+  let f := σ.1
+  
+  -- The given hypothesis tells us f(x) = 4x³ + 1 for all x
+  have hf : ∀ x, f x = 4 * x ^ 3 + 1 := h₀
+  
+  -- To find f⁻¹(33), we need to find x such that f(x) = 33
+  -- Let's set up the equation 4x³ + 1 = 33
+  have eq : 4 * (2:ℝ) ^ 3 + 1 = 33 := by
+    -- Calculate 2^3 = 8
+    have h1 : (2:ℝ) ^ 3 = 8 := by norm_num
+    -- Substitute back: 4*8 + 1 = 33
+    rw [h1]
+    norm_num
+  
+  -- Now we know f(2) = 33 by the equation above and hf
+  have f2 : f 2 = 33 := by rw [hf, eq]
+  
+  -- Since σ is an equivalence (bijection), the inverse is well-defined
+  -- The inverse function property tells us that if f(a) = b, then f⁻¹(b) = a
+  -- Therefore, since f(2) = 33, we have f⁻¹(33) = 2
+  -- In Lean, σ.2 is the inverse function, so we need to show σ.2 33 = 2
+  
+  -- Use the fact that σ is an equivalence to relate f and its inverse
+2025-04-13 15:01:56 - INFO - Error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:01:56 - INFO - After part: -- Apply this property at x = 2
+  have key : σ.2 (f 2) = 2 := inv_prop 2
+  
+  -- Now substitute f 2 with 33 using the f2 equality
+  rw [f2] at key
+  
+  -- The key now exactly matches our goal: σ.2 33 = 2
+  exact key
+2025-04-13 15:01:56 - INFO - ==================================================
+
+2025-04-13 15:01:57 - INFO - Testing fragment: rw [left_distrib]
+2025-04-13 15:01:57 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:01:59 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:01:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:01:59 - DEBUG - === New errors detail ===
+2025-04-13 15:01:59 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + ?c)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:01:59 - INFO - Testing fragment: rw [right_distrib]
+2025-04-13 15:01:59 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:01 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:01 - DEBUG - === New errors detail ===
+2025-04-13 15:02:01 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:01 - INFO - Testing fragment: rw [distrib_three_right]
+2025-04-13 15:02:01 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:03 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:03 - DEBUG - === New errors detail ===
+2025-04-13 15:02:03 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b + ?c) * ?d
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:03 - INFO - Testing fragment: rw [add_one_mul]
+2025-04-13 15:02:03 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:05 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:05 - DEBUG - === New errors detail ===
+2025-04-13 15:02:05 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + 1) * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:05 - INFO - Testing fragment: rw [mul_add_one]
+2025-04-13 15:02:05 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:07 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:07 - DEBUG - === New errors detail ===
+2025-04-13 15:02:07 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + 1)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:07 - INFO - Testing fragment: rw [one_add_mul]
+2025-04-13 15:02:07 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:09 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:09 - DEBUG - === New errors detail ===
+2025-04-13 15:02:09 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 + ?a) * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:09 - INFO - Testing fragment: rw [mul_one_add]
+2025-04-13 15:02:09 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:11 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:11 - DEBUG - === New errors detail ===
+2025-04-13 15:02:11 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 + ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:11 - INFO - Testing fragment: rw [two_mul]
+2025-04-13 15:02:11 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:13 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:13 - DEBUG - === New errors detail ===
+2025-04-13 15:02:13 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  2 * ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:13 - INFO - Testing fragment: rw [mul_two]
+2025-04-13 15:02:13 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:15 - DEBUG - === New errors detail ===
+2025-04-13 15:02:15 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * 2
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:15 - INFO - Testing fragment: rw [mul_boole]
+2025-04-13 15:02:15 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:17 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:17 - DEBUG - === New errors detail ===
+2025-04-13 15:02:17 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * if ?P then 1 else 0
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:17 - INFO - Testing fragment: rw [boole_mul]
+2025-04-13 15:02:17 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:19 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:19 - DEBUG - === New errors detail ===
+2025-04-13 15:02:19 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (if ?P then 1 else 0) * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:19 - INFO - Testing fragment: rw [add_mul_self_eq]
+2025-04-13 15:02:19 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:21 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:21 - DEBUG - === New errors detail ===
+2025-04-13 15:02:21 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * (?a + ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:21 - INFO - Testing fragment: rw [neg_mul]
+2025-04-13 15:02:21 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:23 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:23 - DEBUG - === New errors detail ===
+2025-04-13 15:02:23 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:23 - INFO - Testing fragment: rw [mul_neg]
+2025-04-13 15:02:23 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:25 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:25 - DEBUG - === New errors detail ===
+2025-04-13 15:02:25 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:25 - INFO - Testing fragment: rw [neg_mul_neg]
+2025-04-13 15:02:25 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:27 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:27 - DEBUG - === New errors detail ===
+2025-04-13 15:02:27 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * -?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:27 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
+2025-04-13 15:02:27 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:29 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:29 - DEBUG - === New errors detail ===
+2025-04-13 15:02:29 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:29 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
+2025-04-13 15:02:29 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:31 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:31 - DEBUG - === New errors detail ===
+2025-04-13 15:02:31 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:31 - INFO - Testing fragment: rw [neg_mul_comm]
+2025-04-13 15:02:31 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:33 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:33 - DEBUG - === New errors detail ===
+2025-04-13 15:02:33 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:33 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
+2025-04-13 15:02:33 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:35 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:35 - DEBUG - === New errors detail ===
+2025-04-13 15:02:35 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:35 - INFO - Testing fragment: rw [mul_neg_one]
+2025-04-13 15:02:35 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:37 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:37 - DEBUG - === New errors detail ===
+2025-04-13 15:02:37 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:37 - INFO - Testing fragment: rw [neg_one_mul]
+2025-04-13 15:02:37 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:39 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:39 - DEBUG - === New errors detail ===
+2025-04-13 15:02:39 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:39 - INFO - Testing fragment: rw [mul_sub_left_distrib]
+2025-04-13 15:02:39 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:41 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:41 - DEBUG - === New errors detail ===
+2025-04-13 15:02:41 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ?c)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:41 - INFO - Testing fragment: rw [mul_sub_right_distrib]
+2025-04-13 15:02:41 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:43 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:43 - DEBUG - === New errors detail ===
+2025-04-13 15:02:43 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - ?b) * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:43 - INFO - Testing fragment: rw [sub_one_mul]
+2025-04-13 15:02:43 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:45 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:45 - DEBUG - === New errors detail ===
+2025-04-13 15:02:45 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - 1) * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:45 - INFO - Testing fragment: rw [mul_sub_one]
+2025-04-13 15:02:45 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:47 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:47 - DEBUG - === New errors detail ===
+2025-04-13 15:02:47 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - 1)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:47 - INFO - Testing fragment: rw [one_sub_mul]
+2025-04-13 15:02:47 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:49 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:49 - DEBUG - === New errors detail ===
+2025-04-13 15:02:49 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 - ?a) * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:49 - INFO - Testing fragment: rw [mul_one_sub]
+2025-04-13 15:02:49 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:51 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:51 - DEBUG - === New errors detail ===
+2025-04-13 15:02:51 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 - ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:51 - INFO - Testing fragment: rw [mul_left_cancel]
+2025-04-13 15:02:51 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:53 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:53 - DEBUG - === New errors detail ===
+2025-04-13 15:02:53 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1787
+from equation
+  ?m.1787 = ?m.1788
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:53 - INFO - Testing fragment: rw [mul_left_cancel_iff]
+2025-04-13 15:02:53 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:55 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:55 - DEBUG - === New errors detail ===
+2025-04-13 15:02:55 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1786 * ?m.1787 = ?m.1786 * ?m.1788
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:55 - INFO - Testing fragment: rw [mul_right_injective]
+2025-04-13 15:02:55 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:57 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:57 - DEBUG - === New errors detail ===
+2025-04-13 15:02:57 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:57 - INFO - Testing fragment: rw [mul_right_inj]
+2025-04-13 15:02:57 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:02:59 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:02:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:02:59 - DEBUG - === New errors detail ===
+2025-04-13 15:02:59 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b = ?a * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:02:59 - INFO - Testing fragment: rw [mul_ne_mul_right]
+2025-04-13 15:02:59 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:01 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:01 - DEBUG - === New errors detail ===
+2025-04-13 15:03:01 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b ≠ ?a * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:01 - INFO - Testing fragment: rw [mul_right_cancel]
+2025-04-13 15:03:01 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:03 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:03 - DEBUG - === New errors detail ===
+2025-04-13 15:03:03 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1786
+from equation
+  ?m.1786 = ?m.1788
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:03 - INFO - Testing fragment: rw [mul_right_cancel_iff]
+2025-04-13 15:03:03 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:05 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:05 - DEBUG - === New errors detail ===
+2025-04-13 15:03:05 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1787 * ?m.1786 = ?m.1788 * ?m.1786
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:05 - INFO - Testing fragment: rw [mul_left_injective]
+2025-04-13 15:03:05 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:07 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:07 - DEBUG - === New errors detail ===
+2025-04-13 15:03:07 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:07 - INFO - Testing fragment: rw [mul_left_inj]
+2025-04-13 15:03:07 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:09 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:09 - DEBUG - === New errors detail ===
+2025-04-13 15:03:09 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a = ?c * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:09 - INFO - Testing fragment: rw [mul_ne_mul_left]
+2025-04-13 15:03:09 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:11 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:11 - DEBUG - === New errors detail ===
+2025-04-13 15:03:11 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a ≠ ?c * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:11 - INFO - Testing fragment: rw [mul_assoc]
+2025-04-13 15:03:11 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:13 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:13 - DEBUG - === New errors detail ===
+2025-04-13 15:03:13 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:13 - INFO - Testing fragment: rw [mul_comm]
+2025-04-13 15:03:13 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:15 - DEBUG - === New errors detail ===
+2025-04-13 15:03:15 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:15 - INFO - Testing fragment: rw [MulOneClass]
+2025-04-13 15:03:15 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:17 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:17 - DEBUG - === New errors detail ===
+2025-04-13 15:03:17 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:17 - INFO - Testing fragment: rw [one_mul]
+2025-04-13 15:03:17 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:19 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:19 - DEBUG - === New errors detail ===
+2025-04-13 15:03:19 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:19 - INFO - Testing fragment: rw [mul_one]
+2025-04-13 15:03:19 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:21 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:21 - DEBUG - === New errors detail ===
+2025-04-13 15:03:21 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:21 - INFO - Testing fragment: rw [npowRec_add]
+2025-04-13 15:03:21 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:23 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:23 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:23 - DEBUG - === New errors detail ===
+2025-04-13 15:03:23 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-13 15:03:23 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:23 - INFO - Testing fragment: rw [npowRec_succ]
+2025-04-13 15:03:23 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:25 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:25 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:25 - DEBUG - === New errors detail ===
+2025-04-13 15:03:25 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-13 15:03:25 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:25 - INFO - Testing fragment: rw [npowRec'_succ]
+2025-04-13 15:03:25 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:27 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:27 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:27 - DEBUG - === New errors detail ===
+2025-04-13 15:03:27 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-13 15:03:27 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:27 - INFO - Testing fragment: rw [npowRec'_two_mul]
+2025-04-13 15:03:27 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:29 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:29 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:29 - DEBUG - === New errors detail ===
+2025-04-13 15:03:29 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-13 15:03:29 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:29 - INFO - Testing fragment: rw [npowRec'_mul_comm]
+2025-04-13 15:03:29 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:31 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:31 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:31 - DEBUG - === New errors detail ===
+2025-04-13 15:03:31 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-13 15:03:31 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:31 - INFO - Testing fragment: rw [npowRec_eq]
+2025-04-13 15:03:31 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:33 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:33 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:33 - DEBUG - === New errors detail ===
+2025-04-13 15:03:33 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-13 15:03:33 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:33 - INFO - Testing fragment: rw [npowBinRec]
+2025-04-13 15:03:33 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:35 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:35 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:35 - DEBUG - === New errors detail ===
+2025-04-13 15:03:35 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-13 15:03:35 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:35 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
+2025-04-13 15:03:35 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:37 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:37 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:37 - DEBUG - === New errors detail ===
+2025-04-13 15:03:37 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-13 15:03:37 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:37 - INFO - Testing fragment: rw [npow_eq_pow]
+2025-04-13 15:03:37 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:39 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:39 - DEBUG - === New errors detail ===
+2025-04-13 15:03:39 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Monoid.npow ?n ?x
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:39 - INFO - Testing fragment: rw [pow_zero]
+2025-04-13 15:03:39 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:41 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:41 - DEBUG - === New errors detail ===
+2025-04-13 15:03:41 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:41 - INFO - Testing fragment: rw [pow_succ]
+2025-04-13 15:03:41 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:43 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:43 - DEBUG - === New errors detail ===
+2025-04-13 15:03:43 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ (?n + 1)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:43 - INFO - Testing fragment: rw [inv_inv]
+2025-04-13 15:03:43 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:45 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:45 - DEBUG - === New errors detail ===
+2025-04-13 15:03:45 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:45 - INFO - Testing fragment: rw [exists_zpow_surjective]
+2025-04-13 15:03:45 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:47 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:03:47 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:03:47 - DEBUG - === New errors detail ===
+2025-04-13 15:03:47 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-13 15:03:47 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:47 - INFO - Testing fragment: rw [zpow_eq_pow]
+2025-04-13 15:03:47 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:49 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:49 - DEBUG - === New errors detail ===
+2025-04-13 15:03:49 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  DivInvMonoid.zpow ?n ?x
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:49 - INFO - Testing fragment: rw [zpow_zero]
+2025-04-13 15:03:49 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:51 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:51 - DEBUG - === New errors detail ===
+2025-04-13 15:03:51 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:51 - INFO - Testing fragment: rw [zpow_natCast]
+2025-04-13 15:03:51 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:53 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:53 - DEBUG - === New errors detail ===
+2025-04-13 15:03:53 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ↑?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:53 - INFO - Testing fragment: rw [zpow_negSucc]
+2025-04-13 15:03:53 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:55 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:55 - DEBUG - === New errors detail ===
+2025-04-13 15:03:55 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ Int.negSucc ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:55 - INFO - Testing fragment: rw [negSucc_zsmul]
+2025-04-13 15:03:55 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:57 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:57 - DEBUG - === New errors detail ===
+2025-04-13 15:03:57 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Int.negSucc ?n • ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:57 - INFO - Testing fragment: rw [div_eq_mul_inv]
+2025-04-13 15:03:57 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:03:59 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:03:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:03:59 - DEBUG - === New errors detail ===
+2025-04-13 15:03:59 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:03:59 - INFO - Testing fragment: rw [inv_eq_one_div]
+2025-04-13 15:03:59 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:04:01 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:04:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:04:01 - DEBUG - === New errors detail ===
+2025-04-13 15:04:01 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:04:01 - INFO - Testing fragment: rw [mul_div_assoc]
+2025-04-13 15:04:01 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:04:03 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:04:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:04:03 - DEBUG - === New errors detail ===
+2025-04-13 15:04:03 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:04:03 - INFO - Testing fragment: rw [one_div]
+2025-04-13 15:04:03 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:08 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:08 - DEBUG - === New errors detail ===
+2025-04-13 15:05:08 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:08 - INFO - Testing fragment: rw [inv_one]
+2025-04-13 15:05:08 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:10 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:10 - DEBUG - === New errors detail ===
+2025-04-13 15:05:10 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:10 - INFO - Testing fragment: rw [mul_inv_rev]
+2025-04-13 15:05:10 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:13 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:13 - DEBUG - === New errors detail ===
+2025-04-13 15:05:13 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a * ?b)⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:13 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_right]
+2025-04-13 15:05:13 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:15 - DEBUG - === New errors detail ===
+2025-04-13 15:05:15 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1785⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:15 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_left]
+2025-04-13 15:05:15 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:17 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:17 - DEBUG - === New errors detail ===
+2025-04-13 15:05:17 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1786⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:17 - INFO - Testing fragment: rw [eq_inv_of_mul_eq_one_left]
+2025-04-13 15:05:17 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:19 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:19 - DEBUG - === New errors detail ===
+2025-04-13 15:05:19 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1785
+from equation
+  ?m.1785 = ?m.1786⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:19 - INFO - Testing fragment: rw [inv_mul_cancel]
+2025-04-13 15:05:19 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:21 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:21 - DEBUG - === New errors detail ===
+2025-04-13 15:05:21 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1785⁻¹ * ?m.1785
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:21 - INFO - Testing fragment: rw [inv_eq_of_mul]
+2025-04-13 15:05:21 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:23 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:05:23 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:05:23 - DEBUG - === New errors detail ===
+2025-04-13 15:05:23 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-13 15:05:23 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:23 - INFO - Testing fragment: rw [mul_inv_cancel]
+2025-04-13 15:05:23 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:25 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:25 - DEBUG - === New errors detail ===
+2025-04-13 15:05:25 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1785 * ?m.1785⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:25 - INFO - Testing fragment: rw [div_self']
+2025-04-13 15:05:25 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:27 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:27 - DEBUG - === New errors detail ===
+2025-04-13 15:05:27 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:27 - INFO - Testing fragment: rw [inv_mul_cancel_left]
+2025-04-13 15:05:27 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:29 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:29 - DEBUG - === New errors detail ===
+2025-04-13 15:05:29 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹ * (?a * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:29 - INFO - Testing fragment: rw [mul_inv_cancel_left]
+2025-04-13 15:05:29 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:31 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:31 - DEBUG - === New errors detail ===
+2025-04-13 15:05:31 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?a⁻¹ * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:31 - INFO - Testing fragment: rw [mul_inv_cancel_right]
+2025-04-13 15:05:31 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:33 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:33 - DEBUG - === New errors detail ===
+2025-04-13 15:05:33 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?b⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:33 - INFO - Testing fragment: rw [mul_div_cancel_right]
+2025-04-13 15:05:33 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:35 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:35 - DEBUG - === New errors detail ===
+2025-04-13 15:05:35 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:35 - INFO - Testing fragment: rw [inv_mul_cancel_right]
+2025-04-13 15:05:35 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:37 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:37 - DEBUG - === New errors detail ===
+2025-04-13 15:05:37 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹ * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:37 - INFO - Testing fragment: rw [div_mul_cancel]
+2025-04-13 15:05:37 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:39 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:39 - DEBUG - === New errors detail ===
+2025-04-13 15:05:39 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:39 - INFO - Testing fragment: rw [<- left_distrib]
+2025-04-13 15:05:39 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:41 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:41 - DEBUG - === New errors detail ===
+2025-04-13 15:05:41 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:41 - INFO - Testing fragment: rw [<- right_distrib]
+2025-04-13 15:05:41 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:43 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:43 - DEBUG - === New errors detail ===
+2025-04-13 15:05:43 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c + ?b * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:43 - INFO - Testing fragment: rw [<- distrib_three_right]
+2025-04-13 15:05:43 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:45 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:45 - DEBUG - === New errors detail ===
+2025-04-13 15:05:45 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?d + ?b * ?d + ?c * ?d
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:45 - INFO - Testing fragment: rw [<- add_one_mul]
+2025-04-13 15:05:45 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:47 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:47 - DEBUG - === New errors detail ===
+2025-04-13 15:05:47 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:47 - INFO - Testing fragment: rw [<- mul_add_one]
+2025-04-13 15:05:47 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:49 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:49 - DEBUG - === New errors detail ===
+2025-04-13 15:05:49 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:49 - INFO - Testing fragment: rw [<- one_add_mul]
+2025-04-13 15:05:49 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:51 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:51 - DEBUG - === New errors detail ===
+2025-04-13 15:05:51 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b + ?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:51 - INFO - Testing fragment: rw [<- mul_one_add]
+2025-04-13 15:05:51 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:53 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:53 - DEBUG - === New errors detail ===
+2025-04-13 15:05:53 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a + ?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:53 - INFO - Testing fragment: rw [<- two_mul]
+2025-04-13 15:05:53 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:55 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:55 - DEBUG - === New errors detail ===
+2025-04-13 15:05:55 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:55 - INFO - Testing fragment: rw [<- mul_two]
+2025-04-13 15:05:55 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:57 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:57 - DEBUG - === New errors detail ===
+2025-04-13 15:05:57 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:57 - INFO - Testing fragment: rw [<- mul_boole]
+2025-04-13 15:05:57 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:05:59 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:05:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:05:59 - DEBUG - === New errors detail ===
+2025-04-13 15:05:59 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:05:59 - INFO - Testing fragment: rw [<- boole_mul]
+2025-04-13 15:05:59 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:06:01 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:06:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:06:01 - DEBUG - === New errors detail ===
+2025-04-13 15:06:01 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:06:01 - INFO - Testing fragment: rw [<- add_mul_self_eq]
+2025-04-13 15:06:01 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:06:03 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:06:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:06:03 - DEBUG - === New errors detail ===
+2025-04-13 15:06:03 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?a + 2 * ?a * ?b + ?b * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:06:03 - INFO - Testing fragment: rw [<- neg_mul]
+2025-04-13 15:06:03 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:06:05 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:06:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:06:05 - DEBUG - === New errors detail ===
+2025-04-13 15:06:05 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:06:05 - INFO - Testing fragment: rw [<- mul_neg]
+2025-04-13 15:06:05 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:06:11 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:06:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:06:11 - DEBUG - === New errors detail ===
+2025-04-13 15:06:11 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:06:11 - INFO - Testing fragment: rw [<- neg_mul_neg]
+2025-04-13 15:06:11 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:33 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:33 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:33 - DEBUG - === New errors detail ===
+2025-04-13 15:09:33 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:33 - INFO - Testing fragment: rw [<- neg_mul_eq_neg_mul]
+2025-04-13 15:09:33 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:35 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:35 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:35 - DEBUG - === New errors detail ===
+2025-04-13 15:09:35 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:35 - INFO - Testing fragment: rw [<- neg_mul_eq_mul_neg]
+2025-04-13 15:09:35 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:37 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:37 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:37 - DEBUG - === New errors detail ===
+2025-04-13 15:09:37 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:37 - INFO - Testing fragment: rw [<- neg_mul_comm]
+2025-04-13 15:09:37 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:39 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:39 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:39 - DEBUG - === New errors detail ===
+2025-04-13 15:09:39 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:39 - INFO - Testing fragment: rw [<- neg_eq_neg_one_mul]
+2025-04-13 15:09:39 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:41 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:41 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:41 - DEBUG - === New errors detail ===
+2025-04-13 15:09:41 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:41 - INFO - Testing fragment: rw [<- mul_neg_one]
+2025-04-13 15:09:41 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:43 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:43 - DEBUG - === New errors detail ===
+2025-04-13 15:09:43 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:43 - INFO - Testing fragment: rw [<- neg_one_mul]
+2025-04-13 15:09:43 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:45 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:45 - DEBUG - === New errors detail ===
+2025-04-13 15:09:45 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:45 - INFO - Testing fragment: rw [<- mul_sub_left_distrib]
+2025-04-13 15:09:45 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:47 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:47 - DEBUG - === New errors detail ===
+2025-04-13 15:09:47 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:47 - INFO - Testing fragment: rw [<- mul_sub_right_distrib]
+2025-04-13 15:09:47 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:49 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:49 - DEBUG - === New errors detail ===
+2025-04-13 15:09:49 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c - ?b * ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:49 - INFO - Testing fragment: rw [<- sub_one_mul]
+2025-04-13 15:09:49 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:51 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:51 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:51 - DEBUG - === New errors detail ===
+2025-04-13 15:09:51 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:51 - INFO - Testing fragment: rw [<- mul_sub_one]
+2025-04-13 15:09:51 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:53 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:53 - DEBUG - === New errors detail ===
+2025-04-13 15:09:53 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:53 - INFO - Testing fragment: rw [<- one_sub_mul]
+2025-04-13 15:09:53 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:55 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:55 - DEBUG - === New errors detail ===
+2025-04-13 15:09:55 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b - ?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:55 - INFO - Testing fragment: rw [<- mul_one_sub]
+2025-04-13 15:09:55 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:57 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:57 - DEBUG - === New errors detail ===
+2025-04-13 15:09:57 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a - ?a * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:57 - INFO - Testing fragment: rw [<- mul_left_cancel]
+2025-04-13 15:09:57 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:09:59 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:09:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:09:59 - DEBUG - === New errors detail ===
+2025-04-13 15:09:59 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1788
+from equation
+  ?m.1788 = ?m.1787
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:09:59 - INFO - Testing fragment: rw [<- mul_left_cancel_iff]
+2025-04-13 15:09:59 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:01 - INFO - Testing fix: Original errors: 1, Fixed errors: 3
+2025-04-13 15:10:01 - INFO - Result: False (introduced 3 new errors)
+2025-04-13 15:10:01 - DEBUG - === New errors detail ===
+2025-04-13 15:10:01 - DEBUG - New Error 1: line 28, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 15:10:01 - DEBUG - New Error 2: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:10:01 - DEBUG - New Error 3: line 37, type: type_mismatch, message: type mismatch
+  key
+has type
+  σ.invFun 33 = 2 : Prop
+but is expected to have type
+  ?m.1786 * σ.invFun 33 = ?m.1786 * 2 : Prop
+2025-04-13 15:10:01 - INFO - Testing fragment: rw [<- mul_right_injective]
+2025-04-13 15:10:01 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:03 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:03 - DEBUG - === New errors detail ===
+2025-04-13 15:10:03 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:03 - INFO - Testing fragment: rw [<- mul_right_inj]
+2025-04-13 15:10:03 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:05 - INFO - Testing fix: Original errors: 1, Fixed errors: 3
+2025-04-13 15:10:05 - INFO - Result: False (introduced 3 new errors)
+2025-04-13 15:10:05 - DEBUG - === New errors detail ===
+2025-04-13 15:10:05 - DEBUG - New Error 1: line 28, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 15:10:05 - DEBUG - New Error 2: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:10:05 - DEBUG - New Error 3: line 37, type: type_mismatch, message: type mismatch
+  key
+has type
+  σ.invFun 33 = 2 : Prop
+but is expected to have type
+  ?a * σ.invFun 33 = ?a * 2 : Prop
+2025-04-13 15:10:05 - INFO - Testing fragment: rw [<- mul_ne_mul_right]
+2025-04-13 15:10:05 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:07 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:07 - DEBUG - === New errors detail ===
+2025-04-13 15:10:07 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:07 - INFO - Testing fragment: rw [<- mul_right_cancel]
+2025-04-13 15:10:07 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:09 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:09 - DEBUG - === New errors detail ===
+2025-04-13 15:10:09 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1788
+from equation
+  ?m.1788 = ?m.1786
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:09 - INFO - Testing fragment: rw [<- mul_right_cancel_iff]
+2025-04-13 15:10:09 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:11 - INFO - Testing fix: Original errors: 1, Fixed errors: 3
+2025-04-13 15:10:11 - INFO - Result: False (introduced 3 new errors)
+2025-04-13 15:10:11 - DEBUG - === New errors detail ===
+2025-04-13 15:10:11 - DEBUG - New Error 1: line 28, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 15:10:11 - DEBUG - New Error 2: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:10:11 - DEBUG - New Error 3: line 37, type: type_mismatch, message: type mismatch
+  key
+has type
+  σ.invFun 33 = 2 : Prop
+but is expected to have type
+  σ.invFun 33 * ?m.1786 = 2 * ?m.1786 : Prop
+2025-04-13 15:10:11 - INFO - Testing fragment: rw [<- mul_left_injective]
+2025-04-13 15:10:11 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:13 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:13 - DEBUG - === New errors detail ===
+2025-04-13 15:10:13 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:13 - INFO - Testing fragment: rw [<- mul_left_inj]
+2025-04-13 15:10:13 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 3
+2025-04-13 15:10:15 - INFO - Result: False (introduced 3 new errors)
+2025-04-13 15:10:15 - DEBUG - === New errors detail ===
+2025-04-13 15:10:15 - DEBUG - New Error 1: line 28, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-13 15:10:15 - DEBUG - New Error 2: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:10:15 - DEBUG - New Error 3: line 37, type: type_mismatch, message: type mismatch
+  key
+has type
+  σ.invFun 33 = 2 : Prop
+but is expected to have type
+  σ.invFun 33 * ?a = 2 * ?a : Prop
+2025-04-13 15:10:15 - INFO - Testing fragment: rw [<- mul_ne_mul_left]
+2025-04-13 15:10:15 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:17 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:17 - DEBUG - === New errors detail ===
+2025-04-13 15:10:17 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:17 - INFO - Testing fragment: rw [<- mul_assoc]
+2025-04-13 15:10:17 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:19 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:19 - DEBUG - === New errors detail ===
+2025-04-13 15:10:19 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b * ?c)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:19 - INFO - Testing fragment: rw [<- mul_comm]
+2025-04-13 15:10:19 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:21 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:21 - DEBUG - === New errors detail ===
+2025-04-13 15:10:21 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:21 - INFO - Testing fragment: rw [<- MulOneClass]
+2025-04-13 15:10:21 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:24 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:24 - DEBUG - === New errors detail ===
+2025-04-13 15:10:24 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:24 - INFO - Testing fragment: rw [<- one_mul]
+2025-04-13 15:10:24 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:26 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:26 - DEBUG - === New errors detail ===
+2025-04-13 15:10:26 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = 1 * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:26 - INFO - Testing fragment: rw [<- mul_one]
+2025-04-13 15:10:26 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:28 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:28 - DEBUG - === New errors detail ===
+2025-04-13 15:10:28 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * 1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:28 - INFO - Testing fragment: rw [<- npowRec_add]
+2025-04-13 15:10:28 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:30 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:30 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:30 - DEBUG - === New errors detail ===
+2025-04-13 15:10:30 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-13 15:10:30 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:30 - INFO - Testing fragment: rw [<- npowRec_succ]
+2025-04-13 15:10:30 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:32 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:32 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:32 - DEBUG - === New errors detail ===
+2025-04-13 15:10:32 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-13 15:10:32 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:32 - INFO - Testing fragment: rw [<- npowRec'_succ]
+2025-04-13 15:10:32 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:34 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:34 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:34 - DEBUG - === New errors detail ===
+2025-04-13 15:10:34 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-13 15:10:34 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:34 - INFO - Testing fragment: rw [<- npowRec'_two_mul]
+2025-04-13 15:10:34 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:36 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:36 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:36 - DEBUG - === New errors detail ===
+2025-04-13 15:10:36 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-13 15:10:36 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:36 - INFO - Testing fragment: rw [<- npowRec'_mul_comm]
+2025-04-13 15:10:36 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:38 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:38 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:38 - DEBUG - === New errors detail ===
+2025-04-13 15:10:38 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-13 15:10:38 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:38 - INFO - Testing fragment: rw [<- npowRec_eq]
+2025-04-13 15:10:38 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:40 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:40 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:40 - DEBUG - === New errors detail ===
+2025-04-13 15:10:40 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-13 15:10:40 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:40 - INFO - Testing fragment: rw [<- npowBinRec]
+2025-04-13 15:10:40 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:42 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:42 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:42 - DEBUG - === New errors detail ===
+2025-04-13 15:10:42 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-13 15:10:42 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:42 - INFO - Testing fragment: rw [<- npowRec_eq_npowBinRec]
+2025-04-13 15:10:42 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:44 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:44 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:44 - DEBUG - === New errors detail ===
+2025-04-13 15:10:44 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-13 15:10:44 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:44 - INFO - Testing fragment: rw [<- npow_eq_pow]
+2025-04-13 15:10:44 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:46 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:46 - DEBUG - === New errors detail ===
+2025-04-13 15:10:46 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:46 - INFO - Testing fragment: rw [<- pow_zero]
+2025-04-13 15:10:46 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:48 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:48 - DEBUG - === New errors detail ===
+2025-04-13 15:10:48 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:48 - INFO - Testing fragment: rw [<- pow_succ]
+2025-04-13 15:10:48 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:50 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:50 - DEBUG - === New errors detail ===
+2025-04-13 15:10:50 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n * ?a
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:50 - INFO - Testing fragment: rw [<- inv_inv]
+2025-04-13 15:10:50 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:52 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:52 - DEBUG - === New errors detail ===
+2025-04-13 15:10:52 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a⁻¹⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:52 - INFO - Testing fragment: rw [<- exists_zpow_surjective]
+2025-04-13 15:10:52 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:54 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:10:54 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:10:54 - DEBUG - === New errors detail ===
+2025-04-13 15:10:54 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-13 15:10:54 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:54 - INFO - Testing fragment: rw [<- zpow_eq_pow]
+2025-04-13 15:10:54 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:56 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:56 - DEBUG - === New errors detail ===
+2025-04-13 15:10:56 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:56 - INFO - Testing fragment: rw [<- zpow_zero]
+2025-04-13 15:10:56 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:10:58 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:10:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:10:58 - DEBUG - === New errors detail ===
+2025-04-13 15:10:58 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:10:58 - INFO - Testing fragment: rw [<- zpow_natCast]
+2025-04-13 15:10:58 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:00 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:00 - DEBUG - === New errors detail ===
+2025-04-13 15:11:00 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:00 - INFO - Testing fragment: rw [<- zpow_negSucc]
+2025-04-13 15:11:00 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:02 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:02 - DEBUG - === New errors detail ===
+2025-04-13 15:11:02 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a ^ (?n + 1))⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:02 - INFO - Testing fragment: rw [<- negSucc_zsmul]
+2025-04-13 15:11:02 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:04 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:04 - DEBUG - === New errors detail ===
+2025-04-13 15:11:04 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -((?n + 1) • ?a)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:04 - INFO - Testing fragment: rw [<- div_eq_mul_inv]
+2025-04-13 15:11:04 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:06 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:06 - DEBUG - === New errors detail ===
+2025-04-13 15:11:06 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:06 - INFO - Testing fragment: rw [<- inv_eq_one_div]
+2025-04-13 15:11:06 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:08 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:08 - DEBUG - === New errors detail ===
+2025-04-13 15:11:08 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?x
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:08 - INFO - Testing fragment: rw [<- mul_div_assoc]
+2025-04-13 15:11:08 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:10 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:10 - DEBUG - === New errors detail ===
+2025-04-13 15:11:10 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b / ?c)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:10 - INFO - Testing fragment: rw [<- one_div]
+2025-04-13 15:11:10 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:12 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:12 - DEBUG - === New errors detail ===
+2025-04-13 15:11:12 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:12 - INFO - Testing fragment: rw [<- inv_one]
+2025-04-13 15:11:12 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:14 - DEBUG - === New errors detail ===
+2025-04-13 15:11:14 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:14 - INFO - Testing fragment: rw [<- mul_inv_rev]
+2025-04-13 15:11:14 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:16 - DEBUG - === New errors detail ===
+2025-04-13 15:11:16 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b⁻¹ * ?a⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:16 - INFO - Testing fragment: rw [<- inv_eq_of_mul_eq_one_right]
+2025-04-13 15:11:16 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:18 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:18 - DEBUG - === New errors detail ===
+2025-04-13 15:11:18 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1786
+from equation
+  ?m.1786 = ?m.1785⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:18 - INFO - Testing fragment: rw [<- inv_eq_of_mul_eq_one_left]
+2025-04-13 15:11:18 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:20 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:20 - DEBUG - === New errors detail ===
+2025-04-13 15:11:20 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1785
+from equation
+  ?m.1785 = ?m.1786⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:20 - INFO - Testing fragment: rw [<- eq_inv_of_mul_eq_one_left]
+2025-04-13 15:11:20 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:22 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:22 - DEBUG - === New errors detail ===
+2025-04-13 15:11:22 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1786⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:22 - INFO - Testing fragment: rw [<- inv_mul_cancel]
+2025-04-13 15:11:22 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:24 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:24 - DEBUG - === New errors detail ===
+2025-04-13 15:11:24 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:24 - INFO - Testing fragment: rw [<- inv_eq_of_mul]
+2025-04-13 15:11:24 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:26 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:11:26 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:11:26 - DEBUG - === New errors detail ===
+2025-04-13 15:11:26 - DEBUG - New Error 1: line 28, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-13 15:11:26 - DEBUG - New Error 2: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.1782
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:26 - INFO - Testing fragment: rw [<- mul_inv_cancel]
+2025-04-13 15:11:26 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:28 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:28 - DEBUG - === New errors detail ===
+2025-04-13 15:11:28 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:28 - INFO - Testing fragment: rw [<- div_self']
+2025-04-13 15:11:28 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:30 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:30 - DEBUG - === New errors detail ===
+2025-04-13 15:11:30 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:30 - INFO - Testing fragment: rw [<- inv_mul_cancel_left]
+2025-04-13 15:11:30 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:32 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:32 - DEBUG - === New errors detail ===
+2025-04-13 15:11:32 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?b
+from equation
+  ?b = ?a⁻¹ * (?a * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:32 - INFO - Testing fragment: rw [<- mul_inv_cancel_left]
+2025-04-13 15:11:32 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:34 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:34 - DEBUG - === New errors detail ===
+2025-04-13 15:11:34 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?b
+from equation
+  ?b = ?a * (?a⁻¹ * ?b)
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:34 - INFO - Testing fragment: rw [<- mul_inv_cancel_right]
+2025-04-13 15:11:34 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:36 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:36 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:36 - DEBUG - === New errors detail ===
+2025-04-13 15:11:36 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * ?b * ?b⁻¹
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:36 - INFO - Testing fragment: rw [<- mul_div_cancel_right]
+2025-04-13 15:11:36 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:38 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:38 - DEBUG - === New errors detail ===
+2025-04-13 15:11:38 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * ?b / ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:38 - INFO - Testing fragment: rw [<- inv_mul_cancel_right]
+2025-04-13 15:11:38 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:40 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:40 - DEBUG - === New errors detail ===
+2025-04-13 15:11:40 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * ?b⁻¹ * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:40 - INFO - Testing fragment: rw [<- div_mul_cancel]
+2025-04-13 15:11:40 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:42 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:42 - DEBUG - === New errors detail ===
+2025-04-13 15:11:42 - DEBUG - New Error 1: line 28, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a / ?b * ?b
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+⊢ σ.invFun 33 = 2
+2025-04-13 15:11:42 - INFO - Testing fragment: simp
+2025-04-13 15:11:42 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:44 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:44 - DEBUG - === New errors detail ===
+2025-04-13 15:11:44 - DEBUG - New Error 1: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:11:44 - INFO - Testing fragment: field_simp
+2025-04-13 15:11:44 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:46 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:46 - DEBUG - === New errors detail ===
+2025-04-13 15:11:46 - DEBUG - New Error 1: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:11:46 - INFO - Testing fragment: norm_num
+2025-04-13 15:11:46 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:48 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:48 - DEBUG - === New errors detail ===
+2025-04-13 15:11:48 - DEBUG - New Error 1: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:11:48 - INFO - Testing fragment: ring
+2025-04-13 15:11:48 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:50 - INFO - Testing fix: Original errors: 1, Fixed errors: 2
+2025-04-13 15:11:50 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 15:11:50 - DEBUG - === New errors detail ===
+2025-04-13 15:11:50 - DEBUG - New Error 1: line 28, type: ring_failed, message: Try this: ring_nf
+2025-04-13 15:11:50 - DEBUG - New Error 2: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:11:50 - INFO - Testing fragment: ring_nf
+2025-04-13 15:11:50 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:52 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:52 - DEBUG - === New errors detail ===
+2025-04-13 15:11:52 - DEBUG - New Error 1: line 31, type: unknown_identifier, message: unknown identifier 'inv_prop'
+2025-04-13 15:11:52 - INFO - Testing fragment: omega
+2025-04-13 15:11:52 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:54 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:54 - DEBUG - === New errors detail ===
+2025-04-13 15:11:54 - DEBUG - New Error 1: line 28, type: other_error, message: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+2025-04-13 15:11:54 - INFO - Testing fragment: linarith
+2025-04-13 15:11:54 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:56 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:56 - DEBUG - === New errors detail ===
+2025-04-13 15:11:56 - DEBUG - New Error 1: line 28, type: linarith_failed, message: linarith failed to find a contradiction
+case h1.h
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+a✝ : σ.invFun 33 < 2
+⊢ False
+failed
+2025-04-13 15:11:56 - INFO - Testing fragment: nlinarith
+2025-04-13 15:11:56 - INFO - Original error line:   have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+2025-04-13 15:11:58 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-13 15:11:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 15:11:58 - DEBUG - === New errors detail ===
+2025-04-13 15:11:58 - DEBUG - New Error 1: line 28, type: linarith_failed, message: linarith failed to find a contradiction
+case h1.h
+σ : ℝ ≃ ℝ
+h₀ : ∀ (x : ℝ), σ.toFun x = 4 * x ^ 3 + 1
+f : ℝ → ℝ := σ.toFun
+hf : ∀ (x : ℝ), f x = 4 * x ^ 3 + 1
+eq : 4 * 2 ^ 3 + 1 = 33
+f2 : f 2 = 33
+a✝ : σ.invFun 33 < 2
+⊢ False
+failed
+2025-04-13 15:11:58 - INFO - Failed attempt time: 602.74 seconds
+2025-04-13 15:11:58 - INFO - ❌ Could not generate fix for error at line 28
+2025-04-13 15:11:59 - INFO - 
+===== Fix attempt completed =====
+2025-04-13 15:11:59 - INFO - Original errors: 1
+2025-04-13 15:11:59 - INFO - Fixed errors: 0
+2025-04-13 15:11:59 - INFO - Failed errors: 1
+2025-04-13 15:11:59 - INFO - Remaining errors: 1
+2025-04-13 15:11:59 - INFO - Total time: 604.74 seconds
+2025-04-13 15:11:59 - INFO - 
+Final fixed code:
+2025-04-13 15:11:59 - INFO - ----------------------------------------
+2025-04-13 15:11:59 - INFO - /-- If $f(x)=4x^3+1$, find $f^{-1}(33)$. Show that it is 2.-/
+theorem mathd_algebra_393 (σ : Equiv ℝ ℝ) (h₀ : ∀ x, σ.1 x = 4 * x ^ 3 + 1) : σ.2 33 = 2 := by
+  -- We need to show that the inverse function σ⁻¹ maps 33 to 2
+  -- First, let's extract the forward function f from σ
+  let f := σ.1
+  
+  -- The given hypothesis tells us f(x) = 4x³ + 1 for all x
+  have hf : ∀ x, f x = 4 * x ^ 3 + 1 := h₀
+  
+  -- To find f⁻¹(33), we need to find x such that f(x) = 33
+  -- Let's set up the equation 4x³ + 1 = 33
+  have eq : 4 * (2:ℝ) ^ 3 + 1 = 33 := by
+    -- Calculate 2^3 = 8
+    have h1 : (2:ℝ) ^ 3 = 8 := by norm_num
+    -- Substitute back: 4*8 + 1 = 33
+    rw [h1]
+    norm_num
+  
+  -- Now we know f(2) = 33 by the equation above and hf
+  have f2 : f 2 = 33 := by rw [hf, eq]
+  
+  -- Since σ is an equivalence (bijection), the inverse is well-defined
+  -- The inverse function property tells us that if f(a) = b, then f⁻¹(b) = a
+  -- Therefore, since f(2) = 33, we have f⁻¹(33) = 2
+  -- In Lean, σ.2 is the inverse function, so we need to show σ.2 33 = 2
+  
+  -- Use the fact that σ is an equivalence to relate f and its inverse
+  have inv_prop : ∀ x, σ.2 (f x) = x := σ.left_inv x
+  
+  -- Apply this property at x = 2
+  have key : σ.2 (f 2) = 2 := inv_prop 2
+  
+  -- Now substitute f 2 with 33 using the f2 equality
+  rw [f2] at key
+  
+  -- The key now exactly matches our goal: σ.2 33 = 2
+  exact key
+2025-04-13 15:11:59 - INFO - ----------------------------------------
+2025-04-13 15:11:59 - INFO - 
+Detailed error repair report:
+2025-04-13 15:11:59 - INFO - Original code error count: 1
+❌ Fixed error 1/1: Could not generate fix for error at line 28 «unknown_identifier» (after 602.74s)
+
+=== Fix statistics ===
+Original error count: 1
+Fixed errors: 0 (Fix rate: 0.0000)
+Failed errors: 1
+Remaining errors: 1
+Total time: 604.74 seconds
+
+=== Failed fix details ===
+
+Failed fix 1:
+   Line: 28
+   Error type: unknown_identifier
+   Original error message: unknown identifier 'x'...
+   Failure reason: Could not generate fix
+   Time: 602.74 seconds
+2025-04-13 15:11:59 - INFO - 
+Fixed code saved to: /data/coding/minif2f/lean_fixed/90_fixed.lean
+2025-04-13 15:11:59 - INFO - JSON log saved to: /data/coding/minif2f/lean_fixed/90_fix_log.json
+2025-04-13 15:11:59 - INFO - 
+===== LOG FILE LOCATION =====
+2025-04-13 15:11:59 - INFO - Detailed log file is available at: /data/coding/minif2f/lean_fixed/90.log
+2025-04-13 15:11:59 - INFO - ===============================

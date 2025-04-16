@@ -1,55 +1,34 @@
 import Mathlib
 import Aesop
 
-set_option maxHeartbeats 0
+set_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking
 
 open BigOperators Real Nat Topology Rat
 
 /-- 
-What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
-
-$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
-Show that it is \mathrm{(C)}.
-
-Proof outline:
-1. Let y be the side length of the original cube (volume = 1)
-2. Compute y from the volume equation y³ = 1
-3. Compute the surface area of original cube: 6y²
-4. The new cube has surface area twice this: 2*(6y²) = 12y²
-5. Let x be the side length of the new cube
-6. Set up equation for new cube's surface area: 6x² = 12y²
-7. Solve for x in terms of y
-8. Compute volume of new cube: x³
-9. Show this equals 2√2
+Show that for positive integer n, $\sum_{k=0}^{n-1} (2k + 3) = (n + 1)^2 - 1$.
 -/
-theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
-  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
-  -- First, simplify the surface area equation h₂ by dividing both sides by 6
-  have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
-    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
-    exact h₂
-  
-  -- From the volume of the original cube (y³ = 1), we get y = 1
-  have h₄ : y = 1 := by
-    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
-  
-  -- Substitute y = 1 into the simplified equation x² = 2y²
-  have h₅ : x ^ 2 = 2 := by
-    rw [h₄, pow_two, mul_one] at h₃
-    exact h₃
-  
-  -- Since x > 0, we can take square root of both sides to get x = √2
-  have h₆ : x = Real.sqrt 2 := by
-    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
-  
-  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
-  rw [h₆, ← pow_three_sqrt_two]
-  
-  -- Helper lemma to show (√2)³ = 2 * √2
-  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
-    ring
-  
-  -- Apply the helper lemma to complete the proof
-  exact pow_three_sqrt_two
+theorem induction_sum2kp1npqsqm1 (n : ℕ) :
+    ∑ k in Finset.range n, (2 * k + 3) = (n + 1) ^ 2 - 1 := by
+  -- We'll proceed by mathematical induction on n
+  induction n with
+  | zero => 
+    -- Base case: n = 0
+    -- The sum over an empty range is 0 by definition
+    simp [Finset.range_zero]  -- Simplify using the fact that range 0 is empty
+    -- Right side becomes (0 + 1)^2 - 1 = 1 - 1 = 0
+    norm_num  -- Normalize numerical expressions
+  | succ m ih => 
+    -- Inductive step: assume true for n = m (ih is our induction hypothesis), prove for n = m + 1
+    -- First rewrite the sum for m+1 as the sum for m plus the new term
+    rw [Finset.range_succ, Finset.sum_insert (Finset.not_mem_range_self)]  
+    -- The new term is (2 * m + 3) since k ranges up to m (but not m+1)
+    -- Now rewrite using our induction hypothesis ih: ∑_{k=0}^{m-1} (2k+3) = (m+1)^2 - 1
+    rw [ih]  
+    -- The right-hand side becomes ((m + 1) + 1)^2 - 1 = (m + 2)^2 - 1
+    -- Now we need to show: (m+1)^2 - 1 + (2*m + 3) = (m+2)^2 - 1
+    -- Simplify both sides algebraically:
+    -- Left side: (m^2 + 2m + 1) - 1 + 2m + 3 = m^2 + 4m + 3
+    -- Right side: (m^2 + 4m + 4) - 1 = m^2 + 4m + 3
+    -- So both sides are equal
+    ring  -- Use the ring tactic to prove equalities in commutative rings

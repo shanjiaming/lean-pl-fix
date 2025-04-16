@@ -5,51 +5,61 @@ set_option maxHeartbeats 0
 
 open BigOperators Real Nat Topology Rat
 
-/-- 
-What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
+/-- Which of the following is equal to the [[product]]
+$\frac{8}{4}\cdot\frac{12}{8}\cdot\frac{16}{12}\cdot\cdots\cdot\frac{4n+4}{4n}\cdot\cdots\cdot\frac{2008}{2004}?$
 
-$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
-Show that it is \mathrm{(C)}.
-
-Proof outline:
-1. Let y be the side length of the original cube (volume = 1)
-2. Compute y from the volume equation y³ = 1
-3. Compute the surface area of original cube: 6y²
-4. The new cube has surface area twice this: 2*(6y²) = 12y²
-5. Let x be the side length of the new cube
-6. Set up equation for new cube's surface area: 6x² = 12y²
-7. Solve for x in terms of y
-8. Compute volume of new cube: x³
-9. Show this equals 2√2
--/
-theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
-  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
-  -- First, simplify the surface area equation h₂ by dividing both sides by 6
-  have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
-    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
-    exact h₂
+$\textbf{(A)}\ 251\qquad\textbf{(B)}\ 502\qquad\textbf{(C)}\ 1004\qquad\textbf{(D)}\ 2008\qquad\textbf{(E)}\ 4016$ Show that it is \textbf{(B)}.-/
+theorem amc12a_2008_p4 : (∏ k in Finset.Icc (1 : ℕ) 501, ((4 : ℝ) * k + 4) / (4 * k)) = 502 := by
+  -- First, we simplify the general term of the product
+  -- The term is (4k + 4)/(4k) which can be rewritten as 4(k + 1)/(4k) = (k + 1)/k
+  have term_simplification : ∀ k : ℕ, ((4 : ℝ) * k + 4) / (4 * k) = (k + 1)/k := by
+    intro k
+    -- Factor out 4 from numerator
+    rw [← add_mul, mul_comm 4 k, add_mul]
+    -- Simplify numerator and denominator
+    rw [mul_div_mul_left]
+    -- The 4's cancel out
+    exact (div_self (by norm_num : (4 : ℝ) ≠ 0)).symm ▸ rfl
+    -- Ensure denominator is non-zero (k ≥ 1 in our product range)
+    exact mul_ne_zero four_ne_zero (Nat.cast_ne_zero.mpr (k.ne_of_gt (Nat.pos_of_mem_Icc (k ∈ Finset.Icc 1 501))))
   
-  -- From the volume of the original cube (y³ = 1), we get y = 1
-  have h₄ : y = 1 := by
-    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
+  -- Rewrite the product using the simplified term
+  rw [Finset.prod_congr rfl term_simplification]
   
-  -- Substitute y = 1 into the simplified equation x² = 2y²
-  have h₅ : x ^ 2 = 2 := by
-    rw [h₄, pow_two, mul_one] at h₃
-    exact h₃
+  -- Now we have a telescoping product ∏_{k=1}^501 (k+1)/k
+  -- This can be written as (2/1) * (3/2) * (4/3) * ... * (502/501)
+  -- Most terms cancel out, leaving just 502/1 = 502
   
-  -- Since x > 0, we can take square root of both sides to get x = √2
-  have h₆ : x = Real.sqrt 2 := by
-    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
+  -- To formalize this, we use the theorem Finset.prod_range_div which states:
+  -- ∏ i in range n, (f (i + 1) / f i) = f n / f 0 when f 0 ≠ 0
+  -- Here, we adapt it to our Icc case
   
-  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
-  rw [h₆, ← pow_three_sqrt_two]
+  -- First, convert Icc to range
+  rw [Finset.Icc_eq_range, Finset.range_add_one]
   
-  -- Helper lemma to show (√2)³ = 2 * √2
-  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
-    ring
+  -- Now we have ∏ k in range 501, (k + 2)/(k + 1)
+  -- We can rewrite this as ∏ k in range 501, f (k + 1)/f k where f k = k + 1
+  have telescoping : (∏ k in Finset.range 501, ((k + 1) + 1)/(k + 1)) = 
+      ((501 + 1) + 1)/(0 + 1) := by
+    -- Apply the telescoping product theorem
+    refine Finset.prod_range_div (fun n => (n + 1 : ℝ)) ?_
+    -- Show the base case is non-zero (f 0 = 1 ≠ 0)
+    norm_num
   
-  -- Apply the helper lemma to complete the proof
-  exact pow_three_sqrt_two
+  -- Simplify the telescoping result
+  rw [telescoping]
+  -- The numerator is 502 + 1 = 503, but this seems wrong - we need to re-examine our indexing
+  
+  -- Actually, we made an indexing mistake. Let's correct the approach:
+  
+  -- The product ∏_{k=1}^n (k+1)/k = n+1
+  -- Here n = 501, so the product should be 502
+  
+  -- Alternative approach using Finset.prod_range_succ:
+  rw [Finset.Icc_eq_range, Finset.prod_range_add_one]
+  simp only [Nat.cast_add, Nat.cast_one, add_le_iff_nonpos_right, nonpos_iff_eq_zero, 
+    Finset.range_zero, Finset.prod_empty, div_one, one_mul]
+  
+  -- Now we have (501 + 1)/1 = 502
+  norm_cast
+  simp

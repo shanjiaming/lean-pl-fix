@@ -1,0 +1,106 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/7.lean",
+  "output_file": "/data/coding/minif2f/lean_fixed/7_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For what real value of $k$ is $\\frac{13-\\sqrt{131}}{4}$ a root of $2x^2-13x+k$? Show that it is $\\frac{19}{4}$.-/\ntheorem mathd_algebra_116 (k x : \u211d) (h\u2080 : x = (13 - Real.sqrt 131) / 4)\n    (h\u2081 : 2 * x ^ 2 - 13 * x + k = 0) : k = 19 / 4 := by\n  -- First, we substitute the value of x from h\u2080 into the equation h\u2081\n  rw [h\u2080] at h\u2081\n  -- Now simplify the equation by expanding the terms\n  -- We'll compute 2*x^2 - 13*x + k = 0 step by step\n  -- Start by expanding x^2 where x = (13 - \u221a131)/4\n  have h\u2082 : x ^ 2 = ((13 - Real.sqrt 131) / 4) ^ 2 := by rw [h\u2080]\n  -- Compute the square of the numerator and denominator separately\n  have h\u2083 : ((13 - Real.sqrt 131) / 4) ^ 2 = (13 - Real.sqrt 131) ^ 2 / 16 := by ring\n  -- Expand the squared term in the numerator\n  have h\u2084 : (13 - Real.sqrt 131) ^ 2 = 13^2 - 2*13*Real.sqrt 131 + (Real.sqrt 131)^2 := by ring\n  -- Compute each term in the expansion\n  have h\u2085 : 13^2 = 169 := by norm_num\n  have h\u2086 : 2*13*Real.sqrt 131 = 26*Real.sqrt 131 := by ring\n  have h\u2087 : (Real.sqrt 131)^2 = 131 := by exact Real.sq_sqrt (by norm_num : 0 \u2264 131)\n  -- Combine these results to simplify the numerator\n  have h\u2088 : (13 - Real.sqrt 131) ^ 2 = 169 - 26*Real.sqrt 131 + 131 := by rw [h\u2084, h\u2085, h\u2086, h\u2087]\n  -- Combine the constant terms\n  have h\u2089 : 169 + 131 = 300 := by norm_num\n  have h\u2081\u2080 : (13 - Real.sqrt 131) ^ 2 = 300 - 26*Real.sqrt 131 := by rw [h\u2088, h\u2089]\n  -- Now we can rewrite x^2\n  have h\u2081\u2081 : x ^ 2 = (300 - 26*Real.sqrt 131)/16 := by rw [h\u2082, h\u2083, h\u2081\u2080]\n  -- Compute 2*x^2 by multiplying both sides by 2\n  have h\u2081\u2082 : 2 * x ^ 2 = 2 * (300 - 26*Real.sqrt 131)/16 := by rw [h\u2081\u2081]\n  -- Simplify the fraction\n  have h\u2081\u2083 : 2 * (300 - 26*Real.sqrt 131)/16 = (600 - 52*Real.sqrt 131)/16 := by ring\n  have h\u2081\u2084 : 2 * x ^ 2 = (600 - 52*Real.sqrt 131)/16 := by rw [h\u2081\u2082, h\u2081\u2083]\n  -- Now compute 13*x using the original expression for x\n  have h\u2081\u2085 : 13 * x = 13 * (13 - Real.sqrt 131)/4 := by rw [h\u2080]\n  -- Simplify the numerator\n  have h\u2081\u2086 : 13 * (13 - Real.sqrt 131) = 169 - 13*Real.sqrt 131 := by ring\n  have h\u2081\u2087 : 13 * x = (169 - 13*Real.sqrt 131)/4 := by rw [h\u2081\u2085, h\u2081\u2086]\n  -- To combine terms, we'll need common denominators (16)\n  -- Convert 13*x to have denominator 16\n  have h\u2081\u2088 : (169 - 13*Real.sqrt 131)/4 = (676 - 52*Real.sqrt 131)/16 := by ring\n  have h\u2081\u2089 : 13 * x = (676 - 52*Real.sqrt 131)/16 := by rw [h\u2081\u2087, h\u2081\u2088]\n  -- Now rewrite the original equation h\u2081 using our simplified terms\n  have h\u2082\u2080 : (600 - 52*Real.sqrt 131)/16 - (676 - 52*Real.sqrt 131)/16 + k = 0 := by\n    rw [\u2190 h\u2081\u2084, \u2190 h\u2081\u2089]\n    exact h\u2081\n  -- Combine the fractions\n  have h\u2082\u2081 : ((600 - 52*Real.sqrt 131) - (676 - 52*Real.sqrt 131)) / 16 + k = 0 := by\n    rw [sub_div]\n    exact h\u2082\u2080\n  -- Simplify the numerator\n  have h\u2082\u2082 : (600 - 52*Real.sqrt 131 - 676 + 52*Real.sqrt 131) = -76 := by ring\n  -- Substitute back into the equation\n  have h\u2082\u2083 : (-76)/16 + k = 0 := by rw [h\u2082\u2081, h\u2082\u2082]\n  -- Simplify the fraction\n  have h\u2082\u2084 : -76/16 = -19/4 := by norm_num\n  have h\u2082\u2085 : -19/4 + k = 0 := by rw [\u2190 h\u2082\u2084] at h\u2082\u2083\n  -- Solve for k\n  have h\u2082\u2086 : k = 19/4 := by linarith\n  -- Our goal is exactly h\u2082\u2086\n  exact h\u2082\u2086",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For what real value of $k$ is $\\frac{13-\\sqrt{131}}{4}$ a root of $2x^2-13x+k$? Show that it is $\\frac{19}{4}$.-/\ntheorem mathd_algebra_116 (k x : \u211d) (h\u2080 : x = (13 - Real.sqrt 131) / 4)\n    (h\u2081 : 2 * x ^ 2 - 13 * x + k = 0) : k = 19 / 4 := by\n  -- First, we substitute the value of x from h\u2080 into the equation h\u2081\n  rw [h\u2080] at h\u2081\n  -- Now simplify the equation by expanding the terms\n  -- We'll compute 2*x^2 - 13*x + k = 0 step by step\n  -- Start by expanding x^2 where x = (13 - \u221a131)/4\n  have h\u2082 : x ^ 2 = ((13 - Real.sqrt 131) / 4) ^ 2 := by rw [h\u2080]\n  -- Compute the square of the numerator and denominator separately\n  have h\u2083 : ((13 - Real.sqrt 131) / 4) ^ 2 = (13 - Real.sqrt 131) ^ 2 / 16 := by ring\n  -- Expand the squared term in the numerator\n  have h\u2084 : (13 - Real.sqrt 131) ^ 2 = 13^2 - 2*13*Real.sqrt 131 + (Real.sqrt 131)^2 := by ring\n  -- Compute each term in the expansion\n  have h\u2085 : 13^2 = 169 := by norm_num\n  have h\u2086 : 2*13*Real.sqrt 131 = 26*Real.sqrt 131 := by ring\n  have h\u2087 : (Real.sqrt 131)^2 = 131 := by exact Real.sq_sqrt (by norm_num : 0 \u2264 131)\n  -- Combine these results to simplify the numerator\n  linarith\n  -- Combine the constant terms\n  have h\u2089 : 169 + 131 = 300 := by norm_num\n  have h\u2081\u2080 : (13 - Real.sqrt 131) ^ 2 = 300 - 26*Real.sqrt 131 := by rw [h\u2088, h\u2089]\n  -- Now we can rewrite x^2\n  have h\u2081\u2081 : x ^ 2 = (300 - 26*Real.sqrt 131)/16 := by rw [h\u2082, h\u2083, h\u2081\u2080]\n  -- Compute 2*x^2 by multiplying both sides by 2\n  have h\u2081\u2082 : 2 * x ^ 2 = 2 * (300 - 26*Real.sqrt 131)/16 := by rw [h\u2081\u2081]\n  -- Simplify the fraction\n  have h\u2081\u2083 : 2 * (300 - 26*Real.sqrt 131)/16 = (600 - 52*Real.sqrt 131)/16 := by ring\n  have h\u2081\u2084 : 2 * x ^ 2 = (600 - 52*Real.sqrt 131)/16 := by rw [h\u2081\u2082, h\u2081\u2083]\n  -- Now compute 13*x using the original expression for x\n  have h\u2081\u2085 : 13 * x = 13 * (13 - Real.sqrt 131)/4 := by rw [h\u2080]\n  -- Simplify the numerator\n  have h\u2081\u2086 : 13 * (13 - Real.sqrt 131) = 169 - 13*Real.sqrt 131 := by ring\n  have h\u2081\u2087 : 13 * x = (169 - 13*Real.sqrt 131)/4 := by rw [h\u2081\u2085, h\u2081\u2086]\n  -- To combine terms, we'll need common denominators (16)\n  -- Convert 13*x to have denominator 16\n  have h\u2081\u2088 : (169 - 13*Real.sqrt 131)/4 = (676 - 52*Real.sqrt 131)/16 := by ring\n  have h\u2081\u2089 : 13 * x = (676 - 52*Real.sqrt 131)/16 := by rw [h\u2081\u2087, h\u2081\u2088]\n  -- Now rewrite the original equation h\u2081 using our simplified terms\n  have h\u2082\u2080 : (600 - 52*Real.sqrt 131)/16 - (676 - 52*Real.sqrt 131)/16 + k = 0 := by\n    rw [\u2190 h\u2081\u2084, \u2190 h\u2081\u2089]\n    exact h\u2081\n  -- Combine the fractions\n  have h\u2082\u2081 : ((600 - 52*Real.sqrt 131) - (676 - 52*Real.sqrt 131)) / 16 + k = 0 := by\n    rw [sub_div]\n    exact h\u2082\u2080\n  -- Simplify the numerator\n  have h\u2082\u2082 : (600 - 52*Real.sqrt 131 - 676 + 52*Real.sqrt 131) = -76 := by ring\n  -- Substitute back into the equation\n  have h\u2082\u2083 : (-76)/16 + k = 0 := by rw [h\u2082\u2081, h\u2082\u2082]\n  -- Simplify the fraction\n  have h\u2082\u2084 : -76/16 = -19/4 := by norm_num\n  have h\u2082\u2085 : -19/4 + k = 0 := by rw [\u2190 h\u2082\u2084] at h\u2082\u2083\n  -- Solve for k\n  have h\u2082\u2086 : k = 19/4 := by linarith\n  -- Our goal is exactly h\u2082\u2086\n  exact h\u2082\u2086",
+  "statistics": {
+    "original_errors": 8,
+    "failed_errors": 7,
+    "remaining_errors": 2,
+    "fix_rate": 0.125,
+    "successful_fixes": [
+      {
+        "line": 19,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  13 ^ 2\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0\nh\u2082 : x ^ 2 = ((13 - \u221a131) / 4) ^ 2\nh\u2083 : ((13 - \u221a131) / 4) ^ 2 = (13 - \u221a131) ^ 2 / 16\nh\u2084 : (13 - \u221a131) ^ 2 = 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2\nh\u2085 : 13 ^ 2 = 169\nh\u2086 : 2 * 13 * \u221a131 = 26 * \u221a131\nh\u2087 : \u221a131 ^ 2 = 131\n\u22a2 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2 = 169 - 26 * \u221a131 + 131",
+        "fix_snippet": "linarith",
+        "fixed_line": "  linarith",
+        "fix_time": 1060.3647911548615,
+        "fixed_errors": [
+          {
+            "line": 17,
+            "column": 61,
+            "end_line": 17,
+            "end_column": 84,
+            "message": "application type mismatch\n  sq_sqrt ?m.4897\nargument\n  ?m.4897\nhas type\n  @OfNat.ofNat \u2115 0 (instOfNatNat 0) \u2264 131 : Prop\nbut is expected to have type\n  @OfNat.ofNat \u211d 0 Zero.toOfNat0 \u2264 131 : Prop",
+            "severity": "error"
+          },
+          {
+            "line": 21,
+            "column": 2,
+            "end_line": 21,
+            "end_column": 6,
+            "message": "no goals to be solved",
+            "severity": "error"
+          }
+        ]
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 17,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  sq_sqrt ?m.4897\nargument\n  ?m.4897\nhas type\n  @OfNat.ofNat \u2115 0 (instOfNatNat 0) \u2264 131 : Prop\nbut is expected to have type\n  @OfNat.ofNat \u211d 0 Zero.toOfNat0 \u2264 131 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 501.59036207199097
+      },
+      {
+        "line": 22,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  169 + 131\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0\nh\u2082 : x ^ 2 = ((13 - \u221a131) / 4) ^ 2\nh\u2083 : ((13 - \u221a131) / 4) ^ 2 = (13 - \u221a131) ^ 2 / 16\nh\u2084 : (13 - \u221a131) ^ 2 = 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2\nh\u2085 : 13 ^ 2 = 169\nh\u2086 : 2 * 13 * \u221a131 = 26 * \u221a131\nh\u2087 : \u221a131 ^ 2 = 131\nh\u2088 : (13 - \u221a131) ^ 2 = 169 - 26 * \u221a131 + 131\nh\u2089 : 169 + 131 = 300\n\u22a2 169 - 26 * \u221a131 + 131 = 300 - 26 * \u221a131",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 259.2464096546173
+      },
+      {
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0\nh\u2082 : x ^ 2 = ((13 - \u221a131) / 4) ^ 2\nh\u2083 : ((13 - \u221a131) / 4) ^ 2 = (13 - \u221a131) ^ 2 / 16\nh\u2084 : (13 - \u221a131) ^ 2 = 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2\nh\u2085 : 13 ^ 2 = 169\nh\u2086 : 2 * 13 * \u221a131 = 26 * \u221a131\nh\u2087 : \u221a131 ^ 2 = 131\nh\u2088 : (13 - \u221a131) ^ 2 = 169 - 26 * \u221a131 + 131\nh\u2089 : 169 + 131 = 300\nh\u2081\u2080 : (13 - \u221a131) ^ 2 = 300 - 26 * \u221a131\nh\u2081\u2081 : x ^ 2 = (300 - 26 * \u221a131) / 16\n\u22a2 2 * ((300 - 26 * \u221a131) / 16) = 2 * (300 - 26 * \u221a131) / 16",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 337.5776526927948
+      },
+      {
+        "line": 31,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0\nh\u2082 : x ^ 2 = ((13 - \u221a131) / 4) ^ 2\nh\u2083 : ((13 - \u221a131) / 4) ^ 2 = (13 - \u221a131) ^ 2 / 16\nh\u2084 : (13 - \u221a131) ^ 2 = 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2\nh\u2085 : 13 ^ 2 = 169\nh\u2086 : 2 * 13 * \u221a131 = 26 * \u221a131\nh\u2087 : \u221a131 ^ 2 = 131\nh\u2088 : (13 - \u221a131) ^ 2 = 169 - 26 * \u221a131 + 131\nh\u2089 : 169 + 131 = 300\nh\u2081\u2080 : (13 - \u221a131) ^ 2 = 300 - 26 * \u221a131\nh\u2081\u2081 : x ^ 2 = (300 - 26 * \u221a131) / 16\nh\u2081\u2082 : 2 * x ^ 2 = 2 * (300 - 26 * \u221a131) / 16\nh\u2081\u2083 : 2 * (300 - 26 * \u221a131) / 16 = (600 - 52 * \u221a131) / 16\nh\u2081\u2084 : 2 * x ^ 2 = (600 - 52 * \u221a131) / 16\n\u22a2 13 * ((13 - \u221a131) / 4) = 13 * (13 - \u221a131) / 4",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 335.5992639064789
+      },
+      {
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2081\nhas type\n  2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0 : Prop\nbut is expected to have type\n  2 * x ^ 2 - 13 * x + k = 0 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 335.5831525325775
+      },
+      {
+        "line": 50,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (600 - 52 * \u221a131 - (676 - 52 * \u221a131)) / 16 + k\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0\nh\u2082 : x ^ 2 = ((13 - \u221a131) / 4) ^ 2\nh\u2083 : ((13 - \u221a131) / 4) ^ 2 = (13 - \u221a131) ^ 2 / 16\nh\u2084 : (13 - \u221a131) ^ 2 = 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2\nh\u2085 : 13 ^ 2 = 169\nh\u2086 : 2 * 13 * \u221a131 = 26 * \u221a131\nh\u2087 : \u221a131 ^ 2 = 131\nh\u2088 : (13 - \u221a131) ^ 2 = 169 - 26 * \u221a131 + 131\nh\u2089 : 169 + 131 = 300\nh\u2081\u2080 : (13 - \u221a131) ^ 2 = 300 - 26 * \u221a131\nh\u2081\u2081 : x ^ 2 = (300 - 26 * \u221a131) / 16\nh\u2081\u2082 : 2 * x ^ 2 = 2 * (300 - 26 * \u221a131) / 16\nh\u2081\u2083 : 2 * (300 - 26 * \u221a131) / 16 = (600 - 52 * \u221a131) / 16\nh\u2081\u2084 : 2 * x ^ 2 = (600 - 52 * \u221a131) / 16\nh\u2081\u2085 : 13 * x = 13 * (13 - \u221a131) / 4\nh\u2081\u2086 : 13 * (13 - \u221a131) = 169 - 13 * \u221a131\nh\u2081\u2087 : 13 * x = (169 - 13 * \u221a131) / 4\nh\u2081\u2088 : (169 - 13 * \u221a131) / 4 = (676 - 52 * \u221a131) / 16\nh\u2081\u2089 : 13 * x = (676 - 52 * \u221a131) / 16\nh\u2082\u2080 : (600 - 52 * \u221a131) / 16 - (676 - 52 * \u221a131) / 16 + k = 0\nh\u2082\u2081 : (600 - 52 * \u221a131 - (676 - 52 * \u221a131)) / 16 + k = 0\nh\u2082\u2082 : 600 - 52 * \u221a131 - 676 + 52 * \u221a131 = -76\n\u22a2 -76 / 16 + k = 0",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 335.62065076828003
+      },
+      {
+        "line": 53,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  -19 / 4\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0\nh\u2082 : x ^ 2 = ((13 - \u221a131) / 4) ^ 2\nh\u2083 : ((13 - \u221a131) / 4) ^ 2 = (13 - \u221a131) ^ 2 / 16\nh\u2084 : (13 - \u221a131) ^ 2 = 13 ^ 2 - 2 * 13 * \u221a131 + \u221a131 ^ 2\nh\u2085 : 13 ^ 2 = 169\nh\u2086 : 2 * 13 * \u221a131 = 26 * \u221a131\nh\u2087 : \u221a131 ^ 2 = 131\nh\u2088 : (13 - \u221a131) ^ 2 = 169 - 26 * \u221a131 + 131\nh\u2089 : 169 + 131 = 300\nh\u2081\u2080 : (13 - \u221a131) ^ 2 = 300 - 26 * \u221a131\nh\u2081\u2081 : x ^ 2 = (300 - 26 * \u221a131) / 16\nh\u2081\u2082 : 2 * x ^ 2 = 2 * (300 - 26 * \u221a131) / 16\nh\u2081\u2083 : 2 * (300 - 26 * \u221a131) / 16 = (600 - 52 * \u221a131) / 16\nh\u2081\u2084 : 2 * x ^ 2 = (600 - 52 * \u221a131) / 16\nh\u2081\u2085 : 13 * x = 13 * (13 - \u221a131) / 4\nh\u2081\u2086 : 13 * (13 - \u221a131) = 169 - 13 * \u221a131\nh\u2081\u2087 : 13 * x = (169 - 13 * \u221a131) / 4\nh\u2081\u2088 : (169 - 13 * \u221a131) / 4 = (676 - 52 * \u221a131) / 16\nh\u2081\u2089 : 13 * x = (676 - 52 * \u221a131) / 16\nh\u2082\u2080 : (600 - 52 * \u221a131) / 16 - (676 - 52 * \u221a131) / 16 + k = 0\nh\u2082\u2081 : (600 - 52 * \u221a131 - (676 - 52 * \u221a131)) / 16 + k = 0\nh\u2082\u2082 : 600 - 52 * \u221a131 - 676 + 52 * \u221a131 = -76\nh\u2082\u2083 : -76 / 16 + k = 0\nh\u2082\u2084 : -76 / 16 = -19 / 4\n\u22a2 -19 / 4 + k = 0",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 335.63414573669434
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 17,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  sq_sqrt ?m.4897\nargument\n  ?m.4897\nhas type\n  @OfNat.ofNat \u2115 0 (instOfNatNat 0) \u2264 131 : Prop\nbut is expected to have type\n  @OfNat.ofNat \u211d 0 Zero.toOfNat0 \u2264 131 : Prop"
+      },
+      {
+        "line": 21,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved"
+      }
+    ],
+    "total_time": 3504.2242901325226
+  },
+  "message": "Original code error count: 8\n\u274c Fixed error 1/8: Could not generate fix for error at line 17 \u00abtype_mismatch\u00bb (after 501.59s)\n\u2705 Fixed error 2/8: Successfully fixed error at line 19 \u00abrewrite_failed\u00bb (in 1060.36s)\n\u274c Fixed error 3/8: Could not generate fix for error at line 22 \u00abrewrite_failed\u00bb (after 259.25s)\n\u274c Fixed error 4/8: Could not generate fix for error at line 26 \u00abother_error\u00bb (after 337.58s)\n\u274c Fixed error 5/8: Could not generate fix for error at line 31 \u00abother_error\u00bb (after 335.60s)\n\u274c Fixed error 6/8: Could not generate fix for error at line 42 \u00abtype_mismatch\u00bb (after 335.58s)\n\u274c Fixed error 7/8: Could not generate fix for error at line 50 \u00abrewrite_failed\u00bb (after 335.62s)\n\u274c Fixed error 8/8: Could not generate fix for error at line 53 \u00abrewrite_failed\u00bb (after 335.63s)\n\n=== Fix statistics ===\nOriginal error count: 8\nFixed errors: 1 (Fix rate: 0.1250)\nFailed errors: 7\nRemaining errors: 2\nTotal time: 3504.22 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 19\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  13 ^ 2\nk x ...\n   Fix snippet: linarith\n   Fixed line:   linarith\n   Time: 1060.36 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 17\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  sq_sqrt ?m.4897\nargument\n  ?m.4897\nhas type\n  @OfNat.ofNat \u2115 0 (instOfNa...\n   Failure reason: Could not generate fix\n   Time: 501.59 seconds\n\nFailed fix 2:\n   Line: 22\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  169 + 131\nk...\n   Failure reason: Could not generate fix\n   Time: 259.25 seconds\n\nFailed fix 3:\n   Line: 26\n   Error type: other_error\n   Original error message: unsolved goals\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) /...\n   Failure reason: Could not generate fix\n   Time: 337.58 seconds\n\nFailed fix 4:\n   Line: 31\n   Error type: other_error\n   Original error message: unsolved goals\nk x : \u211d\nh\u2080 : x = (13 - \u221a131) / 4\nh\u2081 : 2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) /...\n   Failure reason: Could not generate fix\n   Time: 335.60 seconds\n\nFailed fix 5:\n   Line: 42\n   Error type: type_mismatch\n   Original error message: type mismatch\n  h\u2081\nhas type\n  2 * ((13 - \u221a131) / 4) ^ 2 - 13 * ((13 - \u221a131) / 4) + k = 0 : Prop\nbut ...\n   Failure reason: Could not generate fix\n   Time: 335.58 seconds\n\nFailed fix 6:\n   Line: 50\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (600 - 52 *...\n   Failure reason: Could not generate fix\n   Time: 335.62 seconds\n\nFailed fix 7:\n   Line: 53\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  -19 / 4\nk x...\n   Failure reason: Could not generate fix\n   Time: 335.63 seconds"
+}

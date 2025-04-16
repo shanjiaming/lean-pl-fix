@@ -1,0 +1,1911 @@
+2025-04-14 01:19:13 - INFO - Log file initialized at 2025-04-14T01:19:13.841807
+2025-04-14 01:19:13 - INFO - ===== LOG FILE LOCATION =====
+2025-04-14 01:19:13 - INFO - Detailed log file created at: /data/coding/minif2f/lean_fixed/3.log
+2025-04-14 01:19:13 - INFO - ===============================
+2025-04-14 01:19:13 - INFO - Original code:
+2025-04-14 01:19:13 - INFO - ----------------------------------------
+2025-04-14 01:19:13 - INFO - import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+/-- 
+What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
+
+$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
+Show that it is \mathrm{(C)}.
+
+Proof outline:
+1. Let y be the side length of the original cube (volume = 1)
+2. Compute y from the volume equation y³ = 1
+3. Compute the surface area of original cube: 6y²
+4. The new cube has surface area twice this: 2*(6y²) = 12y²
+5. Let x be the side length of the new cube
+6. Set up equation for new cube's surface area: 6x² = 12y²
+7. Solve for x in terms of y
+8. Compute volume of new cube: x³
+9. Show this equals 2√2
+-/
+theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
+  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
+  -- First, simplify the surface area equation h₂ by dividing both sides by 6
+  have h₃ : x ^ 2 = 2 * y ^ 2 := by
+    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
+    exact h₂
+  
+  -- From the volume of the original cube (y³ = 1), we get y = 1
+  have h₄ : y = 1 := by
+    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
+  
+  -- Substitute y = 1 into the simplified equation x² = 2y²
+  have h₅ : x ^ 2 = 2 := by
+    rw [h₄, pow_two, mul_one] at h₃
+    exact h₃
+  
+  -- Since x > 0, we can take square root of both sides to get x = √2
+  have h₆ : x = Real.sqrt 2 := by
+    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
+  
+  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
+  rw [h₆, ← pow_three_sqrt_two]
+  
+  -- Helper lemma to show (√2)³ = 2 * √2
+  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
+    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
+    ring
+  
+  -- Apply the helper lemma to complete the proof
+  exact pow_three_sqrt_two
+2025-04-14 01:19:13 - INFO - ----------------------------------------
+2025-04-14 01:19:13 - INFO - 
+Checking original code for all errors...
+2025-04-14 01:23:43 - INFO - Original code contains 6 errors:
+2025-04-14 01:23:43 - INFO - Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?...
+2025-04-14 01:23:43 - INFO - Error 2: line 28, type: unknown_identifier, message: unknown identifier 'eq_one_of_pow_eq_one'...
+2025-04-14 01:23:43 - INFO - Error 3: line 32, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+x y ...
+2025-04-14 01:23:43 - INFO - Error 4: line 37, type: type_mismatch, message: type mismatch
+  (sqrt_eq_iff_sq_eq
+        (le_of_not_gt fun a =>
+          Linarith.lt_irrefl
+     ...
+2025-04-14 01:23:43 - INFO - Error 5: line 40, type: unknown_identifier, message: unknown identifier 'pow_three_sqrt_two'...
+2025-04-14 01:23:43 - INFO - Error 6: line 40, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.4524
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ...
+2025-04-14 01:23:43 - INFO - 
+Starting multi-error continuous repair process...
+2025-04-14 01:23:43 - INFO - 
+===== Starting to fix all errors =====
+2025-04-14 01:23:44 - INFO - 
+Found 6 original errors:
+2025-04-14 01:23:44 - INFO - Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?...
+2025-04-14 01:23:44 - INFO - Error 2: line 28, type: unknown_identifier, message: unknown identifier 'eq_one_of_pow_eq_one'...
+2025-04-14 01:23:44 - INFO - Error 3: line 32, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+x y ...
+2025-04-14 01:23:44 - INFO - Error 4: line 37, type: type_mismatch, message: type mismatch
+  (sqrt_eq_iff_sq_eq
+        (le_of_not_gt fun a =>
+          Linarith.lt_irrefl
+     ...
+2025-04-14 01:23:44 - INFO - Error 5: line 40, type: unknown_identifier, message: unknown identifier 'pow_three_sqrt_two'...
+2025-04-14 01:23:44 - INFO - Error 6: line 40, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.4524
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ...
+2025-04-14 01:23:44 - INFO - 
+Trying to fix error 1/6: line 22, type: rewrite_failed
+2025-04-14 01:23:44 - INFO - Error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?...
+2025-04-14 01:23:44 - INFO - Removed header content, remaining 48 lines of code
+2025-04-14 01:23:44 - INFO - Using specified target error line: 22
+2025-04-14 01:23:45 - INFO - Found error at specified line: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:45 - INFO - Error at line 22: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:45 - INFO - 
+==================================================
+2025-04-14 01:23:45 - INFO - Code prepared, starting synthesis
+2025-04-14 01:23:45 - INFO - Before part: /-- 
+What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
+
+$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
+Show that it is \mathrm{(C)}.
+
+Proof outline:
+1. Let y be the side length of the original cube (volume = 1)
+2. Compute y from the volume equation y³ = 1
+3. Compute the surface area of original cube: 6y²
+4. The new cube has surface area twice this: 2*(6y²) = 12y²
+5. Let x be the side length of the new cube
+6. Set up equation for new cube's surface area: 6x² = 12y²
+7. Solve for x in terms of y
+8. Compute volume of new cube: x³
+9. Show this equals 2√2
+-/
+theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
+  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
+  -- First, simplify the surface area equation h₂ by dividing both sides by 6
+  have h₃ : x ^ 2 = 2 * y ^ 2 := by
+2025-04-14 01:23:45 - INFO - Error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:45 - INFO - After part: rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
+    exact h₂
+  
+  -- From the volume of the original cube (y³ = 1), we get y = 1
+  have h₄ : y = 1 := by
+    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
+  
+  -- Substitute y = 1 into the simplified equation x² = 2y²
+  have h₅ : x ^ 2 = 2 := by
+    rw [h₄, pow_two, mul_one] at h₃
+    exact h₃
+  
+  -- Since x > 0, we can take square root of both sides to get x = √2
+  have h₆ : x = Real.sqrt 2 := by
+    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
+  
+  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
+  rw [h₆, ← pow_three_sqrt_two]
+  
+  -- Helper lemma to show (√2)³ = 2 * √2
+  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
+    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
+    ring
+  
+  -- Apply the helper lemma to complete the proof
+  exact pow_three_sqrt_two
+2025-04-14 01:23:45 - INFO - ==================================================
+
+2025-04-14 01:23:46 - INFO - Testing fragment: rw [left_distrib]
+2025-04-14 01:23:46 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:48 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:23:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:23:48 - DEBUG - === New errors detail ===
+2025-04-14 01:23:48 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + ?c)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:48 - INFO - Testing fragment: rw [right_distrib]
+2025-04-14 01:23:48 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:50 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:23:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:23:50 - DEBUG - === New errors detail ===
+2025-04-14 01:23:50 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:50 - INFO - Testing fragment: rw [distrib_three_right]
+2025-04-14 01:23:50 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:52 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:23:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:23:52 - DEBUG - === New errors detail ===
+2025-04-14 01:23:52 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b + ?c) * ?d
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:52 - INFO - Testing fragment: rw [add_one_mul]
+2025-04-14 01:23:52 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:54 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:23:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:23:54 - DEBUG - === New errors detail ===
+2025-04-14 01:23:54 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + 1) * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:54 - INFO - Testing fragment: rw [mul_add_one]
+2025-04-14 01:23:54 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:56 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:23:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:23:56 - DEBUG - === New errors detail ===
+2025-04-14 01:23:56 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + 1)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:56 - INFO - Testing fragment: rw [one_add_mul]
+2025-04-14 01:23:56 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:23:58 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:23:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:23:58 - DEBUG - === New errors detail ===
+2025-04-14 01:23:58 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 + ?a) * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:23:58 - INFO - Testing fragment: rw [mul_one_add]
+2025-04-14 01:23:58 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:00 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:00 - DEBUG - === New errors detail ===
+2025-04-14 01:24:00 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 + ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:00 - INFO - Testing fragment: rw [two_mul]
+2025-04-14 01:24:00 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:02 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:02 - DEBUG - === New errors detail ===
+2025-04-14 01:24:02 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2246 = 6 * ?m.2247
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = y ^ 2 + y ^ 2
+2025-04-14 01:24:02 - INFO - Testing fragment: rw [mul_two]
+2025-04-14 01:24:02 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:04 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:04 - DEBUG - === New errors detail ===
+2025-04-14 01:24:04 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * 2
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:04 - INFO - Testing fragment: rw [mul_boole]
+2025-04-14 01:24:04 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:06 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:06 - INFO - Target error not fixed: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * if ?P ...
+2025-04-14 01:24:06 - INFO - Result: False (target error not fixed)
+2025-04-14 01:24:06 - INFO - Testing fragment: rw [boole_mul]
+2025-04-14 01:24:06 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:08 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:08 - INFO - Target error not fixed: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (if ?P then...
+2025-04-14 01:24:08 - INFO - Result: False (target error not fixed)
+2025-04-14 01:24:08 - INFO - Testing fragment: rw [add_mul_self_eq]
+2025-04-14 01:24:08 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:10 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:10 - DEBUG - === New errors detail ===
+2025-04-14 01:24:10 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * (?a + ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:10 - INFO - Testing fragment: rw [neg_mul]
+2025-04-14 01:24:10 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:12 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:12 - DEBUG - === New errors detail ===
+2025-04-14 01:24:12 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:12 - INFO - Testing fragment: rw [mul_neg]
+2025-04-14 01:24:12 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:14 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:14 - DEBUG - === New errors detail ===
+2025-04-14 01:24:14 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:14 - INFO - Testing fragment: rw [neg_mul_neg]
+2025-04-14 01:24:14 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:16 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:16 - DEBUG - === New errors detail ===
+2025-04-14 01:24:16 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * -?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:16 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
+2025-04-14 01:24:16 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:18 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:18 - DEBUG - === New errors detail ===
+2025-04-14 01:24:18 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:18 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
+2025-04-14 01:24:18 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:20 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:20 - DEBUG - === New errors detail ===
+2025-04-14 01:24:20 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:20 - INFO - Testing fragment: rw [neg_mul_comm]
+2025-04-14 01:24:20 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:22 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:22 - DEBUG - === New errors detail ===
+2025-04-14 01:24:22 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:22 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
+2025-04-14 01:24:22 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:24 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:24 - DEBUG - === New errors detail ===
+2025-04-14 01:24:24 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:24 - INFO - Testing fragment: rw [mul_neg_one]
+2025-04-14 01:24:24 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:26 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:26 - DEBUG - === New errors detail ===
+2025-04-14 01:24:26 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -1
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:26 - INFO - Testing fragment: rw [neg_one_mul]
+2025-04-14 01:24:26 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:28 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:28 - DEBUG - === New errors detail ===
+2025-04-14 01:24:28 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:28 - INFO - Testing fragment: rw [mul_sub_left_distrib]
+2025-04-14 01:24:28 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:30 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:30 - DEBUG - === New errors detail ===
+2025-04-14 01:24:30 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ?c)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:30 - INFO - Testing fragment: rw [mul_sub_right_distrib]
+2025-04-14 01:24:30 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:32 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:32 - DEBUG - === New errors detail ===
+2025-04-14 01:24:32 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - ?b) * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:32 - INFO - Testing fragment: rw [sub_one_mul]
+2025-04-14 01:24:32 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:34 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:34 - DEBUG - === New errors detail ===
+2025-04-14 01:24:34 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - 1) * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:34 - INFO - Testing fragment: rw [mul_sub_one]
+2025-04-14 01:24:34 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:36 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:36 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:36 - DEBUG - === New errors detail ===
+2025-04-14 01:24:36 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - 1)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:36 - INFO - Testing fragment: rw [one_sub_mul]
+2025-04-14 01:24:36 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:38 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:38 - DEBUG - === New errors detail ===
+2025-04-14 01:24:38 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 - ?a) * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:38 - INFO - Testing fragment: rw [mul_one_sub]
+2025-04-14 01:24:38 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:40 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:40 - DEBUG - === New errors detail ===
+2025-04-14 01:24:40 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 - ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:40 - INFO - Testing fragment: rw [mul_left_cancel]
+2025-04-14 01:24:40 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:42 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:42 - DEBUG - === New errors detail ===
+2025-04-14 01:24:42 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.2067
+from equation
+  ?m.2067 = ?m.2068
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:42 - INFO - Testing fragment: rw [mul_left_cancel_iff]
+2025-04-14 01:24:42 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:44 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:44 - DEBUG - === New errors detail ===
+2025-04-14 01:24:44 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.2066 * ?m.2067 = ?m.2066 * ?m.2068
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:44 - INFO - Testing fragment: rw [mul_right_injective]
+2025-04-14 01:24:44 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:46 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:46 - DEBUG - === New errors detail ===
+2025-04-14 01:24:46 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:46 - INFO - Testing fragment: rw [mul_right_inj]
+2025-04-14 01:24:46 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:48 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:48 - DEBUG - === New errors detail ===
+2025-04-14 01:24:48 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b = ?a * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:48 - INFO - Testing fragment: rw [mul_ne_mul_right]
+2025-04-14 01:24:48 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:50 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:50 - DEBUG - === New errors detail ===
+2025-04-14 01:24:50 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b ≠ ?a * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:50 - INFO - Testing fragment: rw [mul_right_cancel]
+2025-04-14 01:24:50 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:52 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:52 - DEBUG - === New errors detail ===
+2025-04-14 01:24:52 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.2066
+from equation
+  ?m.2066 = ?m.2068
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:52 - INFO - Testing fragment: rw [mul_right_cancel_iff]
+2025-04-14 01:24:52 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:54 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:54 - DEBUG - === New errors detail ===
+2025-04-14 01:24:54 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.2067 * ?m.2066 = ?m.2068 * ?m.2066
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:54 - INFO - Testing fragment: rw [mul_left_injective]
+2025-04-14 01:24:54 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:56 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:56 - DEBUG - === New errors detail ===
+2025-04-14 01:24:56 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:56 - INFO - Testing fragment: rw [mul_left_inj]
+2025-04-14 01:24:56 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:24:58 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:24:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:24:58 - DEBUG - === New errors detail ===
+2025-04-14 01:24:58 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a = ?c * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:24:58 - INFO - Testing fragment: rw [mul_ne_mul_left]
+2025-04-14 01:24:58 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:00 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:00 - DEBUG - === New errors detail ===
+2025-04-14 01:25:00 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a ≠ ?c * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:00 - INFO - Testing fragment: rw [mul_assoc]
+2025-04-14 01:25:00 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:02 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:02 - INFO - Target error not fixed: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?...
+2025-04-14 01:25:02 - INFO - Result: False (target error not fixed)
+2025-04-14 01:25:02 - INFO - Testing fragment: rw [mul_comm]
+2025-04-14 01:25:02 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:04 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:04 - DEBUG - === New errors detail ===
+2025-04-14 01:25:04 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2175 = 6 * ?m.2176
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = y ^ 2 * 2
+2025-04-14 01:25:04 - INFO - Testing fragment: rw [MulOneClass]
+2025-04-14 01:25:04 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:06 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:06 - DEBUG - === New errors detail ===
+2025-04-14 01:25:06 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:06 - INFO - Testing fragment: rw [one_mul]
+2025-04-14 01:25:06 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:08 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:08 - DEBUG - === New errors detail ===
+2025-04-14 01:25:08 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:08 - INFO - Testing fragment: rw [mul_one]
+2025-04-14 01:25:08 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:10 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:10 - DEBUG - === New errors detail ===
+2025-04-14 01:25:10 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:10 - INFO - Testing fragment: rw [npowRec_add]
+2025-04-14 01:25:10 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:12 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:12 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:12 - DEBUG - === New errors detail ===
+2025-04-14 01:25:12 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-14 01:25:12 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:12 - INFO - Testing fragment: rw [npowRec_succ]
+2025-04-14 01:25:12 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:14 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:14 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:14 - DEBUG - === New errors detail ===
+2025-04-14 01:25:14 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-14 01:25:14 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:14 - INFO - Testing fragment: rw [npowRec'_succ]
+2025-04-14 01:25:14 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:16 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:16 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:16 - DEBUG - === New errors detail ===
+2025-04-14 01:25:16 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-14 01:25:16 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:16 - INFO - Testing fragment: rw [npowRec'_two_mul]
+2025-04-14 01:25:16 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:18 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:18 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:18 - DEBUG - === New errors detail ===
+2025-04-14 01:25:18 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-14 01:25:18 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:18 - INFO - Testing fragment: rw [npowRec'_mul_comm]
+2025-04-14 01:25:18 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:20 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:20 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:20 - DEBUG - === New errors detail ===
+2025-04-14 01:25:20 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-14 01:25:20 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:20 - INFO - Testing fragment: rw [npowRec_eq]
+2025-04-14 01:25:20 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:22 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:22 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:22 - DEBUG - === New errors detail ===
+2025-04-14 01:25:22 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-14 01:25:22 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:22 - INFO - Testing fragment: rw [npowBinRec]
+2025-04-14 01:25:22 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:24 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:24 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:24 - DEBUG - === New errors detail ===
+2025-04-14 01:25:24 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-14 01:25:24 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:24 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
+2025-04-14 01:25:24 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:26 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:26 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:26 - DEBUG - === New errors detail ===
+2025-04-14 01:25:26 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-14 01:25:26 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:26 - INFO - Testing fragment: rw [npow_eq_pow]
+2025-04-14 01:25:26 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:28 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:28 - DEBUG - === New errors detail ===
+2025-04-14 01:25:28 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Monoid.npow ?n ?x
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:28 - INFO - Testing fragment: rw [pow_zero]
+2025-04-14 01:25:28 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:30 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:30 - DEBUG - === New errors detail ===
+2025-04-14 01:25:30 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:30 - INFO - Testing fragment: rw [pow_succ]
+2025-04-14 01:25:30 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:32 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:32 - DEBUG - === New errors detail ===
+2025-04-14 01:25:32 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2364 = 6 * ?m.2365
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 1 * x = 2 * y ^ 2
+2025-04-14 01:25:32 - INFO - Testing fragment: rw [inv_inv]
+2025-04-14 01:25:32 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:34 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:34 - DEBUG - === New errors detail ===
+2025-04-14 01:25:34 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:34 - INFO - Testing fragment: rw [exists_zpow_surjective]
+2025-04-14 01:25:34 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:36 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:25:36 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:36 - DEBUG - === New errors detail ===
+2025-04-14 01:25:36 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-14 01:25:36 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:36 - INFO - Testing fragment: rw [zpow_eq_pow]
+2025-04-14 01:25:36 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:38 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:38 - DEBUG - === New errors detail ===
+2025-04-14 01:25:38 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  DivInvMonoid.zpow ?n ?x
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:38 - INFO - Testing fragment: rw [zpow_zero]
+2025-04-14 01:25:38 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:40 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:40 - INFO - Target error not fixed: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+x y ...
+2025-04-14 01:25:40 - INFO - Result: False (target error not fixed)
+2025-04-14 01:25:40 - INFO - Testing fragment: rw [zpow_natCast]
+2025-04-14 01:25:40 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:42 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:42 - DEBUG - === New errors detail ===
+2025-04-14 01:25:42 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ↑?n
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:42 - INFO - Testing fragment: rw [zpow_negSucc]
+2025-04-14 01:25:42 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:44 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:44 - DEBUG - === New errors detail ===
+2025-04-14 01:25:44 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ Int.negSucc ?n
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:44 - INFO - Testing fragment: rw [negSucc_zsmul]
+2025-04-14 01:25:44 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:46 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:46 - DEBUG - === New errors detail ===
+2025-04-14 01:25:46 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Int.negSucc ?n • ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:46 - INFO - Testing fragment: rw [div_eq_mul_inv]
+2025-04-14 01:25:46 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:48 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:48 - DEBUG - === New errors detail ===
+2025-04-14 01:25:48 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:48 - INFO - Testing fragment: rw [inv_eq_one_div]
+2025-04-14 01:25:48 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:50 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:50 - DEBUG - === New errors detail ===
+2025-04-14 01:25:50 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:50 - INFO - Testing fragment: rw [mul_div_assoc]
+2025-04-14 01:25:50 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:52 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:52 - DEBUG - === New errors detail ===
+2025-04-14 01:25:52 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:52 - INFO - Testing fragment: rw [one_div]
+2025-04-14 01:25:52 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:54 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:54 - DEBUG - === New errors detail ===
+2025-04-14 01:25:54 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:54 - INFO - Testing fragment: rw [inv_one]
+2025-04-14 01:25:54 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:56 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:56 - DEBUG - === New errors detail ===
+2025-04-14 01:25:56 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:56 - INFO - Testing fragment: rw [mul_inv_rev]
+2025-04-14 01:25:56 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:25:58 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:25:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:58 - DEBUG - === New errors detail ===
+2025-04-14 01:25:58 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a * ?b)⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:25:58 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_right]
+2025-04-14 01:25:58 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:00 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:00 - DEBUG - === New errors detail ===
+2025-04-14 01:26:00 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.2065⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:00 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_left]
+2025-04-14 01:26:00 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:02 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:02 - DEBUG - === New errors detail ===
+2025-04-14 01:26:02 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.2066⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:02 - INFO - Testing fragment: rw [eq_inv_of_mul_eq_one_left]
+2025-04-14 01:26:02 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:04 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:04 - DEBUG - === New errors detail ===
+2025-04-14 01:26:04 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.2065
+from equation
+  ?m.2065 = ?m.2066⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:04 - INFO - Testing fragment: rw [inv_mul_cancel]
+2025-04-14 01:26:04 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:06 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:06 - DEBUG - === New errors detail ===
+2025-04-14 01:26:06 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.2065⁻¹ * ?m.2065
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:06 - INFO - Testing fragment: rw [inv_eq_of_mul]
+2025-04-14 01:26:06 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:08 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:26:08 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:08 - DEBUG - === New errors detail ===
+2025-04-14 01:26:08 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-14 01:26:08 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:08 - INFO - Testing fragment: rw [mul_inv_cancel]
+2025-04-14 01:26:08 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:10 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:10 - DEBUG - === New errors detail ===
+2025-04-14 01:26:10 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.2065 * ?m.2065⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:10 - INFO - Testing fragment: rw [div_self']
+2025-04-14 01:26:10 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:12 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:12 - INFO - Target error not fixed: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?a
+x y...
+2025-04-14 01:26:12 - INFO - Result: False (target error not fixed)
+2025-04-14 01:26:12 - INFO - Testing fragment: rw [inv_mul_cancel_left]
+2025-04-14 01:26:12 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:14 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:14 - DEBUG - === New errors detail ===
+2025-04-14 01:26:14 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹ * (?a * ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:14 - INFO - Testing fragment: rw [mul_inv_cancel_left]
+2025-04-14 01:26:14 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:16 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:16 - DEBUG - === New errors detail ===
+2025-04-14 01:26:16 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?a⁻¹ * ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:16 - INFO - Testing fragment: rw [mul_inv_cancel_right]
+2025-04-14 01:26:16 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:18 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:18 - DEBUG - === New errors detail ===
+2025-04-14 01:26:18 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?b⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:18 - INFO - Testing fragment: rw [mul_div_cancel_right]
+2025-04-14 01:26:18 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:20 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:20 - DEBUG - === New errors detail ===
+2025-04-14 01:26:20 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:20 - INFO - Testing fragment: rw [inv_mul_cancel_right]
+2025-04-14 01:26:20 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:22 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:22 - DEBUG - === New errors detail ===
+2025-04-14 01:26:22 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹ * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:22 - INFO - Testing fragment: rw [div_mul_cancel]
+2025-04-14 01:26:22 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:24 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:24 - DEBUG - === New errors detail ===
+2025-04-14 01:26:24 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:24 - INFO - Testing fragment: rw [<- left_distrib]
+2025-04-14 01:26:24 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:26 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:26 - DEBUG - === New errors detail ===
+2025-04-14 01:26:26 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:26 - INFO - Testing fragment: rw [<- right_distrib]
+2025-04-14 01:26:26 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:28 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:28 - DEBUG - === New errors detail ===
+2025-04-14 01:26:28 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c + ?b * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:28 - INFO - Testing fragment: rw [<- distrib_three_right]
+2025-04-14 01:26:28 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:30 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:30 - DEBUG - === New errors detail ===
+2025-04-14 01:26:30 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?d + ?b * ?d + ?c * ?d
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:30 - INFO - Testing fragment: rw [<- add_one_mul]
+2025-04-14 01:26:30 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:32 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:32 - DEBUG - === New errors detail ===
+2025-04-14 01:26:32 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:32 - INFO - Testing fragment: rw [<- mul_add_one]
+2025-04-14 01:26:32 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:34 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:34 - DEBUG - === New errors detail ===
+2025-04-14 01:26:34 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:34 - INFO - Testing fragment: rw [<- one_add_mul]
+2025-04-14 01:26:34 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:36 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:36 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:36 - DEBUG - === New errors detail ===
+2025-04-14 01:26:36 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b + ?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:36 - INFO - Testing fragment: rw [<- mul_one_add]
+2025-04-14 01:26:36 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:38 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:38 - DEBUG - === New errors detail ===
+2025-04-14 01:26:38 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a + ?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:38 - INFO - Testing fragment: rw [<- two_mul]
+2025-04-14 01:26:38 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:40 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:40 - DEBUG - === New errors detail ===
+2025-04-14 01:26:40 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:40 - INFO - Testing fragment: rw [<- mul_two]
+2025-04-14 01:26:40 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:42 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:42 - DEBUG - === New errors detail ===
+2025-04-14 01:26:42 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:42 - INFO - Testing fragment: rw [<- mul_boole]
+2025-04-14 01:26:42 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:26:44 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:26:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:44 - DEBUG - === New errors detail ===
+2025-04-14 01:26:44 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:26:44 - INFO - Testing fragment: rw [<- boole_mul]
+2025-04-14 01:26:44 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:29:56 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:29:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:29:56 - DEBUG - === New errors detail ===
+2025-04-14 01:29:56 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:29:56 - INFO - Testing fragment: rw [<- add_mul_self_eq]
+2025-04-14 01:29:56 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:29:58 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:29:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:29:58 - DEBUG - === New errors detail ===
+2025-04-14 01:29:58 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?a + 2 * ?a * ?b + ?b * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:29:58 - INFO - Testing fragment: rw [<- neg_mul]
+2025-04-14 01:29:58 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:00 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:00 - DEBUG - === New errors detail ===
+2025-04-14 01:30:00 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:00 - INFO - Testing fragment: rw [<- mul_neg]
+2025-04-14 01:30:00 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:02 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:02 - DEBUG - === New errors detail ===
+2025-04-14 01:30:02 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:02 - INFO - Testing fragment: rw [<- neg_mul_neg]
+2025-04-14 01:30:02 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:04 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:04 - DEBUG - === New errors detail ===
+2025-04-14 01:30:04 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2609 = 6 * ?m.2610
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = -2 * -y ^ 2
+2025-04-14 01:30:04 - INFO - Testing fragment: rw [<- neg_mul_eq_neg_mul]
+2025-04-14 01:30:04 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:06 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:06 - DEBUG - === New errors detail ===
+2025-04-14 01:30:06 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:06 - INFO - Testing fragment: rw [<- neg_mul_eq_mul_neg]
+2025-04-14 01:30:06 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:08 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:08 - DEBUG - === New errors detail ===
+2025-04-14 01:30:08 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:08 - INFO - Testing fragment: rw [<- neg_mul_comm]
+2025-04-14 01:30:08 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:10 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:10 - DEBUG - === New errors detail ===
+2025-04-14 01:30:10 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:10 - INFO - Testing fragment: rw [<- neg_eq_neg_one_mul]
+2025-04-14 01:30:10 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:12 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:12 - DEBUG - === New errors detail ===
+2025-04-14 01:30:12 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:12 - INFO - Testing fragment: rw [<- mul_neg_one]
+2025-04-14 01:30:12 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:14 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:14 - DEBUG - === New errors detail ===
+2025-04-14 01:30:14 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:14 - INFO - Testing fragment: rw [<- neg_one_mul]
+2025-04-14 01:30:14 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:16 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:16 - DEBUG - === New errors detail ===
+2025-04-14 01:30:16 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:16 - INFO - Testing fragment: rw [<- mul_sub_left_distrib]
+2025-04-14 01:30:16 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:18 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:18 - DEBUG - === New errors detail ===
+2025-04-14 01:30:18 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:18 - INFO - Testing fragment: rw [<- mul_sub_right_distrib]
+2025-04-14 01:30:18 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:20 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:20 - DEBUG - === New errors detail ===
+2025-04-14 01:30:20 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c - ?b * ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:20 - INFO - Testing fragment: rw [<- sub_one_mul]
+2025-04-14 01:30:20 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:22 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:22 - DEBUG - === New errors detail ===
+2025-04-14 01:30:22 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:22 - INFO - Testing fragment: rw [<- mul_sub_one]
+2025-04-14 01:30:22 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:24 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:24 - DEBUG - === New errors detail ===
+2025-04-14 01:30:24 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:24 - INFO - Testing fragment: rw [<- one_sub_mul]
+2025-04-14 01:30:24 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:26 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:26 - DEBUG - === New errors detail ===
+2025-04-14 01:30:26 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b - ?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:26 - INFO - Testing fragment: rw [<- mul_one_sub]
+2025-04-14 01:30:26 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:28 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:28 - DEBUG - === New errors detail ===
+2025-04-14 01:30:28 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a - ?a * ?b
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:28 - INFO - Testing fragment: rw [<- mul_left_cancel]
+2025-04-14 01:30:28 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:30:30 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:30:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:30 - DEBUG - === New errors detail ===
+2025-04-14 01:30:30 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.2068
+from equation
+  ?m.2068 = ?m.2067
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:30:30 - INFO - Testing fragment: rw [<- mul_left_cancel_iff]
+2025-04-14 01:30:30 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:31:59 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:31:59 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:31:59 - DEBUG - === New errors detail ===
+2025-04-14 01:31:59 - DEBUG - New Error 1: line 22, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:31:59 - DEBUG - New Error 2: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2728 = 6 * ?m.2729
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ ?m.2066 * x ^ 2 = ?m.2066 * (2 * y ^ 2)
+2025-04-14 01:31:59 - INFO - Testing fragment: rw [<- mul_right_injective]
+2025-04-14 01:31:59 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:01 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:01 - DEBUG - === New errors detail ===
+2025-04-14 01:32:01 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:01 - INFO - Testing fragment: rw [<- mul_right_inj]
+2025-04-14 01:32:01 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:03 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:03 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:03 - DEBUG - === New errors detail ===
+2025-04-14 01:32:03 - DEBUG - New Error 1: line 22, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:32:03 - DEBUG - New Error 2: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2731 = 6 * ?m.2732
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ ?a * x ^ 2 = ?a * (2 * y ^ 2)
+2025-04-14 01:32:03 - INFO - Testing fragment: rw [<- mul_ne_mul_right]
+2025-04-14 01:32:03 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:05 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:05 - DEBUG - === New errors detail ===
+2025-04-14 01:32:05 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:05 - INFO - Testing fragment: rw [<- mul_right_cancel]
+2025-04-14 01:32:05 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:07 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:07 - DEBUG - === New errors detail ===
+2025-04-14 01:32:07 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.2068
+from equation
+  ?m.2068 = ?m.2066
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:07 - INFO - Testing fragment: rw [<- mul_right_cancel_iff]
+2025-04-14 01:32:07 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:09 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:09 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:09 - DEBUG - === New errors detail ===
+2025-04-14 01:32:09 - DEBUG - New Error 1: line 22, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:32:09 - DEBUG - New Error 2: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2725 = 6 * ?m.2726
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 * ?m.2066 = 2 * y ^ 2 * ?m.2066
+2025-04-14 01:32:09 - INFO - Testing fragment: rw [<- mul_left_injective]
+2025-04-14 01:32:09 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:11 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:11 - DEBUG - === New errors detail ===
+2025-04-14 01:32:11 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:11 - INFO - Testing fragment: rw [<- mul_left_inj]
+2025-04-14 01:32:11 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:13 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:13 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:13 - DEBUG - === New errors detail ===
+2025-04-14 01:32:13 - DEBUG - New Error 1: line 22, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℝ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:32:13 - DEBUG - New Error 2: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2728 = 6 * ?m.2729
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 * ?a = 2 * y ^ 2 * ?a
+2025-04-14 01:32:13 - INFO - Testing fragment: rw [<- mul_ne_mul_left]
+2025-04-14 01:32:13 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:15 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:15 - DEBUG - === New errors detail ===
+2025-04-14 01:32:15 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:15 - INFO - Testing fragment: rw [<- mul_assoc]
+2025-04-14 01:32:15 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:17 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:17 - DEBUG - === New errors detail ===
+2025-04-14 01:32:17 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b * ?c)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:17 - INFO - Testing fragment: rw [<- mul_comm]
+2025-04-14 01:32:17 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:19 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:19 - DEBUG - === New errors detail ===
+2025-04-14 01:32:19 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2175 = 6 * ?m.2176
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = y ^ 2 * 2
+2025-04-14 01:32:19 - INFO - Testing fragment: rw [<- MulOneClass]
+2025-04-14 01:32:19 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:21 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:21 - DEBUG - === New errors detail ===
+2025-04-14 01:32:21 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:21 - INFO - Testing fragment: rw [<- one_mul]
+2025-04-14 01:32:21 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:23 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:23 - DEBUG - === New errors detail ===
+2025-04-14 01:32:23 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = 1 * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:23 - INFO - Testing fragment: rw [<- mul_one]
+2025-04-14 01:32:23 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:25 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:25 - DEBUG - === New errors detail ===
+2025-04-14 01:32:25 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * 1
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:25 - INFO - Testing fragment: rw [<- npowRec_add]
+2025-04-14 01:32:25 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:27 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:27 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:27 - DEBUG - === New errors detail ===
+2025-04-14 01:32:27 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-14 01:32:27 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:27 - INFO - Testing fragment: rw [<- npowRec_succ]
+2025-04-14 01:32:27 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:29 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:29 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:29 - DEBUG - === New errors detail ===
+2025-04-14 01:32:29 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-14 01:32:29 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:29 - INFO - Testing fragment: rw [<- npowRec'_succ]
+2025-04-14 01:32:29 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:31 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:31 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:31 - DEBUG - === New errors detail ===
+2025-04-14 01:32:31 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-14 01:32:31 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:31 - INFO - Testing fragment: rw [<- npowRec'_two_mul]
+2025-04-14 01:32:31 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:33 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:33 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:33 - DEBUG - === New errors detail ===
+2025-04-14 01:32:33 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-14 01:32:33 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:33 - INFO - Testing fragment: rw [<- npowRec'_mul_comm]
+2025-04-14 01:32:33 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:35 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:35 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:35 - DEBUG - === New errors detail ===
+2025-04-14 01:32:35 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-14 01:32:35 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:35 - INFO - Testing fragment: rw [<- npowRec_eq]
+2025-04-14 01:32:35 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:37 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:37 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:37 - DEBUG - === New errors detail ===
+2025-04-14 01:32:37 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-14 01:32:37 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:37 - INFO - Testing fragment: rw [<- npowBinRec]
+2025-04-14 01:32:37 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:39 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:39 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:39 - DEBUG - === New errors detail ===
+2025-04-14 01:32:39 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-14 01:32:39 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:39 - INFO - Testing fragment: rw [<- npowRec_eq_npowBinRec]
+2025-04-14 01:32:39 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:41 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:41 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:41 - DEBUG - === New errors detail ===
+2025-04-14 01:32:41 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-14 01:32:41 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:41 - INFO - Testing fragment: rw [<- npow_eq_pow]
+2025-04-14 01:32:41 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:43 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:43 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:43 - DEBUG - === New errors detail ===
+2025-04-14 01:32:43 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2356 = 6 * ?m.2357
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ Monoid.npow 2 x = 2 * y ^ 2
+2025-04-14 01:32:43 - INFO - Testing fragment: rw [<- pow_zero]
+2025-04-14 01:32:43 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:45 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:45 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:45 - DEBUG - === New errors detail ===
+2025-04-14 01:32:45 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:45 - INFO - Testing fragment: rw [<- pow_succ]
+2025-04-14 01:32:45 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:47 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:47 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:47 - DEBUG - === New errors detail ===
+2025-04-14 01:32:47 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n * ?a
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:47 - INFO - Testing fragment: rw [<- inv_inv]
+2025-04-14 01:32:47 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:49 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:49 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:49 - DEBUG - === New errors detail ===
+2025-04-14 01:32:49 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a⁻¹⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:49 - INFO - Testing fragment: rw [<- exists_zpow_surjective]
+2025-04-14 01:32:49 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:51 - INFO - Testing fix: Original errors: 6, Fixed errors: 7
+2025-04-14 01:32:51 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:51 - DEBUG - === New errors detail ===
+2025-04-14 01:32:51 - DEBUG - New Error 1: line 22, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-14 01:32:51 - DEBUG - New Error 2: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.2062
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:51 - INFO - Testing fragment: rw [<- zpow_eq_pow]
+2025-04-14 01:32:51 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:53 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:53 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:53 - DEBUG - === New errors detail ===
+2025-04-14 01:32:53 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:53 - INFO - Testing fragment: rw [<- zpow_zero]
+2025-04-14 01:32:53 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:55 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:55 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:55 - DEBUG - === New errors detail ===
+2025-04-14 01:32:55 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:55 - INFO - Testing fragment: rw [<- zpow_natCast]
+2025-04-14 01:32:55 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:57 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:57 - DEBUG - === New errors detail ===
+2025-04-14 01:32:57 - DEBUG - New Error 1: line 23, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6 * ?m.2172 = 6 * ?m.2173
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ ↑2 = 2 * y ^ 2
+2025-04-14 01:32:57 - INFO - Testing fragment: rw [<- zpow_negSucc]
+2025-04-14 01:32:57 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:32:59 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:32:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:59 - DEBUG - === New errors detail ===
+2025-04-14 01:32:59 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a ^ (?n + 1))⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:32:59 - INFO - Testing fragment: rw [<- negSucc_zsmul]
+2025-04-14 01:32:59 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:33:01 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:33:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:01 - DEBUG - === New errors detail ===
+2025-04-14 01:33:01 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -((?n + 1) • ?a)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:33:01 - INFO - Testing fragment: rw [<- div_eq_mul_inv]
+2025-04-14 01:33:01 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:33:03 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:33:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:03 - DEBUG - === New errors detail ===
+2025-04-14 01:33:03 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:33:03 - INFO - Testing fragment: rw [<- inv_eq_one_div]
+2025-04-14 01:33:03 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:33:05 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:33:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:05 - DEBUG - === New errors detail ===
+2025-04-14 01:33:05 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?x
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:33:05 - INFO - Testing fragment: rw [<- mul_div_assoc]
+2025-04-14 01:33:05 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
+2025-04-14 01:33:07 - INFO - Testing fix: Original errors: 6, Fixed errors: 6
+2025-04-14 01:33:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:07 - DEBUG - === New errors detail ===
+2025-04-14 01:33:07 - DEBUG - New Error 1: line 22, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b / ?c)
+x y : ℝ
+h₀ : 0 < x ∧ 0 < y
+h₁ : y ^ 3 = 1
+h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)
+⊢ x ^ 2 = 2 * y ^ 2
+2025-04-14 01:33:07 - INFO - Testing fragment: rw [<- one_div]
+2025-04-14 01:33:07 - INFO - Original error line:     rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²

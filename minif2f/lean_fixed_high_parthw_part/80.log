@@ -1,0 +1,751 @@
+2025-04-14 01:23:43 - INFO - Log file initialized at 2025-04-14T01:23:43.261478
+2025-04-14 01:23:43 - INFO - ===== LOG FILE LOCATION =====
+2025-04-14 01:23:43 - INFO - Detailed log file created at: /data/coding/minif2f/lean_fixed/80.log
+2025-04-14 01:23:43 - INFO - ===============================
+2025-04-14 01:23:43 - INFO - Original code:
+2025-04-14 01:23:43 - INFO - ----------------------------------------
+2025-04-14 01:23:43 - INFO - import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+/-- What is the minimum value of $f(x)=\left|x-1\right| + \left|2x-1\right| + \left|3x-1\right| + \cdots + \left|119x - 1 \right|$?
+
+$\textbf{(A)}\ 49 \qquad \textbf{(B)}\ 50 \qquad \textbf{(C)}\ 51 \qquad \textbf{(D)}\ 52 \qquad \textbf{(E)}\ 53$ Show that it is 49\ \textbf{(A)}.-/
+theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+  -- The problem asks for the minimum value of a sum of absolute value functions.
+  -- We approach this by finding the optimal x that minimizes the sum.
+
+  -- First, let's rewrite the sum to use ℕ instead of ℤ for the index since k ranges from 1 to 119
+  let n : ℕ := 119
+  have hsum : ∑ k:ℤ in Finset.Icc 1 n, abs (↑k * x - 1) = ∑ k in Finset.range n, abs ((k + 1) * x - 1) := by
+    simp [Finset.sum_Icc_eq_sum_range, add_comm]
+
+  -- The key observation is that the minimum occurs when x is chosen such that the middle term (for k=60) equals zero.
+  -- This is because the sum of absolute values is minimized when x is the weighted median of the reciprocals.
+  let optimal_x := 1 / 60
+  have h_optimal : (60:ℝ) * optimal_x - 1 = 0 := by simp [optimal_x, mul_div_cancel']
+
+  -- We'll show that the sum evaluated at x = 1/60 gives exactly 49
+  have h_min_val : ∑ k in Finset.range n, abs ((k + 1) * optimal_x - 1) = 49 := by
+    -- Split the sum into two parts: k < 59 and k ≥ 59
+    -- For k < 59 (i.e., k+1 ≤ 59), (k+1)/60 - 1 < 0
+    -- For k ≥ 59 (i.e., k+1 ≥ 60), (k+1)/60 - 1 ≥ 0
+    have h_split : Finset.range n = Finset.Iio 59 ∪ Finset.Ici 59 := by
+      rw [Finset.range_eq_Ico, Finset.Ico_union_Ici_eq_Iio]
+      simp
+
+    rw [h_split, Finset.sum_union (Finset.Iio_disjoint_Ici le_rfl)]
+    -- Compute the sum for k < 59
+    have h_sum_lt : ∑ k in Finset.Iio 59, abs ((k + 1) * optimal_x - 1) = 
+        ∑ k in Finset.Iio 59, (1 - (k + 1) * optimal_x) := by
+      refine Finset.sum_congr rfl fun k hk => ?_
+      rw [abs_of_neg]
+      · ring
+      · rw [Finset.mem_Iio] at hk
+        have : (k:ℝ) + 1 < 60 := by linarith
+        rw [optimal_x, div_lt_iff (by norm_num), mul_comm]
+        linarith
+
+    -- Compute the sum for k ≥ 59
+    have h_sum_ge : ∑ k in Finset.Ici 59, abs ((k + 1) * optimal_x - 1) = 
+        ∑ k in Finset.Ici 59, ((k + 1) * optimal_x - 1) := by
+      refine Finset.sum_congr rfl fun k hk => ?_
+      rw [abs_of_nonneg]
+      · ring
+      · rw [Finset.mem_Ici] at hk
+        have : (k:ℝ) + 1 ≥ 60 := by linarith
+        rw [optimal_x, le_div_iff (by norm_num), mul_comm]
+        linarith
+
+    rw [h_sum_lt, h_sum_ge]
+    -- Now compute both sums explicitly
+    -- The first sum has 59 terms (k=0 to 58)
+    have h_card_lt : (Finset.Iio 59).card = 59 := by simp
+    -- The second sum has 119 - 59 = 60 terms (k=59 to 118)
+    have h_card_ge : (Finset.Ici 59).card = 60 := by
+      rw [Finset.card_Ici, Nat.sub_add_cancel (by linarith)]
+
+    -- Compute the first sum (k < 59)
+    have h_sum1 : ∑ k in Finset.Iio 59, (1 - (k + 1) * optimal_x) = 
+        59 - optimal_x * ∑ k in Finset.Iio 59, (k + 1) := by
+      rw [Finset.sum_sub_distrib, Finset.sum_const, h_card_lt, nsmul_eq_mul, mul_one,
+          Finset.mul_sum]
+
+    -- Compute the sum of (k+1) for k < 59
+    have h_sum_k_lt : ∑ k in Finset.Iio 59, (k + 1) = ∑ k in Finset.range 59, (k + 1) := by
+      simp [Finset.range_eq_Ico]
+    have : ∑ k in Finset.range 59, (k + 1) = 59 * 60 / 2 := by
+      rw [Finset.sum_range_id, Nat.triangle_succ]
+      norm_num
+    rw [h_sum_k_lt, this] at h_sum1
+    norm_num at h_sum1
+    rw [optimal_x] at h_sum1
+    field_simp at h_sum1
+    norm_num at h_sum1
+
+    -- Compute the second sum (k ≥ 59)
+    have h_sum2 : ∑ k in Finset.Ici 59, ((k + 1) * optimal_x - 1) = 
+        optimal_x * ∑ k in Finset.Ici 59, (k + 1) - 60 := by
+      rw [Finset.sum_sub_distrib, Finset.sum_const, h_card_ge, nsmul_eq_mul, mul_one,
+          Finset.mul_sum]
+
+    -- Compute the sum of (k+1) for k ≥ 59
+    have h_sum_k_ge : ∑ k in Finset.Ici 59, (k + 1) = ∑ k in Finset.range 60, (k + 60) := by
+      rw [Finset.sum_Ici_eq_sum_range]
+      intro k
+      rw [add_comm]
+    have : ∑ k in Finset.range 60, (k + 60) = 60 * 60 + 60 * 59 / 2 := by
+      rw [Finset.sum_add_distrib, Finset.sum_range_id, Nat.triangle_succ]
+      norm_num
+    rw [h_sum_k_ge, this] at h_sum2
+    norm_num at h_sum2
+    rw [optimal_x] at h_sum2
+    field_simp at h_sum2
+    norm_num at h_sum2
+
+    -- Combine both sums
+    linarith
+
+  -- Now we know that the minimal value is 49, achieved at x = 1/60
+  -- Therefore, for any real x, the sum is at least 49
+  rw [hsum]
+  have : ∑ k in Finset.range n, abs ((k + 1) * x - 1) ≥ 
+      ∑ k in Finset.range n, abs ((k + 1) * optimal_x - 1) := by
+    -- This follows from the fact that x = 1/60 is the minimizer
+    -- We can use convexity of the absolute value function
+    sorry  -- This part would require more advanced convexity arguments
+  linarith [h_min_val]
+2025-04-14 01:23:43 - INFO - ----------------------------------------
+2025-04-14 01:23:43 - INFO - 
+Checking original code for all errors...
+2025-04-14 01:25:23 - INFO - Original code contains 11 errors:
+2025-04-14 01:25:23 - INFO - Error 1: line 18, type: unknown_constant, message: unknown constant 'Finset.sum_Icc_eq_sum_range'...
+2025-04-14 01:25:23 - INFO - Error 2: line 17, type: other_error, message: unsolved goals
+x : ℝ
+n : ℕ := 119
+⊢ ∑ k ∈ Finset.Icc 1 119, |↑k * x - 1| = ∑ k ∈ Finset.range n, |(↑...
+2025-04-14 01:25:23 - INFO - Error 3: line 23, type: other_error, message: `mul_div_cancel'` has been deprecated, use `mul_div_cancel₀` instead...
+2025-04-14 01:25:23 - INFO - Error 4: line 23, type: other_error, message: unsolved goals
+x : ℝ
+n : ℕ := 119
+hsum : ∑ k ∈ Finset.Icc 1 ↑n, |↑k * x - 1| = ∑ k ∈ Finset.range n,...
+2025-04-14 01:25:23 - INFO - Error 5: line 26, type: failed_to_synthesize, message: failed to synthesize
+  AddGroup ℕ
+use `set_option diagnostics true` to get diagnostic information...
+2025-04-14 01:25:23 - INFO - Error 6: line 30, type: failed_to_synthesize, message: failed to synthesize
+  LocallyFiniteOrderTop ℕ
+use `set_option diagnostics true` to get diagnostic i...
+2025-04-14 01:25:23 - INFO - Error 7: line 31, type: unknown_constant, message: unknown constant 'Finset.Ico_union_Ici_eq_Iio'...
+2025-04-14 01:25:23 - INFO - Error 8: line 31, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.15760
+x : ℝ
+n : ℕ := 119
+hsum : ∑ k ∈ F...
+2025-04-14 01:25:23 - INFO - Error 9: line 34, type: unknown_identifier, message: unknown identifier 'h_split'...
+2025-04-14 01:25:23 - INFO - Error 10: line 34, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.15762
+case refine_1
+x : ℝ
+n : ℕ := 119
+...
+2025-04-14 01:25:23 - INFO - Error 11: line 108, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ∑ k ∈ Finse...
+2025-04-14 01:25:23 - INFO - 
+Starting multi-error continuous repair process...
+2025-04-14 01:25:23 - INFO - 
+===== Starting to fix all errors =====
+2025-04-14 01:25:54 - INFO - 
+Found 1 original errors:
+2025-04-14 01:25:54 - INFO - Error 1: line 4, type: other_error, message: expected token...
+2025-04-14 01:25:54 - INFO - 
+Trying to fix error 1/1: line 4, type: other_error
+2025-04-14 01:25:54 - INFO - Error message: expected token...
+2025-04-14 01:25:54 - INFO - Removed header content, remaining 107 lines of code
+2025-04-14 01:25:54 - INFO - Using specified target error line: 4
+2025-04-14 01:25:55 - INFO - Found error at specified line: expected token
+2025-04-14 01:25:55 - INFO - Error at line 4: expected token
+2025-04-14 01:25:55 - INFO - 
+==================================================
+2025-04-14 01:25:55 - INFO - Code prepared, starting synthesis
+2025-04-14 01:25:55 - INFO - Before part: /-- What is the minimum value of $f(x)=\left|x-1\right| + \left|2x-1\right| + \left|3x-1\right| + \cdots + \left|119x - 1 \right|$?
+
+$\textbf{(A)}\ 49 \qquad \textbf{(B)}\ 50 \qquad \textbf{(C)}\ 51 \qquad \textbf{(D)}\ 52 \qquad \textbf{(E)}\ 53$ Show that it is 49\ \textbf{(A)}.-/
+2025-04-14 01:25:55 - INFO - Error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:25:55 - INFO - After part: -- The problem asks for the minimum value of a sum of absolute value functions.
+  -- We approach this by finding the optimal x that minimizes the sum.
+
+  -- First, let's rewrite the sum to use ℕ instead of ℤ for the index since k ranges from 1 to 119
+  let n : ℕ := 119
+  have hsum : ∑ k:ℤ in Finset.Icc 1 n, abs (↑k * x - 1) = ∑ k in Finset.range n, abs ((k + 1) * x - 1) := by
+    simp [Finset.sum_Icc_eq_sum_range, add_comm]
+
+  -- The key observation is that the minimum occurs when x is chosen such that the middle term (for k=60) equals zero.
+  -- This is because the sum of absolute values is minimized when x is the weighted median of the reciprocals.
+  let optimal_x := 1 / 60
+  have h_optimal : (60:ℝ) * optimal_x - 1 = 0 := by simp [optimal_x, mul_div_cancel']
+
+  -- We'll show that the sum evaluated at x = 1/60 gives exactly 49
+  have h_min_val : ∑ k in Finset.range n, abs ((k + 1) * optimal_x - 1) = 49 := by
+    -- Split the sum into two parts: k < 59 and k ≥ 59
+    -- For k < 59 (i.e., k+1 ≤ 59), (k+1)/60 - 1 < 0
+    -- For k ≥ 59 (i.e., k+1 ≥ 60), (k+1)/60 - 1 ≥ 0
+    have h_split : Finset.range n = Finset.Iio 59 ∪ Finset.Ici 59 := by
+      rw [Finset.range_eq_Ico, Finset.Ico_union_Ici_eq_Iio]
+      simp
+
+    rw [h_split, Finset.sum_union (Finset.Iio_disjoint_Ici le_rfl)]
+    -- Compute the sum for k < 59
+    have h_sum_lt : ∑ k in Finset.Iio 59, abs ((k + 1) * optimal_x - 1) = 
+        ∑ k in Finset.Iio 59, (1 - (k + 1) * optimal_x) := by
+      refine Finset.sum_congr rfl fun k hk => ?_
+      rw [abs_of_neg]
+      · ring
+      · rw [Finset.mem_Iio] at hk
+        have : (k:ℝ) + 1 < 60 := by linarith
+        rw [optimal_x, div_lt_iff (by norm_num), mul_comm]
+        linarith
+
+    -- Compute the sum for k ≥ 59
+    have h_sum_ge : ∑ k in Finset.Ici 59, abs ((k + 1) * optimal_x - 1) = 
+        ∑ k in Finset.Ici 59, ((k + 1) * optimal_x - 1) := by
+      refine Finset.sum_congr rfl fun k hk => ?_
+      rw [abs_of_nonneg]
+      · ring
+      · rw [Finset.mem_Ici] at hk
+        have : (k:ℝ) + 1 ≥ 60 := by linarith
+        rw [optimal_x, le_div_iff (by norm_num), mul_comm]
+        linarith
+
+    rw [h_sum_lt, h_sum_ge]
+    -- Now compute both sums explicitly
+    -- The first sum has 59 terms (k=0 to 58)
+    have h_card_lt : (Finset.Iio 59).card = 59 := by simp
+    -- The second sum has 119 - 59 = 60 terms (k=59 to 118)
+    have h_card_ge : (Finset.Ici 59).card = 60 := by
+      rw [Finset.card_Ici, Nat.sub_add_cancel (by linarith)]
+
+    -- Compute the first sum (k < 59)
+    have h_sum1 : ∑ k in Finset.Iio 59, (1 - (k + 1) * optimal_x) = 
+        59 - optimal_x * ∑ k in Finset.Iio 59, (k + 1) := by
+      rw [Finset.sum_sub_distrib, Finset.sum_const, h_card_lt, nsmul_eq_mul, mul_one,
+          Finset.mul_sum]
+
+    -- Compute the sum of (k+1) for k < 59
+    have h_sum_k_lt : ∑ k in Finset.Iio 59, (k + 1) = ∑ k in Finset.range 59, (k + 1) := by
+      simp [Finset.range_eq_Ico]
+    have : ∑ k in Finset.range 59, (k + 1) = 59 * 60 / 2 := by
+      rw [Finset.sum_range_id, Nat.triangle_succ]
+      norm_num
+    rw [h_sum_k_lt, this] at h_sum1
+    norm_num at h_sum1
+    rw [optimal_x] at h_sum1
+    field_simp at h_sum1
+    norm_num at h_sum1
+
+    -- Compute the second sum (k ≥ 59)
+    have h_sum2 : ∑ k in Finset.Ici 59, ((k + 1) * optimal_x - 1) = 
+        optimal_x * ∑ k in Finset.Ici 59, (k + 1) - 60 := by
+      rw [Finset.sum_sub_distrib, Finset.sum_const, h_card_ge, nsmul_eq_mul, mul_one,
+          Finset.mul_sum]
+
+    -- Compute the sum of (k+1) for k ≥ 59
+    have h_sum_k_ge : ∑ k in Finset.Ici 59, (k + 1) = ∑ k in Finset.range 60, (k + 60) := by
+      rw [Finset.sum_Ici_eq_sum_range]
+      intro k
+      rw [add_comm]
+    have : ∑ k in Finset.range 60, (k + 60) = 60 * 60 + 60 * 59 / 2 := by
+      rw [Finset.sum_add_distrib, Finset.sum_range_id, Nat.triangle_succ]
+      norm_num
+    rw [h_sum_k_ge, this] at h_sum2
+    norm_num at h_sum2
+    rw [optimal_x] at h_sum2
+    field_simp at h_sum2
+    norm_num at h_sum2
+
+    -- Combine both sums
+    linarith
+
+  -- Now we know that the minimal value is 49, achieved at x = 1/60
+  -- Therefore, for any real x, the sum is at least 49
+  rw [hsum]
+  have : ∑ k in Finset.range n, abs ((k + 1) * x - 1) ≥ 
+      ∑ k in Finset.range n, abs ((k + 1) * optimal_x - 1) := by
+    -- This follows from the fact that x = 1/60 is the minimizer
+    -- We can use convexity of the absolute value function
+    sorry  -- This part would require more advanced convexity arguments
+  linarith [h_min_val]
+2025-04-14 01:25:55 - INFO - ==================================================
+
+2025-04-14 01:25:56 - INFO - Testing fragment: rw [left_distrib]
+2025-04-14 01:25:56 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:25:58 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:25:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:25:58 - DEBUG - === New errors detail ===
+2025-04-14 01:25:58 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:25:58 - INFO - Testing fragment: rw [right_distrib]
+2025-04-14 01:25:58 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:00 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:00 - DEBUG - === New errors detail ===
+2025-04-14 01:26:00 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:00 - INFO - Testing fragment: rw [distrib_three_right]
+2025-04-14 01:26:00 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:02 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:02 - DEBUG - === New errors detail ===
+2025-04-14 01:26:02 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:02 - INFO - Testing fragment: rw [add_one_mul]
+2025-04-14 01:26:02 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:04 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:04 - DEBUG - === New errors detail ===
+2025-04-14 01:26:04 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:04 - INFO - Testing fragment: rw [mul_add_one]
+2025-04-14 01:26:04 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:06 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:06 - DEBUG - === New errors detail ===
+2025-04-14 01:26:06 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:06 - INFO - Testing fragment: rw [one_add_mul]
+2025-04-14 01:26:06 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:08 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:08 - DEBUG - === New errors detail ===
+2025-04-14 01:26:08 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:08 - INFO - Testing fragment: rw [mul_one_add]
+2025-04-14 01:26:08 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:10 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:10 - DEBUG - === New errors detail ===
+2025-04-14 01:26:10 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:10 - INFO - Testing fragment: rw [two_mul]
+2025-04-14 01:26:10 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:12 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:12 - DEBUG - === New errors detail ===
+2025-04-14 01:26:12 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:12 - INFO - Testing fragment: rw [mul_two]
+2025-04-14 01:26:12 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:14 - DEBUG - === New errors detail ===
+2025-04-14 01:26:14 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:14 - INFO - Testing fragment: rw [mul_boole]
+2025-04-14 01:26:14 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:16 - DEBUG - === New errors detail ===
+2025-04-14 01:26:16 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:16 - INFO - Testing fragment: rw [boole_mul]
+2025-04-14 01:26:16 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:18 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:18 - DEBUG - === New errors detail ===
+2025-04-14 01:26:18 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:18 - INFO - Testing fragment: rw [add_mul_self_eq]
+2025-04-14 01:26:18 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:20 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:20 - DEBUG - === New errors detail ===
+2025-04-14 01:26:20 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:20 - INFO - Testing fragment: rw [neg_mul]
+2025-04-14 01:26:20 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:22 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:22 - DEBUG - === New errors detail ===
+2025-04-14 01:26:22 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:22 - INFO - Testing fragment: rw [mul_neg]
+2025-04-14 01:26:22 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:24 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:24 - DEBUG - === New errors detail ===
+2025-04-14 01:26:24 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:24 - INFO - Testing fragment: rw [neg_mul_neg]
+2025-04-14 01:26:24 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:26 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:26 - DEBUG - === New errors detail ===
+2025-04-14 01:26:26 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:26 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
+2025-04-14 01:26:26 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:28 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:28 - DEBUG - === New errors detail ===
+2025-04-14 01:26:28 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:28 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
+2025-04-14 01:26:28 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:30 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:30 - DEBUG - === New errors detail ===
+2025-04-14 01:26:30 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:30 - INFO - Testing fragment: rw [neg_mul_comm]
+2025-04-14 01:26:30 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:32 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:32 - DEBUG - === New errors detail ===
+2025-04-14 01:26:32 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:32 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
+2025-04-14 01:26:32 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:34 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:34 - DEBUG - === New errors detail ===
+2025-04-14 01:26:34 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:34 - INFO - Testing fragment: rw [mul_neg_one]
+2025-04-14 01:26:34 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:36 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:36 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:36 - DEBUG - === New errors detail ===
+2025-04-14 01:26:36 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:36 - INFO - Testing fragment: rw [neg_one_mul]
+2025-04-14 01:26:36 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:38 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:38 - DEBUG - === New errors detail ===
+2025-04-14 01:26:38 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:38 - INFO - Testing fragment: rw [mul_sub_left_distrib]
+2025-04-14 01:26:38 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:40 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:40 - DEBUG - === New errors detail ===
+2025-04-14 01:26:40 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:40 - INFO - Testing fragment: rw [mul_sub_right_distrib]
+2025-04-14 01:26:40 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:42 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:42 - DEBUG - === New errors detail ===
+2025-04-14 01:26:42 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:42 - INFO - Testing fragment: rw [sub_one_mul]
+2025-04-14 01:26:42 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:26:44 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:26:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:26:44 - DEBUG - === New errors detail ===
+2025-04-14 01:26:44 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:26:44 - INFO - Testing fragment: rw [mul_sub_one]
+2025-04-14 01:26:44 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:29:57 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:29:57 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:29:57 - DEBUG - === New errors detail ===
+2025-04-14 01:29:57 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:29:57 - INFO - Testing fragment: rw [one_sub_mul]
+2025-04-14 01:29:57 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:29:59 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:29:59 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:29:59 - DEBUG - === New errors detail ===
+2025-04-14 01:29:59 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:29:59 - INFO - Testing fragment: rw [mul_one_sub]
+2025-04-14 01:29:59 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:01 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:01 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:01 - DEBUG - === New errors detail ===
+2025-04-14 01:30:01 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:01 - INFO - Testing fragment: rw [mul_left_cancel]
+2025-04-14 01:30:01 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:03 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:03 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:03 - DEBUG - === New errors detail ===
+2025-04-14 01:30:03 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:03 - INFO - Testing fragment: rw [mul_left_cancel_iff]
+2025-04-14 01:30:03 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:05 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:05 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:05 - DEBUG - === New errors detail ===
+2025-04-14 01:30:05 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:05 - INFO - Testing fragment: rw [mul_right_injective]
+2025-04-14 01:30:05 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:07 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:07 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:07 - DEBUG - === New errors detail ===
+2025-04-14 01:30:07 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:07 - INFO - Testing fragment: rw [mul_right_inj]
+2025-04-14 01:30:07 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:09 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:09 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:09 - DEBUG - === New errors detail ===
+2025-04-14 01:30:09 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:09 - INFO - Testing fragment: rw [mul_ne_mul_right]
+2025-04-14 01:30:09 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:11 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:11 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:11 - DEBUG - === New errors detail ===
+2025-04-14 01:30:11 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:11 - INFO - Testing fragment: rw [mul_right_cancel]
+2025-04-14 01:30:11 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:13 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:13 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:13 - DEBUG - === New errors detail ===
+2025-04-14 01:30:13 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:13 - INFO - Testing fragment: rw [mul_right_cancel_iff]
+2025-04-14 01:30:13 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:15 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:15 - DEBUG - === New errors detail ===
+2025-04-14 01:30:15 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:15 - INFO - Testing fragment: rw [mul_left_injective]
+2025-04-14 01:30:15 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:17 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:17 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:17 - DEBUG - === New errors detail ===
+2025-04-14 01:30:17 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:17 - INFO - Testing fragment: rw [mul_left_inj]
+2025-04-14 01:30:17 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:19 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:19 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:19 - DEBUG - === New errors detail ===
+2025-04-14 01:30:19 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:19 - INFO - Testing fragment: rw [mul_ne_mul_left]
+2025-04-14 01:30:19 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:21 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:21 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:21 - DEBUG - === New errors detail ===
+2025-04-14 01:30:21 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:21 - INFO - Testing fragment: rw [mul_assoc]
+2025-04-14 01:30:21 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:23 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:23 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:23 - DEBUG - === New errors detail ===
+2025-04-14 01:30:23 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:23 - INFO - Testing fragment: rw [mul_comm]
+2025-04-14 01:30:23 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:25 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:25 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:25 - DEBUG - === New errors detail ===
+2025-04-14 01:30:25 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:25 - INFO - Testing fragment: rw [MulOneClass]
+2025-04-14 01:30:25 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:27 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:27 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:27 - DEBUG - === New errors detail ===
+2025-04-14 01:30:27 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:27 - INFO - Testing fragment: rw [one_mul]
+2025-04-14 01:30:27 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:29 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:29 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:29 - DEBUG - === New errors detail ===
+2025-04-14 01:30:29 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:29 - INFO - Testing fragment: rw [mul_one]
+2025-04-14 01:30:29 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:31 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:31 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:31 - DEBUG - === New errors detail ===
+2025-04-14 01:30:31 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:31 - INFO - Testing fragment: rw [npowRec_add]
+2025-04-14 01:30:31 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:30:34 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:30:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:30:34 - DEBUG - === New errors detail ===
+2025-04-14 01:30:34 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:30:34 - INFO - Testing fragment: rw [npowRec_succ]
+2025-04-14 01:30:34 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:00 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:00 - DEBUG - === New errors detail ===
+2025-04-14 01:32:00 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:00 - INFO - Testing fragment: rw [npowRec'_succ]
+2025-04-14 01:32:00 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:02 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:02 - DEBUG - === New errors detail ===
+2025-04-14 01:32:02 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:02 - INFO - Testing fragment: rw [npowRec'_two_mul]
+2025-04-14 01:32:02 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:04 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:04 - DEBUG - === New errors detail ===
+2025-04-14 01:32:04 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:04 - INFO - Testing fragment: rw [npowRec'_mul_comm]
+2025-04-14 01:32:04 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:06 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:06 - DEBUG - === New errors detail ===
+2025-04-14 01:32:06 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:06 - INFO - Testing fragment: rw [npowRec_eq]
+2025-04-14 01:32:06 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:08 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:08 - DEBUG - === New errors detail ===
+2025-04-14 01:32:08 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:08 - INFO - Testing fragment: rw [npowBinRec]
+2025-04-14 01:32:08 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:10 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:10 - DEBUG - === New errors detail ===
+2025-04-14 01:32:10 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:10 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
+2025-04-14 01:32:10 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:12 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:12 - DEBUG - === New errors detail ===
+2025-04-14 01:32:12 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:12 - INFO - Testing fragment: rw [npow_eq_pow]
+2025-04-14 01:32:12 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:14 - DEBUG - === New errors detail ===
+2025-04-14 01:32:14 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:14 - INFO - Testing fragment: rw [pow_zero]
+2025-04-14 01:32:14 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:16 - DEBUG - === New errors detail ===
+2025-04-14 01:32:16 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:16 - INFO - Testing fragment: rw [pow_succ]
+2025-04-14 01:32:16 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:18 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:18 - DEBUG - === New errors detail ===
+2025-04-14 01:32:18 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:18 - INFO - Testing fragment: rw [inv_inv]
+2025-04-14 01:32:18 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:20 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:20 - DEBUG - === New errors detail ===
+2025-04-14 01:32:20 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:20 - INFO - Testing fragment: rw [exists_zpow_surjective]
+2025-04-14 01:32:20 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:22 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:22 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:22 - DEBUG - === New errors detail ===
+2025-04-14 01:32:22 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:22 - INFO - Testing fragment: rw [zpow_eq_pow]
+2025-04-14 01:32:22 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:24 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:24 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:24 - DEBUG - === New errors detail ===
+2025-04-14 01:32:24 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:24 - INFO - Testing fragment: rw [zpow_zero]
+2025-04-14 01:32:24 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:26 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:26 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:26 - DEBUG - === New errors detail ===
+2025-04-14 01:32:26 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:26 - INFO - Testing fragment: rw [zpow_natCast]
+2025-04-14 01:32:26 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:28 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:28 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:28 - DEBUG - === New errors detail ===
+2025-04-14 01:32:28 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:28 - INFO - Testing fragment: rw [zpow_negSucc]
+2025-04-14 01:32:28 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:30 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:30 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:30 - DEBUG - === New errors detail ===
+2025-04-14 01:32:30 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:30 - INFO - Testing fragment: rw [negSucc_zsmul]
+2025-04-14 01:32:30 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:32 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:32 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:32 - DEBUG - === New errors detail ===
+2025-04-14 01:32:32 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:32 - INFO - Testing fragment: rw [div_eq_mul_inv]
+2025-04-14 01:32:32 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:34 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:34 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:34 - DEBUG - === New errors detail ===
+2025-04-14 01:32:34 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:34 - INFO - Testing fragment: rw [inv_eq_one_div]
+2025-04-14 01:32:34 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:36 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:36 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:36 - DEBUG - === New errors detail ===
+2025-04-14 01:32:36 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:36 - INFO - Testing fragment: rw [mul_div_assoc]
+2025-04-14 01:32:36 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:38 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:38 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:38 - DEBUG - === New errors detail ===
+2025-04-14 01:32:38 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:38 - INFO - Testing fragment: rw [one_div]
+2025-04-14 01:32:38 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:40 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:40 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:40 - DEBUG - === New errors detail ===
+2025-04-14 01:32:40 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:40 - INFO - Testing fragment: rw [inv_one]
+2025-04-14 01:32:40 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:42 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:42 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:42 - DEBUG - === New errors detail ===
+2025-04-14 01:32:42 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:42 - INFO - Testing fragment: rw [mul_inv_rev]
+2025-04-14 01:32:42 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:44 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:44 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:44 - DEBUG - === New errors detail ===
+2025-04-14 01:32:44 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:44 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_right]
+2025-04-14 01:32:44 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:46 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:46 - DEBUG - === New errors detail ===
+2025-04-14 01:32:46 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:46 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_left]
+2025-04-14 01:32:46 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:48 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:48 - DEBUG - === New errors detail ===
+2025-04-14 01:32:48 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:48 - INFO - Testing fragment: rw [eq_inv_of_mul_eq_one_left]
+2025-04-14 01:32:48 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:50 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:50 - DEBUG - === New errors detail ===
+2025-04-14 01:32:50 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:50 - INFO - Testing fragment: rw [inv_mul_cancel]
+2025-04-14 01:32:50 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:52 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:52 - DEBUG - === New errors detail ===
+2025-04-14 01:32:52 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:52 - INFO - Testing fragment: rw [inv_eq_of_mul]
+2025-04-14 01:32:52 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:54 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:54 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:54 - DEBUG - === New errors detail ===
+2025-04-14 01:32:54 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:54 - INFO - Testing fragment: rw [mul_inv_cancel]
+2025-04-14 01:32:54 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:56 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:56 - DEBUG - === New errors detail ===
+2025-04-14 01:32:56 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:56 - INFO - Testing fragment: rw [div_self']
+2025-04-14 01:32:56 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:32:58 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:32:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:32:58 - DEBUG - === New errors detail ===
+2025-04-14 01:32:58 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:32:58 - INFO - Testing fragment: rw [inv_mul_cancel_left]
+2025-04-14 01:32:58 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:33:00 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:33:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:00 - DEBUG - === New errors detail ===
+2025-04-14 01:33:00 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:33:00 - INFO - Testing fragment: rw [mul_inv_cancel_left]
+2025-04-14 01:33:00 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:33:02 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:33:02 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:02 - DEBUG - === New errors detail ===
+2025-04-14 01:33:02 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:33:02 - INFO - Testing fragment: rw [mul_inv_cancel_right]
+2025-04-14 01:33:02 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:33:04 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:33:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:04 - DEBUG - === New errors detail ===
+2025-04-14 01:33:04 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:33:04 - INFO - Testing fragment: rw [mul_div_cancel_right]
+2025-04-14 01:33:04 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:33:06 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:33:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:06 - DEBUG - === New errors detail ===
+2025-04-14 01:33:06 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:33:06 - INFO - Testing fragment: rw [inv_mul_cancel_right]
+2025-04-14 01:33:06 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by
+2025-04-14 01:33:08 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
+2025-04-14 01:33:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-14 01:33:08 - DEBUG - === New errors detail ===
+2025-04-14 01:33:08 - DEBUG - New Error 1: line 3, type: other_error, message: unexpected identifier; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'class', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'simproc', 'simproc_decl', 'structure', 'syntax', 'theorem' or 'unif_hint'
+2025-04-14 01:33:08 - INFO - Testing fragment: rw [div_mul_cancel]
+2025-04-14 01:33:08 - INFO - Original error line: theorem amc12a_2010_p22 (x : ℝ) : 49 ≤ ∑ k:ℤ in Finset.Icc 1 119, abs (↑k * x - 1) := by

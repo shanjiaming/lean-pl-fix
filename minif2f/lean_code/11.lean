@@ -5,51 +5,70 @@ set_option maxHeartbeats 0
 
 open BigOperators Real Nat Topology Rat
 
-/-- 
-What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
+/-- A sequence of numbers is defined recursively by $a_1 = 1$, $a_2 = \frac{3}{7}$, and
+$a_n=\frac{a_{n-2} \cdot a_{n-1}}{2a_{n-2} - a_{n-1}}$for all $n \geq 3$ Then $a_{2019}$ can be written as $\frac{p}{q}$, where $p$ and $q$ are relatively prime positive integers. What is $p+q ?$
 
-$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
-Show that it is \mathrm{(C)}.
-
-Proof outline:
-1. Let y be the side length of the original cube (volume = 1)
-2. Compute y from the volume equation y³ = 1
-3. Compute the surface area of original cube: 6y²
-4. The new cube has surface area twice this: 2*(6y²) = 12y²
-5. Let x be the side length of the new cube
-6. Set up equation for new cube's surface area: 6x² = 12y²
-7. Solve for x in terms of y
-8. Compute volume of new cube: x³
-9. Show this equals 2√2
--/
-theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
-  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
-  -- First, simplify the surface area equation h₂ by dividing both sides by 6
-  have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
-    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
-    exact h₂
-  
-  -- From the volume of the original cube (y³ = 1), we get y = 1
-  have h₄ : y = 1 := by
-    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
-  
-  -- Substitute y = 1 into the simplified equation x² = 2y²
-  have h₅ : x ^ 2 = 2 := by
-    rw [h₄, pow_two, mul_one] at h₃
-    exact h₃
-  
-  -- Since x > 0, we can take square root of both sides to get x = √2
-  have h₆ : x = Real.sqrt 2 := by
-    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
-  
-  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
-  rw [h₆, ← pow_three_sqrt_two]
-  
-  -- Helper lemma to show (√2)³ = 2 * √2
-  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
+$\textbf{(A) } 2020 \qquad\textbf{(B) } 4039 \qquad\textbf{(C) } 6057 \qquad\textbf{(D) } 6061 \qquad\textbf{(E) } 8078$ Show that it is \textbf{(E) }8078.-/
+theorem amc12a_2019_p9 (a : ℕ → ℚ) (h₀ : a 1 = 1) (h₁ : a 2 = 3 / 7)
+  (h₂ : ∀ n, a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))) :
+  ↑(a 2019).den + (a 2019).num = 8078 := by
+  -- Define the reciprocal sequence b_n = 1 / a_n
+  let b : ℕ → ℚ := fun n => 1 / a n
+  -- Show that b satisfies the recurrence b_{n+2} = 2b_{n+1} - b_n
+  have hb : ∀ n, b (n + 2) = 2 * b (n + 1) - b n := by
+    intro n
+    -- Compute b (n + 2) = 1 / a (n + 2) using the recurrence for a
+    rw [h₂ n]
+    -- Simplify the expression using the definition of b
+    field_simp [b]
+    -- The recurrence for b follows from algebraic manipulation
     ring
-  
-  -- Apply the helper lemma to complete the proof
-  exact pow_three_sqrt_two
+  -- Initial conditions for b: b 1 = 1 and b 2 = 7/3
+  have hb0 : b 1 = 1 := by rw [b, h₀, one_div_one]
+  have hb1 : b 2 = 7 / 3 := by rw [b, h₁, one_div, inv_div]
+  -- The recurrence for b is linear with constant coefficients
+  -- The general solution is b n = A + B * (n - 1)
+  -- We solve for A and B using the initial conditions
+  have hb_general : ∀ n, b n = 1 + (4 / 3) * (n - 1) := by
+    -- Prove by induction
+    intro n
+    induction n using Nat.recAux with
+    | zero => simp
+    | succ n ih =>
+      cases n with
+      | zero => exact hb0
+      | succ n =>
+        cases n with
+        | zero => exact hb1
+        | succ n =>
+          -- Use the recurrence relation and induction hypothesis
+          rw [hb n, ih n, ih (n + 1)]
+          -- Simplify to show the general form holds
+          ring
+  -- Now, derive the closed form for a_n = 1 / b_n = 3 / (4n - 1)
+  have ha_general : ∀ n, a n = 3 / (4 * n - 1) := by
+    intro n
+    rw [← one_div, b, hb_general n]
+    -- Simplify the expression
+    field_simp
+    ring
+  -- Compute a 2019 using the closed form
+  have ha2019 : a 2019 = 3 / (4 * 2019 - 1) := ha_general 2019
+  -- Simplify the denominator
+  have denom : 4 * 2019 - 1 = 8075 := by norm_num
+  rw [ha2019, denom]
+  -- Show that 3 / 8075 is in reduced form (gcd(3, 8075) = 1)
+  have gcd_eq : Nat.gcd 3 8075 = 1 := by
+    -- Compute the prime factorization of 8075 = 5^2 * 17 * 19
+    -- 3 does not divide 8075
+    rw [Nat.gcd_eq_left (Nat.dvd_gcd_iff.mpr ⟨by decide, by decide⟩)]
+  -- The numerator and denominator are coprime
+  have reduced : (3 / 8075).num = 3 ∧ (3 / 8075).den = 8075 := by
+    apply Rat.num_den_mk
+    · exact Nat.Prime.ne_one (by decide) (Nat.gcd_eq_one_iff_coprime.mp gcd_eq)
+    · exact gcd_eq
+  -- Extract numerator and denominator
+  rcases reduced with ⟨hnum, hden⟩
+  rw [hnum, hden]
+  -- Compute p + q = 3 + 8075 = 8078
+  norm_num

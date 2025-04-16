@@ -1,0 +1,78 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/42.lean",
+  "output_file": "/data/coding/minif2f/lean_fixed/42_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Let x, y, and z be integers. If $(x-y)^2 + (y-z)^2 + (z-x)^2 = xyz$, then $(x+y+z+6)$ divides $(x^3 + y^3 + z^3)$.-/\ntheorem algebra_xmysqpymzsqpzmxsqeqxyz_xpypzp6dvdx3y3z3 (x y z : \u2124)\n  (h\u2080 : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = x * y * z) :\n  x + y + z + 6 \u2223 x ^ 3 + y ^ 3 + z ^ 3 := by\n  -- First, we simplify the given equation by expanding the squares\n  have h\u2081 : 2 * (x^2 + y^2 + z^2 - x*y - y*z - z*x) = x*y*z := by\n    -- Expand each squared term in h\u2080\n    rw [sub_pow, sub_pow, sub_pow] at h\u2080\n    -- Simplify the equation by combining like terms\n    ring_nf at h\u2080\n    -- The left side becomes 2(x\u00b2 + y\u00b2 + z\u00b2 - xy - yz - zx)\n    rw [\u2190 h\u2080]\n    ring\n\n  -- Rewrite the divisibility condition in terms of (x + y + z)\n  suffices x + y + z + 6 \u2223 x^3 + y^3 + z^3 - 3*x*y*z by\n    -- Since 3xyz can be expressed using h\u2081\n    rw [show x^3 + y^3 + z^3 = (x + y + z)^3 - 3*(x + y + z)*(x*y + y*z + z*x) + 3*x*y*z by ring]\n    -- The divisibility condition reduces to showing (x + y + z + 6) divides the expression\n    simp [dvd_sub_right this]\n    ring\n\n  -- Now we focus on proving x + y + z + 6 divides x^3 + y^3 + z^3 - 3xyz\n  -- Using the identity x^3 + y^3 + z^3 - 3xyz = (x + y + z)(x^2 + y^2 + z^2 - xy - yz - zx)\n  rw [show x^3 + y^3 + z^3 - 3*x*y*z = (x + y + z) * (x^2 + y^2 + z^2 - x*y - y*z - z*x) by ring]\n  \n  -- From h\u2081, we can express x\u00b2 + y\u00b2 + z\u00b2 - xy - yz - zx as (x*y*z)/2\n  rw [\u2190 h\u2081, mul_div_cancel']\n  -- Now we have (x + y + z) * (x*y*z)/2\n  -- We need to show x + y + z + 6 divides this expression\n  \n  -- The key observation is that x, y, z must be even numbers\n  have h\u2082 : Even (x*y*z) := by\n    -- From h\u2081, x*y*z is twice an integer\n    rw [\u2190 h\u2081]\n    exact Even.mul_left 2 _\n  \n  -- Case analysis on the parity of x + y + z\n  rcases Int.even_or_odd (x + y + z) with \u27e8k, hk\u27e9 | \u27e8k, hk\u27e9\n  \u00b7 -- Case 1: x + y + z is even\n    -- Then x + y + z + 6 is even\n    -- We can factor out 2 from both terms\n    rw [hk, Int.add_mul, Int.mul_div_cancel_left _ (by norm_num : (2 : \u2124) \u2260 0)]\n    -- Now we have 2 * (k + 3) divides (2 * k) * (x*y*z)/2 = k * (x*y*z)\n    simp [mul_comm]\n    -- Since x*y*z is even (h\u2082), and k + 3 divides k when k = -3, -2, -1, 0, 1, 2, 3\n    -- This requires more detailed analysis of possible cases\n    sorry -- This part would need more case analysis\n    \n  \u00b7 -- Case 2: x + y + z is odd\n    -- Then x + y + z + 6 is odd\n    -- From h\u2082, x*y*z is even, so (x*y*z)/2 is integer\n    -- We need to show the divisibility holds\n    sorry -- This part would need more detailed analysis\n\n  -- The proof would continue with more case analysis based on possible values,\n  -- but this shows the general structure and key steps.\n  -- The complete proof would involve:\n  -- 1. Showing symmetry allows assuming x \u2264 y \u2264 z\n  -- 2. Bounding possible values of x, y, z\n  -- 3. Checking small integer cases\n  -- 4. Showing no solutions exist beyond certain bounds",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Let x, y, and z be integers. If $(x-y)^2 + (y-z)^2 + (z-x)^2 = xyz$, then $(x+y+z+6)$ divides $(x^3 + y^3 + z^3)$.-/\ntheorem algebra_xmysqpymzsqpzmxsqeqxyz_xpypzp6dvdx3y3z3 (x y z : \u2124)\n  (h\u2080 : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = x * y * z) :\n  x + y + z + 6 \u2223 x ^ 3 + y ^ 3 + z ^ 3 := by\n  -- First, we simplify the given equation by expanding the squares\n  have h\u2081 : 2 * (x^2 + y^2 + z^2 - x*y - y*z - z*x) = x*y*z := by\n    -- Expand each squared term in h\u2080\n    norm_num\n    -- Simplify the equation by combining like terms\n    ring_nf at h\u2080\n    -- The left side becomes 2(x\u00b2 + y\u00b2 + z\u00b2 - xy - yz - zx)\n    rw [\u2190 h\u2080]\n    ring\n\n  -- Rewrite the divisibility condition in terms of (x + y + z)\n  suffices x + y + z + 6 \u2223 x^3 + y^3 + z^3 - 3*x*y*z by\n    -- Since 3xyz can be expressed using h\u2081\n    rw [show x^3 + y^3 + z^3 = (x + y + z)^3 - 3*(x + y + z)*(x*y + y*z + z*x) + 3*x*y*z by ring]\n    -- The divisibility condition reduces to showing (x + y + z + 6) divides the expression\n    simp [dvd_sub_right this]\n    ring\n\n  -- Now we focus on proving x + y + z + 6 divides x^3 + y^3 + z^3 - 3xyz\n  -- Using the identity x^3 + y^3 + z^3 - 3xyz = (x + y + z)(x^2 + y^2 + z^2 - xy - yz - zx)\n  rw [show x^3 + y^3 + z^3 - 3*x*y*z = (x + y + z) * (x^2 + y^2 + z^2 - x*y - y*z - z*x) by ring]\n  \n  -- From h\u2081, we can express x\u00b2 + y\u00b2 + z\u00b2 - xy - yz - zx as (x*y*z)/2\n  rw [\u2190 h\u2081, mul_div_cancel']\n  -- Now we have (x + y + z) * (x*y*z)/2\n  -- We need to show x + y + z + 6 divides this expression\n  \n  -- The key observation is that x, y, z must be even numbers\n  have h\u2082 : Even (x*y*z) := by\n    -- From h\u2081, x*y*z is twice an integer\n    rw [\u2190 h\u2081]\n    exact Even.mul_left 2 _\n  \n  -- Case analysis on the parity of x + y + z\n  rcases Int.even_or_odd (x + y + z) with \u27e8k, hk\u27e9 | \u27e8k, hk\u27e9\n  \u00b7 -- Case 1: x + y + z is even\n    -- Then x + y + z + 6 is even\n    -- We can factor out 2 from both terms\n    rw [hk, Int.add_mul, Int.mul_div_cancel_left _ (by norm_num : (2 : \u2124) \u2260 0)]\n    -- Now we have 2 * (k + 3) divides (2 * k) * (x*y*z)/2 = k * (x*y*z)\n    simp [mul_comm]\n    -- Since x*y*z is even (h\u2082), and k + 3 divides k when k = -3, -2, -1, 0, 1, 2, 3\n    -- This requires more detailed analysis of possible cases\n    sorry -- This part would need more case analysis\n    \n  \u00b7 -- Case 2: x + y + z is odd\n    -- Then x + y + z + 6 is odd\n    -- From h\u2082, x*y*z is even, so (x*y*z)/2 is integer\n    -- We need to show the divisibility holds\n    sorry -- This part would need more detailed analysis\n\n  -- The proof would continue with more case analysis based on possible values,\n  -- but this shows the general structure and key steps.\n  -- The complete proof would involve:\n  -- 1. Showing symmetry allows assuming x \u2264 y \u2264 z\n  -- 2. Bounding possible values of x, y, z\n  -- 3. Checking small integer cases\n  -- 4. Showing no solutions exist beyond certain bounds",
+  "statistics": {
+    "original_errors": 4,
+    "failed_errors": 3,
+    "remaining_errors": 2,
+    "fix_rate": 0.25,
+    "successful_fixes": [
+      {
+        "line": 8,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'sub_pow'",
+        "fix_snippet": "norm_num",
+        "fixed_line": "    norm_num",
+        "fix_time": 14.026611566543579,
+        "fixed_errors": [
+          {
+            "line": 20,
+            "column": 4,
+            "end_line": 20,
+            "end_column": 29,
+            "message": "simp made no progress",
+            "severity": "error"
+          },
+          {
+            "line": 28,
+            "column": 6,
+            "end_line": 28,
+            "end_column": 10,
+            "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  x * y * z\nx y z : \u2124\nh\u2080 : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = x * y * z\nh\u2081 : 2 * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x) = x * y * z\n\u22a2 x + y + z + 6 \u2223 (x + y + z) * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x)",
+            "severity": "error"
+          }
+        ]
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 8,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  ?m.2689\nx y z : \u2124\nh\u2080 : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = x * y * z\n\u22a2 2 * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x) = x * y * z",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 23.039921522140503
+      },
+      {
+        "line": 20,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.037774085998535
+      },
+      {
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  x * y * z\nx y z : \u2124\nh\u2080 : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = x * y * z\nh\u2081 : 2 * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x) = x * y * z\n\u22a2 x + y + z + 6 \u2223 (x + y + z) * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x)",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 23.042500734329224
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 20,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress"
+      },
+      {
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  x * y * z\nx y z : \u2124\nh\u2080 : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = x * y * z\nh\u2081 : 2 * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x) = x * y * z\n\u22a2 x + y + z + 6 \u2223 (x + y + z) * (x ^ 2 + y ^ 2 + z ^ 2 - x * y - y * z - z * x)"
+      }
+    ],
+    "total_time": 84.1509120464325
+  },
+  "message": "Original code error count: 4\n\u2705 Fixed error 1/4: Successfully fixed error at line 8 \u00abunknown_identifier\u00bb (in 14.03s)\n\u274c Fixed error 2/4: Could not generate fix for error at line 8 \u00abrewrite_failed\u00bb (after 23.04s)\n\u274c Fixed error 3/4: Could not generate fix for error at line 20 \u00absimp_failed\u00bb (after 22.04s)\n\u274c Fixed error 4/4: Could not generate fix for error at line 28 \u00abrewrite_failed\u00bb (after 23.04s)\n\n=== Fix statistics ===\nOriginal error count: 4\nFixed errors: 1 (Fix rate: 0.2500)\nFailed errors: 3\nRemaining errors: 2\nTotal time: 84.15 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 8\n   Error type: unknown_identifier\n   Original error message: unknown identifier 'sub_pow'...\n   Fix snippet: norm_num\n   Fixed line:     norm_num\n   Time: 14.03 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 8\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  ?m.2689\nx y z : \u2124\nh\u2080 : (x - y) ^ 2 + (y - ...\n   Failure reason: Could not generate fix\n   Time: 23.04 seconds\n\nFailed fix 2:\n   Line: 20\n   Error type: simp_failed\n   Original error message: simp made no progress...\n   Failure reason: Could not generate fix\n   Time: 22.04 seconds\n\nFailed fix 3:\n   Line: 28\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  x * y * z\nx...\n   Failure reason: Could not generate fix\n   Time: 23.04 seconds"
+}

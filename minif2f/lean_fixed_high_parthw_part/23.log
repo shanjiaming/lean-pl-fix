@@ -1,0 +1,2017 @@
+2025-04-14 01:19:13 - INFO - Log file initialized at 2025-04-14T01:19:13.842044
+2025-04-14 01:19:13 - INFO - ===== LOG FILE LOCATION =====
+2025-04-14 01:19:13 - INFO - Detailed log file created at: /data/coding/minif2f/lean_fixed/23.log
+2025-04-14 01:19:13 - INFO - ===============================
+2025-04-14 01:19:13 - INFO - Original code:
+2025-04-14 01:19:13 - INFO - ----------------------------------------
+2025-04-14 01:19:13 - INFO - import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+/-- Find an integer $n$ such that $0\leq n<398$ and $n$ is a multiplicative inverse to 7 modulo 398. Show that it is 57.-/
+theorem mathd_numbertheory_33 (n : ℕ) (h₀ : n < 398) (h₁ : n * 7 % 398 = 1) : n = 57 := by
+  -- We need to find the multiplicative inverse of 7 modulo 398, i.e., a number n such that 7*n ≡ 1 mod 398
+  -- This is equivalent to finding integers n and k such that 7n = 398k + 1
+  -- We can solve this using the Extended Euclidean Algorithm to find the coefficients of Bézout's identity
+
+  -- First, we'll compute gcd(7, 398) using the Euclidean algorithm to verify that an inverse exists
+  have gcd_eq : gcd 7 398 = 1 := by
+    rw [gcd_rec, gcd_rec, gcd_rec, gcd_rec, gcd_rec]
+    norm_num
+  -- Since gcd(7, 398) = 1, an inverse exists
+
+  -- Now we'll find the inverse using the Extended Euclidean Algorithm
+  -- We want to express 1 as a combination of 7 and 398: 1 = 7*x + 398*y
+  -- The x coefficient will be our inverse (mod 398)
+
+  -- Applying the Extended Euclidean Algorithm step-by-step:
+  -- 398 = 56 * 7 + 6
+  -- 7 = 1 * 6 + 1
+  -- 6 = 6 * 1 + 0
+  -- Now back-substitute to express 1 in terms of 7 and 398:
+  -- 1 = 7 - 1 * 6
+  --   = 7 - 1 * (398 - 56 * 7)
+  --   = 57 * 7 - 1 * 398
+
+  -- Therefore, the coefficient for 7 is 57, which is our inverse
+
+  -- Now we need to verify that 57 is indeed the inverse modulo 398
+  have key_identity : 57 * 7 - 1 = 398 * 1 := by norm_num
+  -- This shows that 57 * 7 ≡ 1 mod 398
+
+  -- Since inverses are unique modulo 398 (because gcd(7,398)=1), and both n and 57 are < 398,
+  -- they must be equal
+
+  -- Convert the modular equation to a divisibility statement
+  have h_div : 398 ∣ 7 * n - 1 := by
+    rw [← h₁]
+    exact mod_eq_zero_of_dvd (dvd_mul_of_dvd_right (dvd_refl 7) n)
+
+  -- From our key identity, we also know 398 ∣ 7 * 57 - 1
+  have h_div_57 : 398 ∣ 7 * 57 - 1 := by
+    rw [key_identity]
+    exact dvd_refl 398
+
+  -- Therefore, 398 divides the difference: 398 ∣ 7*(n - 57)
+  have h_diff : 398 ∣ 7 * (n - 57) := by
+    rw [mul_sub]
+    exact dvd_sub h_div h_div_57
+
+  -- Since gcd(7,398)=1, by Euclid's lemma, 398 must divide (n - 57)
+  have h_final : 398 ∣ n - 57 :=
+    dvd_of_mul_dvd_mul_left (by exact gcd_eq.symm ▸ Nat.one_pos) h_diff
+
+  -- Now we know n ≡ 57 mod 398
+  -- But both n and 57 are natural numbers less than 398 (from h₀ and by computation)
+  have h_57_lt : 57 < 398 := by norm_num
+
+  -- Therefore, the only possibility is n = 57
+  exact (eq_of_abs_sub_lt_dvd h_final (by omega)).symm
+2025-04-14 01:19:13 - INFO - ----------------------------------------
+2025-04-14 01:19:13 - INFO - 
+Checking original code for all errors...
+2025-04-14 01:23:43 - INFO - Original code contains 7 errors:
+2025-04-14 01:23:43 - INFO - Error 1: line 8, type: other_error, message: ambiguous, possible interpretations 
+  Nat.gcd 7 398 : ℕ
+  
+  GCDMonoid.gcd 7 398 : ?m.251...
+2025-04-14 01:23:43 - INFO - Error 2: line 9, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.gcd ?n
+n...
+2025-04-14 01:23:43 - INFO - Error 3: line 38, type: type_mismatch, message: type mismatch
+  mod_eq_zero_of_dvd (dvd_mul_of_dvd_right (dvd_refl 7) n)
+has type
+  n * 7 % 7 = 0 : ...
+2025-04-14 01:23:43 - INFO - Error 4: line 43, type: no_goals_to_solve, message: no goals to be solved...
+2025-04-14 01:23:43 - INFO - Error 5: line 47, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ...
+2025-04-14 01:23:43 - INFO - Error 6: line 52, type: unknown_identifier, message: unknown identifier 'dvd_of_mul_dvd_mul_left'...
+2025-04-14 01:23:43 - INFO - Error 7: line 59, type: unknown_identifier, message: unknown identifier 'eq_of_abs_sub_lt_dvd'...
+2025-04-14 01:23:43 - INFO - 
+Starting multi-error continuous repair process...
+2025-04-14 01:23:43 - INFO - 
+===== Starting to fix all errors =====
+2025-04-14 01:23:44 - INFO - 
+Found 7 original errors:
+2025-04-14 01:23:44 - INFO - Error 1: line 8, type: other_error, message: ambiguous, possible interpretations 
+  Nat.gcd 7 398 : ℕ
+  
+  GCDMonoid.gcd 7 398 : ?m.251...
+2025-04-14 01:23:44 - INFO - Error 2: line 9, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.gcd ?n
+n...
+2025-04-14 01:23:44 - INFO - Error 3: line 38, type: type_mismatch, message: type mismatch
+  mod_eq_zero_of_dvd (dvd_mul_of_dvd_right (dvd_refl 7) n)
+has type
+  n * 7 % 7 = 0 : ...
+2025-04-14 01:23:44 - INFO - Error 4: line 43, type: no_goals_to_solve, message: no goals to be solved...
+2025-04-14 01:23:44 - INFO - Error 5: line 47, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ...
+2025-04-14 01:23:44 - INFO - Error 6: line 52, type: unknown_identifier, message: unknown identifier 'dvd_of_mul_dvd_mul_left'...
+2025-04-14 01:23:44 - INFO - Error 7: line 59, type: unknown_identifier, message: unknown identifier 'eq_of_abs_sub_lt_dvd'...
+2025-04-14 01:23:44 - INFO - 
+Trying to fix error 1/7: line 8, type: other_error
+2025-04-14 01:23:44 - INFO - Error message: ambiguous, possible interpretations 
+  Nat.gcd 7 398 : ℕ
+  
+  GCDMonoid.gcd 7 398 : ?m.251...
+2025-04-14 01:23:44 - INFO - Removed header content, remaining 59 lines of code
+2025-04-14 01:23:44 - INFO - Using specified target error line: 8
+2025-04-14 01:23:45 - INFO - Found error at specified line: ambiguous, possible interpretations 
+  Nat.gcd 7 398 : ℕ
+  
+  GCDMonoid.gcd 7 398 : ?m.251
+2025-04-14 01:23:45 - INFO - Error at line 8: ambiguous, possible interpretations 
+  Nat.gcd 7 398 : ℕ
+  
+  GCDMonoid.gcd 7 398 : ?m.251
+2025-04-14 01:23:45 - INFO - 
+==================================================
+2025-04-14 01:23:45 - INFO - Code prepared, starting synthesis
+2025-04-14 01:23:45 - INFO - Before part: /-- Find an integer $n$ such that $0\leq n<398$ and $n$ is a multiplicative inverse to 7 modulo 398. Show that it is 57.-/
+theorem mathd_numbertheory_33 (n : ℕ) (h₀ : n < 398) (h₁ : n * 7 % 398 = 1) : n = 57 := by
+  -- We need to find the multiplicative inverse of 7 modulo 398, i.e., a number n such that 7*n ≡ 1 mod 398
+  -- This is equivalent to finding integers n and k such that 7n = 398k + 1
+  -- We can solve this using the Extended Euclidean Algorithm to find the coefficients of Bézout's identity
+
+  -- First, we'll compute gcd(7, 398) using the Euclidean algorithm to verify that an inverse exists
+2025-04-14 01:23:45 - INFO - Error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:45 - INFO - After part: rw [gcd_rec, gcd_rec, gcd_rec, gcd_rec, gcd_rec]
+    norm_num
+  -- Since gcd(7, 398) = 1, an inverse exists
+
+  -- Now we'll find the inverse using the Extended Euclidean Algorithm
+  -- We want to express 1 as a combination of 7 and 398: 1 = 7*x + 398*y
+  -- The x coefficient will be our inverse (mod 398)
+
+  -- Applying the Extended Euclidean Algorithm step-by-step:
+  -- 398 = 56 * 7 + 6
+  -- 7 = 1 * 6 + 1
+  -- 6 = 6 * 1 + 0
+  -- Now back-substitute to express 1 in terms of 7 and 398:
+  -- 1 = 7 - 1 * 6
+  --   = 7 - 1 * (398 - 56 * 7)
+  --   = 57 * 7 - 1 * 398
+
+  -- Therefore, the coefficient for 7 is 57, which is our inverse
+
+  -- Now we need to verify that 57 is indeed the inverse modulo 398
+  have key_identity : 57 * 7 - 1 = 398 * 1 := by norm_num
+  -- This shows that 57 * 7 ≡ 1 mod 398
+
+  -- Since inverses are unique modulo 398 (because gcd(7,398)=1), and both n and 57 are < 398,
+  -- they must be equal
+
+  -- Convert the modular equation to a divisibility statement
+  have h_div : 398 ∣ 7 * n - 1 := by
+    rw [← h₁]
+    exact mod_eq_zero_of_dvd (dvd_mul_of_dvd_right (dvd_refl 7) n)
+
+  -- From our key identity, we also know 398 ∣ 7 * 57 - 1
+  have h_div_57 : 398 ∣ 7 * 57 - 1 := by
+    rw [key_identity]
+    exact dvd_refl 398
+
+  -- Therefore, 398 divides the difference: 398 ∣ 7*(n - 57)
+  have h_diff : 398 ∣ 7 * (n - 57) := by
+    rw [mul_sub]
+    exact dvd_sub h_div h_div_57
+
+  -- Since gcd(7,398)=1, by Euclid's lemma, 398 must divide (n - 57)
+  have h_final : 398 ∣ n - 57 :=
+    dvd_of_mul_dvd_mul_left (by exact gcd_eq.symm ▸ Nat.one_pos) h_diff
+
+  -- Now we know n ≡ 57 mod 398
+  -- But both n and 57 are natural numbers less than 398 (from h₀ and by computation)
+  have h_57_lt : 57 < 398 := by norm_num
+
+  -- Therefore, the only possibility is n = 57
+  exact (eq_of_abs_sub_lt_dvd h_final (by omega)).symm
+2025-04-14 01:23:45 - INFO - ==================================================
+
+2025-04-14 01:23:46 - INFO - Testing fragment: rw [left_distrib]
+2025-04-14 01:23:46 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:48 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:23:48 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:23:48 - DEBUG - === New errors detail ===
+2025-04-14 01:23:48 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + ?c)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:23:48 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:23:48 - INFO - Testing fragment: rw [right_distrib]
+2025-04-14 01:23:48 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:50 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:23:50 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:23:50 - DEBUG - === New errors detail ===
+2025-04-14 01:23:50 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:23:50 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:23:50 - INFO - Testing fragment: rw [distrib_three_right]
+2025-04-14 01:23:50 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:52 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:23:52 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:23:52 - DEBUG - === New errors detail ===
+2025-04-14 01:23:52 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b + ?c) * ?d
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:23:52 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:23:52 - INFO - Testing fragment: rw [add_one_mul]
+2025-04-14 01:23:52 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:54 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:23:54 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:23:54 - DEBUG - === New errors detail ===
+2025-04-14 01:23:54 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + 1) * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:23:54 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:23:54 - INFO - Testing fragment: rw [mul_add_one]
+2025-04-14 01:23:54 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:56 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:23:56 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:23:56 - DEBUG - === New errors detail ===
+2025-04-14 01:23:56 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + 1)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:23:56 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:23:56 - INFO - Testing fragment: rw [one_add_mul]
+2025-04-14 01:23:56 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:23:58 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:23:58 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:23:58 - DEBUG - === New errors detail ===
+2025-04-14 01:23:58 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 + ?a) * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:23:58 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:23:58 - INFO - Testing fragment: rw [mul_one_add]
+2025-04-14 01:23:58 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:00 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:00 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:00 - DEBUG - === New errors detail ===
+2025-04-14 01:24:00 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 + ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:00 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:00 - INFO - Testing fragment: rw [two_mul]
+2025-04-14 01:24:00 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:02 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:02 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:02 - DEBUG - === New errors detail ===
+2025-04-14 01:24:02 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  2 * ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:02 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:02 - INFO - Testing fragment: rw [mul_two]
+2025-04-14 01:24:02 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:04 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:04 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:04 - DEBUG - === New errors detail ===
+2025-04-14 01:24:04 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * 2
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:04 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:04 - INFO - Testing fragment: rw [mul_boole]
+2025-04-14 01:24:04 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:06 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:06 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:06 - DEBUG - === New errors detail ===
+2025-04-14 01:24:06 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * if ?P then 1 else 0
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:06 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:06 - INFO - Testing fragment: rw [boole_mul]
+2025-04-14 01:24:06 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:08 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:08 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:08 - DEBUG - === New errors detail ===
+2025-04-14 01:24:08 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (if ?P then 1 else 0) * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:08 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:08 - INFO - Testing fragment: rw [add_mul_self_eq]
+2025-04-14 01:24:08 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:10 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:10 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:10 - DEBUG - === New errors detail ===
+2025-04-14 01:24:10 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * (?a + ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:10 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:10 - INFO - Testing fragment: rw [neg_mul]
+2025-04-14 01:24:10 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:12 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:12 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:12 - DEBUG - === New errors detail ===
+2025-04-14 01:24:12 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:12 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:12 - INFO - Testing fragment: rw [mul_neg]
+2025-04-14 01:24:12 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:14 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:14 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:14 - DEBUG - === New errors detail ===
+2025-04-14 01:24:14 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:14 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:14 - INFO - Testing fragment: rw [neg_mul_neg]
+2025-04-14 01:24:14 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:16 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:16 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:16 - DEBUG - === New errors detail ===
+2025-04-14 01:24:16 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * -?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:16 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:16 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
+2025-04-14 01:24:16 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:18 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:18 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:18 - DEBUG - === New errors detail ===
+2025-04-14 01:24:18 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:18 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:18 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
+2025-04-14 01:24:18 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:20 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:20 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:20 - DEBUG - === New errors detail ===
+2025-04-14 01:24:20 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:20 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:20 - INFO - Testing fragment: rw [neg_mul_comm]
+2025-04-14 01:24:20 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:22 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:22 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:22 - DEBUG - === New errors detail ===
+2025-04-14 01:24:22 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:22 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:22 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
+2025-04-14 01:24:22 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:24 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:24 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:24 - DEBUG - === New errors detail ===
+2025-04-14 01:24:24 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:24 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:24 - INFO - Testing fragment: rw [mul_neg_one]
+2025-04-14 01:24:24 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:26 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:26 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:26 - DEBUG - === New errors detail ===
+2025-04-14 01:24:26 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -1
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:26 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:26 - INFO - Testing fragment: rw [neg_one_mul]
+2025-04-14 01:24:26 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:28 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:28 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:28 - DEBUG - === New errors detail ===
+2025-04-14 01:24:28 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:28 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:28 - INFO - Testing fragment: rw [mul_sub_left_distrib]
+2025-04-14 01:24:28 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:30 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:30 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:30 - DEBUG - === New errors detail ===
+2025-04-14 01:24:30 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ?c)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:30 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:30 - INFO - Testing fragment: rw [mul_sub_right_distrib]
+2025-04-14 01:24:30 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:32 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:32 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:32 - DEBUG - === New errors detail ===
+2025-04-14 01:24:32 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - ?b) * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:32 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:32 - INFO - Testing fragment: rw [sub_one_mul]
+2025-04-14 01:24:32 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:34 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:34 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:34 - DEBUG - === New errors detail ===
+2025-04-14 01:24:34 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - 1) * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:34 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:34 - INFO - Testing fragment: rw [mul_sub_one]
+2025-04-14 01:24:34 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:36 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:36 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:36 - DEBUG - === New errors detail ===
+2025-04-14 01:24:36 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - 1)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:36 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:36 - INFO - Testing fragment: rw [one_sub_mul]
+2025-04-14 01:24:36 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:38 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:38 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:38 - DEBUG - === New errors detail ===
+2025-04-14 01:24:38 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 - ?a) * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:38 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:38 - INFO - Testing fragment: rw [mul_one_sub]
+2025-04-14 01:24:38 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:40 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:40 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:40 - DEBUG - === New errors detail ===
+2025-04-14 01:24:40 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 - ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:40 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:40 - INFO - Testing fragment: rw [mul_left_cancel]
+2025-04-14 01:24:40 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:42 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:42 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:42 - DEBUG - === New errors detail ===
+2025-04-14 01:24:42 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.228
+from equation
+  ?m.228 = ?m.229
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:42 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:42 - INFO - Testing fragment: rw [mul_left_cancel_iff]
+2025-04-14 01:24:42 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:44 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:44 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:44 - DEBUG - === New errors detail ===
+2025-04-14 01:24:44 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.227 * ?m.228 = ?m.227 * ?m.229
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:44 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:44 - INFO - Testing fragment: rw [mul_right_injective]
+2025-04-14 01:24:44 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:46 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:46 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:46 - DEBUG - === New errors detail ===
+2025-04-14 01:24:46 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:46 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:46 - INFO - Testing fragment: rw [mul_right_inj]
+2025-04-14 01:24:46 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:48 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:48 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:48 - DEBUG - === New errors detail ===
+2025-04-14 01:24:48 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b = ?a * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:48 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:48 - INFO - Testing fragment: rw [mul_ne_mul_right]
+2025-04-14 01:24:48 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:50 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:50 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:50 - DEBUG - === New errors detail ===
+2025-04-14 01:24:50 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b ≠ ?a * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:50 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:50 - INFO - Testing fragment: rw [mul_right_cancel]
+2025-04-14 01:24:50 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:52 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:52 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:52 - DEBUG - === New errors detail ===
+2025-04-14 01:24:52 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.227
+from equation
+  ?m.227 = ?m.229
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:52 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:52 - INFO - Testing fragment: rw [mul_right_cancel_iff]
+2025-04-14 01:24:52 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:54 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:54 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:54 - DEBUG - === New errors detail ===
+2025-04-14 01:24:54 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.228 * ?m.227 = ?m.229 * ?m.227
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:54 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:54 - INFO - Testing fragment: rw [mul_left_injective]
+2025-04-14 01:24:54 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:56 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:56 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:56 - DEBUG - === New errors detail ===
+2025-04-14 01:24:56 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:56 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:56 - INFO - Testing fragment: rw [mul_left_inj]
+2025-04-14 01:24:56 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:24:58 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:24:58 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:24:58 - DEBUG - === New errors detail ===
+2025-04-14 01:24:58 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a = ?c * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:24:58 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:24:58 - INFO - Testing fragment: rw [mul_ne_mul_left]
+2025-04-14 01:24:58 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:00 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:00 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:00 - DEBUG - === New errors detail ===
+2025-04-14 01:25:00 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a ≠ ?c * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:00 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:00 - INFO - Testing fragment: rw [mul_assoc]
+2025-04-14 01:25:00 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:02 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:02 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:02 - DEBUG - === New errors detail ===
+2025-04-14 01:25:02 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:02 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:02 - INFO - Testing fragment: rw [mul_comm]
+2025-04-14 01:25:02 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:04 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:04 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:04 - DEBUG - === New errors detail ===
+2025-04-14 01:25:04 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:04 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:04 - INFO - Testing fragment: rw [MulOneClass]
+2025-04-14 01:25:04 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:06 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:06 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:06 - DEBUG - === New errors detail ===
+2025-04-14 01:25:06 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:06 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:06 - INFO - Testing fragment: rw [one_mul]
+2025-04-14 01:25:06 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:08 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:08 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:08 - DEBUG - === New errors detail ===
+2025-04-14 01:25:08 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:08 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:08 - INFO - Testing fragment: rw [mul_one]
+2025-04-14 01:25:08 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:10 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:10 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:10 - DEBUG - === New errors detail ===
+2025-04-14 01:25:10 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:10 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:10 - INFO - Testing fragment: rw [npowRec_add]
+2025-04-14 01:25:10 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:12 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:12 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:12 - DEBUG - === New errors detail ===
+2025-04-14 01:25:12 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-14 01:25:12 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:12 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:12 - INFO - Testing fragment: rw [npowRec_succ]
+2025-04-14 01:25:12 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:14 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:14 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:14 - DEBUG - === New errors detail ===
+2025-04-14 01:25:14 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-14 01:25:14 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:14 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:14 - INFO - Testing fragment: rw [npowRec'_succ]
+2025-04-14 01:25:14 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:16 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:16 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:16 - DEBUG - === New errors detail ===
+2025-04-14 01:25:16 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-14 01:25:16 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:16 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:16 - INFO - Testing fragment: rw [npowRec'_two_mul]
+2025-04-14 01:25:16 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:18 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:18 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:18 - DEBUG - === New errors detail ===
+2025-04-14 01:25:18 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-14 01:25:18 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:18 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:18 - INFO - Testing fragment: rw [npowRec'_mul_comm]
+2025-04-14 01:25:18 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:20 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:20 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:20 - DEBUG - === New errors detail ===
+2025-04-14 01:25:20 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-14 01:25:20 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:20 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:20 - INFO - Testing fragment: rw [npowRec_eq]
+2025-04-14 01:25:20 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:22 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:22 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:22 - DEBUG - === New errors detail ===
+2025-04-14 01:25:22 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-14 01:25:22 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:22 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:22 - INFO - Testing fragment: rw [npowBinRec]
+2025-04-14 01:25:22 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:24 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:24 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:24 - DEBUG - === New errors detail ===
+2025-04-14 01:25:24 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-14 01:25:24 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:24 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:24 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
+2025-04-14 01:25:24 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:26 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:26 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:26 - DEBUG - === New errors detail ===
+2025-04-14 01:25:26 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-14 01:25:26 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:26 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:26 - INFO - Testing fragment: rw [npow_eq_pow]
+2025-04-14 01:25:26 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:28 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:28 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:28 - DEBUG - === New errors detail ===
+2025-04-14 01:25:28 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Monoid.npow ?n ?x
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:28 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:28 - INFO - Testing fragment: rw [pow_zero]
+2025-04-14 01:25:28 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:30 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:30 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:30 - DEBUG - === New errors detail ===
+2025-04-14 01:25:30 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:30 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:30 - INFO - Testing fragment: rw [pow_succ]
+2025-04-14 01:25:30 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:32 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:32 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:32 - DEBUG - === New errors detail ===
+2025-04-14 01:25:32 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ (?n + 1)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:32 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:32 - INFO - Testing fragment: rw [inv_inv]
+2025-04-14 01:25:32 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:34 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:34 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:34 - DEBUG - === New errors detail ===
+2025-04-14 01:25:34 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:34 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:34 - INFO - Testing fragment: rw [exists_zpow_surjective]
+2025-04-14 01:25:34 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:36 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:25:36 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:25:36 - DEBUG - === New errors detail ===
+2025-04-14 01:25:36 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-14 01:25:36 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:36 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:36 - INFO - Testing fragment: rw [zpow_eq_pow]
+2025-04-14 01:25:36 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:38 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:38 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:38 - DEBUG - === New errors detail ===
+2025-04-14 01:25:38 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  DivInvMonoid.zpow ?n ?x
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:38 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:38 - INFO - Testing fragment: rw [zpow_zero]
+2025-04-14 01:25:38 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:40 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:40 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:40 - DEBUG - === New errors detail ===
+2025-04-14 01:25:40 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:40 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:40 - INFO - Testing fragment: rw [zpow_natCast]
+2025-04-14 01:25:40 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:42 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:42 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:42 - DEBUG - === New errors detail ===
+2025-04-14 01:25:42 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ↑?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:42 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:42 - INFO - Testing fragment: rw [zpow_negSucc]
+2025-04-14 01:25:42 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:44 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:44 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:44 - DEBUG - === New errors detail ===
+2025-04-14 01:25:44 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ Int.negSucc ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:44 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:44 - INFO - Testing fragment: rw [negSucc_zsmul]
+2025-04-14 01:25:44 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:46 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:46 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:46 - DEBUG - === New errors detail ===
+2025-04-14 01:25:46 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Int.negSucc ?n • ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:46 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:46 - INFO - Testing fragment: rw [div_eq_mul_inv]
+2025-04-14 01:25:46 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:48 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:48 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:48 - DEBUG - === New errors detail ===
+2025-04-14 01:25:48 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:48 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:48 - INFO - Testing fragment: rw [inv_eq_one_div]
+2025-04-14 01:25:48 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:50 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:50 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:50 - DEBUG - === New errors detail ===
+2025-04-14 01:25:50 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:50 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:50 - INFO - Testing fragment: rw [mul_div_assoc]
+2025-04-14 01:25:50 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:52 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:52 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:52 - DEBUG - === New errors detail ===
+2025-04-14 01:25:52 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:52 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:52 - INFO - Testing fragment: rw [one_div]
+2025-04-14 01:25:52 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:54 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:54 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:54 - DEBUG - === New errors detail ===
+2025-04-14 01:25:54 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:54 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:54 - INFO - Testing fragment: rw [inv_one]
+2025-04-14 01:25:54 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:56 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:56 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:56 - DEBUG - === New errors detail ===
+2025-04-14 01:25:56 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:56 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:56 - INFO - Testing fragment: rw [mul_inv_rev]
+2025-04-14 01:25:56 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:25:58 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:25:58 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:25:58 - DEBUG - === New errors detail ===
+2025-04-14 01:25:58 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a * ?b)⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:25:58 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:25:58 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_right]
+2025-04-14 01:25:58 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:00 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:00 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:00 - DEBUG - === New errors detail ===
+2025-04-14 01:26:00 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.226⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:00 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:00 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_left]
+2025-04-14 01:26:00 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:02 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:02 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:02 - DEBUG - === New errors detail ===
+2025-04-14 01:26:02 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.227⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:02 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:02 - INFO - Testing fragment: rw [eq_inv_of_mul_eq_one_left]
+2025-04-14 01:26:02 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:04 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:04 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:04 - DEBUG - === New errors detail ===
+2025-04-14 01:26:04 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.226
+from equation
+  ?m.226 = ?m.227⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:04 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:04 - INFO - Testing fragment: rw [inv_mul_cancel]
+2025-04-14 01:26:04 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:06 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:06 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:06 - DEBUG - === New errors detail ===
+2025-04-14 01:26:06 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.226⁻¹ * ?m.226
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:06 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:06 - INFO - Testing fragment: rw [inv_eq_of_mul]
+2025-04-14 01:26:06 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:08 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:26:08 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:26:08 - DEBUG - === New errors detail ===
+2025-04-14 01:26:08 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-14 01:26:08 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:08 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:08 - INFO - Testing fragment: rw [mul_inv_cancel]
+2025-04-14 01:26:08 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:10 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:10 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:10 - DEBUG - === New errors detail ===
+2025-04-14 01:26:10 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.226 * ?m.226⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:10 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:10 - INFO - Testing fragment: rw [div_self']
+2025-04-14 01:26:10 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:12 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:12 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:12 - DEBUG - === New errors detail ===
+2025-04-14 01:26:12 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:12 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:12 - INFO - Testing fragment: rw [inv_mul_cancel_left]
+2025-04-14 01:26:12 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:14 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:14 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:14 - DEBUG - === New errors detail ===
+2025-04-14 01:26:14 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹ * (?a * ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:14 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:14 - INFO - Testing fragment: rw [mul_inv_cancel_left]
+2025-04-14 01:26:14 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:16 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:16 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:16 - DEBUG - === New errors detail ===
+2025-04-14 01:26:16 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?a⁻¹ * ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:16 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:16 - INFO - Testing fragment: rw [mul_inv_cancel_right]
+2025-04-14 01:26:16 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:18 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:18 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:18 - DEBUG - === New errors detail ===
+2025-04-14 01:26:18 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?b⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:18 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:18 - INFO - Testing fragment: rw [mul_div_cancel_right]
+2025-04-14 01:26:18 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:20 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:20 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:20 - DEBUG - === New errors detail ===
+2025-04-14 01:26:20 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:20 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:20 - INFO - Testing fragment: rw [inv_mul_cancel_right]
+2025-04-14 01:26:20 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:22 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:22 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:22 - DEBUG - === New errors detail ===
+2025-04-14 01:26:22 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹ * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:22 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:22 - INFO - Testing fragment: rw [div_mul_cancel]
+2025-04-14 01:26:22 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:24 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:24 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:24 - DEBUG - === New errors detail ===
+2025-04-14 01:26:24 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:24 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:24 - INFO - Testing fragment: rw [<- left_distrib]
+2025-04-14 01:26:24 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:26 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:26 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:26 - DEBUG - === New errors detail ===
+2025-04-14 01:26:26 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:26 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:26 - INFO - Testing fragment: rw [<- right_distrib]
+2025-04-14 01:26:26 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:28 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:28 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:28 - DEBUG - === New errors detail ===
+2025-04-14 01:26:28 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c + ?b * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:28 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:28 - INFO - Testing fragment: rw [<- distrib_three_right]
+2025-04-14 01:26:28 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:30 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:30 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:30 - DEBUG - === New errors detail ===
+2025-04-14 01:26:30 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?d + ?b * ?d + ?c * ?d
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:30 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:30 - INFO - Testing fragment: rw [<- add_one_mul]
+2025-04-14 01:26:30 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:32 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:32 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:32 - DEBUG - === New errors detail ===
+2025-04-14 01:26:32 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:32 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:32 - INFO - Testing fragment: rw [<- mul_add_one]
+2025-04-14 01:26:32 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:34 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:34 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:34 - DEBUG - === New errors detail ===
+2025-04-14 01:26:34 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b + ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:34 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:34 - INFO - Testing fragment: rw [<- one_add_mul]
+2025-04-14 01:26:34 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:36 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:36 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:36 - DEBUG - === New errors detail ===
+2025-04-14 01:26:36 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b + ?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:36 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:36 - INFO - Testing fragment: rw [<- mul_one_add]
+2025-04-14 01:26:36 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:38 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:38 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:38 - DEBUG - === New errors detail ===
+2025-04-14 01:26:38 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a + ?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:38 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:38 - INFO - Testing fragment: rw [<- two_mul]
+2025-04-14 01:26:38 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:40 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:40 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:40 - DEBUG - === New errors detail ===
+2025-04-14 01:26:40 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:40 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:40 - INFO - Testing fragment: rw [<- mul_two]
+2025-04-14 01:26:40 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:42 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:42 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:42 - DEBUG - === New errors detail ===
+2025-04-14 01:26:42 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:42 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:42 - INFO - Testing fragment: rw [<- mul_boole]
+2025-04-14 01:26:42 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:44 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:44 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:44 - DEBUG - === New errors detail ===
+2025-04-14 01:26:44 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:44 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:44 - INFO - Testing fragment: rw [<- boole_mul]
+2025-04-14 01:26:44 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:26:46 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:26:46 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:26:46 - DEBUG - === New errors detail ===
+2025-04-14 01:26:46 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:26:46 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:26:46 - INFO - Testing fragment: rw [<- add_mul_self_eq]
+2025-04-14 01:26:46 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:29:57 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:29:57 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:29:57 - DEBUG - === New errors detail ===
+2025-04-14 01:29:57 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?a + 2 * ?a * ?b + ?b * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:29:57 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:29:57 - INFO - Testing fragment: rw [<- neg_mul]
+2025-04-14 01:29:57 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:29:59 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:29:59 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:29:59 - DEBUG - === New errors detail ===
+2025-04-14 01:29:59 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:29:59 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:29:59 - INFO - Testing fragment: rw [<- mul_neg]
+2025-04-14 01:29:59 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:01 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:01 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:01 - DEBUG - === New errors detail ===
+2025-04-14 01:30:01 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:01 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:01 - INFO - Testing fragment: rw [<- neg_mul_neg]
+2025-04-14 01:30:01 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:03 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:03 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:03 - DEBUG - === New errors detail ===
+2025-04-14 01:30:03 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:03 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:03 - INFO - Testing fragment: rw [<- neg_mul_eq_neg_mul]
+2025-04-14 01:30:03 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:05 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:05 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:05 - DEBUG - === New errors detail ===
+2025-04-14 01:30:05 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:05 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:05 - INFO - Testing fragment: rw [<- neg_mul_eq_mul_neg]
+2025-04-14 01:30:05 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:07 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:07 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:07 - DEBUG - === New errors detail ===
+2025-04-14 01:30:07 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:07 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:07 - INFO - Testing fragment: rw [<- neg_mul_comm]
+2025-04-14 01:30:07 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:09 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:09 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:09 - DEBUG - === New errors detail ===
+2025-04-14 01:30:09 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:09 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:09 - INFO - Testing fragment: rw [<- neg_eq_neg_one_mul]
+2025-04-14 01:30:09 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:11 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:11 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:11 - DEBUG - === New errors detail ===
+2025-04-14 01:30:11 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:11 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:11 - INFO - Testing fragment: rw [<- mul_neg_one]
+2025-04-14 01:30:11 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:13 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:13 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:13 - DEBUG - === New errors detail ===
+2025-04-14 01:30:13 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:13 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:13 - INFO - Testing fragment: rw [<- neg_one_mul]
+2025-04-14 01:30:13 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:15 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:15 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:15 - DEBUG - === New errors detail ===
+2025-04-14 01:30:15 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:15 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:15 - INFO - Testing fragment: rw [<- mul_sub_left_distrib]
+2025-04-14 01:30:15 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:17 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:17 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:17 - DEBUG - === New errors detail ===
+2025-04-14 01:30:17 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:17 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:17 - INFO - Testing fragment: rw [<- mul_sub_right_distrib]
+2025-04-14 01:30:17 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:19 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:19 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:19 - DEBUG - === New errors detail ===
+2025-04-14 01:30:19 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c - ?b * ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:19 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:19 - INFO - Testing fragment: rw [<- sub_one_mul]
+2025-04-14 01:30:19 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:21 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:21 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:21 - DEBUG - === New errors detail ===
+2025-04-14 01:30:21 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:21 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:21 - INFO - Testing fragment: rw [<- mul_sub_one]
+2025-04-14 01:30:21 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:23 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:23 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:23 - DEBUG - === New errors detail ===
+2025-04-14 01:30:23 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:23 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:23 - INFO - Testing fragment: rw [<- one_sub_mul]
+2025-04-14 01:30:23 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:25 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:25 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:25 - DEBUG - === New errors detail ===
+2025-04-14 01:30:25 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b - ?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:25 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:25 - INFO - Testing fragment: rw [<- mul_one_sub]
+2025-04-14 01:30:25 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:27 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:27 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:27 - DEBUG - === New errors detail ===
+2025-04-14 01:30:27 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a - ?a * ?b
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:27 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:27 - INFO - Testing fragment: rw [<- mul_left_cancel]
+2025-04-14 01:30:27 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:29 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:30:29 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:30:29 - DEBUG - === New errors detail ===
+2025-04-14 01:30:29 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.229
+from equation
+  ?m.229 = ?m.228
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:30:29 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:29 - INFO - Testing fragment: rw [<- mul_left_cancel_iff]
+2025-04-14 01:30:29 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:30:31 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:30:31 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:30:31 - DEBUG - === New errors detail ===
+2025-04-14 01:30:31 - DEBUG - New Error 1: line 8, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℕ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:30:31 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ ?m.227 * n = ?m.227 * 57
+
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ ℕ
+
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ IsLeftCancelMul ℕ
+2025-04-14 01:30:31 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:30:31 - INFO - Testing fragment: rw [<- mul_right_injective]
+2025-04-14 01:30:31 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:31:09 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:31:09 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:31:09 - DEBUG - === New errors detail ===
+2025-04-14 01:31:09 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:31:09 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:31:09 - INFO - Testing fragment: rw [<- mul_right_inj]
+2025-04-14 01:31:09 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:00 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:00 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:00 - DEBUG - === New errors detail ===
+2025-04-14 01:32:00 - DEBUG - New Error 1: line 8, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℕ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:32:00 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ ?a * n = ?a * 57
+
+case a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ ℕ
+
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ IsLeftCancelMul ℕ
+2025-04-14 01:32:00 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:00 - INFO - Testing fragment: rw [<- mul_ne_mul_right]
+2025-04-14 01:32:00 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:02 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:02 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:02 - DEBUG - === New errors detail ===
+2025-04-14 01:32:02 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:02 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:02 - INFO - Testing fragment: rw [<- mul_right_cancel]
+2025-04-14 01:32:02 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:04 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:04 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:04 - DEBUG - === New errors detail ===
+2025-04-14 01:32:04 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.229
+from equation
+  ?m.229 = ?m.227
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:04 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:04 - INFO - Testing fragment: rw [<- mul_right_cancel_iff]
+2025-04-14 01:32:04 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:06 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:06 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:06 - DEBUG - === New errors detail ===
+2025-04-14 01:32:06 - DEBUG - New Error 1: line 8, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℕ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:32:06 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n * ?m.227 = 57 * ?m.227
+
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ ℕ
+
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ IsRightCancelMul ℕ
+2025-04-14 01:32:06 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:06 - INFO - Testing fragment: rw [<- mul_left_injective]
+2025-04-14 01:32:06 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:08 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:08 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:08 - DEBUG - === New errors detail ===
+2025-04-14 01:32:08 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:08 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:08 - INFO - Testing fragment: rw [<- mul_left_inj]
+2025-04-14 01:32:08 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:10 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:10 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:10 - DEBUG - === New errors detail ===
+2025-04-14 01:32:10 - DEBUG - New Error 1: line 8, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℕ
+use `set_option diagnostics true` to get diagnostic information
+2025-04-14 01:32:10 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n * ?a = 57 * ?a
+
+case a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ ℕ
+
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ IsRightCancelMul ℕ
+2025-04-14 01:32:10 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:10 - INFO - Testing fragment: rw [<- mul_ne_mul_left]
+2025-04-14 01:32:10 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:12 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:12 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:12 - DEBUG - === New errors detail ===
+2025-04-14 01:32:12 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:12 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:12 - INFO - Testing fragment: rw [<- mul_assoc]
+2025-04-14 01:32:12 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:14 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:14 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:14 - DEBUG - === New errors detail ===
+2025-04-14 01:32:14 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b * ?c)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:14 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:14 - INFO - Testing fragment: rw [<- mul_comm]
+2025-04-14 01:32:14 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:16 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:16 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:16 - DEBUG - === New errors detail ===
+2025-04-14 01:32:16 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:16 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:16 - INFO - Testing fragment: rw [<- MulOneClass]
+2025-04-14 01:32:16 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:18 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:18 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:18 - DEBUG - === New errors detail ===
+2025-04-14 01:32:18 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:18 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:18 - INFO - Testing fragment: rw [<- one_mul]
+2025-04-14 01:32:18 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:20 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:20 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:20 - DEBUG - === New errors detail ===
+2025-04-14 01:32:20 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = 1 * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:20 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:20 - INFO - Testing fragment: rw [<- mul_one]
+2025-04-14 01:32:20 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:22 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:22 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:22 - DEBUG - === New errors detail ===
+2025-04-14 01:32:22 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a * 1
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:22 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:22 - INFO - Testing fragment: rw [<- npowRec_add]
+2025-04-14 01:32:22 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:24 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:24 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:24 - DEBUG - === New errors detail ===
+2025-04-14 01:32:24 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_add'
+2025-04-14 01:32:24 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:24 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:24 - INFO - Testing fragment: rw [<- npowRec_succ]
+2025-04-14 01:32:24 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:26 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:26 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:26 - DEBUG - === New errors detail ===
+2025-04-14 01:32:26 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_succ'
+2025-04-14 01:32:26 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:26 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:26 - INFO - Testing fragment: rw [<- npowRec'_succ]
+2025-04-14 01:32:26 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:28 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:28 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:28 - DEBUG - === New errors detail ===
+2025-04-14 01:32:28 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec'_succ'
+2025-04-14 01:32:28 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:28 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:28 - INFO - Testing fragment: rw [<- npowRec'_two_mul]
+2025-04-14 01:32:28 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:30 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:30 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:30 - DEBUG - === New errors detail ===
+2025-04-14 01:32:30 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec'_two_mul'
+2025-04-14 01:32:30 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:30 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:30 - INFO - Testing fragment: rw [<- npowRec'_mul_comm]
+2025-04-14 01:32:30 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:32 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:32 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:32 - DEBUG - === New errors detail ===
+2025-04-14 01:32:32 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec'_mul_comm'
+2025-04-14 01:32:32 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:32 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:32 - INFO - Testing fragment: rw [<- npowRec_eq]
+2025-04-14 01:32:32 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:34 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:34 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:34 - DEBUG - === New errors detail ===
+2025-04-14 01:32:34 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_eq'
+2025-04-14 01:32:34 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:34 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:34 - INFO - Testing fragment: rw [<- npowBinRec]
+2025-04-14 01:32:34 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:36 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:36 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:36 - DEBUG - === New errors detail ===
+2025-04-14 01:32:36 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowBinRec'
+2025-04-14 01:32:36 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:36 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:36 - INFO - Testing fragment: rw [<- npowRec_eq_npowBinRec]
+2025-04-14 01:32:36 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:38 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:38 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:38 - DEBUG - === New errors detail ===
+2025-04-14 01:32:38 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'npowRec_eq_npowBinRec'
+2025-04-14 01:32:38 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:38 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:38 - INFO - Testing fragment: rw [<- npow_eq_pow]
+2025-04-14 01:32:38 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:40 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:40 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:40 - DEBUG - === New errors detail ===
+2025-04-14 01:32:40 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:40 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:40 - INFO - Testing fragment: rw [<- pow_zero]
+2025-04-14 01:32:40 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:42 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:42 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:42 - DEBUG - === New errors detail ===
+2025-04-14 01:32:42 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:42 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:42 - INFO - Testing fragment: rw [<- pow_succ]
+2025-04-14 01:32:42 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:44 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:44 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:44 - DEBUG - === New errors detail ===
+2025-04-14 01:32:44 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n * ?a
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:44 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:44 - INFO - Testing fragment: rw [<- inv_inv]
+2025-04-14 01:32:44 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:46 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:46 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:46 - DEBUG - === New errors detail ===
+2025-04-14 01:32:46 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a
+from equation
+  ?a = ?a⁻¹⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:46 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:46 - INFO - Testing fragment: rw [<- exists_zpow_surjective]
+2025-04-14 01:32:46 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:48 - INFO - Testing fix: Original errors: 7, Fixed errors: 3
+2025-04-14 01:32:48 - INFO - Result: False (introduced 3 new errors)
+2025-04-14 01:32:48 - DEBUG - === New errors detail ===
+2025-04-14 01:32:48 - DEBUG - New Error 1: line 8, type: unknown_identifier, message: unknown identifier 'exists_zpow_surjective'
+2025-04-14 01:32:48 - DEBUG - New Error 2: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.223
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:48 - DEBUG - New Error 3: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:48 - INFO - Testing fragment: rw [<- zpow_eq_pow]
+2025-04-14 01:32:48 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:50 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:50 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:50 - DEBUG - === New errors detail ===
+2025-04-14 01:32:50 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x ^ ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:50 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:50 - INFO - Testing fragment: rw [<- zpow_zero]
+2025-04-14 01:32:50 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:52 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:52 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:52 - DEBUG - === New errors detail ===
+2025-04-14 01:32:52 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:52 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:52 - INFO - Testing fragment: rw [<- zpow_natCast]
+2025-04-14 01:32:52 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:54 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:54 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:54 - DEBUG - === New errors detail ===
+2025-04-14 01:32:54 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ?n
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:54 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:54 - INFO - Testing fragment: rw [<- zpow_negSucc]
+2025-04-14 01:32:54 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:56 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:56 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:56 - DEBUG - === New errors detail ===
+2025-04-14 01:32:56 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a ^ (?n + 1))⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:56 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:56 - INFO - Testing fragment: rw [<- negSucc_zsmul]
+2025-04-14 01:32:56 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:32:58 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:32:58 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:32:58 - DEBUG - === New errors detail ===
+2025-04-14 01:32:58 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -((?n + 1) • ?a)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:32:58 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:32:58 - INFO - Testing fragment: rw [<- div_eq_mul_inv]
+2025-04-14 01:32:58 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:33:00 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:33:00 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:33:00 - DEBUG - === New errors detail ===
+2025-04-14 01:33:00 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:33:00 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:33:00 - INFO - Testing fragment: rw [<- inv_eq_one_div]
+2025-04-14 01:33:00 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:33:02 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:33:02 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:33:02 - DEBUG - === New errors detail ===
+2025-04-14 01:33:02 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?x
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:33:02 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:33:02 - INFO - Testing fragment: rw [<- mul_div_assoc]
+2025-04-14 01:33:02 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:33:04 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:33:04 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:33:04 - DEBUG - === New errors detail ===
+2025-04-14 01:33:04 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b / ?c)
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:33:04 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:33:04 - INFO - Testing fragment: rw [<- one_div]
+2025-04-14 01:33:04 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:33:06 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:33:06 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:33:06 - DEBUG - === New errors detail ===
+2025-04-14 01:33:06 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:33:06 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:33:06 - INFO - Testing fragment: rw [<- inv_one]
+2025-04-14 01:33:06 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by
+2025-04-14 01:33:08 - INFO - Testing fix: Original errors: 7, Fixed errors: 2
+2025-04-14 01:33:08 - INFO - Result: False (introduced 2 new errors)
+2025-04-14 01:33:08 - DEBUG - === New errors detail ===
+2025-04-14 01:33:08 - DEBUG - New Error 1: line 8, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1
+n : ℕ
+h₀ : n < 398
+h₁ : n * 7 % 398 = 1
+⊢ n = 57
+2025-04-14 01:33:08 - DEBUG - New Error 2: line 9, type: other_error, message: unexpected identifier; expected command
+2025-04-14 01:33:08 - INFO - Testing fragment: rw [<- mul_inv_rev]
+2025-04-14 01:33:08 - INFO - Original error line:   have gcd_eq : gcd 7 398 = 1 := by

@@ -8,6 +8,7 @@ import fcntl
 import select
 import signal
 import json
+import tempfile
 import re
 from typing import Tuple, List, Dict, Optional, Any
 
@@ -249,6 +250,7 @@ class LakeREPL:
             Dict: Parsed output containing error or result information
         """
         if not self.running:
+            raise Exception("REPL is not running")
             return {"error": "REPL is not running"}
         
         # Extract header if present
@@ -259,14 +261,33 @@ class LakeREPL:
             if self.current_header is None:
                 self.start_head(header_code)
             elif self.current_header != header_code:
+                print("current header: ", self.current_header)
+                print("new header: ", header_code)
+                raise Exception("Header mismatch with previously set header")
                 return {"error": "Header mismatch with previously set header"}
         
         # Execute the code without header
+
+        # cmd execute-- will meet 4096 input buffer constraint
         escaped_code = code_without_head.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
         cmd_to_send = r'{"cmd": "' + escaped_code + r'", "env": 0}'
-        
-        success, output = self.run(cmd_to_send, raw=True)
+
+        if False: # len(cmd_to_send.encode()) < 4000:
+            # this is a speed up (speed up better on small proof) at the cost of line number mismatch (need to +7 when reading).
+            success, output = self.run(cmd_to_send, raw=True)
+        else:
+            # using tempfile to bypass 4096 input buffer constraint
+            with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8', suffix='.lean') as temp_file:
+                temp_file.write(code)
+                temp_filepath = temp_file.name
+
+            # file input cannot have env
+            cmd_to_send = r'{"path": "' + temp_filepath + r'"}'
+            success, output = self.run(cmd_to_send, raw=True)
+            os.remove(temp_filepath)
+
         if not success:
+            raise Exception("Execution failed", output)
             return {"error": "Execution failed", "details": output}
             
         # Parse the output - ensure we get the actual response, not the echo
@@ -301,7 +322,7 @@ class LakeREPL:
             # First try gentle exit with Ctrl+D
             try:
                 os.write(self.master_fd, b"\x04")
-                time.sleep(1)
+                time.sleep(0.01)
             except:
                 pass
             
@@ -331,7 +352,7 @@ class LakeREPL:
             print(f"Error ending Lake REPL: {e}")
             return False
 
-    def run(self, cmd: str, raw=False, timeout: float = 600.0, wait_for_env: bool = True) -> Tuple[bool, str]:
+    def run(self, cmd: str, raw=False, timeout: float = 200.0, wait_for_env: bool = True) -> Tuple[bool, str]:
         """
         Run a command in the Lake REPL and return the output.
         For Lake REPL, we append two newlines to each command as specified.
@@ -357,16 +378,28 @@ class LakeREPL:
             if not raw:
                 cmd = r'{"cmd": "' + cmd + r'", "env": 0}'
             cmd_to_send = cmd.rstrip() + "\n\n"
+            # while len(cmd_to_send) > 400:
+            #     os.write(self.master_fd, cmd_to_send[:400].encode())
+            #     cmd_to_send = cmd_to_send[400:]
             os.write(self.master_fd, cmd_to_send.encode())
+
+            # data = (cmd.rstrip() + "\n\n").encode()
+            # chunk_size = 400
+            # for i in range(0, len(data), chunk_size):
+            #     os.write(self.master_fd, data[i:i+chunk_size])
             
             # Wait for execution to complete
             start_time = time.time()
             def judge():
-                return (r'"ast":' in "".join(self.collected_output)) or (r'"messages":' in "".join(self.collected_output))
+                # return (r'"ast":' in "".join(self.collected_output)) or (r'"messages":' in "".join(self.collected_output))
+                joined = "".join(self.collected_output)
+                return (r'"ast":' in joined) or (r'"messages":' in joined) or (r'"message":' in joined)
+                # return ('\n' in "".join(self.collected_output))
 
             if wait_for_env:
                 while not judge() and time.time() - start_time < timeout:
-                    time.sleep(0.01)
+                    print("".join(self.collected_output))
+                    time.sleep(1)
                 
                 execution_complete = judge()
             else:
@@ -377,12 +410,18 @@ class LakeREPL:
             # Get the output
             with self.output_lock:
                 output = "".join(self.collected_output)
+            # print("DEBUG Output: ", output)
+            # print("DEBUG execution_complete: ", execution_complete)
                 
             if not execution_complete:
                 # Try to interrupt the current execution with Ctrl+C if timed out
+                print("DEBUG Timeout execution")
                 os.write(self.master_fd, b"\x03")
                 return False, f"Execution timed out after {timeout} seconds. Partial output:\n{output}"
             
+            if r'offset 4096: unexpected character in string' in output:
+                return False, f"4096 input buffer bug not fixed now"
+
             return True, output
             
         except Exception as e:
@@ -472,8 +511,7 @@ theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
     print("Check result:", is_valid, check_result)
 
 if __name__ == "__main__":
-    example()
-    
+    example()    
     # Additional test to verify global repl works
     print("\nSimple test of global repl instance:")
     if not repl.running:

@@ -33,14 +33,17 @@ def parse_log_file(file_path):
         stats = data["statistics"]
         file_name = os.path.basename(file_path)
         
+        # Calculate fixed_errors correctly - it should be the length of successful_fixes
+        fixed_errors = len(stats.get("successful_fixes", []))
+        
         return {
             "file_name": file_name,
             "status": data.get("status", "unknown"),
             "original_errors": stats.get("original_errors", 0),
-            "fixed_errors": stats.get("fixed_errors", 0),
+            "fixed_errors": fixed_errors,  # Use the calculated value
             "failed_errors": stats.get("failed_errors", 0),
             "remaining_errors": stats.get("remaining_errors", 0),
-            "fix_rate": stats.get("fix_rate", 0),
+            "fix_rate": fixed_errors / stats.get("original_errors", 1) if stats.get("original_errors", 0) > 0 else 0,
             "successful_fixes": stats.get("successful_fixes", []),
             "failed_fixes": stats.get("failed_fixes", []),
             "total_time": stats.get("total_time", 0),
@@ -57,6 +60,8 @@ def analyze_logs(log_data):
     # 1. Overall statistics
     total_files = len(log_data)
     total_original_errors = sum(log["original_errors"] for log in log_data)
+    
+    # Calculate fixed_errors correctly
     total_fixed_errors = sum(log["fixed_errors"] for log in log_data)
     total_failed_errors = sum(log["failed_errors"] for log in log_data)
     total_remaining_errors = sum(log["remaining_errors"] for log in log_data)
@@ -65,7 +70,8 @@ def analyze_logs(log_data):
     overall_fix_rate = total_fixed_errors / total_original_errors if total_original_errors > 0 else 0
     
     # Count of fully fixed files (all errors fixed)
-    fully_fixed_files = sum(1 for log in log_data if log["remaining_errors"] == 0 and log["original_errors"] > 0)
+    fully_fixed_files = sum(1 for log in log_data 
+                           if log["remaining_errors"] == 0 and log["original_errors"] > 0 and log["fixed_errors"] > 0)
     
     # Count of partially fixed files (some errors fixed but not all)
     partially_fixed_files = sum(1 for log in log_data 
@@ -82,7 +88,8 @@ def analyze_logs(log_data):
     fix_snippets = []
     for log in log_data:
         for fix in log["successful_fixes"]:
-            fix_snippets.append(fix.get("fix_snippet", "unknown"))
+            if "fix_snippet" in fix:
+                fix_snippets.append(fix.get("fix_snippet", "unknown"))
     
     snippet_counter = Counter(fix_snippets)
     
@@ -427,8 +434,8 @@ def main():
     # Create output directory based on input directory if not specified
     output_dir = args.output_dir
     if not output_dir:
-        output_dir = os.path.join(os.path.dirname(args.input_dir), 
-                                 f"{os.path.basename(args.input_dir)}_analysis")
+        # Change this to place the analysis folder inside the input directory
+        output_dir = os.path.join(args.input_dir, "analysis")
     
     # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)

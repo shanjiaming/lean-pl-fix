@@ -5,51 +5,53 @@ set_option maxHeartbeats 0
 
 open BigOperators Real Nat Topology Rat
 
-/-- 
-What is the volume of a cube whose surface area is twice that of a cube with volume 1? 
+/-- Find $A$ and $B$ such that
+\[\frac{4x}{x^2-8x+15} = \frac{A}{x-3} + \frac{B}{x-5}\]for all $x$ besides 3 and 5. Express your answer as an ordered pair in the form $(A, B).$ Show that it is (-6, 10).-/
+theorem mathd_algebra_13 (a b : ℝ)
+  (h₀ : ∀ x, x - 3 ≠ 0 ∧ x - 5 ≠ 0 → 4 * x / (x ^ 2 - 8 * x + 15) = a / (x - 3) + b / (x - 5)) :
+  a = -6 ∧ b = 10 := by
+  -- Strategy: To find A and B, we'll choose specific values for x that simplify the equation
+  -- First, we'll use x = 4 to get one equation, then x = 2 to get another
+  
+  -- Step 1: Evaluate at x = 4 (which is neither 3 nor 5)
+  have h1 : 4 - 3 ≠ 0 ∧ 4 - 5 ≠ 0 := by norm_num
+  -- Apply the universal quantifier hypothesis to x = 4
+  have h2 := h₀ 4 h1
+  -- Simplify the denominators in the equation
+  have h3 : 4 ^ 2 - 8 * 4 + 15 = (4 - 3) * (4 - 5) := by norm_num
+  -- Rewrite the equation using the simplified denominators
+  simp only [h3, sub_self, ne_eq, not_false_eq_true, div_one, div_mul_div] at h2
+  -- The equation now becomes: 4*4/((4-3)*(4-5)) = A/(4-3) + B/(4-5)
+  -- Which simplifies to: 16/(-1) = A - B
+  -- Or: -16 = A - B
+  simp only [mul_one, mul_neg, div_one, div_neg, sub_eq_add_neg] at h2
+  -- Let's name this equation (1)
+  have eq1 : a - b = -16 := by linarith [h2]
 
-$\mathrm{(A)}\ \sqrt{2}\qquad\mathrm{(B)}\ 2\qquad\mathrm{(C)}\ 2\sqrt{2}\qquad\mathrm{(D)}\ 4\qquad\mathrm{(E)}\ 8$ 
-Show that it is \mathrm{(C)}.
+  -- Step 2: Evaluate at x = 2 (which is neither 3 nor 5)
+  have h4 : 2 - 3 ≠ 0 ∧ 2 - 5 ≠ 0 := by norm_num
+  -- Apply the universal quantifier hypothesis to x = 2
+  have h5 := h₀ 2 h4
+  -- Simplify the denominators in the equation
+  have h6 : 2 ^ 2 - 8 * 2 + 15 = (2 - 3) * (2 - 5) := by norm_num
+  -- Rewrite the equation using the simplified denominators
+  simp only [h6, sub_self, ne_eq, not_false_eq_true, div_one, div_mul_div] at h5
+  -- The equation now becomes: 4*2/((2-3)*(2-5)) = A/(2-3) + B/(2-5)
+  -- Which simplifies to: 8/3 = -A - B/3
+  -- Multiply both sides by 3 to get: 8 = -3A - B
+  simp only [mul_one, mul_neg, div_one, div_neg, sub_eq_add_neg] at h5
+  have h7 : 8 = -3 * a - b := by linarith [h5]
+  -- Let's name this equation (2)
+  have eq2 : -3 * a - b = 8 := by linarith [h7]
 
-Proof outline:
-1. Let y be the side length of the original cube (volume = 1)
-2. Compute y from the volume equation y³ = 1
-3. Compute the surface area of original cube: 6y²
-4. The new cube has surface area twice this: 2*(6y²) = 12y²
-5. Let x be the side length of the new cube
-6. Set up equation for new cube's surface area: 6x² = 12y²
-7. Solve for x in terms of y
-8. Compute volume of new cube: x³
-9. Show this equals 2√2
--/
-theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
-  (h₂ : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by
-  -- First, simplify the surface area equation h₂ by dividing both sides by 6
-  have h₃ : x ^ 2 = 2 * y ^ 2 := by
-    rw [mul_assoc, mul_comm] at h₂  -- Rewrite RHS to 2*6*y²
-    rw [mul_right_inj' (by norm_num : 6 ≠ 0)] at h₂  -- Divide both sides by 6
-    exact h₂
+  -- Step 3: Solve the system of equations
+  -- From eq1: a = b - 16
+  -- Substitute into eq2: -3(b-16) - b = 8 → -3b + 48 - b = 8 → -4b = -40 → b = 10
+  -- Then a = 10 - 16 = -6
+  have hb : b = 10 := by
+    linarith [eq1, eq2]
+  have ha : a = -6 := by
+    linarith [eq1, hb]
   
-  -- From the volume of the original cube (y³ = 1), we get y = 1
-  have h₄ : y = 1 := by
-    exact (eq_one_of_pow_eq_one (by linarith [h₀.2]) (by norm_num) h₁).symm
-  
-  -- Substitute y = 1 into the simplified equation x² = 2y²
-  have h₅ : x ^ 2 = 2 := by
-    rw [h₄, pow_two, mul_one] at h₃
-    exact h₃
-  
-  -- Since x > 0, we can take square root of both sides to get x = √2
-  have h₆ : x = Real.sqrt 2 := by
-    exact (sqrt_eq_iff_sq_eq (by linarith [h₀.1]) (by linarith)).mpr h₅
-  
-  -- Now compute x³ = (√2)³ = (√2)² * √2 = 2 * √2
-  rw [h₆, ← pow_three_sqrt_two]
-  
-  -- Helper lemma to show (√2)³ = 2 * √2
-  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by
-    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]
-    ring
-  
-  -- Apply the helper lemma to complete the proof
-  exact pow_three_sqrt_two
+  -- Step 4: Return the solution
+  exact ⟨ha, hb⟩

@@ -1,0 +1,191 @@
+{
+  "status": "partial_success",
+  "file_path": "/data/coding/minif2f/lean_code/75.lean",
+  "output_file": "/data/coding/minif2f/lean_fixed/75_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Suppose that $x$ and $y$ are positive real numbers with $y\\leq x$, and that $\\sqrt{xy}(x-y)=(x+y)$.\nProve that $x+y\\geq 4$.-/\ntheorem algebra_amgm_sqrtxymulxmyeqxpy_xpygeq4 (x y : \u211d) (h\u2080 : 0 < x \u2227 0 < y) (h\u2081 : y \u2264 x)\n  (h\u2082 : Real.sqrt (x * y) * (x - y) = x + y) : x + y \u2265 4 := by\n  -- First, extract the positivity conditions from h\u2080\n  have hx : 0 < x := h\u2080.left\n  have hy : 0 < y := h\u2080.right\n  \n  -- Introduce the variable s = x + y and p = x * y\n  let s := x + y\n  let p := x * y\n  \n  -- Our goal is to show s \u2265 4. We'll proceed by contradiction, assuming s < 4\n  by_contra h\n  push_neg at h\n  -- Now we have h : s < 4\n  \n  -- From the given equation h\u2082: \u221a(xy)(x-y) = x+y\n  -- We can rewrite this in terms of s and p:\n  -- \u221ap * (x - y) = s\n  -- Square both sides to eliminate the square root\n  have h\u2083 : p * (x - y)^2 = s^2 := by\n    calc\n      p * (x - y)^2 = (Real.sqrt p)^2 * (x - y)^2 := by rw [Real.sq_sqrt (mul_pos hx hy)]\n      _ = (Real.sqrt p * (x - y))^2 := by ring\n      _ = s^2 := by rw [h\u2082]\n  \n  -- Express (x - y)^2 in terms of s and p: (x - y)^2 = s^2 - 4p\n  have h\u2084 : (x - y)^2 = s^2 - 4*p := by\n    calc\n      (x - y)^2 = x^2 - 2*x*y + y^2 := by ring\n      _ = (x + y)^2 - 4*x*y := by ring\n      _ = s^2 - 4*p := by rw [s, p]\n  \n  -- Substitute h\u2084 into h\u2083\n  have h\u2085 : p * (s^2 - 4*p) = s^2 := by rw [h\u2084, h\u2083]\n  \n  -- Rearrange h\u2085 to form a quadratic equation in p:\n  -- p*s\u00b2 - 4p\u00b2 = s\u00b2 \u2192 4p\u00b2 - s\u00b2p + s\u00b2 = 0\n  have h\u2086 : 4*p^2 - s^2*p + s^2 = 0 := by\n    linear_combination h\u2085\n  \n  -- Consider this as a quadratic in p: 4p\u00b2 - s\u00b2p + s\u00b2 = 0\n  -- The discriminant is D = s\u2074 - 16s\u00b2\n  have h\u2087 : (s^2)^2 - 4*4*s^2 \u2265 0 := by\n    -- For real roots to exist, discriminant must be non-negative\n    rw [\u2190 h\u2086]\n    exact discriminant_nonneg (a := 4) (b := -s^2) (c := s^2)\n  \n  -- Simplify the discriminant inequality: s\u2074 - 16s\u00b2 \u2265 0 \u2192 s\u00b2(s\u00b2 - 16) \u2265 0\n  -- Since s > 0 (as x, y > 0), we can divide by s\u00b2: s\u00b2 - 16 \u2265 0 \u2192 s \u2265 4\n  have h\u2088 : s^2 * (s^2 - 16) \u2265 0 := by\n    calc\n      s^2 * (s^2 - 16) = s^4 - 16*s^2 := by ring\n      _ \u2265 0 := h\u2087\n  \n  -- Since s > 0 and s\u00b2 > 0, we have s\u00b2 - 16 \u2265 0\n  have h\u2089 : s^2 - 16 \u2265 0 := by\n    -- Because s > 0 (x, y > 0 \u21d2 x + y > 0), s\u00b2 > 0, so we can divide h\u2088 by s\u00b2\n    have s_pos : s > 0 := add_pos hx hy\n    have s_sq_pos : s^2 > 0 := pow_pos s_pos 2\n    exact (le_of_mul_le_left h\u2088 s_sq_pos)\n  \n  -- From h\u2089 we get s\u00b2 \u2265 16 \u2192 s \u2265 4 (since s > 0)\n  have h\u2081\u2080 : s \u2265 4 := by\n    have s_pos : s > 0 := add_pos hx hy\n    rwa [\u2190 le_sqrt (le_refl 0) (le_of_lt s_pos), sqrt_sq (le_of_lt s_pos), sqrt_sixteen] at h\u2089\n    norm_num\n  \n  -- This contradicts our assumption that s < 4\n  exact lt_irrefl 4 (lt_of_lt_of_le h h\u2081\u2080)",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Suppose that $x$ and $y$ are positive real numbers with $y\\leq x$, and that $\\sqrt{xy}(x-y)=(x+y)$.\nProve that $x+y\\geq 4$.-/\ntheorem algebra_amgm_sqrtxymulxmyeqxpy_xpygeq4 (x y : \u211d) (h\u2080 : 0 < x \u2227 0 < y) (h\u2081 : y \u2264 x)\n  (h\u2082 : Real.sqrt (x * y) * (x - y) = x + y) : x + y \u2265 4 := by\n  -- First, extract the positivity conditions from h\u2080\n  have hx : 0 < x := h\u2080.left\n  have hy : 0 < y := h\u2080.right\n  \n  -- Introduce the variable s = x + y and p = x * y\n  let s := x + y\n  let p := x * y\n  \n  -- Our goal is to show s \u2265 4. We'll proceed by contradiction, assuming s < 4\n  by_contra h\n  push_neg at h\n  -- Now we have h : s < 4\n  \n  -- From the given equation h\u2082: \u221a(xy)(x-y) = x+y\n  -- We can rewrite this in terms of s and p:\n  -- \u221ap * (x - y) = s\n  -- Square both sides to eliminate the square root\n  have h\u2083 : p * (x - y)^2 = s^2 := by\n    calc\n      p * (x - y)^2 = (Real.sqrt p)^2 * (x - y)^2 := by rw [Real.sq_sqrt (mul_pos hx hy)]\n      _ = (Real.sqrt p * (x - y))^2 := by ring\n      _ = s^2 := by rw [h\u2082]\n  \n  -- Express (x - y)^2 in terms of s and p: (x - y)^2 = s^2 - 4p\n  have h\u2084 : (x - y)^2 = s^2 - 4*p := by\n    calc\n      (x - y)^2 = x^2 - 2*x*y + y^2 := by ring\n      _ = (x + y)^2 - 4*x*y := by ring\n      _ = s^2 - 4*p := by rw [s, p]\n  \n  -- Substitute h\u2084 into h\u2083\n  have h\u2085 : p * (s^2 - 4*p) = s^2 := by rw [h\u2084, h\u2083]\n  \n  -- Rearrange h\u2085 to form a quadratic equation in p:\n  -- p*s\u00b2 - 4p\u00b2 = s\u00b2 \u2192 4p\u00b2 - s\u00b2p + s\u00b2 = 0\n  have h\u2086 : 4*p^2 - s^2*p + s^2 = 0 := by\n    linear_combination h\u2085\n  \n  -- Consider this as a quadratic in p: 4p\u00b2 - s\u00b2p + s\u00b2 = 0\n  -- The discriminant is D = s\u2074 - 16s\u00b2\n  have h\u2087 : (s^2)^2 - 4*4*s^2 \u2265 0 := by\n    -- For real roots to exist, discriminant must be non-negative\n    rw [\u2190 h\u2086]\n    exact discriminant_nonneg (a := 4) (b := -s^2) (c := s^2)\n  \n  -- Simplify the discriminant inequality: s\u2074 - 16s\u00b2 \u2265 0 \u2192 s\u00b2(s\u00b2 - 16) \u2265 0\n  -- Since s > 0 (as x, y > 0), we can divide by s\u00b2: s\u00b2 - 16 \u2265 0 \u2192 s \u2265 4\n  have h\u2088 : s^2 * (s^2 - 16) \u2265 0 := by\n    calc\n      s^2 * (s^2 - 16) = s^4 - 16*s^2 := by ring\n      _ \u2265 0 := h\u2087\n  \n  -- Since s > 0 and s\u00b2 > 0, we have s\u00b2 - 16 \u2265 0\n  have h\u2089 : s^2 - 16 \u2265 0 := by\n    -- Because s > 0 (x, y > 0 \u21d2 x + y > 0), s\u00b2 > 0, so we can divide h\u2088 by s\u00b2\n    have s_pos : s > 0 := add_pos hx hy\n    have s_sq_pos : s^2 > 0 := pow_pos s_pos 2\n    nlinarith\n  \n  -- From h\u2089 we get s\u00b2 \u2265 16 \u2192 s \u2265 4 (since s > 0)\n  have h\u2081\u2080 : s \u2265 4 := by\n    have s_pos : s > 0 := add_pos hx hy\n    rwa [\u2190 le_sqrt (le_refl 0) (le_of_lt s_pos), sqrt_sq (le_of_lt s_pos), sqrt_sixteen] at h\u2089\n    norm_num\n  \n  -- This contradicts our assumption that s < 4\n  exact lt_irrefl 4 (lt_of_lt_of_le h h\u2081\u2080)",
+  "statistics": {
+    "original_errors": 9,
+    "failed_errors": 8,
+    "remaining_errors": 8,
+    "fix_rate": 0.1111111111111111,
+    "successful_fixes": [
+      {
+        "line": 62,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  le_of_mul_le_left h\u2088\nargument\n  h\u2088\nhas type\n  s ^ 2 * (s ^ 2 - 16) \u2265 0 : Prop\nbut is expected to have type\n  ?m.16830 * ?m.16831 \u2264 ?m.16832 : Prop",
+        "fix_snippet": "nlinarith",
+        "fixed_line": "    nlinarith",
+        "fix_time": 346.5274655818939,
+        "fixed_errors": [
+          {
+            "line": 24,
+            "column": 73,
+            "end_line": 24,
+            "end_column": 88,
+            "message": "application type mismatch\n  sq_sqrt (mul_pos hx hy)\nargument\n  mul_pos hx hy\nhas type\n  0 < x * y : Prop\nbut is expected to have type\n  0 \u2264 ?m.2750 : Prop",
+            "severity": "error"
+          },
+          {
+            "line": 33,
+            "column": 30,
+            "end_line": 33,
+            "end_column": 31,
+            "message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211d\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\n\u22a2 (x + y) ^ 2 - 4 * x * y = s ^ 2 - 4 * p",
+            "severity": "error"
+          },
+          {
+            "line": 36,
+            "column": 44,
+            "end_line": 36,
+            "end_column": 46,
+            "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (x - y) ^ 2\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\n\u22a2 p * (s ^ 2 - 4 * p) = s ^ 2",
+            "severity": "error"
+          },
+          {
+            "line": 41,
+            "column": 4,
+            "end_line": 41,
+            "end_column": 25,
+            "message": "ring failed, ring expressions not equal\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\nh\u2085 : p * (s ^ 2 - 4 * p) = s ^ 2\n\u22a2 x * y * 4 - x * y ^ 3 * 2 + x ^ 2 * 2 + (x ^ 2 * y ^ 2 * 4 - x ^ 3 * y * 2) + y ^ 2 * 2 = 0",
+            "severity": "error"
+          },
+          {
+            "line": 48,
+            "column": 10,
+            "end_line": 48,
+            "end_column": 29,
+            "message": "unknown identifier 'discriminant_nonneg'",
+            "severity": "error"
+          },
+          {
+            "line": 55,
+            "column": 15,
+            "end_line": 55,
+            "end_column": 17,
+            "message": "type mismatch\n  h\u2087\nhas type\n  (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0 : Prop\nbut is expected to have type\n  s ^ 4 - 16 * s ^ 2 \u2265 0 : Prop",
+            "severity": "error"
+          },
+          {
+            "line": 67,
+            "column": 9,
+            "end_line": 67,
+            "end_column": 47,
+            "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  0 ^ 2 \u2264 s\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\nh\u2085 : p * (s ^ 2 - 4 * p) = s ^ 2\nh\u2086 : 4 * p ^ 2 - s ^ 2 * p + s ^ 2 = 0\nh\u2087 : (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0\nh\u2088 : s ^ 2 * (s ^ 2 - 16) \u2265 0\nh\u2089 : s ^ 2 - 16 \u2265 0\ns_pos : s > 0\n\u22a2 s \u2265 4",
+            "severity": "error"
+          },
+          {
+            "line": 71,
+            "column": 36,
+            "end_line": 71,
+            "end_column": 37,
+            "message": "application type mismatch\n  lt_of_lt_of_le h\nargument\n  h\nhas type\n  x + y < 4 : Prop\nbut is expected to have type\n  4 < ?m.30716 : Prop",
+            "severity": "error"
+          }
+        ]
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 24,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  sq_sqrt (mul_pos hx hy)\nargument\n  mul_pos hx hy\nhas type\n  0 < x * y : Prop\nbut is expected to have type\n  0 \u2264 ?m.2750 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 503.3510551452637
+      },
+      {
+        "line": 33,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211d\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\n\u22a2 (x + y) ^ 2 - 4 * x * y = s ^ 2 - 4 * p",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 466.5801331996918
+      },
+      {
+        "line": 36,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (x - y) ^ 2\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\n\u22a2 p * (s ^ 2 - 4 * p) = s ^ 2",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 470.6124892234802
+      },
+      {
+        "line": 41,
+        "error_type": "ring_expr_not_equal",
+        "original_error_message": "ring failed, ring expressions not equal\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\nh\u2085 : p * (s ^ 2 - 4 * p) = s ^ 2\n\u22a2 x * y * 4 - x * y ^ 3 * 2 + x ^ 2 * 2 + (x ^ 2 * y ^ 2 * 4 - x ^ 3 * y * 2) + y ^ 2 * 2 = 0",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 382.41852283477783
+      },
+      {
+        "line": 48,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'discriminant_nonneg'",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 338.5830600261688
+      },
+      {
+        "line": 55,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2087\nhas type\n  (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0 : Prop\nbut is expected to have type\n  s ^ 4 - 16 * s ^ 2 \u2265 0 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 334.5430955886841
+      },
+      {
+        "line": 67,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  0 ^ 2 \u2264 s\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\nh\u2085 : p * (s ^ 2 - 4 * p) = s ^ 2\nh\u2086 : 4 * p ^ 2 - s ^ 2 * p + s ^ 2 = 0\nh\u2087 : (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0\nh\u2088 : s ^ 2 * (s ^ 2 - 16) \u2265 0\nh\u2089 : s ^ 2 - 16 \u2265 0\ns_pos : s > 0\n\u22a2 s \u2265 4",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 2011.3403358459473
+      },
+      {
+        "line": 71,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  lt_of_lt_of_le h\nargument\n  h\nhas type\n  x + y < 4 : Prop\nbut is expected to have type\n  4 < ?m.18133 : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 2010.3349883556366
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 24,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  sq_sqrt (mul_pos hx hy)\nargument\n  mul_pos hx hy\nhas type\n  0 < x * y : Prop\nbut is expected to have type\n  0 \u2264 ?m.2750 : Prop"
+      },
+      {
+        "line": 33,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211d\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\n\u22a2 (x + y) ^ 2 - 4 * x * y = s ^ 2 - 4 * p"
+      },
+      {
+        "line": 36,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (x - y) ^ 2\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\n\u22a2 p * (s ^ 2 - 4 * p) = s ^ 2"
+      },
+      {
+        "line": 41,
+        "error_type": "ring_expr_not_equal",
+        "original_error_message": "ring failed, ring expressions not equal\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\nh\u2085 : p * (s ^ 2 - 4 * p) = s ^ 2\n\u22a2 x * y * 4 - x * y ^ 3 * 2 + x ^ 2 * 2 + (x ^ 2 * y ^ 2 * 4 - x ^ 3 * y * 2) + y ^ 2 * 2 = 0"
+      },
+      {
+        "line": 48,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'discriminant_nonneg'"
+      },
+      {
+        "line": 55,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2087\nhas type\n  (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0 : Prop\nbut is expected to have type\n  s ^ 4 - 16 * s ^ 2 \u2265 0 : Prop"
+      },
+      {
+        "line": 67,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  0 ^ 2 \u2264 s\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y) = x + y\nhx : 0 < x\nhy : 0 < y\ns : \u211d := x + y\np : \u211d := x * y\nh : x + y < 4\nh\u2083 : p * (x - y) ^ 2 = s ^ 2\nh\u2084 : (x - y) ^ 2 = s ^ 2 - 4 * p\nh\u2085 : p * (s ^ 2 - 4 * p) = s ^ 2\nh\u2086 : 4 * p ^ 2 - s ^ 2 * p + s ^ 2 = 0\nh\u2087 : (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0\nh\u2088 : s ^ 2 * (s ^ 2 - 16) \u2265 0\nh\u2089 : s ^ 2 - 16 \u2265 0\ns_pos : s > 0\n\u22a2 s \u2265 4"
+      },
+      {
+        "line": 71,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  lt_of_lt_of_le h\nargument\n  h\nhas type\n  x + y < 4 : Prop\nbut is expected to have type\n  4 < ?m.30716 : Prop"
+      }
+    ],
+    "total_time": 6871.30335688591
+  },
+  "message": "Original code error count: 9\n\u274c Fixed error 1/9: Could not generate fix for error at line 24 \u00abtype_mismatch\u00bb (after 503.35s)\n\u274c Fixed error 2/9: Could not generate fix for error at line 33 \u00abrewrite_failed\u00bb (after 466.58s)\n\u274c Fixed error 3/9: Could not generate fix for error at line 36 \u00abrewrite_failed\u00bb (after 470.61s)\n\u274c Fixed error 4/9: Could not generate fix for error at line 41 \u00abring_expr_not_equal\u00bb (after 382.42s)\n\u274c Fixed error 5/9: Could not generate fix for error at line 48 \u00abunknown_identifier\u00bb (after 338.58s)\n\u274c Fixed error 6/9: Could not generate fix for error at line 55 \u00abtype_mismatch\u00bb (after 334.54s)\n\u2705 Fixed error 7/9: Successfully fixed error at line 62 \u00abtype_mismatch\u00bb (in 346.53s)\n\u274c Fixed error 8/9: Could not generate fix for error at line 67 \u00abrewrite_failed\u00bb (after 2011.34s)\n\u274c Fixed error 9/9: Could not generate fix for error at line 71 \u00abtype_mismatch\u00bb (after 2010.33s)\n\n=== Fix statistics ===\nOriginal error count: 9\nFixed errors: 1 (Fix rate: 0.1111)\nFailed errors: 8\nRemaining errors: 8\nTotal time: 6871.30 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 62\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  le_of_mul_le_left h\u2088\nargument\n  h\u2088\nhas type\n  s ^ 2 * (s ^ 2 - 16) \u2265 0 :...\n   Fix snippet: nlinarith\n   Fixed line:     nlinarith\n   Time: 346.53 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 24\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  sq_sqrt (mul_pos hx hy)\nargument\n  mul_pos hx hy\nhas type\n  0 < x * y : ...\n   Failure reason: Could not generate fix\n   Time: 503.35 seconds\n\nFailed fix 2:\n   Line: 33\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, equality or iff proof expected\n  \u211d\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082...\n   Failure reason: Could not generate fix\n   Time: 466.58 seconds\n\nFailed fix 3:\n   Line: 36\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (x - y) ^ 2...\n   Failure reason: Could not generate fix\n   Time: 470.61 seconds\n\nFailed fix 4:\n   Line: 41\n   Error type: ring_expr_not_equal\n   Original error message: ring failed, ring expressions not equal\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y \u2264 x\nh\u2082 : \u221a(x * y) * (x - y...\n   Failure reason: Could not generate fix\n   Time: 382.42 seconds\n\nFailed fix 5:\n   Line: 48\n   Error type: unknown_identifier\n   Original error message: unknown identifier 'discriminant_nonneg'...\n   Failure reason: Could not generate fix\n   Time: 338.58 seconds\n\nFailed fix 6:\n   Line: 55\n   Error type: type_mismatch\n   Original error message: type mismatch\n  h\u2087\nhas type\n  (s ^ 2) ^ 2 - 4 * 4 * s ^ 2 \u2265 0 : Prop\nbut is expected to have type\n  ...\n   Failure reason: Could not generate fix\n   Time: 334.54 seconds\n\nFailed fix 7:\n   Line: 67\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  0 ^ 2 \u2264 s\nx...\n   Failure reason: Could not generate fix\n   Time: 2011.34 seconds\n\nFailed fix 8:\n   Line: 71\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  lt_of_lt_of_le h\nargument\n  h\nhas type\n  x + y < 4 : Prop\nbut is expecte...\n   Failure reason: Could not generate fix\n   Time: 2010.33 seconds"
+}
