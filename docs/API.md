@@ -8,48 +8,63 @@
 
 #### `lean_api.py`
 
-封装了与Lean REPL的交互。该模块现在尝试优先使用 `lean-interact` 库（如果已安装）以提高稳定性和健壮性，如果 `lean-interact` 不可用，则回退到基于 `pty` 的传统实现。
+封装了与Lean REPL的交互。该模块现在**主要基于 `lean-interact` 库**。
 
-##### 主要类: `LakeREPL`
+##### 主要类: `REPLInstance`
 
-###### `LakeREPL.__init__(work_dir=None, use_header_mode=True)`
+###### `REPLInstance.__init__()`
 
-初始化Lean REPL接口。
+初始化基于 `lean-interact` 的 REPL 实例并启动 Lean 服务器。
+环境模式现在由 `execute` 方法的 `env_mode` 参数控制。
 
-**参数**:
-- `work_dir` (str, optional): REPL进程的工作目录
-- `use_header_mode` (bool, optional): 是否启用头部处理模式（提取并复用 import/open/set_option 语句）。默认为 `True`。
+**内部状态**:
+- `self.header_env`: 存储仅由 header 代码（import, open, set_option 等）成功执行后产生的环境。此环境用于后续 `execute(env_mode='header')` 调用（如果 header 匹配）。
+- `self._latest_env`: 存储最近一次成功执行 `execute` 且该模式需要更新此状态（即 `env_mode='header'` 或 `env_mode='latest'`）后的最终环境状态。
+- `self.current_header`: 存储与 `self.header_env` 对应的 header 字符串（进行 header 比较时会忽略前后空格）。
 
-###### `LakeREPL.start()`
+###### `REPLInstance.start()`
 
-启动Lake REPL进程或 `lean-interact` 服务器。
-
-**返回值**:
-- `bool`: 进程/服务器是否成功启动
-
-###### `LakeREPL.execute(code)`
-
-执行Lean代码并返回解析后的输出。如果 `use_header_mode` 为 `True`，会自动处理头部。
-
-**参数**:
-- `code` (str): 要执行的Lean代码
+启动Lean服务器。如果服务器已在运行，则无操作。
 
 **返回值**:
-- `Dict`: 包含环境信息 (`env`) 和消息列表 (`messages`) 的解析输出。失败时返回包含 `error` 键的字典。
+- `bool`: 服务器是否成功启动或已在运行。
 
-###### `LakeREPL.check(code)`
+###### `REPLInstance.execute(code: str, env_mode: str = 'fresh')`
 
-检查代码是否包含错误。
+执行Lean代码，并根据 `env_mode` 参数控制环境处理逻辑。
+
+**参数**:
+- `code` (str): 要执行的Lean代码。
+- `env_mode` (str, optional): 控制环境处理方式，默认为 `'fresh'`。
+    - `'fresh'`: 在新的、独立的环境中执行 `code`。**不**使用或更新实例的 `header_env`, `current_header`, `_latest_env` 状态。
+    - `'header'`: 使用头部感知逻辑：
+        1.  提取 header 和 main code。
+        2.  如果 header 与 `current_header` 不同（忽略空格）或 `header_env` 不存在，则在隔离环境中执行 header，成功后更新 `header_env`, `current_header`, 和 `_latest_env`。如果 header 执行失败，则停止。
+        3.  如果 header 匹配或无 header，则使用已存储的 `header_env` 作为执行 main code 的起始环境。
+        4.  执行 main code（如果存在）。
+        5.  用 main code 执行后的结果更新 `_latest_env`。
+    - `'latest'`: 使用当前的 `_latest_env` 作为起始环境执行 `code`，并用执行结果更新 `_latest_env`。
+
+**返回值**:
+- `Dict`: 包含以下键的字典：
+    - `error` (Optional[str]): Python 执行期间发生的错误信息，无错误则为 `None`。
+    - `messages` (List[Dict]): Lean 返回的消息列表（已经过 `_parse_all_errors` 处理为字典格式）。
+    - `env` (Any): 执行后的最终环境状态。对于 `'fresh'` 模式，这是该次独立执行的结果环境；对于 `'header'` 和 `'latest'` 模式，这反映了更新后的 `_latest_env`。
+    - `header_env_used` (Any): 如果 `env_mode` 是 `'header'`，则返回执行 main code 时所使用的起始环境（即处理完 header 后的 `header_env`）；否则为 `None`。
+
+###### `REPLInstance.check(code)`
+
+检查代码是否包含 Lean 错误。**内部调用 `execute(code, env_mode='header')`** 并检查返回的 `messages` 中是否有 `severity` 为 `'error'` 的消息，因为检查通常需要 header 上下文。
 
 **参数**:
 - `code` (str): 要检查的Lean代码
 
 **返回值**:
-- `Tuple[bool, Dict]`: (是否有效, 结果或错误信息)
+- `Tuple[bool, Dict]`: (`is_valid`, `execute` 返回的完整结果字典)。`is_valid` 为 `True` 当且仅当 `execute` 返回的 `messages` 中没有错误。
 
-###### `LakeREPL.extract_header(full_code)`
+###### `REPLInstance.extract_header(full_code)`
 
-从代码中提取头部部分（import, set_option, open语句）。
+从代码中提取头部部分（import, set_option, open 语句，以及它们之间的空行和注释行）。
 
 **参数**:
 - `full_code` (str): 完整代码
@@ -57,47 +72,22 @@
 **返回值**:
 - `Tuple[str, str]`: (头部代码, 不含头部的代码)
 
-###### `LakeREPL.locate_error(code)`
+###### `REPLInstance._parse_all_errors(result)` (内部方法)
 
-运行代码并找出第一个错误的位置。
-
-**返回值**:
-- `Tuple[bool, Optional[int], Optional[str]]`: (有错误, 错误行, 错误消息)
-
-###### `LakeREPL.parse_all_errors(result)`
-
-解析 `execute` 或 `check` 返回结果中的所有错误消息。
+内部辅助方法，用于解析 `lean-interact` 返回的消息对象列表为字典列表。不应直接从外部调用。
 
 **参数**:
-- `result` (Dict): 来自 execute 或 check 的结果字典
+- `result` (Dict): 包含原始 `messages` 列表的字典 (例如 `{"messages": response.messages}`)
 
 **返回值**:
-- `List[Dict]`: 错误字典列表，每个字典包含 `line`, `column`, `message`, `severity` 等键。
+- `List[Dict]`: 错误/消息字典列表。
 
-###### `LakeREPL.end()`
+###### `REPLInstance.end()`
 
-终止Lake REPL进程或关闭 `lean-interact` 服务器。
+终止 Lean 服务器连接并重置内部状态 (`header_env`, `_latest_env` 等)。
 
 **返回值**:
-- `bool`: 是否成功终止
-
-#### `lean_interact_api.py`
-
-一个更现代的 REPL 接口实现，专门使用 `lean-interact` 库。提供与 `lean_api.py` 类似的接口，但底层实现不同，通常更稳定。
-
-##### 主要类: `REPLInstance`
-
-###### `REPLInstance.__init__(work_dir=None, use_header_mode=True)`
-
-初始化基于 `lean-interact` 的 REPL 实例并启动服务器。
-
-**参数**:
-- `work_dir` (str, optional): REPL进程的工作目录 (传递给 `LeanREPLConfig`)
-- `use_header_mode` (bool, optional): 是否启用头部处理模式。默认为 `True`。
-
-###### 其他方法
-
-提供与 `lean_api.LakeREPL` 类似的方法，如 `start()`, `execute(code)`, `check(code)`, `extract_header(full_code)`, `locate_error(code)`, `parse_all_errors(result)`, `end()`。接口设计保持兼容。
+- `bool`: 固定返回 `True`。
 
 ### 错误修复与合成 (lean_enumerator.py)
 

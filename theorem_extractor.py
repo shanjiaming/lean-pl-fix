@@ -14,7 +14,7 @@ def extract_theorems_from_module(module_path):
         A list of theorem names defined in the module
     """
     # Convert module path to file path
-    file_path = os.path.join("/data/coding/Goedel-Prover/mathlib4", 
+    file_path = os.path.join("./Goedel-Prover/mathlib4", 
                             module_path.replace(".", "/") + ".lean")
     
     # Check if file exists

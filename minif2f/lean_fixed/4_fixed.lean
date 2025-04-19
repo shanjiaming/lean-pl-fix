@@ -18,7 +18,7 @@ theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
   -- Next step: Simplify both multiplications
 
   -- First multiplication: 7 * (3 * y) can be rewritten using associativity of multiplication
-  rw [mul_assoc]  -- Rewrites a*(b*c) as (a*b)*c
+  rw [<- mul_assoc]
 
   -- Now we have (7 * 3) * y + 7 * 2
   -- Next step: Compute the constant multiplications

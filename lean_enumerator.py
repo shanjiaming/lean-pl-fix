@@ -115,101 +115,48 @@ def vlog(message, level=logging.INFO):
     for handler in logging.root.handlers:
         handler.flush()
 
-# 适配新API的错误处理函数
-def parse_all_errors(result) -> List[Dict]:
+# Simplify locate_error using parsed messages from execute
+def locate_error(code: str) -> Tuple[bool, Optional[int], Optional[str], List[Dict]]:
     """
-    Parse all error messages from the Lean output
+    Run code using 'header' mode and find the first error message's location.
     
     Args:
-        result: Result from execute or check
-        
-    Returns:
-        List of error dictionaries
-    """
-    errors = []
-    
-    try:
-        if "messages" in result:
-            for error_msg in result["messages"]:
-                # 适配新API的消息格式
-                if hasattr(error_msg, 'start_pos'):
-                    start_pos = {'line': error_msg.start_pos.line, 'column': error_msg.start_pos.column}
-                    end_pos = {'line': error_msg.end_pos.line, 'column': error_msg.end_pos.column} if hasattr(error_msg, 'end_pos') else None
-                    
-                    error = {
-                        'line': start_pos['line'],
-                        'column': start_pos['column'],
-                        'end_line': end_pos['line'] if end_pos else -1,
-                        'end_column': end_pos['column'] if end_pos else -1,
-                        'message': error_msg.data,
-                        'severity': error_msg.severity if hasattr(error_msg, 'severity') else "error",
-                    }
-                    
-                    errors.append(error)
-                # 兼容旧格式的消息
-                else:
-                    start_pos = error_msg.get("pos", {})
-                    end_pos = error_msg.get("endPos", {})
-                    
-                    error = {
-                        'line': start_pos.get("line", -1),
-                        'column': start_pos.get("column", -1),
-                        'end_line': end_pos.get("line", -1) if end_pos else -1,
-                        'end_column': end_pos.get("column", -1) if end_pos else -1,
-                        'message': error_msg.get("data", ""),
-                        'severity': error_msg.get("severity", "error"),
-                    }
-                    
-                    errors.append(error)
-    except Exception as e:
-        print(f"Error parsing error messages: {str(e)}")
-        
-    return errors
-
-# 适配新API的错误定位函数
-def locate_error(code) -> Tuple[bool, Optional[int], Optional[str]]:
-    """
-    Run code and find where the error is
-    
-    Returns:
-        Tuple[bool, int, str]: (has_error, error_line, error_message)
-    """
-    # Execute the code
-    result = repl.execute(code)
-    
-    if "messages" not in result or not result["messages"]:
-        return False, None, None
-    
-    try:
-        # Parse error information
-        if "messages" in result and len(result["messages"]) > 0:
-            error_msg = result["messages"][0]
+        code: The Lean code (including header) to check.
             
-            # 适配新API的消息格式
-            if hasattr(error_msg, 'start_pos'):
-                error_line = error_msg.start_pos.line
-                end_line = error_msg.end_pos.line if hasattr(error_msg, 'end_pos') else error_line
-                error_message = error_msg.data
-            # 兼容旧格式的消息
-            else:
-                start_pos = error_msg.get("pos", {})
-                end_pos = error_msg.get("endPos", {})
-                error_line = start_pos.get("line", -1)
-                end_line = end_pos.get("line", -1) if end_pos else -1
-                error_message = error_msg.get("data", "")
+    Returns:
+        Tuple[bool, Optional[int], Optional[str], List[Dict]]: 
+            (has_error, error_line, error_message, all_parsed_errors)
+            Returns all parsed error messages (severity='error').
+    """
+    # Execute the code using header mode for context
+    result = repl.execute(code, env_mode='header')
+    # Messages are already parsed dictionaries
+    all_messages = result.get("messages", []) 
+    
+    # Filter for actual errors
+    all_errors = [e for e in all_messages if e.get('severity') == 'error']
+    
+    # Find the first error
+    first_error = all_errors[0] if all_errors else None
+    
+    if first_error:
+        error_line = first_error.get('line', -1)
+        error_message = first_error.get('message', "")
+        
+        # Optional: Check if error spans multiple lines (can be ignored for simplicity)
+        # end_line = first_error.get('end_line', -1)
+        # if error_line != end_line and end_line != -1:
+        #     vlog(f"Warning: First error spans multiple lines: {error_line} -> {end_line}", logging.WARNING)
             
-            # Only handle errors where pos and endPos are on the same line
-            if error_line == end_line and error_line > 0:
-                return True, error_line, error_message
-            else:
-                print(f"Error spans multiple lines or line number is abnormal: {error_line} -> {end_line}")
-                return False, None, None
+        if error_line > 0:
+            return True, error_line, error_message, all_errors
         else:
-            print("No error messages found")
-            return False, None, None
-    except Exception as e:
-        print(f"Error parsing error information: {str(e)}")
-        return False, None, None
+            # Error found but no valid line number? Should be rare with new parser.
+            vlog(f"Error found but line number is invalid: {error_line}. Message: {error_message}", logging.WARNING)
+            return True, None, error_message, all_errors 
+    else:
+        # No errors found
+        return False, None, None, [] # Return empty list if no errors
 
 def extract_error_type(error):
     """
@@ -410,253 +357,251 @@ def similar_error_types(error1, error2):
     
     return True
 
-def evaluate_fix(original_code, fixed_code, targeted_line, targeted_error_message=None, is_checker_mode=False):
+# Modify evaluate_fix to take full code and use header mode
+def evaluate_fix(original_code_full: str, fixed_code_full: str, targeted_line: int, targeted_error_message: Optional[str]=None, is_checker_mode: bool=False) -> Tuple[bool, List[Dict]]:
     """
-    Check if a fix resolves the targeted error
+    Check if a fix resolves the targeted error using header mode.
+    Takes full code (with header) as input. Line numbers are relative to the start of the full code.
     
     Args:
-        original_code: Original code
-        fixed_code: Fixed code
-        targeted_line: Target error line number
-        targeted_error_message: Optional, error message feature to fix
-        is_checker_mode: Whether in quick check mode (used during synthesis)
+        original_code_full: Original full code (with header).
+        fixed_code_full: Fixed full code (with header).
+        targeted_line: Target error line number (relative to full code).
+        targeted_error_message: Optional, substring of the error message to target.
+        is_checker_mode: Whether in quick check mode (used during synthesis).
         
     Returns:
-        bool, list: Whether the fix successfully resolved the error, and the list of errors in fixed code
+        Tuple[bool, List[Dict]]: (fix_is_valid, list_of_remaining_errors)
+            fix_is_valid is True if the target error is gone and no new errors were introduced.
+            list_of_remaining_errors contains error messages from the fixed code.
     """
-    # Get all errors in the original code
-    original_result = repl.execute(original_code)
-    original_errors = parse_all_errors(original_result)
+    # Get all errors in the original code using header mode
+    original_result = repl.execute(original_code_full, env_mode='header')
+    # Directly use parsed messages and filter for errors
+    original_errors = [m for m in original_result.get("messages", []) if m.get('severity') == 'error']
     
-    # Get all errors in the fixed code
-    fixed_result = repl.execute(fixed_code)
-    fixed_errors = parse_all_errors(fixed_result)
+    # Get all errors in the fixed code using header mode
+    fixed_result = repl.execute(fixed_code_full, env_mode='header')
+    # Directly use parsed messages and filter for errors
+    fixed_errors = [m for m in fixed_result.get("messages", []) if m.get('severity') == 'error']
     
     # Display error statistics
     if not is_checker_mode:
         vlog(f"Original code error count: {len(original_errors)}")
         vlog(f"Fixed code error count: {len(fixed_errors)}")
     elif is_checker_mode:
-        vlog(f"Testing fix: Original errors: {len(original_errors)}, Fixed errors: {len(fixed_errors)}")
-    
-    # If there are no errors at all, that's the best case
-    if len(fixed_errors) == 0:
+        # Be less verbose in checker mode
+        # vlog(f"Testing fix: Original errors: {len(original_errors)}, Fixed errors: {len(fixed_errors)}")
+        pass
+
+    # If there are no errors at all in the fixed code, that's the best case
+    if not fixed_errors:
         if is_checker_mode:
             vlog("Result: True (no errors)")
         
-        # Log original errors details for debugging
-        vlog("=== Original errors detail ===", logging.DEBUG)
-        for i, error in enumerate(original_errors):
-            vlog(f"Error {i+1}: line {error['line']}, type: {extract_error_type(error)}, message: {error['message']}", logging.DEBUG)
+        # Log original errors details for debugging if needed
+        # vlog("=== Original errors detail ===", logging.DEBUG) ...
         
-        # Log fixed code
-        original_lines = original_code.splitlines()
-        fixed_lines = fixed_code.splitlines()
+        # Log fixed code changes if needed (can be verbose)
+        # vlog("=== Fixed code comparison ===", logging.DEBUG) ...
         
-        vlog("=== Fixed code comparison ===", logging.DEBUG)
-        for i, (orig_line, fixed_line) in enumerate(zip(original_lines, fixed_lines), 1):
-            if orig_line != fixed_line:
-                vlog(f"Line {i} changed:", logging.DEBUG)
-                vlog(f"  Original: {orig_line}", logging.DEBUG)
-                vlog(f"  Fixed:    {fixed_line}", logging.DEBUG)
-        
-        return True, fixed_errors
-    
+        return True, [] # Return empty list for remaining errors
+
+    # --- Logic to check if the specific target error is fixed ---
     # Find the original errors at the target line
-    target_errors = [e for e in original_errors if e['line'] == targeted_line]
-    if not target_errors:
-        # In checker mode, if no target line error is found, it might be because we're using a placeholder
-        # In this case, we assume there's an error at the target line
-        pass
-    
-    # Check if the target line errors are fixed
+    target_errors_in_original = [e for e in original_errors if e.get('line') == targeted_line]
+
+    # If a specific error message was targeted, filter further
+    if targeted_error_message:
+        target_errors_in_original = [e for e in target_errors_in_original if targeted_error_message in e.get('message','')]
+
     target_error_fixed = True
-    for original_error in target_errors:
-        if targeted_error_message and targeted_error_message not in original_error['message']:
-            continue  # Not the specific error we're looking for
-            
-        # Check if the same error still exists in the fixed code
-        for fixed_error in fixed_errors:
-            if similar_error_types(fixed_error, original_error):
+    if not target_errors_in_original:
+        # If the target line had no errors originally (or not the specific one targeted),
+        # we can't claim to have fixed it. But maybe it's okay if no new errors are introduced?
+        # Let's be strict for now: if the target wasn't there, the fix isn't valid *for that target*.
+        # However, in checker mode, we might proceed assuming it was there implicitly.
+        if not is_checker_mode:
+             vlog(f"Warning: No original error found at target line {targeted_line} matching criteria.", logging.WARNING)
+             target_error_fixed = False # Cannot confirm fix if target wasn't there
+        # else: pass # Allow checker mode to proceed
+
+    else:
+        # Check if *any* of the targeted original errors still exist in the fixed code
+        for original_error in target_errors_in_original:
+            target_still_present = False
+            for fixed_error in fixed_errors:
+                # Use similar_error_types for comparison
+                if similar_error_types(fixed_error, original_error):
+                    target_still_present = True
+                    break 
+            if target_still_present:
                 target_error_fixed = False
-                if not is_checker_mode:
-                    vlog(f"Target error still exists: {fixed_error['message'][:100]}...")
-                elif is_checker_mode:
-                    vlog(f"Target error not fixed: {fixed_error['message'][:100]}...")
-                break
-    
-    # Check if new errors were introduced
+                error_msg_snippet = original_error['message'][:100].replace('\n', ' ')
+                # Be less verbose in checker mode
+                log_msg = f"Target error at line {targeted_line} not fixed: {error_msg_snippet}..."
+                if not is_checker_mode: vlog(log_msg)
+                # else: vlog(log_msg, level=logging.DEBUG) # Log only in debug for checker
+                break # One persistent error is enough to mark as not fixed
+
+    # --- Logic to check for newly introduced errors ---
     new_errors = []
     for fixed_error in fixed_errors:
         is_new = True
         for orig_error in original_errors:
-            # Check if this is the same error
+            # Check if this is the same error (position and potentially message)
             if similar_error_types(fixed_error, orig_error):
                 is_new = False
                 break
         if is_new:
             new_errors.append(fixed_error)
-    
-    # Unified judgment criteria: target error must be fixed and no new errors introduced
+
+    # --- Final decision ---
+    # Success requires the targeted error (if present originally) to be fixed AND no new errors introduced.
     success = target_error_fixed and not new_errors
 
-    # Log detailed information for debugging
+    # Logging
     if success:
-        vlog("Result: True (target error fixed and no new errors introduced)")
-        
-        # Log original and fixed errors detail for successful fixes
-        vlog("=== Original errors detail ===", logging.DEBUG)
-        for i, error in enumerate(original_errors):
-            vlog(f"Error {i+1}: line {error['line']}, type: {extract_error_type(error)}, message: {error['message']}", logging.DEBUG)
-        
-        # Log fixed code line by line comparison
-        original_lines = original_code.splitlines()
-        fixed_lines = fixed_code.splitlines()
-        
-        vlog("=== Fixed code comparison ===", logging.DEBUG)
-        for i, (orig_line, fixed_line) in enumerate(zip(original_lines, fixed_lines), 1):
-            if orig_line != fixed_line:
-                vlog(f"Line {i} changed:", logging.DEBUG)
-                vlog(f"  Original: {orig_line}", logging.DEBUG)
-                vlog(f"  Fixed:    {fixed_line}", logging.DEBUG)
+        if not is_checker_mode: vlog("Result: True (target error fixed and no new errors introduced)")
+        # else: vlog("Result: True (checker passed)") # Less verbose for checker
     else:
         if not target_error_fixed:
-            vlog("Result: False (target error not fixed)")
-        else:
-            vlog(f"Result: False (introduced {len(new_errors)} new errors)")
+             # Error message already logged above if target error persists
+             if not is_checker_mode: vlog(f"Result: False (target error at line {targeted_line} not fixed or wasn't present)")
+             # else: vlog(f"Result: False (checker failed - target error persisted)")
+        elif new_errors:
+            if not is_checker_mode: vlog(f"Result: False (introduced {len(new_errors)} new errors)")
+            # else: vlog(f"Result: False (checker failed - new errors)")
             # Log new errors detail
             vlog("=== New errors detail ===", logging.DEBUG)
             for i, error in enumerate(new_errors):
                 vlog(f"New Error {i+1}: line {error['line']}, type: {extract_error_type(error)}, message: {error['message']}", logging.DEBUG)
-    
-    return success, fixed_errors
+            
+    return success, fixed_errors # Return the list of errors remaining in the fixed code
 
-def prepare_code_for_synthesis(full_code, target_error_line=None):
+# Modify prepare_code_for_synthesis to use header mode and return header
+def prepare_code_for_synthesis(full_code: str, target_error_line_num: Optional[int]=None) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[str], Optional[int], Optional[str]]:
     """
-    Prepare code for synthesis: extract parts for synthesis
+    Prepare code for synthesis: extract parts for synthesis.
+    Uses header mode to get errors relative to the full code.
     
     Args:
-        full_code: Full code
-        target_error_line: Specific error line to process, if provided
+        full_code: Full code (with header).
+        target_error_line_num: Specific error line number to process (relative to full code).
         
     Returns:
-        (before part, error line indentation, original error line content, after part, error line number)
+        Tuple[Optional[str], Optional[str], Optional[str], Optional[str], Optional[int], Optional[str]]:
+            (before_part, indentation, original_error_line_content, after_part, actual_error_line_num, header_code) 
+            Returns None for tuple elements if no suitable error found or on error.
     """
-    # Get code without header
-    header_code, code_without_head = repl.extract_header(full_code)
+    # Extract header first
+    header_code, _ = repl.extract_header(full_code) # We need the header later
     
-    if VERBOSE_OUTPUT:
-        vlog(f"Removed header content, remaining {len(code_without_head.splitlines())} lines of code")
-    
-    # If target error line is provided, use it
-    if target_error_line is not None:
+    # Execute the full code to get errors relative to the full file
+    result = repl.execute(full_code, env_mode='header')
+    # Directly use parsed messages and filter for errors
+    all_errors = [m for m in result.get("messages", []) if m.get('severity') == 'error']
+
+    if not all_errors:
+        vlog("Code has no errors, no need for fixes")
+        return None, None, None, None, None, header_code
+
+    # Determine the error to target
+    target_error = None
+    if target_error_line_num is not None:
         if VERBOSE_OUTPUT:
-            vlog(f"Using specified target error line: {target_error_line}")
-        error_line = target_error_line
-        # Still check to confirm this line actually has an error
-        result = repl.execute(code_without_head)
-        errors = parse_all_errors(result)
-        target_errors = [e for e in errors if e['line'] == target_error_line]
-        
-        if not target_errors:
-            if VERBOSE_OUTPUT:
-                vlog(f"Warning: No errors found at specified line {target_error_line}")
-            # Try falling back to automatic location
-            has_error, auto_error_line, error_message = locate_error(code_without_head)
-            if has_error:
-                if VERBOSE_OUTPUT:
-                    vlog(f"Automatically located error at line: {auto_error_line}")
-                error_line = auto_error_line
-            else:
-                if VERBOSE_OUTPUT:
-                    vlog("Could not locate any errors")
-                return None, None, None, None, None
-        else:
-            # Use the found error message
-            error_message = target_errors[0]['message']
-            if VERBOSE_OUTPUT:
-                vlog(f"Found error at specified line: {error_message}")
+            vlog(f"Attempting to use specified target error line: {target_error_line_num}")
+        # Find the error at the specified line
+        target_error = next((e for e in all_errors if e.get('line') == target_error_line_num), None)
+        if not target_error:
+            vlog(f"Warning: No error found at specified line {target_error_line_num}. Falling back to first error.", logging.WARNING)
+            target_error = all_errors[0] # Fallback to first error
     else:
-        # Use code without header for error location
-        has_error, error_line, error_message = locate_error(code_without_head)
+        # Default to the first error
+        target_error = all_errors[0]
+
+    error_line = target_error.get('line')
+    error_message = target_error.get('message')
+    
+    if error_line is None or error_line <= 0:
+        vlog(f"Error found, but line number is invalid: {error_line}. Message: {error_message}", logging.ERROR)
+        return None, None, None, None, None, header_code
         
-        if not has_error:
-            if VERBOSE_OUTPUT:
-                vlog("Code has no errors, no need for fixes")
-            return None, None, None, None, None
-    
     if VERBOSE_OUTPUT:
-        vlog(f"Error at line {error_line}: {error_message}")
+        vlog(f"Targeting error at line {error_line} (relative to full code): {error_message[:100]}...")
     
-    # Split code without header into lines
-    lines = code_without_head.splitlines()
+    # Split *full* code into lines
+    lines = full_code.splitlines()
     
-    if error_line <= 0 or error_line > len(lines):
+    if error_line > len(lines):
         if VERBOSE_OUTPUT:
             vlog(f"Error line number out of range: {error_line}, total lines: {len(lines)}")
-        return None, None, None, None, None
+        return None, None, None, None, None, header_code
     
-    # Get error line indentation and original content
+    # Get error line indentation and original content from the full code
     error_line_text = lines[error_line - 1]
     indentation = re.match(r'(\s*)', error_line_text).group(1)
-    original_error_line_content = error_line_text.strip()  # Original content of error line (without indentation)
+    original_error_line_content = error_line_text.strip()
     
-    # Build before and after code
+    # Build before and after code based on *full* code lines
     before_lines = lines[:error_line - 1]
     after_lines = lines[error_line:]
     
-    before = '\n'.join(before_lines) + '\n' if before_lines else ''
-    after = '\n' + '\n'.join(after_lines) if after_lines else ''
+    # Reconstruct before/after parts as single strings
+    before = '\n'.join(before_lines) + ('\n' if before_lines else '') 
+    after = ('\n' if after_lines else '') + '\n'.join(after_lines)
     
-    return before, indentation, original_error_line_content, after, error_line
+    # before part now contains the header
+    return before, indentation, original_error_line_content, after, error_line, header_code
 
-def checker(s, before, indentation, original_error_content, after, original_error_line):
+# Modify checker to pass header_code and use updated evaluate_fix
+def checker(s: str, before: str, indentation: str, original_error_content: str, after: str, original_error_line: int, header_code: str) -> bool:
     """
-    Test if the synthesized code fragment fixes the error
+    Test if the synthesized code fragment fixes the error.
+    Now takes header_code explicitly and reconstructs full codes.
+    Uses the updated evaluate_fix.
     
     Args:
-        s: Fix code fragment to test
-        before: Code before error line
-        indentation: Error line indentation
-        original_error_content: Original content of error line (without indentation)
-        after: Code after error line
-        original_error_line: Original error line number
+        s: Fix code fragment to test.
+        before: Code before error line (potentially including header).
+        indentation: Error line indentation.
+        original_error_content: Original content of error line (without indentation).
+        after: Code after error line.
+        original_error_line: Original error line number (relative to full code).
+        header_code: The extracted header code (not used directly here but passed by interpreter).
     """
-    # Build original code - including original error line
-    original_code = before + indentation + original_error_content + after
+    # Build original full code
+    original_full_code = before + indentation + original_error_content + after
     
+    # --- Build fixed code --- 
     # Check if the line contains "by " and handle replacement accordingly
     if "by " in original_error_content:
-        # Find the position of "by " in the line
+        # Special handling for `by` tactics: replace only the tactic part
         by_pos = original_error_content.find("by ")
-        # Get the part before "by "
-        before_by = original_error_content[:by_pos + 3]
-        # Find the position of the first right parenthesis after "by "
-        right_paren_pos = original_error_content.find(")", by_pos + 3)
-        if right_paren_pos != -1:
-            # If there's a right parenthesis, only replace up to that point
-            fixed_line = before_by + s + original_error_content[right_paren_pos:]
-        else:
-            # If no right parenthesis, replace everything after "by "
-            fixed_line = before_by + s
+        prefix = original_error_content[:by_pos + 3] # Include "by "
+        # Heuristic: Assume tactic ends at line end or before a comment?
+        # For simplicity, replace everything after "by " for now.
+        # More robust parsing might be needed for complex cases.
+        fixed_line_content = prefix + s 
     else:
-        # Original behavior - replace the whole line
-        fixed_line = s
+        # Default: replace the whole stripped line content
+        fixed_line_content = s
+    # Combine fixed full code
+    fixed_full_code = before + indentation + fixed_line_content + after
+    # --- End Build fixed code --- 
     
-    # Combine fixed code
-    fixed_code = before + indentation + fixed_line + after
-    
-    if VERBOSE_OUTPUT:
-        vlog(f"Testing fragment: {s}")
-        vlog(f"Original error line: {indentation + original_error_content}")
-    # if original_error_line == 32 and s == "ring":
-        # breakpoint()
+    # vlog(f"Testing fragment: {s}", level=logging.DEBUG)
+    # vlog(f"Original line {original_error_line}: {indentation + original_error_content}", level=logging.DEBUG)
+    # vlog(f"Fixed line {original_error_line}:    {indentation + fixed_line_content}", level=logging.DEBUG)
+
+    # Use the modified evaluate_fix which takes full codes
     success, _ = evaluate_fix(
-        original_code,
-        fixed_code,
+        original_full_code,
+        fixed_full_code,
         original_error_line,
-        is_checker_mode=True
+        is_checker_mode=True # Indicate this is a quick check
     )
+    # vlog(f"Checker result for '{s}': {success}", level=logging.DEBUG)
     return success
 
 def get_program_string(prog):
@@ -710,13 +655,15 @@ def get_program_string(prog):
         # If we know what the fix is, return it directly
         return "rw [<- mul_assoc]"  # We've seen from logs this is a successful fix
 
+# Modify ToyInterpreter to store and pass header_code
 class ToyInterpreter(PostOrderInterpreter):
-    def __init__(self, before, indentation, original_error_content, after, error_line):
+    def __init__(self, before: str, indentation: str, original_error_content: str, after: str, error_line: int, header_code: str):
         self.before = before
         self.indentation = indentation
         self.original_error_content = original_error_content
         self.after = after
         self.error_line = error_line
+        self.header_code = header_code # Store header
         self.last_solution = None  # Save the last successful fix
         super().__init__()
 
@@ -736,418 +683,304 @@ class ToyInterpreter(PostOrderInterpreter):
         Returns a boolean indicating whether the fix is valid
         """
         solution = args[0]  # Save the solution string
-        result = checker(solution, self.before, self.indentation, self.original_error_content, self.after, self.error_line)
+        # Pass header_code to checker
+        result = checker(solution, self.before, self.indentation, self.original_error_content, self.after, self.error_line, self.header_code)
         # If the check passes, save this solution
         if result:
             self.last_solution = solution
-            vlog(f"Found effective solution: {solution}")
+            # vlog(f"Found effective solution: {solution}") # Be less verbose in interpreter
         return result
 
-def synthesize_fix(code, target_error_line=None):
+# Modify synthesize_fix to use updated helpers
+def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tuple[Optional[str], bool, str, float, List[Dict]]:
     """
-    Fix the given code
+    Attempt to fix a single error in the given code using header mode implicitly.
     
     Args:
-        code: Code to fix
-        target_error_line: Error line to fix, if not provided will find the first error
+        code: Full code to fix (including header).
+        target_error_line_num: Specific error line number to fix (relative to full code). 
+                               If None, targets the first error found.
         
     Returns:
-        (fixed_code, success, message, time_elapsed, fixed_errors): Fixed code, success flag, message, time elapsed, and fixed errors
+        Tuple[Optional[str], bool, str, float, List[Dict]]: 
+            (fixed_code, success, message, time_elapsed, list_of_remaining_errors)
+            fixed_code is the full code with the fix applied (or original if failed).
+            success indicates if the specific error was fixed without new errors.
+            list_of_remaining_errors contains errors present *after* the fix attempt.
     """
-    # Start timing
     start_time = time.time()
-    
-    # Get Tyrell spec file path from arguments
     spec_file = get_spec_path()
+    # Check if spec file exists (simplified check)
     if not os.path.exists(spec_file):
-        # Fallback if the specified file doesn't exist
-        vlog(f"Warning: Tyrell spec file not found at {spec_file}, falling back to default semantic/lean.tyrell", logging.WARNING)
-        spec_file = 'semantic/lean.tyrell'
-        if not os.path.exists(spec_file):
-            vlog(f"Error: Default Tyrell spec file {spec_file} also not found!", logging.ERROR)
-            # End timing early if spec is missing
-            elapsed_time = time.time() - start_time
-            return None, False, f"Tyrell spec file {spec_file} not found", elapsed_time, []
-
-    # Extract header and code without header
-    header_code, code_without_head = repl.extract_header(code)
-    
-    # Prepare code for synthesis
-    before, indentation, original_error_content, after, error_line = prepare_code_for_synthesis(code, target_error_line)
-    
-    if before is None:
-        if VERBOSE_OUTPUT:
-            vlog("Could not prepare code, skipping synthesis")
-        # End timing
+        vlog(f"Error: Tyrell spec file {spec_file} not found!", logging.ERROR)
         elapsed_time = time.time() - start_time
-        return None, False, "Could not prepare code", elapsed_time, []
+        # Attempt to get original errors even if spec is missing
+        initial_check_result = repl.execute(code, env_mode='header')
+        initial_errors = [e for e in initial_check_result.get("messages", []) if e.get('severity') == 'error']
+        return code, False, f"Tyrell spec file {spec_file} not found", elapsed_time, initial_errors
+
+    # Prepare code using the updated function
+    prep_result = prepare_code_for_synthesis(code, target_error_line_num)
     
-    # Save original code
-    original_code = code_without_head
+    if prep_result is None or prep_result[0] is None:
+        elapsed_time = time.time() - start_time
+        # Check if code originally had errors
+        initial_check_result = repl.execute(code, env_mode='header')
+        initial_errors = [e for e in initial_check_result.get("messages", []) if e.get('severity') == 'error']
+        if not initial_errors:
+            return code, True, "No errors found in original code", elapsed_time, []
+        else:
+            # Prep failed, likely invalid line number or other issue
+            return code, False, "Could not prepare code for synthesis (invalid line or no errors found)", elapsed_time, initial_errors
     
-    if VERBOSE_OUTPUT:
-        vlog("\n" + "="*50)
-        vlog("Code prepared, starting synthesis")
-        vlog(f"Before part: {before.strip()}")
-        vlog(f"Error line: {indentation + original_error_content}")
-        vlog(f"After part: {after.strip()}")
-        vlog("="*50 + "\n")
-    
-    # Get error statistics for original code
-    result = repl.execute(code_without_head)
-    original_errors = parse_all_errors(result)
+    before, indentation, original_error_content, after, error_line, header_code = prep_result
+    original_full_code = code # Keep original full code for final evaluation
+
+    # Get original errors (again, to be safe, though prep_code should have them)
+    original_result = repl.execute(original_full_code, env_mode='header')
+    original_errors = [m for m in original_result.get("messages", []) if m.get('severity') == 'error']
     original_error_count = len(original_errors)
-    
-    # Parse spec using the path from arguments
+
+    # --- Synthesis Setup ---
     logger.info(f'Parsing spec file: {spec_file}...')
     try:
         spec = S.parse_file(spec_file)
-    except FileNotFoundError:
-        vlog(f"Error: Tyrell spec file {spec_file} not found during parsing!", logging.ERROR)
-        elapsed_time = time.time() - start_time
-        return None, False, f"Tyrell spec file {spec_file} not found", elapsed_time, []
-    except Exception as e:
+    except Exception as e: # Catch potential parsing errors
         vlog(f"Error parsing Tyrell spec file {spec_file}: {str(e)}", logging.ERROR)
         elapsed_time = time.time() - start_time
-        return None, False, f"Error parsing Tyrell spec file {spec_file}: {str(e)}", elapsed_time, []
+        return code, False, f"Error parsing Tyrell spec file {spec_file}: {str(e)}", elapsed_time, original_errors
     logger.info('Parsing successful')
 
-    # Build interpreter and synthesizer
-    toy_interpreter = ToyInterpreter(before, indentation, original_error_content, after, error_line)
+    # Build interpreter (passing header_code)
+    toy_interpreter = ToyInterpreter(before, indentation, original_error_content, after, error_line, header_code)
 
     logger.info('Building synthesizer...')
     synthesizer = Synthesizer(
-        enumerator=ExhaustiveEnumerator(spec, max_depth=4),
+        enumerator=ExhaustiveEnumerator(spec, max_depth=4), 
         decider=ExampleDecider(
             interpreter=toy_interpreter,
-            examples=[Example(input=[], output=True)]
+            examples=[Example(input=[], output=True)] 
         )
     )
+    # --- End Synthesis Setup ---
+
+    logger.info(f'Starting program synthesis for error at line {error_line}...')
+    prog = None
+    fixed_full_code = original_full_code # Default to original code
+    success = False
+    message = "Synthesis failed: No program generated."
+    remaining_errors = original_errors
     
-    # Start synthesis
-    logger.info('Starting program synthesis...')
+    # *** Corrected Try/Except Block ***
     try:
         prog = synthesizer.synthesize()
         
         if prog is not None:
-            # Try to get recorded solution from interpreter
+            fix = None
             if toy_interpreter.last_solution:
                 fix = toy_interpreter.last_solution
-                logger.info(f'Get last successful solution from interpreter: {fix}')
+                logger.info(f'Using last successful solution from interpreter: {fix}')
             else:
-                # If no recorded solution, try evaluating again
-                logger.info('No recorded solution found, trying to evaluate again...')
+                logger.warning('No recorded solution found in interpreter after synthesis, likely synthesis failed internally or no solution exists.')
+                # Attempt to evaluate the program directly (might fail or give non-string)
                 try:
-                    fix = toy_interpreter.eval(prog)
-                    logger.info(f'Get solution by evaluating again: {fix}')
+                   eval_result = toy_interpreter.eval(prog)
+                   if isinstance(eval_result, str): 
+                       fix = eval_result
+                       logger.info(f'Evaluated program directly: {fix}')
+                   else: 
+                       logger.warning(f'Direct evaluation did not return a string: {eval_result}')
+                       fix = None # If eval doesn't return a string fix, discard
                 except Exception as eval_err:
-                    # If evaluation fails, fall back to using get_program_string
-                    logger.info(f'Evaluation failed: {str(eval_err)}, trying get_program_string...')
-                    fix = get_program_string(prog)
-                    # If it's a checker node, try to extract its parameters
-                    if isinstance(fix, str) and fix.startswith("checker("):
-                        match = re.search(r"checker\((.*?)\)", fix)
-                        if match:
-                            fix = match.group(1)
-                    
-            logger.info(f'Final solution to use: {fix}')
-            
-            # Apply fix
-            fixed_code = before + indentation + fix + after
-            if VERBOSE_OUTPUT:
-                vlog("\n" + "="*50)
-                vlog("Fixed code:")
-                vlog(fixed_code)
-                vlog("="*50)
-            
-            # Evaluate the fix
-            success, fixed_errors = evaluate_fix(
-                code_without_head,
-                fixed_code,
-                error_line
-            )
-            
-            message = "Synthesis successful"
-            if VERBOSE_OUTPUT:
-                vlog("\n" + "="*50)
-                vlog(message)
-                vlog("="*50)
-            
-            # End timing
-            elapsed_time = time.time() - start_time
-            if VERBOSE_OUTPUT:
-                vlog(f"Fix time: {elapsed_time:.2f} seconds")
-            
-            # Return full fixed code (including header)
-            return header_code + "\n" + fixed_code, success, message, elapsed_time, fixed_errors
-        else:
-            logger.info('No solution found!')
-            # Build message with original error information
-            no_solution_message = f"Original code error count: {original_error_count}\nFixed code error count: {original_error_count}\nNo solution found"
-            
-            # End timing
-            elapsed_time = time.time() - start_time
-            if VERBOSE_OUTPUT:
-                vlog(f"Failed attempt time: {elapsed_time:.2f} seconds")
-            
-            return None, False, no_solution_message, elapsed_time, []
-    except Exception as e:
-        if VERBOSE_OUTPUT:
-            vlog(f"Synthesis failed: {str(e)}")
-        # Try to extract successful fix from exception information
-        error_log = str(e)
-        
-        # Find test fragment
-        match = re.search(r"Testing fragment: (.*?)\nResult: True", error_log)
-        if match:
-            fix = match.group(1)
-            if VERBOSE_OUTPUT:
-                vlog(f"Get successful fix from error log: {fix}")
-            
-            fixed_code = before + indentation + fix + after
-            if VERBOSE_OUTPUT:
-                vlog("\n" + "="*50)
-                vlog("Fixed code:")
-                vlog(fixed_code)
-                vlog("="*50)
-            
-            # Evaluate the fix
-            success, fixed_errors = evaluate_fix(
-                code_without_head,
-                fixed_code,
-                error_line
-            )
-            
-            message = "Synthesis successful (extracted from error log)"
-            if VERBOSE_OUTPUT:
-                vlog("\n" + "="*50)
-                vlog(message)
-                vlog("="*50)
-            
-            # End timing
-            elapsed_time = time.time() - start_time
-            if VERBOSE_OUTPUT:
-                vlog(f"Fix time: {elapsed_time:.2f} seconds")
-            
-            # Return full fixed code (including header)
-            return header_code + "\n" + fixed_code, success, message, elapsed_time, fixed_errors
-        
-        # Build message with original error information
-        error_message = f"Original code error count: {original_error_count}\nFixed code error count: {original_error_count}\nSynthesis failed: {str(e)}"
-        
-        # End timing
-        elapsed_time = time.time() - start_time
-        if VERBOSE_OUTPUT:
-            vlog(f"Failed attempt time: {elapsed_time:.2f} seconds")
-        
-        return None, False, error_message, elapsed_time, []
+                   logger.error(f'Direct evaluation failed: {eval_err}')
+                   fix = None # Ensure fix is None if direct eval fails
 
-def synthesize_all_fixes(code):
+            if fix: # Proceed only if we have a string fix
+                logger.info(f'Applying synthesized fix: {fix}')
+                
+                # --- Apply fix (similar to checker) ---
+                if "by " in original_error_content:
+                    by_pos = original_error_content.find("by ")
+                    prefix = original_error_content[:by_pos + 3]
+                    fixed_line_content = prefix + fix
+                else:
+                    fixed_line_content = fix
+                fixed_full_code = before + indentation + fixed_line_content + after
+                # --- End Apply fix ---
+
+                # Evaluate the fix using full codes
+                success, remaining_errors = evaluate_fix(
+                    original_full_code, 
+                    fixed_full_code, 
+                    error_line 
+                )
+                message = "Synthesis successful" if success else "Synthesized fix failed validation (error persisted or new errors introduced)"
+            else:
+                # No valid fix string obtained
+                 message = "Synthesis failed: No valid fix generated or extracted."
+                 success = False
+                 remaining_errors = original_errors # Errors remain unchanged
+                 fixed_full_code = original_full_code # Return original code
+        else:
+             logger.info('Synthesizer returned None (no solution found).')
+             message = "Synthesis failed: No solution found by synthesizer."
+             success = False
+             remaining_errors = original_errors
+             fixed_full_code = original_full_code
+
+    except Exception as e:
+        logger.error(f"Synthesis process failed with exception: {e}", exc_info=True) # Log traceback
+        message = f"Synthesis failed with exception: {e}"
+        success = False
+        remaining_errors = original_errors # Assume errors unchanged on exception
+        fixed_full_code = original_full_code
+    # *** End Corrected Try/Except Block ***
+
+    elapsed_time = time.time() - start_time
+    vlog(f"Fix attempt for line {error_line} finished in {elapsed_time:.2f}s. Success: {success}. Message: {message}")
+    
+    return fixed_full_code, success, message, elapsed_time, remaining_errors
+
+# Modify synthesize_all_fixes to use updated helpers
+def synthesize_all_fixes(code: str) -> Tuple[str, bool, str, Dict]:
     """
-    Try to fix each error in the code once, without complex iteration.
-    For each error, try to fix once: accept if successful, skip if failed.
+    Try to fix each error in the code sequentially, using header mode for checks.
     
     Args:
-        code: Original code, possibly with header
+        code: Original full code (including header).
         
     Returns:
-        (fixed_code, success, message, stats_dict): Fixed code, whether successful, text message, and JSON-compatible stats dictionary
+        Tuple[str, bool, str, Dict]: 
+            (final_fixed_code, overall_success, summary_message, stats_dict)
+            overall_success is True only if *all* original errors are fixed.
     """
-    # Record total start time
     total_start_time = time.time()
+    vlog("\n===== Starting sequential error fixing =====")
     
-    if VERBOSE_OUTPUT:
-        vlog("\n===== Starting to fix all errors =====")
-    original_code = code
     current_code = code
-    fixed_errors = 0
-    failed_errors = 0
-    overall_message = []
-    
-    # For collecting detailed information about successful fixes
+    total_fixed_count = 0
+    total_failed_attempts = 0
     successful_fixes_details = []
-    # For collecting information about failed fixes
     failed_fixes_details = []
     
-    # Extract header and code without header
-    header_code, code_without_head = repl.extract_header(current_code)
-    
-    # Get all errors from original code
-    result = repl.execute(code_without_head)
-    original_errors = parse_all_errors(result)
+    # Initial error check
+    initial_result = repl.execute(current_code, env_mode='header')
+    original_errors = [m for m in initial_result.get("messages", []) if m.get('severity') == 'error']
     original_error_count = len(original_errors)
+    vlog(f"Found {original_error_count} initial errors.")
     
-    # Output all original error details
-    if VERBOSE_OUTPUT:
-        vlog(f"\nFound {original_error_count} original errors:")
-        for i, error in enumerate(original_errors, 1):
-            vlog(f"Error {i}: line {error['line']}, type: {extract_error_type(error)}, message: {error['message'][:100]}...")
-    
-    overall_message.append(f"Original code error count: {original_error_count}")
-    
-    # If no errors, return immediately
     if original_error_count == 0:
-        overall_message.append("Code has no errors, no need for fixes")
-        # Calculate total elapsed time
+        vlog("Original code has no errors.")
         total_elapsed_time = time.time() - total_start_time
-        # Prepare JSON-compatible stats dictionary
-        stats_dict = {
-            "original_errors": original_error_count,
-            "fixed_errors": 0,
-            "failed_errors": 0,
-            "remaining_errors": 0,
-            "fix_rate": 1.0000,
-            "successful_fixes": [],
-            "failed_fixes": [],
-            "total_time": total_elapsed_time
-        }
-        return current_code, True, "\n".join(overall_message), stats_dict
+        stats = {"original_errors": 0, "fixed_errors": 0, "failed_errors": 0, "remaining_errors": 0, 
+                 "fix_rate": 1.0, "successful_fixes": [], "failed_fixes": [], "remaining_errors_details": [], "total_time": total_elapsed_time}
+        return code, True, "No errors found.", stats
+
+    # --- Sequential Fixing Loop ---
+    # We iterate based on the *original* error list for simplicity, 
+    # but apply fixes to the sequentially updated `current_code`.
+    # Note: Line numbers might shift after fixes. We pass the original line number to synthesize_fix.
     
-    # Sort errors by line number, usually fixing from front to back is more reasonable
-    sorted_errors = sorted(original_errors, key=lambda e: e['line'])
+    original_errors_sorted = sorted(original_errors, key=lambda e: e.get('line', 0))
     
-    # Try to fix each error once
-    for i, error in enumerate(sorted_errors, 1):
-        error_line = error['line']
-        error_type = extract_error_type(error)
-        error_message = error['message']
+    for i, error_to_target in enumerate(original_errors_sorted, 1):
+        target_line = error_to_target.get('line')
+        error_type = extract_error_type(error_to_target)
+        error_message = error_to_target.get('message', '')
+
+        if target_line is None:
+            vlog(f"Skipping original error {i} due to missing line number.", logging.WARNING)
+            total_failed_attempts += 1
+            failed_fixes_details.append({
+                "line": "N/A", "error_type": error_type, "original_error_message": error_message,
+                "failure_reason": "Missing line number in original error", "attempt_time": 0
+            })
+            continue
+            
+        vlog(f"\nAttempting fix {i}/{original_error_count} for original error at line {target_line} ({error_type})...")
         
-        if VERBOSE_OUTPUT:
-            vlog(f"\nTrying to fix error {i}/{original_error_count}: line {error_line}, type: {error_type}")
-            vlog(f"Error message: {error_message[:100]}...")
-        
-        # Create fix code for specific error line
-        error_code = current_code
-        
-        # Try to fix the error, pass specific error line number
-        fix_result = synthesize_fix(error_code, error_line)
-        
-        if fix_result and fix_result[0]:
-            fixed_code, success, message, fix_time, remaining_fixed_errors = fix_result
-            
-            # Synthesized solution is valid
-            if VERBOSE_OUTPUT:
-                vlog(f"✅ Fixed error at line {error_line}")
-            # Update current code to fixed code
-            current_code = fixed_code
-            fixed_errors += 1
-            
-            # Extract fixed code line
-            _, fixed_code_without_head = repl.extract_header(fixed_code)
-            fixed_code_lines = fixed_code_without_head.splitlines()
-            fixed_line = fixed_code_lines[error_line - 1] if error_line <= len(fixed_code_lines) else "Could not get fixed line"
-            
-            # Extract fix snippet from fixed line
-            fix_snippet = fixed_line.strip()
-            
-            # Save fix details
-            fix_detail = {
-                "line": error_line,
-                "error_type": error_type,
-                "original_error_message": error_message,
-                "fix_snippet": fix_snippet,
-                "fixed_line": fixed_line,
-                "fix_time": fix_time,  # Add fix time
-                "fixed_errors": remaining_fixed_errors  # Add remaining errors after fix
-            }
-            successful_fixes_details.append(fix_detail)
-            
-            overall_message.append(f"✅ Fixed error {i}/{original_error_count}: Successfully fixed error at line {error_line} «{error_type}» (in {fix_time:.2f}s)")
+        # Call synthesize_fix on the *current* state of the code, targeting the original line number
+        fixed_code_attempt, success, message, fix_time, remaining_errors_after_fix = synthesize_fix(
+            current_code, 
+            target_line 
+        )
+
+        # Check if the fix was specifically successful for the targeted error
+        # We might need more refined success check here if synthesize_fix's success flag isn't sufficient
+        if success: 
+            vlog(f"✅ Successfully synthesized and validated fix for original error at line {target_line} ({error_type}) in {fix_time:.2f}s.")
+            current_code = fixed_code_attempt # Update code for next iteration
+            total_fixed_count += 1
+            # Extract actual fix details might be complex due to line shifts, log basic info
+            successful_fixes_details.append({
+                "original_line": target_line, 
+                "error_type": error_type, 
+                "original_error_message": error_message, 
+                "fix_time": fix_time,
+                "errors_after_this_fix": len(remaining_errors_after_fix) 
+            })
         else:
-            if VERBOSE_OUTPUT:
-                vlog(f"❌ Could not generate fix for error at line {error_line}")
-            failed_errors += 1
-            
-            # Get attempt time
-            _, _, _, attempt_time, _ = fix_result if fix_result else (None, None, None, 0, [])
-            
-            # Record failed fix details
-            failed_fix_detail = {
-                "line": error_line,
-                "error_type": error_type,
-                "original_error_message": error_message,
-                "failure_reason": "Could not generate fix",
-                "attempt_time": attempt_time  # Add attempt time
-            }
-            failed_fixes_details.append(failed_fix_detail)
-            overall_message.append(f"❌ Fixed error {i}/{original_error_count}: Could not generate fix for error at line {error_line} «{error_type}» (after {attempt_time:.2f}s)")
+            vlog(f"❌ Failed to fix original error at line {target_line} ({error_type}) after {fix_time:.2f}s. Message: {message}")
+            total_failed_attempts += 1
+            failed_fixes_details.append({
+                "original_line": target_line, 
+                "error_type": error_type, 
+                "original_error_message": error_message, 
+                "failure_reason": message, 
+                "attempt_time": fix_time
+            })
+            # Keep current_code unchanged if fix failed
+
+    # --- Final Assessment ---
+    vlog("\n===== Sequential fixing complete =====")
+    final_result = repl.execute(current_code, env_mode='header')
+    final_errors = [m for m in final_result.get("messages", []) if m.get('severity') == 'error']
+    remaining_error_count = len(final_errors)
     
-    # Final check
-    _, final_code_without_head = repl.extract_header(current_code)
-    final_result = repl.execute(final_code_without_head)
-    final_errors = parse_all_errors(final_result)
-    
-    # Record remaining errors
+    overall_success = (remaining_error_count == 0 and original_error_count > 0) # Success only if all original errors are gone
+
+    # Prepare summary message
+    summary_lines = []
+    summary_lines.append("=== Fix Summary ===")
+    summary_lines.append(f"Original errors: {original_error_count}")
+    summary_lines.append(f"Successful fixes applied: {total_fixed_count}")
+    summary_lines.append(f"Failed fix attempts: {total_failed_attempts}")
+    summary_lines.append(f"Remaining errors: {remaining_error_count}")
+
     remaining_errors_details = []
-    for error in final_errors:
-        remaining_detail = {
-            "line": error['line'],
-            "error_type": extract_error_type(error),
-            "original_error_message": error['message']
-        }
-        remaining_errors_details.append(remaining_detail)
-    
-    # Calculate fix rate
-    fix_rate = fixed_errors / original_error_count if original_error_count > 0 else 1.0
-    
-    # Calculate total elapsed time
+    if final_errors:
+        summary_lines.append("\nRemaining Errors:")
+        for err in final_errors:
+            line = err.get('line')
+            etype = extract_error_type(err)
+            emsg = err.get('message', '')[:100].replace('\n', ' ')
+            summary_lines.append(f"  - Line {line}: {etype} - {emsg}...")
+            remaining_errors_details.append({"line": line, "error_type": etype, "message": err.get('message', '')})
+            
     total_elapsed_time = time.time() - total_start_time
+    fix_rate = total_fixed_count / original_error_count if original_error_count > 0 else 1.0
+    summary_lines.append(f"\nFix Rate (Successful Attempts / Original Errors): {fix_rate:.4f}")
+    summary_lines.append(f"Total time: {total_elapsed_time:.2f} seconds")
+    summary_message = "\n".join(summary_lines)
     
-    # Build final statistics
-    overall_message.append("\n=== Fix statistics ===")
-    overall_message.append(f"Original error count: {original_error_count}")
-    overall_message.append(f"Fixed errors: {fixed_errors} (Fix rate: {fix_rate:.4f})")
-    overall_message.append(f"Failed errors: {failed_errors}")
-    overall_message.append(f"Remaining errors: {len(final_errors)}")
-    overall_message.append(f"Total time: {total_elapsed_time:.2f} seconds")
-    
-    # Add fix details
-    if successful_fixes_details:
-        overall_message.append("\n=== Successful fix details ===")
-        for idx, detail in enumerate(successful_fixes_details, 1):
-            overall_message.append(f"\nFix {idx}:")
-            overall_message.append(f"   Line: {detail['line']}")
-            overall_message.append(f"   Error type: {detail['error_type']}")
-            overall_message.append(f"   Original error message: {detail['original_error_message'][:100]}...")
-            overall_message.append(f"   Fix snippet: {detail['fix_snippet']}")
-            overall_message.append(f"   Fixed line: {detail['fixed_line']}")
-            overall_message.append(f"   Time: {detail['fix_time']:.2f} seconds")
-    
-    # Add failed fix details
-    if failed_fixes_details:
-        overall_message.append("\n=== Failed fix details ===")
-        for idx, detail in enumerate(failed_fixes_details, 1):
-            overall_message.append(f"\nFailed fix {idx}:")
-            overall_message.append(f"   Line: {detail['line']}")
-            overall_message.append(f"   Error type: {detail['error_type']}")
-            overall_message.append(f"   Original error message: {detail['original_error_message'][:100]}...")
-            overall_message.append(f"   Failure reason: {detail['failure_reason']}")
-            overall_message.append(f"   Time: {detail['attempt_time']:.2f} seconds")
-    
-    if VERBOSE_OUTPUT:
-        vlog("\n===== Fix attempt completed =====")
-        vlog(f"Original errors: {original_error_count}")
-        vlog(f"Fixed errors: {fixed_errors}")
-        vlog(f"Failed errors: {failed_errors}")
-        vlog(f"Remaining errors: {len(final_errors)}")
-        vlog(f"Total time: {total_elapsed_time:.2f} seconds")
-    
-    # Prepare JSON-compatible stats dictionary
+    vlog(summary_message) # Log the summary
+
+    # Prepare detailed stats dictionary
     stats_dict = {
         "original_errors": original_error_count,
-        "fixed_errors": fixed_errors,
-        "failed_errors": failed_errors,
-        "remaining_errors": len(final_errors),
+        "successful_fixes_applied": total_fixed_count, # Renamed for clarity
+        "failed_fix_attempts": total_failed_attempts, # Renamed for clarity
+        "remaining_errors": remaining_error_count,
         "fix_rate": fix_rate,
-        "successful_fixes": successful_fixes_details,
-        "failed_fixes": failed_fixes_details,
-        "remaining_errors_details": remaining_errors_details,
+        "successful_fixes_details": successful_fixes_details, # Details of successful attempts
+        "failed_fixes_details": failed_fixes_details,       # Details of failed attempts
+        "remaining_errors_details": remaining_errors_details, # Details of errors left at the end
         "total_time": total_elapsed_time
     }
-    
-    # Return final result, including fix details
-    return current_code, len(final_errors) == 0, "\n".join(overall_message), stats_dict
 
+    return current_code, overall_success, summary_message, stats_dict
+
+# Modify main to use header mode and updated helpers
 def main():
     # Setup argument parser
     parser = argparse.ArgumentParser(description='Lean code error fixer')
@@ -1177,7 +1010,7 @@ def main():
         file_path = args.file
     else:
         # Use original default path
-        file_path = "/data/coding/minif2f/lean_code/4.lean"
+        file_path = "./minif2f/lean_code/4.lean"
         vlog("No file path provided, using default path: " + file_path)
     
     # Determine output directory
@@ -1217,12 +1050,15 @@ def main():
     
     logger.setLevel('DEBUG')
     
-    # Check original code for errors
+    # Check original code for errors using header mode
     if text_output:
-        vlog("\nChecking original code for all errors...")
+        vlog("\nChecking original code for errors (using header mode)...")
     
-    result = repl.execute(code)
-    if "messages" not in result or not result["messages"]:
+    result = repl.execute(code, env_mode='header') # Use header mode
+    # Directly use parsed messages
+    original_errors = [m for m in result.get("messages", []) if m.get('severity') == 'error']
+    
+    if not original_errors:
         success_msg = "Original code has no errors!"
         json_data = {
             "status": "success",
@@ -1263,7 +1099,6 @@ def main():
             vlog(success_msg)
         return
     
-    original_errors = parse_all_errors(result)
     if text_output:
         vlog(f"Original code contains {len(original_errors)} errors:")
         for i, error in enumerate(original_errors, 1):
@@ -1274,10 +1109,10 @@ def main():
         vlog("\nStarting multi-error continuous repair process...")
     
     # The function now returns 4 values with the new stats_dict
-    result = synthesize_all_fixes(code)
+    fix_result = synthesize_all_fixes(code) # Pass original code
     
-    if result:
-        fixed_code, success, message, stats_dict = result
+    if fix_result:
+        fixed_code, success, message, stats_dict = fix_result
         
         if text_output:
             vlog("\nFinal fixed code:")
@@ -1312,21 +1147,18 @@ def main():
                 if text_output:
                     vlog(f"\nFixed code saved to: {output_file_path}")
                 
-                # Create a copy of stats_dict without fixed_errors
+                # Create a copy of stats_dict
                 json_stats_dict = stats_dict.copy()
-                # Remove fixed_errors from JSON output but keep other fields
-                if "fixed_errors" in json_stats_dict:
-                    del json_stats_dict["fixed_errors"]
                 
                 # Prepare JSON data
                 json_data = {
-                    "status": "success" if success else "partial_success",
+                    "status": "success" if success else ("partial_success" if stats_dict.get("successful_fixes_applied", 0) > 0 else "failure"),
                     "file_path": file_path,
                     "output_file": output_file_path,
                     "original_code": code,
                     "fixed_code": fixed_code,
-                    "statistics": json_stats_dict,
-                    "message": message
+                    "statistics": json_stats_dict, # Use the full stats dict
+                    "message": message # Use the summary message
                 }
                 
                 # Print JSON to stdout
@@ -1338,7 +1170,7 @@ def main():
                         json.dump(json_data, f, indent=2)
                     if text_output:
                         vlog(f"JSON log saved to: {json_file_path}")
-                
+            
             except Exception as e:
                 error_msg = f"Error saving file: {str(e)}"
                 vlog(error_msg, logging.ERROR)

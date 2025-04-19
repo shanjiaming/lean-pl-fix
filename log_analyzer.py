@@ -11,7 +11,7 @@ from tabulate import tabulate
 import argparse
 
 # Default log directory path (will be overridden by command line arguments if provided)
-DEFAULT_LOG_DIR = "/data/coding/minif2f/lean_fixed"
+DEFAULT_LOG_DIR = "./minif2f/lean_fixed"
 LOG_DIR = DEFAULT_LOG_DIR
 
 def collect_log_files():

@@ -1,32 +1,27 @@
 {
-  "status": "partial_success",
-  "file_path": "/data/coding/minif2f/lean_code/4.lean",
-  "output_file": "/data/coding/minif2f/lean_fixed/4_fixed.lean",
+  "status": "success",
+  "file_path": "./minif2f/lean_code/4.lean",
+  "output_file": "/home/matheye/lean-pl-fix/minif2f/lean_fixed/4_fixed.lean",
   "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking\n\nopen BigOperators Real Nat Topology Rat  -- Open common mathematical namespaces\n\n/--\nExpand the following expression: $7(3y+2)$ Show that it is 21y+14.\nThis theorem states that for any complex number y, 7 multiplied by (3y + 2) equals 21y + 14.\n-/\ntheorem mathd_algebra_182 (y : \u2102) : 7 * (3 * y + 2) = 21 * y + 14 := by\n  -- The proof will use the distributive property of multiplication over addition\n  -- First step: Apply the distributive property to multiply 7 across the terms inside the parentheses\n  rw [mul_add]  -- Rewrites using the distributive property: a*(b+c) = a*b + a*c\n\n  -- Now we have two multiplication terms: 7 * (3 * y) and 7 * 2\n  -- Next step: Simplify both multiplications\n\n  -- First multiplication: 7 * (3 * y) can be rewritten using associativity of multiplication\n  rw [mul_assoc]  -- Rewrites a*(b*c) as (a*b)*c\n\n  -- Now we have (7 * 3) * y + 7 * 2\n  -- Next step: Compute the constant multiplications\n\n  -- Compute 7 * 3 to get 21\n  norm_num  -- Normalizes numerical expressions, computing 7*3 to 21 and 7*2 to 14\n\n  -- After norm_num, the expression is now 21 * y + 14\n  -- No further simplification is needed as we've reached the desired form\n\n  -- The proof is complete as both sides of the equation now match\n",
-  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking\n\nopen BigOperators Real Nat Topology Rat  -- Open common mathematical namespaces\n\n/--\nExpand the following expression: $7(3y+2)$ Show that it is 21y+14.\nThis theorem states that for any complex number y, 7 multiplied by (3y + 2) equals 21y + 14.\n-/\ntheorem mathd_algebra_182 (y : \u2102) : 7 * (3 * y + 2) = 21 * y + 14 := by\n  -- The proof will use the distributive property of multiplication over addition\n  -- First step: Apply the distributive property to multiply 7 across the terms inside the parentheses\n  rw [mul_add]  -- Rewrites using the distributive property: a*(b+c) = a*b + a*c\n\n  -- Now we have two multiplication terms: 7 * (3 * y) and 7 * 2\n  -- Next step: Simplify both multiplications\n\n  -- First multiplication: 7 * (3 * y) can be rewritten using associativity of multiplication\n  rw [mul_assoc]  -- Rewrites a*(b*c) as (a*b)*c\n\n  -- Now we have (7 * 3) * y + 7 * 2\n  -- Next step: Compute the constant multiplications\n\n  -- Compute 7 * 3 to get 21\n  norm_num  -- Normalizes numerical expressions, computing 7*3 to 21 and 7*2 to 14\n\n  -- After norm_num, the expression is now 21 * y + 14\n  -- No further simplification is needed as we've reached the desired form\n\n  -- The proof is complete as both sides of the equation now match\n",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking\n\nopen BigOperators Real Nat Topology Rat  -- Open common mathematical namespaces\n\n/--\nExpand the following expression: $7(3y+2)$ Show that it is 21y+14.\nThis theorem states that for any complex number y, 7 multiplied by (3y + 2) equals 21y + 14.\n-/\ntheorem mathd_algebra_182 (y : \u2102) : 7 * (3 * y + 2) = 21 * y + 14 := by\n  -- The proof will use the distributive property of multiplication over addition\n  -- First step: Apply the distributive property to multiply 7 across the terms inside the parentheses\n  rw [mul_add]  -- Rewrites using the distributive property: a*(b+c) = a*b + a*c\n\n  -- Now we have two multiplication terms: 7 * (3 * y) and 7 * 2\n  -- Next step: Simplify both multiplications\n\n  -- First multiplication: 7 * (3 * y) can be rewritten using associativity of multiplication\n  rw [<- mul_assoc]\n\n  -- Now we have (7 * 3) * y + 7 * 2\n  -- Next step: Compute the constant multiplications\n\n  -- Compute 7 * 3 to get 21\n  norm_num  -- Normalizes numerical expressions, computing 7*3 to 21 and 7*2 to 14\n\n  -- After norm_num, the expression is now 21 * y + 14\n  -- No further simplification is needed as we've reached the desired form\n\n  -- The proof is complete as both sides of the equation now match",
   "statistics": {
     "original_errors": 1,
-    "failed_errors": 1,
-    "remaining_errors": 1,
-    "fix_rate": 0.0,
-    "successful_fixes": [],
-    "failed_fixes": [
+    "successful_fixes_applied": 1,
+    "failed_fix_attempts": 0,
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
       {
-        "line": 5,
-        "error_type": "syntax_error",
-        "original_error_message": "unexpected token '*'; expected ':=', 'where' or '|'",
-        "failure_reason": "Could not generate fix",
-        "attempt_time": 2.1208701133728027
+        "original_line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b * ?c\ny : \u2102\n\u22a2 7 * (3 * y) + 7 * 2 = 21 * y + 14",
+        "fix_time": 7.251790761947632,
+        "errors_after_this_fix": 0
       }
     ],
-    "remaining_errors_details": [
-      {
-        "line": 5,
-        "error_type": "syntax_error",
-        "original_error_message": "unexpected token '*'; expected ':=', 'where' or '|'"
-      }
-    ],
-    "total_time": 2.1262929439544678
+    "failed_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 7.322528600692749
   },
-  "message": "Original code error count: 1\n\u274c Fixed error 1/1: Could not generate fix for error at line 5 \u00absyntax_error\u00bb (after 2.12s)\n\n=== Fix statistics ===\nOriginal error count: 1\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 1\nRemaining errors: 1\nTotal time: 2.13 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 5\n   Error type: syntax_error\n   Original error message: unexpected token '*'; expected ':=', 'where' or '|'...\n   Failure reason: Could not generate fix\n   Time: 2.12 seconds"
+  "message": "=== Fix Summary ===\nOriginal errors: 1\nSuccessful fixes applied: 1\nFailed fix attempts: 0\nRemaining errors: 0\n\nFix Rate (Successful Attempts / Original Errors): 1.0000\nTotal time: 7.32 seconds"
 }

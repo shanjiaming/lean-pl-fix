@@ -1,10 +1,10 @@
-2025-04-19 07:37:13 - INFO - Log file initialized at 2025-04-19T07:37:13.339703
-2025-04-19 07:37:13 - INFO - ===== LOG FILE LOCATION =====
-2025-04-19 07:37:13 - INFO - Detailed log file created at: /data/coding/minif2f/lean_fixed/4.log
-2025-04-19 07:37:13 - INFO - ===============================
-2025-04-19 07:37:13 - INFO - Original code:
-2025-04-19 07:37:13 - INFO - ----------------------------------------
-2025-04-19 07:37:13 - INFO - import Mathlib
+2025-04-19 18:58:31 - INFO - Log file initialized at 2025-04-19T18:58:31.719918
+2025-04-19 18:58:31 - INFO - ===== LOG FILE LOCATION =====
+2025-04-19 18:58:31 - INFO - Detailed log file created at: /home/matheye/lean-pl-fix/minif2f/lean_fixed/4.log
+2025-04-19 18:58:31 - INFO - ===============================
+2025-04-19 18:58:31 - INFO - Original code:
+2025-04-19 18:58:31 - INFO - ----------------------------------------
+2025-04-19 18:58:31 - INFO - import Mathlib
 import Aesop
 
 set_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking
@@ -37,1065 +37,645 @@ theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
 
   -- The proof is complete as both sides of the equation now match
 
-2025-04-19 07:37:13 - INFO - ----------------------------------------
-2025-04-19 07:37:13 - INFO - 
-Checking original code for all errors...
-2025-04-19 07:37:14 - INFO - Original code contains 2 errors:
-2025-04-19 07:37:14 - INFO - Error 1: line 6, type: other_error, message: unknown namespace 'BigOperators'...
-2025-04-19 07:37:14 - INFO - Error 2: line 12, type: syntax_error, message: unexpected token '*'; expected ':=', 'where' or '|'...
-2025-04-19 07:37:14 - INFO - 
+2025-04-19 18:58:31 - INFO - ----------------------------------------
+2025-04-19 18:58:31 - INFO - 
+Checking original code for errors (using header mode)...
+2025-04-19 18:58:34 - INFO - Original code contains 1 errors:
+2025-04-19 18:58:34 - INFO - Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?...
+2025-04-19 18:58:34 - INFO - 
 Starting multi-error continuous repair process...
-2025-04-19 07:37:14 - INFO - 
-===== Starting to fix all errors =====
-2025-04-19 07:37:14 - INFO - 
-Found 1 original errors:
-2025-04-19 07:37:14 - INFO - Error 1: line 5, type: syntax_error, message: unexpected token '*'; expected ':=', 'where' or '|'...
-2025-04-19 07:37:14 - INFO - 
-Trying to fix error 1/1: line 5, type: syntax_error
-2025-04-19 07:37:14 - INFO - Error message: unexpected token '*'; expected ':=', 'where' or '|'...
-2025-04-19 07:37:14 - INFO - Removed header content, remaining 25 lines of code
-2025-04-19 07:37:14 - INFO - Using specified target error line: 5
-2025-04-19 07:37:14 - INFO - Found error at specified line: unexpected token '*'; expected ':=', 'where' or '|'
-2025-04-19 07:37:14 - INFO - Error at line 5: unexpected token '*'; expected ':=', 'where' or '|'
-2025-04-19 07:37:14 - INFO - 
-==================================================
-2025-04-19 07:37:14 - INFO - Code prepared, starting synthesis
-2025-04-19 07:37:14 - INFO - Before part: /--
-Expand the following expression: $7(3y+2)$ Show that it is 21y+14.
-This theorem states that for any complex number y, 7 multiplied by (3y + 2) equals 21y + 14.
--/
-2025-04-19 07:37:14 - INFO - Error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - After part: -- The proof will use the distributive property of multiplication over addition
-  -- First step: Apply the distributive property to multiply 7 across the terms inside the parentheses
-  rw [mul_add]  -- Rewrites using the distributive property: a*(b+c) = a*b + a*c
+2025-04-19 18:58:34 - INFO - 
+===== Starting sequential error fixing =====
+2025-04-19 18:58:35 - INFO - Found 1 initial errors.
+2025-04-19 18:58:35 - INFO - 
+Attempting fix 1/1 for original error at line 21 (rewrite_failed)...
+2025-04-19 18:58:35 - INFO - Attempting to use specified target error line: 21
+2025-04-19 18:58:35 - INFO - Targeting error at line 21 (relative to full code): tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?...
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b + ?c)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b + ?c) * ?d
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?n + 1) * ?m
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * (?m + 1)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 + ?a) * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 + ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  2 * ?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) = 21 * y
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a + ?b) * (?a + ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * -?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:35 - DEBUG - === New errors detail ===
+2025-04-19 18:58:35 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -1
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?b - ?c)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - ?b) * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a - 1) * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * (?m - 1)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (1 - ?a) * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (1 - ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1708
+from equation
+  ?m.1708 = ?m.1709
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1707 * ?m.1708 = ?m.1707 * ?m.1709
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b = ?a * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b ≠ ?a * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1707
+from equation
+  ?m.1707 = ?m.1709
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1708 * ?m.1707 = ?m.1709 * ?m.1707
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₁
+from equation
+  ?a₁ = ?a₂
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:36 - DEBUG - === New errors detail ===
+2025-04-19 18:58:36 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a = ?c * ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b * ?a ≠ ?c * ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 3 * y * 7 = 21 * y
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  Type ?u.1703
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 * ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * 1
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  npowRec (?m + ?n) ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  npowRec (?n + 1) ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  npowRec' (?m.1707 + 1) ?m
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  npowRec' (2 * ?k) ?m
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m * npowRec' ?m.1707 ?m
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  npowRec (?k + 1) ?m
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: other_error, message: failed to rewrite using equation theorems for 'npowBinRec'.
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  @npowRecAuto
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Monoid.npow ?n ?x
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:37 - DEBUG - === New errors detail ===
+2025-04-19 18:58:37 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ 0
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ (?n + 1)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ∃ g, Function.Surjective fun x => g ^ x
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  DivInvMonoid.zpow ?n ?x
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ ↑?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a ^ Int.negSucc ?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  Int.negSucc ?n • ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?x⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1 / ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  (?a * ?b)⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1706⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?m.1707⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:38 - DEBUG - === New errors detail ===
+2025-04-19 18:58:38 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1706
+from equation
+  ?m.1706 = ?m.1707⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹ * ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: unknown_identifier, message: unknown identifier 'inv_eq_of_mul'
+2025-04-19 18:58:39 - DEBUG - New Error 2: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?a⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a⁻¹ * (?a * ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * (?a⁻¹ * ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b * ?b⁻¹
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b / ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b⁻¹ * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a / ?b * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y + 2) = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c + ?b * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?d + ?b * ?d + ?c * ?d
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * ?m + ?m
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * ?m + ?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:39 - DEBUG - === New errors detail ===
+2025-04-19 18:58:39 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b + ?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a + ?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n + ?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  if ?P then ?a else 0
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?a + 2 * ?a * ?b + ?b * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -(?a * ?b)
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) = 21 * y
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * -?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -1 * ?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  -?a
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:40 - DEBUG - === New errors detail ===
+2025-04-19 18:58:40 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?a * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?c - ?b * ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a * ?b - ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?n * ?m - ?n
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b - ?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?a - ?a * ?b
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1709
+from equation
+  ?m.1709 = ?m.1708
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℂ
 
-  -- Now we have two multiplication terms: 7 * (3 * y) and 7 * 2
-  -- Next step: Simplify both multiplications
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+2025-04-19 18:58:41 - DEBUG - New Error 2: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) = 21 * y ∨ ?m.1707 = 0
 
-  -- First multiplication: 7 * (3 * y) can be rewritten using associativity of multiplication
-  rw [mul_assoc]  -- Rewrites a*(b*c) as (a*b)*c
+y : ℂ
+⊢ IsLeftCancelMul ℂ
 
-  -- Now we have (7 * 3) * y + 7 * 2
-  -- Next step: Compute the constant multiplications
+y : ℂ
+⊢ ℂ
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: failed_to_synthesize, message: failed to synthesize
+  IsLeftCancelMul ℂ
 
-  -- Compute 7 * 3 to get 21
-  norm_num  -- Normalizes numerical expressions, computing 7*3 to 21 and 7*2 to 14
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+2025-04-19 18:58:41 - DEBUG - New Error 2: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) = 21 * y ∨ ?a = 0
 
-  -- After norm_num, the expression is now 21 * y + 14
-  -- No further simplification is needed as we've reached the desired form
+case a
+y : ℂ
+⊢ ℂ
 
-  -- The proof is complete as both sides of the equation now match
-2025-04-19 07:37:14 - INFO - ==================================================
+y : ℂ
+⊢ IsLeftCancelMul ℂ
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?m.1709
+from equation
+  ?m.1709 = ?m.1707
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℂ
 
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [left_distrib]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [right_distrib]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [distrib_three_right]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [add_one_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_add_one]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [one_add_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_one_add]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [two_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_two]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_boole]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [boole_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [add_mul_self_eq]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_neg]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_mul_neg]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_mul_eq_neg_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_mul_eq_mul_neg]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_mul_comm]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_eq_neg_one_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_neg_one]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [neg_one_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_sub_left_distrib]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_sub_right_distrib]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [sub_one_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_sub_one]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [one_sub_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_one_sub]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_left_cancel]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_left_cancel_iff]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_right_injective]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_right_inj]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_ne_mul_right]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_right_cancel]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_right_cancel_iff]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_left_injective]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_left_inj]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_ne_mul_left]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_assoc]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_comm]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [MulOneClass]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [one_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [mul_one]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [npowRec_add]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [npowRec_succ]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [npowRec'_succ]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:14 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:14 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:14 - DEBUG - === New errors detail ===
-2025-04-19 07:37:14 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:14 - INFO - Testing fragment: rw [npowRec'_two_mul]
-2025-04-19 07:37:14 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [npowRec'_mul_comm]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [npowRec_eq]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [npowBinRec]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [npowRec_eq_npowBinRec]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [npow_eq_pow]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [pow_zero]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [pow_succ]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_inv]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [exists_zpow_surjective]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [zpow_eq_pow]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [zpow_zero]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [zpow_natCast]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [zpow_negSucc]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [negSucc_zsmul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [div_eq_mul_inv]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_eq_one_div]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [mul_div_assoc]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [one_div]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_one]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [mul_inv_rev]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_right]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_eq_of_mul_eq_one_left]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [eq_inv_of_mul_eq_one_left]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_mul_cancel]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_eq_of_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [mul_inv_cancel]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [div_self']
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_mul_cancel_left]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [mul_inv_cancel_left]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [mul_inv_cancel_right]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [mul_div_cancel_right]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [inv_mul_cancel_right]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [div_mul_cancel]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- left_distrib]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- right_distrib]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- distrib_three_right]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- add_one_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_add_one]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- one_add_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_one_add]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- two_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_two]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_boole]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- boole_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- add_mul_self_eq]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_neg]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_mul_neg]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_mul_eq_neg_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_mul_eq_mul_neg]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_mul_comm]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_eq_neg_one_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_neg_one]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- neg_one_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_sub_left_distrib]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_sub_right_distrib]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- sub_one_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_sub_one]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- one_sub_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_one_sub]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_left_cancel]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_left_cancel_iff]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_right_injective]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_right_inj]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_ne_mul_right]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_right_cancel]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_right_cancel_iff]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_left_injective]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_left_inj]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_ne_mul_left]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_assoc]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_comm]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- MulOneClass]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- one_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- mul_one]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- npowRec_add]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- npowRec_succ]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- npowRec'_succ]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- npowRec'_two_mul]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:15 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:15 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:15 - DEBUG - === New errors detail ===
-2025-04-19 07:37:15 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:15 - INFO - Testing fragment: rw [<- npowRec'_mul_comm]
-2025-04-19 07:37:15 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- npowRec_eq]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- npowBinRec]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- npowRec_eq_npowBinRec]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- npow_eq_pow]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- pow_zero]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- pow_succ]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_inv]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- exists_zpow_surjective]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- zpow_eq_pow]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- zpow_zero]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- zpow_natCast]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- zpow_negSucc]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- negSucc_zsmul]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- div_eq_mul_inv]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_eq_one_div]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- mul_div_assoc]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- one_div]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_one]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- mul_inv_rev]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_eq_of_mul_eq_one_right]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_eq_of_mul_eq_one_left]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- eq_inv_of_mul_eq_one_left]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_mul_cancel]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_eq_of_mul]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- mul_inv_cancel]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- div_self']
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_mul_cancel_left]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- mul_inv_cancel_left]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- mul_inv_cancel_right]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- mul_div_cancel_right]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- inv_mul_cancel_right]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: rw [<- div_mul_cancel]
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: simp
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: field_simp
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: norm_num
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: ring
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: ring_nf
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: omega
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: linarith
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Testing fragment: nlinarith
-2025-04-19 07:37:16 - INFO - Original error line: theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-2025-04-19 07:37:16 - INFO - Testing fix: Original errors: 1, Fixed errors: 1
-2025-04-19 07:37:16 - INFO - Result: False (introduced 1 new errors)
-2025-04-19 07:37:16 - DEBUG - === New errors detail ===
-2025-04-19 07:37:16 - DEBUG - New Error 1: line 4, type: other_error, message: unexpected identifier; expected 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_initialize', 'class', 'declare_syntax_cat', 'def', 'elab', 'elab_rules', 'example', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_tactic_tag', 'structure', 'syntax', 'tactic_extension' or 'theorem'
-2025-04-19 07:37:16 - INFO - Failed attempt time: 2.12 seconds
-2025-04-19 07:37:16 - INFO - ❌ Could not generate fix for error at line 5
-2025-04-19 07:37:16 - INFO - 
-===== Fix attempt completed =====
-2025-04-19 07:37:16 - INFO - Original errors: 1
-2025-04-19 07:37:16 - INFO - Fixed errors: 0
-2025-04-19 07:37:16 - INFO - Failed errors: 1
-2025-04-19 07:37:16 - INFO - Remaining errors: 1
-2025-04-19 07:37:16 - INFO - Total time: 2.13 seconds
-2025-04-19 07:37:16 - INFO - 
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+2025-04-19 18:58:41 - DEBUG - New Error 2: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) = 21 * y ∨ ?m.1707 = 0
+
+y : ℂ
+⊢ IsRightCancelMul ℂ
+
+y : ℂ
+⊢ ℂ
+2025-04-19 18:58:41 - DEBUG - === New errors detail ===
+2025-04-19 18:58:41 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, pattern is a metavariable
+  ?a₂
+from equation
+  ?a₂ = ?a₁
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:42 - DEBUG - === New errors detail ===
+2025-04-19 18:58:42 - DEBUG - New Error 1: line 21, type: failed_to_synthesize, message: failed to synthesize
+  IsRightCancelMul ℂ
+
+Additional diagnostic information may be available using the `set_option diagnostics true` command.
+2025-04-19 18:58:42 - DEBUG - New Error 2: line 12, type: other_error, message: unsolved goals
+y : ℂ
+⊢ 7 * (3 * y) = 21 * y ∨ ?a = 0
+
+case a
+y : ℂ
+⊢ ℂ
+
+y : ℂ
+⊢ IsRightCancelMul ℂ
+2025-04-19 18:58:42 - DEBUG - === New errors detail ===
+2025-04-19 18:58:42 - DEBUG - New Error 1: line 21, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  ?b ≠ ?c
+y : ℂ
+⊢ 7 * (3 * y) + 7 * 2 = 21 * y + 14
+2025-04-19 18:58:42 - INFO - Result: True (no errors)
+2025-04-19 18:58:42 - INFO - Original code error count: 1
+2025-04-19 18:58:42 - INFO - Fixed code error count: 0
+2025-04-19 18:58:42 - INFO - Fix attempt for line 21 finished in 7.25s. Success: True. Message: Synthesis successful
+2025-04-19 18:58:42 - INFO - ✅ Successfully synthesized and validated fix for original error at line 21 (rewrite_failed) in 7.25s.
+2025-04-19 18:58:42 - INFO - 
+===== Sequential fixing complete =====
+2025-04-19 18:58:42 - INFO - === Fix Summary ===
+Original errors: 1
+Successful fixes applied: 1
+Failed fix attempts: 0
+Remaining errors: 0
+
+Fix Rate (Successful Attempts / Original Errors): 1.0000
+Total time: 7.32 seconds
+2025-04-19 18:58:42 - INFO - 
 Final fixed code:
-2025-04-19 07:37:16 - INFO - ----------------------------------------
-2025-04-19 07:37:16 - INFO - /--
+2025-04-19 18:58:42 - INFO - ----------------------------------------
+2025-04-19 18:58:42 - INFO - /--
 Expand the following expression: $7(3y+2)$ Show that it is 21y+14.
 This theorem states that for any complex number y, 7 multiplied by (3y + 2) equals 21y + 14.
 -/
@@ -1108,7 +688,7 @@ theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
   -- Next step: Simplify both multiplications
 
   -- First multiplication: 7 * (3 * y) can be rewritten using associativity of multiplication
-  rw [mul_assoc]  -- Rewrites a*(b*c) as (a*b)*c
+  rw [<- mul_assoc]
 
   -- Now we have (7 * 3) * y + 7 * 2
   -- Next step: Compute the constant multiplications
@@ -1120,31 +700,21 @@ theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
   -- No further simplification is needed as we've reached the desired form
 
   -- The proof is complete as both sides of the equation now match
-2025-04-19 07:37:16 - INFO - ----------------------------------------
-2025-04-19 07:37:16 - INFO - 
+2025-04-19 18:58:42 - INFO - ----------------------------------------
+2025-04-19 18:58:42 - INFO - 
 Detailed error repair report:
-2025-04-19 07:37:16 - INFO - Original code error count: 1
-❌ Fixed error 1/1: Could not generate fix for error at line 5 «syntax_error» (after 2.12s)
+2025-04-19 18:58:42 - INFO - === Fix Summary ===
+Original errors: 1
+Successful fixes applied: 1
+Failed fix attempts: 0
+Remaining errors: 0
 
-=== Fix statistics ===
-Original error count: 1
-Fixed errors: 0 (Fix rate: 0.0000)
-Failed errors: 1
-Remaining errors: 1
-Total time: 2.13 seconds
-
-=== Failed fix details ===
-
-Failed fix 1:
-   Line: 5
-   Error type: syntax_error
-   Original error message: unexpected token '*'; expected ':=', 'where' or '|'...
-   Failure reason: Could not generate fix
-   Time: 2.12 seconds
-2025-04-19 07:37:16 - INFO - 
-Fixed code saved to: /data/coding/minif2f/lean_fixed/4_fixed.lean
-2025-04-19 07:37:16 - INFO - JSON log saved to: /data/coding/minif2f/lean_fixed/4_fix_log.json
-2025-04-19 07:37:16 - INFO - 
+Fix Rate (Successful Attempts / Original Errors): 1.0000
+Total time: 7.32 seconds
+2025-04-19 18:58:42 - INFO - 
+Fixed code saved to: /home/matheye/lean-pl-fix/minif2f/lean_fixed/4_fixed.lean
+2025-04-19 18:58:42 - INFO - JSON log saved to: /home/matheye/lean-pl-fix/minif2f/lean_fixed/4_fix_log.json
+2025-04-19 18:58:42 - INFO - 
 ===== LOG FILE LOCATION =====
-2025-04-19 07:37:16 - INFO - Detailed log file is available at: /data/coding/minif2f/lean_fixed/4.log
-2025-04-19 07:37:16 - INFO - ===============================
+2025-04-19 18:58:42 - INFO - Detailed log file is available at: /home/matheye/lean-pl-fix/minif2f/lean_fixed/4.log
+2025-04-19 18:58:42 - INFO - ===============================

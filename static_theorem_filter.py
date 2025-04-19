@@ -7,7 +7,7 @@ import traceback
 import glob # Added for directory processing
 
 # Define the base path for the mathlib4 source code
-MATHLIB_BASE_PATH = "/data/coding/Goedel-Prover/mathlib4/"
+MATHLIB_BASE_PATH = "./Goedel-Prover/mathlib4/"
 
 def module_to_path(module_name: str, base_path: str) -> Path | None:
     """Converts a Lean module name (e.g., Mathlib.Data.Nat.Basic) to a file path."""

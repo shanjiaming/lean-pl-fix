@@ -56,9 +56,9 @@ def repair_file(file_path, output_dir):
 
 def main():
     parser = argparse.ArgumentParser(description="Batch process Lean files")
-    parser.add_argument("--input_dir", type=str, default="/data/coding/minif2f/lean_code",
+    parser.add_argument("--input_dir", type=str, default="./minif2f/lean_code",
                         help="Directory containing .lean files")
-    parser.add_argument("--output_dir", type=str, default="/data/coding/minif2f/lean_fixed",
+    parser.add_argument("--output_dir", type=str, default="./minif2f/lean_fixed",
                         help="Directory to store marker files for processed files")
     parser.add_argument("--max_workers", type=int, default=20,
                         help="Maximum number of parallel tasks")

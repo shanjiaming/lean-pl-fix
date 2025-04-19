@@ -2,21 +2,33 @@ from lean_interact import LeanREPLConfig, LeanServer, Command, TempRequireProjec
 import json
 import os
 from typing import Tuple, List, Dict, Optional, Any
+import traceback
+
+# Ensure lean_interact is imported at the top level if possible
+# This helps avoid potential issues with imports inside methods/functions
+try:
+    from lean_interact import LeanREPLConfig, LeanServer, Command, TempRequireProject
+except ImportError as e:
+    print(f"WARNING: Failed to import lean_interact: {e}. REPLInstance might not work.")
+    # Define dummy classes or raise error if lean_interact is essential
+    LeanREPLConfig = object
+    LeanServer = object
+    Command = object
+    TempRequireProject = object
 
 class REPLInstance:
-    def __init__(self, use_header_mode: bool = True):
+    def __init__(self, debug: bool = False):
         """
         Initialize a Lean REPL interface using lean_interact.
-        
-        Args:
-            use_header_mode (bool): Whether to use header mode (extract and reuse header)
+        Header mode is now controlled by the `env_mode` parameter in `execute`.
         """
-        self.use_header_mode = use_header_mode
         self.running = False
         self._config = None
         self._server = None
-        self._last_env = None
-        self.current_header = None
+        self._latest_env = None # Stores the env after the absolute last command execution
+        self.current_header = None # Stores the string of the last processed header
+        self.header_env = None # Stores the env state *immediately after* processing the header
+        self.debug = debug # Store the debug flag
         
         # Start the server immediately
         self.start()
@@ -35,11 +47,16 @@ class REPLInstance:
         try:
             self._config = LeanREPLConfig(verbose=True, project=TempRequireProject("mathlib"))
             self._server = LeanServer(self._config)
-            self._last_env = None
+            self._latest_env = None
+            self.current_header = None
+            self.header_env = None
             self.running = True
+            if self.debug:
+                print("DEBUG: Lean REPL started successfully.")
             return True
         except Exception as e:
             print(f"Error starting Lean REPL: {e}")
+            traceback.print_exc()
             return False
     
     def extract_header(self, full_code: str) -> Tuple[str, str]:
@@ -79,22 +96,57 @@ class REPLInstance:
         return header_code, code_without_head
     
     def start_head(self, cmd):
-        """Set header code in the REPL"""
+        """Process a header command, storing the resulting environment."""
+        if self.debug:
+            print(f"DEBUG: Starting header processing: {cmd[:100]}...")
+        if not self.running:
+             print("ERROR: REPL not running in start_head")
+             return False
         try:
+            # Run header command in a fresh environment
             response = self._server.run(Command(cmd=cmd))
-            self._last_env = response.env
-            self.current_header = cmd
-            return True
+            new_env = getattr(response, 'env', None)
+            if new_env is not None:
+                if self.debug:
+                    print(f"DEBUG: Header processed successfully. New header_env: {new_env}")
+                self.header_env = new_env
+                self._latest_env = new_env # Also update latest env
+                self.current_header = cmd
+                return True
+            else:
+                # Header command might not produce an env (e.g., if it fails or is empty)
+                if self.debug:
+                    print(f"WARNING: Header command did not produce a new environment. Response: {response}")
+                # Decide if we should reset header state or keep old? Let's reset for safety.
+                self.header_env = None
+                self.current_header = None
+                self._latest_env = None # Reset latest env too if header fails fundamentally
+                # Check for specific errors in response messages
+                if hasattr(response, 'messages'):
+                     temp_res = {"messages": response.messages}
+                     parsed_errors = self._parse_all_errors(temp_res)
+                     if any(e['severity'] == 'error' for e in parsed_errors):
+                          print(f"ERROR: Header command failed with errors: {parsed_errors}")
+                          return False # Explicitly return False on header errors
+                if self.debug:
+                     print("DEBUG: Header processing finished but no new environment was returned.")
+                return False
         except Exception as e:
             print(f"Error running header in lean_interact: {e}")
+            traceback.print_exc()
+            # Reset state on exception
+            self.header_env = None
+            self.current_header = None
+            self._latest_env = None
             return False
     
-    def parse_all_errors(self, result) -> List[Dict]:
+    def _parse_all_errors(self, result, line_offset: int = 0) -> List[Dict]:
         """
-        Parse all error messages from the Lean output
+        Internal helper to parse all error messages from Lean output.
         
         Args:
             result: Result from execute or check
+            line_offset: Offset to add to line numbers (for absolute positioning)
             
         Returns:
             List of error dictionaries
@@ -102,31 +154,38 @@ class REPLInstance:
         errors = []
         
         try:
-            if "messages" in result:
-                for error_msg in result["messages"]:
-                    # Handle different message formats
-                    if hasattr(error_msg, 'pos'):
-                        start_pos = error_msg.pos
-                        end_pos = error_msg.endPos if hasattr(error_msg, 'endPos') else None
-                        message = error_msg.data if hasattr(error_msg, 'data') else ""
-                        severity = error_msg.severity if hasattr(error_msg, 'severity') else "error"
-                    else:
-                        start_pos = error_msg.get("pos", {})
-                        end_pos = error_msg.get("endPos", {})
-                        message = error_msg.get("data", "")
-                        severity = error_msg.get("severity", "error")
+            messages = result.get("messages", [])
+            if messages:
+                for msg in messages:
+                    # Initialize default values
+                    line, column, end_line, end_column = -1, -1, -1, -1
+                    message, severity = "", "error" # Default severity to error
                     
-                    # Extract line and column info
-                    if hasattr(start_pos, 'line'):
-                        line = start_pos.line
+                    # Use attribute access with hasattr checks
+                    if hasattr(msg, 'start_pos') and hasattr(msg.start_pos, 'line'):
+                        start_pos = msg.start_pos
+                        # Adjust for 0-based line number from Lean and 1-based offset count
+                        line = start_pos.line + line_offset + 1 
                         column = start_pos.column
-                        end_line = end_pos.line if end_pos else -1
-                        end_column = end_pos.column if end_pos else -1
-                    else:
-                        line = start_pos.get("line", -1)
-                        column = start_pos.get("column", -1)
-                        end_line = end_pos.get("line", -1) if end_pos else -1
-                        end_column = end_pos.get("column", -1) if end_pos else -1
+                    elif hasattr(msg, 'pos') and hasattr(msg.pos, 'line'): # Fallback for older format?
+                        start_pos = msg.pos
+                         # Adjust for 0-based line number from Lean and 1-based offset count
+                        line = start_pos.line + line_offset + 1
+                        column = start_pos.column
+
+                    if hasattr(msg, 'end_pos') and hasattr(msg.end_pos, 'line'):
+                        end_pos = msg.end_pos
+                         # Adjust for 0-based line number from Lean and 1-based offset count
+                        end_line = end_pos.line + line_offset + 1
+                        end_column = end_pos.column
+                        
+                    if hasattr(msg, 'data'):
+                        message = msg.data
+                    elif hasattr(msg, 'message'): # Fallback
+                        message = msg.message
+                        
+                    if hasattr(msg, 'severity'):
+                        severity = msg.severity
                     
                     error = {
                         'line': line,
@@ -139,260 +198,309 @@ class REPLInstance:
                     
                     errors.append(error)
         except Exception as e:
-            print(f"Error parsing error messages: {str(e)}")
+            print(f"Error parsing error messages: {str(e)}") # Print the exception
             
         return errors
     
-    def locate_error(self, code) -> Tuple[bool, Optional[int], Optional[str]]:
+    def execute(self, code: str, env_mode: str = 'fresh') -> Dict:
         """
-        Run code and find where the error is
-        
-        Returns:
-            Tuple[bool, int, str]: (has_error, error_line, error_message)
-        """
-        # Execute the code
-        result = self.execute(code)
-        
-        if "messages" not in result or not result["messages"]:
-            return False, None, None
-        
-        try:
-            # Parse error information
-            if "messages" in result and len(result["messages"]) > 0:
-                error_msg = result["messages"][0]
-                
-                # Handle different message formats
-                if hasattr(error_msg, 'pos'):
-                    start_pos = error_msg.pos
-                    end_pos = error_msg.endPos if hasattr(error_msg, 'endPos') else None
-                    error_message = error_msg.data if hasattr(error_msg, 'data') else ""
-                else:
-                    start_pos = error_msg.get("pos", {})
-                    end_pos = error_msg.get("endPos", {})
-                    error_message = error_msg.get("data", "")
-                
-                # Extract line info
-                if hasattr(start_pos, 'line'):
-                    error_line = start_pos.line
-                    end_line = end_pos.line if end_pos else -1
-                else:
-                    error_line = start_pos.get("line", -1)
-                    end_line = end_pos.get("line", -1) if end_pos else -1
-                
-                # Only handle errors where pos and endPos are on the same line
-                if error_line == end_line and error_line > 0:
-                    return True, error_line, error_message
-                else:
-                    print(f"Error spans multiple lines or line number is abnormal: {start_pos} -> {end_pos}")
-                    return False, None, None
-            else:
-                print("No error messages found")
-                return False, None, None
-        except Exception as e:
-            print(f"Error parsing error information: {str(e)}")
-            return False, None, None
-    
-    def execute(self, code: str) -> Dict:
-        """
-        Execute Lean code and return parsed output
-        
-        Args:
-            code: The Lean code to execute
-            
-        Returns:
-            Dict: Parsed output containing error or result information
-        """
-        print(f"Executing code: {code[:100]}...") # Print only first 100 chars
-        if not self.running:
-            raise Exception("REPL is not running")
-            # return {"error": "REPL is not running"} # Unreachable code
-        
-        try:
-            run_full_code = False
-            effective_code = code # Default to full code
-            env_to_use = self._last_env # Default to last env
-            header_code = None # Initialize header_code for state update later
+        Execute Lean code with configurable environment handling.
 
-            if self.use_header_mode:
+        Args:
+            code (str): The Lean code to execute.
+            env_mode (str): Controls environment handling. Defaults to 'fresh'.
+                - 'fresh': Executes `code` in a new, empty environment. Instance state is NOT updated.
+                - 'header': Uses header-aware logic. Extracts header, updates/reuses `header_env`.
+                            Only `header_env` is reused for subsequent 'header' mode calls.
+                            `_latest_env` is updated with the final state.
+                - 'latest': Executes `code` starting from the `_latest_env`.
+                            Updates `_latest_env` with the final state.
+        Returns:
+            Dict: Parsed output containing:
+                  - messages (List[Dict]): Parsed Lean messages.
+                  - env (Any): The final environment state *after* this execution.
+                               For 'fresh' mode, this is the env from the isolated run.
+                               For 'header'/'latest', this reflects the updated `_latest_env`.
+                  - error (Optional[str]): Python execution error message, or None.
+                  - header_env_used (Any): The header_env state used as input (for 'header' mode).
+        """
+        if self.debug:
+            print(f"Executing code: {code} (env_mode={env_mode})")
+        if not self.running:
+            print("ERROR: REPL is not running in execute")
+            # Return structure consistent with success case but indicate error
+            return {"error": "REPL is not running", "messages": [], "env": None, "header_env_used": None}
+            
+        # Initialize variables for this execution
+        final_response = None
+        parsed_messages = []
+        env_used_as_input = None # Track the env passed to the *final* lean execution
+        header_env_for_this_call = None # Specific to header mode output
+        update_latest_env = False # Flag to control _latest_env update
+        update_header_state = False # Flag to control header_env/current_header update
+
+        try:
+            # --- Determine execution strategy based on env_mode --- 
+            if env_mode == 'fresh':
+                if self.debug:
+                    print("DEBUG: env_mode='fresh'. Running code in new environment.")
+                env_used_as_input = None
+                code_to_run = code
+                # State updates are disabled for fresh mode
+
+            elif env_mode == 'latest':
+                if self.debug:
+                    print(f"DEBUG: env_mode='latest'. Running code using _latest_env: {self._latest_env}")
+                env_used_as_input = self._latest_env
+                code_to_run = code
+                update_latest_env = True # Update _latest_env after execution
+
+            elif env_mode == 'header':
+                if self.debug:
+                    print("DEBUG: env_mode='header'. Applying header logic...")
                 header_code, code_without_head = self.extract_header(code)
+                header_env_for_this_call = self.header_env # Record for return value
 
                 if header_code:
-                    # If there IS a header in the current code:
-                    if self._last_env is None or self.current_header != header_code:
-                        # Header is new or first time, run the *full code* to establish new baseline env
-                        print("DEBUG: New/different header detected. Running full code...")
-                        run_full_code = True
-                        effective_code = code
-                        env_to_use = None # Don't pass old env when running full code for new header
-                        # We will update self.current_header and self._last_env *after* this run
+                    # Compare headers directly
+                    # Check if header is different or header_env is missing
+                    if self.current_header != header_code or self.header_env is None:
+                        if self.debug:
+                            print(f"DEBUG: New/different header detected (or env missing). Processing header: '{header_code[:50]}...'")
+                        # Run header in isolation
+                        header_response = self._server.run(Command(cmd=header_code)) # Run original header_code
+                        # Parse header messages immediately with offset 0
+                        parsed_header_errors = self._parse_all_errors({"messages": getattr(header_response, 'messages', [])}, line_offset=0)
+                        parsed_messages.extend(parsed_header_errors) # Add parsed messages
+                        new_header_env = getattr(header_response, 'env', None)
+                        
+                        # Check for errors during header processing using already parsed errors
+                        if new_header_env is not None and not any(e['severity'] == 'error' for e in parsed_header_errors):
+                            if self.debug:
+                                print(f"DEBUG: Header processed successfully. New header_env: {new_header_env}")
+                            # Update header state only on success
+                            self.header_env = new_header_env
+                            # Store the *original* header_code (with potentially different whitespace)
+                            self.current_header = header_code 
+                            header_env_for_this_call = self.header_env # Update for return value
+                            update_header_state = True 
+                            # Also update latest_env since this was the last successful operation
+                            self._latest_env = self.header_env 
+                            update_latest_env = True
+                        else:
+                            print(f"ERROR: Header processing failed. Errors: {parsed_header_errors}. Response: {header_response}")
+                            # Don't proceed, return header processing result
+                            final_response = header_response
+                            # Don't update any instance state on header failure
+                            return {"error": None, "messages": parsed_messages, "env": self._latest_env, "header_env_used": None}
+
                     else:
-                        # Header matches the one for _last_env, safe to run only code_without_head with _last_env
-                        print("DEBUG: Header matches current env. Running main code only...")
-                        effective_code = code_without_head
-                        # Keep env_to_use = self._last_env
-                        if not effective_code.strip():
-                             print("DEBUG: Only header provided, and it matched. No main code to execute.")
-                             # Return previous state? Or empty success?
-                             return {"env": self._last_env, "messages": []} # Empty success for now
-                else:
-                    # No header in the current code. Run it using the last env.
-                    print("DEBUG: No header in current code. Running with last env...")
-                    effective_code = code # Full code is the code_without_head here
-                    # Keep env_to_use = self._last_env
+                        # Header matches (ignoring whitespace), use existing header_env
+                        if self.debug:
+                            print(f"DEBUG: Header matches (ignoring whitespace: '{header_code[:50]}...'). Using existing header_env: {self.header_env}")
+                        header_env_for_this_call = self.header_env
 
-            else: # Header mode disabled
-                print("DEBUG: Header mode disabled. Running full code...")
-                run_full_code = True
-                effective_code = code
-                env_to_use = None # Don't use env when header mode off
+                    # Set the environment to use for the main code
+                    env_used_as_input = self.header_env 
+               
+                else: # No header in code, but mode is 'header'
+                    if self.debug:
+                        print("DEBUG: No header in code, using existing header_env (if any)...")
+                    header_env_for_this_call = self.header_env
+                    env_used_as_input = self.header_env
+               
+                # Code to run is the part after the header (if any)
+                code_to_run = code_without_head
+                # Always update latest_env in header mode if main code runs
+                if code_to_run.strip():
+                    update_latest_env = True 
+           
+            else: # Invalid env_mode
+                 raise ValueError(f"Invalid env_mode: {env_mode}. Must be 'fresh', 'header', or 'latest'.")
 
-            # --- Actual Execution ---
-            # Ensure effective_code is not just whitespace before running
-            if not effective_code.strip():
-                print("WARNING: effective_code is empty or whitespace, skipping execution.")
-                return {"env": env_to_use, "messages": []} # Return current state
+            # --- Calculate header line count for main code offset (only in header mode) ---
+            header_line_count = 0
+            if env_mode == 'header' and header_code:
+                header_line_count = len(header_code.splitlines())
+                if self.debug:
+                    print(f"DEBUG: Header line count for offset: {header_line_count}")
+
+            # --- Actual Execution --- 
+            if code_to_run.strip():
+                if self.debug:
+                    print(f"DEBUG: Executing main/full code (env={env_used_as_input}): {repr(code_to_run[:100])}...")
+                command = Command(cmd=code_to_run, env=env_used_as_input)
+                final_response = self._server.run(command)
+                # Parse messages from this step with appropriate offset
+                offset_for_main_code = header_line_count if env_mode == 'header' else 0
+                parsed_main_errors = self._parse_all_errors({"messages": getattr(final_response, 'messages', [])}, line_offset=offset_for_main_code)
+                parsed_messages.extend(parsed_main_errors) # Add parsed messages
                 
-            print(f"DEBUG: Executing (env={env_to_use}): {repr(effective_code)}")
-            if env_to_use is not None:
-                 response = self._server.run(Command(cmd=effective_code, env=env_to_use))
+                # Update state based on flags
+                new_env_after_run = getattr(final_response, 'env', None)
+                if update_latest_env and new_env_after_run is not None:
+                    self._latest_env = new_env_after_run
+                    if self.debug:
+                        print(f"DEBUG: _latest_env updated to: {self._latest_env}")
+                # Header state is updated only during header processing step above if update_header_state is True
+
+            elif env_mode == 'header' and header_code and not code_without_head.strip():
+                 if self.debug:
+                      print("DEBUG: Only header was processed, no main code executed.")
+                 # final_response would still be header_response from above if header was processed
+                 # State (_latest_env, header_env, current_header) updated during header step if successful
+                 pass # No further execution needed
             else:
-                 response = self._server.run(Command(cmd=effective_code))
-            # --- End Execution ---
+                 if self.debug:
+                      print("WARNING: No code to execute.")
+                 # Return current state? Or empty success?
+                 # Use already parsed messages (might be empty or from header)
+                 return {"error": None, "messages": parsed_messages, "env": self._latest_env, "header_env_used": env_used_as_input}
 
-            # --- Update State ---
-            new_env = getattr(response, 'env', None)
-            if run_full_code and new_env is not None:
-                # If we ran the full code because header was new/first, update the baseline
-                self._last_env = new_env
-                self.current_header = header_code # Store the header associated with this new env (needs header_code from above)
-            elif new_env is not None:
-                 # If we ran only main part or no-header code, just update the env
-                 self._last_env = new_env
-            # else: keep the old self._last_env if execution failed to produce one? Or reset?
-            # Let's keep the old env if the command failed to produce a new one
-            # unless run_full_code was true, in which case failure means we have no valid new baseline.
-            elif run_full_code:
-                 self._last_env = None
-                 self.current_header = None
-
-
-            # --- Format Result ---
-            result = {"env": self._last_env}
-            if hasattr(response, 'messages') and response.messages:
-                result["messages"] = response.messages
-            else:
-                result["messages"] = []
-            # print(f"DEBUG: Execute successful. Result: {result}") # Verbose success log
-            return result
+            # --- Format Final Result --- 
+            final_env_state = getattr(final_response, 'env', None) if final_response else self._latest_env
+            # If state was updated, return the updated state, otherwise the env from the run
+            reported_env = self._latest_env if update_latest_env else final_env_state
+            
+            # parsed_msgs = self._parse_all_errors({"messages": combined_messages}) # Removed
+            # Return env_used_as_input for header_env_used when in header mode
+            # Use the incrementally built parsed_messages
+            return {"error": None, 
+                    "messages": parsed_messages, 
+                    "env": reported_env, 
+                    "header_env_used": env_used_as_input if env_mode == 'header' else None}
 
         except Exception as e:
-            print(f"ERROR in execute: {e}") # Print actual exception
-            import traceback
+            print(f"ERROR in execute: {e}") 
             traceback.print_exc()
-            # Reset env on failure
-            self._last_env = None
-            self.current_header = None
-            return {"error": f"Execution failed: {str(e)}", "messages": []}
+            # Reset state only if it was supposed to be updated? Or always on error?
+            # Let's reset _latest_env on error for safety, but keep header state unless error was in header processing?
+            # For simplicity now, let's just report the error and the state *before* the failed op.
+            # The actual state might be inconsistent after an error in lean_interact.
+            # Also report the env that *would* have been used based on logic before exception
+            # Report any messages parsed *before* the exception occurred
+            return {"error": f"Execution failed: {str(e)}", 
+                    "messages": parsed_messages, # Return messages parsed so far
+                    "env": self._latest_env, # Report state before potential corruption
+                    "header_env_used": env_used_as_input if env_mode == 'header' else None}
             
     def check(self, code: str) -> Tuple[bool, Dict]:
         """
-        Check if code contains errors
+        Check if code contains errors by looking for messages with severity 'error'.
+        Always uses 'header' mode for execute, as checking usually requires context.
         
         Args:
             code: The Lean code to check
             
         Returns:
-            Tuple[bool, Dict]: (is_valid, result_or_error_info)
+            Tuple[bool, Dict]: (is_valid, result_info from execute)
         """
-        result = self.execute(code)
-        has_error = "messages" in result and len(result["messages"]) > 0
-        return not has_error, result
+        # Use env_mode='header' for checking
+        result = self.execute(code, env_mode='header') 
+        is_valid = not any(e['severity'] == 'error' for e in result.get("messages", []))
+        return is_valid, result
     
     def end(self) -> bool:
         """
-        Terminate the Lean REPL process.
+        Terminate the Lean REPL process and reset state.
         
         Returns:
             bool: True if terminated successfully, False otherwise
         """
-        # Currently no explicit shutdown in LeanServer
+        if self.debug:
+            print("DEBUG: Ending Lean REPL session.")
+        # Currently no explicit shutdown needed for LeanServer object itself
         self.running = False
         self._server = None
         self._config = None
+        self._latest_env = None
+        self.current_header = None
+        self.header_env = None
         return True
-    
-    def run(self, cmd: str, raw=False, timeout: float = 200.0, wait_for_env: bool = True) -> Tuple[bool, str]:
-        """
-        Run a command in the Lean REPL and return the output.
-        
-        Args:
-            cmd (str): The command to execute
-            raw (bool): Whether cmd is already properly formatted
-            timeout (float): Maximum time in seconds to wait for execution
-            wait_for_env (bool): Whether to wait for "env" to appear in output
-            
-        Returns:
-            Tuple[bool, str]: (success, output)
-        """
-        try:
-            if raw:
-                # Parse the JSON command
-                cmd_data = json.loads(cmd)
-                if "cmd" in cmd_data:
-                    response = self._server.run(Command(cmd=cmd_data["cmd"]))
-                elif "path" in cmd_data:
-                    response = self._server.run(Command(path=cmd_data["path"]))
-                else:
-                    return False, "Unsupported command format"
-            else:
-                response = self._server.run(Command(cmd=cmd))
-                
-            if hasattr(response, 'env'):
-                self._last_env = response.env
-                
-            # Convert response to string for compatibility
-            return True, str(response)
-        except Exception as e:
-            return False, str(e)
 
 # Initialize a global repl instance
-repl = REPLInstance(use_header_mode=True)
+# Ensure lean_interact is imported before class instantiation if needed globally
+try:
+    # from lean_interact import LeanREPLConfig, LeanServer, Command, TempRequireProject
+    repl = REPLInstance() # No use_header_mode needed
+except ImportError as e:
+     print(f"Failed to import lean_interact: {e}. Global repl instance might not work.")
+     repl = None # Indicate failure
+except Exception as e:
+     print(f"Failed to initialize global REPL instance: {e}")
+     repl = None
+
 
 def example():
-    """Example usage of the REPL"""
-    # Use the global repl instance
-    if not repl.running:
-        repl.start()
+    """Example usage of the REPL with execute modes"""
+    if repl is None:
+         print("Global REPL instance failed to initialize. Exiting example.")
+         return
+         
+    if not repl.running and not repl.start():
+         print("Failed to start REPL. Exiting example.")
+         return
     
-    # Example 1: Code with header
-    full_code = """import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-open BigOperators Real Nat Topology Rat
+    header = "import Mathlib.Data.Real.Basic\nopen Real"   
+    code1 = "theorem thm1 (x : ℝ) : x + 0 = x := by rw [add_zero]"
+    code2 = "theorem thm2 (x : ℝ) : 0 + x = x := by rw [zero_add]"
+    check_cmd = "#check Real"
 
-theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-  rw [mul_add]
-  rw [<- mul_assoc]
-  norm_num"""
+    # 1. Header mode (processes header, updates header_env and _latest_env)
+    print("\n--- Example 1: Execute with env_mode='header' (First time) ---")
+    res1 = repl.execute(f"{header}\n\n{code1}", env_mode='header')
+    print(json.dumps(res1, indent=2, default=lambda o: '<Lean Env>'))
+    assert repl.current_header == header
+    assert repl.header_env is not None
+    assert repl._latest_env == repl.header_env # Should be same after header+code1
+
+    # 2. Header mode, no header (reuses header_env, updates _latest_env)
+    print("\n--- Example 2: Execute with env_mode='header' (No Header) ---")
+    res2 = repl.execute(code2, env_mode='header')
+    print(json.dumps(res2, indent=2, default=lambda o: '<Lean Env>'))
+    assert repl.current_header == header # Header unchanged
+    assert res2['header_env_used'] == repl.header_env # Used header_env
+    assert repl._latest_env != repl.header_env # _latest_env updated by code2
+    env_after_code2 = repl._latest_env
+
+    # 3. Header mode, same header (reuses header_env, should fail on code1)
+    print("\n--- Example 3: Execute with env_mode='header' (Same Header, Duplicate def) ---")
+    res3 = repl.execute(f"{header}\n\n{code1}", env_mode='header') # Should fail on thm1
+    print(json.dumps(res3, indent=2, default=lambda o: '<Lean Env>'))
+    assert any("already been declared" in msg.get('message', '') and "thm1" in msg.get('message', '') for msg in res3["messages"]), "Expected thm1 already declared error"
+    assert repl._latest_env == env_after_code2 # latest_env should NOT update on failure
+
+    # 4. Latest mode (uses env_after_code2)
+    print("\n--- Example 4: Execute with env_mode='latest' ---")
+    res4 = repl.execute(check_cmd, env_mode='latest') 
+    print(json.dumps(res4, indent=2, default=lambda o: '<Lean Env>'))
+    assert not any(e['severity'] == 'error' for e in res4['messages']), "Expected no error in Result 4"
+    assert repl._latest_env != env_after_code2 # latest_env updated by check_cmd
+    env_after_check = repl._latest_env
     
-    result = repl.execute(full_code)
-    print("Result 1:", result)
-    
-    # Example 2: Code without header (reusing previous header)
-    code_no_header = """theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
-  rw [mul_add]
-  rw [mul_assoc]
-  norm_num"""
-    
-    result = repl.execute(code_no_header)
-    print("Result 2:", result)
-    
-    # Test a simple theorem 
-    response = repl.run('theorem ex (n : Nat) : n = 5 → n = 5 := id')
-    print("Simple theorem response:", response)
-    
-    # Clean up
+    # 5. Fresh mode (runs in new env, no state update)
+    print("\n--- Example 5: Execute with env_mode='fresh' ---")
+    res5 = repl.execute(f"{header}\n\n{code1}", env_mode='fresh') 
+    print(json.dumps(res5, indent=2, default=lambda o: '<Lean Env>'))
+    assert not any(e['severity'] == 'error' for e in res5['messages']), "Expected no error in Result 5"
+    assert repl._latest_env == env_after_check # State should NOT have changed
+    assert repl.header_env is not None # Previous header state should persist
+    assert repl.current_header == header
+
+    # 6. Header mode with different header
+    print("\n--- Example 6: Execute with env_mode='header' (New Header) ---")
+    header_nat = "import Mathlib.Data.Nat.Basic\nopen Nat"
+    code_nat = "theorem thm_nat1 : 1 + 1 = 2 := rfl"
+    res6 = repl.execute(f"{header_nat}\n\n{code_nat}", env_mode='header')
+    print(json.dumps(res6, indent=2, default=lambda o: '<Lean Env>'))
+    assert not any(e['severity'] == 'error' for e in res6['messages']), "Expected no error in Result 6"
+    assert repl.current_header == header_nat # Header state updated
+    assert repl.header_env != header_env_for_this_call # Header env changed
+    assert repl._latest_env == repl.header_env # latest updated too
+
     repl.end()
 
 if __name__ == "__main__":
+    # Add imports here if they are only used in __main__
+    # from lean_interact import LeanREPLConfig, LeanServer, Command, TempRequireProject 
     example() 
