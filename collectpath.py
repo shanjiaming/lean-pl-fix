@@ -1,4 +1,4 @@
-from lean_interact_api import repl as repl
+from lean_api import repl
 import re
 import json
 import time
@@ -21,15 +21,13 @@ def extract_module_paths(result):
     module_paths = {}
     if 'messages' in result:
         for message in result['messages']:
-            # Handle different message formats
-            if hasattr(message, 'data'):
-                data = message.data
-            elif isinstance(message, dict) and 'data' in message:
-                data = message['data']
+            # Get the message string from the 'message' key
+            if isinstance(message, dict) and 'message' in message:
+                data = message['message']
             else:
                 continue
                 
-            # Parse the data field which is in format "identifier : module"
+            # Parse the data field which is expected in format "identifier : module"
             parts = data.split(' : ')
             if len(parts) == 2:
                 identifier = parts[0]
@@ -72,7 +70,7 @@ run_cmd do
     try:
         # Execute using the REPL
         # print(f"Executing code: {code_template}")
-        result = repl.execute(code_template)
+        result = repl.execute(code_template, env_mode='header')
         print(f"Batch {batch_num} execution completed")
         
         # Extract module paths from this batch
