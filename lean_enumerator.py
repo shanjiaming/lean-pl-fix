@@ -8,7 +8,7 @@ from Trinity.tyrell.decider import Example, ExampleDecider
 from Trinity.tyrell.synthesizer import Synthesizer
 from Trinity.tyrell.logger import get_logger
 
-from lean_interact_api import repl
+from lean_api import repl
 import json
 import re
 import sys
@@ -1177,7 +1177,7 @@ def main():
         file_path = args.file
     else:
         # Use original default path
-        file_path = "/data/coding/minif2f/lean_code/1.lean"
+        file_path = "/data/coding/minif2f/lean_code/4.lean"
         vlog("No file path provided, using default path: " + file_path)
     
     # Determine output directory

@@ -71,7 +71,6 @@ theorem amc12a_2008_p8 (x y : ℝ) (h₀ : 0 < x ∧ 0 < y) (h₁ : y ^ 3 = 1)
 # a = server.run(Command(path= "/data/coding/minif2f/lean_code/112.lean"))
 
 cmddd="""import Mathlib
-open Lean
 """
 
 response = server.run(Command(cmd=cmddd))
@@ -79,6 +78,11 @@ print(response)
 # Execute with options to get tactics information
 response = server.run(Command(cmd="theorem ex (n : Nat) : n = 5 → n = 5 := by simp", all_tactics=True))
 print(response)
+
+
+response = server.run(Command(cmd=r"import Mathlib.Data.Real.Basic\n\ntheorem test_add_zero (x : ℝ) : x + 0 = x := by\n  rw [add_zero]\n"))
+print(response)
+
 
 # Continue in the same environment
 # response = server.run(Command(cmd="#check ex", env=response.env))

@@ -1,92 +1,46 @@
-import os
-import pty
-import subprocess
-import threading
-import time
-import io
-import fcntl
-import select
-import signal
+from lean_interact import LeanREPLConfig, LeanServer, Command, TempRequireProject
 import json
-import tempfile
-import re
+import os
 from typing import Tuple, List, Dict, Optional, Any
 
-class LakeREPL:
-    def __init__(self, work_dir: str = None):
+class REPLInstance:
+    def __init__(self, use_header_mode: bool = True):
         """
-        Initialize a Lake REPL interface.
+        Initialize a Lean REPL interface using lean_interact.
         
         Args:
-            work_dir (str): Working directory for the REPL process
+            use_header_mode (bool): Whether to use header mode (extract and reuse header)
         """
-        self.work_dir = work_dir
-        self.process = None
-        self.master_fd = None
+        self.use_header_mode = use_header_mode
         self.running = False
-        self.output_thread = None
-        self.collected_output = []
-        self.output_lock = threading.Lock()
-        self.sentinel_value = None
-        self.sentinel_found = threading.Event()
+        self._config = None
+        self._server = None
+        self._last_env = None
         self.current_header = None
+        
+        # Start the server immediately
+        self.start()
         
     def start(self) -> bool:
         """
-        Start the Lake REPL process.
+        Start the Lean REPL process.
         
         Returns:
             bool: True if the process started successfully, False otherwise
         """
         if self.running:
             print("REPL is already running")
-            return False
+            return True
         
         try:
-            # Create a pseudo-terminal
-            master_fd, slave_fd = pty.openpty()
-            
-            # Make the master file descriptor non-blocking
-            flags = fcntl.fcntl(master_fd, fcntl.F_GETFL)
-            fcntl.fcntl(master_fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
-            
-            # Start Lake REPL process
-            self.process = subprocess.Popen(
-                ["lake", "exe", "repl"],
-                stdin=slave_fd,
-                stdout=slave_fd,
-                stderr=slave_fd,
-                text=True,
-                start_new_session=True,
-                cwd=self.work_dir
-            )
-            
-            # Close the slave fd in the parent process
-            os.close(slave_fd)
-            
-            self.master_fd = master_fd
+            self._config = LeanREPLConfig(verbose=True, project=TempRequireProject("mathlib"))
+            self._server = LeanServer(self._config)
+            self._last_env = None
             self.running = True
-            self.collected_output = []
-            
-            # Start the output reading thread
-            self.output_thread = threading.Thread(target=self._read_output)
-            self.output_thread.daemon = True
-            self.output_thread.start()
             return True
-            
         except Exception as e:
-            print(f"Error starting Lake REPL: {e}")
-            if self.process:
-                self.process.terminate()
+            print(f"Error starting Lean REPL: {e}")
             return False
-
-    def start_head(self, cmd):
-        """Set header code in the REPL"""
-        cmd = repr(cmd)[1:-1]
-        cmd_to_send = r'{"cmd": "' + cmd + r'"}'
-        success, output = self.run(cmd_to_send, raw=True)
-        self.current_header = cmd
-        return success
     
     def extract_header(self, full_code: str) -> Tuple[str, str]:
         """
@@ -124,52 +78,17 @@ class LakeREPL:
         
         return header_code, code_without_head
     
-    def parse_output(self, text: str) -> Dict:
-        """
-        Parse JSON output from Lean, focusing on the response or error messages
-        
-        Args:
-            text: Raw output text from Lean
-            
-        Returns:
-            Dict: JSON object containing response or error messages
-        """
-        if isinstance(text, dict):
-            return text
-            
-        json_objects = []
-        current_pos = 0
-        
-        while current_pos < len(text):
-            try:
-                next_start = text.find('{', current_pos)
-                if next_start == -1:
-                    break
-                
-                decoder = json.JSONDecoder()
-                obj, end = decoder.raw_decode(text[next_start:])
-                
-                json_objects.append(obj)
-                current_pos = next_start + end
-                
-            except json.JSONDecodeError:
-                current_pos += 1
-        
-        # Return the object with error messages
-        for obj in json_objects:
-            if "messages" in obj and len(obj["messages"]) > 0:
-                return obj
-        
-        # Second object is typically the response (not the echo of the command)
-        if len(json_objects) >= 2:
-            return json_objects[1]
-        
-        # Fallback to first object
-        if json_objects:
-            return json_objects[0]
-            
-        return {"error": "No JSON objects found in output"}
-
+    def start_head(self, cmd):
+        """Set header code in the REPL"""
+        try:
+            response = self._server.run(Command(cmd=cmd))
+            self._last_env = response.env
+            self.current_header = cmd
+            return True
+        except Exception as e:
+            print(f"Error running header in lean_interact: {e}")
+            return False
+    
     def parse_all_errors(self, result) -> List[Dict]:
         """
         Parse all error messages from the Lean output
@@ -185,16 +104,37 @@ class LakeREPL:
         try:
             if "messages" in result:
                 for error_msg in result["messages"]:
-                    start_pos = error_msg.get("pos", {})
-                    end_pos = error_msg.get("endPos", {})
+                    # Handle different message formats
+                    if hasattr(error_msg, 'pos'):
+                        start_pos = error_msg.pos
+                        end_pos = error_msg.endPos if hasattr(error_msg, 'endPos') else None
+                        message = error_msg.data if hasattr(error_msg, 'data') else ""
+                        severity = error_msg.severity if hasattr(error_msg, 'severity') else "error"
+                    else:
+                        start_pos = error_msg.get("pos", {})
+                        end_pos = error_msg.get("endPos", {})
+                        message = error_msg.get("data", "")
+                        severity = error_msg.get("severity", "error")
+                    
+                    # Extract line and column info
+                    if hasattr(start_pos, 'line'):
+                        line = start_pos.line
+                        column = start_pos.column
+                        end_line = end_pos.line if end_pos else -1
+                        end_column = end_pos.column if end_pos else -1
+                    else:
+                        line = start_pos.get("line", -1)
+                        column = start_pos.get("column", -1)
+                        end_line = end_pos.get("line", -1) if end_pos else -1
+                        end_column = end_pos.get("column", -1) if end_pos else -1
                     
                     error = {
-                        'line': start_pos.get("line", -1),
-                        'column': start_pos.get("column", -1),
-                        'end_line': end_pos.get("line", -1) if end_pos else -1,
-                        'end_column': end_pos.get("column", -1) if end_pos else -1,
-                        'message': error_msg.get("data", ""),
-                        'severity': error_msg.get("severity", "error"),
+                        'line': line,
+                        'column': column,
+                        'end_line': end_line,
+                        'end_column': end_column,
+                        'message': message,
+                        'severity': severity,
                     }
                     
                     errors.append(error)
@@ -202,7 +142,7 @@ class LakeREPL:
             print(f"Error parsing error messages: {str(e)}")
             
         return errors
-
+    
     def locate_error(self, code) -> Tuple[bool, Optional[int], Optional[str]]:
         """
         Run code and find where the error is
@@ -220,11 +160,24 @@ class LakeREPL:
             # Parse error information
             if "messages" in result and len(result["messages"]) > 0:
                 error_msg = result["messages"][0]
-                start_pos = error_msg.get("pos", {})
-                end_pos = error_msg.get("endPos", {})
-                error_line = start_pos.get("line", -1)
-                end_line = end_pos.get("line", -1)
-                error_message = error_msg.get("data", "")
+                
+                # Handle different message formats
+                if hasattr(error_msg, 'pos'):
+                    start_pos = error_msg.pos
+                    end_pos = error_msg.endPos if hasattr(error_msg, 'endPos') else None
+                    error_message = error_msg.data if hasattr(error_msg, 'data') else ""
+                else:
+                    start_pos = error_msg.get("pos", {})
+                    end_pos = error_msg.get("endPos", {})
+                    error_message = error_msg.get("data", "")
+                
+                # Extract line info
+                if hasattr(start_pos, 'line'):
+                    error_line = start_pos.line
+                    end_line = end_pos.line if end_pos else -1
+                else:
+                    error_line = start_pos.get("line", -1)
+                    end_line = end_pos.get("line", -1) if end_pos else -1
                 
                 # Only handle errors where pos and endPos are on the same line
                 if error_line == end_line and error_line > 0:
@@ -238,7 +191,7 @@ class LakeREPL:
         except Exception as e:
             print(f"Error parsing error information: {str(e)}")
             return False, None, None
-
+    
     def execute(self, code: str) -> Dict:
         """
         Execute Lean code and return parsed output
@@ -249,50 +202,98 @@ class LakeREPL:
         Returns:
             Dict: Parsed output containing error or result information
         """
+        print(f"Executing code: {code[:100]}...") # Print only first 100 chars
         if not self.running:
             raise Exception("REPL is not running")
-            return {"error": "REPL is not running"}
+            # return {"error": "REPL is not running"} # Unreachable code
         
-        # Extract header if present
-        header_code, code_without_head = self.extract_header(code)
-        
-        # Handle header
-        if header_code:
-            if self.current_header is None:
-                self.start_head(header_code)
-            elif self.current_header != header_code:
-                print("current header: ", self.current_header)
-                print("new header: ", header_code)
-                raise Exception("Header mismatch with previously set header")
-                return {"error": "Header mismatch with previously set header"}
-        
-        # Execute the code without header
+        try:
+            run_full_code = False
+            effective_code = code # Default to full code
+            env_to_use = self._last_env # Default to last env
+            header_code = None # Initialize header_code for state update later
 
-        # cmd execute-- will meet 4096 input buffer constraint
-        escaped_code = code_without_head.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
-        cmd_to_send = r'{"cmd": "' + escaped_code + r'", "env": 0}'
+            if self.use_header_mode:
+                header_code, code_without_head = self.extract_header(code)
 
-        if False: # len(cmd_to_send.encode()) < 4000:
-            # this is a speed up (speed up better on small proof) at the cost of line number mismatch (need to +7 when reading).
-            success, output = self.run(cmd_to_send, raw=True)
-        else:
-            # using tempfile to bypass 4096 input buffer constraint
-            with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8', suffix='.lean') as temp_file:
-                temp_file.write(code)
-                temp_filepath = temp_file.name
+                if header_code:
+                    # If there IS a header in the current code:
+                    if self._last_env is None or self.current_header != header_code:
+                        # Header is new or first time, run the *full code* to establish new baseline env
+                        print("DEBUG: New/different header detected. Running full code...")
+                        run_full_code = True
+                        effective_code = code
+                        env_to_use = None # Don't pass old env when running full code for new header
+                        # We will update self.current_header and self._last_env *after* this run
+                    else:
+                        # Header matches the one for _last_env, safe to run only code_without_head with _last_env
+                        print("DEBUG: Header matches current env. Running main code only...")
+                        effective_code = code_without_head
+                        # Keep env_to_use = self._last_env
+                        if not effective_code.strip():
+                             print("DEBUG: Only header provided, and it matched. No main code to execute.")
+                             # Return previous state? Or empty success?
+                             return {"env": self._last_env, "messages": []} # Empty success for now
+                else:
+                    # No header in the current code. Run it using the last env.
+                    print("DEBUG: No header in current code. Running with last env...")
+                    effective_code = code # Full code is the code_without_head here
+                    # Keep env_to_use = self._last_env
 
-            # file input cannot have env
-            cmd_to_send = r'{"path": "' + temp_filepath + r'"}'
-            success, output = self.run(cmd_to_send, raw=True)
-            os.remove(temp_filepath)
+            else: # Header mode disabled
+                print("DEBUG: Header mode disabled. Running full code...")
+                run_full_code = True
+                effective_code = code
+                env_to_use = None # Don't use env when header mode off
 
-        if not success:
-            raise Exception("Execution failed", output)
-            return {"error": "Execution failed", "details": output}
+            # --- Actual Execution ---
+            # Ensure effective_code is not just whitespace before running
+            if not effective_code.strip():
+                print("WARNING: effective_code is empty or whitespace, skipping execution.")
+                return {"env": env_to_use, "messages": []} # Return current state
+                
+            print(f"DEBUG: Executing (env={env_to_use}): {repr(effective_code)}")
+            if env_to_use is not None:
+                 response = self._server.run(Command(cmd=effective_code, env=env_to_use))
+            else:
+                 response = self._server.run(Command(cmd=effective_code))
+            # --- End Execution ---
+
+            # --- Update State ---
+            new_env = getattr(response, 'env', None)
+            if run_full_code and new_env is not None:
+                # If we ran the full code because header was new/first, update the baseline
+                self._last_env = new_env
+                self.current_header = header_code # Store the header associated with this new env (needs header_code from above)
+            elif new_env is not None:
+                 # If we ran only main part or no-header code, just update the env
+                 self._last_env = new_env
+            # else: keep the old self._last_env if execution failed to produce one? Or reset?
+            # Let's keep the old env if the command failed to produce a new one
+            # unless run_full_code was true, in which case failure means we have no valid new baseline.
+            elif run_full_code:
+                 self._last_env = None
+                 self.current_header = None
+
+
+            # --- Format Result ---
+            result = {"env": self._last_env}
+            if hasattr(response, 'messages') and response.messages:
+                result["messages"] = response.messages
+            else:
+                result["messages"] = []
+            # print(f"DEBUG: Execute successful. Result: {result}") # Verbose success log
+            return result
+
+        except Exception as e:
+            print(f"ERROR in execute: {e}") # Print actual exception
+            import traceback
+            traceback.print_exc()
+            # Reset env on failure
+            self._last_env = None
+            self.current_header = None
+            return {"error": f"Execution failed: {str(e)}", "messages": []}
             
-        # Parse the output - ensure we get the actual response, not the echo
-        return self.parse_output(output)
-    
     def check(self, code: str) -> Tuple[bool, Dict]:
         """
         Check if code contains errors
@@ -309,53 +310,20 @@ class LakeREPL:
     
     def end(self) -> bool:
         """
-        Terminate the Lake REPL process.
+        Terminate the Lean REPL process.
         
         Returns:
             bool: True if terminated successfully, False otherwise
         """
-        if not self.running:
-            print("No REPL is running")
-            return False
-        
-        try:
-            # First try gentle exit with Ctrl+D
-            try:
-                os.write(self.master_fd, b"\x04")
-                time.sleep(0.01)
-            except:
-                pass
-            
-            # Terminate if still running
-            if self.process.poll() is None:
-                self.process.terminate()
-                self.process.wait(timeout=2)
-            
-            # Kill if still running
-            if self.process.poll() is None:
-                self.process.kill()
-                self.process.wait(timeout=1)
-            
-            # Close the master fd
-            os.close(self.master_fd)
-            
-            # Update status
-            self.running = False
-            
-            # Wait for thread to exit
-            if self.output_thread and self.output_thread.is_alive():
-                self.output_thread.join(timeout=1)
-            
-            return True
-            
-        except Exception as e:
-            print(f"Error ending Lake REPL: {e}")
-            return False
-
+        # Currently no explicit shutdown in LeanServer
+        self.running = False
+        self._server = None
+        self._config = None
+        return True
+    
     def run(self, cmd: str, raw=False, timeout: float = 200.0, wait_for_env: bool = True) -> Tuple[bool, str]:
         """
-        Run a command in the Lake REPL and return the output.
-        For Lake REPL, we append two newlines to each command as specified.
+        Run a command in the Lean REPL and return the output.
         
         Args:
             cmd (str): The command to execute
@@ -366,119 +334,32 @@ class LakeREPL:
         Returns:
             Tuple[bool, str]: (success, output)
         """
-        if not self.running:
-            return False, "REPL is not running. Call start() first."
-        
         try:
-            # Clear previous output
-            with self.output_lock:
-                self.collected_output = []
-            
-            # Send the command with two newlines as specified
-            if not raw:
-                cmd = r'{"cmd": "' + cmd + r'", "env": 0}'
-            cmd_to_send = cmd.rstrip() + "\n\n"
-            # while len(cmd_to_send) > 400:
-            #     os.write(self.master_fd, cmd_to_send[:400].encode())
-            #     cmd_to_send = cmd_to_send[400:]
-            os.write(self.master_fd, cmd_to_send.encode())
-
-            # data = (cmd.rstrip() + "\n\n").encode()
-            # chunk_size = 400
-            # for i in range(0, len(data), chunk_size):
-            #     os.write(self.master_fd, data[i:i+chunk_size])
-            
-            # Wait for execution to complete
-            start_time = time.time()
-            def judge():
-                # return (r'"ast":' in "".join(self.collected_output)) or (r'"messages":' in "".join(self.collected_output))
-                joined = "".join(self.collected_output)
-                return (r'"ast":' in joined) or (r'"messages":' in joined) or (r'"message":' in joined)
-                # return ('\n' in "".join(self.collected_output))
-
-            if wait_for_env:
-                while not judge() and time.time() - start_time < timeout:
-                    print("".join(self.collected_output))
-                    time.sleep(1)
-                
-                execution_complete = judge()
+            if raw:
+                # Parse the JSON command
+                cmd_data = json.loads(cmd)
+                if "cmd" in cmd_data:
+                    response = self._server.run(Command(cmd=cmd_data["cmd"]))
+                elif "path" in cmd_data:
+                    response = self._server.run(Command(path=cmd_data["path"]))
+                else:
+                    return False, "Unsupported command format"
             else:
-                # Wait a fixed amount of time if not looking for "env"
-                time.sleep(min(3.0, timeout))
-                execution_complete = True
-            
-            # Get the output
-            with self.output_lock:
-                output = "".join(self.collected_output)
-            # print("DEBUG Output: ", output)
-            # print("DEBUG execution_complete: ", execution_complete)
+                response = self._server.run(Command(cmd=cmd))
                 
-            if not execution_complete:
-                # Try to interrupt the current execution with Ctrl+C if timed out
-                print("DEBUG Timeout execution")
-                os.write(self.master_fd, b"\x03")
-                return False, f"Execution timed out after {timeout} seconds. Partial output:\n{output}"
-            
-            if r'offset 4096: unexpected character in string' in output:
-                return False, f"4096 input buffer bug not fixed now"
-
-            return True, output
-            
+            if hasattr(response, 'env'):
+                self._last_env = response.env
+                
+            # Convert response to string for compatibility
+            return True, str(response)
         except Exception as e:
-            return False, f"Error executing command: {e}"
-    
-    def _read_output(self):
-        """
-        Thread function to continuously read output from the REPL process.
-        """
-        buffer = b""
-        
-        while self.running:
-            try:
-                # Wait for data to be available
-                rlist, _, _ = select.select([self.master_fd], [], [], 0.01)
-                
-                if self.master_fd in rlist:
-                    # Read available data
-                    chunk = os.read(self.master_fd, 4096)
-                    if not chunk:
-                        time.sleep(0.01)
-                        continue
-                    
-                    # Decode the chunk
-                    try:
-                        text = chunk.decode()
-                        
-                        # Add to output buffer
-                        with self.output_lock:
-                            self.collected_output.append(text)
-                            
-                    except UnicodeDecodeError:
-                        # Handle potential decoding errors
-                        buffer += chunk
-                        try:
-                            text = buffer.decode()
-                            buffer = b""
-                            
-                            # Add to output buffer
-                            with self.output_lock:
-                                self.collected_output.append(text)
-                                
-                        except UnicodeDecodeError:
-                            pass  # Keep accumulating in buffer
-            
-            except OSError:
-                # Process terminated or error in reading
-                break
-            except Exception as e:
-                print(f"Error in output thread: {e}")
-                break
+            return False, str(e)
 
-# Initialize a global repl instance with the specified work directory
-work_dir = "/data/coding/Goedel-Prover/mathlib4"
-repl = LakeREPL(work_dir=work_dir)
+# Initialize a global repl instance
+repl = REPLInstance(use_header_mode=True)
 
 def example():
+    """Example usage of the REPL"""
     # Use the global repl instance
     if not repl.running:
         repl.start()
@@ -506,20 +387,12 @@ theorem mathd_algebra_182 (y : ℂ) : 7 * (3 * y + 2) = 21 * y + 14 := by
     result = repl.execute(code_no_header)
     print("Result 2:", result)
     
-    # Check code for errors
-    is_valid, check_result = repl.check(code_no_header)
-    print("Check result:", is_valid, check_result)
+    # Test a simple theorem 
+    response = repl.run('theorem ex (n : Nat) : n = 5 → n = 5 := id')
+    print("Simple theorem response:", response)
+    
+    # Clean up
+    repl.end()
 
 if __name__ == "__main__":
-    example()    
-    # Additional test to verify global repl works
-    print("\nSimple test of global repl instance:")
-    if not repl.running:
-        repl.start()
-    
-    test_code = "theorem test_theorem (x : ℝ): x + 0 = x := by\n  rw [add_zero]"
-    result = repl.execute(test_code)
-    print("Test result:", result)
-    
-    # End the repl when done
-    repl.end()
+    example() 
