@@ -555,7 +555,7 @@ def prepare_code_for_synthesis(full_code: str, target_error_line_num: Optional[i
     return before, indentation, original_error_line_content, after, error_line, header_code
 
 # Modify checker to pass header_code and use updated evaluate_fix
-def checker(s: str, before: str, indentation: str, original_error_content: str, after: str, original_error_line: int, header_code: str) -> bool:
+def checker(s: str, before: str, indentation: str, original_error_content: str, after: str, original_error_line: int, header_code: str, place: str) -> bool:
     """
     Test if the synthesized code fragment fixes the error.
     Now takes header_code explicitly and reconstructs full codes.
@@ -569,30 +569,40 @@ def checker(s: str, before: str, indentation: str, original_error_content: str, 
         after: Code after error line.
         original_error_line: Original error line number (relative to full code).
         header_code: The extracted header code (not used directly here but passed by interpreter).
+        place: Place to insert the fix, either "here" or "before"
     """
     # Build original full code
     original_full_code = before + indentation + original_error_content + after
     
-    # --- Build fixed code --- 
-    # Check if the line contains "by " and handle replacement accordingly
-    if "by " in original_error_content:
-        # Special handling for `by` tactics: replace only the tactic part
-        by_pos = original_error_content.find("by ")
-        prefix = original_error_content[:by_pos + 3] # Include "by "
-        # Heuristic: Assume tactic ends at line end or before a comment?
-        # For simplicity, replace everything after "by " for now.
-        # More robust parsing might be needed for complex cases.
-        fixed_line_content = prefix + s 
+    # --- Build fixed code based on 'place' ---
+    fixed_full_code = ""
+    if place == "here":
+        # Replace the current line's content
+        if "by " in original_error_content:
+            # Special handling for `by` tactics: replace only the tactic part
+            by_pos = original_error_content.find("by ")
+            prefix = original_error_content[:by_pos + 3] # Include "by "
+            fixed_line_content = prefix + s 
+        else:
+            # Default: replace the whole stripped line content
+            fixed_line_content = s
+        fixed_full_code = before + indentation + fixed_line_content + after
+        # vlog(f"Testing ({place}): Replace line {original_error_line} with {fixed_line_content}", level=logging.DEBUG)
+    elif place == "before":
+        # Insert the new line before the original error line
+        new_line_to_insert = indentation + s + '\\n' # Add newline after inserted line
+        original_line_full = indentation + original_error_content # Keep original line
+        fixed_full_code = before + new_line_to_insert + original_line_full + after
+        # vlog(f"Testing ({place}): Insert '{s}' before line {original_error_line}", level=logging.DEBUG)
     else:
-        # Default: replace the whole stripped line content
-        fixed_line_content = s
-    # Combine fixed full code
-    fixed_full_code = before + indentation + fixed_line_content + after
+        # Should not happen with current spec, but handle defensively
+        vlog(f"Warning: Unknown placement '{place}' received in checker. Defaulting to 'here'.", logging.WARNING)
+        fixed_line_content = s # Default to replacing
+        fixed_full_code = before + indentation + fixed_line_content + after
     # --- End Build fixed code --- 
     
-    # vlog(f"Testing fragment: {s}", level=logging.DEBUG)
-    # vlog(f"Original line {original_error_line}: {indentation + original_error_content}", level=logging.DEBUG)
-    # vlog(f"Fixed line {original_error_line}:    {indentation + fixed_line_content}", level=logging.DEBUG)
+    # vlog(f"Original code slice:\n...{original_error_content}...", level=logging.DEBUG)
+    # vlog(f"Generated fixed code slice for check:\n...{fixed_full_code[len(before):len(fixed_full_code)-len(after)]}...", level=logging.DEBUG)
 
     # Use the modified evaluate_fix which takes full codes
     success, _ = evaluate_fix(
@@ -601,7 +611,7 @@ def checker(s: str, before: str, indentation: str, original_error_content: str, 
         original_error_line,
         is_checker_mode=True # Indicate this is a quick check
     )
-    # vlog(f"Checker result for '{s}': {success}", level=logging.DEBUG)
+    # vlog(f"Checker result for '{s}' ({place}): {success}", level=logging.DEBUG)
     return success
 
 def get_program_string(prog):
@@ -665,6 +675,7 @@ class ToyInterpreter(PostOrderInterpreter):
         self.error_line = error_line
         self.header_code = header_code # Store header
         self.last_solution = None  # Save the last successful fix
+        self.last_solution_place = None # Save placement ("here" or "before")
         super().__init__()
 
     def eval_rw(self, node, args):
@@ -676,6 +687,9 @@ class ToyInterpreter(PostOrderInterpreter):
     def eval_oneline(self, node, args):
         return f"{args[0]}"
     
+    def eval_delete(self, node, args):
+        return "" # for simplicity, we have a redundant delete place, before or here, though before is never used.
+    
     def eval_checker(self, node, args):
         """
         Check if the given fix is effective
@@ -683,12 +697,14 @@ class ToyInterpreter(PostOrderInterpreter):
         Returns a boolean indicating whether the fix is valid
         """
         solution = args[0]  # Save the solution string
+        place = args[1]
         # Pass header_code to checker
-        result = checker(solution, self.before, self.indentation, self.original_error_content, self.after, self.error_line, self.header_code)
-        # If the check passes, save this solution
+        result = checker(solution, self.before, self.indentation, self.original_error_content, self.after, self.error_line, self.header_code, place)
+        # If the check passes, save this solution and its placement
         if result:
             self.last_solution = solution
-            # vlog(f"Found effective solution: {solution}") # Be less verbose in interpreter
+            self.last_solution_place = place # Store the placement
+            # vlog(f"Found effective solution: {solution} ({place})") # Be less verbose in interpreter
         return result
 
 # Modify synthesize_fix to use updated helpers
@@ -777,47 +793,59 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tupl
         
         if prog is not None:
             fix = None
+            place = None # Initialize place
             if toy_interpreter.last_solution:
                 fix = toy_interpreter.last_solution
-                logger.info(f'Using last successful solution from interpreter: {fix}')
+                place = toy_interpreter.last_solution_place # Get placement
+                logger.info(f'Using last successful solution from interpreter: {fix} (place: {place})')
             else:
                 logger.warning('No recorded solution found in interpreter after synthesis, likely synthesis failed internally or no solution exists.')
                 # Attempt to evaluate the program directly (might fail or give non-string)
-                try:
-                   eval_result = toy_interpreter.eval(prog)
-                   if isinstance(eval_result, str): 
-                       fix = eval_result
-                       logger.info(f'Evaluated program directly: {fix}')
-                   else: 
-                       logger.warning(f'Direct evaluation did not return a string: {eval_result}')
-                       fix = None # If eval doesn't return a string fix, discard
-                except Exception as eval_err:
-                   logger.error(f'Direct evaluation failed: {eval_err}')
-                   fix = None # Ensure fix is None if direct eval fails
+                # Direct evaluation might not work well with the checker logic, so we prioritize last_solution
+                fix = None 
+                place = None
 
-            if fix: # Proceed only if we have a string fix
-                logger.info(f'Applying synthesized fix: {fix}')
+            if fix and place: # Proceed only if we have a string fix and a place
+                logger.info(f'Applying synthesized fix: {fix} (place: {place})')
                 
-                # --- Apply fix (similar to checker) ---
-                if "by " in original_error_content:
-                    by_pos = original_error_content.find("by ")
-                    prefix = original_error_content[:by_pos + 3]
-                    fixed_line_content = prefix + fix
-                else:
+                # --- Apply fix based on 'place' (logic matches checker) ---
+                final_fixed_full_code = ""
+                if place == "here":
+                    if "by " in original_error_content:
+                        by_pos = original_error_content.find("by ")
+                        prefix = original_error_content[:by_pos + 3]
+                        fixed_line_content = prefix + fix
+                    else:
+                        fixed_line_content = fix
+                    final_fixed_full_code = before + indentation + fixed_line_content + after
+                elif place == "before":
+                    new_line_to_insert = indentation + fix + '\\n'
+                    original_line_full = indentation + original_error_content
+                    final_fixed_full_code = before + new_line_to_insert + original_line_full + after
+                else: 
+                    # Default to 'here' if place is unexpected (shouldn't happen)
+                    logger.warning(f"Unexpected place '{place}' from interpreter, defaulting to 'here'.")
                     fixed_line_content = fix
-                fixed_full_code = before + indentation + fixed_line_content + after
+                    final_fixed_full_code = before + indentation + fixed_line_content + after
                 # --- End Apply fix ---
 
-                # Evaluate the fix using full codes
+                # Evaluate the final constructed fix using full codes
                 success, remaining_errors = evaluate_fix(
                     original_full_code, 
-                    fixed_full_code, 
+                    final_fixed_full_code, # Use the code constructed based on 'place'
                     error_line 
                 )
-                message = "Synthesis successful" if success else "Synthesized fix failed validation (error persisted or new errors introduced)"
+                
+                if success:
+                    fixed_full_code = final_fixed_full_code # Update the code to be returned
+                    message = f"Synthesis successful (fix applied {place})"
+                else:
+                    # Fix failed validation, keep original code
+                    fixed_full_code = original_full_code 
+                    message = f"Synthesized fix ({fix}, {place}) failed validation (error persisted or new errors introduced)"
             else:
-                # No valid fix string obtained
-                 message = "Synthesis failed: No valid fix generated or extracted."
+                # No valid fix string or place obtained
+                 message = "Synthesis failed: No valid fix/placement generated or extracted."
                  success = False
                  remaining_errors = original_errors # Errors remain unchanged
                  fixed_full_code = original_full_code # Return original code
