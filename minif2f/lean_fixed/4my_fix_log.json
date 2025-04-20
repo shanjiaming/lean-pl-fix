@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/4my.lean",
+  "output_file": "/home/matheye/lean-pl-fix/minif2f/lean_fixed/4my_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking\n\nopen BigOperators Real Nat Topology Rat  -- Open common mathematical namespaces\n\ntheorem mathd_algebra_182 (y : \u2102) : 7 * (3 * y + 2) = 21 * y + 14 := by\n  rw [mul_add, mul_assoc]  -- Rewrites using the distributive property: a*(b+c) = a*b + a*c\n  norm_num  -- Normalizes numerical expressions, computing 7*3 to 21 and 7*2 to 14\n",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disable heartbeat limit to prevent timeout during proof checking\n\nopen BigOperators Real Nat Topology Rat  -- Open common mathematical namespaces\n\ntheorem mathd_algebra_182 (y : \u2102) : 7 * (3 * y + 2) = 21 * y + 14 := by\n  rw [mul_add]\n  rw [<- mul_assoc]\n  norm_num  -- Normalizes numerical expressions, computing 7*3 to 21 and 7*2 to 14",
+  "statistics": {
+    "original_errors": 1,
+    "decompositions_applied": 1,
+    "successful_syntheses": 1,
+    "failed_syntheses": {},
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 2,
+        "line": 10,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b * ?c\ny : \u2102\n\u22a2 7 * (3 * y) + 7 * 2 = 21 * y + 14",
+        "fix_time": 0.2516903877258301,
+        "errors_after_this_fix": 0
+      }
+    ],
+    "failed_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 0.4124138355255127
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 1\nDecompositions applied: 1\nSuccessful syntheses: 1\nPersistent failed syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 0.41 seconds"
+}

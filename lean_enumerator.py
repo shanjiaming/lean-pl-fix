@@ -590,7 +590,7 @@ def checker(s: str, before: str, indentation: str, original_error_content: str, 
         # vlog(f"Testing ({place}): Replace line {original_error_line} with {fixed_line_content}", level=logging.DEBUG)
     elif place == "before":
         # Insert the new line before the original error line
-        new_line_to_insert = indentation + s + '\\n' # Add newline after inserted line
+        new_line_to_insert = indentation + s + '\n' # Add newline after inserted line
         original_line_full = indentation + original_error_content # Keep original line
         fixed_full_code = before + new_line_to_insert + original_line_full + after
         # vlog(f"Testing ({place}): Insert '{s}' before line {original_error_line}", level=logging.DEBUG)
@@ -819,7 +819,7 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tupl
                         fixed_line_content = fix
                     final_fixed_full_code = before + indentation + fixed_line_content + after
                 elif place == "before":
-                    new_line_to_insert = indentation + fix + '\\n'
+                    new_line_to_insert = indentation + fix + '\n'
                     original_line_full = indentation + original_error_content
                     final_fixed_full_code = before + new_line_to_insert + original_line_full + after
                 else: 
@@ -869,113 +869,260 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tupl
     
     return fixed_full_code, success, message, elapsed_time, remaining_errors
 
+# Function to decompose complex rw ... at ... tactics
+def decompose_rw_at(line_content: str, indentation: str) -> Optional[str]:
+    """
+    Decompose 'rw [th1, th2]' or 'rw [th1, th2] at loc1 loc2' into multiple lines.
+
+    Args:
+        line_content: The content of the line (stripped).
+        indentation: The indentation of the line.
+
+    Returns:
+        A string with decomposed lines, or None if not applicable.
+    """
+    vlog(f"[Decompose Debug] Received line_content: '{line_content}'", logging.DEBUG)
+    # Group 1: Theorems
+    # Group 2: Locations (only if 'at' is present)
+    # --- Fixed Correct Regex --- #
+    match = re.match(r'^\s*(rw)\s*(\[.*?\])(?:\s+(at)\s+(.*?))?\s*$', line_content)
+    # -------------------------- #
+    # match = re.match(r'^\\s*(rw)\\s*(\[.*?\])(?:\\s+(at)\\s+(.*?))?\\s*$', line_content)
+    # --------------------
+    # match = re.match(r'^\\s*(rw)\\s*(\\[.*?\])(?:\\s+(at)\\s+(.*?))?\\s*$', line_content)
+    # --------------------
+    # match = re.match(r'^\\s*rw\\s*\\[(.*?)\\](?:\\s+at\\s+(.*?))?\\s*$', line_content)
+    # ----------------------------------------
+    if not match:
+        vlog("[Decompose Debug] Regex did not match.", logging.DEBUG)
+        return None
+
+    # Adjust group indices based on new regex
+    theorems_str = match.group(2)[1:-1].strip() # Remove brackets and strip
+    locations_str = match.group(4).strip() if match.group(4) else None
+    # theorems_str = match.group(1).strip()
+    # locations_str = match.group(2).strip() if match.group(2) else None # Locations string or None
+    # at_part = match.group(2) # This will be None if 'at' is not present
+    # locations_str = match.group(3).strip() if at_part else "" # Locations string or empty
+
+    theorems = [th.strip() for th in theorems_str.split(',') if th.strip()]
+    locations = [loc.strip() for loc in locations_str.split() if loc.strip()] if locations_str else []
+
+    # Only decompose if more than one theorem OR (more than one location AND at least one theorem)
+    # We need at least one theorem to decompose anything.
+    if not theorems or (len(theorems) <= 1 and len(locations) <= 1):
+        vlog(f"[Decompose Debug] Condition not met: theorems={len(theorems)}, locations={len(locations)}", logging.DEBUG)
+        return None
+
+    decomposed_lines = []
+    # If no locations specified (either 'at' was absent or location list was empty)
+    if not locations:
+        # Only decompose if there's more than one theorem
+        if len(theorems) > 1:
+            for th in theorems:
+                decomposed_lines.append(f"{indentation}rw [{th}]")
+        else:
+             # Single theorem, no locations - no decomposition needed
+             vlog("[Decompose Debug] Single theorem, no locations. No decomposition needed.", logging.DEBUG)
+             return None
+    # If locations are specified (and we have at least one theorem)
+    else:
+        for th in theorems:
+            for loc in locations:
+                decomposed_lines.append(f"{indentation}rw [{th}] at {loc}")
+
+    # Ensure we actually generated lines (handles edge cases like rw [] at loc)
+    if not decomposed_lines:
+        vlog("[Decompose Debug] No decomposed lines generated.", logging.DEBUG)
+        return None
+
+    result = '\n'.join(decomposed_lines)
+    vlog(f"[Decompose Debug] Decomposing line: '{line_content}' into {len(decomposed_lines)} lines. Result: {result}", logging.INFO)
+    # vlog(f"Decomposing line: '{line_content}' into {len(decomposed_lines)} lines.", logging.INFO)
+    return result
+
 # Modify synthesize_all_fixes to use updated helpers
 def synthesize_all_fixes(code: str) -> Tuple[str, bool, str, Dict]:
     """
-    Try to fix each error in the code sequentially, using header mode for checks.
-    
+    Try to fix errors in the code iteratively, attempting decomposition first.
+    Uses header mode for checks.
+
     Args:
         code: Original full code (including header).
-        
+
     Returns:
-        Tuple[str, bool, str, Dict]: 
+        Tuple[str, bool, str, Dict]:
             (final_fixed_code, overall_success, summary_message, stats_dict)
             overall_success is True only if *all* original errors are fixed.
     """
     total_start_time = time.time()
-    vlog("\n===== Starting sequential error fixing =====")
-    
+    vlog("\n===== Starting iterative error fixing =====")
+
     current_code = code
-    total_fixed_count = 0
-    total_failed_attempts = 0
-    successful_fixes_details = []
-    failed_fixes_details = []
-    
+    stats = {
+        "original_errors": 0,
+        "decompositions_applied": 0,
+        "successful_syntheses": 0,
+        "failed_syntheses": {}, # Stores {line_num: message} for persistent failures
+        "remaining_errors": 0,
+        "fix_rate": 0.0,
+        "successful_fixes_details": [], # Keep track of successful synthesis details
+        "failed_fixes_details": [],     # Keep track of failed synthesis attempts
+        "remaining_errors_details": [],
+        "total_time": 0.0
+    }
+
     # Initial error check
     initial_result = repl.execute(current_code, env_mode='header')
-    original_errors = [m for m in initial_result.get("messages", []) if m.get('severity') == 'error']
-    original_error_count = len(original_errors)
-    vlog(f"Found {original_error_count} initial errors.")
-    
-    if original_error_count == 0:
+    initial_errors = [m for m in initial_result.get("messages", []) if m.get('severity') == 'error']
+    stats["original_errors"] = len(initial_errors)
+    vlog(f"Found {stats['original_errors']} initial errors.")
+
+    if stats["original_errors"] == 0:
         vlog("Original code has no errors.")
-        total_elapsed_time = time.time() - total_start_time
-        stats = {"original_errors": 0, "fixed_errors": 0, "failed_errors": 0, "remaining_errors": 0, 
-                 "fix_rate": 1.0, "successful_fixes": [], "failed_fixes": [], "remaining_errors_details": [], "total_time": total_elapsed_time}
+        stats["fix_rate"] = 1.0
+        stats["total_time"] = time.time() - total_start_time
         return code, True, "No errors found.", stats
 
-    # --- Sequential Fixing Loop ---
-    # We iterate based on the *original* error list for simplicity, 
-    # but apply fixes to the sequentially updated `current_code`.
-    # Note: Line numbers might shift after fixes. We pass the original line number to synthesize_fix.
-    
-    original_errors_sorted = sorted(original_errors, key=lambda e: e.get('line', 0))
-    
-    for i, error_to_target in enumerate(original_errors_sorted, 1):
-        target_line = error_to_target.get('line')
-        error_type = extract_error_type(error_to_target)
-        error_message = error_to_target.get('message', '')
+    pass_num = 0
+    while True:
+        pass_num += 1
+        vlog(f"\n--- Starting Fix Pass {pass_num} ---")
 
-        if target_line is None:
-            vlog(f"Skipping original error {i} due to missing line number.", logging.WARNING)
-            total_failed_attempts += 1
-            failed_fixes_details.append({
-                "line": "N/A", "error_type": error_type, "original_error_message": error_message,
-                "failure_reason": "Missing line number in original error", "attempt_time": 0
-            })
-            continue
-            
-        vlog(f"\nAttempting fix {i}/{original_error_count} for original error at line {target_line} ({error_type})...")
-        
-        # Call synthesize_fix on the *current* state of the code, targeting the original line number
-        fixed_code_attempt, success, message, fix_time, remaining_errors_after_fix = synthesize_fix(
-            current_code, 
-            target_line 
-        )
+        # Get current errors
+        pass_result = repl.execute(current_code, env_mode='header')
+        current_errors = [m for m in pass_result.get("messages", []) if m.get('severity') == 'error']
+        current_errors_sorted = sorted(current_errors, key=lambda e: e.get('line', 0))
 
-        # Check if the fix was specifically successful for the targeted error
-        # We might need more refined success check here if synthesize_fix's success flag isn't sufficient
-        if success: 
-            vlog(f"✅ Successfully synthesized and validated fix for original error at line {target_line} ({error_type}) in {fix_time:.2f}s.")
-            current_code = fixed_code_attempt # Update code for next iteration
-            total_fixed_count += 1
-            # Extract actual fix details might be complex due to line shifts, log basic info
-            successful_fixes_details.append({
-                "original_line": target_line, 
-                "error_type": error_type, 
-                "original_error_message": error_message, 
-                "fix_time": fix_time,
-                "errors_after_this_fix": len(remaining_errors_after_fix) 
-            })
-        else:
-            vlog(f"❌ Failed to fix original error at line {target_line} ({error_type}) after {fix_time:.2f}s. Message: {message}")
-            total_failed_attempts += 1
-            failed_fixes_details.append({
-                "original_line": target_line, 
-                "error_type": error_type, 
-                "original_error_message": error_message, 
-                "failure_reason": message, 
-                "attempt_time": fix_time
-            })
-            # Keep current_code unchanged if fix failed
+        if not current_errors_sorted:
+            vlog("No errors remaining. Fixing process complete.")
+            break # Success
+
+        vlog(f"Errors remaining at start of pass {pass_num}: {len(current_errors_sorted)}")
+
+        made_change_this_pass = False
+        attempted_synthesis_in_this_pass = set() # Track lines where synthesis failed *this pass*
+
+        current_code_lines = current_code.splitlines()
+
+        for error_to_process in current_errors_sorted:
+            target_line_num = error_to_process.get('line')
+            error_type = extract_error_type(error_to_process)
+            error_message = error_to_process.get('message', '')
+
+            if target_line_num is None:
+                vlog(f"Skipping error due to missing line number: {error_message[:100]}...", logging.WARNING)
+                continue
+
+            # Check if synthesis already failed for this line in a *previous* pass and wasn't fixed
+            # Or if it failed in *this* pass already
+            if target_line_num in stats["failed_syntheses"] or target_line_num in attempted_synthesis_in_this_pass:
+                 # vlog(f"Skipping line {target_line_num} (synthesis previously failed or failed this pass)", logging.DEBUG)
+                 continue # Don't retry synthesis immediately if it failed
+
+            if not (0 < target_line_num <= len(current_code_lines)):
+                 vlog(f"Skipping error at line {target_line_num} - line number out of bounds for current code ({len(current_code_lines)} lines).", logging.WARNING)
+                 continue
+
+            error_line_full_content = current_code_lines[target_line_num - 1]
+            indentation = re.match(r'(\s*)', error_line_full_content).group(1)
+            error_line_content_stripped = error_line_full_content.strip()
+
+            # --- Strip comment before attempting decomposition ---
+            code_part = error_line_content_stripped.split('--')[0].strip()
+            # ----------------------------------------------------
+
+            # 1. Attempt Decomposition
+            decomposed_code_block = decompose_rw_at(code_part, indentation)
+            if decomposed_code_block is not None:
+                vlog(f"Applying decomposition at line {target_line_num}")
+                # Replace the line
+                new_code_lines = current_code_lines[:target_line_num - 1] + decomposed_code_block.split('\n') + current_code_lines[target_line_num:]
+                current_code = '\n'.join(new_code_lines)
+                current_code_lines = current_code.splitlines() # Update lines list
+                stats["decompositions_applied"] += 1
+                made_change_this_pass = True
+                # Clear persistent failure status for this line if it existed, as decomposition might fix it
+                if target_line_num in stats["failed_syntheses"]:
+                    del stats["failed_syntheses"][target_line_num]
+                vlog(f"Code updated after decomposition at line {target_line_num}. Starting new pass.")
+                break # Break inner for loop, start new pass immediately
+
+            # 2. Attempt Synthesis (only if decomposition didn't happen)
+            vlog(f"Attempting synthesis for error at line {target_line_num} ({error_type})...")
+            fixed_code_attempt, success, message, fix_time, remaining_errors_after_fix = synthesize_fix(
+                current_code, # Pass the current state of the code
+                target_line_num
+            )
+
+            if success:
+                vlog(f"✅ Successfully synthesized and validated fix for error at line {target_line_num} ({error_type}) in {fix_time:.2f}s.")
+                current_code = fixed_code_attempt # Update code
+                current_code_lines = current_code.splitlines() # Update lines list
+                stats["successful_syntheses"] += 1
+                # Record success details (similar to previous version)
+                stats["successful_fixes_details"].append({
+                    "pass": pass_num,
+                    "line": target_line_num,
+                    "error_type": error_type,
+                    "original_error_message": error_message, # Error message *before* this fix
+                    "fix_time": fix_time,
+                    "errors_after_this_fix": len(remaining_errors_after_fix)
+                })
+                # Clear persistent failure status for this line if it existed
+                if target_line_num in stats["failed_syntheses"]:
+                    del stats["failed_syntheses"][target_line_num]
+                made_change_this_pass = True
+                vlog(f"Code updated after successful synthesis at line {target_line_num}. Starting new pass.")
+                break # Break inner for loop, start new pass immediately
+            else:
+                vlog(f"❌ Failed to synthesize fix for error at line {target_line_num} ({error_type}) after {fix_time:.2f}s. Message: {message}")
+                # Record persistent failure
+                stats["failed_syntheses"][target_line_num] = message
+                # Track failure for *this* pass to avoid immediate retry within the same pass
+                attempted_synthesis_in_this_pass.add(target_line_num)
+                # Record failure details (similar to previous version)
+                stats["failed_fixes_details"].append({
+                     "pass": pass_num,
+                     "line": target_line_num,
+                     "error_type": error_type,
+                     "original_error_message": error_message, # Error message before this attempt
+                     "failure_reason": message,
+                     "attempt_time": fix_time
+                 })
+                # Continue the inner for loop to the next error in this pass
+
+        # After iterating through all errors in the pass
+        if not made_change_this_pass:
+            vlog(f"No changes made in pass {pass_num}. Stopping iterative fixing.")
+            break # Break outer while loop
+
+        # Safety break to prevent infinite loops (e.g., if fixes introduce new errors repeatedly)
+        if pass_num >= (stats["original_errors"] * 2) + 5: # Allow roughly 2 passes per original error + buffer
+             vlog(f"Warning: Reached pass limit ({pass_num}). Stopping iterative fixing to prevent infinite loops.", logging.WARNING)
+             break
+
 
     # --- Final Assessment ---
-    vlog("\n===== Sequential fixing complete =====")
+    vlog("\n===== Iterative fixing complete =====")
     final_result = repl.execute(current_code, env_mode='header')
     final_errors = [m for m in final_result.get("messages", []) if m.get('severity') == 'error']
-    remaining_error_count = len(final_errors)
-    
-    overall_success = (remaining_error_count == 0 and original_error_count > 0) # Success only if all original errors are gone
+    stats["remaining_errors"] = len(final_errors)
+
+    overall_success = (stats["remaining_errors"] == 0 and stats["original_errors"] > 0) # Success only if all original errors are gone
 
     # Prepare summary message
     summary_lines = []
     summary_lines.append("=== Fix Summary ===")
-    summary_lines.append(f"Original errors: {original_error_count}")
-    summary_lines.append(f"Successful fixes applied: {total_fixed_count}")
-    summary_lines.append(f"Failed fix attempts: {total_failed_attempts}")
-    summary_lines.append(f"Remaining errors: {remaining_error_count}")
+    summary_lines.append(f"Original errors: {stats['original_errors']}")
+    summary_lines.append(f"Decompositions applied: {stats['decompositions_applied']}")
+    summary_lines.append(f"Successful syntheses: {stats['successful_syntheses']}")
+    summary_lines.append(f"Persistent failed syntheses (line: reason): {len(stats['failed_syntheses'])}")
+    for line, reason in stats['failed_syntheses'].items():
+        summary_lines.append(f"  - Line {line}: {reason[:100]}...")
+    summary_lines.append(f"Remaining errors: {stats['remaining_errors']}")
 
-    remaining_errors_details = []
+    stats["remaining_errors_details"] = []
     if final_errors:
         summary_lines.append("\nRemaining Errors:")
         for err in final_errors:
@@ -983,30 +1130,21 @@ def synthesize_all_fixes(code: str) -> Tuple[str, bool, str, Dict]:
             etype = extract_error_type(err)
             emsg = err.get('message', '')[:100].replace('\n', ' ')
             summary_lines.append(f"  - Line {line}: {etype} - {emsg}...")
-            remaining_errors_details.append({"line": line, "error_type": etype, "message": err.get('message', '')})
-            
+            stats["remaining_errors_details"].append({"line": line, "error_type": etype, "message": err.get('message', '')})
+
     total_elapsed_time = time.time() - total_start_time
-    fix_rate = total_fixed_count / original_error_count if original_error_count > 0 else 1.0
-    summary_lines.append(f"\nFix Rate (Successful Attempts / Original Errors): {fix_rate:.4f}")
+    stats["total_time"] = total_elapsed_time
+    # Calculate fix rate based on reduction in errors
+    errors_fixed = stats['original_errors'] - stats['remaining_errors']
+    stats["fix_rate"] = errors_fixed / stats['original_errors'] if stats['original_errors'] > 0 else 1.0
+    summary_lines.append(f"\nOverall Fix Rate (Errors Fixed / Original Errors): {stats['fix_rate']:.4f}")
     summary_lines.append(f"Total time: {total_elapsed_time:.2f} seconds")
     summary_message = "\n".join(summary_lines)
-    
+
     vlog(summary_message) # Log the summary
 
-    # Prepare detailed stats dictionary
-    stats_dict = {
-        "original_errors": original_error_count,
-        "successful_fixes_applied": total_fixed_count, # Renamed for clarity
-        "failed_fix_attempts": total_failed_attempts, # Renamed for clarity
-        "remaining_errors": remaining_error_count,
-        "fix_rate": fix_rate,
-        "successful_fixes_details": successful_fixes_details, # Details of successful attempts
-        "failed_fixes_details": failed_fixes_details,       # Details of failed attempts
-        "remaining_errors_details": remaining_errors_details, # Details of errors left at the end
-        "total_time": total_elapsed_time
-    }
-
-    return current_code, overall_success, summary_message, stats_dict
+    # The stats dictionary is already updated throughout the process
+    return current_code, overall_success, summary_message, stats
 
 # Modify main to use header mode and updated helpers
 def main():
@@ -1038,7 +1176,7 @@ def main():
         file_path = args.file
     else:
         # Use original default path
-        file_path = "./minif2f/lean_code/4.lean"
+        file_path = "./minif2f/lean_code/4my.lean"
         vlog("No file path provided, using default path: " + file_path)
     
     # Determine output directory
