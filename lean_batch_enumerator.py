@@ -8,29 +8,21 @@ import argparse
 import subprocess
 import concurrent.futures
 
-# Define the base directory for Tyrell specification files
-TYRELL_SPEC_DIR = "minif2f/tyrell_batch_output"
+# 不再需要全局定义Tyrell规范目录，让lean_enumerator.py自己决定使用哪个规范文件
 
 def repair_file(file_path, output_dir):
     # Get the file name
     filename = os.path.basename(file_path)
     print(f"Processing: {filename}")
     
-    # Construct the corresponding Tyrell spec file path
-    input_name = os.path.splitext(filename)[0]
-    tyrell_file = os.path.join(TYRELL_SPEC_DIR, f"{input_name}_static_filtered.tyrell")
+    # 不再构建特定的Tyrell规范文件路径
+    # 让lean_enumerator.py自行判断使用哪个规范文件
     
-    # Check if the Tyrell spec file exists
-    if not os.path.exists(tyrell_file):
-        print(f"❌ {filename} processing failed - Tyrell spec file not found: {tyrell_file}")
-        return # Skip processing if spec file is missing
-    
-    # Call lean_enumerator.py to process the file, passing the specific tyrell spec
+    # Call lean_enumerator.py to process the file
     cmd = [
         sys.executable,
         "lean_enumerator.py",
         file_path,
-        "--tyrell-spec", tyrell_file,
         "--output-dir", output_dir, # Pass output dir for logs/results
         "--no-verbose" # Optional: reduce noise during batch processing
     ]
@@ -60,7 +52,7 @@ def main():
                         help="Directory containing .lean files")
     parser.add_argument("--output_dir", type=str, default="./minif2f/lean_fixed",
                         help="Directory to store marker files for processed files")
-    parser.add_argument("--max_workers", type=int, default=20,
+    parser.add_argument("--max_workers", type=int, default=4,
                         help="Maximum number of parallel tasks")
     args = parser.parse_args()
     

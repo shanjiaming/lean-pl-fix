@@ -12,6 +12,7 @@ Lean Enumerator是一个自动修复Lean数学证明代码错误的工具，利�
 - **统计分析**：计算修复率、成功和失败的错误类型等统计信息
 - **可配置输出**：支持文本输出和JSON输出，可以根据需要控制输出详细程度
 - **错误分类**：能够识别和分类多种Lean错误类型，针对性地应用修复策略
+- **智能Tyrell规范选择**：根据错误类型自动选择最合适的Tyrell规范文件，区分本地定理(have)和库定理
 - **并行批处理**：支持并行处理多个Lean文件，提高修复效率
 - **可视化报告**：提供修复结果的可视化统计和图表
 - **定理引用分析**：通过`lean_theorem_analyzer.py`分析Lean文件中使用的mathlib定理（查看[文档](LeanTheoremAnalyzer.md)）
@@ -76,27 +77,47 @@ python log_analyzer.py --input-dir path/to/logs --output-dir path/to/analysis/ou
     python collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
     ```
 
-3.  **静态定理过滤**: 根据 JSON 文件中提供的库路径，扫描相应的库源文件，使用正则表达式提取 `theorem`/`lemma` 声明，并输出包含定理的库列表和定理列表。
+3.  **静态过滤定理**: 
+    运行 `static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理和模块保存到多个输出目录：
     ```bash
-    # 处理单个JSON文件
-    python static_theorem_filter.py path/to/module_paths.json path/to/filtered_theorems.json
-    # 批量处理目录中的JSON文件
-    python static_theorem_filter.py --input-dir path/to/module_paths/output --output-dir path/to/static_filtered/output
+    python static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f
+    ```
+    这会创建以下输出目录：
+    - `minif2f/static_theorems`: 包含定理列表的JSON文件
+    - `minif2f/static_modules`: 包含模块列表的JSON文件
+    - `minif2f/static_filtered_theorems_output`: 包含定理和模块的JSON文件（向后兼容）
+
+4.  **生成 Tyrell 文件**: 
+    运行 `update_tyrell_theorems.py` 两次，一次处理静态过滤的定理，一次处理'have'定理：
+    ```bash
+    # 使用静态过滤的定理生成Tyrell文件
+    python update_tyrell_theorems.py --input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/static_tyrell_output
+    
+    # 使用'have'定理生成Tyrell文件
+    python update_tyrell_theorems.py --input-dir minif2f/have_theorems --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/have_tyrell_output
     ```
 
-4.  **更新 Tyrell 语法**: 使用 JSON 文件中的定理列表更新 Tyrell 语法文件 (`.tyrell`) 中的 `enum Theorem` 部分。支持批量处理。
-    ```bash
-    # 批量处理
-    python update_tyrell_theorems.py --json-input-dir path/to/filtered/jsons --tyrell-input path/to/template.tyrell --tyrell-output-dir path/to/updated/tyrells
-    ```
-
-### (旧) 定理引用分析
-
-分析单个 Lean 文件中使用的 mathlib 定理（依赖 `#check` 和 `#where`，可能较慢且不稳定）：
-
+这些步骤可以通过使用 `gen_tyrell.sh` 脚本一次性执行：
 ```bash
-python lean_theorem_analyzer.py path/to/your/file.lean
+bash gen_tyrell.sh
 ```
+
+执行完这些步骤后，将生成以下文件：
+- `minif2f/static_theorems`: 包含从静态分析中提取的定理列表的JSON文件
+- `minif2f/static_modules`: 包含从静态分析中提取的模块列表的JSON文件
+- `minif2f/static_filtered_theorems_output`: 包含上述数据的JSON文件（向后兼容）
+- `minif2f/static_tyrell_output`: 为每个原始Lean文件生成的基于静态分析定理的Tyrell语法文件
+- `minif2f/have_tyrell_output`: 为每个原始Lean文件生成的基于'have'定理的Tyrell语法文件
+
+这些定制的Tyrell文件可以用于为特定问题优化程序合成搜索空间。
+
+## 许可证
+
+[添加许可证信息]
+
+## 贡献
+
+欢迎提交问题报告和改进建议。 
 
 ## 命令行参数
 
@@ -113,11 +134,14 @@ python lean_theorem_analyzer.py path/to/your/file.lean
 #### `static_theorem_filter.py` 参数
 
 - `--input-dir INPUT_DIR`: 包含 `identifier: module_path` JSON 文件的输入目录。
-- `--output-dir OUTPUT_DIR`: 输出包含 `selected_library_modules` 和 `theorems` 的 JSON 文件的目录。
+- `--output-dir OUTPUT_DIR`: 输出基本目录，会在其下创建以下子目录：
+  - `static_theorems`: 包含从静态分析中提取的定理列表的JSON文件
+  - `static_modules`: 包含从静态分析中提取的模块列表的JSON文件
+  - `static_filtered_theorems_output`: 包含定理和模块的JSON文件（向后兼容）
 
 #### `update_tyrell_theorems.py` 参数
 
-- `--json-input-dir JSON_INPUT_DIR`: 包含定理列表 JSON 文件的输入目录。
+- `--input-dir INPUT_DIR`: 包含定理列表文件的输入目录（支持JSON格式）。
 - `--tyrell-input TYRELL_INPUT`: Tyrell 模板文件路径。
 - `--tyrell-output-dir TYRELL_OUTPUT_DIR`: 保存更新后 Tyrell 文件的输出目录。
 
@@ -139,16 +163,20 @@ Lean Enumerator由以下主要组件构成：
     *   `static_theorem_filter.py`: 基于静态分析过滤定理。
     *   `update_tyrell_theorems.py`: 更新 Tyrell 语法文件。
 9.  **定理分析器** (`lean_theorem_analyzer.py`)：(旧) 分析 Lean 文件中使用的 mathlib 定理。
+10. **智能Tyrell选择器**：根据错误类型和涉及的定理自动选择合适的Tyrell规范文件。
 
 ## 错误修复流程
 
 1. 解析Lean文件，提取头部信息和代码
 2. 定位需要修复的错误行
 3. 将代码分解为错误行之前、错误行和错误行之后的部分
-4. 使用程序合成器尝试生成可能的修复
-5. 评估修复是否解决了目标错误且未引入新错误
-6. 应用成功的修复，并更新代码
-7. 继续处理下一个错误（如果有），直到所有错误都被修复或尝试失败
+4. 分析错误类型，选择合适的Tyrell规范文件：
+   - 如果错误涉及本地定理(have定义的定理)，使用`minif2f/have_tyrell_output`中的规范
+   - 否则使用`minif2f/static_tyrell_output`中的规范
+5. 使用程序合成器尝试生成可能的修复
+6. 评估修复是否解决了目标错误且未引入新错误
+7. 应用成功的修复，并更新代码
+8. 继续处理下一个错误（如果有），直到所有错误都被修复或尝试失败
 
 ## 日志分析
 
@@ -213,20 +241,72 @@ python log_analyzer.py --input-dir path/to/logs
     ```
 
 3.  **静态过滤定理**: 
-    运行 `static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理列表保存到 `minif2f/static_filtered_theorems_output` 目录下的新 JSON 文件（如 `1_static_filtered.json`）。
+    运行 `static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理和模块保存到多个输出目录：
     ```bash
-    mkdir -p minif2f/static_filtered_theorems_output
-    python static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f/static_filtered_theorems_output
+    python static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f
     ```
+    这会创建以下输出目录：
+    - `minif2f/static_theorems`: 包含定理列表的JSON文件
+    - `minif2f/static_modules`: 包含模块列表的JSON文件
+    - `minif2f/static_filtered_theorems_output`: 包含定理和模块的JSON文件（向后兼容）
 
 4.  **生成 Tyrell 文件**: 
-    运行 `update_tyrell_theorems.py` 处理上一步生成的 `minif2f/static_filtered_theorems_output` 目录下的所有 JSON 文件。脚本使用 `semantic/lean.tyrell` 作为模板，将每个 JSON 文件中的定理列表填充到模板的 `enum Theorem` 部分，并将最终生成的 Tyrell 文件保存到 `minif2f/tyrell_batch_output` 目录（如 `1_static_filtered.tyrell`）。
+    运行 `update_tyrell_theorems.py` 两次，一次处理静态过滤的定理，一次处理'have'定理：
     ```bash
-    mkdir -p minif2f/tyrell_batch_output
-    python update_tyrell_theorems.py --json-input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/tyrell_batch_output
+    # 使用静态过滤的定理生成Tyrell文件
+    python update_tyrell_theorems.py --input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/static_tyrell_output
+    
+    # 使用'have'定理生成Tyrell文件
+    python update_tyrell_theorems.py --input-dir minif2f/have_theorems --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/have_tyrell_output
     ```
 
-执行完这些步骤后，`minif2f/tyrell_batch_output` 目录将包含为每个原始 Lean 测试文件定制的 Tyrell 语法文件，其中 `enum Theorem` 部分只包含通过静态分析找到的相关定理。
+这些步骤可以通过使用 `gen_tyrell.sh` 脚本一次性执行：
+```bash
+bash gen_tyrell.sh
+```
+
+执行完这些步骤后，将生成以下文件：
+- `minif2f/static_theorems`: 包含从静态分析中提取的定理列表的JSON文件
+- `minif2f/static_modules`: 包含从静态分析中提取的模块列表的JSON文件
+- `minif2f/static_filtered_theorems_output`: 包含上述数据的JSON文件（向后兼容）
+- `minif2f/static_tyrell_output`: 为每个原始Lean文件生成的基于静态分析定理的Tyrell语法文件
+- `minif2f/have_tyrell_output`: 为每个原始Lean文件生成的基于'have'定理的Tyrell语法文件
+
+这些定制的Tyrell文件可以用于为特定问题优化程序合成搜索空间。 
+
+## 文件夹结构规范
+
+为确保系统正常工作，请遵循以下目录结构规范：
+
+```
+minif2f/
+├── lean_code/                    # 原始Lean文件目录
+│   └── *.lean                    # Lean源代码文件
+├── have_theorems/                # have语句提取的定理
+│   └── *.json                    # 每个文件对应的have定理列表(JSON格式)
+├── module_paths_output/          # 模块路径收集结果
+│   └── *.json                    # 每个文件的标识符到模块路径映射
+├── static_theorems/              # 静态分析提取的定理
+│   └── *.json                    # 每个文件对应的静态提取定理列表
+├── static_modules/               # 静态分析提取的模块
+│   └── *.json                    # 每个文件对应的模块列表
+├── static_filtered_theorems_output/ # 向后兼容的综合JSON输出
+│   └── *_static_filtered.json    # 包含定理和模块的综合JSON文件
+├── static_tyrell_output/         # 基于静态定理的Tyrell文件
+│   └── *.tyrell                  # 针对静态库定理生成的Tyrell规范
+├── have_tyrell_output/           # 基于have定理的Tyrell文件
+│   └── *.tyrell                  # 针对本地have定理生成的Tyrell规范
+└── lean_fixed/                   # 修复后的Lean文件
+    ├── *_fixed.lean              # 修复后的Lean代码文件
+    └── *_fix_log.json           # 修复过程的日志文件
+```
+
+**重要说明**：
+- 修复系统会智能判断错误类型，并自动选择合适的Tyrell规范文件
+- 对于`rw [h1]`这样引用本地定理的错误，系统会查询`have_theorems`目录中的JSON文件确认定理`h1`是否存在
+- 如果确认是本地定理，则使用`have_tyrell_output`目录中的规范文件
+- 其他错误则使用`static_tyrell_output`目录中的规范文件
+- 在任一错误类型的规范文件不存在时，会回退到默认规范
 
 ## 许可证
 

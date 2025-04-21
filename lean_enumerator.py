@@ -715,7 +715,7 @@ class ToyInterpreter(PostOrderInterpreter):
         return result
 
 # Modify synthesize_fix to use updated helpers
-def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tuple[Optional[str], bool, str, float, List[Dict]]:
+def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_path: Optional[str]=None) -> Tuple[Optional[str], bool, str, float, List[Dict]]:
     """
     Attempt to fix a single error in the given code using header mode implicitly.
     
@@ -723,6 +723,7 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tupl
         code: Full code to fix (including header).
         target_error_line_num: Specific error line number to fix (relative to full code). 
                                If None, targets the first error found.
+        file_path: Path to the file being processed (for Tyrell spec selection).
         
     Returns:
         Tuple[Optional[str], bool, str, float, List[Dict]]: 
@@ -732,16 +733,7 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tupl
             list_of_remaining_errors contains errors present *after* the fix attempt.
     """
     start_time = time.time()
-    spec_file = get_spec_path()
-    # Check if spec file exists (simplified check)
-    if not os.path.exists(spec_file):
-        vlog(f"Error: Tyrell spec file {spec_file} not found!", logging.ERROR)
-        elapsed_time = time.time() - start_time
-        # Attempt to get original errors even if spec is missing
-        initial_check_result = repl.execute(code, env_mode='header')
-        initial_errors = [e for e in initial_check_result.get("messages", []) if e.get('severity') == 'error']
-        return code, False, f"Tyrell spec file {spec_file} not found", elapsed_time, initial_errors
-
+    
     # Prepare code using the updated function
     prep_result = prepare_code_for_synthesis(code, target_error_line_num)
     
@@ -763,6 +755,25 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None) -> Tupl
     original_result = repl.execute(original_full_code, env_mode='header')
     original_errors = [m for m in original_result.get("messages", []) if m.get('severity') == 'error']
     original_error_count = len(original_errors)
+
+    # Get the specific error we're targeting
+    target_error = next((e for e in original_errors if e.get('line') == error_line), None)
+    if not target_error:
+        vlog(f"Warning: No error found at line {error_line}. Using first error.", logging.WARNING)
+        target_error = original_errors[0] if original_errors else None
+    
+    # Get error line content for classification
+    error_line_content = original_error_content if original_error_content else ""
+    
+    # Get appropriate spec file based on error type and file path
+    spec_file = get_spec_path(target_error, error_line_content, file_path)
+    vlog(f'Using spec file: {spec_file}')
+    
+    # Check if spec file exists
+    if not os.path.exists(spec_file):
+        vlog(f"Error: Tyrell spec file {spec_file} not found!", logging.ERROR)
+        elapsed_time = time.time() - start_time
+        return code, False, f"Tyrell spec file {spec_file} not found", elapsed_time, original_errors
 
     # --- Synthesis Setup ---
     logger.info(f'Parsing spec file: {spec_file}...')
@@ -949,13 +960,14 @@ def decompose_rw_at(line_content: str, indentation: str) -> Optional[str]:
     return result
 
 # Modify synthesize_all_fixes to use updated helpers
-def synthesize_all_fixes(code: str) -> Tuple[str, bool, str, Dict]:
+def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str, bool, str, Dict]:
     """
     Try to fix errors in the code iteratively, attempting decomposition first.
     Uses header mode for checks.
 
     Args:
         code: Original full code (including header).
+        file_path: Path to the file being processed (for Tyrell spec selection).
 
     Returns:
         Tuple[str, bool, str, Dict]:
@@ -1059,7 +1071,8 @@ def synthesize_all_fixes(code: str) -> Tuple[str, bool, str, Dict]:
             vlog(f"Attempting synthesis for error at line {target_line_num} ({error_type})...")
             fixed_code_attempt, success, message, fix_time, remaining_errors_after_fix = synthesize_fix(
                 current_code, # Pass the current state of the code
-                target_line_num
+                target_line_num,
+                file_path  # Pass file_path for Tyrell spec selection
             )
 
             if success:
@@ -1108,7 +1121,6 @@ def synthesize_all_fixes(code: str) -> Tuple[str, bool, str, Dict]:
         if pass_num >= (stats["original_errors"] * 2) + 5: # Allow roughly 2 passes per original error + buffer
              vlog(f"Warning: Reached pass limit ({pass_num}). Stopping iterative fixing to prevent infinite loops.", logging.WARNING)
              break
-
 
     # --- Final Assessment ---
     vlog("\n===== Iterative fixing complete =====")
@@ -1281,8 +1293,8 @@ def main():
     if text_output:
         vlog("\nStarting multi-error continuous repair process...")
     
-    # The function now returns 4 values with the new stats_dict
-    fix_result = synthesize_all_fixes(code) # Pass original code
+    # Pass file_path to synthesize_all_fixes
+    fix_result = synthesize_all_fixes(code, file_path)
     
     if fix_result:
         fixed_code, success, message, stats_dict = fix_result
@@ -1390,11 +1402,115 @@ def main():
         vlog(f"Detailed log file is available at: {log_file}")
         vlog(f"===============================")
 
-def get_spec_path():
+def is_local_theorem_error(error, code_line, file_path=None):
+    """
+    Check if the error is related to a local theorem (have series) by verifying
+    if the theorem exists in the corresponding have_theorems JSON file.
+    
+    Args:
+        error: Error dictionary
+        code_line: The content of the error line
+        file_path: The path to the Lean file being processed
+        
+    Returns:
+        bool: True if the error is related to a local theorem
+    """
+    # If no file path provided, we can't check the have_theorems file
+    if file_path is None:
+        return False
+        
+    error_type = extract_error_type(error)
+    
+    # First check if it's a rewrite or unknown identifier error
+    if error_type not in ["rw_failed", "unknown_identifier", "not_in_scope", "unknown_constant"]:
+        return False
+    
+    # Check if the line contains rw [theorem_name]
+    rw_match = re.search(r'rw\s*\[(.*?)\]', code_line)
+    if not rw_match:
+        return False
+    
+    # Extract the theorem name
+    theorem_name = rw_match.group(1).strip()
+    
+    # Determine the have_theorems JSON file path for this Lean file
+    input_basename = os.path.basename(file_path)
+    input_name = os.path.splitext(input_basename)[0]
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(file_path)))
+    have_json_path = os.path.join(base_dir, "minif2f", "have_theorems", f"{input_name}.json")
+    
+    # Check if the have_theorems JSON file exists
+    if not os.path.exists(have_json_path):
+        vlog(f"Have theorems JSON file not found: {have_json_path}", logging.INFO)
+        return False
+    
+    # Read the have_theorems JSON file and check if the theorem exists
+    try:
+        with open(have_json_path, 'r', encoding='utf-8') as f:
+            have_theorems = json.load(f)
+        
+        # Check if the theorem exists in the have_theorems list
+        if theorem_name in have_theorems:
+            vlog(f"Theorem '{theorem_name}' found in have_theorems file", logging.INFO)
+            return True
+        else:
+            vlog(f"Theorem '{theorem_name}' not found in have_theorems file", logging.INFO)
+            return False
+    except Exception as e:
+        vlog(f"Error reading have_theorems JSON file: {e}", logging.ERROR)
+        return False
+
+def get_spec_path(error=None, error_line=None, file_path=None):
+    """
+    Get the path to the Tyrell specification file.
+    Choose different specs based on error type if available.
+    
+    Args:
+        error: Optional error dictionary
+        error_line: Optional content of the error line
+        file_path: Optional path to the Lean file being processed
+        
+    Returns:
+        str: Path to the Tyrell spec file
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('--tyrell-spec', type=str, help='Path to the Tyrell specification file', default='semantic/lean.tyrell')
     args, _ = parser.parse_known_args() # Parse only known args to avoid conflicts
-    return args.tyrell_spec
+    
+    # Default spec path from args or default
+    default_spec_path = args.tyrell_spec
+    
+    # If no error info provided, return default spec
+    if error is None or error_line is None:
+        return default_spec_path
+    
+    # Check if it's a local theorem error
+    if is_local_theorem_error(error, error_line, file_path):
+        # Use have_tyrell_output directory instead of default
+        file_name = os.path.basename(default_spec_path)
+        base_dir = os.path.dirname(os.path.dirname(default_spec_path))
+        have_spec_path = os.path.join(base_dir, "minif2f", "have_tyrell_output", file_name)
+        
+        # If the have spec exists, use it; otherwise fall back to default
+        if os.path.exists(have_spec_path):
+            vlog(f"Using have series spec file: {have_spec_path}", logging.INFO)
+            return have_spec_path
+        else:
+            vlog(f"Have series spec file not found: {have_spec_path}, using default", logging.WARNING)
+    
+    # For other error types, use the static_tyrell_output directory
+    file_name = os.path.basename(default_spec_path)
+    base_dir = os.path.dirname(os.path.dirname(default_spec_path))
+    static_spec_path = os.path.join(base_dir, "minif2f", "static_tyrell_output", file_name)
+    
+    # If the static spec exists, use it; otherwise fall back to default
+    if os.path.exists(static_spec_path):
+        vlog(f"Using static series spec file: {static_spec_path}", logging.INFO)
+        return static_spec_path
+    
+    # Fall back to default
+    vlog(f"Using default spec file: {default_spec_path}", logging.INFO)
+    return default_spec_path
 
 if __name__ == '__main__':
     main()

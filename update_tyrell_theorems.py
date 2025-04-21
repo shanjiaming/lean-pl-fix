@@ -2,29 +2,37 @@ import json
 import os
 import argparse
 import re
-import glob # Added for directory processing
-from pathlib import Path # Added for path manipulation
+import glob
+from pathlib import Path
 
-def read_theorems_from_json(json_path):
+def read_theorems_from_file(file_path):
     """Reads the list of theorems from the specified JSON file."""
     try:
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        # Assuming the key for the theorem list is "theorems"
-        theorems = data.get("theorems", [])
-        if not isinstance(theorems, list):
-            print(f"Error: 'theorems' key in {json_path} is not a list.")
-            return None
-        print(f"Read {len(theorems)} theorems from {json_path}")
+            
+        # Handle two possible JSON formats:
+        # 1. Direct list of theorems (from extract_have.py)
+        # 2. Object with "theorems" key (from static_theorem_filter.py)
+        if isinstance(data, list):
+            theorems = data
+        else:
+            # Try to get theorems from the "theorems" key
+            theorems = data.get("theorems", [])
+            if not isinstance(theorems, list):
+                print(f"Error: 'theorems' key in {file_path} is not a list.")
+                return None
+                
+        print(f"Read {len(theorems)} theorems from {file_path}")
         return theorems
     except FileNotFoundError:
-        print(f"Error: Input JSON file not found at {json_path}")
+        print(f"Error: Input file not found at {file_path}")
         return None
     except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from {json_path}")
+        print(f"Error: Could not decode JSON from {file_path}")
         return None
     except Exception as e:
-        print(f"Error reading JSON file {json_path}: {e}")
+        print(f"Error reading file {file_path}: {e}")
         return None
 
 def read_tyrell_content(tyrell_path):
@@ -51,9 +59,6 @@ def format_theorems_for_tyrell(theorems):
 def update_tyrell_file(original_content, formatted_theorems):
     """Replaces the enum Theorem block in the Tyrell content."""
     # Find the start and end of the enum Theorem block
-    # Regex to find 'enum Theorem {' up to the closing '}'
-    # DOTALL allows . to match newlines
-    # Non-greedy match .*? to find the *first* closing brace
     pattern = re.compile(r"(enum\s+Theorem\s*\{)(.*?)(\})", re.DOTALL | re.MULTILINE)
     match = pattern.search(original_content)
     
@@ -68,7 +73,6 @@ def update_tyrell_file(original_content, formatted_theorems):
     new_block_content = f"\n{formatted_theorems}\n"
     
     # Replace the old content with the new content
-    # A more robust replacement using the match object
     updated_content = original_content[:match.start()] + start_block + new_block_content + end_block + original_content[match.end():]
     
     return updated_content
@@ -87,8 +91,8 @@ def save_updated_tyrell(content, output_path):
         print(f"Error saving updated Tyrell file to {output_path}: {e}")
 
 def main():
-    parser = argparse.ArgumentParser(description='Update the enum Theorem block in a Tyrell file for multiple JSON inputs.')
-    parser.add_argument('--json-input-dir', required=True, help='Directory containing input JSON files.')
+    parser = argparse.ArgumentParser(description='Update the enum Theorem block in a Tyrell file based on theorem files.')
+    parser.add_argument('--input-dir', required=True, help='Directory containing input theorem JSON files.')
     parser.add_argument('--tyrell-input', required=True, help='Path to the original Tyrell file (template).')
     parser.add_argument('--tyrell-output-dir', required=True, help='Directory to save the updated Tyrell files.')
     args = parser.parse_args()
@@ -100,21 +104,21 @@ def main():
         return # Error message already printed
 
     # 2. Find all JSON files in the input directory
-    json_files = sorted(glob.glob(os.path.join(args.json_input_dir, '*.json')))
-    if not json_files:
-        print(f"No JSON files found in directory: {args.json_input_dir}")
+    input_files = sorted(glob.glob(os.path.join(args.input_dir, '*.json')))
+    if not input_files:
+        print(f"No JSON files found in directory: {args.input_dir}")
         return
         
-    print(f"Found {len(json_files)} JSON files to process.")
+    print(f"Found {len(input_files)} JSON files to process.")
     processed_count = 0
     failed_count = 0
 
-    # 3. Process each JSON file
-    for json_path in json_files:
-        print(f"\nProcessing JSON file: {json_path}")
-        theorems = read_theorems_from_json(json_path)
+    # 3. Process each file
+    for file_path in input_files:
+        print(f"\nProcessing file: {file_path}")
+        theorems = read_theorems_from_file(file_path)
         if theorems is None:
-            print(f"Skipping file {json_path} due to read error.")
+            print(f"Skipping file {file_path} due to read error.")
             failed_count += 1
             continue
 
@@ -124,13 +128,13 @@ def main():
         # Update Tyrell content using the original template
         updated_tyrell_content = update_tyrell_file(original_tyrell_content, formatted_theorems_str)
         if updated_tyrell_content is None:
-            print(f"Skipping file {json_path} due to update error.")
+            print(f"Skipping file {file_path} due to update error.")
             failed_count += 1
             continue
             
         # Construct output path
-        json_filename_stem = Path(json_path).stem
-        output_filename = f"{json_filename_stem}.tyrell"
+        file_name_stem = Path(file_path).stem
+        output_filename = f"{file_name_stem}.tyrell"
         output_path = os.path.join(args.tyrell_output_dir, output_filename)
         
         # Save updated file

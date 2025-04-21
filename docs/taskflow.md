@@ -86,3 +86,54 @@ The goal is to enhance the `synthesize_all_fixes` function to handle complex `rw
 *   Fixed regex pattern in `decompose_rw_at` function that prevented proper matching of `rw [h1, h2]` patterns due to escaped backslashes. Changed from `r'^\\s*(rw)\\s*...'` to `r'^\s*(rw)\s*...'` to correctly match and decompose tactical rewrites.
 
 **Status:** Completed.
+
+## 当前任务流程
+
+以下是当前的任务流程和状态：
+
+### 编程语言修复 (Program Language Fix)
+
+- 状态：✅ 完成
+- 描述：这是整个系统的核心功能，即修复Lean代码中的错误。
+- 关键组件：
+  - `lean_enumerator.py`: 单文件错误修复
+  - `lean_batch_enumerator.py`: 批量文件错误修复
+  - `synthesize_all_fixes`: 尝试修复某个文件中的所有错误
+  - `synthesize_fix`: 尝试修复特定的错误
+  - `is_local_theorem_error`: 判断是否为本地定理错误
+  - `get_spec_path`: 根据错误类型和文件路径智能选择合适的Tyrell规范文件
+
+#### Lean错误修复流程
+
+1. **错误提取**:
+   - 使用`lean_api.py`获取Lean代码中的错误
+   - 解析错误位置和错误信息
+   - 通过`extract_error_type`分析错误类型
+
+2. **错误分类**:
+   - 分析错误是否涉及本地定理（使用`is_local_theorem_error`函数检查）
+   - 根据错误类型和上下文信息确定需要的修复策略
+
+3. **Tyrell规范文件选择**:
+   - 通过`get_spec_path`函数判断使用哪种规范文件
+   - 如果是本地定理错误，使用`have_tyrell_output`目录中的规范文件
+   - 否则使用`static_tyrell_output`目录中的规范文件
+   - 如果指定目录中没有相应的规范文件，回退到默认规范
+
+4. **修复合成**:
+   - 使用Tyrell框架合成可能的修复代码
+   - 尝试不同的修复候选解决方案
+
+5. **修复验证**:
+   - 将修复应用到原始代码
+   - 使用Lean验证修复后的代码
+   - 检查修复是否解决了目标错误且没有引入新错误
+
+6. **迭代修复**:
+   - 如果当前修复失败，继续尝试下一个可能的修复
+   - 如果所有修复尝试都失败，记录失败并继续处理下一个错误
+   - 如果修复成功，记录成功并更新代码
+
+7. **结果记录**:
+   - 记录修复尝试的过程和结果
+   - 生成详细的JSON格式日志
