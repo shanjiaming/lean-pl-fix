@@ -1,0 +1,56 @@
+{
+  "status": "partial_success",
+  "file_path": "./minif2f/lean_code/40.lean",
+  "output_file": "./minif2f/lean_fixed/40_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nLet $p$, $q$, and $r$ be constants. One solution to the equation $(x-p)(x-q) = (r-p)(r-q)$ is $x=r$. \nFind the other solution in terms of $p$, $q$, and $r$. Show that it is p+q-r.\n-/\ntheorem mathd_algebra_73 (p q r x : \u2102) (h\u2080 : (x - p) * (x - q) = (r - p) * (r - q)) (h\u2081 : x \u2260 r) :\n  x = p + q - r := by\n  -- First, expand both sides of the equation to convert it to standard quadratic form\n  have h\u2082 : x^2 - (p + q) * x + p * q = r^2 - (p + q) * r + p * q := by\n    -- Expand left side (x-p)(x-q)\n    rw [mul_sub_right_distrib, sub_mul, sub_mul]\n    -- Simplify terms\n    ring\n    -- Expand right side (r-p)(r-q) to match left side\n    rw [mul_sub_right_distrib, sub_mul, sub_mul] at h\u2080\n    -- Simplify terms\n    ring at h\u2080\n    -- The expanded forms are now equal\n    exact h\u2080\n  \n  -- Subtract right side from both sides to form a quadratic equation set to zero\n  have h\u2083 : x^2 - (p + q) * x - (r^2 - (p + q) * r) = 0 := by\n    -- Subtract right side from both sides of h\u2082\n    rw [\u2190 sub_eq_zero, h\u2082]\n  \n  -- Rewrite the equation in a more standard quadratic form\n  have h\u2084 : x^2 - (p + q) * x - r^2 + (p + q) * r = 0 := by\n    -- Distribute the negative sign in h\u2083\n    ring_nf at h\u2083 \u22a2\n    exact h\u2083\n  \n  -- Factor the equation by grouping terms\n  have h\u2085 : (x^2 - r^2) - (p + q) * (x - r) = 0 := by\n    -- Group x\u00b2-r\u00b2 and factor out (p+q) from remaining terms\n    rw [sub_mul, \u2190 sub_sub]\n    -- Recognize x\u00b2 - r\u00b2 as difference of squares\n    rw [\u2190 add_sub_assoc]\n    -- Rearrange terms to show the factoring structure\n    ring_nf\n  \n  -- Factor the difference of squares and rewrite the equation\n  have h\u2086 : (x - r) * (x + r) - (p + q) * (x - r) = 0 := by\n    -- Apply difference of squares formula to x\u00b2 - r\u00b2\n    rw [pow_two x, pow_two r, sq_sub_sq]\n  \n  -- Factor out the common (x - r) term from both parts\n  have h\u2087 : (x - r) * (x + r - (p + q)) = 0 := by\n    -- Factor (x - r) from both terms\n    rw [\u2190 mul_sub_left_distrib]\n  \n  -- Since the product equals zero, one of the factors must be zero\n  have h\u2088 : (x - r = 0) \u2228 (x + r - (p + q) = 0) := by\n    -- Apply the zero product property\n    exact eq_zero_or_eq_zero_of_mul_eq_zero h\u2087\n  \n  -- We know x \u2260 r from hypothesis h\u2081, so the first case is false\n  have h\u2089 : x + r - (p + q) = 0 := by\n    -- Eliminate the first possibility using h\u2081\n    cases h\u2088 with\n    | inl hr => \n      -- This would imply x = r, which contradicts h\u2081\n      exfalso\n      exact h\u2081 hr\n    | inr h => \n      -- This is the case we want\n      exact h\n  \n  -- Solve for x in the remaining equation\n  have h\u2081\u2080 : x = p + q - r := by\n    -- Rearrange terms to solve for x\n    rw [sub_eq_zero, add_comm] at h\u2089\n    -- Add r to both sides and subtract x from both sides\n    rw [\u2190 eq_sub_iff_add_eq, sub_sub, add_comm (p + q) r]\n    -- Simplify the expression\n    simp only [add_sub_cancel]\n  \n  -- The result follows from h\u2081\u2080\n  exact h\u2081\u2080",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nLet $p$, $q$, and $r$ be constants. One solution to the equation $(x-p)(x-q) = (r-p)(r-q)$ is $x=r$. \nFind the other solution in terms of $p$, $q$, and $r$. Show that it is p+q-r.\n-/\ntheorem mathd_algebra_73 (p q r x : \u2102) (h\u2080 : (x - p) * (x - q) = (r - p) * (r - q)) (h\u2081 : x \u2260 r) :\n  x = p + q - r := by\n  -- First, expand both sides of the equation to convert it to standard quadratic form\n  have h\u2082 : x^2 - (p + q) * x + p * q = r^2 - (p + q) * r + p * q := by\n    -- Expand left side (x-p)(x-q)\n    rw [mul_sub_right_distrib, sub_mul, sub_mul]\n    -- Simplify terms\n    ring\n    -- Expand right side (r-p)(r-q) to match left side\n    rw [mul_sub_right_distrib, sub_mul, sub_mul] at h\u2080\n    -- Simplify terms\n    ring at h\u2080\n    -- The expanded forms are now equal\n    exact h\u2080\n  \n  -- Subtract right side from both sides to form a quadratic equation set to zero\n  have h\u2083 : x^2 - (p + q) * x - (r^2 - (p + q) * r) = 0 := by\n    -- Subtract right side from both sides of h\u2082\n    rw [\u2190 sub_eq_zero, h\u2082]\n  \n  -- Rewrite the equation in a more standard quadratic form\n  have h\u2084 : x^2 - (p + q) * x - r^2 + (p + q) * r = 0 := by\n    -- Distribute the negative sign in h\u2083\n    ring_nf at h\u2083 \u22a2\n    exact h\u2083\n  \n  -- Factor the equation by grouping terms\n  have h\u2085 : (x^2 - r^2) - (p + q) * (x - r) = 0 := by\n    -- Group x\u00b2-r\u00b2 and factor out (p+q) from remaining terms\n    rw [sub_mul, \u2190 sub_sub]\n    -- Recognize x\u00b2 - r\u00b2 as difference of squares\n    rw [\u2190 add_sub_assoc]\n    -- Rearrange terms to show the factoring structure\n    ring_nf\n  \n  -- Factor the difference of squares and rewrite the equation\n  have h\u2086 : (x - r) * (x + r) - (p + q) * (x - r) = 0 := by\n    -- Apply difference of squares formula to x\u00b2 - r\u00b2\n    rw [pow_two x, pow_two r, sq_sub_sq]\n  \n  -- Factor out the common (x - r) term from both parts\n  have h\u2087 : (x - r) * (x + r - (p + q)) = 0 := by\n    -- Factor (x - r) from both terms\n    rw [\u2190 mul_sub_left_distrib]\n  \n  -- Since the product equals zero, one of the factors must be zero\n  have h\u2088 : (x - r = 0) \u2228 (x + r - (p + q) = 0) := by\n    -- Apply the zero product property\n    exact eq_zero_or_eq_zero_of_mul_eq_zero h\u2087\n  \n  -- We know x \u2260 r from hypothesis h\u2081, so the first case is false\n  have h\u2089 : x + r - (p + q) = 0 := by\n    -- Eliminate the first possibility using h\u2081\n    cases h\u2088 with\n    | inl hr => \n      -- This would imply x = r, which contradicts h\u2081\n      exfalso\n      exact h\u2081 hr\n    | inr h => \n      -- This is the case we want\n      exact h\n  \n  -- Solve for x in the remaining equation\n  have h\u2081\u2080 : x = p + q - r := by\n    -- Rearrange terms to solve for x\n    rw [sub_eq_zero, add_comm] at h\u2089\n    -- Add r to both sides and subtract x from both sides\n    rw [\u2190 eq_sub_iff_add_eq, sub_sub, add_comm (p + q) r]\n    -- Simplify the expression\n    simp only [add_sub_cancel]\n  \n  -- The result follows from h\u2081\u2080\n  exact h\u2081\u2080",
+  "statistics": {
+    "original_errors": 3,
+    "failed_errors": 3,
+    "remaining_errors": 3,
+    "fix_rate": 0.0,
+    "successful_fixes": [],
+    "failed_fixes": [
+      {
+        "line": 6,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\np q r x : \u2102\nh\u2080 : (x - p) * (x - q) = (r - p) * (r - q)\nh\u2081 : x \u2260 r\nh\u2082 : x ^ 2 - (p + q) * x + p * q = r ^ 2 - (p + q) * r + p * q\n\u22a2 x = p + q - r",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.038962364196777
+      },
+      {
+        "line": 10,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (?a - ?b) * ?c\np q r x : \u2102\nh\u2080 : (x - p) * (x - q) = (r - p) * (r - q)\nh\u2081 : x \u2260 r\n\u22a2 x ^ 2 - (p + q) * x + p * q = r ^ 2 - (p + q) * r + p * q",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.041243314743042
+      },
+      {
+        "line": 16,
+        "error_type": "syntax_error",
+        "original_error_message": "unexpected token 'at'; expected command",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.04752469062805
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 10,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (?a - ?b) * ?c\np q r x : \u2102\nh\u2080 : (x - p) * (x - q) = (r - p) * (r - q)\nh\u2081 : x \u2260 r\n\u22a2 x ^ 2 - (p + q) * x + p * q = r ^ 2 - (p + q) * r + p * q"
+      },
+      {
+        "line": 6,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\np q r x : \u2102\nh\u2080 : (x - p) * (x - q) = (r - p) * (r - q)\nh\u2081 : x \u2260 r\nh\u2082 : x ^ 2 - (p + q) * x + p * q = r ^ 2 - (p + q) * r + p * q\n\u22a2 x = p + q - r"
+      },
+      {
+        "line": 16,
+        "error_type": "syntax_error",
+        "original_error_message": "unexpected token 'at'; expected command"
+      }
+    ],
+    "total_time": 68.13192248344421
+  },
+  "message": "Original code error count: 3\n\u274c Fixed error 1/3: Could not generate fix for error at line 6 \u00abother_error\u00bb (after 22.04s)\n\u274c Fixed error 2/3: Could not generate fix for error at line 10 \u00abrewrite_failed\u00bb (after 22.04s)\n\u274c Fixed error 3/3: Could not generate fix for error at line 16 \u00absyntax_error\u00bb (after 22.05s)\n\n=== Fix statistics ===\nOriginal error count: 3\nFixed errors: 0 (Fix rate: 0.0000)\nFailed errors: 3\nRemaining errors: 3\nTotal time: 68.13 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 6\n   Error type: other_error\n   Original error message: unsolved goals\np q r x : \u2102\nh\u2080 : (x - p) * (x - q) = (r - p) * (r - q)\nh\u2081 : x \u2260 r\nh\u2082 : x ^ 2 - (p + q...\n   Failure reason: Could not generate fix\n   Time: 22.04 seconds\n\nFailed fix 2:\n   Line: 10\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (?a - ?b) *...\n   Failure reason: Could not generate fix\n   Time: 22.04 seconds\n\nFailed fix 3:\n   Line: 16\n   Error type: syntax_error\n   Original error message: unexpected token 'at'; expected command...\n   Failure reason: Could not generate fix\n   Time: 22.05 seconds"
+}

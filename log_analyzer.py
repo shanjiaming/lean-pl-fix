@@ -33,20 +33,23 @@ def parse_log_file(file_path):
         stats = data["statistics"]
         file_name = os.path.basename(file_path)
         
-        # Calculate fixed_errors correctly - it should be the length of successful_fixes
-        fixed_errors = len(stats.get("successful_fixes", []))
+        # 更新: 使用 successful_syntheses 作为修复的错误数
+        fixed_errors = stats.get("successful_syntheses", 0)
         
         return {
             "file_name": file_name,
             "status": data.get("status", "unknown"),
             "original_errors": stats.get("original_errors", 0),
-            "fixed_errors": fixed_errors,  # Use the calculated value
-            "failed_errors": stats.get("failed_errors", 0),
+            "fixed_errors": fixed_errors,
+            "failed_errors": len(stats.get("failed_syntheses", {})),  # 使用failed_syntheses的长度
+            "timeout_errors": stats.get("timeout_syntheses", 0),  # 添加超时错误数
             "remaining_errors": stats.get("remaining_errors", 0),
-            "fix_rate": fixed_errors / stats.get("original_errors", 1) if stats.get("original_errors", 0) > 0 else 0,
-            "successful_fixes": stats.get("successful_fixes", []),
-            "failed_fixes": stats.get("failed_fixes", []),
+            "fix_rate": stats.get("fix_rate", 0),  # 直接使用计算好的fix_rate
+            "successful_fixes": stats.get("successful_fixes_details", []),  # 更新键名
+            "failed_fixes": stats.get("failed_fixes_details", []),  # 更新键名
+            "timeout_fixes": stats.get("timeout_fixes_details", []),  # 添加超时修复详情
             "total_time": stats.get("total_time", 0),
+            "decompositions_applied": stats.get("decompositions_applied", 0)  # 添加decompositions_applied
         }
     except Exception as e:
         print(f"Error parsing {file_path}: {str(e)}")
@@ -61,13 +64,15 @@ def analyze_logs(log_data):
     total_files = len(log_data)
     total_original_errors = sum(log["original_errors"] for log in log_data)
     
-    # Calculate fixed_errors correctly
+    # 使用更新后的键名计算统计数据
     total_fixed_errors = sum(log["fixed_errors"] for log in log_data)
+    total_decompositions = sum(log["decompositions_applied"] for log in log_data)
     total_failed_errors = sum(log["failed_errors"] for log in log_data)
+    total_timeout_errors = sum(log["timeout_errors"] for log in log_data)  # 添加超时错误总数
     total_remaining_errors = sum(log["remaining_errors"] for log in log_data)
     
-    # Avoid division by zero if there are no errors
-    overall_fix_rate = total_fixed_errors / total_original_errors if total_original_errors > 0 else 0
+    # 使用日志自身的fix_rate或重新计算
+    overall_fix_rate = sum(log["fix_rate"] * log["original_errors"] for log in log_data) / total_original_errors if total_original_errors > 0 else 0
     
     # Count of fully fixed files (all errors fixed)
     fully_fixed_files = sum(1 for log in log_data 
@@ -84,10 +89,14 @@ def analyze_logs(log_data):
     # Count of files with no errors
     no_error_files = sum(1 for log in log_data if log["original_errors"] == 0)
     
-    # 2. Collect fix_snippet distribution
+    # Files with timeout errors
+    files_with_timeout = sum(1 for log in log_data if log["timeout_errors"] > 0)
+    
+    # 2. Collect fix details distribution
     fix_snippets = []
     for log in log_data:
         for fix in log["successful_fixes"]:
+            # 适应新的successful_fixes_details结构
             if "fix_snippet" in fix:
                 fix_snippets.append(fix.get("fix_snippet", "unknown"))
     
@@ -96,6 +105,7 @@ def analyze_logs(log_data):
     # 3. Statistics by error type
     error_types_fixed = defaultdict(int)
     error_types_failed = defaultdict(int)
+    error_types_timeout = defaultdict(int)  # 添加超时错误类型统计
     
     for log in log_data:
         for fix in log["successful_fixes"]:
@@ -105,17 +115,23 @@ def analyze_logs(log_data):
         for fix in log["failed_fixes"]:
             error_type = fix.get("error_type", "unknown")
             error_types_failed[error_type] += 1
+            
+        for fix in log["timeout_fixes"]:  # 添加超时错误类型统计
+            error_type = fix.get("error_type", "unknown")
+            error_types_timeout[error_type] += 1
     
     # Calculate fix rate for each error type
     error_type_stats = {}
-    for error_type in set(error_types_fixed.keys()) | set(error_types_failed.keys()):
+    for error_type in set(error_types_fixed.keys()) | set(error_types_failed.keys()) | set(error_types_timeout.keys()):
         fixed = error_types_fixed[error_type]
         failed = error_types_failed[error_type]
-        total = fixed + failed
+        timeout = error_types_timeout[error_type]  # 添加超时错误数
+        total = fixed + failed + timeout
         fix_rate = fixed / total if total > 0 else 0
         error_type_stats[error_type] = {
             "fixed": fixed,
             "failed": failed,
+            "timeout": timeout,  # 添加超时错误数
             "total": total,
             "fix_rate": fix_rate
         }
@@ -157,6 +173,11 @@ def analyze_logs(log_data):
             if "attempt_time" in fix:
                 bucket = int(fix["attempt_time"])
                 time_buckets[bucket]["total"] += 1
+                
+        for fix in log["timeout_fixes"]:  # 添加超时错误统计
+            if "attempt_time" in fix:
+                bucket = int(fix["attempt_time"])
+                time_buckets[bucket]["total"] += 1
     
     # Calculate success rate by bucket
     time_success_rates = {
@@ -173,9 +194,12 @@ def analyze_logs(log_data):
             "fully_fixed_files": fully_fixed_files,
             "partially_fixed_files": partially_fixed_files,
             "unfixed_files": unfixed_files,
+            "files_with_timeout": files_with_timeout,  # 添加超时文件数
             "total_original_errors": total_original_errors,
             "total_fixed_errors": total_fixed_errors,
+            "total_decompositions": total_decompositions,
             "total_failed_errors": total_failed_errors,
+            "total_timeout_errors": total_timeout_errors,  # 添加超时错误总数
             "total_remaining_errors": total_remaining_errors,
             "overall_fix_rate": overall_fix_rate
         },
@@ -194,9 +218,12 @@ def print_analysis(analysis):
     print(f"Fully fixed files: {summary['fully_fixed_files']}")
     print(f"Partially fixed files: {summary['partially_fixed_files']}")
     print(f"Unfixed files: {summary['unfixed_files']}")
+    print(f"Files with timeout errors: {summary['files_with_timeout']}")
     print(f"Total original errors: {summary['total_original_errors']}")
     print(f"Fixed errors: {summary['total_fixed_errors']}")
+    print(f"Decompositions applied: {summary['total_decompositions']}")
     print(f"Failed to fix errors: {summary['total_failed_errors']}")
+    print(f"Timeout errors: {summary['total_timeout_errors']}")
     print(f"Remaining errors: {summary['total_remaining_errors']}")
     print(f"Overall fix rate: {summary['overall_fix_rate']:.2%}")
     
@@ -215,13 +242,14 @@ def print_analysis(analysis):
             error_type, 
             stats["fixed"], 
             stats["failed"], 
+            stats["timeout"],
             stats["total"],
             f"{stats['fix_rate']:.2%}"
         ])
     
     if error_type_data:
         print(tabulate(error_type_data, 
-                     headers=["Error Type", "Fixed", "Failed", "Total", "Fix Rate"],
+                     headers=["Error Type", "Fixed", "Failed", "Timeout", "Total", "Fix Rate"],
                      tablefmt="pretty"))
     else:
         print("No error type statistics found.")
@@ -280,12 +308,14 @@ def generate_plots(analysis, output_dir, log_data):
             labels = [et for et, _ in top_error_types]
             fixed = [stats["fixed"] for _, stats in top_error_types]
             failed = [stats["failed"] for _, stats in top_error_types]
+            timeout = [stats["timeout"] for _, stats in top_error_types]
             
             x = np.arange(len(labels))
             width = 0.35
             
-            ax.bar(x - width/2, fixed, width, label='Fixed')
-            ax.bar(x + width/2, failed, width, label='Failed')
+            ax.bar(x - width/3, fixed, width, label='Fixed')
+            ax.bar(x, failed, width, label='Failed')
+            ax.bar(x + width/3, timeout, width, label='Timeout')
             
             ax.set_xticks(x)
             ax.set_xticklabels(labels, rotation=45, ha='right')
@@ -348,9 +378,12 @@ def save_report_to_file(analysis, output_file):
             f.write(f"Fully fixed files: {summary['fully_fixed_files']}\n")
             f.write(f"Partially fixed files: {summary['partially_fixed_files']}\n")
             f.write(f"Unfixed files: {summary['unfixed_files']}\n")
+            f.write(f"Files with timeout errors: {summary['files_with_timeout']}\n")
             f.write(f"Total original errors: {summary['total_original_errors']}\n")
             f.write(f"Fixed errors: {summary['total_fixed_errors']}\n")
+            f.write(f"Decompositions applied: {summary['total_decompositions']}\n")
             f.write(f"Failed to fix errors: {summary['total_failed_errors']}\n")
+            f.write(f"Timeout errors: {summary['total_timeout_errors']}\n")
             f.write(f"Remaining errors: {summary['total_remaining_errors']}\n")
             f.write(f"Overall fix rate: {summary['overall_fix_rate']:.2%}\n")
             
@@ -371,13 +404,14 @@ def save_report_to_file(analysis, output_file):
                     error_type, 
                     stats["fixed"], 
                     stats["failed"], 
+                    stats["timeout"],
                     stats["total"],
                     f"{stats['fix_rate']:.2%}"
                 ])
             
             if error_type_data:
                 f.write(tabulate(error_type_data, 
-                               headers=["Error Type", "Fixed", "Failed", "Total", "Fix Rate"],
+                               headers=["Error Type", "Fixed", "Failed", "Timeout", "Total", "Fix Rate"],
                                tablefmt="grid") + "\n")
             else:
                 f.write("No error type statistics found.\n")

@@ -1,0 +1,71 @@
+{
+  "status": "partial_success",
+  "file_path": "./minif2f/lean_code/49.lean",
+  "output_file": "./minif2f/lean_fixed/49_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $|x - 2| = p$, where $x < 2$, then $x - p =$\n\n$ \\textbf{(A)} \\ -2 \\qquad \\textbf{(B)} \\ 2 \\qquad \\textbf{(C)} \\ 2-2p \\qquad \\textbf{(D)} \\ 2p-2 \\qquad \\textbf{(E)} \\ |2p-2|  $ Show that it is \\text{(C)2-2p}.-/\ntheorem amc12_2000_p5 (x p : \u211d) (h\u2080 : x < 2) (h\u2081 : abs (x - 2) = p) : x - p = 2 - 2 * p := by\n  -- Since x < 2, the expression inside the absolute value (x - 2) is negative\n  -- Therefore, |x - 2| = -(x - 2) = 2 - x\n  have h\u2082 : abs (x - 2) = 2 - x := by\n    -- The absolute value of a negative number is its negation\n    rw [abs_of_neg] \n    -- Show that (x - 2) is negative because x < 2\n    \u00b7 exact sub_neg.mpr h\u2080\n    -- The above line proves x - 2 < 0 from h\u2080 (x < 2)\n\n  -- From the problem statement h\u2081: |x - 2| = p and our derivation h\u2082: |x - 2| = 2 - x\n  -- We can equate them to get p = 2 - x\n  have h\u2083 : p = 2 - x := by\n    -- Substitute h\u2082 into h\u2081\n    rw [h\u2081, h\u2082]\n\n  -- Now we can solve for x in terms of p from h\u2083\n  have h\u2084 : x = 2 - p := by\n    -- Rearrange h\u2083: p = 2 - x \u2192 x = 2 - p\n    linarith\n\n  -- Now we can compute x - p using the expression for x from h\u2084\n  -- x - p = (2 - p) - p = 2 - 2p\n  calc\n    x - p = (2 - p) - p := by rw [h\u2084]  -- Substitute x = 2 - p\n    _ = 2 - (p + p) := by ring          -- Combine like terms\n    _ = 2 - 2 * p := by ring             -- Simplify to final form",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $|x - 2| = p$, where $x < 2$, then $x - p =$\n\n$ \\textbf{(A)} \\ -2 \\qquad \\textbf{(B)} \\ 2 \\qquad \\textbf{(C)} \\ 2-2p \\qquad \\textbf{(D)} \\ 2p-2 \\qquad \\textbf{(E)} \\ |2p-2|  $ Show that it is \\text{(C)2-2p}.-/\ntheorem amc12_2000_p5 (x p : \u211d) (h\u2080 : x < 2) (h\u2081 : abs (x - 2) = p) : x - p = 2 - 2 * p := by\n  -- Since x < 2, the expression inside the absolute value (x - 2) is negative\n  -- Therefore, |x - 2| = -(x - 2) = 2 - x\n  have h\u2082 : abs (x - 2) = 2 - x := by\n    -- The absolute value of a negative number is its negation\n    rw [abs_of_neg] \n    -- Show that (x - 2) is negative because x < 2\n    \u00b7 exact sub_neg.mpr h\u2080\n    -- The above line proves x - 2 < 0 from h\u2080 (x < 2)\n\n  -- From the problem statement h\u2081: |x - 2| = p and our derivation h\u2082: |x - 2| = 2 - x\n  -- We can equate them to get p = 2 - x\n  have h\u2083 : p = 2 - x := by\n    -- Substitute h\u2082 into h\u2081\n    linarith\n\n  -- Now we can solve for x in terms of p from h\u2083\n  have h\u2084 : x = 2 - p := by\n    -- Rearrange h\u2083: p = 2 - x \u2192 x = 2 - p\n    linarith\n\n  -- Now we can compute x - p using the expression for x from h\u2084\n  -- x - p = (2 - p) - p = 2 - 2p\n  calc\n    x - p = (2 - p) - p := by rw [h\u2084]  -- Substitute x = 2 - p\n    _ = 2 - (p + p) := by ring          -- Combine like terms\n    _ = 2 - 2 * p := by ring             -- Simplify to final form",
+  "statistics": {
+    "original_errors": 3,
+    "failed_errors": 2,
+    "remaining_errors": 2,
+    "fix_rate": 0.3333333333333333,
+    "successful_fixes": [
+      {
+        "line": 18,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |x - 2|\nx p : \u211d\nh\u2080 : x < 2\nh\u2081 : |x - 2| = p\nh\u2082 : |x - 2| = 2 - x\n\u22a2 p = 2 - x",
+        "fix_snippet": "linarith",
+        "fixed_line": "    linarith",
+        "fix_time": 22.038758277893066,
+        "fixed_errors": [
+          {
+            "line": 11,
+            "column": 6,
+            "end_line": 11,
+            "end_column": 26,
+            "message": "type mismatch\n  sub_neg.mpr h\u2080\nhas type\n  x - 2 < 0 : Prop\nbut is expected to have type\n  -(x - 2) = 2 - x : Prop",
+            "severity": "error"
+          },
+          {
+            "line": 7,
+            "column": 35,
+            "end_line": 11,
+            "end_column": 26,
+            "message": "unsolved goals\nx p : \u211d\nh\u2080 : x < 2\nh\u2081 : |x - 2| = p\n\u22a2 x - 2 < 0",
+            "severity": "error"
+          }
+        ]
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 7,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx p : \u211d\nh\u2080 : x < 2\nh\u2081 : |x - 2| = p\n\u22a2 x - 2 < 0",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.042824268341064
+      },
+      {
+        "line": 11,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  sub_neg.mpr h\u2080\nhas type\n  x - 2 < 0 : Prop\nbut is expected to have type\n  -(x - 2) = 2 - x : Prop",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.036997318267822
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 11,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  sub_neg.mpr h\u2080\nhas type\n  x - 2 < 0 : Prop\nbut is expected to have type\n  -(x - 2) = 2 - x : Prop"
+      },
+      {
+        "line": 7,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx p : \u211d\nh\u2080 : x < 2\nh\u2081 : |x - 2| = p\n\u22a2 x - 2 < 0"
+      }
+    ],
+    "total_time": 68.12232518196106
+  },
+  "message": "Original code error count: 3\n\u274c Fixed error 1/3: Could not generate fix for error at line 7 \u00abother_error\u00bb (after 22.04s)\n\u274c Fixed error 2/3: Could not generate fix for error at line 11 \u00abtype_mismatch\u00bb (after 22.04s)\n\u2705 Fixed error 3/3: Successfully fixed error at line 18 \u00abrewrite_failed\u00bb (in 22.04s)\n\n=== Fix statistics ===\nOriginal error count: 3\nFixed errors: 1 (Fix rate: 0.3333)\nFailed errors: 2\nRemaining errors: 2\nTotal time: 68.12 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 18\n   Error type: rewrite_failed\n   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |x - 2|\nx p...\n   Fix snippet: linarith\n   Fixed line:     linarith\n   Time: 22.04 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 7\n   Error type: other_error\n   Original error message: unsolved goals\nx p : \u211d\nh\u2080 : x < 2\nh\u2081 : |x - 2| = p\n\u22a2 x - 2 < 0...\n   Failure reason: Could not generate fix\n   Time: 22.04 seconds\n\nFailed fix 2:\n   Line: 11\n   Error type: type_mismatch\n   Original error message: type mismatch\n  sub_neg.mpr h\u2080\nhas type\n  x - 2 < 0 : Prop\nbut is expected to have type\n  -(x - 2) =...\n   Failure reason: Could not generate fix\n   Time: 22.04 seconds"
+}

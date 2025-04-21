@@ -1,0 +1,51 @@
+{
+  "status": "partial_success",
+  "file_path": "./minif2f/lean_code/111.lean",
+  "output_file": "./minif2f/lean_fixed/111_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For any real number a, show that $10a \\leq 28a^2 + 1$.-/\ntheorem algebra_binomnegdiscrineq_10alt28asqp1 (a : \u211d) : 10 * a \u2264 28 * a ^ 2 + 1 := by\n  -- First, rearrange the inequality to standard quadratic form: 28a\u00b2 - 10a + 1 \u2265 0\n  -- Let's consider the quadratic function f(a) = 28a\u00b2 - 10a + 1\n  -- To show this is always non-negative, we'll check its discriminant\n  have key_inequality : 0 \u2264 28 * a ^ 2 - 10 * a + 1 := by\n    -- Calculate the discriminant \u0394 = b\u00b2 - 4ac where a=28, b=-10, c=1\n    -- Here \u0394 = (-10)\u00b2 - 4*28*1 = 100 - 112 = -12\n    have discriminant : (-10)^2 - 4 * 28 * 1 = -12 := by norm_num\n    -- Since the leading coefficient (28) is positive and \u0394 < 0,\n    -- the quadratic is always positive\n    have main : \u2200 x, 0 \u2264 28 * x ^ 2 - 10 * x + 1 := by\n      intro x\n      -- The quadratic is always positive because:\n      -- 1. The leading coefficient (28) is positive\n      have leading_coeff_pos : 0 < 28 := by norm_num\n      -- 2. The discriminant is negative\n      have discr_neg : (-10)^2 - 4 * 28 * 1 < 0 := by norm_num\n      -- Therefore the quadratic is always above the x-axis\n      exact Quadratic.nonneg_of_discrim_neg leading_coeff_pos discr_neg x\n    exact main a\n  -- Now transform this back to our original inequality\n  -- Starting from 28a\u00b2 - 10a + 1 \u2265 0\n  -- Add 10a to both sides: 28a\u00b2 + 1 \u2265 10a\n  -- Which is equivalent to our goal\n  linarith [key_inequality]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For any real number a, show that $10a \\leq 28a^2 + 1$.-/\ntheorem algebra_binomnegdiscrineq_10alt28asqp1 (a : \u211d) : 10 * a \u2264 28 * a ^ 2 + 1 := by\n  -- First, rearrange the inequality to standard quadratic form: 28a\u00b2 - 10a + 1 \u2265 0\n  -- Let's consider the quadratic function f(a) = 28a\u00b2 - 10a + 1\n  -- To show this is always non-negative, we'll check its discriminant\n  have key_inequality : 0 \u2264 28 * a ^ 2 - 10 * a + 1 := by\n    -- Calculate the discriminant \u0394 = b\u00b2 - 4ac where a=28, b=-10, c=1\n    -- Here \u0394 = (-10)\u00b2 - 4*28*1 = 100 - 112 = -12\n    have discriminant : (-10)^2 - 4 * 28 * 1 = -12 := by norm_num\n    -- Since the leading coefficient (28) is positive and \u0394 < 0,\n    -- the quadratic is always positive\n    have main : \u2200 x, 0 \u2264 28 * x ^ 2 - 10 * x + 1 := by\n      intro x\n      -- The quadratic is always positive because:\n      -- 1. The leading coefficient (28) is positive\n      have leading_coeff_pos : 0 < 28 := by norm_num\n      -- 2. The discriminant is negative\n      have discr_neg : (-10)^2 - 4 * 28 * 1 < 0 := by norm_num\n      -- Therefore the quadratic is always above the x-axis\n      simp\n    exact main a\n  -- Now transform this back to our original inequality\n  -- Starting from 28a\u00b2 - 10a + 1 \u2265 0\n  -- Add 10a to both sides: 28a\u00b2 + 1 \u2265 10a\n  -- Which is equivalent to our goal\n  linarith [key_inequality]",
+  "statistics": {
+    "original_errors": 2,
+    "failed_errors": 1,
+    "remaining_errors": 1,
+    "fix_rate": 0.5,
+    "successful_fixes": [
+      {
+        "line": 20,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'Quadratic.nonneg_of_discrim_neg'",
+        "fix_snippet": "simp",
+        "fixed_line": "      simp",
+        "fix_time": 10.021992683410645,
+        "fixed_errors": [
+          {
+            "line": 21,
+            "column": 15,
+            "end_line": 21,
+            "end_column": 16,
+            "message": "application type mismatch\n  main a\nargument\n  a\nhas type\n  \u211d : Type\nbut is expected to have type\n  \u2115 : Type",
+            "severity": "error"
+          }
+        ]
+      }
+    ],
+    "failed_fixes": [
+      {
+        "line": 21,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  main a\nargument\n  a\nhas type\n  \u211d : Type\nbut is expected to have type\n  \u2115 : Type",
+        "failure_reason": "Could not generate fix",
+        "attempt_time": 22.042406797409058
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 21,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  main a\nargument\n  a\nhas type\n  \u211d : Type\nbut is expected to have type\n  \u2115 : Type"
+      }
+    ],
+    "total_time": 34.06848883628845
+  },
+  "message": "Original code error count: 2\n\u2705 Fixed error 1/2: Successfully fixed error at line 20 \u00abunknown_identifier\u00bb (in 10.02s)\n\u274c Fixed error 2/2: Could not generate fix for error at line 21 \u00abtype_mismatch\u00bb (after 22.04s)\n\n=== Fix statistics ===\nOriginal error count: 2\nFixed errors: 1 (Fix rate: 0.5000)\nFailed errors: 1\nRemaining errors: 1\nTotal time: 34.07 seconds\n\n=== Successful fix details ===\n\nFix 1:\n   Line: 20\n   Error type: unknown_identifier\n   Original error message: unknown identifier 'Quadratic.nonneg_of_discrim_neg'...\n   Fix snippet: simp\n   Fixed line:       simp\n   Time: 10.02 seconds\n\n=== Failed fix details ===\n\nFailed fix 1:\n   Line: 21\n   Error type: type_mismatch\n   Original error message: application type mismatch\n  main a\nargument\n  a\nhas type\n  \u211d : Type\nbut is expected to have type\n  \u2115...\n   Failure reason: Could not generate fix\n   Time: 22.04 seconds"
+}

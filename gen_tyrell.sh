@@ -7,6 +7,7 @@ rm -rf ./minif2f/static_modules
 rm -rf ./minif2f/static_filtered_theorems_output
 rm -rf ./minif2f/static_tyrell_output
 rm -rf ./minif2f/have_tyrell_output
+rm -rf ./minif2f/module_paths_output
 echo "Clean up complete."
 
 # First generate have theorems extraction

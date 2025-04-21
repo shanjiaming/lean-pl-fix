@@ -733,6 +733,8 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
             list_of_remaining_errors contains errors present *after* the fix attempt.
     """
     start_time = time.time()
+    # 设置超时时间（120秒 = 2分钟）
+    TIMEOUT = 120  
     
     # Prepare code using the updated function
     prep_result = prepare_code_for_synthesis(code, target_error_line_num)
@@ -805,9 +807,47 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
     message = "Synthesis failed: No program generated."
     remaining_errors = original_errors
     
-    # *** Corrected Try/Except Block ***
+    # *** Try/Except Block with Timeout Check ***
     try:
+        # 添加超时检查
+        remaining_time = TIMEOUT - (time.time() - start_time)
+        if remaining_time <= 0:
+            raise TimeoutError("Preparation took too long before synthesis could start")
+        
+        # 使用单独的线程来实现超时
+        import threading
+        
+        # 设置超时标志
+        timeout_occurred = threading.Event()
+        
+        # 在单独的线程中检查超时
+        def check_timeout():
+            time_to_wait = TIMEOUT - (time.time() - start_time)
+            if time_to_wait <= 0:
+                timeout_occurred.set()
+                return
+                
+            # 等待剩余的超时时间
+            timeout_occurred.wait(time_to_wait)
+        
+        # 启动超时检查线程
+        timeout_thread = threading.Thread(target=check_timeout)
+        timeout_thread.daemon = True  # 设为守护线程，使其不会阻止主程序退出
+        timeout_thread.start()
+        
+        # 周期性检查超时标志的函数
+        def check_if_timeout():
+            if timeout_occurred.is_set() or (time.time() - start_time) > TIMEOUT:
+                raise TimeoutError("Synthesis timeout after 2 minutes")
+            return False
+        
+        # 开始合成，并周期性检查超时
+        synthesis_start_time = time.time()
         prog = synthesizer.synthesize()
+        
+        # 每次迭代后检查超时
+        if check_if_timeout():
+            raise TimeoutError("Synthesis timeout during execution")
         
         if prog is not None:
             fix = None
@@ -822,6 +862,10 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
                 # Direct evaluation might not work well with the checker logic, so we prioritize last_solution
                 fix = None 
                 place = None
+
+            # 再次检查是否超时
+            if timeout_occurred.is_set() or (time.time() - start_time) > TIMEOUT:
+                raise TimeoutError("Synthesis completed but timed out before applying fix")
 
             if fix and place: # Proceed only if we have a string fix and a place
                 logger.info(f'Applying synthesized fix: {fix} (place: {place})')
@@ -846,6 +890,10 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
                     fixed_line_content = fix
                     final_fixed_full_code = before + indentation + fixed_line_content + after
                 # --- End Apply fix ---
+
+                # 再次检查是否超时
+                if timeout_occurred.is_set() or (time.time() - start_time) > TIMEOUT:
+                    raise TimeoutError("Fix applied but evaluation timed out")
 
                 # Evaluate the final constructed fix using full codes
                 success, remaining_errors = evaluate_fix(
@@ -873,16 +921,29 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
              success = False
              remaining_errors = original_errors
              fixed_full_code = original_full_code
-
+    
+    except TimeoutError as e:
+        # 处理超时异常
+        logger.error(f"Synthesis process timed out after {TIMEOUT} seconds: {e}")
+        message = f"Synthesis timed out after {TIMEOUT} seconds: {str(e)}"
+        success = False
+        remaining_errors = original_errors
+        fixed_full_code = original_full_code
+    
     except Exception as e:
         logger.error(f"Synthesis process failed with exception: {e}", exc_info=True) # Log traceback
         message = f"Synthesis failed with exception: {e}"
         success = False
         remaining_errors = original_errors # Assume errors unchanged on exception
         fixed_full_code = original_full_code
-    # *** End Corrected Try/Except Block ***
+    # *** End Try/Except Block ***
 
     elapsed_time = time.time() - start_time
+    
+    # 如果超时了但是未捕获到TimeoutError，添加超时标记到消息中
+    if elapsed_time >= TIMEOUT and "timed out" not in message:
+        message = f"Synthesis timed out after {TIMEOUT} seconds: {message}"
+    
     vlog(f"Fix attempt for line {error_line} finished in {elapsed_time:.2f}s. Success: {success}. Message: {message}")
     
     return fixed_full_code, success, message, elapsed_time, remaining_errors
@@ -983,10 +1044,12 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
         "decompositions_applied": 0,
         "successful_syntheses": 0,
         "failed_syntheses": {}, # Stores {line_num: message} for persistent failures
+        "timeout_syntheses": 0,  # 计数超时发生的次数
         "remaining_errors": 0,
         "fix_rate": 0.0,
         "successful_fixes_details": [], # Keep track of successful synthesis details
         "failed_fixes_details": [],     # Keep track of failed synthesis attempts
+        "timeout_fixes_details": [],    # 记录超时的修复尝试详情
         "remaining_errors_details": [],
         "total_time": 0.0
     }
@@ -1075,6 +1138,9 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                 file_path  # Pass file_path for Tyrell spec selection
             )
 
+            # 检测超时情况
+            is_timeout = "timed out" in message
+
             if success:
                 vlog(f"✅ Successfully synthesized and validated fix for error at line {target_line_num} ({error_type}) in {fix_time:.2f}s.")
                 current_code = fixed_code_attempt # Update code
@@ -1087,7 +1153,8 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                     "error_type": error_type,
                     "original_error_message": error_message, # Error message *before* this fix
                     "fix_time": fix_time,
-                    "errors_after_this_fix": len(remaining_errors_after_fix)
+                    "errors_after_this_fix": len(remaining_errors_after_fix),
+                    "fix_snippet": toy_interpreter.last_solution  # 添加修复片段
                 })
                 # Clear persistent failure status for this line if it existed
                 if target_line_num in stats["failed_syntheses"]:
@@ -1095,6 +1162,26 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                 made_change_this_pass = True
                 vlog(f"Code updated after successful synthesis at line {target_line_num}. Starting new pass.")
                 break # Break inner for loop, start new pass immediately
+            elif is_timeout:
+                # 处理超时情况
+                vlog(f"⏱ Synthesis for error at line {target_line_num} ({error_type}) timed out after {fix_time:.2f}s.")
+                # 记录超时统计
+                stats["timeout_syntheses"] += 1
+                # 记录超时详情
+                stats["timeout_fixes_details"].append({
+                     "pass": pass_num,
+                     "line": target_line_num,
+                     "error_type": error_type,
+                     "original_error_message": error_message,
+                     "timeout_message": message,
+                     "attempt_time": fix_time
+                })
+                # 同样标记为当前pass已尝试，避免重复尝试
+                attempted_synthesis_in_this_pass.add(target_line_num)
+                # 记录为持久失败
+                stats["failed_syntheses"][target_line_num] = "Timed out: " + message
+                # 继续下一个错误
+                continue
             else:
                 vlog(f"❌ Failed to synthesize fix for error at line {target_line_num} ({error_type}) after {fix_time:.2f}s. Message: {message}")
                 # Record persistent failure
@@ -1122,6 +1209,7 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
              vlog(f"Warning: Reached pass limit ({pass_num}). Stopping iterative fixing to prevent infinite loops.", logging.WARNING)
              break
 
+
     # --- Final Assessment ---
     vlog("\n===== Iterative fixing complete =====")
     final_result = repl.execute(current_code, env_mode='header')
@@ -1136,6 +1224,7 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
     summary_lines.append(f"Original errors: {stats['original_errors']}")
     summary_lines.append(f"Decompositions applied: {stats['decompositions_applied']}")
     summary_lines.append(f"Successful syntheses: {stats['successful_syntheses']}")
+    summary_lines.append(f"Timed out syntheses: {stats['timeout_syntheses']}")  # 添加超时信息
     summary_lines.append(f"Persistent failed syntheses (line: reason): {len(stats['failed_syntheses'])}")
     for line, reason in stats['failed_syntheses'].items():
         summary_lines.append(f"  - Line {line}: {reason[:100]}...")

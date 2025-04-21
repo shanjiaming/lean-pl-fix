@@ -1,0 +1,527 @@
+2025-04-13 10:40:51 - INFO - Log file initialized at 2025-04-13T10:40:51.695196
+2025-04-13 10:40:51 - INFO - ===== LOG FILE LOCATION =====
+2025-04-13 10:40:51 - INFO - Detailed log file created at: ./minif2f/lean_fixed/55.log
+2025-04-13 10:40:51 - INFO - ===============================
+2025-04-13 10:40:51 - INFO - Original code:
+2025-04-13 10:40:51 - INFO - ----------------------------------------
+2025-04-13 10:40:51 - INFO - import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+/-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/
+theorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by
+  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12
+  -- Then adding 11 gives us 23 as required
+
+  -- First, simplify both numbers by factoring out common powers of 2
+  -- 6432 ÷ 4 = 1608, 132 ÷ 4 = 33, so gcd(6432,132) = 4 × gcd(1608,33)
+  have h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by
+    rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+    simp only [mul_left_inj' (by norm_num : 4 ≠ 0)]  -- Simplify multiplication
+    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization
+
+  -- Now compute gcd(1608,33) using Euclidean algorithm:
+  -- 1608 = 48 × 33 + 24
+  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3
+  have h₂ : Nat.gcd 1608 33 = 3 := by
+    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step
+    rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)
+    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)
+    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)
+    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)
+    rfl  -- gcd(3,0) = 3
+
+  -- Combine the results: gcd(6432,132) = 4 × 3 = 12
+  rw [h₁, h₂]
+  -- Now compute 12 + 11 = 23
+  norm_num  -- Simplify the arithmetic
+2025-04-13 10:40:51 - INFO - ----------------------------------------
+2025-04-13 10:40:51 - INFO - 
+Checking original code for all errors...
+2025-04-13 10:40:57 - INFO - Original code contains 3 errors:
+2025-04-13 10:40:57 - INFO - Error 1: line 9, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6432 * Nat....
+2025-04-13 10:40:57 - INFO - Error 2: line 18, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1608 % 33
+h...
+2025-04-13 10:40:57 - INFO - Error 3: line 28, type: no_goals_to_solve, message: no goals to be solved...
+2025-04-13 10:40:57 - INFO - 
+Starting multi-error continuous repair process...
+2025-04-13 10:40:57 - INFO - 
+===== Starting to fix all errors =====
+2025-04-13 10:40:58 - INFO - 
+Found 3 original errors:
+2025-04-13 10:40:58 - INFO - Error 1: line 9, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6432 * Nat....
+2025-04-13 10:40:58 - INFO - Error 2: line 18, type: rewrite_failed, message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1608 % 33
+h...
+2025-04-13 10:40:58 - INFO - Error 3: line 28, type: no_goals_to_solve, message: no goals to be solved...
+2025-04-13 10:40:58 - INFO - 
+Trying to fix error 1/3: line 9, type: rewrite_failed
+2025-04-13 10:40:58 - INFO - Error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6432 * Nat....
+2025-04-13 10:40:58 - INFO - Removed header content, remaining 28 lines of code
+2025-04-13 10:40:58 - INFO - Using specified target error line: 9
+2025-04-13 10:40:59 - INFO - Found error at specified line: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6432 * Nat.gcd 4 33
+⊢ Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+2025-04-13 10:40:59 - INFO - Error at line 9: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6432 * Nat.gcd 4 33
+⊢ Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+2025-04-13 10:40:59 - INFO - 
+==================================================
+2025-04-13 10:40:59 - INFO - Code prepared, starting synthesis
+2025-04-13 10:40:59 - INFO - Before part: /-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/
+theorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by
+  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12
+  -- Then adding 11 gives us 23 as required
+
+  -- First, simplify both numbers by factoring out common powers of 2
+  -- 6432 ÷ 4 = 1608, 132 ÷ 4 = 33, so gcd(6432,132) = 4 × gcd(1608,33)
+  have h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by
+2025-04-13 10:40:59 - INFO - Error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:40:59 - INFO - After part: simp only [mul_left_inj' (by norm_num : 4 ≠ 0)]  -- Simplify multiplication
+    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization
+
+  -- Now compute gcd(1608,33) using Euclidean algorithm:
+  -- 1608 = 48 × 33 + 24
+  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3
+  have h₂ : Nat.gcd 1608 33 = 3 := by
+    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step
+    rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)
+    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)
+    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)
+    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)
+    rfl  -- gcd(3,0) = 3
+
+  -- Combine the results: gcd(6432,132) = 4 × 3 = 12
+  rw [h₁, h₂]
+  -- Now compute 12 + 11 = 23
+  norm_num  -- Simplify the arithmetic
+2025-04-13 10:40:59 - INFO - ==================================================
+
+2025-04-13 10:41:00 - INFO - Testing fragment: rw [justaplaceholder]
+2025-04-13 10:41:00 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:02 - INFO - Testing fix: Original errors: 3, Fixed errors: 4
+2025-04-13 10:41:02 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:02 - DEBUG - === New errors detail ===
+2025-04-13 10:41:02 - DEBUG - New Error 1: line 9, type: unknown_identifier, message: unknown identifier 'justaplaceholder'
+2025-04-13 10:41:02 - DEBUG - New Error 2: line 9, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.206
+⊢ Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+2025-04-13 10:41:02 - INFO - Testing fragment: rw [<- justaplaceholder]
+2025-04-13 10:41:02 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:04 - INFO - Testing fix: Original errors: 3, Fixed errors: 4
+2025-04-13 10:41:04 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:04 - DEBUG - === New errors detail ===
+2025-04-13 10:41:04 - DEBUG - New Error 1: line 9, type: unknown_identifier, message: unknown identifier 'justaplaceholder'
+2025-04-13 10:41:04 - DEBUG - New Error 2: line 9, type: rewrite_failed, message: tactic 'rewrite' failed, equality or iff proof expected
+  ?m.206
+⊢ Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+2025-04-13 10:41:04 - INFO - Testing fragment: simp
+2025-04-13 10:41:04 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:06 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:06 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:06 - DEBUG - === New errors detail ===
+2025-04-13 10:41:06 - DEBUG - New Error 1: line 10, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:06 - INFO - Testing fragment: field_simp
+2025-04-13 10:41:06 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:08 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:08 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:08 - DEBUG - === New errors detail ===
+2025-04-13 10:41:08 - DEBUG - New Error 1: line 9, type: simp_failed, message: simp made no progress
+2025-04-13 10:41:08 - INFO - Testing fragment: norm_num
+2025-04-13 10:41:08 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:10 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:10 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:10 - DEBUG - === New errors detail ===
+2025-04-13 10:41:10 - DEBUG - New Error 1: line 10, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:10 - INFO - Testing fragment: ring
+2025-04-13 10:41:10 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:12 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:12 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:12 - DEBUG - === New errors detail ===
+2025-04-13 10:41:12 - DEBUG - New Error 1: line 10, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:12 - INFO - Testing fragment: ring_nf
+2025-04-13 10:41:12 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:14 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:14 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:14 - DEBUG - === New errors detail ===
+2025-04-13 10:41:14 - DEBUG - New Error 1: line 10, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:14 - INFO - Testing fragment: omega
+2025-04-13 10:41:14 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:16 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:16 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:16 - DEBUG - === New errors detail ===
+2025-04-13 10:41:16 - DEBUG - New Error 1: line 9, type: other_error, message: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  4*a - b ≥ 1
+  b ≥ 0
+  a ≥ 0
+where
+ a := ↑(Nat.gcd 1608 33)
+ b := ↑(Nat.gcd 6432 132)
+2025-04-13 10:41:16 - INFO - Testing fragment: linarith
+2025-04-13 10:41:16 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:18 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:18 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:18 - DEBUG - === New errors detail ===
+2025-04-13 10:41:18 - DEBUG - New Error 1: line 9, type: linarith_failed, message: linarith failed to find a contradiction
+case h1.h
+a✝ : Nat.gcd 6432 132 < 4 * Nat.gcd 1608 33
+⊢ False
+failed
+2025-04-13 10:41:18 - INFO - Testing fragment: nlinarith
+2025-04-13 10:41:18 - INFO - Original error line:     rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+2025-04-13 10:41:20 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:20 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:20 - DEBUG - === New errors detail ===
+2025-04-13 10:41:20 - DEBUG - New Error 1: line 9, type: linarith_failed, message: linarith failed to find a contradiction
+case h1.h
+a✝ : Nat.gcd 6432 132 < 4 * Nat.gcd 1608 33
+⊢ False
+failed
+2025-04-13 10:41:20 - INFO - Failed attempt time: 22.04 seconds
+2025-04-13 10:41:20 - INFO - ❌ Could not generate fix for error at line 9
+2025-04-13 10:41:20 - INFO - 
+Trying to fix error 2/3: line 18, type: rewrite_failed
+2025-04-13 10:41:20 - INFO - Error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1608 % 33
+h...
+2025-04-13 10:41:20 - INFO - Removed header content, remaining 28 lines of code
+2025-04-13 10:41:20 - INFO - Using specified target error line: 18
+2025-04-13 10:41:21 - INFO - Found error at specified line: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1608 % 33
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+⊢ (33 % 1608).gcd 1608 = 3
+2025-04-13 10:41:21 - INFO - Error at line 18: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1608 % 33
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+⊢ (33 % 1608).gcd 1608 = 3
+2025-04-13 10:41:21 - INFO - 
+==================================================
+2025-04-13 10:41:21 - INFO - Code prepared, starting synthesis
+2025-04-13 10:41:21 - INFO - Before part: /-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/
+theorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by
+  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12
+  -- Then adding 11 gives us 23 as required
+
+  -- First, simplify both numbers by factoring out common powers of 2
+  -- 6432 ÷ 4 = 1608, 132 ÷ 4 = 33, so gcd(6432,132) = 4 × gcd(1608,33)
+  have h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by
+    rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+    simp only [mul_left_inj' (by norm_num : 4 ≠ 0)]  -- Simplify multiplication
+    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization
+
+  -- Now compute gcd(1608,33) using Euclidean algorithm:
+  -- 1608 = 48 × 33 + 24
+  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3
+  have h₂ : Nat.gcd 1608 33 = 3 := by
+    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step
+2025-04-13 10:41:21 - INFO - Error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:21 - INFO - After part: rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)
+    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)
+    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)
+    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)
+    rfl  -- gcd(3,0) = 3
+
+  -- Combine the results: gcd(6432,132) = 4 × 3 = 12
+  rw [h₁, h₂]
+  -- Now compute 12 + 11 = 23
+  norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:21 - INFO - ==================================================
+
+2025-04-13 10:41:22 - INFO - Testing fragment: rw [justaplaceholder]
+2025-04-13 10:41:22 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:24 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:24 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:24 - DEBUG - === New errors detail ===
+2025-04-13 10:41:24 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:24 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:24 - INFO - Testing fragment: rw [<- justaplaceholder]
+2025-04-13 10:41:24 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:26 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:26 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:26 - DEBUG - === New errors detail ===
+2025-04-13 10:41:26 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:26 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:26 - INFO - Testing fragment: simp
+2025-04-13 10:41:26 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:28 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:28 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:28 - DEBUG - === New errors detail ===
+2025-04-13 10:41:28 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:28 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:28 - INFO - Testing fragment: field_simp
+2025-04-13 10:41:28 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:30 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:30 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:30 - DEBUG - === New errors detail ===
+2025-04-13 10:41:30 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:30 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:30 - INFO - Testing fragment: norm_num
+2025-04-13 10:41:30 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:32 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:32 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:32 - DEBUG - === New errors detail ===
+2025-04-13 10:41:32 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:32 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:32 - INFO - Testing fragment: ring
+2025-04-13 10:41:32 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:34 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:34 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:34 - DEBUG - === New errors detail ===
+2025-04-13 10:41:34 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:34 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:34 - INFO - Testing fragment: ring_nf
+2025-04-13 10:41:34 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:36 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:36 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:36 - DEBUG - === New errors detail ===
+2025-04-13 10:41:36 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:36 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:36 - INFO - Testing fragment: omega
+2025-04-13 10:41:36 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:38 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:38 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:38 - DEBUG - === New errors detail ===
+2025-04-13 10:41:38 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:38 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:38 - INFO - Testing fragment: linarith
+2025-04-13 10:41:38 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:40 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:40 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:40 - DEBUG - === New errors detail ===
+2025-04-13 10:41:40 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:40 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:40 - INFO - Testing fragment: nlinarith
+2025-04-13 10:41:40 - INFO - Original error line:     rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+2025-04-13 10:41:42 - INFO - Testing fix: Original errors: 3, Fixed errors: 2
+2025-04-13 10:41:42 - INFO - Result: False (introduced 2 new errors)
+2025-04-13 10:41:42 - DEBUG - === New errors detail ===
+2025-04-13 10:41:42 - DEBUG - New Error 1: line 18, type: other_error, message: unexpected identifier; expected ']'
+2025-04-13 10:41:42 - DEBUG - New Error 2: line 2, type: other_error, message: unsolved goals
+h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33
+h₂ : Nat.gcd 1608 33 = 3
+⊢ Nat.gcd 6432 132 + 11 = 23
+2025-04-13 10:41:42 - INFO - Failed attempt time: 22.04 seconds
+2025-04-13 10:41:42 - INFO - ❌ Could not generate fix for error at line 18
+2025-04-13 10:41:42 - INFO - 
+Trying to fix error 3/3: line 28, type: no_goals_to_solve
+2025-04-13 10:41:42 - INFO - Error message: no goals to be solved...
+2025-04-13 10:41:42 - INFO - Removed header content, remaining 28 lines of code
+2025-04-13 10:41:42 - INFO - Using specified target error line: 28
+2025-04-13 10:41:43 - INFO - Found error at specified line: no goals to be solved
+2025-04-13 10:41:43 - INFO - Error at line 28: no goals to be solved
+2025-04-13 10:41:43 - INFO - 
+==================================================
+2025-04-13 10:41:43 - INFO - Code prepared, starting synthesis
+2025-04-13 10:41:43 - INFO - Before part: /-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/
+theorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by
+  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12
+  -- Then adding 11 gives us 23 as required
+
+  -- First, simplify both numbers by factoring out common powers of 2
+  -- 6432 ÷ 4 = 1608, 132 ÷ 4 = 33, so gcd(6432,132) = 4 × gcd(1608,33)
+  have h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by
+    rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+    simp only [mul_left_inj' (by norm_num : 4 ≠ 0)]  -- Simplify multiplication
+    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization
+
+  -- Now compute gcd(1608,33) using Euclidean algorithm:
+  -- 1608 = 48 × 33 + 24
+  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3
+  have h₂ : Nat.gcd 1608 33 = 3 := by
+    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step
+    rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)
+    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)
+    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)
+    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)
+    rfl  -- gcd(3,0) = 3
+
+  -- Combine the results: gcd(6432,132) = 4 × 3 = 12
+  rw [h₁, h₂]
+  -- Now compute 12 + 11 = 23
+2025-04-13 10:41:43 - INFO - Error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:43 - INFO - After part: 
+2025-04-13 10:41:43 - INFO - ==================================================
+
+2025-04-13 10:41:44 - INFO - Testing fragment: rw [justaplaceholder]
+2025-04-13 10:41:44 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:46 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:46 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:46 - DEBUG - === New errors detail ===
+2025-04-13 10:41:46 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:46 - INFO - Testing fragment: rw [<- justaplaceholder]
+2025-04-13 10:41:46 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:48 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:48 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:48 - DEBUG - === New errors detail ===
+2025-04-13 10:41:48 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:48 - INFO - Testing fragment: simp
+2025-04-13 10:41:48 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:50 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:50 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:50 - DEBUG - === New errors detail ===
+2025-04-13 10:41:50 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:50 - INFO - Testing fragment: field_simp
+2025-04-13 10:41:50 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:52 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:52 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:52 - DEBUG - === New errors detail ===
+2025-04-13 10:41:52 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:52 - INFO - Testing fragment: norm_num
+2025-04-13 10:41:52 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:54 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:54 - INFO - Target error not fixed: no goals to be solved...
+2025-04-13 10:41:54 - INFO - Result: False (target error not fixed)
+2025-04-13 10:41:54 - INFO - Testing fragment: ring
+2025-04-13 10:41:54 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:56 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:56 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:56 - DEBUG - === New errors detail ===
+2025-04-13 10:41:56 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:56 - INFO - Testing fragment: ring_nf
+2025-04-13 10:41:56 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:41:58 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:41:58 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:41:58 - DEBUG - === New errors detail ===
+2025-04-13 10:41:58 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:41:58 - INFO - Testing fragment: omega
+2025-04-13 10:41:58 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:42:00 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:42:00 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:42:00 - DEBUG - === New errors detail ===
+2025-04-13 10:42:00 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:42:00 - INFO - Testing fragment: linarith
+2025-04-13 10:42:00 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:42:02 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:42:02 - INFO - Target error not fixed: no goals to be solved...
+2025-04-13 10:42:02 - INFO - Result: False (target error not fixed)
+2025-04-13 10:42:02 - INFO - Testing fragment: nlinarith
+2025-04-13 10:42:02 - INFO - Original error line:   norm_num  -- Simplify the arithmetic
+2025-04-13 10:42:04 - INFO - Testing fix: Original errors: 3, Fixed errors: 3
+2025-04-13 10:42:04 - INFO - Result: False (introduced 1 new errors)
+2025-04-13 10:42:04 - DEBUG - === New errors detail ===
+2025-04-13 10:42:04 - DEBUG - New Error 1: line 28, type: no_goals_to_solve, message: no goals to be solved
+2025-04-13 10:42:04 - INFO - Failed attempt time: 22.04 seconds
+2025-04-13 10:42:04 - INFO - ❌ Could not generate fix for error at line 28
+2025-04-13 10:42:05 - INFO - 
+===== Fix attempt completed =====
+2025-04-13 10:42:05 - INFO - Original errors: 3
+2025-04-13 10:42:05 - INFO - Fixed errors: 0
+2025-04-13 10:42:05 - INFO - Failed errors: 3
+2025-04-13 10:42:05 - INFO - Remaining errors: 3
+2025-04-13 10:42:05 - INFO - Total time: 68.12 seconds
+2025-04-13 10:42:05 - INFO - 
+Final fixed code:
+2025-04-13 10:42:05 - INFO - ----------------------------------------
+2025-04-13 10:42:05 - INFO - /-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/
+theorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by
+  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12
+  -- Then adding 11 gives us 23 as required
+
+  -- First, simplify both numbers by factoring out common powers of 2
+  -- 6432 ÷ 4 = 1608, 132 ÷ 4 = 33, so gcd(6432,132) = 4 × gcd(1608,33)
+  have h₁ : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by
+    rw [← Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers
+    simp only [mul_left_inj' (by norm_num : 4 ≠ 0)]  -- Simplify multiplication
+    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization
+
+  -- Now compute gcd(1608,33) using Euclidean algorithm:
+  -- 1608 = 48 × 33 + 24
+  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3
+  have h₂ : Nat.gcd 1608 33 = 3 := by
+    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step
+    rw [show 1608 % 33 = 24 by rfl]  -- 1608 ÷ 33 = 48 remainder 24
+    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)
+    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)
+    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)
+    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)
+    rfl  -- gcd(3,0) = 3
+
+  -- Combine the results: gcd(6432,132) = 4 × 3 = 12
+  rw [h₁, h₂]
+  -- Now compute 12 + 11 = 23
+  norm_num  -- Simplify the arithmetic
+2025-04-13 10:42:05 - INFO - ----------------------------------------
+2025-04-13 10:42:05 - INFO - 
+Detailed error repair report:
+2025-04-13 10:42:05 - INFO - Original code error count: 3
+❌ Fixed error 1/3: Could not generate fix for error at line 9 «rewrite_failed» (after 22.04s)
+❌ Fixed error 2/3: Could not generate fix for error at line 18 «rewrite_failed» (after 22.04s)
+❌ Fixed error 3/3: Could not generate fix for error at line 28 «no_goals_to_solve» (after 22.04s)
+
+=== Fix statistics ===
+Original error count: 3
+Fixed errors: 0 (Fix rate: 0.0000)
+Failed errors: 3
+Remaining errors: 3
+Total time: 68.12 seconds
+
+=== Failed fix details ===
+
+Failed fix 1:
+   Line: 9
+   Error type: rewrite_failed
+   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  6432 * Nat....
+   Failure reason: Could not generate fix
+   Time: 22.04 seconds
+
+Failed fix 2:
+   Line: 18
+   Error type: rewrite_failed
+   Original error message: tactic 'rewrite' failed, did not find instance of the pattern in the target expression
+  1608 % 33
+h...
+   Failure reason: Could not generate fix
+   Time: 22.04 seconds
+
+Failed fix 3:
+   Line: 28
+   Error type: no_goals_to_solve
+   Original error message: no goals to be solved...
+   Failure reason: Could not generate fix
+   Time: 22.04 seconds
+2025-04-13 10:42:05 - INFO - 
+Fixed code saved to: ./minif2f/lean_fixed/55_fixed.lean
+2025-04-13 10:42:05 - INFO - JSON log saved to: ./minif2f/lean_fixed/55_fix_log.json
+2025-04-13 10:42:05 - INFO - 
+===== LOG FILE LOCATION =====
+2025-04-13 10:42:05 - INFO - Detailed log file is available at: ./minif2f/lean_fixed/55.log
+2025-04-13 10:42:05 - INFO - ===============================
