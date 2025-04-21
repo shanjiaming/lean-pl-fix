@@ -676,6 +676,7 @@ class ToyInterpreter(PostOrderInterpreter):
         self.header_code = header_code # Store header
         self.last_solution = None  # Save the last successful fix
         self.last_solution_place = None # Save placement ("here" or "before")
+        self.theorem_in_parenthesis = original_error_content[original_error_content.find("[") + 1 : original_error_content.find("]")]
         super().__init__()
 
     def eval_rw(self, node, args):
@@ -689,6 +690,12 @@ class ToyInterpreter(PostOrderInterpreter):
     
     def eval_delete(self, node, args):
         return "" # for simplicity, we have a redundant delete place, before or here, though before is never used.
+    
+    def eval_unfold(self, node, args):
+        return "unfold " + self.theorem_in_parenthesis
+    
+    def eval_nth_rw(self, node, args):
+        return "nth_rw " + args[0] + " [" + self.theorem_in_parenthesis + "]"
     
     def eval_checker(self, node, args):
         """

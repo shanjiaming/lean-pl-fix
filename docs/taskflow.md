@@ -8,6 +8,28 @@ This document outlines the planned and completed tasks for improving the Lean en
 
 ## Completed Tasks
 
+### Implement Lean Have Extractor (Completed)
+
+**Understanding:**
+
+The goal is to create a utility that can extract theorem names that follow 'have' statements in Lean files and output them as a JSON list.
+
+**Plan (as implemented):**
+
+1. **Created `extract_have.py` Script:**
+   * Uses regular expressions to identify and extract 'have' statements from Lean files
+   * Only matches 'have' statements that appear at the beginning of a line (after possible whitespace)
+   * Uses pattern `^\s*have\s+([^\s:\(\[\{]+)` to match line-starting 'have' statements
+   * Extracts theorem names after 'have' statements until encountering any terminating character
+   * Removes duplicate theorem names while preserving order
+   * Outputs the extracted theorems as a JSON array
+
+2. **Added Documentation:**
+   * Created detailed documentation in `docs/lean_have_extractor.md`
+   * Described usage, parameters, output format, and implementation details
+
+**Status:** Completed.
+
 ### Implement `rw` Decomposition and Iterative Fixing (Completed)
 
 **Understanding:**

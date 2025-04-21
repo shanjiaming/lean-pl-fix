@@ -4,6 +4,7 @@ config = LeanREPLConfig(verbose=True, project=TempRequireProject("mathlib")) # d
 server = LeanServer(config) # start Lean REPL
 
 
+print(config.__dict__)
 
 cmddd="""import Mathlib
 """

@@ -57,15 +57,26 @@ python log_analyzer.py --input-dir path/to/logs --output-dir path/to/analysis/ou
 
 ### 定理和库路径处理
 
-1.  **提取库路径**: 从一个或多个 Lean 文件中提取所有标识符，并查询它们定义的库路径。
+1.  **提取 'have' 定理**: 
+    运行 `extract_have.py` 处理 Lean 文件或整个目录，提取所有 'have' 语句后面的定理名。对于目录处理，脚本会递归查找所有 .lean 文件，并为每个文件创建对应的JSON输出文件。
     ```bash
     # 处理单个文件
-    python collectpath.py --file path/to/file.lean --output output.json
-    # 处理目录中的所有文件，为每个文件生成一个JSON
-    python collectpath.py --dir path/to/lean/dir --output-dir path/to/module/paths/output
+    python extract_have.py ./minif2f/lean_code/100.lean ./minif2f/have_theorems/100.json
+    
+    # 批量处理整个目录（为每个文件生成对应的JSON文件）
+    mkdir -p ./minif2f/have_theorems
+    python extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
     ```
 
-2.  **静态定理过滤**: 根据 JSON 文件中提供的库路径，扫描相应的库源文件，使用正则表达式提取 `theorem`/`lemma` 声明，并输出包含定理的库列表和定理列表。
+2.  **收集库路径**: 
+    运行 `collectpath.py` 处理 `./minif2f/lean_code` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `./minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
+    ```bash
+    # (确保 Lean 环境已激活: source /data/lean.sh)
+    mkdir -p ./minif2f/module_paths_output
+    python collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
+    ```
+
+3.  **静态定理过滤**: 根据 JSON 文件中提供的库路径，扫描相应的库源文件，使用正则表达式提取 `theorem`/`lemma` 声明，并输出包含定理的库列表和定理列表。
     ```bash
     # 处理单个JSON文件
     python static_theorem_filter.py path/to/module_paths.json path/to/filtered_theorems.json
@@ -73,7 +84,7 @@ python log_analyzer.py --input-dir path/to/logs --output-dir path/to/analysis/ou
     python static_theorem_filter.py --input-dir path/to/module_paths/output --output-dir path/to/static_filtered/output
     ```
 
-3.  **更新 Tyrell 语法**: 使用 JSON 文件中的定理列表更新 Tyrell 语法文件 (`.tyrell`) 中的 `enum Theorem` 部分。支持批量处理。
+4.  **更新 Tyrell 语法**: 使用 JSON 文件中的定理列表更新 Tyrell 语法文件 (`.tyrell`) 中的 `enum Theorem` 部分。支持批量处理。
     ```bash
     # 批量处理
     python update_tyrell_theorems.py --json-input-dir path/to/filtered/jsons --tyrell-input path/to/template.tyrell --tyrell-output-dir path/to/updated/tyrells
@@ -175,29 +186,40 @@ python log_analyzer.py --input-dir path/to/logs
 本示例展示了如何从一个包含 Lean 源代码文件的目录开始，最终为每个源文件生成一个包含相关定理的 Tyrell 语法文件。这对于为特定问题定制 Tyrell 搜索空间非常有用。
 
 **假设**: 
-*   你的 Lean 源文件位于 `/data/coding/minif2f/lean_code_test` 目录。
+*   你的 Lean 源文件位于 `./minif2f/lean_code` 目录。
 *   你希望将中间和最终结果存储在 `minif2f/` 目录下。
 *   你有一个基础的 Tyrell 模板文件 `semantic/lean.tyrell`。
 *   运行命令前已通过 `source /data/lean.sh` 设置好 Lean 环境。
 
 **步骤**: 
 
-1.  **收集库路径**: 
-    运行 `collectpath.py` 处理 `/data/coding/minif2f/lean_code_test` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `/data/coding/minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
+1.  **提取 'have' 定理**: 
+    运行 `extract_have.py` 处理 Lean 文件或整个目录，提取所有 'have' 语句后面的定理名。对于目录处理，脚本会递归查找所有 .lean 文件，并为每个文件创建对应的JSON输出文件。
+    ```bash
+    # 处理单个文件
+    python extract_have.py ./minif2f/lean_code/100.lean ./minif2f/have_theorems/100.json
+    
+    # 批量处理整个目录（为每个文件生成对应的JSON文件）
+    mkdir -p ./minif2f/have_theorems
+    python extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
+    ```
+
+2.  **收集库路径**: 
+    运行 `collectpath.py` 处理 `./minif2f/lean_code` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `./minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
     ```bash
     # (确保 Lean 环境已激活: source /data/lean.sh)
-    mkdir -p /data/coding/minif2f/module_paths_output
-    python collectpath.py --dir /data/coding/minif2f/lean_code_test --output-dir /data/coding/minif2f/module_paths_output
+    mkdir -p ./minif2f/module_paths_output
+    python collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
     ```
 
-2.  **静态过滤定理**: 
-    运行 `static_theorem_filter.py` 处理上一步生成的 `/data/coding/minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理列表保存到 `minif2f/static_filtered_theorems_output` 目录下的新 JSON 文件（如 `1_static_filtered.json`）。
+3.  **静态过滤定理**: 
+    运行 `static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理列表保存到 `minif2f/static_filtered_theorems_output` 目录下的新 JSON 文件（如 `1_static_filtered.json`）。
     ```bash
     mkdir -p minif2f/static_filtered_theorems_output
-    python static_theorem_filter.py --input-dir /data/coding/minif2f/module_paths_output --output-dir minif2f/static_filtered_theorems_output
+    python static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f/static_filtered_theorems_output
     ```
 
-3.  **生成 Tyrell 文件**: 
+4.  **生成 Tyrell 文件**: 
     运行 `update_tyrell_theorems.py` 处理上一步生成的 `minif2f/static_filtered_theorems_output` 目录下的所有 JSON 文件。脚本使用 `semantic/lean.tyrell` 作为模板，将每个 JSON 文件中的定理列表填充到模板的 `enum Theorem` 部分，并将最终生成的 Tyrell 文件保存到 `minif2f/tyrell_batch_output` 目录（如 `1_static_filtered.tyrell`）。
     ```bash
     mkdir -p minif2f/tyrell_batch_output
