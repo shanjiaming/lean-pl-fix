@@ -1,0 +1,49 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/55.lean",
+  "output_file": "./minif2f/lean_fixed/55_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/\ntheorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by\n  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12\n  -- Then adding 11 gives us 23 as required\n\n  -- First, simplify both numbers by factoring out common powers of 2\n  -- 6432 \u00f7 4 = 1608, 132 \u00f7 4 = 33, so gcd(6432,132) = 4 \u00d7 gcd(1608,33)\n  have h\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by\n    rw [\u2190 Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers\n    simp only [mul_left_inj' (by norm_num : 4 \u2260 0)]  -- Simplify multiplication\n    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization\n\n  -- Now compute gcd(1608,33) using Euclidean algorithm:\n  -- 1608 = 48 \u00d7 33 + 24\n  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3\n  have h\u2082 : Nat.gcd 1608 33 = 3 := by\n    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step\n    rw [show 1608 % 33 = 24 by rfl]  -- 1608 \u00f7 33 = 48 remainder 24\n    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)\n    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)\n    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)\n    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)\n    rfl  -- gcd(3,0) = 3\n\n  -- Combine the results: gcd(6432,132) = 4 \u00d7 3 = 12\n  rw [h\u2081, h\u2082]\n  -- Now compute 12 + 11 = 23\n  norm_num  -- Simplify the arithmetic",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/\ntheorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by\n  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12\n  -- Then adding 11 gives us 23 as required\n\n  -- First, simplify both numbers by factoring out common powers of 2\n  -- 6432 \u00f7 4 = 1608, 132 \u00f7 4 = 33, so gcd(6432,132) = 4 \u00d7 gcd(1608,33)\n  have h\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by\n    simp\n  have h\u2082 : Nat.gcd 1608 33 = 3 := by\n    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step\n    simp\n  rw [h\u2081, h\u2082]\n  -- Now compute 12 + 11 = 23",
+  "statistics": {
+    "original_errors": 3,
+    "decompositions_applied": 0,
+    "successful_syntheses": 2,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "16": 1,
+      "19": 1
+    },
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  6432 * Nat.gcd 4 33\n\u22a2 Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33",
+        "fix_time": 0.5366237163543701,
+        "errors_after_this_fix": 3,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      },
+      {
+        "pass": 3,
+        "line": 19,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  1608 % 33\nh\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33\n\u22a2 (33 % 1608).gcd 1608 = 3",
+        "fix_time": 0.529416561126709,
+        "errors_after_this_fix": 2,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      }
+    ],
+    "failed_fixes_details": [],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 1.3032481670379639,
+    "no_goals_fixes_applied": 3
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 3\nDecompositions applied: 0\nNo goals error fixes applied: 3\nSuccessful syntheses: 2\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 16: 1 attempts\n  - Line 19: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 1.30 seconds",
+  "dsl": "oneline(simp)"
+}

@@ -1,0 +1,182 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/63.lean",
+  "output_file": "./minif2f/lean_fixed/63_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- An audience of $450$ people is seated in an auditorium. Each row contains the same number of seats and each seat in the auditorium is occupied. With three fewer seats per row, and five extra rows, the same audience could still be seated, occupying all seats. How many rows does the auditorium have? Show that it is 25.-/\ntheorem mathd_algebra_69 (rows seats : \u2115) (h\u2080 : rows * seats = 450)\n  (h\u2081 : (rows + 5) * (seats - 3) = 450) : rows = 25 := by\n  -- We have two equations:\n  -- 1. rows * seats = 450 (original seating arrangement)\n  -- 2. (rows + 5) * (seats - 3) = 450 (modified arrangement)\n  -- We'll solve this system of equations to find 'rows'\n\n  -- First, let's expand the second equation to get a relationship between rows and seats\n  have h\u2082 : (rows + 5) * (seats - 3) = rows * seats - 3 * rows + 5 * seats - 15 := by ring\n  -- Substitute the first equation (h\u2080) into the expanded second equation\n  rw [h\u2081, h\u2080] at h\u2082\n  -- After substitution and simplification, we get:\n  -- 450 = 450 - 3*rows + 5*seats - 15\n  -- Simplify this equation\n  have h\u2083 : 0 = -3 * rows + 5 * seats - 15 := by linarith\n  -- Rearrange terms to express seats in terms of rows\n  have h\u2084 : 5 * seats = 3 * rows + 15 := by linarith\n  have h\u2085 : seats = (3 * rows + 15) / 5 := by\n    rw [\u2190 mul_right_inj' (by norm_num : (5 : \u211a) \u2260 0)]  -- Multiply both sides by 1/5\n    rw [mul_div_cancel' _ (by norm_num : (5 : \u211a) \u2260 0)]  -- Cancel 5 on left side\n    exact h\u2084\n  -- Now substitute this expression for seats back into the original equation h\u2080\n  have h\u2086 : rows * ((3 * rows + 15) / 5) = 450 := by rw [\u2190 h\u2085, h\u2080]\n  -- Multiply both sides by 5 to eliminate denominator\n  have h\u2087 : rows * (3 * rows + 15) = 2250 := by\n    rw [\u2190 mul_right_inj' (by norm_num : (5 : \u211a) \u2260 0)]  -- Multiply both sides by 5\n    simp [mul_assoc, h\u2086]\n  -- Expand the left side and bring all terms to one side to form a quadratic equation\n  have h\u2088 : 3 * rows^2 + 15 * rows - 2250 = 0 := by\n    rw [\u2190 h\u2087]\n    ring\n  -- Simplify the quadratic equation by dividing all terms by 3\n  have h\u2089 : rows^2 + 5 * rows - 750 = 0 := by\n    rw [\u2190 mul_right_inj' (by norm_num : (3 : \u211a) \u2260 0)]  -- Multiply both sides by 1/3\n    simp [h\u2088]\n    ring\n  -- Now we have a simpler quadratic equation: rows\u00b2 + 5*rows - 750 = 0\n  -- We can solve this using the quadratic formula or by factoring\n  -- Let's factor it: (rows + 30)(rows - 25) = 0\n  have h\u2081\u2080 : (rows + 30) * (rows - 25) = 0 := by\n    rw [\u2190 h\u2089]\n    ring\n  -- The solutions are rows = -30 or rows = 25\n  -- Since rows is a natural number, we discard the negative solution\n  -- Therefore rows must be 25\n  -- We can use the zero product property to conclude\n  simp [mul_eq_zero] at h\u2081\u2080\n  cases' h\u2081\u2080 with h\u2081\u2081 h\u2081\u2082\n  \u00b7 -- Case rows + 30 = 0 leads to negative solution which we discard\n    linarith\n  \u00b7 -- Case rows - 25 = 0 gives our solution\n    exact h\u2081\u2082",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- An audience of $450$ people is seated in an auditorium. Each row contains the same number of seats and each seat in the auditorium is occupied. With three fewer seats per row, and five extra rows, the same audience could still be seated, occupying all seats. How many rows does the auditorium have? Show that it is 25.-/\ntheorem mathd_algebra_69 (rows seats : \u2115) (h\u2080 : rows * seats = 450)\n  (h\u2081 : (rows + 5) * (seats - 3) = 450) : rows = 25 := by\n  -- We have two equations:\n  -- 1. rows * seats = 450 (original seating arrangement)\n  -- 2. (rows + 5) * (seats - 3) = 450 (modified arrangement)\n  -- We'll solve this system of equations to find 'rows'\n\n  -- First, let's expand the second equation to get a relationship between rows and seats\n  have h\u2082 : (rows + 5) * (seats - 3) = rows * seats - 3 * rows + 5 * seats - 15 := by ring\n  -- Substitute the first equation (h\u2080) into the expanded second equation\n  rw [h\u2081, h\u2080] at h\u2082\n  -- After substitution and simplification, we get:\n  -- 450 = 450 - 3*rows + 5*seats - 15\n  -- Simplify this equation\n  have h\u2083 : 0 = -3 * rows + 5 * seats - 15 := by linarith\n  -- Rearrange terms to express seats in terms of rows\n  have h\u2084 : 5 * seats = 3 * rows + 15 := by linarith\n  have h\u2085 : seats = (3 * rows + 15) / 5 := by\n    rw [\u2190 mul_right_inj' (by norm_num : (5 : \u211a) \u2260 0)]  -- Multiply both sides by 1/5\n    rw [mul_div_cancel' _ (by norm_num : (5 : \u211a) \u2260 0)]  -- Cancel 5 on left side\n    exact h\u2084\n  -- Now substitute this expression for seats back into the original equation h\u2080\n  have h\u2086 : rows * ((3 * rows + 15) / 5) = 450 := by rw [\u2190 h\u2085, h\u2080]\n  -- Multiply both sides by 5 to eliminate denominator\n  have h\u2087 : rows * (3 * rows + 15) = 2250 := by\n    nlinarith\n  nlinarith",
+  "statistics": {
+    "original_errors": 11,
+    "decompositions_applied": 0,
+    "successful_syntheses": 2,
+    "failed_syntheses": {
+      "27": "Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+      "17": "Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+      "23": "Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+      "25": "Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes"
+    },
+    "timeout_syntheses": 4,
+    "attempts_per_line": {
+      "17": 3,
+      "23": 3,
+      "25": 3,
+      "27": 2,
+      "34": 2,
+      "37": 1
+    },
+    "remaining_errors": 5,
+    "fix_rate": 0.5454545454545454,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 37,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\nh\u2084 : 5 * seats = 3 * rows + 15\nh\u2085 : seats = (3 * rows + 15) / 5\nh\u2086 : rows * ((3 * rows + 15) / 5) = 450\nh\u2087 : rows * (3 * rows + 15) = 2250\n\u22a2 rows * 15 + rows ^ 2 * 3 - (rows * 15 + rows ^ 2 * 3) = 0",
+        "fix_time": 46.937002182006836,
+        "errors_after_this_fix": 7,
+        "fix_snippet": "nlinarith",
+        "dsl": "oneline(nlinarith)"
+      },
+      {
+        "pass": 2,
+        "line": 34,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?m.50310 = ?m.50311\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\nh\u2084 : 5 * seats = 3 * rows + 15\nh\u2085 : seats = (3 * rows + 15) / 5\nh\u2086 : rows * ((3 * rows + 15) / 5) = 450\n\u22a2 rows * (3 * rows + 15) = 2250",
+        "fix_time": 100.97222304344177,
+        "errors_after_this_fix": 7,
+        "fix_snippet": "nlinarith",
+        "dsl": "oneline(nlinarith)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 17,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\n\u22a2 rows * (seats - 3) + (seats - 3) * 5 = seats * 5 + (rows * seats - rows * 3) - 15",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 45.618027210235596
+      },
+      {
+        "pass": 1,
+        "line": 23,
+        "error_type": "failed_to_synthesize",
+        "original_error_message": "failed to synthesize\n  Neg \u2115\n\nAdditional diagnostic information may be available using the `set_option diagnostics true` command.",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.5535249710083
+      },
+      {
+        "pass": 1,
+        "line": 25,
+        "error_type": "linarith_failed",
+        "original_error_message": "linarith failed to find a contradiction\ncase h1.h\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\na\u271d : 5 * seats < 3 * rows + 15\n\u22a2 False failed",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 48.73681950569153
+      },
+      {
+        "pass": 1,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?m.49754 = ?m.49755\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\nh\u2084 : 5 * seats = 3 * rows + 15\n\u22a2 seats = (3 * rows + 15) / 5",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 57.447996616363525
+      },
+      {
+        "pass": 1,
+        "line": 34,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?m.50310 = ?m.50311\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\nh\u2084 : 5 * seats = 3 * rows + 15\nh\u2085 : seats = (3 * rows + 15) / 5\nh\u2086 : rows * ((3 * rows + 15) / 5) = 450\n\u22a2 rows * (3 * rows + 15) = 2250",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 58.89220833778381
+      },
+      {
+        "pass": 2,
+        "line": 17,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\n\u22a2 rows * (seats - 3) + (seats - 3) * 5 = seats * 5 + (rows * seats - rows * 3) - 15",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 114.78619050979614
+      },
+      {
+        "pass": 2,
+        "line": 23,
+        "error_type": "failed_to_synthesize",
+        "original_error_message": "failed to synthesize\n  Neg \u2115\n\nAdditional diagnostic information may be available using the `set_option diagnostics true` command.",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 113.89577460289001
+      },
+      {
+        "pass": 2,
+        "line": 25,
+        "error_type": "linarith_failed",
+        "original_error_message": "linarith failed to find a contradiction\ncase h1.h\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\na\u271d : 5 * seats < 3 * rows + 15\n\u22a2 False failed",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 117.92006921768188
+      }
+    ],
+    "timeout_fixes_details": [
+      {
+        "pass": 2,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?m.49754 = ?m.49755\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\nh\u2084 : 5 * seats = 3 * rows + 15\n\u22a2 seats = (3 * rows + 15) / 5",
+        "timeout_message": "Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+        "attempt_time": 124.34359407424927
+      },
+      {
+        "pass": 3,
+        "line": 17,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\n\u22a2 rows * (seats - 3) + (seats - 3) * 5 = seats * 5 + (rows * seats - rows * 3) - 15",
+        "timeout_message": "Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+        "attempt_time": 182.04224157333374
+      },
+      {
+        "pass": 3,
+        "line": 23,
+        "error_type": "failed_to_synthesize",
+        "original_error_message": "failed to synthesize\n  Neg \u2115\n\nAdditional diagnostic information may be available using the `set_option diagnostics true` command.",
+        "timeout_message": "Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+        "attempt_time": 180.65435552597046
+      },
+      {
+        "pass": 3,
+        "line": 25,
+        "error_type": "linarith_failed",
+        "original_error_message": "linarith failed to find a contradiction\ncase h1.h\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\na\u271d : 5 * seats < 3 * rows + 15\n\u22a2 False failed",
+        "timeout_message": "Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes",
+        "attempt_time": 189.08683371543884
+      }
+    ],
+    "remaining_errors_details": [
+      {
+        "line": 17,
+        "error_type": "other_error",
+        "message": "unsolved goals\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\n\u22a2 rows * (seats - 3) + (seats - 3) * 5 = seats * 5 + (rows * seats - rows * 3) - 15"
+      },
+      {
+        "line": 23,
+        "error_type": "failed_to_synthesize",
+        "message": "failed to synthesize\n  Neg \u2115\n\nAdditional diagnostic information may be available using the `set_option diagnostics true` command."
+      },
+      {
+        "line": 23,
+        "error_type": "linarith_failed",
+        "message": "linarith failed to find a contradiction\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\n\u22a2 False failed"
+      },
+      {
+        "line": 25,
+        "error_type": "linarith_failed",
+        "message": "linarith failed to find a contradiction\ncase h1.h\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\na\u271d : 5 * seats < 3 * rows + 15\n\u22a2 False failed"
+      },
+      {
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?m.49754 = ?m.49755\nrows seats : \u2115\nh\u2080 : rows * seats = 450\nh\u2081 : (rows + 5) * (seats - 3) = 450\nh\u2082 : 450 = 450 - 3 * rows + 5 * seats - 15\nh\u2083 : sorry\nh\u2084 : 5 * seats = 3 * rows + 15\n\u22a2 seats = (3 * rows + 15) / 5"
+      }
+    ],
+    "total_time": 1447.3089113235474,
+    "no_goals_fixes_applied": 2
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 11\nDecompositions applied: 0\nNo goals error fixes applied: 2\nSuccessful syntheses: 2\nTimed out syntheses: 4\nSynthesis attempts per line:\n  - Line 17: 3 attempts\n  - Line 23: 3 attempts\n  - Line 25: 3 attempts\n  - Line 27: 2 attempts\n  - Line 34: 2 attempts\n  - Line 37: 1 attempts\nTimed out syntheses (line: reason): 4\n  - Line 27: Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes...\n  - Line 17: Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes...\n  - Line 23: Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes...\n  - Line 25: Timed out: Synthesis timed out after 120 seconds: Synthesis timeout after 2 minutes...\nRemaining errors: 5\n\nRemaining Errors:\n  - Line 17: other_error - unsolved goals rows seats : \u2115 h\u2080 : rows * seats = 450 h\u2081 : (rows + 5) * (seats - 3) = 450 \u22a2 rows * (...\n  - Line 23: failed_to_synthesize - failed to synthesize   Neg \u2115  Additional diagnostic information may be available using the `set_opti...\n  - Line 23: linarith_failed - linarith failed to find a contradiction rows seats : \u2115 h\u2080 : rows * seats = 450 h\u2081 : (rows + 5) * (se...\n  - Line 25: linarith_failed - linarith failed to find a contradiction case h1.h rows seats : \u2115 h\u2080 : rows * seats = 450 h\u2081 : (rows ...\n  - Line 27: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   ?m.49754 = ...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.5455\nTotal time: 1447.31 seconds",
+  "dsl": "oneline(nlinarith)"
+}

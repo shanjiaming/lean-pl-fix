@@ -1,0 +1,62 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/105.lean",
+  "output_file": "./minif2f/lean_fixed/105_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For real numbers a and c, show that $2a(2+c)\\leq a^2+c^2+4(1+c)$.-/\ntheorem algebra_sqineq_2at2pclta2c2p41pc (a c : \u211d) :\n    2 * a * (2 + c) \u2264 a ^ 2 + c ^ 2 + 4 * (1 + c) := by\n  -- Our strategy is to rearrange the inequality into a sum of squares \u2265 0\n  -- First, let's expand both sides of the inequality\n  have key : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4 := by\n    -- Expand all terms on the left side\n    rw [mul_add, mul_comm (2 * a) c, mul_assoc 2 a c]  -- Expand 2*a*(2+c)\n    rw [add_mul, one_mul]  -- Expand 4*(1+c)\n    rw [pow_two, pow_two]  -- Expand a^2 and c^2\n    -- Now combine like terms and simplify\n    ring\n  -- The original inequality can now be rewritten using this identity\n  rw [\u2190 sub_nonneg, key]\n  -- Now we have (a-2)\u00b2 + (c-2)\u00b2 - 4 \u2265 0, which we can rearrange to:\n  -- (a-2)\u00b2 + (c-2)\u00b2 \u2265 4\n  -- However, this isn't always true, so our initial approach needs adjustment\n  -- Let's instead consider the expression as a quadratic in a\n  \n  -- Alternative approach: complete the square for the a terms\n  -- The inequality is equivalent to a\u00b2 - 2a(2+c) + c\u00b2 + 4 + 4c \u2265 0\n  -- Let's write this as a perfect square plus remaining terms\n  have h : a ^ 2 - 2 * a * (2 + c) + (2 + c) ^ 2 = (a - (2 + c)) ^ 2 := by\n    ring\n  -- Now rewrite the original expression using this identity\n  have expr_eq : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = \n      (a - (2 + c)) ^ 2 + (c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2) := by\n    rw [h]\n    ring\n  -- Simplify the remaining terms\n  have rem_eq : c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2 = 0 := by\n    ring\n  rw [expr_eq, rem_eq]\n  -- Now we have (a - (2 + c))\u00b2 + 0 \u2265 0\n  -- Since squares are always non-negative, this is true\n  simp only [add_zero]\n  apply pow_two_nonneg",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For real numbers a and c, show that $2a(2+c)\\leq a^2+c^2+4(1+c)$.-/\ntheorem algebra_sqineq_2at2pclta2c2p41pc (a c : \u211d) :\n    2 * a * (2 + c) \u2264 a ^ 2 + c ^ 2 + 4 * (1 + c) := by\n  -- Our strategy is to rearrange the inequality into a sum of squares \u2265 0\n  -- First, let's expand both sides of the inequality\n  have key : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4 := by\n    -- Expand all terms on the left side\n    rw [mul_add]\n    rw [mul_comm (2 * a) c]\n    rw [mul_assoc 2 a c]\n    rw [add_mul, one_mul]  -- Expand 4*(1+c)\n    rw [pow_two, pow_two]  -- Expand a^2 and c^2\n    -- Now combine like terms and simplify\n    ring\n  -- The original inequality can now be rewritten using this identity\n  rw [\u2190 sub_nonneg, key]\n  -- Now we have (a-2)\u00b2 + (c-2)\u00b2 - 4 \u2265 0, which we can rearrange to:\n  -- (a-2)\u00b2 + (c-2)\u00b2 \u2265 4\n  -- However, this isn't always true, so our initial approach needs adjustment\n  -- Let's instead consider the expression as a quadratic in a\n  \n  -- Alternative approach: complete the square for the a terms\n  -- The inequality is equivalent to a\u00b2 - 2a(2+c) + c\u00b2 + 4 + 4c \u2265 0\n  -- Let's write this as a perfect square plus remaining terms\n  have h : a ^ 2 - 2 * a * (2 + c) + (2 + c) ^ 2 = (a - (2 + c)) ^ 2 := by\n    ring\n  -- Now rewrite the original expression using this identity\n  have expr_eq : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = \n      (a - (2 + c)) ^ 2 + (c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2) := by\n    rw [mul_assoc]\n    ring\n  -- Simplify the remaining terms\n  have rem_eq : c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2 = 0 := by\n    ring\n  rw [expr_eq]\n  rw [rem_eq]\n  -- Now we have (a - (2 + c))\u00b2 + 0 \u2265 0\n  -- Since squares are always non-negative, this is true\n  simp only [add_zero]\n  apply pow_two_nonneg",
+  "statistics": {
+    "original_errors": 3,
+    "decompositions_applied": 2,
+    "successful_syntheses": 1,
+    "failed_syntheses": {
+      "16": "Synthesis failed: No solution found by synthesizer.",
+      "42": "Synthesis failed: No solution found by synthesizer."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 2,
+    "fix_rate": 0.3333333333333333,
+    "successful_fixes_details": [
+      {
+        "pass": 2,
+        "line": 37,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a ^ 2 - 2 * a * (2 + c) + (2 + c) ^ 2\na c : \u211d\nkey : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4\nh : a ^ 2 - 2 * a * (2 + c) + (2 + c) ^ 2 = (a - (2 + c)) ^ 2\n\u22a2 a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - (2 + c)) ^ 2 + (c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2)",
+        "fix_time": 1.3056411743164062,
+        "errors_after_this_fix": 2
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 2,
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  2 * a * c\na c : \u211d\n\u22a2 a ^ 2 + c ^ 2 + (4 * 1 + 4 * c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 14.344163179397583
+      },
+      {
+        "pass": 4,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c)\na c : \u211d\nkey : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4\nh : a ^ 2 - 2 * a * (2 + c) + (2 + c) ^ 2 = (a - (2 + c)) ^ 2\nexpr_eq : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - (2 + c)) ^ 2 + (c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2)\nrem_eq : c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2 = 0\n\u22a2 0 \u2264 (a - 2) ^ 2 + (c - 2) ^ 2 - 4",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 15.532660245895386
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  2 * a * c\na c : \u211d\n\u22a2 a ^ 2 + c ^ 2 + (4 * 1 + 4 * c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4"
+      },
+      {
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c)\na c : \u211d\nkey : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - 2) ^ 2 + (c - 2) ^ 2 - 4\nh : a ^ 2 - 2 * a * (2 + c) + (2 + c) ^ 2 = (a - (2 + c)) ^ 2\nexpr_eq : a ^ 2 + c ^ 2 + 4 * (1 + c) - 2 * a * (2 + c) = (a - (2 + c)) ^ 2 + (c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2)\nrem_eq : c ^ 2 + 4 * (1 + c) - (2 + c) ^ 2 = 0\n\u22a2 0 \u2264 (a - 2) ^ 2 + (c - 2) ^ 2 - 4"
+      }
+    ],
+    "total_time": 32.62260174751282
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 3\nDecompositions applied: 2\nSuccessful syntheses: 1\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 2\n  - Line 16: Synthesis failed: No solution found by synthesizer....\n  - Line 42: Synthesis failed: No solution found by synthesizer....\nRemaining errors: 2\n\nRemaining Errors:\n  - Line 16: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   2 * a * c a...\n  - Line 42: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   a ^ 2 + c ^...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.3333\nTotal time: 32.62 seconds"
+}

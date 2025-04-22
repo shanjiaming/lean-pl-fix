@@ -1,0 +1,196 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/89.lean",
+  "output_file": "./minif2f/lean_fixed/89_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for positive integers $n$ and $k$, if $k \\leq n$, then $\\sum_{k=1}^n (k*C_n^k) = n * 2^{n-1}$.-/\ntheorem numbertheory_sumkmulnckeqnmul2pownm1 (n : \u2115) (h\u2080 : 0 < n) :\n    (\u2211 k in Finset.Icc 1 n, k * Nat.choose n k) = n * 2 ^ (n - 1) := by\n  -- We'll prove this using induction on n. The base case is n = 1.\n  induction' n using Nat.strong_induction_on with n ih\n  -- Handle the base case where n = 1\n  cases' n with n\n  \u00b7 -- This case is n = 0, which contradicts our hypothesis 0 < n\n    contradiction\n  \u00b7 -- Now we have n = Nat.succ n (n+1 in usual notation)\n    cases' n with n\n    \u00b7 -- Base case: n = 1\n      -- The sum is just k=1 term: 1 * C(1,1) = 1\n      simp only [Finset.Icc_1_1, Finset.sum_singleton, Nat.choose_self, mul_one]\n      -- Right side is 1 * 2^(0) = 1\n      rw [Nat.sub_self, pow_zero, mul_one]\n    \u00b7 -- Inductive step: assume true for all m < n+2, prove for n+2\n      -- The sum we want to compute is from k=1 to n+2 of k*C(n+2,k)\n      -- We'll use the binomial coefficient identity: C(n+2,k) = C(n+1,k) + C(n+1,k-1)\n      have sum_split : (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 2) k) =\n          (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) k) +\n          (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) (k - 1)) := by\n        -- Apply the binomial coefficient identity to each term\n        simp_rw [Nat.choose_succ_succ, add_mul]\n        -- Split the sum into two sums\n        rw [Finset.sum_add_distrib]\n      \n      -- The first sum can be written as the sum from 1 to n+1 (since C(n+1,n+2)=0)\n      have sum1_eq : (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) k) =\n          (\u2211 k in Finset.Icc 1 (n + 1), k * Nat.choose (n + 1) k) := by\n        -- The extra term at n+2 is zero because C(n+1,n+2)=0\n        rw [Finset.Icc_1_eq_Ioc, Finset.sum_Ioc_eq_sum_Icc]\n        apply Finset.sum_congr\n        \u00b7 rw [Finset.Icc_eq_Ioc, Nat.lt_succ_iff, Nat.succ_le_iff]\n          exact Nat.zero_lt_succ _\n        \u00b7 intro k hk\n          rfl\n        \u00b7 simp only [Nat.choose_eq_zero_of_lt]\n          simp only [Finset.mem_Icc] at hk\n          rw [Nat.lt_succ_iff] at hk\n          exact hk.2\n\n      -- The second sum can be reindexed by setting j = k-1\n      have sum2_eq : (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) (k - 1)) =\n          (\u2211 j in Finset.Icc 0 (n + 1), (j + 1) * Nat.choose (n + 1) j) := by\n        -- Reindex the sum using k = j + 1\n        rw [Finset.sum_Icc_Ico_Ioc_Ioo]\n        apply Finset.sum_bij (fun k _ => k - 1)\n        \u00b7 intro k hk\n          simp at hk\n          simp [hk.1, Nat.sub_le]\n        \u00b7 intro k hk\n          simp at hk\n          rw [Nat.sub_add_cancel hk.1]\n        \u00b7 intro k\u2081 k\u2082 hk\u2081 hk\u2082 h\n          exact Nat.sub_right_inj h\n        \u00b7 intro j hj\n          simp at hj\n          use j + 1\n          simp [hj.1, Nat.succ_le_succ hj.2, Nat.add_sub_cancel]\n      \n      -- Now we can apply the induction hypothesis to the first sum\n      have ih1 := ih (n + 1) (Nat.lt_succ_self _)\n      -- The first sum becomes (n+1)*2^n\n      rw [sum1_eq] at sum_split\n      rw [ih1] at sum_split\n      \n      -- For the second sum, we split it into two parts\n      have sum2_split : (\u2211 j in Finset.Icc 0 (n + 1), (j + 1) * Nat.choose (n + 1) j) =\n          (\u2211 j in Finset.Icc 0 (n + 1), j * Nat.choose (n + 1) j) +\n          (\u2211 j in Finset.Icc 0 (n + 1), Nat.choose (n + 1) j) := by\n        -- Split (j+1)*C(n+1,j) into j*C(n+1,j) + C(n+1,j)\n        simp_rw [add_mul, one_mul]\n        rw [Finset.sum_add_distrib]\n      \n      -- The first part of the split sum2 is almost the same as sum1\n      have sum2_part1 : (\u2211 j in Finset.Icc 0 (n + 1), j * Nat.choose (n + 1) j) =\n          (\u2211 j in Finset.Icc 1 (n + 1), j * Nat.choose (n + 1) j) := by\n        -- The j=0 term is zero, so we can start from j=1\n        rw [\u2190 Finset.sum_Ico_Ioc_Icc, Finset.Ico_eq_empty, Finset.sum_empty, zero_add]\n        simp [Nat.succ_pos]\n      \n      -- The second part is just the sum of binomial coefficients 2^(n+1)\n      have sum2_part2 : (\u2211 j in Finset.Icc 0 (n + 1), Nat.choose (n + 1) j) = 2 ^ (n + 1) := by\n        -- This is the well-known sum of binomial coefficients\n        rw [Finset.sum_Icc_eq_sum_range]\n        simp [Nat.choose_symm, Nat.sum_choose]\n      \n      -- Now apply the induction hypothesis to sum2_part1\n      rw [sum2_part1] at sum2_split\n      rw [ih1] at sum2_split\n      rw [sum2_part2] at sum2_split\n      \n      -- Now combine all the results\n      rw [sum2_eq, sum2_split] at sum_split\n      -- Simplify the expression\n      rw [sum_split]\n      -- We now have: (n+1)*2^n + (n+1)*2^n + 2^(n+1) = (n+2)*2^(n+1)\n      -- Let's simplify this\n      ring_nf\n      -- (n+1)*2^n + (n+1)*2^n = 2*(n+1)*2^n = (n+1)*2^(n+1)\n      rw [\u2190 mul_add, \u2190 pow_succ]\n      -- Now we have (n+1)*2^(n+1) + 2^(n+1) = (n+2)*2^(n+1)\n      rw [\u2190 add_mul, add_comm _ 1]\n      -- Which simplifies to (n+2)*2^(n+1) as required\n      simp only [Nat.add_succ_sub_one, add_zero]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for positive integers $n$ and $k$, if $k \\leq n$, then $\\sum_{k=1}^n (k*C_n^k) = n * 2^{n-1}$.-/\ntheorem numbertheory_sumkmulnckeqnmul2pownm1 (n : \u2115) (h\u2080 : 0 < n) :\n    (\u2211 k in Finset.Icc 1 n, k * Nat.choose n k) = n * 2 ^ (n - 1) := by\n  -- We'll prove this using induction on n. The base case is n = 1.\n  induction' n using Nat.strong_induction_on with n ih\n  -- Handle the base case where n = 1\n  cases' n with n\n  \u00b7 -- This case is n = 0, which contradicts our hypothesis 0 < n\n    contradiction\n  \u00b7 -- Now we have n = Nat.succ n (n+1 in usual notation)\n    cases' n with n\n    \u00b7 -- Base case: n = 1\n      -- The sum is just k=1 term: 1 * C(1,1) = 1\n      simp\n      -- Right side is 1 * 2^(0) = 1\n    \u00b7 -- Inductive step: assume true for all m < n+2, prove for n+2\n      -- The sum we want to compute is from k=1 to n+2 of k*C(n+2,k)\n      -- We'll use the binomial coefficient identity: C(n+2,k) = C(n+1,k) + C(n+1,k-1)\n      have sum_split : (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 2) k) =\n          (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) k) +\n          (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) (k - 1)) := by\n        -- Apply the binomial coefficient identity to each term\n        simp_rw [Nat.choose_succ_succ, add_mul]\n        -- Split the sum into two sums\n        rw [Finset.sum_add_distrib]\n      \n      -- The first sum can be written as the sum from 1 to n+1 (since C(n+1,n+2)=0)\n      have sum1_eq : (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) k) =\n          (\u2211 k in Finset.Icc 1 (n + 1), k * Nat.choose (n + 1) k) := by\n        -- The extra term at n+2 is zero because C(n+1,n+2)=0\n        rw [Finset.Icc_1_eq_Ioc]\n        rw [Finset.sum_Ioc_eq_sum_Icc]\n        apply Finset.sum_congr\n        \u00b7 rw [Finset.Icc_eq_Ioc, Nat.lt_succ_iff, Nat.succ_le_iff]\n          exact Nat.zero_lt_succ _\n        \u00b7 intro k hk\n          rfl\n        \u00b7 simp only [Nat.choose_eq_zero_of_lt]\n          simp only [Finset.mem_Icc] at hk\n          rw [Nat.lt_succ_iff] at hk\n          exact hk.2\n\n      -- The second sum can be reindexed by setting j = k-1\n      have sum2_eq : (\u2211 k in Finset.Icc 1 (n + 2), k * Nat.choose (n + 1) (k - 1)) =\n          (\u2211 j in Finset.Icc 0 (n + 1), (j + 1) * Nat.choose (n + 1) j) := by\n        -- Reindex the sum using k = j + 1\n        rw [Finset.sum_Icc_Ico_Ioc_Ioo]\n        apply Finset.sum_bij (fun k _ => k - 1)\n        \u00b7 intro k hk\n          simp at hk\n          simp [hk.1, Nat.sub_le]\n        \u00b7 intro k hk\n          simp at hk\n          rw [Nat.sub_add_cancel hk.1]\n        \u00b7 intro k\u2081 k\u2082 hk\u2081 hk\u2082 h\n          exact Nat.sub_right_inj h\n        \u00b7 intro j hj\n          simp at hj\n          use j + 1\n          simp [hj.1, Nat.succ_le_succ hj.2, Nat.add_sub_cancel]\n      \n      -- Now we can apply the induction hypothesis to the first sum\n      have ih1 := ih (n + 1) (Nat.lt_succ_self _)\n      -- The first sum becomes (n+1)*2^n\n      rw [sum1_eq] at sum_split\n      rw [ih1] at sum_split\n      \n      -- For the second sum, we split it into two parts\n      have sum2_split : (\u2211 j in Finset.Icc 0 (n + 1), (j + 1) * Nat.choose (n + 1) j) =\n          (\u2211 j in Finset.Icc 0 (n + 1), j * Nat.choose (n + 1) j) +\n          (\u2211 j in Finset.Icc 0 (n + 1), Nat.choose (n + 1) j) := by\n        -- Split (j+1)*C(n+1,j) into j*C(n+1,j) + C(n+1,j)\n        simp_rw [add_mul, one_mul]\n        rw [Finset.sum_add_distrib]\n      \n      -- The first part of the split sum2 is almost the same as sum1\n      have sum2_part1 : (\u2211 j in Finset.Icc 0 (n + 1), j * Nat.choose (n + 1) j) =\n          (\u2211 j in Finset.Icc 1 (n + 1), j * Nat.choose (n + 1) j) := by\n        -- The j=0 term is zero, so we can start from j=1\n        rw [\u2190 Finset.sum_Ico_Ioc_Icc]\n        rw [Finset.Ico_eq_empty]\n        rw [Finset.sum_empty]\n        rw [zero_add]\n        simp [Nat.succ_pos]\n      \n      -- The second part is just the sum of binomial coefficients 2^(n+1)\n      have sum2_part2 : (\u2211 j in Finset.Icc 0 (n + 1), Nat.choose (n + 1) j) = 2 ^ (n + 1) := by\n        -- This is the well-known sum of binomial coefficients\n        rw [Finset.sum_Icc_eq_sum_range]\n        simp [Nat.choose_symm, Nat.sum_choose]\n      \n      -- Now apply the induction hypothesis to sum2_part1\n      rw [sum2_part1] at sum2_split\n      rw [ih1] at sum2_split\n      rw [sum2_part2] at sum2_split\n      \n      -- Now combine all the results\n      rw [sum2_eq, sum2_split] at sum_split\n      -- Simplify the expression\n      rw [sum_split]\n      -- We now have: (n+1)*2^n + (n+1)*2^n + 2^(n+1) = (n+2)*2^(n+1)\n      -- Let's simplify this\n      ring_nf\n      -- (n+1)*2^n + (n+1)*2^n = 2*(n+1)*2^n = (n+1)*2^(n+1)\n      rw [\u2190 mul_add]\n      rw [\u2190 pow_succ]\n      -- Now we have (n+1)*2^(n+1) + 2^(n+1) = (n+2)*2^(n+1)\n      rw [\u2190 add_mul, add_comm _ 1]\n      -- Which simplifies to (n+2)*2^(n+1) as required\n      simp only [Nat.add_succ_sub_one, add_zero]",
+  "statistics": {
+    "original_errors": 8,
+    "decompositions_applied": 3,
+    "successful_syntheses": 1,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "21": 1,
+      "30": 4,
+      "38": 3,
+      "54": 3,
+      "87": 2,
+      "96": 2,
+      "112": 1
+    },
+    "remaining_errors": 6,
+    "fix_rate": 0.25,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 21,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.Icc_1_1'",
+        "fix_time": 4.425028562545776,
+        "errors_after_this_fix": 7,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 3,
+        "line": 30,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.63453769683838
+      },
+      {
+        "pass": 4,
+        "line": 30,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.463875770568848
+      },
+      {
+        "pass": 4,
+        "line": 38,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.Icc_1_eq_Ioc'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.912939071655273
+      },
+      {
+        "pass": 4,
+        "line": 54,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Icc_Ico_Ioc_Ioo'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.48244881629944
+      },
+      {
+        "pass": 5,
+        "line": 30,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.490384340286255
+      },
+      {
+        "pass": 5,
+        "line": 38,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.Icc_1_eq_Ioc'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.02786421775818
+      },
+      {
+        "pass": 5,
+        "line": 54,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Icc_Ico_Ioc_Ioo'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 23.031503200531006
+      },
+      {
+        "pass": 5,
+        "line": 87,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Ico_Ioc_Icc'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.624597549438477
+      },
+      {
+        "pass": 5,
+        "line": 96,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Icc_eq_sum_range'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.30537724494934
+      },
+      {
+        "pass": 6,
+        "line": 30,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.367461919784546
+      },
+      {
+        "pass": 6,
+        "line": 38,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.Icc_1_eq_Ioc'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.37201976776123
+      },
+      {
+        "pass": 6,
+        "line": 54,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Icc_Ico_Ioc_Ioo'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.82185649871826
+      },
+      {
+        "pass": 6,
+        "line": 87,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Ico_Ioc_Icc'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.475465059280396
+      },
+      {
+        "pass": 6,
+        "line": 96,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Finset.sum_Icc_eq_sum_range'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 23.124029636383057
+      },
+      {
+        "pass": 6,
+        "line": 112,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b + ?a * ?c\ncase h.succ.succ\nn : \u2115\nih : \u2200 m < n + 1 + 1, 0 < m \u2192 \u2211 k \u2208 Finset.Icc 1 m, k * m.choose k = m * 2 ^ (m - 1)\nh\u2080 : 0 < n + 1 + 1\nsum_split :\n  \u2211 k \u2208 Finset.Icc 1 (n + 2), k * (n + 2).choose k =\n    (n + 1) * 2 ^ (n + 1 - 1) + ((n + 1) * 2 ^ (n + 1 - 1) + 2 ^ (n + 1))\nsum1_eq : \u2211 k \u2208 Finset.Icc 1 (n + 2), k * (n + 1).choose k = \u2211 k \u2208 Finset.Icc 1 (n + 1), k * (n + 1).choose k\nsum2_eq :\n  \u2211 k \u2208 Finset.Icc 1 (n + 2), k * (n + 1).choose (k - 1) = \u2211 j \u2208 Finset.Icc 0 (n + 1), (j + 1) * (n + 1).choose j\nih1 : 0 < n + 1 \u2192 \u2211 k \u2208 Finset.Icc 1 (n + 1), k * (n + 1).choose k = (n + 1) * 2 ^ (n + 1 - 1)\nsum2_split : \u2211 j \u2208 Finset.Icc 0 (n + 1), (j + 1) * (n + 1).choose j = (n + 1) * 2 ^ (n + 1 - 1) + 2 ^ (n + 1)\nsum2_part1 : \u2211 j \u2208 Finset.Icc 0 (n + 1), j * (n + 1).choose j = \u2211 j \u2208 Finset.Icc 1 (n + 1), j * (n + 1).choose j\nsum2_part2 : \u2211 j \u2208 Finset.Icc 0 (n + 1), (n + 1).choose j = 2 ^ (n + 1)\n\u22a2 n * 2 ^ (1 + n - 1) * 2 + 2 ^ n * 2 + 2 ^ (1 + n - 1) * 2 = n * 2 ^ (2 + n - 1) + 2 ^ (2 + n - 1) * 2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 24.731833457946777
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 30,
+        "error_type": "simp_failed",
+        "message": "simp made no progress"
+      },
+      {
+        "line": 38,
+        "error_type": "unknown_constant",
+        "message": "unknown constant 'Finset.Icc_1_eq_Ioc'"
+      },
+      {
+        "line": 54,
+        "error_type": "unknown_constant",
+        "message": "unknown constant 'Finset.sum_Icc_Ico_Ioc_Ioo'"
+      },
+      {
+        "line": 87,
+        "error_type": "unknown_constant",
+        "message": "unknown constant 'Finset.sum_Ico_Ioc_Icc'"
+      },
+      {
+        "line": 96,
+        "error_type": "unknown_constant",
+        "message": "unknown constant 'Finset.sum_Icc_eq_sum_range'"
+      },
+      {
+        "line": 112,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b + ?a * ?c\ncase h.succ.succ\nn : \u2115\nih : \u2200 m < n + 1 + 1, 0 < m \u2192 \u2211 k \u2208 Finset.Icc 1 m, k * m.choose k = m * 2 ^ (m - 1)\nh\u2080 : 0 < n + 1 + 1\nsum_split :\n  \u2211 k \u2208 Finset.Icc 1 (n + 2), k * (n + 2).choose k =\n    (n + 1) * 2 ^ (n + 1 - 1) + ((n + 1) * 2 ^ (n + 1 - 1) + 2 ^ (n + 1))\nsum1_eq : \u2211 k \u2208 Finset.Icc 1 (n + 2), k * (n + 1).choose k = \u2211 k \u2208 Finset.Icc 1 (n + 1), k * (n + 1).choose k\nsum2_eq :\n  \u2211 k \u2208 Finset.Icc 1 (n + 2), k * (n + 1).choose (k - 1) = \u2211 j \u2208 Finset.Icc 0 (n + 1), (j + 1) * (n + 1).choose j\nih1 : 0 < n + 1 \u2192 \u2211 k \u2208 Finset.Icc 1 (n + 1), k * (n + 1).choose k = (n + 1) * 2 ^ (n + 1 - 1)\nsum2_split : \u2211 j \u2208 Finset.Icc 0 (n + 1), (j + 1) * (n + 1).choose j = (n + 1) * 2 ^ (n + 1 - 1) + 2 ^ (n + 1)\nsum2_part1 : \u2211 j \u2208 Finset.Icc 0 (n + 1), j * (n + 1).choose j = \u2211 j \u2208 Finset.Icc 1 (n + 1), j * (n + 1).choose j\nsum2_part2 : \u2211 j \u2208 Finset.Icc 0 (n + 1), (n + 1).choose j = 2 ^ (n + 1)\n\u22a2 n * 2 ^ (1 + n - 1) * 2 + 2 ^ n * 2 + 2 ^ (1 + n - 1) * 2 = n * 2 ^ (2 + n - 1) + 2 ^ (2 + n - 1) * 2"
+      }
+    ],
+    "total_time": 343.1217803955078,
+    "no_goals_fixes_applied": 1
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 8\nDecompositions applied: 3\nNo goals error fixes applied: 1\nSuccessful syntheses: 1\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 21: 1 attempts\n  - Line 30: 4 attempts\n  - Line 38: 3 attempts\n  - Line 54: 3 attempts\n  - Line 87: 2 attempts\n  - Line 96: 2 attempts\n  - Line 112: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 6\n\nRemaining Errors:\n  - Line 30: simp_failed - simp made no progress...\n  - Line 38: unknown_constant - unknown constant 'Finset.Icc_1_eq_Ioc'...\n  - Line 54: unknown_constant - unknown constant 'Finset.sum_Icc_Ico_Ioc_Ioo'...\n  - Line 87: unknown_constant - unknown constant 'Finset.sum_Ico_Ioc_Icc'...\n  - Line 96: unknown_constant - unknown constant 'Finset.sum_Icc_eq_sum_range'...\n  - Line 112: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   ?a * ?b + ?...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.2500\nTotal time: 343.12 seconds",
+  "dsl": "oneline(simp)"
+}

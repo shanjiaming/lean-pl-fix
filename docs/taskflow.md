@@ -87,6 +87,37 @@ The goal is to enhance the `synthesize_all_fixes` function to handle complex `rw
 
 **Status:** Completed.
 
+### Improved Error Handling and Fix Synthesis (Completed)
+
+**Understanding:**
+
+The goal is to enhance the error handling and synthesis tracking in the Lean enumerator, particularly focusing on failed syntheses and synthesis attempts per line tracking.
+
+**Plan (as implemented):**
+
+1. **Enhanced Error Tracking:**
+   * Improved the `failed_syntheses` tracking to better record synthesis failures by line number
+   * Added `attempts_per_line` counter to track how many synthesis attempts were made for each line
+   * This allows better analysis of which lines are problematic and might need manual intervention
+
+2. **Fixed Local Theorem Error Detection:**
+   * Improved the `is_local_theorem_error` function to correctly identify errors related to local theorems
+   * Enhanced the logic for checking if an error is related to a theorem defined in the local context
+   * Fixed issues with theorem name extraction and verification
+
+3. **Improved Have Tyrell Specification Selection:**
+   * Enhanced the logic for selecting the appropriate Tyrell specification file when dealing with local theorem errors
+   * Made the system more robust in falling back to appropriate specifications when specific ones are not available
+   * Improved logging and error reporting for specification selection
+
+**Benefits:**
+* Better tracking of synthesis attempts provides more detailed information for debugging
+* Improved error analysis helps identify patterns in failures
+* More accurate theorem error detection leads to better specification selection
+* Overall more robust and informative synthesis process
+
+**Status:** Completed.
+
 ## 当前任务流程
 
 以下是当前的任务流程和状态：

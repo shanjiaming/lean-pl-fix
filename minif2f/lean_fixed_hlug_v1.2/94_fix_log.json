@@ -1,0 +1,244 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/94.lean",
+  "output_file": "./minif2f/lean_fixed/94_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- $\n\\textbf{(A)}\\ 5 \\qquad\n\\textbf{(B)}\\ 6 \\qquad\n\\textbf{(C)}\\ 7 \\qquad\n\\textbf{(D)}\\ 8 \\qquad\n\\textbf{(E)}\\ 9 $ Show that it is \\textbf{(D)}\\ 8.-/\ntheorem amc12a_2011_p18 (x y : \u211d) (h\u2080 : abs (x + y) + abs (x - y) = 2) :\n  x ^ 2 - 6 * x + y ^ 2 \u2264 8 := by\n  -- First, we interpret the given condition |x + y| + |x - y| = 2\n  -- This expression represents the sum of Manhattan distances, which for real numbers\n  -- equals 2*max(|x|, |y|). Therefore, max(|x|, |y|) = 1.\n\n  -- We can formalize this observation with the following lemma:\n  have h\u2081 : max (|x|) (|y|) = 1 := by\n    -- The key property is that for any real numbers a b, |a + b| + |a - b| = 2*max(|a|, |b|)\n    -- We can prove this by considering cases based on the signs and magnitudes of a and b\n    rw [\u2190 abs_add_max]\n    exact h\u2080\n\n  -- From h\u2081, we know both |x| and |y| are \u2264 1, since max(|x|, |y|) = 1\n  have hx : |x| \u2264 1 := le_max_left_of_le h\u2081.le\n  have hy : |y| \u2264 1 := le_max_right_of_le h\u2081.le\n\n  -- Our goal is to maximize x^2 - 6x + y^2 under the constraints |x| \u2264 1, |y| \u2264 1\n  -- Since y^2 is always non-negative, to maximize the expression we should minimize y^2\n  -- The minimal y^2 is 0 (when y = 0), so we can focus on maximizing x^2 - 6x\n\n  -- The expression x^2 - 6x is a quadratic function. To find its maximum on [-1, 1]:\n  -- The vertex of the parabola is at x = -b/(2a) = 6/2 = 3, but 3 \u2209 [-1, 1]\n  -- Therefore, the maximum on [-1, 1] occurs at one of the endpoints\n\n  -- Evaluate the expression at the endpoints:\n  -- At x = 1: 1 - 6 + y^2 = -5 + y^2 \u2264 -5 + 1 = -4 (since y^2 \u2264 1)\n  -- At x = -1: 1 + 6 + y^2 = 7 + y^2 \u2264 7 + 1 = 8 (since y^2 \u2264 1)\n  -- The maximum value occurs at x = -1, y = \u00b11, giving value 8\n\n  -- Now we formalize this reasoning:\n  -- First, note that y^2 \u2264 1 since |y| \u2264 1\n  have y_sq_le : y^2 \u2264 1 := by\n    rw [sq_abs]\n    exact pow_le_one _ (abs_nonneg _) hy\n\n  -- The expression x^2 - 6x + y^2 \u2264 x^2 - 6x + 1 (since y^2 \u2264 1)\n  -- So it suffices to show x^2 - 6x + 1 \u2264 8, or equivalently x^2 - 6x - 7 \u2264 0\n  -- Let's define f(x) = x^2 - 6x - 7 and show it's \u2264 0 on [-1, 1]\n\n  -- First, compute f at the endpoints:\n  have f_at_1 : (1:\u211d)^2 - 6*1 - 7 = -12 := by norm_num\n  have f_at_neg1 : (-1:\u211d)^2 - 6*(-1) - 7 = 0 := by norm_num\n\n  -- The derivative f'(x) = 2x - 6 is negative for all x \u2264 3, so f is decreasing on [-1, 1]\n  -- Therefore, the maximum of f on [-1, 1] is at x = -1, where f(-1) = 0\n\n  -- Thus, x^2 - 6x - 7 \u2264 0 on [-1, 1], so x^2 - 6x + y^2 \u2264 x^2 - 6x + 1 \u2264 7 + 1 = 8\n  -- Now we can complete the proof:\n\n  -- Start with the original expression\n  calc x^2 - 6*x + y^2\n    -- Bound y^2 by 1\n    _ \u2264 x^2 - 6*x + 1 := add_le_add_left y_sq_le _\n    -- Rewrite as (x^2 - 6x - 7) + 8\n    _ = (x^2 - 6*x - 7) + 8 := by ring\n    -- Now we need to show x^2 - 6x - 7 \u2264 0\n    -- Since |x| \u2264 1, and the function is decreasing, its maximum is at x = -1\n    _ \u2264 0 + 8 := by\n      -- The maximum of x^2 - 6x - 7 on [-1,1] is at x = -1\n      have : \u2200 x \u2208 Set.Icc (-1:\u211d) 1, x^2 - 6*x - 7 \u2264 0 := by\n        intro x \u27e8hx1, hx2\u27e9\n        -- The function is decreasing on this interval (derivative is negative)\n        have deriv : \u2200 x \u2208 Set.Icc (-1:\u211d) 1, deriv (fun x => x^2 - 6*x - 7) x < 0 := by\n          intro x _\n          simp [deriv]\n          linarith\n        -- Therefore the maximum is at the left endpoint x = -1\n        have : x^2 - 6*x - 7 \u2264 (-1)^2 - 6*(-1) - 7 := by\n          apply ConvexOn.le_on_segment'\n          \u00b7 exact fun x _ => DifferentiableAt.differentiableWithinAt (by simp)\n          \u00b7 intro x hx\n            apply deriv x hx.1\n          \u00b7 exact \u27e8hx1, hx2\u27e9\n          \u00b7 exact \u27e8le_refl _, by linarith\u27e9\n        rw [f_at_neg1] at this\n        exact this\n      -- Apply this fact using that |x| \u2264 1 implies x \u2208 [-1,1]\n      have : x \u2208 Set.Icc (-1:\u211d) 1 := \u27e8neg_le_abs_self x \u25b8 hx, abs_le.mp hx\u27e9\n      exact add_le_add (this x this) (le_refl _)\n    -- Final simplification\n    _ = 8 := by simp",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- $\n\\textbf{(A)}\\ 5 \\qquad\n\\textbf{(B)}\\ 6 \\qquad\n\\textbf{(C)}\\ 7 \\qquad\n\\textbf{(D)}\\ 8 \\qquad\n\\textbf{(E)}\\ 9 $ Show that it is \\textbf{(D)}\\ 8.-/\ntheorem amc12a_2011_p18 (x y : \u211d) (h\u2080 : abs (x + y) + abs (x - y) = 2) :\n  x ^ 2 - 6 * x + y ^ 2 \u2264 8 := by\n  -- First, we interpret the given condition |x + y| + |x - y| = 2\n  -- This expression represents the sum of Manhattan distances, which for real numbers\n  -- equals 2*max(|x|, |y|). Therefore, max(|x|, |y|) = 1.\n\n  -- We can formalize this observation with the following lemma:\n  have h\u2081 : max (|x|) (|y|) = 1 := by\n    -- The key property is that for any real numbers a b, |a + b| + |a - b| = 2*max(|a|, |b|)\n    -- We can prove this by considering cases based on the signs and magnitudes of a and b\n    rw [\u2190 abs_add_max]\n    exact h\u2080\n\n  -- From h\u2081, we know both |x| and |y| are \u2264 1, since max(|x|, |y|) = 1\n  have hx : |x| \u2264 1 := le_max_left_of_le h\u2081.le\n  simp\n\n  -- Our goal is to maximize x^2 - 6x + y^2 under the constraints |x| \u2264 1, |y| \u2264 1\n  -- Since y^2 is always non-negative, to maximize the expression we should minimize y^2\n  -- The minimal y^2 is 0 (when y = 0), so we can focus on maximizing x^2 - 6x\n\n  -- The expression x^2 - 6x is a quadratic function. To find its maximum on [-1, 1]:\n  -- The vertex of the parabola is at x = -b/(2a) = 6/2 = 3, but 3 \u2209 [-1, 1]\n  -- Therefore, the maximum on [-1, 1] occurs at one of the endpoints\n\n  -- Evaluate the expression at the endpoints:\n  -- At x = 1: 1 - 6 + y^2 = -5 + y^2 \u2264 -5 + 1 = -4 (since y^2 \u2264 1)\n  -- At x = -1: 1 + 6 + y^2 = 7 + y^2 \u2264 7 + 1 = 8 (since y^2 \u2264 1)\n  -- The maximum value occurs at x = -1, y = \u00b11, giving value 8\n\n  -- Now we formalize this reasoning:\n  -- First, note that y^2 \u2264 1 since |y| \u2264 1\n  have y_sq_le : y^2 \u2264 1 := by\n    rw [sq_abs]\n    exact pow_le_one _ (abs_nonneg _) hy\n\n  -- The expression x^2 - 6x + y^2 \u2264 x^2 - 6x + 1 (since y^2 \u2264 1)\n  -- So it suffices to show x^2 - 6x + 1 \u2264 8, or equivalently x^2 - 6x - 7 \u2264 0\n  -- Let's define f(x) = x^2 - 6x - 7 and show it's \u2264 0 on [-1, 1]\n\n  -- First, compute f at the endpoints:\n  have f_at_1 : (1:\u211d)^2 - 6*1 - 7 = -12 := by norm_num\n  have f_at_neg1 : (-1:\u211d)^2 - 6*(-1) - 7 = 0 := by norm_num\n\n  -- The derivative f'(x) = 2x - 6 is negative for all x \u2264 3, so f is decreasing on [-1, 1]\n  -- Therefore, the maximum of f on [-1, 1] is at x = -1, where f(-1) = 0\n\n  -- Thus, x^2 - 6x - 7 \u2264 0 on [-1, 1], so x^2 - 6x + y^2 \u2264 x^2 - 6x + 1 \u2264 7 + 1 = 8\n  -- Now we can complete the proof:\n\n  -- Start with the original expression\n  calc x^2 - 6*x + y^2\n    -- Bound y^2 by 1\n    _ \u2264 x^2 - 6*x + 1 := add_le_add_left y_sq_le _\n    -- Rewrite as (x^2 - 6x - 7) + 8\n    _ = (x^2 - 6*x - 7) + 8 := by ring\n    -- Now we need to show x^2 - 6x - 7 \u2264 0\n    -- Since |x| \u2264 1, and the function is decreasing, its maximum is at x = -1\n    _ \u2264 0 + 8 := by\n      -- The maximum of x^2 - 6x - 7 on [-1,1] is at x = -1\n      have : \u2200 x \u2208 Set.Icc (-1:\u211d) 1, x^2 - 6*x - 7 \u2264 0 := by\n        intro x \u27e8hx1, hx2\u27e9\n        -- The function is decreasing on this interval (derivative is negative)\n        have deriv : \u2200 x \u2208 Set.Icc (-1:\u211d) 1, deriv (fun x => x^2 - 6*x - 7) x < 0 := by\n          intro x _\n          simp [deriv]\n          linarith\n        -- Therefore the maximum is at the left endpoint x = -1\n        have : x^2 - 6*x - 7 \u2264 (-1)^2 - 6*(-1) - 7 := by\n          nlinarith\n        rw [f_at_neg1] at this\n        exact this\n      -- Apply this fact using that |x| \u2264 1 implies x \u2208 [-1,1]\n      simp\n      exact add_le_add (this x this) (le_refl _)\n    -- Final simplification\n    _ = 8 := by simp",
+  "statistics": {
+    "original_errors": 8,
+    "decompositions_applied": 0,
+    "successful_syntheses": 3,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "24": 5,
+      "28": 5,
+      "29": 1,
+      "47": 4,
+      "79": 4,
+      "83": 1,
+      "87": 1,
+      "88": 1
+    },
+    "remaining_errors": 5,
+    "fix_rate": 0.375,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 29,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'le_max_right_of_le'",
+        "fix_time": 11.284088373184204,
+        "errors_after_this_fix": 7,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      },
+      {
+        "pass": 2,
+        "line": 83,
+        "error_type": "apply_failed",
+        "original_error_message": "tactic 'apply' failed, failed to unify\n  ?f (?a \u2022 ?x + ?b \u2022 ?y) \u2264 ?f ?x \u2294 ?f ?y\nwith\n  x ^ 2 - 6 * x - 7 \u2264 (-1) ^ 2 - 6 * -1 - 7\nx\u271d y : \u211d\nh\u2080 : |x\u271d + y| + |x\u271d - y| = 2\nh\u2081 : |x\u271d| \u2294 |y| = 1\nhx : |x\u271d| \u2264 1\ny_sq_le : y ^ 2 \u2264 1\nf_at_1 : 1 ^ 2 - 6 * 1 - 7 = -12\nf_at_neg1 : (-1) ^ 2 - 6 * -1 - 7 = 0\nx : \u211d\nhx1 : -1 \u2264 x\nhx2 : x \u2264 1\nderiv : \u2200 x \u2208 Set.Icc (-1) 1, _root_.deriv (fun x => x ^ 2 - 6 * x - 7) x < 0\n\u22a2 x ^ 2 - 6 * x - 7 \u2264 (-1) ^ 2 - 6 * -1 - 7",
+        "fix_time": 46.879488945007324,
+        "errors_after_this_fix": 7,
+        "fix_snippet": "nlinarith",
+        "dsl": "oneline(nlinarith)"
+      },
+      {
+        "pass": 4,
+        "line": 87,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'neg_le_abs_self'",
+        "fix_time": 19.975483417510986,
+        "errors_after_this_fix": 5,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'abs_add_max'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 63.51037406921387
+      },
+      {
+        "pass": 1,
+        "line": 28,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'le_max_left_of_le'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.40960717201233
+      },
+      {
+        "pass": 2,
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'abs_add_max'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 64.58943128585815
+      },
+      {
+        "pass": 2,
+        "line": 28,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'le_max_left_of_le'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 41.47201108932495
+      },
+      {
+        "pass": 2,
+        "line": 47,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |?a| ^ 2\nx y : \u211d\nh\u2080 : |x + y| + |x - y| = 2\nh\u2081 : |x| \u2294 |y| = 1\nhx : |x| \u2264 1\n\u22a2 y ^ 2 \u2264 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 64.38008522987366
+      },
+      {
+        "pass": 2,
+        "line": 79,
+        "error_type": "other_tactic_failed",
+        "original_error_message": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 49.03848838806152
+      },
+      {
+        "pass": 3,
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'abs_add_max'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 80.77124500274658
+      },
+      {
+        "pass": 3,
+        "line": 28,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'le_max_left_of_le'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 51.04939603805542
+      },
+      {
+        "pass": 3,
+        "line": 47,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |?a| ^ 2\nx y : \u211d\nh\u2080 : |x + y| + |x - y| = 2\nh\u2081 : |x| \u2294 |y| = 1\nhx : |x| \u2264 1\n\u22a2 y ^ 2 \u2264 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 83.52471423149109
+      },
+      {
+        "pass": 3,
+        "line": 79,
+        "error_type": "other_tactic_failed",
+        "original_error_message": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 66.78051114082336
+      },
+      {
+        "pass": 4,
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'abs_add_max'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 79.85334658622742
+      },
+      {
+        "pass": 4,
+        "line": 28,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'le_max_left_of_le'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 51.34085202217102
+      },
+      {
+        "pass": 4,
+        "line": 47,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |?a| ^ 2\nx y : \u211d\nh\u2080 : |x + y| + |x - y| = 2\nh\u2081 : |x| \u2294 |y| = 1\nhx : |x| \u2264 1\n\u22a2 y ^ 2 \u2264 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 82.49730157852173
+      },
+      {
+        "pass": 4,
+        "line": 79,
+        "error_type": "other_tactic_failed",
+        "original_error_message": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 68.81000113487244
+      },
+      {
+        "pass": 5,
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'abs_add_max'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 83.36298680305481
+      },
+      {
+        "pass": 5,
+        "line": 28,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'le_max_left_of_le'",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 41.70023322105408
+      },
+      {
+        "pass": 5,
+        "line": 47,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |?a| ^ 2\nx y : \u211d\nh\u2080 : |x + y| + |x - y| = 2\nh\u2081 : |x| \u2294 |y| = 1\nhx : |x| \u2264 1\n\u22a2 y ^ 2 \u2264 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 86.69562077522278
+      },
+      {
+        "pass": 5,
+        "line": 79,
+        "error_type": "other_tactic_failed",
+        "original_error_message": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 71.2559461593628
+      },
+      {
+        "pass": 5,
+        "line": 88,
+        "error_type": "type_mismatch",
+        "original_error_message": "overloaded, errors \n  81:31 application type mismatch\n    this x this\n  argument\n    this\n  has type\n    \u2200 x \u2208 Set.Icc (-1) 1, x ^ 2 - 6 * x - 7 \u2264 0 : Prop\n  but is expected to have type\n    x \u2208 Set.Icc (-1) 1 : Prop\n  \n  81:31 application type mismatch\n    this x this\n  argument\n    this\n  has type\n    \u2200 x \u2208 Set.Icc (-1) 1, x ^ 2 - 6 * x - 7 \u2264 0 : Prop\n  but is expected to have type\n    x \u2208 Set.Icc (-1) 1 : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 87.42884707450867
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "message": "unknown identifier 'abs_add_max'"
+      },
+      {
+        "line": 28,
+        "error_type": "unknown_identifier",
+        "message": "unknown identifier 'le_max_left_of_le'"
+      },
+      {
+        "line": 47,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  |?a| ^ 2\nx y : \u211d\nh\u2080 : |x + y| + |x - y| = 2\nh\u2081 : |x| \u2294 |y| = 1\nhx : |x| \u2264 1\n\u22a2 y ^ 2 \u2264 1"
+      },
+      {
+        "line": 79,
+        "error_type": "other_tactic_failed",
+        "message": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+      },
+      {
+        "line": 88,
+        "error_type": "type_mismatch",
+        "message": "overloaded, errors \n  81:31 application type mismatch\n    this x this\n  argument\n    this\n  has type\n    \u2200 x \u2208 Set.Icc (-1) 1, x ^ 2 - 6 * x - 7 \u2264 0 : Prop\n  but is expected to have type\n    x \u2208 Set.Icc (-1) 1 : Prop\n  \n  81:31 application type mismatch\n    this x this\n  argument\n    this\n  has type\n    \u2200 x \u2208 Set.Icc (-1) 1, x ^ 2 - 6 * x - 7 \u2264 0 : Prop\n  but is expected to have type\n    x \u2208 Set.Icc (-1) 1 : Prop"
+      }
+    ],
+    "total_time": 1350.129055261612,
+    "no_goals_fixes_applied": 1
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 8\nDecompositions applied: 0\nNo goals error fixes applied: 1\nSuccessful syntheses: 3\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 24: 5 attempts\n  - Line 28: 5 attempts\n  - Line 29: 1 attempts\n  - Line 47: 4 attempts\n  - Line 79: 4 attempts\n  - Line 83: 1 attempts\n  - Line 87: 1 attempts\n  - Line 88: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 5\n\nRemaining Errors:\n  - Line 24: unknown_identifier - unknown identifier 'abs_add_max'...\n  - Line 28: unknown_identifier - unknown identifier 'le_max_left_of_le'...\n  - Line 47: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   |?a| ^ 2 x ...\n  - Line 79: other_tactic_failed - tactic 'simp' failed, nested error: maximum recursion depth has been reached use `set_option maxRecD...\n  - Line 88: type_mismatch - overloaded, errors    81:31 application type mismatch     this x this   argument     this   has type...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.3750\nTotal time: 1350.13 seconds",
+  "dsl": "oneline(simp)"
+}

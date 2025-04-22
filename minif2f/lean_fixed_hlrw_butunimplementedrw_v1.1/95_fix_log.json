@@ -1,0 +1,53 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/95.lean",
+  "output_file": "./minif2f/lean_fixed/95_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $a * b = a^b + b^a$, for all positive integer values of $a$ and $b$, then what is the value of $2 * 6$? Show that it is 100.-/\ntheorem mathd_algebra_15 (s : \u2115 \u2192 \u2115 \u2192 \u2115)\n    (h\u2080 : \u2200 a b, 0 < a \u2227 0 < b \u2192 s a b = a ^ (b : \u2115) + b ^ (a : \u2115)) : s 2 6 = 100 := by\n  -- First, we need to compute s 2 6 using the given definition\n  -- The hypothesis h\u2080 tells us how s is defined for positive a and b\n  -- We'll apply this hypothesis with a = 2 and b = 6\n  \n  -- Step 1: Prove that 2 and 6 are positive\n  have h_pos : 0 < 2 \u2227 0 < 6 := by\n    -- Both 0 < 2 and 0 < 6 are true by definition\n    -- We can prove this using the `simp` tactic which simplifies basic arithmetic\n    simp only [zero_lt_two, zero_lt_succ]\n  \n  -- Step 2: Apply the hypothesis h\u2080 with a = 2 and b = 6\n  -- This will give us the equation for s 2 6\n  have h_eq := h\u2080 2 6 h_pos\n  -- Now h_eq states: s 2 6 = 2^6 + 6^2\n  \n  -- Step 3: Compute 2^6 and 6^2\n  -- First, let's compute 2^6\n  have h_two_pow_six : (2:\u2115)^6 = 64 := by\n    -- We can compute this step by step:\n    -- 2^6 = 2^(5+1) = 2^5 * 2\n    -- Continuing this way until we reach base case\n    -- But in Lean, we can just use norm_num which can compute concrete numbers\n    norm_num\n  \n  -- Now compute 6^2\n  have h_six_pow_two : (6:\u2115)^2 = 36 := by\n    -- Similarly, 6^2 = 6 * 6 = 36\n    norm_num\n  \n  -- Step 4: Combine the results\n  -- From h_eq, we know s 2 6 = 2^6 + 6^2\n  -- We've computed both terms, so let's substitute them\n  rw [h_eq, h_two_pow_six, h_six_pow_two]\n  -- Now the goal is 64 + 36 = 100\n  \n  -- Step 5: Compute the final sum\n  -- We can use norm_num again to verify the addition\n  norm_num",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $a * b = a^b + b^a$, for all positive integer values of $a$ and $b$, then what is the value of $2 * 6$? Show that it is 100.-/\ntheorem mathd_algebra_15 (s : \u2115 \u2192 \u2115 \u2192 \u2115)\n    (h\u2080 : \u2200 a b, 0 < a \u2227 0 < b \u2192 s a b = a ^ (b : \u2115) + b ^ (a : \u2115)) : s 2 6 = 100 := by\n  -- First, we need to compute s 2 6 using the given definition\n  -- The hypothesis h\u2080 tells us how s is defined for positive a and b\n  -- We'll apply this hypothesis with a = 2 and b = 6\n  \n  -- Step 1: Prove that 2 and 6 are positive\n  have h_pos : 0 < 2 \u2227 0 < 6 := by\n    -- Both 0 < 2 and 0 < 6 are true by definition\n    -- We can prove this using the `simp` tactic which simplifies basic arithmetic\n    simp only [zero_lt_two, zero_lt_succ]\n  \n  -- Step 2: Apply the hypothesis h\u2080 with a = 2 and b = 6\n  -- This will give us the equation for s 2 6\n  have h_eq := h\u2080 2 6 h_pos\n  -- Now h_eq states: s 2 6 = 2^6 + 6^2\n  \n  -- Step 3: Compute 2^6 and 6^2\n  -- First, let's compute 2^6\n  have h_two_pow_six : (2:\u2115)^6 = 64 := by\n    -- We can compute this step by step:\n    -- 2^6 = 2^(5+1) = 2^5 * 2\n    -- Continuing this way until we reach base case\n    -- But in Lean, we can just use norm_num which can compute concrete numbers\n    norm_num\n  \n  -- Now compute 6^2\n  have h_six_pow_two : (6:\u2115)^2 = 36 := by\n    -- Similarly, 6^2 = 6 * 6 = 36\n    norm_num\n  \n  -- Step 4: Combine the results\n  -- From h_eq, we know s 2 6 = 2^6 + 6^2\n  -- We've computed both terms, so let's substitute them\n  rw [h_eq, h_two_pow_six, h_six_pow_two]\n  -- Now the goal is 64 + 36 = 100\n  \n  -- Step 5: Compute the final sum\n  -- We can use norm_num again to verify the addition\n  norm_num",
+  "statistics": {
+    "original_errors": 2,
+    "decompositions_applied": 0,
+    "successful_syntheses": 0,
+    "failed_syntheses": {
+      "16": "Synthesis failed: No solution found by synthesizer.",
+      "48": "Synthesis failed: No valid fix/placement generated or extracted."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 2,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 16,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ns : \u2115 \u2192 \u2115 \u2192 \u2115\nh\u2080 : \u2200 (a b : \u2115), 0 < a \u2227 0 < b \u2192 s a b = a ^ b + b ^ a\n\u22a2 True \u2227 True",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 3.144226312637329
+      },
+      {
+        "pass": 1,
+        "line": 48,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 3.2040042877197266
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 16,
+        "error_type": "other_error",
+        "message": "unsolved goals\ns : \u2115 \u2192 \u2115 \u2192 \u2115\nh\u2080 : \u2200 (a b : \u2115), 0 < a \u2227 0 < b \u2192 s a b = a ^ b + b ^ a\n\u22a2 True \u2227 True"
+      },
+      {
+        "line": 48,
+        "error_type": "no_goals_to_solve",
+        "message": "no goals to be solved"
+      }
+    ],
+    "total_time": 6.548187017440796
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 2\nDecompositions applied: 0\nSuccessful syntheses: 0\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 2\n  - Line 16: Synthesis failed: No solution found by synthesizer....\n  - Line 48: Synthesis failed: No valid fix/placement generated or extracted....\nRemaining errors: 2\n\nRemaining Errors:\n  - Line 16: other_error - unsolved goals s : \u2115 \u2192 \u2115 \u2192 \u2115 h\u2080 : \u2200 (a b : \u2115), 0 < a \u2227 0 < b \u2192 s a b = a ^ b + b ^ a \u22a2 True \u2227 True...\n  - Line 48: no_goals_to_solve - no goals to be solved...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 6.55 seconds"
+}

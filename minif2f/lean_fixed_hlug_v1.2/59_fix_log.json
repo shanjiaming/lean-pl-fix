@@ -1,0 +1,100 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/59.lean",
+  "output_file": "./minif2f/lean_fixed/59_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for any positive real numbers $a$ and $b$, $(a+b)^4 \\leq 8(a^4 + b^4)$.-/\ntheorem algebra_apb4leq8ta4pb4 (a b : \u211d) (h\u2080 : 0 < a \u2227 0 < b) : (a + b) ^ 4 \u2264 8 * (a ^ 4 + b ^ 4) := by\n  -- First, expand (a + b)^4 using the binomial theorem\n  have h\u2081 : (a + b)^4 = a^4 + 4*a^3*b + 6*a^2*b^2 + 4*a*b^3 + b^4 := by\n    ring\n  -- Rewrite the goal using the expanded form\n  rw [h\u2081]\n  -- The goal now is to show that the expanded form is \u2264 8*(a^4 + b^4)\n  -- We can bring all terms to one side to form a non-positivity claim\n  suffices : 0 \u2264 7*a^4 + 7*b^4 - 4*a^3*b - 6*a^2*b^2 - 4*a*b^3\n  \u00b7 -- If we prove this non-negativity statement, the original inequality follows\n    linarith\n  -- Now we'll express this as a sum of manifestly non-negative terms\n  -- The key is to find suitable combinations that are clearly \u2265 0\n  have h\u2082 : 0 \u2264 3*(a^4 + b^4 - a^2*b^2) := by\n    -- This term is non-negative because a\u2074 + b\u2074 \u2265 a\u00b2b\u00b2 for all real a,b\n    -- This follows from 2(a\u2074 + b\u2074) \u2265 (a\u00b2 + b\u00b2)\u00b2 \u2265 (2ab)\u00b2/4 = a\u00b2b\u00b2\n    refine mul_nonneg (by norm_num) ?_\n    rw [sub_nonneg]\n    exact pow_four_add_pow_four_ge_sq_mul_sq a b\n  have h\u2083 : 0 \u2264 4*(a^4 + b^4 - a^3*b - a*b^3) := by\n    -- This term is non-negative because a\u2074 + b\u2074 \u2265 a\u00b3b + ab\u00b3 for a,b > 0\n    -- This follows from rearranging a\u2074 - a\u00b3b - ab\u00b3 + b\u2074 = a\u00b3(a-b) - b\u00b3(a-b) = (a-b)(a\u00b3-b\u00b3) \u2265 0\n    refine mul_nonneg (by norm_num) ?_\n    rw [sub_nonneg, sub_add_sub_comm]\n    have : a^4 - a^3*b = a^3*(a - b) := by ring\n    have : b^4 - a*b^3 = b^3*(b - a) := by ring\n    rw [this, this]\n    rw [\u2190 neg_sub (b^3), \u2190 mul_neg, neg_sub]\n    -- Now we have a^3*(a-b) + -b^3*(a-b) = (a^3 - b^3)*(a-b)\n    rw [\u2190 sub_mul]\n    -- Since (a\u00b3 - b\u00b3) and (a - b) have the same sign, their product is non-negative\n    have : a^3 - b^3 = (a - b)*(a^2 + a*b + b^2) := by ring\n    rw [this]\n    rw [mul_assoc, mul_comm (a - b), \u2190 mul_assoc]\n    refine mul_nonneg ?_ ?_\n    \u00b7 exact sq_nonneg (a - b)\n    \u00b7 refine add_nonneg (add_nonneg (sq_nonneg a) ?_) (sq_nonneg b))\n      exact mul_nonneg (le_of_lt h\u2080.1) (le_of_lt h\u2080.2)\n  -- Now combine these non-negative terms to get our desired inequality\n  -- The original expression 7a\u2074 + 7b\u2074 - 4a\u00b3b - 6a\u00b2b\u00b2 - 4ab\u00b3 can be written as:\n  -- (3a\u2074 + 3b\u2074 - 3a\u00b2b\u00b2) + (4a\u2074 + 4b\u2074 - 4a\u00b3b - 4ab\u00b3) = 3(a\u2074 + b\u2074 - a\u00b2b\u00b2) + 4(a\u2074 + b\u2074 - a\u00b3b - ab\u00b3)\n  have h\u2084 : 7*a^4 + 7*b^4 - 4*a^3*b - 6*a^2*b^2 - 4*a*b^3 =\n            3*(a^4 + b^4 - a^2*b^2) + 4*(a^4 + b^4 - a^3*b - a*b^3) := by\n    ring\n  rw [h\u2084]\n  -- Now we can combine our non-negativity results\n  exact add_nonneg h\u2082 h\u2083",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for any positive real numbers $a$ and $b$, $(a+b)^4 \\leq 8(a^4 + b^4)$.-/\ntheorem algebra_apb4leq8ta4pb4 (a b : \u211d) (h\u2080 : 0 < a \u2227 0 < b) : (a + b) ^ 4 \u2264 8 * (a ^ 4 + b ^ 4) := by\n  -- First, expand (a + b)^4 using the binomial theorem\n  have h\u2081 : (a + b)^4 = a^4 + 4*a^3*b + 6*a^2*b^2 + 4*a*b^3 + b^4 := by\n    ring\n  -- Rewrite the goal using the expanded form\n  rw [h\u2081]\n  -- The goal now is to show that the expanded form is \u2264 8*(a^4 + b^4)\n  -- We can bring all terms to one side to form a non-positivity claim\n  suffices : 0 \u2264 7*a^4 + 7*b^4 - 4*a^3*b - 6*a^2*b^2 - 4*a*b^3\n  \u00b7 -- If we prove this non-negativity statement, the original inequality follows\n    linarith\n  -- Now we'll express this as a sum of manifestly non-negative terms\n  -- The key is to find suitable combinations that are clearly \u2265 0\n  have h\u2082 : 0 \u2264 3*(a^4 + b^4 - a^2*b^2) := by\n    -- This term is non-negative because a\u2074 + b\u2074 \u2265 a\u00b2b\u00b2 for all real a,b\n    -- This follows from 2(a\u2074 + b\u2074) \u2265 (a\u00b2 + b\u00b2)\u00b2 \u2265 (2ab)\u00b2/4 = a\u00b2b\u00b2\n    refine mul_nonneg (by norm_num) ?_\n    rw [sub_nonneg]\n    exact pow_four_add_pow_four_ge_sq_mul_sq a b\n  have h\u2083 : 0 \u2264 4*(a^4 + b^4 - a^3*b - a*b^3) := by\n    -- This term is non-negative because a\u2074 + b\u2074 \u2265 a\u00b3b + ab\u00b3 for a,b > 0\n    -- This follows from rearranging a\u2074 - a\u00b3b - ab\u00b3 + b\u2074 = a\u00b3(a-b) - b\u00b3(a-b) = (a-b)(a\u00b3-b\u00b3) \u2265 0\n    refine mul_nonneg (by norm_num) ?_\n    rw [sub_nonneg]\n    rw [sub_add_sub_comm]\n    have : a^4 - a^3*b = a^3*(a - b) := by ring\n    have : b^4 - a*b^3 = b^3*(b - a) := by ring\n    rw [this, this]\n    rw [\u2190 neg_sub (b^3), \u2190 mul_neg, neg_sub]\n    -- Now we have a^3*(a-b) + -b^3*(a-b) = (a^3 - b^3)*(a-b)\n    rw [\u2190 sub_mul]\n    -- Since (a\u00b3 - b\u00b3) and (a - b) have the same sign, their product is non-negative\n    have : a^3 - b^3 = (a - b)*(a^2 + a*b + b^2) := by ring\n    rw [this]\n    rw [mul_assoc, mul_comm (a - b), \u2190 mul_assoc]\n    refine mul_nonneg ?_ ?_\n    \u00b7 exact sq_nonneg (a - b)\n    \u00b7 refine add_nonneg (add_nonneg (sq_nonneg a) ?_) (sq_nonneg b))\n      exact mul_nonneg (le_of_lt h\u2080.1) (le_of_lt h\u2080.2)\n  -- Now combine these non-negative terms to get our desired inequality\n  -- The original expression 7a\u2074 + 7b\u2074 - 4a\u00b3b - 6a\u00b2b\u00b2 - 4ab\u00b3 can be written as:\n  -- (3a\u2074 + 3b\u2074 - 3a\u00b2b\u00b2) + (4a\u2074 + 4b\u2074 - 4a\u00b3b - 4ab\u00b3) = 3(a\u2074 + b\u2074 - a\u00b2b\u00b2) + 4(a\u2074 + b\u2074 - a\u00b3b - ab\u00b3)\n  have h\u2084 : 7*a^4 + 7*b^4 - 4*a^3*b - 6*a^2*b^2 - 4*a*b^3 =\n            3*(a^4 + b^4 - a^2*b^2) + 4*(a^4 + b^4 - a^3*b - a*b^3) := by\n    ring\n  rw [h\u2084]\n  -- Now we can combine our non-negativity results\n  exact add_nonneg h\u2082 h\u2083",
+  "statistics": {
+    "original_errors": 4,
+    "decompositions_applied": 1,
+    "successful_syntheses": 0,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "9": 2,
+      "27": 2,
+      "33": 1,
+      "46": 1
+    },
+    "remaining_errors": 4,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 9,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase this\na b : \u211d\nh\u2080 : 0 < a \u2227 0 < b\nh\u2081 : (a + b) ^ 4 = a ^ 4 + 4 * a ^ 3 * b + 6 * a ^ 2 * b ^ 2 + 4 * a * b ^ 3 + b ^ 4\nh\u2082 : 0 \u2264 3 * (a ^ 4 + b ^ 4 - a ^ 2 * b ^ 2)\nh\u2083 : 0 \u2264 4 * (a ^ 4 + b ^ 4 - a ^ 3 * b - a * b ^ 3)\n\u22a2 0 \u2264 7 * a ^ 4 + 7 * b ^ 4 - 4 * a ^ 3 * b - 6 * a ^ 2 * b ^ 2 - 4 * a * b ^ 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 16.36553430557251
+      },
+      {
+        "pass": 1,
+        "line": 27,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'pow_four_add_pow_four_ge_sq_mul_sq'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.95307683944702
+      },
+      {
+        "pass": 2,
+        "line": 9,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase this\na b : \u211d\nh\u2080 : 0 < a \u2227 0 < b\nh\u2081 : (a + b) ^ 4 = a ^ 4 + 4 * a ^ 3 * b + 6 * a ^ 2 * b ^ 2 + 4 * a * b ^ 3 + b ^ 4\nh\u2082 : 0 \u2264 3 * (a ^ 4 + b ^ 4 - a ^ 2 * b ^ 2)\nh\u2083 : 0 \u2264 4 * (a ^ 4 + b ^ 4 - a ^ 3 * b - a * b ^ 3)\n\u22a2 0 \u2264 7 * a ^ 4 + 7 * b ^ 4 - 4 * a ^ 3 * b - 6 * a ^ 2 * b ^ 2 - 4 * a * b ^ 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 16.296757698059082
+      },
+      {
+        "pass": 2,
+        "line": 27,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'pow_four_add_pow_four_ge_sq_mul_sq'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 23.051475763320923
+      },
+      {
+        "pass": 2,
+        "line": 33,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a - ?b + (?c - ?d)\na b : \u211d\nh\u2080 : 0 < a \u2227 0 < b\nh\u2081 : (a + b) ^ 4 = a ^ 4 + 4 * a ^ 3 * b + 6 * a ^ 2 * b ^ 2 + 4 * a * b ^ 3 + b ^ 4\nh\u2082 : 0 \u2264 3 * (a ^ 4 + b ^ 4 - a ^ 2 * b ^ 2)\n\u22a2 a * b ^ 3 \u2264 a ^ 4 + b ^ 4 - a ^ 3 * b",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 23.278971433639526
+      },
+      {
+        "pass": 2,
+        "line": 46,
+        "error_type": "syntax_error",
+        "original_error_message": "unexpected token ')'; expected command",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 22.41329288482666
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 27,
+        "error_type": "unknown_identifier",
+        "message": "unknown identifier 'pow_four_add_pow_four_ge_sq_mul_sq'"
+      },
+      {
+        "line": 33,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a - ?b + (?c - ?d)\na b : \u211d\nh\u2080 : 0 < a \u2227 0 < b\nh\u2081 : (a + b) ^ 4 = a ^ 4 + 4 * a ^ 3 * b + 6 * a ^ 2 * b ^ 2 + 4 * a * b ^ 3 + b ^ 4\nh\u2082 : 0 \u2264 3 * (a ^ 4 + b ^ 4 - a ^ 2 * b ^ 2)\n\u22a2 a * b ^ 3 \u2264 a ^ 4 + b ^ 4 - a ^ 3 * b"
+      },
+      {
+        "line": 9,
+        "error_type": "other_error",
+        "message": "unsolved goals\ncase this\na b : \u211d\nh\u2080 : 0 < a \u2227 0 < b\nh\u2081 : (a + b) ^ 4 = a ^ 4 + 4 * a ^ 3 * b + 6 * a ^ 2 * b ^ 2 + 4 * a * b ^ 3 + b ^ 4\nh\u2082 : 0 \u2264 3 * (a ^ 4 + b ^ 4 - a ^ 2 * b ^ 2)\nh\u2083 : 0 \u2264 4 * (a ^ 4 + b ^ 4 - a ^ 3 * b - a * b ^ 3)\n\u22a2 0 \u2264 7 * a ^ 4 + 7 * b ^ 4 - 4 * a ^ 3 * b - 6 * a ^ 2 * b ^ 2 - 4 * a * b ^ 3"
+      },
+      {
+        "line": 46,
+        "error_type": "syntax_error",
+        "message": "unexpected token ')'; expected command"
+      }
+    ],
+    "total_time": 125.92951226234436,
+    "no_goals_fixes_applied": 0
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 4\nDecompositions applied: 1\nNo goals error fixes applied: 0\nSuccessful syntheses: 0\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 9: 2 attempts\n  - Line 27: 2 attempts\n  - Line 33: 1 attempts\n  - Line 46: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 4\n\nRemaining Errors:\n  - Line 27: unknown_identifier - unknown identifier 'pow_four_add_pow_four_ge_sq_mul_sq'...\n  - Line 33: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   ?a - ?b + (...\n  - Line 9: other_error - unsolved goals case this a b : \u211d h\u2080 : 0 < a \u2227 0 < b h\u2081 : (a + b) ^ 4 = a ^ 4 + 4 * a ^ 3 * b + 6 * a...\n  - Line 46: syntax_error - unexpected token ')'; expected command...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 125.93 seconds",
+  "dsl": null
+}

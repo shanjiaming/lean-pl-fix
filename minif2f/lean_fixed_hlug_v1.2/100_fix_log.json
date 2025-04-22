@@ -1,0 +1,522 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/100.lean",
+  "output_file": "./minif2f/lean_fixed/100_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Find $x^2+y^2_{}$ if $x_{}^{}$ and $y_{}^{}$ are positive integers such that\n$\\begin{align*}\nxy+x+y&=71, \\\\\nx^2y+xy^2&=880.\n\\end{align*}$ Show that it is 146.-/\ntheorem aime_1991_p1 (x y : \u2115) (h\u2080 : 0 < x \u2227 0 < y) (h\u2081 : x * y + (x + y) = 71)\n  (h\u2082 : x ^ 2 * y + x * y ^ 2 = 880) : x ^ 2 + y ^ 2 = 146 := by\n  -- First, we extract the positivity assumptions for x and y\n  have hx : 0 < x := h\u2080.left\n  have hy : 0 < y := h\u2080.right\n  \n  -- Rewrite the first equation h\u2081 to the form xy + x + y = 71\n  -- Add 1 to both sides to factor: xy + x + y + 1 = 72\n  have h\u2081' : x * y + x + y + 1 = 72 := by rw [\u2190 h\u2081, add_assoc]\n  \n  -- Factor the left side as (x + 1)(y + 1) = 72\n  have h_factor : (x + 1) * (y + 1) = 72 := by\n    rw [add_mul, one_mul, mul_one, \u2190 add_assoc, h\u2081']\n  \n  -- Rewrite the second equation h\u2082: x\u00b2y + xy\u00b2 = 880\n  -- Factor out xy to get xy(x + y) = 880\n  have h\u2082' : x * y * (x + y) = 880 := by\n    rw [\u2190 h\u2082, pow_two, pow_two, mul_add, mul_comm (x * y) x, mul_comm (x * y) y]\n  \n  -- Let s = x + y and p = xy, then we have:\n  -- p + s = 71 (from h\u2081)\n  -- p * s = 880 (from h\u2082')\n  let s := x + y\n  let p := x * y\n  \n  -- From p + s = 71, we can express s as 71 - p\n  have h_sum : p + s = 71 := by\n    rw [\u2190 h\u2081, add_assoc, add_comm y x]\n  \n  -- From p * s = 880 and s = 71 - p, we get p(71 - p) = 880\n  -- This gives us a quadratic equation: p\u00b2 - 71p + 880 = 0\n  have h_quad : p ^ 2 - 71 * p + 880 = 0 := by\n    rw [\u2190 h\u2082', h_sum, add_sub_cancel_left]\n    ring\n  \n  -- Solve the quadratic equation for p\n  -- The discriminant is 71\u00b2 - 4*880 = 5041 - 3520 = 1521\n  -- The roots are (71 \u00b1 39)/2, giving p = 55 or p = 16\n  have p_cases : p = 55 \u2228 p = 16 := by\n    have discr : 71 ^ 2 - 4 * 880 = 1521 := by norm_num\n    have sqrt_discr : Nat.sqrt 1521 = 39 := by norm_num\n    apply quadratic_eq_zero_iff.1\n    exact h_quad\n  \n  -- Consider both cases for p\n  cases p_cases with\n  | inl hp =>\n    -- Case 1: p = 55\n    -- Then s = 71 - 55 = 16\n    have hs : s = 16 := by\n      rw [\u2190 h_sum, hp, add_comm, add_tsub_cancel_right]\n    \n    -- Now x and y are roots of t\u00b2 - st + p = 0 \u2192 t\u00b2 - 16t + 55 = 0\n    -- Solutions would be (16 \u00b1 \u221a(256 - 220))/2 = (16 \u00b1 6)/2 \u2192 11 and 5\n    -- Check if (x,y) = (5,11) or (11,5) satisfies all conditions\n    \n    -- However, we need to verify that these are the only possible natural number solutions\n    -- From the factored form (x+1)(y+1) = 72 and x+y=16\n    -- Possible factor pairs of 72 where x+1 + y+1 = 18 (since (x+1)+(y+1)=x+y+2=18)\n    -- Possible pairs (x+1,y+1): (6,12), (5,13), (4,18), etc. but only (6,12) sums to 18\n    -- Thus x+1=6 \u2192 x=5, y+1=12 \u2192 y=11 or vice versa\n    \n    -- Verify that x=5, y=11 satisfies all original equations\n    have x_case : x = 5 \u2228 x = 11 := by\n      rw [\u2190 hs, add_comm] at h_factor\n      have h_fact : (x + 1) * (16 - x + 1) = 72 := by\n        rw [add_comm y x] at hs\n        rw [hs, add_comm y x, add_sub_cancel, h_factor]\n      -- Solve (x+1)(17-x) = 72\n      -- Expand: -x\u00b2 + 16x + 17 = 72 \u2192 x\u00b2 - 16x + 55 = 0\n      -- Solutions are x=5 or x=11\n      interval_cases x\n      \u00b7 left; rfl\n      \u00b7 right; rfl\n    \n    -- In both subcases, x\u00b2 + y\u00b2 = 146\n    cases x_case with\n    | inl hx' =>\n      have hy' : y = 11 := by\n        rw [hx', hs] at h_sum\n        simp [hp, hx'] at h_sum\n        exact (add_left_inj 55).1 h_sum\n      rw [hx', hy', pow_two, pow_two]\n      norm_num\n    | inr hx' =>\n      have hy' : y = 5 := by\n        rw [hx', hs] at h_sum\n        simp [hp, hx'] at h_sum\n        exact (add_left_inj 55).1 h_sum\n      rw [hx', hy', pow_two, pow_two]\n      norm_num\n    \n  | inr hp =>\n    -- Case 2: p = 16\n    -- Then s = 71 - 16 = 55\n    have hs : s = 55 := by\n      rw [\u2190 h_sum, hp, add_comm, add_tsub_cancel_right]\n    \n    -- Now x and y are roots of t\u00b2 - 55t + 16 = 0\n    -- But the discriminant 55\u00b2 - 64 = 3025 - 64 = 2961 is not a perfect square\n    -- Moreover, from (x+1)(y+1)=72 and x+y=55, we'd need (x+1)(56-x)=72\n    -- The maximum product when x+1=28 is 28*28=784 > 72, but no natural solutions\n    -- Thus this case leads to no natural number solutions\n    \n    -- To formally rule out this case, we can show that there are no natural numbers x,y\n    -- satisfying both (x+1)(y+1)=72 and x+y=55\n    have no_sol : False := by\n      -- From (x+1)(y+1)=72 and x+y=55 \u2192 (x+1)(56-x)=72\n      have h_contradiction : (x + 1) * (56 - x) = 72 := by\n        rw [add_comm y x] at hs\n        rw [hs, add_comm y x, add_sub_cancel, h_factor]\n      -- The maximum of (x+1)(56-x) occurs at x=27.5\n      -- At x=27: (28)(29) = 812 > 72\n      -- At x=0: (1)(56) = 56 < 812 but still > 72\n      -- Thus no natural x satisfies this equation\n      -- We can prove this by showing all possible x values fail\n      interval_cases x\n      all_goals { simp [h_contradiction] at * }\n    \n    -- Since we've reached a contradiction, this case is impossible\n    exact False.elim no_sol",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Find $x^2+y^2_{}$ if $x_{}^{}$ and $y_{}^{}$ are positive integers such that\n$\\begin{align*}\nxy+x+y&=71, \\\\\nx^2y+xy^2&=880.\n\\end{align*}$ Show that it is 146.-/\ntheorem aime_1991_p1 (x y : \u2115) (h\u2080 : 0 < x \u2227 0 < y) (h\u2081 : x * y + (x + y) = 71)\n  (h\u2082 : x ^ 2 * y + x * y ^ 2 = 880) : x ^ 2 + y ^ 2 = 146 := by\n  -- First, we extract the positivity assumptions for x and y\n  have hx : 0 < x := h\u2080.left\n  have hy : 0 < y := h\u2080.right\n  \n  -- Rewrite the first equation h\u2081 to the form xy + x + y = 71\n  -- Add 1 to both sides to factor: xy + x + y + 1 = 72\n  have h\u2081' : x * y + x + y + 1 = 72 := by omega\n  \n  -- Factor the left side as (x + 1)(y + 1) = 72\n  have h_factor : (x + 1) * (y + 1) = 72 := by\n    rw [add_mul]\n    rw [one_mul]\n    linarith\n  have h\u2082' : x * y * (x + y) = 880 := by\n    rw [\u2190 h\u2082, pow_two, pow_two, mul_add, mul_comm (x * y) x, mul_comm (x * y) y]\n  \n  -- Let s = x + y and p = xy, then we have:\n  -- p + s = 71 (from h\u2081)\n  -- p * s = 880 (from h\u2082')\n  let s := x + y\n  let p := x * y\n  \n  -- From p + s = 71, we can express s as 71 - p\n  have h_sum : p + s = 71 := by\n    rw [\u2190 h\u2081]\n  have h_quad : p ^ 2 - 71 * p + 880 = 0 := by\n    rw [\u2190 h\u2082']\n    rw [h_sum]\n    rw [add_sub_cancel_left]\n    ring\n  \n  -- Solve the quadratic equation for p\n  -- The discriminant is 71\u00b2 - 4*880 = 5041 - 3520 = 1521\n  -- The roots are (71 \u00b1 39)/2, giving p = 55 or p = 16\n  have p_cases : p = 55 \u2228 p = 16 := by\n    have discr : 71 ^ 2 - 4 * 880 = 1521 := by norm_num\n    have sqrt_discr : Nat.sqrt 1521 = 39 := by norm_num\n    norm_num\n    omega\n  \n  -- Consider both cases for p\n  cases p_cases with\n  | inl hp =>\n    -- Case 1: p = 55\n    -- Then s = 71 - 55 = 16\n    have hs : s = 16 := by\n      omega\n    have x_case : x = 5 \u2228 x = 11 := by\n      omega\n    cases x_case with\n    | inl hx' =>\n      have hy' : y = 11 := by\n        omega\n      rw [hx', hy', pow_two, pow_two]\n      norm_num\n    | inr hx' =>\n      have hy' : y = 5 := by\n        omega\n      rw [hx', hy', pow_two, pow_two]\n      norm_num\n    \n  | inr hp =>\n    -- Case 2: p = 16\n    -- Then s = 71 - 16 = 55\n    have hs : s = 55 := by\n      omega\n    have no_sol : False := by\n      -- From (x+1)(y+1)=72 and x+y=55 \u2192 (x+1)(56-x)=72\n      have h_contradiction : (x + 1) * (56 - x) = 72 := by\n        omega\n      norm_num\n      all_goals { simp [h_contradiction] at * }\n    \n    -- Since we've reached a contradiction, this case is impossible\n    exact False.elim no_sol",
+  "statistics": {
+    "original_errors": 14,
+    "decompositions_applied": 8,
+    "successful_syntheses": 11,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "21": 1,
+      "27": 1,
+      "28": 24,
+      "42": 21,
+      "52": 1,
+      "53": 1,
+      "61": 1,
+      "63": 1,
+      "67": 1,
+      "72": 1,
+      "80": 1,
+      "84": 1,
+      "85": 1
+    },
+    "remaining_errors": 2,
+    "fix_rate": 0.8571428571428571,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  71\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\n\u22a2 x * y + x + y + 1 = 72",
+        "fix_time": 10.387840986251831,
+        "errors_after_this_fix": 13,
+        "fix_snippet": "have h\u2081' : x * y + x + y + 1 = 72 := by omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 3,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * 1\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\n\u22a2 x * (y + 1) + (y + 1) = 72",
+        "fix_time": 14.012009859085083,
+        "errors_after_this_fix": 13,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 8,
+        "line": 52,
+        "error_type": "invalid_field_notation",
+        "original_error_message": "invalid field notation, type is not of the form (C ...) where C is a constant\n  quadratic_eq_zero_iff\nhas type\n  ?m.27893 \u2260 0 \u2192\n    \u2200 {s : ?m.26811},\n      discrim ?m.27893 ?m.27894 ?m.27895 = s * s \u2192\n        \u2200 (x : ?m.26811),\n          ?m.27893 * (x * x) + ?m.27894 * x + ?m.27895 = 0 \u2194\n            x = (-?m.27894 + s) / (2 * ?m.27893) \u2228 x = (-?m.27894 - s) / (2 * ?m.27893)",
+        "fix_time": 13.413536071777344,
+        "errors_after_this_fix": 10,
+        "fix_snippet": "norm_num",
+        "dsl": "oneline(norm_num)"
+      },
+      {
+        "pass": 9,
+        "line": 53,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h_quad\nhas type\n  p ^ 2 - 71 * p + 880 = 0 : Prop\nbut is expected to have type\n  p = 55 \u2228 p = 16 : Prop",
+        "fix_time": 21.183275938034058,
+        "errors_after_this_fix": 9,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 11,
+        "line": 61,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  71\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\nh_quad : p ^ 2 - 71 * p + 880 = 0\nhp : p = 55\n\u22a2 s = 16",
+        "fix_time": 21.3564875125885,
+        "errors_after_this_fix": 9,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 14,
+        "line": 63,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  16\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\nh_quad : p ^ 2 - 71 * p + 880 = 0\nhp : p = 55\nhs : s = 16\n\u22a2 x = 5 \u2228 x = 11",
+        "fix_time": 21.07768988609314,
+        "errors_after_this_fix": 8,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 17,
+        "line": 67,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  x\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\nh_quad : p ^ 2 - 71 * p + 880 = 0\nhp : p = 55\nhs : s = 16\nhx' : x = 5\n\u22a2 y = 11",
+        "fix_time": 20.606818914413452,
+        "errors_after_this_fix": 7,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 20,
+        "line": 72,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  x\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\nh_quad : p ^ 2 - 71 * p + 880 = 0\nhp : p = 55\nhs : s = 16\nhx' : x = 11\n\u22a2 y = 5",
+        "fix_time": 20.66675043106079,
+        "errors_after_this_fix": 6,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 23,
+        "line": 80,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  71\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\nh_quad : p ^ 2 - 71 * p + 880 = 0\nhp : p = 16\n\u22a2 s = 55",
+        "fix_time": 20.321438312530518,
+        "errors_after_this_fix": 5,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 25,
+        "line": 84,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  y + x\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\nh_quad : p ^ 2 - 71 * p + 880 = 0\nhp : p = 16\nhs : s = 55\n\u22a2 (x + 1) * (56 - x) = 72",
+        "fix_time": 20.362504243850708,
+        "errors_after_this_fix": 4,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 27,
+        "line": 85,
+        "error_type": "interval_cases_failed",
+        "original_error_message": "interval_cases failed: could not find upper bound on x",
+        "fix_time": 13.53264045715332,
+        "errors_after_this_fix": 2,
+        "fix_snippet": "norm_num",
+        "dsl": "oneline(norm_num)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 5,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 33.53237557411194
+      },
+      {
+        "pass": 6,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 33.988215923309326
+      },
+      {
+        "pass": 7,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 33.418418884277344
+      },
+      {
+        "pass": 8,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 34.34074258804321
+      },
+      {
+        "pass": 8,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.45529055595398
+      },
+      {
+        "pass": 9,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.97811222076416
+      },
+      {
+        "pass": 9,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.56044030189514
+      },
+      {
+        "pass": 10,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 34.08186912536621
+      },
+      {
+        "pass": 10,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.71369814872742
+      },
+      {
+        "pass": 11,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 33.83648467063904
+      },
+      {
+        "pass": 11,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.02459764480591
+      },
+      {
+        "pass": 12,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 34.181495904922485
+      },
+      {
+        "pass": 12,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 43.619054555892944
+      },
+      {
+        "pass": 13,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.979777574539185
+      },
+      {
+        "pass": 13,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 43.031238079071045
+      },
+      {
+        "pass": 14,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.86959481239319
+      },
+      {
+        "pass": 14,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.108776569366455
+      },
+      {
+        "pass": 15,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 33.03279185295105
+      },
+      {
+        "pass": 15,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 44.08221888542175
+      },
+      {
+        "pass": 16,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.301005125045776
+      },
+      {
+        "pass": 16,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.14782190322876
+      },
+      {
+        "pass": 17,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.966938018798828
+      },
+      {
+        "pass": 17,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.35820388793945
+      },
+      {
+        "pass": 18,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.998677730560303
+      },
+      {
+        "pass": 18,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 41.89849519729614
+      },
+      {
+        "pass": 19,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.02570843696594
+      },
+      {
+        "pass": 19,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.254634380340576
+      },
+      {
+        "pass": 20,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.238120555877686
+      },
+      {
+        "pass": 20,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 41.837510108947754
+      },
+      {
+        "pass": 21,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.82776975631714
+      },
+      {
+        "pass": 21,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.34452557563782
+      },
+      {
+        "pass": 22,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.975942373275757
+      },
+      {
+        "pass": 22,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 41.916287422180176
+      },
+      {
+        "pass": 23,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.011078119277954
+      },
+      {
+        "pass": 23,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.156060218811035
+      },
+      {
+        "pass": 24,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.25951313972473
+      },
+      {
+        "pass": 24,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.231303453445435
+      },
+      {
+        "pass": 25,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 32.124860525131226
+      },
+      {
+        "pass": 25,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 42.04367113113403
+      },
+      {
+        "pass": 26,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.982192516326904
+      },
+      {
+        "pass": 26,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 41.38143873214722
+      },
+      {
+        "pass": 27,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 31.394234895706177
+      },
+      {
+        "pass": 27,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 41.33895778656006
+      },
+      {
+        "pass": 28,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 36.13848352432251
+      },
+      {
+        "pass": 28,
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 48.721057653427124
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 28,
+        "error_type": "other_error",
+        "message": "unsolved goals\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\n\u22a2 x * (x * y) + y * (x * y) = x * x * y + x * (y * y)"
+      },
+      {
+        "line": 42,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  p + s\nx y : \u2115\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : x * y + (x + y) = 71\nh\u2082 : x ^ 2 * y + x * y ^ 2 = 880\nhx : 0 < x\nhy : 0 < y\nh\u2081' : x * y + x + y + 1 = 72\nh_factor : (x + 1) * (y + 1) = 72\nh\u2082' : x * y * (x + y) = 880\ns : \u2115 := x + y\np : \u2115 := x * y\nh_sum : p + s = 71\n\u22a2 p ^ 2 - 71 * p + x * y * (x + y) = 0"
+      }
+    ],
+    "total_time": 1906.0822715759277,
+    "no_goals_fixes_applied": 8
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 14\nDecompositions applied: 8\nNo goals error fixes applied: 8\nSuccessful syntheses: 11\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 21: 1 attempts\n  - Line 27: 1 attempts\n  - Line 28: 24 attempts\n  - Line 42: 21 attempts\n  - Line 52: 1 attempts\n  - Line 53: 1 attempts\n  - Line 61: 1 attempts\n  - Line 63: 1 attempts\n  - Line 67: 1 attempts\n  - Line 72: 1 attempts\n  - Line 80: 1 attempts\n  - Line 84: 1 attempts\n  - Line 85: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 2\n\nRemaining Errors:\n  - Line 28: other_error - unsolved goals x y : \u2115 h\u2080 : 0 < x \u2227 0 < y h\u2081 : x * y + (x + y) = 71 h\u2082 : x ^ 2 * y + x * y ^ 2 = 880...\n  - Line 42: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   p + s x y :...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.8571\nTotal time: 1906.08 seconds",
+  "dsl": "oneline(omega)"
+}

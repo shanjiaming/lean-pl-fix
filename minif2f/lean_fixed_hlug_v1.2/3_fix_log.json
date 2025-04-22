@@ -1,0 +1,227 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/3.lean",
+  "output_file": "./minif2f/lean_fixed/3_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nWhat is the volume of a cube whose surface area is twice that of a cube with volume 1? \n\n$\\mathrm{(A)}\\ \\sqrt{2}\\qquad\\mathrm{(B)}\\ 2\\qquad\\mathrm{(C)}\\ 2\\sqrt{2}\\qquad\\mathrm{(D)}\\ 4\\qquad\\mathrm{(E)}\\ 8$ \nShow that it is \\mathrm{(C)}.\n\nProof outline:\n1. Let y be the side length of the original cube (volume = 1)\n2. Compute y from the volume equation y\u00b3 = 1\n3. Compute the surface area of original cube: 6y\u00b2\n4. The new cube has surface area twice this: 2*(6y\u00b2) = 12y\u00b2\n5. Let x be the side length of the new cube\n6. Set up equation for new cube's surface area: 6x\u00b2 = 12y\u00b2\n7. Solve for x in terms of y\n8. Compute volume of new cube: x\u00b3\n9. Show this equals 2\u221a2\n-/\ntheorem amc12a_2008_p8 (x y : \u211d) (h\u2080 : 0 < x \u2227 0 < y) (h\u2081 : y ^ 3 = 1)\n  (h\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by\n  -- First, simplify the surface area equation h\u2082 by dividing both sides by 6\n  have h\u2083 : x ^ 2 = 2 * y ^ 2 := by\n    rw [mul_assoc, mul_comm] at h\u2082  -- Rewrite RHS to 2*6*y\u00b2\n    rw [mul_right_inj' (by norm_num : 6 \u2260 0)] at h\u2082  -- Divide both sides by 6\n    exact h\u2082\n  \n  -- From the volume of the original cube (y\u00b3 = 1), we get y = 1\n  have h\u2084 : y = 1 := by\n    exact (eq_one_of_pow_eq_one (by linarith [h\u2080.2]) (by norm_num) h\u2081).symm\n  \n  -- Substitute y = 1 into the simplified equation x\u00b2 = 2y\u00b2\n  have h\u2085 : x ^ 2 = 2 := by\n    rw [h\u2084, pow_two, mul_one] at h\u2083\n    exact h\u2083\n  \n  -- Since x > 0, we can take square root of both sides to get x = \u221a2\n  have h\u2086 : x = Real.sqrt 2 := by\n    exact (sqrt_eq_iff_sq_eq (by linarith [h\u2080.1]) (by linarith)).mpr h\u2085\n  \n  -- Now compute x\u00b3 = (\u221a2)\u00b3 = (\u221a2)\u00b2 * \u221a2 = 2 * \u221a2\n  rw [h\u2086, \u2190 pow_three_sqrt_two]\n  \n  -- Helper lemma to show (\u221a2)\u00b3 = 2 * \u221a2\n  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by\n    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]\n    ring\n  \n  -- Apply the helper lemma to complete the proof\n  exact pow_three_sqrt_two",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nWhat is the volume of a cube whose surface area is twice that of a cube with volume 1? \n\n$\\mathrm{(A)}\\ \\sqrt{2}\\qquad\\mathrm{(B)}\\ 2\\qquad\\mathrm{(C)}\\ 2\\sqrt{2}\\qquad\\mathrm{(D)}\\ 4\\qquad\\mathrm{(E)}\\ 8$ \nShow that it is \\mathrm{(C)}.\n\nProof outline:\n1. Let y be the side length of the original cube (volume = 1)\n2. Compute y from the volume equation y\u00b3 = 1\n3. Compute the surface area of original cube: 6y\u00b2\n4. The new cube has surface area twice this: 2*(6y\u00b2) = 12y\u00b2\n5. Let x be the side length of the new cube\n6. Set up equation for new cube's surface area: 6x\u00b2 = 12y\u00b2\n7. Solve for x in terms of y\n8. Compute volume of new cube: x\u00b3\n9. Show this equals 2\u221a2\n-/\ntheorem amc12a_2008_p8 (x y : \u211d) (h\u2080 : 0 < x \u2227 0 < y) (h\u2081 : y ^ 3 = 1)\n  (h\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)) : x ^ 3 = 2 * Real.sqrt 2 := by\n  -- First, simplify the surface area equation h\u2082 by dividing both sides by 6\n  have h\u2083 : x ^ 2 = 2 * y ^ 2 := by\n    linarith\n  have h\u2084 : y = 1 := by\n    exact (eq_one_of_pow_eq_one (by linarith [h\u2080.2]) (by norm_num) h\u2081).symm\n  \n  -- Substitute y = 1 into the simplified equation x\u00b2 = 2y\u00b2\n  have h\u2085 : x ^ 2 = 2 := by\n    rw [h\u2084] at h\u2083\n    rw [pow_two] at h\u2083\n    linarith\n  have h\u2086 : x = Real.sqrt 2 := by\n    exact (sqrt_eq_iff_sq_eq (by linarith [h\u2080.1]) (by linarith)).mpr h\u2085\n  \n  -- Now compute x\u00b3 = (\u221a2)\u00b3 = (\u221a2)\u00b2 * \u221a2 = 2 * \u221a2\n  rw [h\u2086]\n  norm_num\n  \n  -- Helper lemma to show (\u221a2)\u00b3 = 2 * \u221a2\n  have pow_three_sqrt_two : (Real.sqrt 2) ^ 3 = 2 * Real.sqrt 2 := by\n    rw [pow_succ, pow_two, Real.mul_self_sqrt (by norm_num)]\n  exact pow_three_sqrt_two",
+  "statistics": {
+    "original_errors": 6,
+    "decompositions_applied": 3,
+    "successful_syntheses": 3,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "26": 8,
+      "29": 1,
+      "31": 7,
+      "37": 1,
+      "39": 4,
+      "43": 1
+    },
+    "remaining_errors": 2,
+    "fix_rate": 0.6666666666666666,
+    "successful_fixes_details": [
+      {
+        "pass": 2,
+        "line": 29,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * ?b * ?c\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\n\u22a2 x ^ 2 = 2 * y ^ 2",
+        "fix_time": 3.9276108741760254,
+        "errors_after_this_fix": 6,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 5,
+        "line": 37,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a * 1\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x * x = 2 * 1 ^ 2\nh\u2084 : y = 1\n\u22a2 x ^ 2 = 2",
+        "fix_time": 6.6400556564331055,
+        "errors_after_this_fix": 5,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 8,
+        "line": 43,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'pow_three_sqrt_two'",
+        "fix_time": 4.469553709030151,
+        "errors_after_this_fix": 3,
+        "fix_snippet": "norm_num",
+        "dsl": "oneline(norm_num)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 3.383819103240967
+      },
+      {
+        "pass": 2,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 3.3297791481018066
+      },
+      {
+        "pass": 3,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 5.487658500671387
+      },
+      {
+        "pass": 4,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 6.147783279418945
+      },
+      {
+        "pass": 4,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 8.803091049194336
+      },
+      {
+        "pass": 5,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 6.365244626998901
+      },
+      {
+        "pass": 5,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.526845216751099
+      },
+      {
+        "pass": 6,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.845290422439575
+      },
+      {
+        "pass": 6,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.721402168273926
+      },
+      {
+        "pass": 7,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.7609381675720215
+      },
+      {
+        "pass": 7,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.453813076019287
+      },
+      {
+        "pass": 7,
+        "line": 39,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'sqrt_eq_iff_sq_eq'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.430235385894775
+      },
+      {
+        "pass": 8,
+        "line": 26,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nx y : \u211d\nh\u2080 : 0 < x \u2227 0 < y\nh\u2081 : y ^ 3 = 1\nh\u2082 : 6 * x ^ 2 = 2 * (6 * y ^ 2)\nh\u2083 : x ^ 2 = 2 * y ^ 2\nh\u2084 : y = 1\nh\u2085 : x ^ 2 = 2\nh\u2086 : x = \u221a2\n\u22a2 \u221a2 ^ 3 = 2 * \u221a2",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.9059553146362305
+      },
+      {
+        "pass": 8,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.148765325546265
+      },
+      {
+        "pass": 8,
+        "line": 39,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'sqrt_eq_iff_sq_eq'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.20547342300415
+      },
+      {
+        "pass": 9,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.7858726978302
+      },
+      {
+        "pass": 9,
+        "line": 39,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'sqrt_eq_iff_sq_eq'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.950241804122925
+      },
+      {
+        "pass": 10,
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'eq_one_of_pow_eq_one'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.23505687713623
+      },
+      {
+        "pass": 10,
+        "line": 39,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'sqrt_eq_iff_sq_eq'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.992009162902832
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 31,
+        "error_type": "unknown_identifier",
+        "message": "unknown identifier 'eq_one_of_pow_eq_one'"
+      },
+      {
+        "line": 39,
+        "error_type": "unknown_identifier",
+        "message": "unknown identifier 'sqrt_eq_iff_sq_eq'"
+      }
+    ],
+    "total_time": 191.4758849143982,
+    "no_goals_fixes_applied": 3
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 6\nDecompositions applied: 3\nNo goals error fixes applied: 3\nSuccessful syntheses: 3\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 26: 8 attempts\n  - Line 29: 1 attempts\n  - Line 31: 7 attempts\n  - Line 37: 1 attempts\n  - Line 39: 4 attempts\n  - Line 43: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 2\n\nRemaining Errors:\n  - Line 31: unknown_identifier - unknown identifier 'eq_one_of_pow_eq_one'...\n  - Line 39: unknown_identifier - unknown identifier 'sqrt_eq_iff_sq_eq'...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.6667\nTotal time: 191.48 seconds",
+  "dsl": "oneline(linarith)"
+}

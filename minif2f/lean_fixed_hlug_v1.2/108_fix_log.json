@@ -1,0 +1,49 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/108.lean",
+  "output_file": "./minif2f/lean_fixed/108_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $x$, $y$, and $z$ are positive real numbers satisfying: \\begin{align*}\n\\log x - \\log y &= a, \\\\\n\\log y - \\log z &= 15, \\text{ and} \\\\\n\\log z - \\log x &= -7, \\\\\n\\end{align*}where $a$ is a real number, what is $a$? Show that it is -8.-/\ntheorem mathd_algebra_96 (x y z a : \u211d) (h\u2080 : 0 < x \u2227 0 < y \u2227 0 < z)\n  (h\u2081 : Real.log x - Real.log y = a) (h\u2082 : Real.log y - Real.log z = 15)\n  (h\u2083 : Real.log z - Real.log x = -7) : a = -8 := by\n  -- First, we'll work with the system of equations involving logarithms\n  -- Let's extract the positivity assumptions for x, y, z from h\u2080\n  have x_pos : 0 < x := h\u2080.left\n  have y_pos : 0 < y := h\u2080.right.left\n  have z_pos : 0 < z := h\u2080.right.right\n  \n  -- The strategy is to add all three equations together\n  -- This will create a cyclic sum where most terms cancel out\n  -- Start by adding h\u2081 and h\u2082\n  have sum_eq : (Real.log x - Real.log y) + (Real.log y - Real.log z) + (Real.log z - Real.log x) = a + 15 + (-7) := by\n    -- Add all three equations together\n    rw [h\u2081, h\u2082, h\u2083]\n    -- Simplify the right hand side\n    ring\n  \n  -- Now simplify the left side of sum_eq\n  -- The terms will cancel out completely\n  have left_simplified : (Real.log x - Real.log y) + (Real.log y - Real.log z) + (Real.log z - Real.log x) = 0 := by\n    -- Expand the expression\n    rw [sub_add_sub_comm, sub_add_sub_comm]\n    -- Simplify using the fact that log x - log x = 0 etc.\n    simp only [sub_self]\n  \n  -- Now we know the sum of the right sides equals 0\n  have right_sum : a + 15 + (-7) = 0 := by\n    rw [\u2190 sum_eq, left_simplified]\n  \n  -- Simplify the equation a + 15 - 7 = 0\n  have simplified : a + 8 = 0 := by\n    -- Compute 15 + (-7) = 8\n    rw [add_assoc, add_neg_self, add_zero] at right_sum\n    exact right_sum\n  \n  -- Finally, solve for a\n  exact eq_neg_of_add_eq_zero_left simplified",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- If $x$, $y$, and $z$ are positive real numbers satisfying: \\begin{align*}\n\\log x - \\log y &= a, \\\\\n\\log y - \\log z &= 15, \\text{ and} \\\\\n\\log z - \\log x &= -7, \\\\\n\\end{align*}where $a$ is a real number, what is $a$? Show that it is -8.-/\ntheorem mathd_algebra_96 (x y z a : \u211d) (h\u2080 : 0 < x \u2227 0 < y \u2227 0 < z)\n  (h\u2081 : Real.log x - Real.log y = a) (h\u2082 : Real.log y - Real.log z = 15)\n  (h\u2083 : Real.log z - Real.log x = -7) : a = -8 := by\n  -- First, we'll work with the system of equations involving logarithms\n  -- Let's extract the positivity assumptions for x, y, z from h\u2080\n  have x_pos : 0 < x := h\u2080.left\n  have y_pos : 0 < y := h\u2080.right.left\n  have z_pos : 0 < z := h\u2080.right.right\n  \n  -- The strategy is to add all three equations together\n  -- This will create a cyclic sum where most terms cancel out\n  -- Start by adding h\u2081 and h\u2082\n  have sum_eq : (Real.log x - Real.log y) + (Real.log y - Real.log z) + (Real.log z - Real.log x) = a + 15 + (-7) := by\n    -- Add all three equations together\n    rw [h\u2081, h\u2082, h\u2083]\n    -- Simplify the right hand side\n  have left_simplified : (Real.log x - Real.log y) + (Real.log y - Real.log z) + (Real.log z - Real.log x) = 0 := by\n    -- Expand the expression\n    rw [sub_add_sub_comm, sub_add_sub_comm]\n    -- Simplify using the fact that log x - log x = 0 etc.\n    ring\n  \n  -- Now we know the sum of the right sides equals 0\n  have right_sum : a + 15 + (-7) = 0 := by\n    rw [\u2190 sum_eq, left_simplified]\n  \n  -- Simplify the equation a + 15 - 7 = 0\n  have simplified : a + 8 = 0 := by\n    -- Compute 15 + (-7) = 8\n    rw [add_assoc] at right_sum\n    linarith\n  exact eq_neg_of_add_eq_zero_left simplified",
+  "statistics": {
+    "original_errors": 3,
+    "decompositions_applied": 1,
+    "successful_syntheses": 2,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "33": 1,
+      "43": 1
+    },
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 2,
+        "line": 33,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "fix_time": 2.1639184951782227,
+        "errors_after_this_fix": 1,
+        "fix_snippet": "ring",
+        "dsl": "oneline(ring)"
+      },
+      {
+        "pass": 4,
+        "line": 43,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'add_neg_self'",
+        "fix_time": 4.503983736038208,
+        "errors_after_this_fix": 1,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      }
+    ],
+    "failed_fixes_details": [],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 7.573591709136963,
+    "no_goals_fixes_applied": 2
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 3\nDecompositions applied: 1\nNo goals error fixes applied: 2\nSuccessful syntheses: 2\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 33: 1 attempts\n  - Line 43: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 7.57 seconds",
+  "dsl": "oneline(ring)"
+}

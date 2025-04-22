@@ -1,0 +1,67 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/52.lean",
+  "output_file": "./minif2f/lean_fixed/52_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Given that $x + y = 13$ and $xy = 24$, find the distance from the point $(x, y)$ to the origin. Show that it is 11.-/\ntheorem mathd_algebra_510 (x y : \u211d) (h\u2080 : x + y = 13) (h\u2081 : x * y = 24) :\n  Real.sqrt (x ^ 2 + y ^ 2) = 11 := by\n  -- Our goal is to prove that the distance from (x,y) to the origin is 11\n  -- The distance formula gives us \u221a(x\u00b2 + y\u00b2), so we need to show x\u00b2 + y\u00b2 = 121\n  \n  -- First, let's compute x\u00b2 + y\u00b2 using the identity:\n  -- x\u00b2 + y\u00b2 = (x + y)\u00b2 - 2xy\n  have key_identity : x^2 + y^2 = (x + y)^2 - 2 * (x * y) := by\n    -- Expand (x + y)\u00b2 and simplify\n    calc (x + y)^2 - 2 * (x * y) \n        = x^2 + 2*x*y + y^2 - 2*x*y := by ring\n      _ = x^2 + y^2 := by ring\n  \n  -- Now substitute our known values from hypotheses h\u2080 and h\u2081\n  have sum_of_squares : x^2 + y^2 = 13^2 - 2 * 24 := by\n    rw [key_identity, h\u2080, h\u2081]\n  \n  -- Compute the numerical value\n  have computed_value : x^2 + y^2 = 169 - 48 := by\n    rw [sum_of_squares]\n    norm_num\n  \n  -- Simplify further to get x\u00b2 + y\u00b2 = 121\n  have final_eq : x^2 + y^2 = 121 := by\n    rw [computed_value]\n    norm_num\n  \n  -- Now take square roots of both sides\n  -- Since distance is always non-negative and 11 is positive, we can conclude\n  rw [\u2190 Real.sqrt_sq (by norm_num : 0 \u2264 11), \u2190 final_eq]\n  simp",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Given that $x + y = 13$ and $xy = 24$, find the distance from the point $(x, y)$ to the origin. Show that it is 11.-/\ntheorem mathd_algebra_510 (x y : \u211d) (h\u2080 : x + y = 13) (h\u2081 : x * y = 24) :\n  Real.sqrt (x ^ 2 + y ^ 2) = 11 := by\n  -- Our goal is to prove that the distance from (x,y) to the origin is 11\n  -- The distance formula gives us \u221a(x\u00b2 + y\u00b2), so we need to show x\u00b2 + y\u00b2 = 121\n  \n  -- First, let's compute x\u00b2 + y\u00b2 using the identity:\n  -- x\u00b2 + y\u00b2 = (x + y)\u00b2 - 2xy\n  have key_identity : x^2 + y^2 = (x + y)^2 - 2 * (x * y) := by\n    -- Expand (x + y)\u00b2 and simplify\n    calc (x + y)^2 - 2 * (x * y) \n        = x^2 + 2*x*y + y^2 - 2*x*y := by ring\n      _ = x^2 + y^2 := by ring\n  \n  -- Now substitute our known values from hypotheses h\u2080 and h\u2081\n  have sum_of_squares : x^2 + y^2 = 13^2 - 2 * 24 := by\n    rw [key_identity, h\u2080, h\u2081]\n  \n  -- Compute the numerical value\n  have computed_value : x^2 + y^2 = 169 - 48 := by\n    rw [sum_of_squares]\n    norm_num\n  \n  -- Simplify further to get x\u00b2 + y\u00b2 = 121\n  have final_eq : x^2 + y^2 = 121 := by\n    rw [computed_value]\n    norm_num\n  \n  -- Now take square roots of both sides\n  -- Since distance is always non-negative and 11 is positive, we can conclude\n  rw [\u2190 Real.sqrt_sq (by norm_num : 0 \u2264 11)]\n  rw [\u2190 final_eq]\n  simp",
+  "statistics": {
+    "original_errors": 3,
+    "decompositions_applied": 1,
+    "successful_syntheses": 0,
+    "failed_syntheses": {
+      "18": "Synthesis failed: No solution found by synthesizer.",
+      "20": "Synthesis failed: No solution found by synthesizer.",
+      "38": "Synthesis failed: No solution found by synthesizer."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 3,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 18,
+        "error_type": "other_error",
+        "original_error_message": "invalid 'calc' step, left-hand side is\n  (x + y) ^ 2 - 2 * (x * y) : \u211d\nbut is expected to be\n  x ^ 2 + y ^ 2 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.835153341293335
+      },
+      {
+        "pass": 1,
+        "line": 20,
+        "error_type": "other_error",
+        "original_error_message": "invalid 'calc' step, right-hand side is\n  x ^ 2 + y ^ 2 : \u211d\nbut is expected to be\n  (x + y) ^ 2 - 2 * (x * y) : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.197779178619385
+      },
+      {
+        "pass": 2,
+        "line": 38,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, pattern is a metavariable\n  ?m.7058\nfrom equation\n  ?m.7058 = \u221a(?m.7058 ^ 2)\nx y : \u211d\nh\u2080 : x + y = 13\nh\u2081 : x * y = 24\nkey_identity : x ^ 2 + y ^ 2 = (x + y) ^ 2 - 2 * (x * y)\nsum_of_squares : x ^ 2 + y ^ 2 = 13 ^ 2 - 2 * 24\ncomputed_value : x ^ 2 + y ^ 2 = 169 - 48\nfinal_eq : x ^ 2 + y ^ 2 = 121\n\u22a2 \u221a(x ^ 2 + y ^ 2) = 11",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.55538010597229
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 18,
+        "error_type": "other_error",
+        "message": "invalid 'calc' step, left-hand side is\n  (x + y) ^ 2 - 2 * (x * y) : \u211d\nbut is expected to be\n  x ^ 2 + y ^ 2 : \u211d"
+      },
+      {
+        "line": 20,
+        "error_type": "other_error",
+        "message": "invalid 'calc' step, right-hand side is\n  x ^ 2 + y ^ 2 : \u211d\nbut is expected to be\n  (x + y) ^ 2 - 2 * (x * y) : \u211d"
+      },
+      {
+        "line": 38,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, pattern is a metavariable\n  ?m.7058\nfrom equation\n  ?m.7058 = \u221a(?m.7058 ^ 2)\nx y : \u211d\nh\u2080 : x + y = 13\nh\u2081 : x * y = 24\nkey_identity : x ^ 2 + y ^ 2 = (x + y) ^ 2 - 2 * (x * y)\nsum_of_squares : x ^ 2 + y ^ 2 = 13 ^ 2 - 2 * 24\ncomputed_value : x ^ 2 + y ^ 2 = 169 - 48\nfinal_eq : x ^ 2 + y ^ 2 = 121\n\u22a2 \u221a(x ^ 2 + y ^ 2) = 11"
+      }
+    ],
+    "total_time": 28.3022301197052
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 3\nDecompositions applied: 1\nSuccessful syntheses: 0\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 3\n  - Line 18: Synthesis failed: No solution found by synthesizer....\n  - Line 20: Synthesis failed: No solution found by synthesizer....\n  - Line 38: Synthesis failed: No solution found by synthesizer....\nRemaining errors: 3\n\nRemaining Errors:\n  - Line 18: other_error - invalid 'calc' step, left-hand side is   (x + y) ^ 2 - 2 * (x * y) : \u211d but is expected to be   x ^ 2...\n  - Line 20: other_error - invalid 'calc' step, right-hand side is   x ^ 2 + y ^ 2 : \u211d but is expected to be   (x + y) ^ 2 - 2 ...\n  - Line 38: rewrite_failed - tactic 'rewrite' failed, pattern is a metavariable   ?m.7058 from equation   ?m.7058 = \u221a(?m.7058 ^ 2...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 28.30 seconds"
+}

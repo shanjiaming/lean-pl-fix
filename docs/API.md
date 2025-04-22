@@ -17,6 +17,10 @@
 初始化基于 `lean-interact` 的 REPL 实例并启动 Lean 服务器。
 环境模式现在由 `execute` 方法的 `env_mode` 参数控制。
 
+**参数**:
+- `debug` (bool, optional): 是否启用调试打印，默认为 `False`。
+- `reset_threshold` (int, optional): 密集调用次数（'fresh' 模式或 header 重处理）的阈值。当计数器达到此阈值时，将自动重置 Lean 服务器以释放内存。设置为 0 或负数可禁用此功能。默认为 `100`。
+
 **内部状态**:
 - `self.header_env`: 存储仅由 header 代码（import, open, set_option 等）成功执行后产生的环境。此环境用于后续 `execute(env_mode='header')` 调用（如果 header 匹配）。
 - `self._latest_env`: 存储最近一次成功执行 `execute` 且该模式需要更新此状态（即 `env_mode='header'` 或 `env_mode='latest'`）后的最终环境状态。
@@ -32,6 +36,11 @@
 ###### `REPLInstance.execute(code: str, env_mode: str = 'fresh')`
 
 执行Lean代码，并根据 `env_mode` 参数控制环境处理逻辑。
+
+**自动重置**:
+- 如果在 `__init__` 中设置了 `reset_threshold > 0`，该方法会在执行 *之前* 检查计数器。
+- 如果当前调用被视为"密集"（即 `env_mode='fresh'` 或 `env_mode='header'` 且需要重处理 header），并且计数器已达到阈值，则会自动调用 `end()` 和 `start()` 来重置 Lean 服务器。
+- 成功执行密集调用后，内部计数器会增加。
 
 **参数**:
 - `code` (str): 要执行的Lean代码。

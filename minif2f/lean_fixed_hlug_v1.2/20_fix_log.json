@@ -1,0 +1,98 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/20.lean",
+  "output_file": "./minif2f/lean_fixed/20_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- How many natural numbers less than 1000 have exactly three distinct positive integer divisors? Show that it is 11.-/\ntheorem mathd_numbertheory_221 (S : Finset \u2115)\n  (h\u2080 : \u2200 x : \u2115, x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3) : S.card = 11 := by\n  -- The key observation is that numbers with exactly three divisors must be squares of primes.\n  -- This is because:\n  -- - For a number n with prime factorization n = \u03a0 p_i^e_i, the number of divisors is \u03a0 (e_i + 1)\n  -- - To get exactly 3 divisors, the exponents must be (2) (since 3 is prime, there can only be one prime factor)\n  -- - Therefore n must be p^2 where p is prime, giving divisors {1, p, p^2}\n\n  -- First, we'll find all prime squares less than 1000\n  -- The largest prime whose square is less than 1000 is 31, since 31^2 = 961 < 1000 and 37^2 = 1369 > 1000\n\n  -- Define the set of primes whose squares are less than 1000\n  let primes_less_than_32 := Finset.filter (fun p => p.Prime) (Finset.range 32)\n  -- Note: range 32 gives numbers from 0 to 31, and we'll filter primes from these\n\n  -- The set S should be exactly the squares of these primes\n  have h\u2081 : S = Finset.image (fun p => p^2) primes_less_than_32 := by\n    -- Prove equality by showing both inclusions\n    apply Finset.ext\n    intro x\n    rw [h\u2080]\n    constructor\n    \u00b7 -- Forward direction: if x \u2208 S, then x is a prime square\n      intro hx\n      obtain \u27e8hx_pos, hx_lt, hx_div\u27e9 := hx\n      -- x has exactly three divisors, so must be p^2 for some prime p\n      have hx_pow : \u2203 p : \u2115, p.Prime \u2227 x = p^2 := by\n        rw [Nat.divisors_card_eq_iff] at hx_div\n        cases hx_div with\n        | inl \u27e8p, hp\u27e9 => \n          -- Case where x = p^2\n          exact \u27e8p, hp.1, hp.2\u27e9\n        | inr \u27e8p, hp\u27e9 =>\n          -- Case where x = p^3, but this would have 4 divisors (1,p,p\u00b2,p\u00b3)\n          -- So this contradicts hx_div = 3\n          have p_div : p.divisors.card = 2 := by\n            rw [Nat.prime_iff] at hp\n            exact hp.2\n          contradiction\n      -- Now we know x is a prime square\n      obtain \u27e8p, hp_prime, hp_sq\u27e9 := hx_pow\n      -- Since x < 1000, p < \u221a1000 \u2248 31.6, so p \u2264 31\n      have p_le_31 : p \u2264 31 := by\n        rw [hp_sq] at hx_lt\n        have := Nat.sqrt_lt_sqrt hx_lt\n        rw [Nat.sqrt_eq 961] at this  -- 31^2 = 961\n        exact Nat.lt_succ.mp this\n      -- Therefore p is in our primes_less_than_32 set\n      have p_in_primes : p \u2208 primes_less_than_32 := by\n        simp [primes_less_than_32]\n        exact \u27e8Nat.mem_range.mpr (Nat.lt_succ_of_le p_le_31), hp_prime\u27e9\n      -- And thus x = p^2 is in the image\n      simp [p_in_primes, hp_sq]\n      exact \u27e8hx_pos, hx_lt\u27e9\n    \u00b7 -- Reverse direction: if x is a prime square less than 1000, then x \u2208 S\n      intro hx\n      obtain \u27e8p, hp_mem, hp_sq\u27e9 := Finset.mem_image.mp hx\n      rw [hp_sq]\n      -- p is a prime in primes_less_than_32, so p^2 < 1000\n      have p_lt_32 : p < 32 := by\n        simp [primes_less_than_32] at hp_mem\n        exact hp_mem.1\n      have p_sq_lt : p^2 < 1000 := by\n        calc p^2 \u2264 31^2 := by apply pow_le_pow_right; linarith\n              _ = 961 := by norm_num\n              _ < 1000 := by norm_num\n      -- p^2 has exactly three divisors since p is prime\n      have p_div : (p^2).divisors.card = 3 := by\n        rw [Nat.divisors_prime_pow hp_mem.2]\n        simp\n      -- Therefore p^2 satisfies all conditions for S\n      simp [hp_mem.2, p_sq_lt, p_div]\n      exact Nat.pos_of_ne_zero (fun h => Nat.not_prime_zero (hp_mem.2.trans h.symm))\n\n  -- Now we just need to count the primes less than 32\n  -- The primes less than 32 are: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 (11 primes)\n  have h\u2082 : primes_less_than_32.card = 11 := by\n    -- We can compute this explicitly\n    rw [primes_less_than_32]\n    -- Filter primes from numbers 0-31\n    have : (Finset.range 32).filter Nat.Prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31} := by\n      apply Finset.ext\n      intro x\n      simp [Nat.prime_iff]\n      constructor\n      \u00b7 intro \u27e8hx_range, hx_prime\u27e9\n        simp [Finset.mem_range, Nat.lt_succ_iff] at hx_range\n        -- List all primes \u2264 31\n        exact hx_prime.1\n      \u00b7 intro hx_mem\n        -- Check that all listed numbers are indeed primes \u2264 31\n        simp [Nat.prime_iff]\n        repeat' (first | constructor | assumption)\n    rw [this]\n    -- Count the elements\n    simp\n\n  -- Finally, since S is the image of primes_less_than_32 under squaring,\n  -- and squaring is injective on primes, the cardinality is preserved\n  have h\u2083 : S.card = primes_less_than_32.card := by\n    rw [h\u2081]\n    apply Finset.card_image_of_injOn\n    -- Squaring is injective on positive numbers\n    intro p\u2081 hp\u2081 p\u2082 hp\u2082 h\n    simp at hp\u2081 hp\u2082\n    exact Nat.pow_left_inj (Nat.Prime.two_le hp\u2081.2) (Nat.Prime.two_le hp\u2082.2) (by linarith) h\n\n  -- Combine the results to get S.card = 11\n  rw [h\u2083, h\u2082]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- How many natural numbers less than 1000 have exactly three distinct positive integer divisors? Show that it is 11.-/\ntheorem mathd_numbertheory_221 (S : Finset \u2115)\n  (h\u2080 : \u2200 x : \u2115, x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3) : S.card = 11 := by\n  -- The key observation is that numbers with exactly three divisors must be squares of primes.\n  -- This is because:\n  -- - For a number n with prime factorization n = \u03a0 p_i^e_i, the number of divisors is \u03a0 (e_i + 1)\n  -- - To get exactly 3 divisors, the exponents must be (2) (since 3 is prime, there can only be one prime factor)\n  -- - Therefore n must be p^2 where p is prime, giving divisors {1, p, p^2}\n\n  -- First, we'll find all prime squares less than 1000\n  -- The largest prime whose square is less than 1000 is 31, since 31^2 = 961 < 1000 and 37^2 = 1369 > 1000\n\n  -- Define the set of primes whose squares are less than 1000\n  let primes_less_than_32 := Finset.filter (fun p => p.Prime) (Finset.range 32)\n  -- Note: range 32 gives numbers from 0 to 31, and we'll filter primes from these\n\n  -- The set S should be exactly the squares of these primes\n  have h\u2081 : S = Finset.image (fun p => p^2) primes_less_than_32 := by\n    -- Prove equality by showing both inclusions\n    apply Finset.ext\n    intro x\n    rw [h\u2080]\n    constructor\n    \u00b7 -- Forward direction: if x \u2208 S, then x is a prime square\n      intro hx\n      obtain \u27e8hx_pos, hx_lt, hx_div\u27e9 := hx\n      -- x has exactly three divisors, so must be p^2 for some prime p\n      have hx_pow : \u2203 p : \u2115, p.Prime \u2227 x = p^2 := by\n        rw [Nat.divisors_card_eq_iff] at hx_div\n        cases hx_div with\n        | inl \u27e8p, hp\u27e9 => \n          -- Case where x = p^2\n          exact \u27e8p, hp.1, hp.2\u27e9\n        | inr \u27e8p, hp\u27e9 =>\n          -- Case where x = p^3, but this would have 4 divisors (1,p,p\u00b2,p\u00b3)\n          -- So this contradicts hx_div = 3\n          have p_div : p.divisors.card = 2 := by\n            rw [Nat.prime_iff] at hp\n            exact hp.2\n          contradiction\n      -- Now we know x is a prime square\n      obtain \u27e8p, hp_prime, hp_sq\u27e9 := hx_pow\n      -- Since x < 1000, p < \u221a1000 \u2248 31.6, so p \u2264 31\n      have p_le_31 : p \u2264 31 := by\n        rw [hp_sq] at hx_lt\n        have := Nat.sqrt_lt_sqrt hx_lt\n        rw [Nat.sqrt_eq 961] at this  -- 31^2 = 961\n        exact Nat.lt_succ.mp this\n      -- Therefore p is in our primes_less_than_32 set\n      have p_in_primes : p \u2208 primes_less_than_32 := by\n        simp [primes_less_than_32]\n        exact \u27e8Nat.mem_range.mpr (Nat.lt_succ_of_le p_le_31), hp_prime\u27e9\n      -- And thus x = p^2 is in the image\n      simp [p_in_primes, hp_sq]\n      exact \u27e8hx_pos, hx_lt\u27e9\n    \u00b7 -- Reverse direction: if x is a prime square less than 1000, then x \u2208 S\n      intro hx\n      obtain \u27e8p, hp_mem, hp_sq\u27e9 := Finset.mem_image.mp hx\n      rw [hp_sq]\n      -- p is a prime in primes_less_than_32, so p^2 < 1000\n      have p_lt_32 : p < 32 := by\n        simp [primes_less_than_32] at hp_mem\n        exact hp_mem.1\n      have p_sq_lt : p^2 < 1000 := by\n        calc p^2 \u2264 31^2 := by apply pow_le_pow_right; linarith\n              _ = 961 := by norm_num\n              _ < 1000 := by norm_num\n      -- p^2 has exactly three divisors since p is prime\n      have p_div : (p^2).divisors.card = 3 := by\n        rw [Nat.divisors_prime_pow hp_mem.2]\n        simp\n      -- Therefore p^2 satisfies all conditions for S\n      simp [hp_mem.2, p_sq_lt, p_div]\n      exact Nat.pos_of_ne_zero (fun h => Nat.not_prime_zero (hp_mem.2.trans h.symm))\n\n  -- Now we just need to count the primes less than 32\n  -- The primes less than 32 are: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 (11 primes)\n  have h\u2082 : primes_less_than_32.card = 11 := by\n    -- We can compute this explicitly\n    rw [primes_less_than_32]\n    -- Filter primes from numbers 0-31\n    have : (Finset.range 32).filter Nat.Prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31} := by\n      apply Finset.ext\n      intro x\n      simp [Nat.prime_iff]\n      constructor\n      \u00b7 intro \u27e8hx_range, hx_prime\u27e9\n        simp [Finset.mem_range, Nat.lt_succ_iff] at hx_range\n        -- List all primes \u2264 31\n        exact hx_prime.1\n      \u00b7 intro hx_mem\n        -- Check that all listed numbers are indeed primes \u2264 31\n        simp [Nat.prime_iff]\n        repeat' (first | constructor | assumption)\n    rw [this]\n    -- Count the elements\n    simp\n\n  -- Finally, since S is the image of primes_less_than_32 under squaring,\n  -- and squaring is injective on primes, the cardinality is preserved\n  have h\u2083 : S.card = primes_less_than_32.card := by\n    rw [h\u2081]\n    apply Finset.card_image_of_injOn\n    -- Squaring is injective on positive numbers\n    intro p\u2081 hp\u2081 p\u2082 hp\u2082 h\n    simp at hp\u2081 hp\u2082\n    exact Nat.pow_left_inj (Nat.Prime.two_le hp\u2081.2) (Nat.Prime.two_le hp\u2082.2) (by linarith) h\n\n  -- Combine the results to get S.card = 11\n  rw [h\u2083, h\u2082]",
+  "statistics": {
+    "original_errors": 5,
+    "decompositions_applied": 0,
+    "successful_syntheses": 0,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "10": 1,
+      "25": 1,
+      "31": 1,
+      "36": 1,
+      "38": 1
+    },
+    "remaining_errors": 5,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 10,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3\nprimes_less_than_32 : Finset \u2115 := {p \u2208 Finset.range 32 | Nat.Prime p}\nh\u2081 : S = Finset.image (fun p => p ^ 2) primes_less_than_32\n\u22a2 S.card = 11",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 2.3489089012145996
+      },
+      {
+        "pass": 1,
+        "line": 25,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase h.mpr\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3\nprimes_less_than_32 : Finset \u2115 := {p \u2208 Finset.range 32 | Nat.Prime p}\nx : \u2115\n\u22a2 x \u2208 Finset.image (fun p => p ^ 2) primes_less_than_32 \u2192 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 2.757816791534424
+      },
+      {
+        "pass": 1,
+        "line": 31,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase h.mp.intro.intro\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3\nprimes_less_than_32 : Finset \u2115 := {p \u2208 Finset.range 32 | Nat.Prime p}\nx : \u2115\nhx_pos : 0 < x\nhx_lt : x < 1000\nhx_div : x.divisors.card = 3\nhx_pow : \u2203 p, Nat.Prime p \u2227 x = p ^ 2\n\u22a2 x \u2208 Finset.image (fun p => p ^ 2) primes_less_than_32",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 5.7536375522613525
+      },
+      {
+        "pass": 1,
+        "line": 36,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Nat.divisors_card_eq_iff'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 3.3677425384521484
+      },
+      {
+        "pass": 1,
+        "line": 38,
+        "error_type": "syntax_error",
+        "original_error_message": "unexpected token '\u27e8'; expected '=>'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 3.1040220260620117
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 38,
+        "error_type": "syntax_error",
+        "message": "unexpected token '\u27e8'; expected '=>'"
+      },
+      {
+        "line": 36,
+        "error_type": "unknown_constant",
+        "message": "unknown constant 'Nat.divisors_card_eq_iff'"
+      },
+      {
+        "line": 31,
+        "error_type": "other_error",
+        "message": "unsolved goals\ncase h.mp.intro.intro\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3\nprimes_less_than_32 : Finset \u2115 := {p \u2208 Finset.range 32 | Nat.Prime p}\nx : \u2115\nhx_pos : 0 < x\nhx_lt : x < 1000\nhx_div : x.divisors.card = 3\nhx_pow : \u2203 p, Nat.Prime p \u2227 x = p ^ 2\n\u22a2 x \u2208 Finset.image (fun p => p ^ 2) primes_less_than_32"
+      },
+      {
+        "line": 25,
+        "error_type": "other_error",
+        "message": "unsolved goals\ncase h.mpr\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3\nprimes_less_than_32 : Finset \u2115 := {p \u2208 Finset.range 32 | Nat.Prime p}\nx : \u2115\n\u22a2 x \u2208 Finset.image (fun p => p ^ 2) primes_less_than_32 \u2192 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3"
+      },
+      {
+        "line": 10,
+        "error_type": "other_error",
+        "message": "unsolved goals\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3\nprimes_less_than_32 : Finset \u2115 := {p \u2208 Finset.range 32 | Nat.Prime p}\nh\u2081 : S = Finset.image (fun p => p ^ 2) primes_less_than_32\n\u22a2 S.card = 11"
+      }
+    ],
+    "total_time": 17.4943368434906,
+    "no_goals_fixes_applied": 0
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 5\nDecompositions applied: 0\nNo goals error fixes applied: 0\nSuccessful syntheses: 0\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 10: 1 attempts\n  - Line 25: 1 attempts\n  - Line 31: 1 attempts\n  - Line 36: 1 attempts\n  - Line 38: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 5\n\nRemaining Errors:\n  - Line 38: syntax_error - unexpected token '\u27e8'; expected '=>'...\n  - Line 36: unknown_constant - unknown constant 'Nat.divisors_card_eq_iff'...\n  - Line 31: other_error - unsolved goals case h.mp.intro.intro S : Finset \u2115 h\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divis...\n  - Line 25: other_error - unsolved goals case h.mpr S : Finset \u2115 h\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = ...\n  - Line 10: other_error - unsolved goals S : Finset \u2115 h\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x < 1000 \u2227 x.divisors.card = 3 primes_le...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 17.49 seconds",
+  "dsl": null
+}

@@ -1,0 +1,67 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/55.lean",
+  "output_file": "./minif2f/lean_fixed/55_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/\ntheorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by\n  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12\n  -- Then adding 11 gives us 23 as required\n\n  -- First, simplify both numbers by factoring out common powers of 2\n  -- 6432 \u00f7 4 = 1608, 132 \u00f7 4 = 33, so gcd(6432,132) = 4 \u00d7 gcd(1608,33)\n  have h\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by\n    rw [\u2190 Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers\n    simp only [mul_left_inj' (by norm_num : 4 \u2260 0)]  -- Simplify multiplication\n    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization\n\n  -- Now compute gcd(1608,33) using Euclidean algorithm:\n  -- 1608 = 48 \u00d7 33 + 24\n  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3\n  have h\u2082 : Nat.gcd 1608 33 = 3 := by\n    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step\n    rw [show 1608 % 33 = 24 by rfl]  -- 1608 \u00f7 33 = 48 remainder 24\n    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)\n    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)\n    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)\n    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)\n    rfl  -- gcd(3,0) = 3\n\n  -- Combine the results: gcd(6432,132) = 4 \u00d7 3 = 12\n  rw [h\u2081, h\u2082]\n  -- Now compute 12 + 11 = 23\n  norm_num  -- Simplify the arithmetic",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the result when the greatest common factor of 6432 and 132 is increased by 11? Show that it is 23.-/\ntheorem mathd_numbertheory_45 : Nat.gcd 6432 132 + 11 = 23 := by\n  -- To prove this, we need to compute gcd(6432, 132) and show it equals 12\n  -- Then adding 11 gives us 23 as required\n\n  -- First, simplify both numbers by factoring out common powers of 2\n  -- 6432 \u00f7 4 = 1608, 132 \u00f7 4 = 33, so gcd(6432,132) = 4 \u00d7 gcd(1608,33)\n  have h\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33 := by\n    rw [\u2190 Nat.gcd_mul_left 6432 4 33]  -- Factor out 4 from both numbers\n    simp only [mul_left_inj' (by norm_num : 4 \u2260 0)]  -- Simplify multiplication\n    rw [show 4 * 1608 = 6432 by rfl, show 4 * 33 = 132 by rfl]  -- Verify factorization\n\n  -- Now compute gcd(1608,33) using Euclidean algorithm:\n  -- 1608 = 48 \u00d7 33 + 24\n  -- gcd(33,24) = gcd(24,9) = gcd(9,6) = gcd(6,3) = gcd(3,0) = 3\n  have h\u2082 : Nat.gcd 1608 33 = 3 := by\n    rw [Nat.gcd_rec]  -- Apply Euclidean algorithm step\n    rw [show 1608 % 33 = 24 by rfl]  -- 1608 \u00f7 33 = 48 remainder 24\n    rw [Nat.gcd_rec, show 33 % 24 = 9 by rfl]  -- Next step: gcd(33,24)\n    rw [Nat.gcd_rec, show 24 % 9 = 6 by rfl]   -- Next step: gcd(24,9)\n    rw [Nat.gcd_rec, show 9 % 6 = 3 by rfl]    -- Next step: gcd(9,6)\n    rw [Nat.gcd_rec, show 6 % 3 = 0 by rfl]    -- Final step: gcd(6,3)\n    rfl  -- gcd(3,0) = 3\n\n  -- Combine the results: gcd(6432,132) = 4 \u00d7 3 = 12\n  rw [h\u2081, h\u2082]\n  -- Now compute 12 + 11 = 23\n  norm_num  -- Simplify the arithmetic",
+  "statistics": {
+    "original_errors": 3,
+    "decompositions_applied": 0,
+    "successful_syntheses": 0,
+    "failed_syntheses": {
+      "16": "Synthesis failed: No solution found by synthesizer.",
+      "25": "Synthesis failed: No solution found by synthesizer.",
+      "35": "Synthesis failed: No valid fix/placement generated or extracted."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 3,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  6432 * Nat.gcd 4 33\n\u22a2 Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 2.381413459777832
+      },
+      {
+        "pass": 1,
+        "line": 25,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  1608 % 33\nh\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33\n\u22a2 (33 % 1608).gcd 1608 = 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 2.633200168609619
+      },
+      {
+        "pass": 1,
+        "line": 35,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 1.6198570728302002
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 16,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  6432 * Nat.gcd 4 33\n\u22a2 Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33"
+      },
+      {
+        "line": 25,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  1608 % 33\nh\u2081 : Nat.gcd 6432 132 = 4 * Nat.gcd 1608 33\n\u22a2 (33 % 1608).gcd 1608 = 3"
+      },
+      {
+        "line": 35,
+        "error_type": "no_goals_to_solve",
+        "message": "no goals to be solved"
+      }
+    ],
+    "total_time": 6.730499029159546
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 3\nDecompositions applied: 0\nSuccessful syntheses: 0\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 3\n  - Line 16: Synthesis failed: No solution found by synthesizer....\n  - Line 25: Synthesis failed: No solution found by synthesizer....\n  - Line 35: Synthesis failed: No valid fix/placement generated or extracted....\nRemaining errors: 3\n\nRemaining Errors:\n  - Line 16: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   6432 * Nat....\n  - Line 25: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   1608 % 33 h...\n  - Line 35: no_goals_to_solve - no goals to be solved...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 6.73 seconds"
+}

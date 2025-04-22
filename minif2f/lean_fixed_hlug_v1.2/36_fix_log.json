@@ -1,0 +1,42 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/36.lean",
+  "output_file": "./minif2f/lean_fixed/36_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for positive integer $n$, $\\sum_{k=0}^{n-1} \\frac{1}{(k+1)(k+2)} = \\frac{n}{n+1}$.-/\ntheorem induction_sum_1oktkp1 (n : \u2115) :\n    (\u2211 k in Finset.range n, (1 : \u211d) / ((k + 1) * (k + 2))) = n / (n + 1) := by\n  -- We'll prove this by induction on n\n  induction n with\n  | zero =>\n    -- Base case: n = 0\n    -- The sum over an empty range is 0, and 0/(0+1) = 0\n    simp [Finset.range_zero]  -- Simplify the empty sum\n    norm_num  -- Normalize numerical expressions\n  | succ m ih =>\n    -- Inductive step: assume true for n = m (induction hypothesis ih), prove for n = m + 1\n    -- First rewrite the sum for m+1 as the sum for m plus the new term\n    rw [Finset.range_succ, Finset.sum_insert (Finset.not_mem_range_self m)]\n    -- Rewrite using the induction hypothesis\n    rw [ih]\n    -- The new term is 1/((m+1)*(m+2))\n    -- Now we need to show: m/(m+1) + 1/((m+1)*(m+2)) = (m+1)/(m+2)\n    -- First find a common denominator\n    have common_denom : (m + 1) * (m + 2) = (m + 1) * (m + 2) := by ring\n    -- Rewrite both fractions with the common denominator\n    rw [div_eq_mul_inv, div_eq_mul_inv, div_eq_mul_inv]\n    -- Convert to multiplication form\n    rw [\u2190 mul_inv, \u2190 mul_inv, \u2190 mul_inv]\n    -- Factor out the inverse of the common denominator\n    rw [mul_add, \u2190 mul_assoc]\n    -- Simplify the numerators\n    have num1 : m * (m + 2) = m^2 + 2*m := by ring\n    have num2 : 1 = 1 := by rfl\n    rw [num1, num2]\n    -- Combine terms in the numerator\n    have combined_num : (m^2 + 2*m + 1) = (m + 1)^2 := by ring\n    rw [combined_num]\n    -- Now we have: (m+1)^2 / ((m+1)*(m+2)) = (m+1)/(m+2)\n    -- Cancel one (m+1) factor from numerator and denominator\n    have cancel_factor : (m + 1)^2 / ((m + 1) * (m + 2)) = \n        (m + 1) * (m + 1) / ((m + 1) * (m + 2)) := by ring\n    rw [cancel_factor]\n    rw [mul_div_mul_left]\n    -- The remaining expression is exactly what we need\n    -- The side condition is m + 1 \u2260 0, which holds since m is a natural number\n    simp [m.succ_ne_zero]  -- Simplify using the fact that m+1 \u2260 0",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for positive integer $n$, $\\sum_{k=0}^{n-1} \\frac{1}{(k+1)(k+2)} = \\frac{n}{n+1}$.-/\ntheorem induction_sum_1oktkp1 (n : \u2115) :\n    (\u2211 k in Finset.range n, (1 : \u211d) / ((k + 1) * (k + 2))) = n / (n + 1) := by\n  -- We'll prove this by induction on n\n  induction n with\n  | zero =>\n    -- Base case: n = 0\n    -- The sum over an empty range is 0, and 0/(0+1) = 0\n    simp [Finset.range_zero]  -- Simplify the empty sum\n  | succ m ih =>\n    -- Inductive step: assume true for n = m (induction hypothesis ih), prove for n = m + 1\n    -- First rewrite the sum for m+1 as the sum for m plus the new term\n    rw [Finset.range_succ]\n    rw [Finset.sum_insert (Finset.not_mem_range_self m)]\n    -- Rewrite using the induction hypothesis\n    rw [ih]\n    -- The new term is 1/((m+1)*(m+2))\n    -- Now we need to show: m/(m+1) + 1/((m+1)*(m+2)) = (m+1)/(m+2)\n    -- First find a common denominator\n    have common_denom : (m + 1) * (m + 2) = (m + 1) * (m + 2) := by ring\n    -- Rewrite both fractions with the common denominator\n    rw [div_eq_mul_inv, div_eq_mul_inv, div_eq_mul_inv]\n    -- Convert to multiplication form\n    rw [\u2190 mul_inv, \u2190 mul_inv, \u2190 mul_inv]\n    -- Factor out the inverse of the common denominator\n    rw [mul_add, \u2190 mul_assoc]\n    -- Simplify the numerators\n    have num1 : m * (m + 2) = m^2 + 2*m := by ring\n    have num2 : 1 = 1 := by rfl\n    rw [num1, num2]\n    -- Combine terms in the numerator\n    have combined_num : (m^2 + 2*m + 1) = (m + 1)^2 := by ring\n    rw [combined_num]\n    -- Now we have: (m+1)^2 / ((m+1)*(m+2)) = (m+1)/(m+2)\n    -- Cancel one (m+1) factor from numerator and denominator\n    have cancel_factor : (m + 1)^2 / ((m + 1) * (m + 2)) = \n        (m + 1) * (m + 1) / ((m + 1) * (m + 2)) := by ring\n    rw [cancel_factor]\n    rw [mul_div_mul_left]\n    -- The remaining expression is exactly what we need\n    -- The side condition is m + 1 \u2260 0, which holds since m is a natural number\n    simp [m.succ_ne_zero]  -- Simplify using the fact that m+1 \u2260 0",
+  "statistics": {
+    "original_errors": 2,
+    "decompositions_applied": 1,
+    "successful_syntheses": 0,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "21": 1
+    },
+    "remaining_errors": 1,
+    "fix_rate": 0.5,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 3,
+        "line": 21,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  Finset.not_mem_range_self m\nargument\n  m\nhas type\n  \u2115 : Type\nbut is expected to have type\n  ?m.2593 \u2208 Finset.range ?m.2593 : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.365747451782227
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 21,
+        "error_type": "type_mismatch",
+        "message": "application type mismatch\n  Finset.not_mem_range_self m\nargument\n  m\nhas type\n  \u2115 : Type\nbut is expected to have type\n  ?m.2593 \u2208 Finset.range ?m.2593 : Prop"
+      }
+    ],
+    "total_time": 7.855868339538574,
+    "no_goals_fixes_applied": 1
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 2\nDecompositions applied: 1\nNo goals error fixes applied: 1\nSuccessful syntheses: 0\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 21: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 1\n\nRemaining Errors:\n  - Line 21: type_mismatch - application type mismatch   Finset.not_mem_range_self m argument   m has type   \u2115 : Type but is expe...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.5000\nTotal time: 7.86 seconds",
+  "dsl": null
+}

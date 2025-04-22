@@ -1,0 +1,81 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/71.lean",
+  "output_file": "./minif2f/lean_fixed/71_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the sum of the four positive factors of the positive integer value of $\\sqrt{196}$? Show that it is 24.-/\ntheorem mathd_numbertheory_35 (S : Finset \u2115) (h\u2080 : \u2200 n : \u2115, n \u2208 S \u2194 n \u2223 Nat.sqrt 196) :\n    (\u2211 k in S, k) = 24 := by\n  -- First, compute the integer square root of 196\n  have sqrt_196 : Nat.sqrt 196 = 14 := by\n    -- The square root of 196 is exactly 14 since 14\u00b2 = 196\n    rw [Nat.sqrt_eq]\n    exact \u27e8by norm_num, by norm_num\u27e9\n\n  -- Rewrite the hypothesis h\u2080 using the computed square root value\n  rw [sqrt_196] at h\u2080\n\n  -- The positive divisors of 14 are exactly 1, 2, 7, and 14\n  -- We'll prove that S must be {1, 2, 7, 14}\n  have S_eq : S = {1, 2, 7, 14} := by\n    -- Use the extensionality of finsets\n    apply Finset.ext\n    intro n\n    -- Rewrite using our hypothesis about membership in S\n    rw [h\u2080]\n    -- The divisors of 14 are exactly these four numbers\n    rw [Nat.dvd_iff_exists_eq_mul_left]\n    -- Prove equivalence by enumerating cases\n    cases n with\n    | zero => simp -- 0 is not a positive divisor\n    | succ n =>\n      match n with\n      | 0 => simp [Nat.succ_eq_add_one] -- n = 1 case\n      | 1 => simp [Nat.succ_eq_add_one] -- n = 2 case\n      | 6 => simp [Nat.succ_eq_add_one] -- n = 7 case\n      | 13 => simp [Nat.succ_eq_add_one] -- n = 14 case\n      | _ =>\n        -- For other numbers, show they're not divisors\n        simp only [Nat.succ_eq_add_one, add_zero]\n        intro k hk\n        -- Numbers larger than 14 can't divide 14\n        have : 14 < n.succ := by omega\n        contradiction\n\n  -- Now rewrite the goal using the equality we just proved\n  rw [S_eq]\n\n  -- Compute the sum of the elements {1, 2, 7, 14}\n  -- This can be done by direct computation\n  simp only [Finset.sum_insert, Finset.sum_singleton, Finset.mem_singleton, \n    Finset.mem_insert, not_or, not_false_eq_true]\n  -- The sum is 1 + 2 + 7 + 14 = 24\n  norm_num",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- What is the sum of the four positive factors of the positive integer value of $\\sqrt{196}$? Show that it is 24.-/\ntheorem mathd_numbertheory_35 (S : Finset \u2115) (h\u2080 : \u2200 n : \u2115, n \u2208 S \u2194 n \u2223 Nat.sqrt 196) :\n    (\u2211 k in S, k) = 24 := by\n  -- First, compute the integer square root of 196\n  have sqrt_196 : Nat.sqrt 196 = 14 := by\n    -- The square root of 196 is exactly 14 since 14\u00b2 = 196\n    norm_num\n  rw [sqrt_196] at h\u2080\n\n  -- The positive divisors of 14 are exactly 1, 2, 7, and 14\n  -- We'll prove that S must be {1, 2, 7, 14}\n  have S_eq : S = {1, 2, 7, 14} := by\n    -- Use the extensionality of finsets\n    apply Finset.ext\n    intro n\n    -- Rewrite using our hypothesis about membership in S\n    rw [h\u2080]\n    -- The divisors of 14 are exactly these four numbers\n    rw [Nat.dvd_iff_exists_eq_mul_left]\n    -- Prove equivalence by enumerating cases\n    cases n with\n    | zero => simp -- 0 is not a positive divisor\n    | succ n =>\n      match n with\n      | 0 => simp [Nat.succ_eq_add_one] -- n = 1 case\n      | 1 => simp [Nat.succ_eq_add_one] -- n = 2 case\n      | 6 => simp [Nat.succ_eq_add_one] -- n = 7 case\n      | 13 => simp [Nat.succ_eq_add_one] -- n = 14 case\n      | _ =>\n        -- For other numbers, show they're not divisors\n        simp only [Nat.succ_eq_add_one, add_zero]\n        intro k hk\n        -- Numbers larger than 14 can't divide 14\n        have : 14 < n.succ := by omega\n        contradiction\n\n  -- Now rewrite the goal using the equality we just proved\n  rw [S_eq]\n\n  -- Compute the sum of the elements {1, 2, 7, 14}\n  -- This can be done by direct computation\n  simp",
+  "statistics": {
+    "original_errors": 3,
+    "decompositions_applied": 0,
+    "successful_syntheses": 2,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "14": 1,
+      "26": 3,
+      "49": 1
+    },
+    "remaining_errors": 1,
+    "fix_rate": 0.6666666666666666,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 14,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (?n * ?n).sqrt\nS : Finset \u2115\nh\u2080 : \u2200 (n : \u2115), n \u2208 S \u2194 n \u2223 Nat.sqrt 196\n\u22a2 Nat.sqrt 196 = 14",
+        "fix_time": 1.2198588848114014,
+        "errors_after_this_fix": 3,
+        "fix_snippet": "norm_num",
+        "dsl": "oneline(norm_num)"
+      },
+      {
+        "pass": 3,
+        "line": 49,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "fix_time": 1.122452974319458,
+        "errors_after_this_fix": 2,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 3,
+        "line": 26,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Nat.dvd_iff_exists_eq_mul_left'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 4.321542263031006
+      },
+      {
+        "pass": 4,
+        "line": 26,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Nat.dvd_iff_exists_eq_mul_left'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.194967269897461
+      },
+      {
+        "pass": 5,
+        "line": 26,
+        "error_type": "unknown_constant",
+        "original_error_message": "unknown constant 'Nat.dvd_iff_exists_eq_mul_left'",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.421098232269287
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 26,
+        "error_type": "unknown_constant",
+        "message": "unknown constant 'Nat.dvd_iff_exists_eq_mul_left'"
+      }
+    ],
+    "total_time": 21.996049404144287,
+    "no_goals_fixes_applied": 2
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 3\nDecompositions applied: 0\nNo goals error fixes applied: 2\nSuccessful syntheses: 2\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 14: 1 attempts\n  - Line 26: 3 attempts\n  - Line 49: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 1\n\nRemaining Errors:\n  - Line 26: unknown_constant - unknown constant 'Nat.dvd_iff_exists_eq_mul_left'...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.6667\nTotal time: 22.00 seconds",
+  "dsl": "oneline(norm_num)"
+}

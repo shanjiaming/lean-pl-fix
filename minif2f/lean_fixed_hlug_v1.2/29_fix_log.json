@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/29.lean",
+  "output_file": "./minif2f/lean_fixed/29_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disables the heartbeat limit to prevent timeout during execution\n\nopen BigOperators Real Nat Topology Rat  -- Opens various namespaces for mathematical notations\n\n/-- \nSimplify (9 - 4i) - (-3 - 4i). Show that it is 12.\nThis theorem proves that the difference between two complex numbers q and e equals 12,\nwhere q is defined as 9 - 4i and e is defined as -3 - 4i.\n-/\ntheorem mathd_algebra_48 (q e : \u2102) (h\u2080 : q = 9 - 4 * Complex.I) (h\u2081 : e = -3 - 4 * Complex.I) :\n  q - e = 12 := by\n  -- First, we substitute the definitions of q and e from the hypotheses\n  rw [h\u2080, h\u2081]  -- Rewrites q and e using their definitions in h\u2080 and h\u2081\n  -- Now the goal becomes: (9 - 4*I) - (-3 - 4*I) = 12\n  \n  -- Next, we simplify the subtraction of complex numbers\n  -- We distribute the subtraction operation\n  simp only [sub_eq_add_neg]  -- Converts subtraction to addition of negative\n  -- Goal becomes: (9 - 4*I) + -(-3 - 4*I) = 12\n  \n  -- Simplify the negation of the second complex number\n  simp only [neg_sub]  -- Applies the property -(a - b) = -a + b\n  -- Goal becomes: (9 - 4*I) + (3 + 4*I) = 12\n  \n  -- Now we remove the parentheses and regroup terms\n  simp only [add_sub]  -- Distributes the addition over subtraction\n  -- Goal becomes: 9 - 4*I + 3 + 4*I = 12\n  \n  -- Combine like terms (real parts and imaginary parts)\n  ring  -- The 'ring' tactic solves goals in commutative rings by normalization\n  -- This successfully simplifies the left side to 12, matching the right side\n  \n  -- No more goals left, so the proof is complete",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0  -- Disables the heartbeat limit to prevent timeout during execution\n\nopen BigOperators Real Nat Topology Rat  -- Opens various namespaces for mathematical notations\n\n/-- \nSimplify (9 - 4i) - (-3 - 4i). Show that it is 12.\nThis theorem proves that the difference between two complex numbers q and e equals 12,\nwhere q is defined as 9 - 4i and e is defined as -3 - 4i.\n-/\ntheorem mathd_algebra_48 (q e : \u2102) (h\u2080 : q = 9 - 4 * Complex.I) (h\u2081 : e = -3 - 4 * Complex.I) :\n  q - e = 12 := by\n  -- First, we substitute the definitions of q and e from the hypotheses\n  rw [h\u2080, h\u2081]  -- Rewrites q and e using their definitions in h\u2080 and h\u2081\n  -- Now the goal becomes: (9 - 4*I) - (-3 - 4*I) = 12\n  \n  -- Next, we simplify the subtraction of complex numbers\n  -- We distribute the subtraction operation\n  simp only [sub_eq_add_neg]  -- Converts subtraction to addition of negative\n  -- Goal becomes: (9 - 4*I) + -(-3 - 4*I) = 12\n  \n  -- Simplify the negation of the second complex number\n  ring\n  -- Goal becomes: (9 - 4*I) + (3 + 4*I) = 12\n  \n  -- Now we remove the parentheses and regroup terms",
+  "statistics": {
+    "original_errors": 1,
+    "decompositions_applied": 0,
+    "successful_syntheses": 1,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "25": 1
+    },
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 25,
+        "error_type": "simp_failed",
+        "original_error_message": "simp made no progress",
+        "fix_time": 0.994420051574707,
+        "errors_after_this_fix": 1,
+        "fix_snippet": "ring",
+        "dsl": "oneline(ring)"
+      }
+    ],
+    "failed_fixes_details": [],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 1.1578340530395508,
+    "no_goals_fixes_applied": 1
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 1\nDecompositions applied: 0\nNo goals error fixes applied: 1\nSuccessful syntheses: 1\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 25: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 1.16 seconds",
+  "dsl": "oneline(ring)"
+}

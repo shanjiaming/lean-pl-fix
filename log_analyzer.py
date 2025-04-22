@@ -41,7 +41,7 @@ def parse_log_file(file_path):
             "status": data.get("status", "unknown"),
             "original_errors": stats.get("original_errors", 0),
             "fixed_errors": fixed_errors,
-            "failed_errors": len(stats.get("failed_syntheses", {})),  # 使用failed_syntheses的长度
+            "failed_errors": len(stats.get("failed_fixes_details", [])),  # 使用failed_fixes_details的长度，而不是failed_syntheses
             "timeout_errors": stats.get("timeout_syntheses", 0),  # 添加超时错误数
             "remaining_errors": stats.get("remaining_errors", 0),
             "fix_rate": stats.get("fix_rate", 0),  # 直接使用计算好的fix_rate
@@ -49,7 +49,8 @@ def parse_log_file(file_path):
             "failed_fixes": stats.get("failed_fixes_details", []),  # 更新键名
             "timeout_fixes": stats.get("timeout_fixes_details", []),  # 添加超时修复详情
             "total_time": stats.get("total_time", 0),
-            "decompositions_applied": stats.get("decompositions_applied", 0)  # 添加decompositions_applied
+            "decompositions_applied": stats.get("decompositions_applied", 0),  # 添加decompositions_applied
+            "attempts_per_line": stats.get("attempts_per_line", {})  # 添加每行尝试次数
         }
     except Exception as e:
         print(f"Error parsing {file_path}: {str(e)}")
@@ -70,6 +71,9 @@ def analyze_logs(log_data):
     total_failed_errors = sum(log["failed_errors"] for log in log_data)
     total_timeout_errors = sum(log["timeout_errors"] for log in log_data)  # 添加超时错误总数
     total_remaining_errors = sum(log["remaining_errors"] for log in log_data)
+    
+    # 计算总尝试次数
+    total_attempts = sum(sum(attempts.values()) for log in log_data if "attempts_per_line" in log for attempts in [log["attempts_per_line"]])
     
     # 使用日志自身的fix_rate或重新计算
     overall_fix_rate = sum(log["fix_rate"] * log["original_errors"] for log in log_data) / total_original_errors if total_original_errors > 0 else 0
@@ -94,13 +98,18 @@ def analyze_logs(log_data):
     
     # 2. Collect fix details distribution
     fix_snippets = []
+    dsl_snippets = []  # 收集DSL信息
     for log in log_data:
         for fix in log["successful_fixes"]:
             # 适应新的successful_fixes_details结构
             if "fix_snippet" in fix:
                 fix_snippets.append(fix.get("fix_snippet", "unknown"))
+            # 收集DSL信息
+            if "dsl" in fix and fix["dsl"]:
+                dsl_snippets.append(fix.get("dsl", "unknown"))
     
     snippet_counter = Counter(fix_snippets)
+    dsl_counter = Counter(dsl_snippets)  # 计数DSL出现次数
     
     # 3. Statistics by error type
     error_types_fixed = defaultdict(int)
@@ -187,6 +196,25 @@ def analyze_logs(log_data):
         for bucket, stats in time_buckets.items()
     }
     
+    # 6. 统计尝试次数分布
+    attempt_counts = []
+    for log in log_data:
+        if "attempts_per_line" in log:
+            attempt_counts.extend(log["attempts_per_line"].values())
+    
+    # 计算尝试次数统计
+    attempt_stats = {}
+    if attempt_counts:
+        attempt_stats = {
+            "min": min(attempt_counts),
+            "max": max(attempt_counts),
+            "mean": statistics.mean(attempt_counts),
+            "median": statistics.median(attempt_counts),
+            "total_lines": len(attempt_counts)
+        }
+        if len(attempt_counts) > 1:
+            attempt_stats["stdev"] = statistics.stdev(attempt_counts)
+    
     return {
         "summary": {
             "total_files": total_files,
@@ -201,11 +229,14 @@ def analyze_logs(log_data):
             "total_failed_errors": total_failed_errors,
             "total_timeout_errors": total_timeout_errors,  # 添加超时错误总数
             "total_remaining_errors": total_remaining_errors,
+            "total_attempts": total_attempts,  # 添加总尝试次数
             "overall_fix_rate": overall_fix_rate
         },
         "fix_snippets": snippet_counter,
+        "dsl_snippets": dsl_counter,  # 添加DSL计数
         "error_types": error_type_stats,
         "time_stats": time_stats,
+        "attempt_stats": attempt_stats,  # 添加尝试次数统计
         "time_success_rates": time_success_rates
     }
 
@@ -225,7 +256,23 @@ def print_analysis(analysis):
     print(f"Failed to fix errors: {summary['total_failed_errors']}")
     print(f"Timeout errors: {summary['total_timeout_errors']}")
     print(f"Remaining errors: {summary['total_remaining_errors']}")
+    print(f"Total synthesis attempts: {summary['total_attempts']}")
     print(f"Overall fix rate: {summary['overall_fix_rate']:.2%}")
+    
+    # 打印尝试次数统计
+    if "attempt_stats" in analysis:
+        print("\n===== Synthesis Attempts Statistics =====")
+        attempt_stats = analysis["attempt_stats"]
+        if attempt_stats:
+            print(f"Minimum attempts per line: {attempt_stats['min']}")
+            print(f"Maximum attempts per line: {attempt_stats['max']}")
+            print(f"Mean attempts per line: {attempt_stats['mean']:.2f}")
+            print(f"Median attempts per line: {attempt_stats['median']}")
+            if "stdev" in attempt_stats:
+                print(f"Standard deviation: {attempt_stats['stdev']:.2f}")
+            print(f"Total lines with attempts: {attempt_stats['total_lines']}")
+        else:
+            print("No attempt statistics available.")
     
     print("\n===== Fix Snippet Distribution =====")
     snippet_data = [(snippet, count) for snippet, count in analysis["fix_snippets"].most_common()]
@@ -233,6 +280,14 @@ def print_analysis(analysis):
         print(tabulate(snippet_data, headers=["Fix Snippet", "Count"], tablefmt="pretty"))
     else:
         print("No successful fixes found.")
+    
+    # 打印DSL分布
+    print("\n===== DSL Distribution =====")
+    dsl_data = [(dsl, count) for dsl, count in analysis["dsl_snippets"].most_common()]
+    if dsl_data:
+        print(tabulate(dsl_data, headers=["DSL", "Count"], tablefmt="pretty"))
+    else:
+        print("No DSL information found.")
     
     print("\n===== Error Type Statistics =====")
     error_type_data = []
@@ -344,7 +399,25 @@ def generate_plots(analysis, output_dir, log_data):
                 plt.savefig(os.path.join(output_dir, "fix_time_distribution.png"))
                 plt.close()
         
-        # 4. Bar chart: Fix snippet distribution
+        # 4. Histogram: Attempts per line distribution
+        if "attempt_stats" in analysis and analysis["attempt_stats"]:
+            # Collect all attempt counts
+            attempt_counts = []
+            for log in log_data:
+                if "attempts_per_line" in log:
+                    attempt_counts.extend(log["attempts_per_line"].values())
+            
+            if attempt_counts:
+                plt.figure(figsize=(10, 6))
+                plt.hist(attempt_counts, bins=min(20, len(set(attempt_counts))), alpha=0.7)
+                plt.title("Synthesis Attempts per Line Distribution")
+                plt.xlabel("Number of Attempts")
+                plt.ylabel("Frequency (Number of Lines)")
+                plt.grid(True, alpha=0.3)
+                plt.savefig(os.path.join(output_dir, "attempts_per_line_distribution.png"))
+                plt.close()
+        
+        # 5. Bar chart: Fix snippet distribution
         snippet_counter = analysis["fix_snippets"]
         if snippet_counter:
             # Show only the top 10 most common fix snippets
@@ -360,6 +433,70 @@ def generate_plots(analysis, output_dir, log_data):
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, "fix_snippet_distribution.png"))
             plt.close()
+            
+        # 6. Bar chart: DSL distribution
+        dsl_counter = analysis["dsl_snippets"]
+        if dsl_counter:
+            # Show only the top 10 most common DSL
+            top_dsls = dsl_counter.most_common(10)
+            
+            labels = [s for s, _ in top_dsls]
+            counts = [c for _, c in top_dsls]
+            
+            plt.figure(figsize=(12, 6))
+            plt.bar(range(len(labels)), counts)
+            plt.xticks(range(len(labels)), labels, rotation=45, ha='right')
+            plt.title("Common DSL Distribution")
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_dir, "dsl_distribution.png"))
+            plt.close()
+            
+        # 7. Scatter plot: Relationship between attempts and success
+        if "attempt_stats" in analysis and analysis["attempt_stats"]:
+            # Collect data about lines, attempts, and success status
+            line_data = []
+            for log in log_data:
+                if "attempts_per_line" not in log:
+                    continue
+                
+                # Gather line numbers that were successfully fixed
+                successful_lines = set(fix.get("line") for fix in log["successful_fixes"] if "line" in fix)
+                
+                # For each line with attempts, record attempts and success status
+                for line, attempts in log["attempts_per_line"].items():
+                    line_data.append({
+                        "line": line,
+                        "attempts": attempts,
+                        "success": line in successful_lines
+                    })
+            
+            if line_data:
+                # Extract data for plotting
+                attempts = [item["attempts"] for item in line_data]
+                success = [1 if item["success"] else 0 for item in line_data]
+                
+                plt.figure(figsize=(10, 6))
+                
+                # Create jittered x-coordinates to avoid complete overlap
+                jitter = np.random.normal(0, 0.1, len(attempts))
+                x_jittered = [a + j for a, j in zip(attempts, jitter)]
+                
+                # Plot successful attempts in green, failures in red
+                successful = [x for x, s in zip(x_jittered, success) if s == 1]
+                failed = [x for x, s in zip(x_jittered, success) if s == 0]
+                
+                if successful:
+                    plt.scatter(successful, [1] * len(successful), color='green', alpha=0.6, label='Success')
+                if failed:
+                    plt.scatter(failed, [0] * len(failed), color='red', alpha=0.6, label='Failure')
+                
+                plt.yticks([0, 1], ['Failed', 'Success'])
+                plt.xlabel('Number of Attempts')
+                plt.title('Synthesis Success vs. Number of Attempts')
+                plt.grid(True, alpha=0.3)
+                plt.legend()
+                plt.savefig(os.path.join(output_dir, "success_vs_attempts.png"))
+                plt.close()
             
         print(f"Charts saved to {output_dir} directory")
         
@@ -385,6 +522,7 @@ def save_report_to_file(analysis, output_file):
             f.write(f"Failed to fix errors: {summary['total_failed_errors']}\n")
             f.write(f"Timeout errors: {summary['total_timeout_errors']}\n")
             f.write(f"Remaining errors: {summary['total_remaining_errors']}\n")
+            f.write(f"Total synthesis attempts: {summary['total_attempts']}\n")
             f.write(f"Overall fix rate: {summary['overall_fix_rate']:.2%}\n")
             
             # Write fix snippet distribution
@@ -394,6 +532,14 @@ def save_report_to_file(analysis, output_file):
                 f.write(tabulate(snippet_data, headers=["Fix Snippet", "Count"], tablefmt="grid") + "\n")
             else:
                 f.write("No successful fixes found.\n")
+            
+            # Write DSL distribution
+            f.write("\n===== DSL Distribution =====\n")
+            dsl_data = [(dsl, count) for dsl, count in analysis["dsl_snippets"].most_common()]
+            if dsl_data:
+                f.write(tabulate(dsl_data, headers=["DSL", "Count"], tablefmt="grid") + "\n")
+            else:
+                f.write("No DSL information found.\n")
             
             # Write error type statistics
             f.write("\n===== Error Type Statistics =====\n")
@@ -430,6 +576,20 @@ def save_report_to_file(analysis, output_file):
             else:
                 f.write("No fix time data found.\n")
             
+            # Write attempt statistics
+            f.write("\n===== Synthesis Attempts Statistics =====\n")
+            if "attempt_stats" in analysis:
+                attempt_stats = analysis["attempt_stats"]
+                f.write(f"Minimum attempts per line: {attempt_stats['min']}\n")
+                f.write(f"Maximum attempts per line: {attempt_stats['max']}\n")
+                f.write(f"Mean attempts per line: {attempt_stats['mean']:.2f}\n")
+                f.write(f"Median attempts per line: {attempt_stats['median']}\n")
+                if "stdev" in attempt_stats:
+                    f.write(f"Standard deviation: {attempt_stats['stdev']:.2f}\n")
+                f.write(f"Total lines with attempts: {attempt_stats['total_lines']}\n")
+            else:
+                f.write("No attempt statistics available.\n")
+            
         print(f"Analysis report saved to {output_file}")
     except Exception as e:
         print(f"Error saving report to file: {str(e)}")
@@ -442,6 +602,7 @@ def save_json_report(analysis, output_file):
         
         # Ensure Counter objects are converted to dict
         json_safe_analysis["fix_snippets"] = dict(analysis["fix_snippets"])
+        json_safe_analysis["dsl_snippets"] = dict(analysis["dsl_snippets"])
         
         with open(output_file, 'w') as f:
             json.dump(json_safe_analysis, f, indent=2)

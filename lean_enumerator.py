@@ -448,6 +448,19 @@ def evaluate_fix(original_code_full: str, fixed_code_full: str, targeted_line: i
     new_errors = []
     for fixed_error in fixed_errors:
         is_new = True
+        
+        # Check if this is a "no goals to be solved" error that we want to ignore
+        error_message = fixed_error.get('message', '').lower()
+        is_no_goals_error = "no goals to be solved" in error_message
+        
+        # Skip "no goals to be solved" errors in new errors check
+        # Note: We have a separate fix channel for handling these errors.
+        # These errors often occur after fixing other tactical errors and aren't 
+        # considered true errors but rather indicators that a tactical goal
+        # has been completed but the tactic sequence isn't terminated correctly.
+        if is_no_goals_error:
+            continue
+            
         for orig_error in original_errors:
             # Check if this is the same error (position and potentially message)
             if similar_error_types(fixed_error, orig_error):
@@ -714,6 +727,78 @@ class ToyInterpreter(PostOrderInterpreter):
             # vlog(f"Found effective solution: {solution} ({place})") # Be less verbose in interpreter
         return result
 
+    def extract_dsl_info(self, exception_str):
+        """Extract DSL information from exception string if available."""
+        if 'checker' not in exception_str:
+            return None
+        
+        # 提取DSL信息，改进正则表达式以处理嵌套括号
+        try:
+            # 查找checker(开始到最后一个)结束的内容
+            start_idx = exception_str.find('checker(')
+            if start_idx == -1:
+                return None
+            
+            # 找到匹配的右括号
+            open_count = 1
+            end_idx = start_idx + len('checker(')
+            
+            while open_count > 0 and end_idx < len(exception_str):
+                if exception_str[end_idx] == '(':
+                    open_count += 1
+                elif exception_str[end_idx] == ')':
+                    open_count -= 1
+                end_idx += 1
+            
+            if open_count == 0:
+                # 成功找到匹配的括号
+                dsl_str = exception_str[start_idx:end_idx]
+                
+                # 从checker(和最后一个参数之间提取内容
+                # 查找第一个参数的开始和结束位置
+                param_start = dsl_str.find('(') + 1
+                
+                # 寻找第一个参数的结束位置（在最后一个逗号之前）
+                # 使用栈来匹配括号以处理嵌套情况
+                bracket_stack = []
+                param_end = param_start
+                
+                while param_end < len(dsl_str):
+                    char = dsl_str[param_end]
+                    if char == '(':
+                        bracket_stack.append('(')
+                    elif char == ')':
+                        if bracket_stack:
+                            bracket_stack.pop()
+                        else:
+                            # 到达checker的闭括号
+                            break
+                    elif char == ',' and not bracket_stack:
+                        # 找到了第一个参数的结束位置（非嵌套内的逗号）
+                        break
+                    param_end += 1
+                
+                if param_end > param_start:
+                    first_param = dsl_str[param_start:param_end].strip()
+                    return first_param
+            
+            # 如果上面的方法失败，尝试更简单的方法提取checker内容
+            try:
+                # 移除"checker("和")"，保留中间内容
+                inner_content = exception_str[start_idx + len('checker('):end_idx-1]
+                # 找到最后一个参数（通常以逗号分隔）
+                parts = inner_content.rsplit(',', 1)
+                if len(parts) > 1:
+                    return parts[0].strip()
+                return inner_content
+            except:
+                pass
+                
+            return None
+        except Exception as e:
+            print(f"Error extracting DSL info: {e}")
+            return None
+
 # Modify synthesize_fix to use updated helpers
 def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_path: Optional[str]=None) -> Tuple[Optional[str], bool, str, float, List[Dict]]:
     """
@@ -856,6 +941,57 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
                 fix = toy_interpreter.last_solution
                 place = toy_interpreter.last_solution_place # Get placement
                 logger.info(f'Using last successful solution from interpreter: {fix} (place: {place})')
+                
+                # 获取DSL字符串表示
+                dsl_str = None
+                if prog is not None:
+                    try:
+                        # 获取DSL程序的字符串表示，不包含checker()外壳
+                        dsl_str = str(prog)
+                        # 如果DSL字符串包含checker，尝试提取内部实际DSL内容
+                        if "checker" in dsl_str:
+                            # 旧的正则表达式只能捕获到第一个逗号前的内容，会导致嵌套结构被截断
+                            # match = re.search(r'checker\(\s*([^,]+),', dsl_str)
+                            # if match:
+                            #     dsl_str = match.group(1).strip()
+                            
+                            # 改进方法：处理嵌套括号，提取完整的第一个参数
+                            # 使用栈来跟踪括号层级
+                            parts = dsl_str.split("checker(", 1)
+                            if len(parts) > 1:
+                                content = parts[1].strip()
+                                stack = []
+                                param_end = -1
+                                
+                                for i, char in enumerate(content):
+                                    if char == '(':
+                                        stack.append(char)
+                                    elif char == ')':
+                                        if stack:
+                                            stack.pop()
+                                        else:
+                                            # 不匹配的右括号，可能是checker的结束括号
+                                            continue
+                                    elif char == ',' and not stack:
+                                        # 找到了第一个参数的结束位置
+                                        param_end = i
+                                        break
+                                
+                                if param_end > 0:
+                                    dsl_str = content[:param_end].strip()
+                                    vlog(f"Extracted DSL: {dsl_str}", level=logging.DEBUG)
+                                else:
+                                    # 提取失败，保留原始DSL字符串但去掉checker外壳
+                                    vlog("Failed to extract first parameter with precise method, using fallback", level=logging.WARNING)
+                                    # 备用方法：移除外部checker调用，保留内部内容
+                                    if dsl_str.startswith("checker(") and dsl_str.endswith(")"):
+                                        inner_content = dsl_str[8:-1].strip()  # 去掉"checker("和最后的")"
+                                        # 从内部内容中提取第一个参数（简单实现，仅用于备用）
+                                        first_param = inner_content.split(',', 1)[0].strip()
+                                        dsl_str = first_param
+                    except Exception as e:
+                        vlog(f"Unable to extract DSL representation: {e}", logging.WARNING)
+                        dsl_str = None
             else:
                 logger.warning('No recorded solution found in interpreter after synthesis, likely synthesis failed internally or no solution exists.')
                 # Attempt to evaluate the program directly (might fail or give non-string)
@@ -905,6 +1041,9 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
                 if success:
                     fixed_full_code = final_fixed_full_code # Update the code to be returned
                     message = f"Synthesis successful (fix applied {place})"
+                    # 记录DSL信息作为返回值的一部分
+                    if dsl_str:
+                        message += f" [DSL: {dsl_str}]"
                 else:
                     # Fix failed validation, keep original code
                     fixed_full_code = original_full_code 
@@ -944,6 +1083,10 @@ def synthesize_fix(code: str, target_error_line_num: Optional[int]=None, file_pa
     if elapsed_time >= TIMEOUT and "timed out" not in message:
         message = f"Synthesis timed out after {TIMEOUT} seconds: {message}"
     
+    # 确保成功的情况下添加DSL信息
+    if success and 'dsl_str' in locals() and dsl_str and "[DSL: " not in message:
+        message += f" [DSL: {dsl_str}]"
+    
     vlog(f"Fix attempt for line {error_line} finished in {elapsed_time:.2f}s. Success: {success}. Message: {message}")
     
     return fixed_full_code, success, message, elapsed_time, remaining_errors
@@ -968,7 +1111,7 @@ def decompose_rw_at(line_content: str, indentation: str) -> Optional[str]:
     # -------------------------- #
     # match = re.match(r'^\\s*(rw)\\s*(\[.*?\])(?:\\s+(at)\\s+(.*?))?\\s*$', line_content)
     # --------------------
-    # match = re.match(r'^\\s*(rw)\\s*(\\[.*?\])(?:\\s+(at)\\s+(.*?))?\\s*$', line_content)
+    # match = re.match(r'^\\s*(rw)\\s*(\\[.*?\\])(?:\\s+(at)\\s+(.*?))?\\s*$', line_content)
     # --------------------
     # match = re.match(r'^\\s*rw\\s*\\[(.*?)\\](?:\\s+at\\s+(.*?))?\\s*$', line_content)
     # ----------------------------------------
@@ -1043,15 +1186,17 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
         "original_errors": 0,
         "decompositions_applied": 0,
         "successful_syntheses": 0,
-        "failed_syntheses": {}, # Stores {line_num: message} for persistent failures
+        "failed_syntheses": {}, # 只存储timeout情况 {line_num: timeout_message}
         "timeout_syntheses": 0,  # 计数超时发生的次数
+        "attempts_per_line": {},  # 记录每行尝试的总次数 {line_num: count}
         "remaining_errors": 0,
         "fix_rate": 0.0,
         "successful_fixes_details": [], # Keep track of successful synthesis details
         "failed_fixes_details": [],     # Keep track of failed synthesis attempts
         "timeout_fixes_details": [],    # 记录超时的修复尝试详情
         "remaining_errors_details": [],
-        "total_time": 0.0
+        "total_time": 0.0,
+        "no_goals_fixes_applied": 0,    # Track number of "no goals to be solved" fixes applied
     }
 
     # Initial error check
@@ -1067,6 +1212,8 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
         return code, True, "No errors found.", stats
 
     pass_num = 0
+    # 用于追踪timeout的行
+    timeout_lines = set()  
     while True:
         pass_num += 1
         vlog(f"\n--- Starting Fix Pass {pass_num} ---")
@@ -1096,11 +1243,10 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                 vlog(f"Skipping error due to missing line number: {error_message[:100]}...", logging.WARNING)
                 continue
 
-            # Check if synthesis already failed for this line in a *previous* pass and wasn't fixed
-            # Or if it failed in *this* pass already
-            if target_line_num in stats["failed_syntheses"] or target_line_num in attempted_synthesis_in_this_pass:
-                 # vlog(f"Skipping line {target_line_num} (synthesis previously failed or failed this pass)", logging.DEBUG)
-                 continue # Don't retry synthesis immediately if it failed
+            # 只有timeout的情况才检查failed_syntheses
+            # 其他普通失败情况只检查当前pass中的attempted_synthesis_in_this_pass
+            if (target_line_num in timeout_lines or target_line_num in attempted_synthesis_in_this_pass):
+                continue # 不重试已超时的行或当前pass已尝试的行
 
             if not (0 < target_line_num <= len(current_code_lines)):
                  vlog(f"Skipping error at line {target_line_num} - line number out of bounds for current code ({len(current_code_lines)} lines).", logging.WARNING)
@@ -1113,6 +1259,35 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
             # --- Strip comment before attempting decomposition ---
             code_part = error_line_content_stripped.split('--')[0].strip()
             # ----------------------------------------------------
+            
+            # 0. Special handling for "no goals to be solved" errors
+            if error_type == "no_goals_to_solve":
+                vlog(f"Detected 'no goals to be solved' error at line {target_line_num}. Attempting to clean up...")
+                new_code_lines, clean_applied = clean_no_goals_lines(
+                    current_code_lines, 
+                    target_line_num, 
+                    error_message
+                )
+                
+                if clean_applied:
+                    vlog(f"Successfully cleaned up 'no goals to be solved' error at line {target_line_num}")
+                    # Update current code with fixed version
+                    current_code = '\n'.join(new_code_lines)
+                    current_code_lines = new_code_lines
+                    stats["no_goals_fixes_applied"] += 1
+                    made_change_this_pass = True
+                    
+                    # 如果是超时行，移除其状态
+                    if target_line_num in timeout_lines:
+                        timeout_lines.remove(target_line_num)
+                        if target_line_num in stats["failed_syntheses"]:
+                            del stats["failed_syntheses"][target_line_num]
+                        
+                    vlog(f"Code updated after cleaning 'no goals to be solved' error at line {target_line_num}. Starting new pass.")
+                    break # Break inner for loop, start new pass immediately
+                else:
+                    vlog(f"Could not clean up 'no goals to be solved' error at line {target_line_num}. Continuing with normal fix attempts.")
+                    # Continue to try other fix methods
 
             # 1. Attempt Decomposition
             decomposed_code_block = decompose_rw_at(code_part, indentation)
@@ -1124,11 +1299,18 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                 current_code_lines = current_code.splitlines() # Update lines list
                 stats["decompositions_applied"] += 1
                 made_change_this_pass = True
-                # Clear persistent failure status for this line if it existed, as decomposition might fix it
-                if target_line_num in stats["failed_syntheses"]:
-                    del stats["failed_syntheses"][target_line_num]
+                
+                # 如果是超时行，移除其状态
+                if target_line_num in timeout_lines:
+                    timeout_lines.remove(target_line_num)
+                    if target_line_num in stats["failed_syntheses"]:
+                        del stats["failed_syntheses"][target_line_num]
+                
                 vlog(f"Code updated after decomposition at line {target_line_num}. Starting new pass.")
                 break # Break inner for loop, start new pass immediately
+
+            # 更新尝试次数统计
+            stats["attempts_per_line"][target_line_num] = stats["attempts_per_line"].get(target_line_num, 0) + 1
 
             # 2. Attempt Synthesis (only if decomposition didn't happen)
             vlog(f"Attempting synthesis for error at line {target_line_num} ({error_type})...")
@@ -1146,7 +1328,15 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                 current_code = fixed_code_attempt # Update code
                 current_code_lines = current_code.splitlines() # Update lines list
                 stats["successful_syntheses"] += 1
-                # Record success details (similar to previous version)
+                
+                # 提取DSL信息
+                dsl_info = None
+                if "[DSL: " in message:
+                    dsl_match = re.search(r'\[DSL: (.*?)\]', message)
+                    if dsl_match:
+                        dsl_info = dsl_match.group(1)
+                
+                # Record success details with DSL information
                 stats["successful_fixes_details"].append({
                     "pass": pass_num,
                     "line": target_line_num,
@@ -1154,11 +1344,16 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                     "original_error_message": error_message, # Error message *before* this fix
                     "fix_time": fix_time,
                     "errors_after_this_fix": len(remaining_errors_after_fix),
-                    "fix_snippet": toy_interpreter.last_solution  # 添加修复片段
+                    "fix_snippet": fixed_code_attempt.splitlines()[target_line_num - 1].strip(), # 记录实际应用的修复内容
+                    "dsl": dsl_info  # 记录DSL信息
                 })
-                # Clear persistent failure status for this line if it existed
-                if target_line_num in stats["failed_syntheses"]:
-                    del stats["failed_syntheses"][target_line_num]
+                
+                # 如果是超时行，移除其状态
+                if target_line_num in timeout_lines:
+                    timeout_lines.remove(target_line_num)
+                    if target_line_num in stats["failed_syntheses"]:
+                        del stats["failed_syntheses"][target_line_num]
+                
                 made_change_this_pass = True
                 vlog(f"Code updated after successful synthesis at line {target_line_num}. Starting new pass.")
                 break # Break inner for loop, start new pass immediately
@@ -1176,18 +1371,19 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
                      "timeout_message": message,
                      "attempt_time": fix_time
                 })
-                # 同样标记为当前pass已尝试，避免重复尝试
+                # 标记为当前pass已尝试和永久超时
                 attempted_synthesis_in_this_pass.add(target_line_num)
-                # 记录为持久失败
+                timeout_lines.add(target_line_num)
+                # 记录为持久失败（只记录timeout情况）
                 stats["failed_syntheses"][target_line_num] = "Timed out: " + message
                 # 继续下一个错误
                 continue
             else:
                 vlog(f"❌ Failed to synthesize fix for error at line {target_line_num} ({error_type}) after {fix_time:.2f}s. Message: {message}")
-                # Record persistent failure
-                stats["failed_syntheses"][target_line_num] = message
-                # Track failure for *this* pass to avoid immediate retry within the same pass
+                
+                # 只标记为当前pass已尝试，不记录为持久失败
                 attempted_synthesis_in_this_pass.add(target_line_num)
+                
                 # Record failure details (similar to previous version)
                 stats["failed_fixes_details"].append({
                      "pass": pass_num,
@@ -1223,11 +1419,20 @@ def synthesize_all_fixes(code: str, file_path: Optional[str]=None) -> Tuple[str,
     summary_lines.append("=== Fix Summary ===")
     summary_lines.append(f"Original errors: {stats['original_errors']}")
     summary_lines.append(f"Decompositions applied: {stats['decompositions_applied']}")
+    summary_lines.append(f"No goals error fixes applied: {stats['no_goals_fixes_applied']}")
     summary_lines.append(f"Successful syntheses: {stats['successful_syntheses']}")
-    summary_lines.append(f"Timed out syntheses: {stats['timeout_syntheses']}")  # 添加超时信息
-    summary_lines.append(f"Persistent failed syntheses (line: reason): {len(stats['failed_syntheses'])}")
+    summary_lines.append(f"Timed out syntheses: {stats['timeout_syntheses']}")
+    
+    # 显示每行尝试次数
+    summary_lines.append(f"Synthesis attempts per line:")
+    for line, count in sorted(stats["attempts_per_line"].items()):
+        summary_lines.append(f"  - Line {line}: {count} attempts")
+    
+    # 只显示超时失败情况
+    summary_lines.append(f"Timed out syntheses (line: reason): {len(stats['failed_syntheses'])}")
     for line, reason in stats['failed_syntheses'].items():
         summary_lines.append(f"  - Line {line}: {reason[:100]}...")
+    
     summary_lines.append(f"Remaining errors: {stats['remaining_errors']}")
 
     stats["remaining_errors_details"] = []
@@ -1284,7 +1489,7 @@ def main():
         file_path = args.file
     else:
         # Use original default path
-        file_path = "./minif2f/lean_code/4my.lean"
+        file_path = "./minif2f/lean_code/4.lean"
         vlog("No file path provided, using default path: " + file_path)
     
     # Determine output directory
@@ -1432,8 +1637,17 @@ def main():
                     "original_code": code,
                     "fixed_code": fixed_code,
                     "statistics": json_stats_dict, # Use the full stats dict
-                    "message": message # Use the summary message
+                    "message": message, # Use the summary message
+                    "dsl": None  # Initialize DSL info field
                 }
+                
+                # Try to extract DSL info from successful fix records
+                if "successful_fixes_details" in json_stats_dict and json_stats_dict["successful_fixes_details"]:
+                    # Find the first record with DSL info
+                    for fix_detail in json_stats_dict["successful_fixes_details"]:
+                        if "dsl" in fix_detail and fix_detail["dsl"]:
+                            json_data["dsl"] = fix_detail["dsl"]
+                            break
                 
                 # Print JSON to stdout
                 print(json.dumps(json_data, indent=2))
@@ -1508,11 +1722,7 @@ def is_local_theorem_error(error, code_line, file_path=None):
     if file_path is None:
         return False
         
-    error_type = extract_error_type(error)
-    
-    # First check if it's a rewrite or unknown identifier error
-    if error_type not in ["rw_failed", "unknown_identifier", "not_in_scope", "unknown_constant"]:
-        return False
+    # 简化条件：不再检查错误类型
     
     # Check if the line contains rw [theorem_name]
     rw_match = re.search(r'rw\s*\[(.*?)\]', code_line)
@@ -1525,8 +1735,16 @@ def is_local_theorem_error(error, code_line, file_path=None):
     # Determine the have_theorems JSON file path for this Lean file
     input_basename = os.path.basename(file_path)
     input_name = os.path.splitext(input_basename)[0]
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(file_path)))
-    have_json_path = os.path.join(base_dir, "minif2f", "have_theorems", f"{input_name}.json")
+    
+    # 修复：使用绝对路径直接访问minif2f/have_theorems目录
+    # 获取当前文件的路径
+    current_file = os.path.abspath(__file__)
+    # 获取项目根目录（lean-pl-fix）
+    project_root = os.path.dirname(current_file)
+    vlog(f"Project root directory: {project_root}", logging.DEBUG)
+    
+    have_json_path = os.path.join(project_root, "minif2f", "have_theorems", f"{input_name}.json")
+    vlog(f"Looking for have theorems JSON file at: {have_json_path}", logging.DEBUG)
     
     # Check if the have_theorems JSON file exists
     if not os.path.exists(have_json_path):
@@ -1538,13 +1756,14 @@ def is_local_theorem_error(error, code_line, file_path=None):
         with open(have_json_path, 'r', encoding='utf-8') as f:
             have_theorems = json.load(f)
         
-        # Check if the theorem exists in the have_theorems list
+        # 检查定理名是否存在于have_theorems列表中
+        vlog(f"Checking if theorem '{theorem_name}' exists in have_theorems file", logging.DEBUG)
         if theorem_name in have_theorems:
             vlog(f"Theorem '{theorem_name}' found in have_theorems file", logging.INFO)
             return True
-        else:
-            vlog(f"Theorem '{theorem_name}' not found in have_theorems file", logging.INFO)
-            return False
+        
+        vlog(f"Theorem '{theorem_name}' not found in have_theorems file", logging.INFO)
+        return False
     except Exception as e:
         vlog(f"Error reading have_theorems JSON file: {e}", logging.ERROR)
         return False
@@ -1569,37 +1788,131 @@ def get_spec_path(error=None, error_line=None, file_path=None):
     # Default spec path from args or default
     default_spec_path = args.tyrell_spec
     
+    # 修复：使用绝对路径直接访问minif2f目录
+    # 获取当前文件的路径
+    current_file = os.path.abspath(__file__)
+    # 获取项目根目录（lean-pl-fix）
+    project_root = os.path.dirname(current_file)
+    vlog(f"Project root directory: {project_root}", logging.DEBUG)
+    
+    # 如果提供了文件路径，尝试根据文件编号选择特定规范
+    if file_path:
+        filename = os.path.basename(file_path)
+        input_name = os.path.splitext(filename)[0]
+        match = re.match(r'(\d+)', input_name)
+        if match:
+            file_number = int(match.group(1))
+            
+            # 先检查是否是local theorem错误（即使用have tyrell）
+            if error is not None and error_line is not None:
+                # 强制调用is_local_theorem_error进行调试跟踪
+                is_local = is_local_theorem_error(error, error_line, file_path)
+                vlog(f"Local theorem check for {filename} (line: {error.get('line', 'unknown')}): {is_local}", logging.INFO)
+                
+                if is_local:
+                    # 构建have tyrell规范路径
+                    have_spec_path = os.path.join(project_root, "minif2f", "have_tyrell_output", f"{input_name}.tyrell")
+                    vlog(f"Looking for have tyrell spec at: {have_spec_path}", logging.INFO)
+                    
+                    if os.path.exists(have_spec_path):
+                        vlog(f"Found have tyrell spec: {have_spec_path}", logging.INFO)
+                        return have_spec_path
+                    else:
+                        vlog(f"Have tyrell spec not found: {have_spec_path}, falling back to static", logging.WARNING)
+            
+            # 尝试查找具体的static规范
+            static_spec = os.path.join(project_root, "minif2f", "static_tyrell_output", f"{file_number}_static_filtered.tyrell")
+            vlog(f"Looking for static tyrell spec at: {static_spec}", logging.DEBUG)
+            
+            if os.path.exists(static_spec):
+                vlog(f"Using specific static tyrell spec for file {file_number}: {static_spec}", logging.INFO)
+                return static_spec
+            else:
+                vlog(f"Static tyrell spec not found at: {static_spec}", logging.WARNING)
+    
     # If no error info provided, return default spec
     if error is None or error_line is None:
         return default_spec_path
     
-    # Check if it's a local theorem error
-    if is_local_theorem_error(error, error_line, file_path):
-        # Use have_tyrell_output directory instead of default
-        file_name = os.path.basename(default_spec_path)
-        base_dir = os.path.dirname(os.path.dirname(default_spec_path))
-        have_spec_path = os.path.join(base_dir, "minif2f", "have_tyrell_output", file_name)
+    # For any other case, use the static_tyrell_output directory if applicable
+    if file_path:
+        input_basename = os.path.basename(file_path)
+        input_name = os.path.splitext(input_basename)[0]
         
-        # If the have spec exists, use it; otherwise fall back to default
-        if os.path.exists(have_spec_path):
-            vlog(f"Using have series spec file: {have_spec_path}", logging.INFO)
-            return have_spec_path
+        # 尝试查找文件号对应的static规范
+        static_spec_path = os.path.join(project_root, "minif2f", "static_tyrell_output", f"{input_name}_static_filtered.tyrell")
+        vlog(f"Looking for static tyrell spec at: {static_spec_path}", logging.DEBUG)
+        
+        # If the static spec exists, use it; otherwise fall back to default
+        if os.path.exists(static_spec_path):
+            vlog(f"Using static series spec file: {static_spec_path}", logging.INFO)
+            return static_spec_path
         else:
-            vlog(f"Have series spec file not found: {have_spec_path}, using default", logging.WARNING)
-    
-    # For other error types, use the static_tyrell_output directory
-    file_name = os.path.basename(default_spec_path)
-    base_dir = os.path.dirname(os.path.dirname(default_spec_path))
-    static_spec_path = os.path.join(base_dir, "minif2f", "static_tyrell_output", file_name)
-    
-    # If the static spec exists, use it; otherwise fall back to default
-    if os.path.exists(static_spec_path):
-        vlog(f"Using static series spec file: {static_spec_path}", logging.INFO)
-        return static_spec_path
+            vlog(f"Static series spec file not found: {static_spec_path}, using default", logging.WARNING)
     
     # Fall back to default
     vlog(f"Using default spec file: {default_spec_path}", logging.INFO)
     return default_spec_path
+
+def clean_no_goals_lines(code_lines, error_line_num, error_message):
+    """
+    Clean up lines when encountering 'no goals to be solved' error.
+    Removes lines starting from the error line until encountering a line with less indentation.
+    
+    Args:
+        code_lines: List of code lines
+        error_line_num: Line number with the 'no goals to be solved' error (1-indexed)
+        error_message: Error message text
+        
+    Returns:
+        Tuple[List[str], bool]: (Updated code lines, whether cleanup was performed)
+    """
+    if "no goals to be solved" not in error_message.lower():
+        return code_lines, False
+    
+    if error_line_num <= 0 or error_line_num > len(code_lines):
+        return code_lines, False
+    
+    # Get indentation of error line
+    error_line = code_lines[error_line_num - 1]
+    indent_match = re.match(r'^(\s*)', error_line)
+    if not indent_match:
+        return code_lines, False
+        
+    error_indentation = indent_match.group(1)
+    indent_level = len(error_indentation)
+    
+    # Determine which lines to remove
+    lines_to_remove = []
+    for i in range(error_line_num - 1, len(code_lines)):
+        current_line = code_lines[i]
+        # Check if line is empty or comment-only
+        is_empty_or_comment = not current_line.strip() or current_line.strip().startswith('--')
+        
+        # Get current line indentation
+        current_indent_match = re.match(r'^(\s*)', current_line)
+        current_indent = current_indent_match.group(1) if current_indent_match else ""
+        current_indent_level = len(current_indent)
+        
+        # If line has content and less indentation than error line, stop removing
+        if (not is_empty_or_comment) and current_indent_level < indent_level:
+            break
+            
+        # Otherwise, mark for removal
+        lines_to_remove.append(i)
+    
+    # If no lines to remove, return original
+    if not lines_to_remove:
+        return code_lines, False
+    
+    # Create new code with lines removed
+    new_code_lines = code_lines.copy()
+    # Remove lines in reverse order to avoid index shifting
+    for line_idx in reversed(lines_to_remove):
+        del new_code_lines[line_idx]
+    
+    vlog(f"Removed {len(lines_to_remove)} lines starting from line {error_line_num} due to 'no goals to be solved' error")
+    return new_code_lines, True
 
 if __name__ == '__main__':
     main()

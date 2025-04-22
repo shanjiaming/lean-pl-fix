@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/107.lean",
+  "output_file": "./minif2f/lean_fixed/107_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nThe graph of $y=ax^2 + bx + c$ is a parabola with vertical axis of symmetry.  \nThe vertex of this parabola is $(2,3)$ and the parabola contains the point $(4,4)$.  \nFind the value of $y$ when $x=6$. Show that it is 7.\n-/\ntheorem mathd_algebra_214 (a : \u211d) (f : \u211d \u2192 \u211d) \n    (h\u2080 : \u2200 x, f x = a * (x - 2) ^ 2 + 3)  -- The function is given in vertex form with vertex at (2,3)\n    (h\u2081 : f 4 = 4) :                        -- The parabola passes through (4,4)\n    f 6 = 7 := by\n  -- First, we'll find the coefficient 'a' using the point (4,4)\n  \n  -- Step 1: Substitute x=4 into the function definition\n  have h\u2082 : f 4 = a * (4 - 2) ^ 2 + 3 := h\u2080 4\n  \n  -- Step 2: Simplify the equation using h\u2081 (f 4 = 4)\n  have h\u2083 : 4 = a * (2) ^ 2 + 3 := by\n    rw [h\u2081] at h\u2082      -- Replace f 4 with 4\n    rw [sub_self] at h\u2082 -- Simplify (4-2) to 2\n    exact h\u2082\n  \n  -- Step 3: Further simplify to solve for 'a'\n  have h\u2084 : 4 = a * 4 + 3 := by\n    rw [pow_two] at h\u2083  -- Replace 2^2 with 4\n    exact h\u2083\n  \n  -- Step 4: Solve the linear equation for 'a'\n  have h\u2085 : 1 = a * 4 := by\n    rw [\u2190 sub_eq_zero] at h\u2084\n    linarith\n  \n  have h\u2086 : a = 1/4 := by\n    field_simp [h\u2085]\n    linarith\n  \n  -- Now that we have a = 1/4, we can find f(6)\n  \n  -- Step 5: Express the function with the known value of a\n  have h\u2087 : \u2200 x, f x = (1/4) * (x - 2) ^ 2 + 3 := by\n    intro x\n    rw [h\u2080, h\u2086]\n  \n  -- Step 6: Compute f(6) using the function definition\n  have h\u2088 : f 6 = (1/4) * (6 - 2) ^ 2 + 3 := h\u2087 6\n  \n  -- Step 7: Simplify the computation\n  have h\u2089 : f 6 = (1/4) * (4) ^ 2 + 3 := by\n    rw [sub_self] at h\u2088  -- Simplify (6-2) to 4\n    exact h\u2088\n  \n  -- Step 8: Continue simplification\n  have h\u2081\u2080 : f 6 = (1/4) * 16 + 3 := by\n    rw [pow_two] at h\u2089   -- Replace 4^2 with 16\n    exact h\u2089\n  \n  -- Final computation\n  have h\u2081\u2081 : f 6 = 4 + 3 := by\n    norm_num at h\u2081\u2080      -- Compute (1/4)*16 = 4\n    exact h\u2081\u2080\n  \n  -- Conclusion\n  rw [h\u2081\u2081]              -- Show that 4 + 3 = 7\n  norm_num",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- \nThe graph of $y=ax^2 + bx + c$ is a parabola with vertical axis of symmetry.  \nThe vertex of this parabola is $(2,3)$ and the parabola contains the point $(4,4)$.  \nFind the value of $y$ when $x=6$. Show that it is 7.\n-/\ntheorem mathd_algebra_214 (a : \u211d) (f : \u211d \u2192 \u211d) \n    (h\u2080 : \u2200 x, f x = a * (x - 2) ^ 2 + 3)  -- The function is given in vertex form with vertex at (2,3)\n    (h\u2081 : f 4 = 4) :                        -- The parabola passes through (4,4)\n    f 6 = 7 := by\n  -- First, we'll find the coefficient 'a' using the point (4,4)\n  \n  -- Step 1: Substitute x=4 into the function definition\n  have h\u2082 : f 4 = a * (4 - 2) ^ 2 + 3 := h\u2080 4\n  \n  -- Step 2: Simplify the equation using h\u2081 (f 4 = 4)\n  have h\u2083 : 4 = a * (2) ^ 2 + 3 := by\n    rw [h\u2081] at h\u2082      -- Replace f 4 with 4\n    linarith\n  have h\u2084 : 4 = a * 4 + 3 := by\n    rw [pow_two] at h\u2083  -- Replace 2^2 with 4\n    linarith\n  \n  -- Step 4: Solve the linear equation for 'a'\n  have h\u2085 : 1 = a * 4 := by\n    rw [\u2190 sub_eq_zero] at h\u2084\n    linarith\n  \n  have h\u2086 : a = 1/4 := by\n    field_simp [h\u2085]\n  have h\u2087 : \u2200 x, f x = (1/4) * (x - 2) ^ 2 + 3 := by\n    intro x\n    rw [h\u2080, h\u2086]\n  \n  -- Step 6: Compute f(6) using the function definition\n  have h\u2088 : f 6 = (1/4) * (6 - 2) ^ 2 + 3 := h\u2087 6\n  \n  -- Step 7: Simplify the computation\n  have h\u2089 : f 6 = (1/4) * (4) ^ 2 + 3 := by\n    linarith\n  have h\u2081\u2080 : f 6 = (1/4) * 16 + 3 := by\n    rw [pow_two] at h\u2089   -- Replace 4^2 with 16\n    linarith\n  \n  -- Final computation\n  have h\u2081\u2081 : f 6 = 4 + 3 := by\n    norm_num at h\u2081\u2080      -- Compute (1/4)*16 = 4\n    norm_num\n    exact h\u2081\u2080\n  \n  -- Conclusion\n  rw [h\u2081\u2081]              -- Show that 4 + 3 = 7\n  norm_num",
+  "statistics": {
+    "original_errors": 6,
+    "decompositions_applied": 0,
+    "successful_syntheses": 5,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "25": 1,
+      "28": 1,
+      "46": 1,
+      "49": 1,
+      "54": 1
+    },
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 25,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a - ?a\na : \u211d\nf : \u211d \u2192 \u211d\nh\u2080 : \u2200 (x : \u211d), f x = a * (x - 2) ^ 2 + 3\nh\u2081 : f 4 = 4\nh\u2082 : 4 = a * (4 - 2) ^ 2 + 3\n\u22a2 4 = a * 2 ^ 2 + 3",
+        "fix_time": 10.537889003753662,
+        "errors_after_this_fix": 6,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 3,
+        "line": 28,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2083\nhas type\n  4 = a * (2 * 2) + 3 : Prop\nbut is expected to have type\n  4 = a * 4 + 3 : Prop",
+        "fix_time": 12.537612915039062,
+        "errors_after_this_fix": 4,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 5,
+        "line": 46,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a - ?a\na : \u211d\nf : \u211d \u2192 \u211d\nh\u2080 : \u2200 (x : \u211d), f x = a * (x - 2) ^ 2 + 3\nh\u2081 : f 4 = 4\nh\u2082 : f 4 = a * (4 - 2) ^ 2 + 3\nh\u2083 : 4 = a * 2 ^ 2 + 3\nh\u2084 : 4 = a * 4 + 3\nh\u2085 : 1 = a * 4\nh\u2086 : a = 1 / 4\nh\u2087 : \u2200 (x : \u211d), f x = 1 / 4 * (x - 2) ^ 2 + 3\nh\u2088 : f 6 = 1 / 4 * (6 - 2) ^ 2 + 3\n\u22a2 f 6 = 1 / 4 * 4 ^ 2 + 3",
+        "fix_time": 13.853703022003174,
+        "errors_after_this_fix": 3,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 7,
+        "line": 49,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2089\nhas type\n  f 6 = 1 / 4 * (4 * 4) + 3 : Prop\nbut is expected to have type\n  f 6 = 1 / 4 * 16 + 3 : Prop",
+        "fix_time": 18.398801803588867,
+        "errors_after_this_fix": 1,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      },
+      {
+        "pass": 8,
+        "line": 54,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2081\u2080\nhas type\n  f 6 = 7 : Prop\nbut is expected to have type\n  f 6 = 4 + 3 : Prop",
+        "fix_time": 14.264502763748169,
+        "errors_after_this_fix": 0,
+        "fix_snippet": "norm_num",
+        "dsl": "oneline(norm_num)"
+      }
+    ],
+    "failed_fixes_details": [],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 74.01947784423828,
+    "no_goals_fixes_applied": 3
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 6\nDecompositions applied: 0\nNo goals error fixes applied: 3\nSuccessful syntheses: 5\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 25: 1 attempts\n  - Line 28: 1 attempts\n  - Line 46: 1 attempts\n  - Line 49: 1 attempts\n  - Line 54: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 74.02 seconds",
+  "dsl": "oneline(linarith)"
+}

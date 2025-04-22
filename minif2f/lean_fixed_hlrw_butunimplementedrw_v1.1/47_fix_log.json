@@ -1,0 +1,77 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/47.lean",
+  "output_file": "./minif2f/lean_fixed/47_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For what values of $x$ is it true that $x^2 - 5x - 4 \\le 10$? Express your answer in interval notation. Show that it is x \u2208 [-2,7].-/\ntheorem mathd_algebra_101 (x : \u211d) (h\u2080 : x ^ 2 - 5 * x - 4 \u2264 10) : x \u2265 -2 \u2227 x \u2264 7 := by\n  -- First, we rewrite the inequality to standard quadratic form: x\u00b2 - 5x - 14 \u2264 0\n  have h\u2081 : x ^ 2 - 5 * x - 14 \u2264 0 := by\n    -- Subtract 10 from both sides of the original inequality\n    linarith only [h\u2080]\n  \n  -- Factor the quadratic expression: (x + 2)(x - 7) \u2264 0\n  have h\u2082 : (x + 2) * (x - 7) \u2264 0 := by\n    -- Expand (x + 2)(x - 7) to show it equals x\u00b2 - 5x - 14\n    rw [add_mul, sub_mul, mul_comm x 2, \u2190 sub_eq_add_neg]\n    simp only [mul_one, sub_sub, add_sub_cancel]\n    exact h\u2081\n  \n  -- The product (x+2)(x-7) \u2264 0 when x is between the roots -2 and 7\n  -- We use the theorem mul_nonpos_iff which states that a*b \u2264 0 \u2194 (a \u2264 0 \u2227 b \u2265 0) \u2228 (a \u2265 0 \u2227 b \u2264 0)\n  rw [mul_nonpos_iff] at h\u2082\n  \n  -- We now consider both cases from the disjunction\n  cases' h\u2082 with h\u2082_left h\u2082_right\n  \u00b7 -- Case 1: (x + 2 \u2264 0 \u2227 x - 7 \u2265 0)\n    -- This would mean x \u2264 -2 and x \u2265 7 simultaneously, which is impossible\n    -- We show this leads to a contradiction\n    rcases h\u2082_left with \u27e8h_le, h_ge\u27e9\n    have : x \u2264 -2 \u2227 x \u2265 7 := \u27e8h_le, by linarith only [h_ge]\u27e9\n    -- But x can't be \u2264 -2 and \u2265 7 at the same time\n    linarith only [this]\n  \n  \u00b7 -- Case 2: (x + 2 \u2265 0 \u2227 x - 7 \u2264 0)\n    -- This gives us x \u2265 -2 and x \u2264 7, which is our desired conclusion\n    rcases h\u2082_right with \u27e8h_ge, h_le\u27e9\n    exact \u27e8by linarith only [h_ge], by linarith only [h_le]\u27e9",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For what values of $x$ is it true that $x^2 - 5x - 4 \\le 10$? Express your answer in interval notation. Show that it is x \u2208 [-2,7].-/\ntheorem mathd_algebra_101 (x : \u211d) (h\u2080 : x ^ 2 - 5 * x - 4 \u2264 10) : x \u2265 -2 \u2227 x \u2264 7 := by\n  -- First, we rewrite the inequality to standard quadratic form: x\u00b2 - 5x - 14 \u2264 0\n  have h\u2081 : x ^ 2 - 5 * x - 14 \u2264 0 := by\n    -- Subtract 10 from both sides of the original inequality\n    linarith only [h\u2080]\n  \n  -- Factor the quadratic expression: (x + 2)(x - 7) \u2264 0\n  have h\u2082 : (x + 2) * (x - 7) \u2264 0 := by\n    -- Expand (x + 2)(x - 7) to show it equals x\u00b2 - 5x - 14\n    rw [add_mul]\n    rw [sub_mul]\n    rw [mul_comm x 2]\n    rw [\u2190 sub_eq_add_neg]\n    simp only [mul_one, sub_sub, add_sub_cancel]\n    exact h\u2081\n  \n  -- The product (x+2)(x-7) \u2264 0 when x is between the roots -2 and 7\n  -- We use the theorem mul_nonpos_iff which states that a*b \u2264 0 \u2194 (a \u2264 0 \u2227 b \u2265 0) \u2228 (a \u2265 0 \u2227 b \u2264 0)\n  rw [mul_nonpos_iff] at h\u2082\n  \n  -- We now consider both cases from the disjunction\n  cases' h\u2082 with h\u2082_left h\u2082_right\n  \u00b7 -- Case 1: (x + 2 \u2264 0 \u2227 x - 7 \u2265 0)\n    -- This would mean x \u2264 -2 and x \u2265 7 simultaneously, which is impossible\n    -- We show this leads to a contradiction\n    rcases h\u2082_left with \u27e8h_le, h_ge\u27e9\n    have : x \u2264 -2 \u2227 x \u2265 7 := \u27e8h_le, by linarith only [h_ge]\u27e9\n    -- But x can't be \u2264 -2 and \u2265 7 at the same time\n    linarith only [this]\n  \n  \u00b7 -- Case 2: (x + 2 \u2265 0 \u2227 x - 7 \u2264 0)\n    -- This gives us x \u2265 -2 and x \u2264 7, which is our desired conclusion\n    rcases h\u2082_right with \u27e8h_ge, h_le\u27e9\n    exact \u27e8by linarith only [h_ge], by linarith only [h_le]\u27e9",
+  "statistics": {
+    "original_errors": 5,
+    "decompositions_applied": 1,
+    "successful_syntheses": 0,
+    "failed_syntheses": {
+      "19": "Synthesis failed: No solution found by synthesizer.",
+      "35": "Synthesis failed: No solution found by synthesizer.",
+      "42": "Synthesis failed: No solution found by synthesizer."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 5,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 2,
+        "line": 19,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (?a - ?b) * ?c\nx : \u211d\nh\u2080 : x ^ 2 - 5 * x - 4 \u2264 10\nh\u2081 : x ^ 2 - 5 * x - 14 \u2264 0\n\u22a2 x * (x - 7) + 2 * (x - 7) \u2264 0",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 13.230456829071045
+      },
+      {
+        "pass": 2,
+        "line": 35,
+        "error_type": "type_mismatch",
+        "original_error_message": "application type mismatch\n  And.intro h_le\nargument\n  h_le\nhas type\n  0 \u2264 x + 2 : Prop\nbut is expected to have type\n  x \u2264 -2 : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.788930416107178
+      },
+      {
+        "pass": 2,
+        "line": 42,
+        "error_type": "linarith_failed",
+        "original_error_message": "linarith failed to find a contradiction\ncase a\nx : \u211d\nh\u2080 : x ^ 2 - 5 * x - 4 \u2264 10\nh\u2081 : x ^ 2 - 5 * x - 14 \u2264 0\nh_ge : x + 2 \u2264 0\nh_le : 0 \u2264 x - 7\na\u271d : -2 > x\n\u22a2 False failed",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.42454719543457
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 19,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (?a - ?b) * ?c\nx : \u211d\nh\u2080 : x ^ 2 - 5 * x - 4 \u2264 10\nh\u2081 : x ^ 2 - 5 * x - 14 \u2264 0\n\u22a2 x * (x - 7) + 2 * (x - 7) \u2264 0"
+      },
+      {
+        "line": 35,
+        "error_type": "type_mismatch",
+        "message": "application type mismatch\n  And.intro h_le\nargument\n  h_le\nhas type\n  0 \u2264 x + 2 : Prop\nbut is expected to have type\n  x \u2264 -2 : Prop"
+      },
+      {
+        "line": 35,
+        "error_type": "linarith_failed",
+        "message": "linarith failed to find a contradiction\ncase a\nx : \u211d\nh\u2080 : x ^ 2 - 5 * x - 4 \u2264 10\nh\u2081 : x ^ 2 - 5 * x - 14 \u2264 0\nh_le : 0 \u2264 x + 2\nh_ge : x - 7 \u2264 0\na\u271d : 7 > x\n\u22a2 False failed"
+      },
+      {
+        "line": 42,
+        "error_type": "linarith_failed",
+        "message": "linarith failed to find a contradiction\ncase a\nx : \u211d\nh\u2080 : x ^ 2 - 5 * x - 4 \u2264 10\nh\u2081 : x ^ 2 - 5 * x - 14 \u2264 0\nh_ge : x + 2 \u2264 0\nh_le : 0 \u2264 x - 7\na\u271d : -2 > x\n\u22a2 False failed"
+      },
+      {
+        "line": 42,
+        "error_type": "linarith_failed",
+        "message": "linarith failed to find a contradiction\ncase a\nx : \u211d\nh\u2080 : x ^ 2 - 5 * x - 4 \u2264 10\nh\u2081 : x ^ 2 - 5 * x - 14 \u2264 0\nh_ge : x + 2 \u2264 0\nh_le : 0 \u2264 x - 7\na\u271d : x > 7\n\u22a2 False failed"
+      }
+    ],
+    "total_time": 38.27074575424194
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 5\nDecompositions applied: 1\nSuccessful syntheses: 0\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 3\n  - Line 19: Synthesis failed: No solution found by synthesizer....\n  - Line 35: Synthesis failed: No solution found by synthesizer....\n  - Line 42: Synthesis failed: No solution found by synthesizer....\nRemaining errors: 5\n\nRemaining Errors:\n  - Line 19: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   (?a - ?b) *...\n  - Line 35: type_mismatch - application type mismatch   And.intro h_le argument   h_le has type   0 \u2264 x + 2 : Prop but is expect...\n  - Line 35: linarith_failed - linarith failed to find a contradiction case a x : \u211d h\u2080 : x ^ 2 - 5 * x - 4 \u2264 10 h\u2081 : x ^ 2 - 5 * x ...\n  - Line 42: linarith_failed - linarith failed to find a contradiction case a x : \u211d h\u2080 : x ^ 2 - 5 * x - 4 \u2264 10 h\u2081 : x ^ 2 - 5 * x ...\n  - Line 42: linarith_failed - linarith failed to find a contradiction case a x : \u211d h\u2080 : x ^ 2 - 5 * x - 4 \u2264 10 h\u2081 : x ^ 2 - 5 * x ...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 38.27 seconds"
+}

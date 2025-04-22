@@ -1,0 +1,49 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/33.lean",
+  "output_file": "./minif2f/lean_fixed/33_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\n-- Disable heartbeat to prevent timeout errors during computation\nset_option maxHeartbeats 0\n\n-- Open necessary namespaces for mathematical operations\nopen BigOperators Real Nat Topology Rat\n\n/-- \nFind the greatest common divisor (gcd) of 180 and 168. \nProve that it equals 12 using the Euclidean algorithm.\n-/\ntheorem mathd_numbertheory_188 : Nat.gcd 180 168 = 12 := by\n  -- First, we'll compute gcd(180, 168) step by step using the Euclidean algorithm\n  -- The Euclidean algorithm states that gcd(a, b) = gcd(b, a mod b) for a > b\n  \n  -- Step 1: gcd(180, 168) = gcd(168, 180 mod 168)\n  -- Compute 180 mod 168 = 180 - 168 = 12\n  have step1 : Nat.gcd 180 168 = Nat.gcd 168 12 := by\n    rw [\u2190 Nat.gcd_rec 180 168]  -- Apply the recursive definition of gcd\n    congr  -- Focus on proving the mod part\n    norm_num  -- Compute 180 % 168 = 12\n    \n  -- Step 2: gcd(168, 12) = gcd(12, 168 mod 12)\n  -- Compute 168 mod 12 = 0 (since 12 \u00d7 14 = 168)\n  have step2 : Nat.gcd 168 12 = Nat.gcd 12 0 := by\n    rw [\u2190 Nat.gcd_rec 168 12]  -- Apply recursive definition again\n    congr  -- Focus on proving the mod part\n    norm_num  -- Compute 168 % 12 = 0\n    \n  -- Final step: gcd(12, 0) = 12 (by definition)\n  have step3 : Nat.gcd 12 0 = 12 := by\n    exact Nat.gcd_zero_right 12  -- Base case of gcd definition\n    \n  -- Chain all the steps together to prove the original statement\n  rw [step1, step2, step3]  -- Substitute each step's equality",
+  "fixed_code": "import Mathlib\nimport Aesop\n\n-- Disable heartbeat to prevent timeout errors during computation\nset_option maxHeartbeats 0\n\n-- Open necessary namespaces for mathematical operations\nopen BigOperators Real Nat Topology Rat\n\n/-- \nFind the greatest common divisor (gcd) of 180 and 168. \nProve that it equals 12 using the Euclidean algorithm.\n-/\ntheorem mathd_numbertheory_188 : Nat.gcd 180 168 = 12 := by\n  -- First, we'll compute gcd(180, 168) step by step using the Euclidean algorithm\n  -- The Euclidean algorithm states that gcd(a, b) = gcd(b, a mod b) for a > b\n  \n  -- Step 1: gcd(180, 168) = gcd(168, 180 mod 168)\n  -- Compute 180 mod 168 = 180 - 168 = 12\n  have step1 : Nat.gcd 180 168 = Nat.gcd 168 12 := by\n    simp\n  have step2 : Nat.gcd 168 12 = Nat.gcd 12 0 := by\n    simp\n  have step3 : Nat.gcd 12 0 = 12 := by\n    exact Nat.gcd_zero_right 12  -- Base case of gcd definition\n    \n  -- Chain all the steps together to prove the original statement\n  rw [step1, step2, step3]  -- Substitute each step's equality",
+  "statistics": {
+    "original_errors": 2,
+    "decompositions_applied": 0,
+    "successful_syntheses": 2,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "21": 1,
+      "23": 1
+    },
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (168 % 180).gcd 180\n\u22a2 Nat.gcd 180 168 = Nat.gcd 168 12",
+        "fix_time": 0.32605576515197754,
+        "errors_after_this_fix": 2,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      },
+      {
+        "pass": 3,
+        "line": 23,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (12 % 168).gcd 168\nstep1 : Nat.gcd 180 168 = Nat.gcd 168 12\n\u22a2 Nat.gcd 168 12 = Nat.gcd 12 0",
+        "fix_time": 0.29923439025878906,
+        "errors_after_this_fix": 1,
+        "fix_snippet": "simp",
+        "dsl": "oneline(simp)"
+      }
+    ],
+    "failed_fixes_details": [],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 0.7841091156005859,
+    "no_goals_fixes_applied": 2
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 2\nDecompositions applied: 0\nNo goals error fixes applied: 2\nSuccessful syntheses: 2\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 21: 1 attempts\n  - Line 23: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 0.78 seconds",
+  "dsl": "oneline(simp)"
+}

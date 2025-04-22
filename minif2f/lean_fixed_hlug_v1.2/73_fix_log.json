@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "file_path": "./minif2f/lean_code/73.lean",
+  "output_file": "./minif2f/lean_fixed/73_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Solve for $a$: $\\frac15|9+2a|<1$.  Express your answer in interval notation. Show that it is (-7, -2).-/\ntheorem mathd_algebra_327 (a : \u211d) (h\u2080 : 1 / 5 * abs (9 + 2 * a) < 1) : -7 < a \u2227 a < -2 := by\n  -- First, we simplify the inequality (1/5)*|9 + 2a| < 1\n  -- Multiply both sides by 5 to eliminate the denominator\n  have h\u2081 : abs (9 + 2 * a) < 5 := by\n    -- Original inequality is (1/5)*|9 + 2a| < 1\n    -- Multiply both sides by 5 (positive, so inequality direction stays the same)\n    rw [mul_lt_mul_left (show 0 < (1/5:\u211d)\u207b\u00b9 by norm_num)] at h\u2080\n    -- Simplify (1/5)\u207b\u00b9 to 5 and 1 * 5 to 5\n    simp only [inv_one_div, mul_one] at h\u2080\n    exact h\u2080\n  \n  -- The absolute value inequality |9 + 2a| < 5 is equivalent to -5 < 9 + 2a < 5\n  rw [abs_lt] at h\u2081\n  -- Now we have h\u2081 : -5 < 9 + 2 * a \u2227 9 + 2 * a < 5\n  \n  -- We'll handle the two inequalities separately\n  -- First inequality: -5 < 9 + 2a\n  have left_ineq : -5 < 9 + 2 * a := h\u2081.left\n  -- Subtract 9 from both sides: -14 < 2a\n  have left_step : -14 < 2 * a := by linarith\n  -- Divide both sides by 2: -7 < a\n  have h_left : -7 < a := by linarith\n  \n  -- Second inequality: 9 + 2a < 5\n  have right_ineq : 9 + 2 * a < 5 := h\u2081.right\n  -- Subtract 9 from both sides: 2a < -4\n  have right_step : 2 * a < -4 := by linarith\n  -- Divide both sides by 2: a < -2\n  have h_right : a < -2 := by linarith\n  \n  -- Combine both results\n  exact \u27e8h_left, h_right\u27e9",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Solve for $a$: $\\frac15|9+2a|<1$.  Express your answer in interval notation. Show that it is (-7, -2).-/\ntheorem mathd_algebra_327 (a : \u211d) (h\u2080 : 1 / 5 * abs (9 + 2 * a) < 1) : -7 < a \u2227 a < -2 := by\n  -- First, we simplify the inequality (1/5)*|9 + 2a| < 1\n  -- Multiply both sides by 5 to eliminate the denominator\n  have h\u2081 : abs (9 + 2 * a) < 5 := by\n    -- Original inequality is (1/5)*|9 + 2a| < 1\n    -- Multiply both sides by 5 (positive, so inequality direction stays the same)\n    linarith\n  rw [abs_lt] at h\u2081\n  -- Now we have h\u2081 : -5 < 9 + 2 * a \u2227 9 + 2 * a < 5\n  \n  -- We'll handle the two inequalities separately\n  -- First inequality: -5 < 9 + 2a\n  have left_ineq : -5 < 9 + 2 * a := h\u2081.left\n  -- Subtract 9 from both sides: -14 < 2a\n  have left_step : -14 < 2 * a := by linarith\n  -- Divide both sides by 2: -7 < a\n  have h_left : -7 < a := by linarith\n  \n  -- Second inequality: 9 + 2a < 5\n  have right_ineq : 9 + 2 * a < 5 := h\u2081.right\n  -- Subtract 9 from both sides: 2a < -4\n  have right_step : 2 * a < -4 := by linarith\n  -- Divide both sides by 2: a < -2\n  have h_right : a < -2 := by linarith\n  \n  -- Combine both results\n  exact \u27e8h_left, h_right\u27e9",
+  "statistics": {
+    "original_errors": 1,
+    "decompositions_applied": 0,
+    "successful_syntheses": 1,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "15": 1
+    },
+    "remaining_errors": 0,
+    "fix_rate": 1.0,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 15,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  (1 / 5)\u207b\u00b9 * ?m.620 < (1 / 5)\u207b\u00b9 * ?m.621\na : \u211d\nh\u2080 : 1 / 5 * |9 + 2 * a| < 1\n\u22a2 |9 + 2 * a| < 5",
+        "fix_time": 13.756423473358154,
+        "errors_after_this_fix": 1,
+        "fix_snippet": "linarith",
+        "dsl": "oneline(linarith)"
+      }
+    ],
+    "failed_fixes_details": [],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [],
+    "total_time": 15.916517972946167,
+    "no_goals_fixes_applied": 1
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 1\nDecompositions applied: 0\nNo goals error fixes applied: 1\nSuccessful syntheses: 1\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 15: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 0\n\nOverall Fix Rate (Errors Fixed / Original Errors): 1.0000\nTotal time: 15.92 seconds",
+  "dsl": "oneline(linarith)"
+}

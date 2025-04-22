@@ -1,0 +1,81 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/48.lean",
+  "output_file": "./minif2f/lean_fixed/48_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Cards are numbered from 1 to 100. One card is removed and the values on the other 99 are added. \n    The resulting sum is a multiple of 77. What number was on the card that was removed? \n    Show that it is 45.-/\ntheorem mathd_numbertheory_257 (x : \u2115) (h\u2080 : 1 \u2264 x \u2227 x \u2264 100)\n    (h\u2081 : 77 \u2223 (\u2211 k in Finset.range 101, k) - x) : x = 45 := by\n  -- First, compute the sum of all numbers from 1 to 100 using the arithmetic series formula\n  have sum_all : \u2211 k in Finset.range 101, k = 100 * 101 / 2 := by\n    rw [Finset.sum_range_id]  -- Convert range sum to closed form\n    norm_num  -- Compute the numerical value\n\n  -- Simplify the sum to its concrete value (5050)\n  have sum_all_value : \u2211 k in Finset.range 101, k = 5050 := by\n    rw [sum_all]\n    norm_num\n\n  -- The problem states that 77 divides (total sum - x)\n  -- Rewrite the divisibility condition using the concrete sum value\n  have h\u2081' : 77 \u2223 5050 - x := by rwa [sum_all_value] at h\u2081\n\n  -- We need to find x \u2208 [1,100] such that 5050 - x \u2261 0 mod 77\n  -- First compute 5050 mod 77\n  have mod_calc : 5050 % 77 = 45 := by norm_num\n\n  -- From 77 \u2223 5050 - x, we have x \u2261 5050 mod 77\n  have x_mod : x \u2261 45 [MOD 77] := by\n    rw [Nat.modEq_iff_dvd']\n    exact h\u2081'\n    rw [mod_calc]\n\n  -- Since 1 \u2264 x \u2264 100, and x \u2261 45 mod 77, the only possible value is x = 45\n  -- Because the next congruent number would be 45 + 77 = 122 > 100\n  -- And previous would be 45 - 77 = -32 < 1\n  obtain \u27e8k, hk\u27e9 := x_mod\n  -- Substitute x = 77k + 45 into the bounds\n  have k_bound : k = 0 := by\n    -- Case analysis on possible k values\n    cases' k with k\n    \u00b7 rfl  -- k = 0 is within bounds\n    \u00b7 cases' k with k\n      \u00b7 -- k = 1 gives x = 122 which is > 100\n        exfalso\n        rw [hk, mul_one, add_comm] at h\u2080\n        simp at h\u2080\n        linarith [h\u2080.2]\n      \u00b7 -- Any k \u2265 2 makes x too large\n        exfalso\n        rw [hk] at h\u2080\n        have : 77 * (k + 2) + 45 \u2265 77 * 2 + 45 := by\n          apply add_le_add_right\n          apply Nat.mul_le_mul_left\n          linarith\n        linarith [h\u2080.2]\n    \u00b7 -- Negative k makes x too small\n      exfalso\n      rw [hk] at h\u2080\n      have : 77 * (Int.negSucc k) + 45 \u2264 -32 := by\n        simp [mul_negSucc]\n        linarith\n      linarith [h\u2080.1]\n\n  -- Therefore x must be exactly 45\n  rw [hk, k_bound]\n  simp",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Cards are numbered from 1 to 100. One card is removed and the values on the other 99 are added. \n    The resulting sum is a multiple of 77. What number was on the card that was removed? \n    Show that it is 45.-/\ntheorem mathd_numbertheory_257 (x : \u2115) (h\u2080 : 1 \u2264 x \u2227 x \u2264 100)\n    (h\u2081 : 77 \u2223 (\u2211 k in Finset.range 101, k) - x) : x = 45 := by\n  -- First, compute the sum of all numbers from 1 to 100 using the arithmetic series formula\n  have sum_all : \u2211 k in Finset.range 101, k = 100 * 101 / 2 := by\n    rw [Finset.sum_range_id]  -- Convert range sum to closed form\n    norm_num  -- Compute the numerical value\n\n  -- Simplify the sum to its concrete value (5050)\n  have sum_all_value : \u2211 k in Finset.range 101, k = 5050 := by\n    rw [sum_all]\n    norm_num\n\n  -- The problem states that 77 divides (total sum - x)\n  -- Rewrite the divisibility condition using the concrete sum value\n  have h\u2081' : 77 \u2223 5050 - x := by rwa [sum_all_value] at h\u2081\n\n  -- We need to find x \u2208 [1,100] such that 5050 - x \u2261 0 mod 77\n  -- First compute 5050 mod 77\n  have mod_calc : 5050 % 77 = 45 := by norm_num\n\n  -- From 77 \u2223 5050 - x, we have x \u2261 5050 mod 77\n  have x_mod : x \u2261 45 [MOD 77] := by\n    rw [Nat.modEq_iff_dvd']\n    exact h\u2081'\n    rw [mod_calc]\n\n  -- Since 1 \u2264 x \u2264 100, and x \u2261 45 mod 77, the only possible value is x = 45\n  -- Because the next congruent number would be 45 + 77 = 122 > 100\n  -- And previous would be 45 - 77 = -32 < 1\n  obtain \u27e8k, hk\u27e9 := x_mod\n  -- Substitute x = 77k + 45 into the bounds\n  have k_bound : k = 0 := by\n    -- Case analysis on possible k values\n    cases' k with k\n    \u00b7 rfl  -- k = 0 is within bounds\n    \u00b7 cases' k with k\n      \u00b7 -- k = 1 gives x = 122 which is > 100\n        exfalso\n        rw [hk, mul_one, add_comm] at h\u2080\n        simp at h\u2080\n        linarith [h\u2080.2]\n      \u00b7 -- Any k \u2265 2 makes x too large\n        exfalso\n        rw [hk] at h\u2080\n        have : 77 * (k + 2) + 45 \u2265 77 * 2 + 45 := by\n          apply add_le_add_right\n          apply Nat.mul_le_mul_left\n          linarith\n        linarith [h\u2080.2]\n    \u00b7 -- Negative k makes x too small\n      exfalso\n      rw [hk] at h\u2080\n      have : 77 * (Int.negSucc k) + 45 \u2264 -32 := by\n        simp [mul_negSucc]\n        linarith\n      linarith [h\u2080.1]\n\n  -- Therefore x must be exactly 45\n  rw [hk, k_bound]\n  simp",
+  "statistics": {
+    "original_errors": 4,
+    "decompositions_applied": 0,
+    "successful_syntheses": 0,
+    "failed_syntheses": {
+      "16": "Synthesis failed: No valid fix/placement generated or extracted.",
+      "21": "Synthesis failed: No valid fix/placement generated or extracted.",
+      "34": "Synthesis failed: No solution found by synthesizer.",
+      "40": "Synthesis failed: No solution found by synthesizer."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 4,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 16,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 2.3474223613739014
+      },
+      {
+        "pass": 1,
+        "line": 21,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 2.4726474285125732
+      },
+      {
+        "pass": 1,
+        "line": 34,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  h\u2081'\nhas type\n  77 \u2223 5050 - x : Prop\nbut is expected to have type\n  77 \u2223 45 - x : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 4.002063751220703
+      },
+      {
+        "pass": 1,
+        "line": 40,
+        "error_type": "cases_failed",
+        "original_error_message": "tactic 'cases' failed, nested error:\ndependent elimination failed, failed to solve equation\n  45 =\n    match x, 77 with\n    | 0, x => 0\n    | n@h:n_1.succ, m => if m \u2264 n then n.modCore m else n\nat case Eq.refl",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 4.159576177597046
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 16,
+        "error_type": "no_goals_to_solve",
+        "message": "no goals to be solved"
+      },
+      {
+        "line": 21,
+        "error_type": "no_goals_to_solve",
+        "message": "no goals to be solved"
+      },
+      {
+        "line": 34,
+        "error_type": "type_mismatch",
+        "message": "type mismatch\n  h\u2081'\nhas type\n  77 \u2223 5050 - x : Prop\nbut is expected to have type\n  77 \u2223 45 - x : Prop"
+      },
+      {
+        "line": 40,
+        "error_type": "cases_failed",
+        "message": "tactic 'cases' failed, nested error:\ndependent elimination failed, failed to solve equation\n  45 =\n    match x, 77 with\n    | 0, x => 0\n    | n@h:n_1.succ, m => if m \u2264 n then n.modCore m else n\nat case Eq.refl"
+      }
+    ],
+    "total_time": 13.12963056564331
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 4\nDecompositions applied: 0\nSuccessful syntheses: 0\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 4\n  - Line 16: Synthesis failed: No valid fix/placement generated or extracted....\n  - Line 21: Synthesis failed: No valid fix/placement generated or extracted....\n  - Line 34: Synthesis failed: No solution found by synthesizer....\n  - Line 40: Synthesis failed: No solution found by synthesizer....\nRemaining errors: 4\n\nRemaining Errors:\n  - Line 16: no_goals_to_solve - no goals to be solved...\n  - Line 21: no_goals_to_solve - no goals to be solved...\n  - Line 34: type_mismatch - type mismatch   h\u2081' has type   77 \u2223 5050 - x : Prop but is expected to have type   77 \u2223 45 - x : Pro...\n  - Line 40: cases_failed - tactic 'cases' failed, nested error: dependent elimination failed, failed to solve equation   45 =  ...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 13.13 seconds"
+}

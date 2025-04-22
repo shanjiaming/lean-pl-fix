@@ -1,0 +1,39 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/51.lean",
+  "output_file": "./minif2f/lean_fixed/51_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\n-- Disable heartbeat limit to prevent timeout during proof checking\nset_option maxHeartbeats 0\n\n-- Open necessary namespaces for mathematical notations and theorems\nopen BigOperators Real Nat Topology Rat\n\n/-- \nTim is doing a cakewalk with $11$ steps. He takes his first step on step $1$ and takes a total of \n139 steps, walking in a circle (so that after the 11th step he reaches the first step again). \nWhich step of the cakewalk does he end on? Show that it is 7.\n\nMathematical explanation:\n- The cakewalk has 11 steps, so it's equivalent to arithmetic modulo 11.\n- Starting at step 1, taking 139 steps means we need to compute (1 + 139) mod 11.\n- However, since the first step is already on position 1, we can think of it as adding 138 steps.\n- Equivalently, we can compute 139 mod 11 directly to find the offset from the starting position.\n- 11 \u00d7 12 = 132, and 139 - 132 = 7, so 139 mod 11 = 7.\n-/\ntheorem mathd_numbertheory_200 : 139 % 11 = 7 := by\n  -- First approach: direct computation using norm_num\n  -- This will automatically compute the modulus\n  norm_num\n  \n  -- Alternative approach: step-by-step proof showing the mathematical reasoning\n  have h11 : 11 * 12 = 132 := by norm_num  -- Compute 11 \u00d7 12\n  have hdiff : 139 - 132 = 7 := by norm_num  -- Compute remainder\n  -- The theorem follows from the division algorithm:\n  -- 139 = 11 \u00d7 12 + 7, with 0 \u2264 7 < 11\n  rw [\u2190 hdiff]\n  -- Show that 132 is indeed 11 \u00d7 12\n  rw [h11]\n  -- Apply the modulus definition\n  exact Nat.mod_eq_of_lt (by norm_num)  -- Prove 7 < 11",
+  "fixed_code": "import Mathlib\nimport Aesop\n\n-- Disable heartbeat limit to prevent timeout during proof checking\nset_option maxHeartbeats 0\n\n-- Open necessary namespaces for mathematical notations and theorems\nopen BigOperators Real Nat Topology Rat\n\n/-- \nTim is doing a cakewalk with $11$ steps. He takes his first step on step $1$ and takes a total of \n139 steps, walking in a circle (so that after the 11th step he reaches the first step again). \nWhich step of the cakewalk does he end on? Show that it is 7.\n\nMathematical explanation:\n- The cakewalk has 11 steps, so it's equivalent to arithmetic modulo 11.\n- Starting at step 1, taking 139 steps means we need to compute (1 + 139) mod 11.\n- However, since the first step is already on position 1, we can think of it as adding 138 steps.\n- Equivalently, we can compute 139 mod 11 directly to find the offset from the starting position.\n- 11 \u00d7 12 = 132, and 139 - 132 = 7, so 139 mod 11 = 7.\n-/\ntheorem mathd_numbertheory_200 : 139 % 11 = 7 := by\n  -- First approach: direct computation using norm_num\n  -- This will automatically compute the modulus\n  norm_num\n  \n  -- Alternative approach: step-by-step proof showing the mathematical reasoning\n  have h11 : 11 * 12 = 132 := by norm_num  -- Compute 11 \u00d7 12\n  have hdiff : 139 - 132 = 7 := by norm_num  -- Compute remainder\n  -- The theorem follows from the division algorithm:\n  -- 139 = 11 \u00d7 12 + 7, with 0 \u2264 7 < 11\n  rw [\u2190 hdiff]\n  -- Show that 132 is indeed 11 \u00d7 12\n  rw [h11]\n  -- Apply the modulus definition\n  exact Nat.mod_eq_of_lt (by norm_num)  -- Prove 7 < 11",
+  "statistics": {
+    "original_errors": 1,
+    "decompositions_applied": 0,
+    "successful_syntheses": 0,
+    "failed_syntheses": {
+      "28": "Synthesis failed: No solution found by synthesizer."
+    },
+    "timeout_syntheses": 0,
+    "remaining_errors": 1,
+    "fix_rate": 0.0,
+    "successful_fixes_details": [],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 28,
+        "error_type": "no_goals_to_solve",
+        "original_error_message": "no goals to be solved",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 0.46816325187683105
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 28,
+        "error_type": "no_goals_to_solve",
+        "message": "no goals to be solved"
+      }
+    ],
+    "total_time": 0.4917318820953369
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 1\nDecompositions applied: 0\nSuccessful syntheses: 0\nTimed out syntheses: 0\nPersistent failed syntheses (line: reason): 1\n  - Line 28: Synthesis failed: No solution found by synthesizer....\nRemaining errors: 1\n\nRemaining Errors:\n  - Line 28: no_goals_to_solve - no goals to be solved...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.0000\nTotal time: 0.49 seconds"
+}

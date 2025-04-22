@@ -1,0 +1,448 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/11.lean",
+  "output_file": "./minif2f/lean_fixed/11_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- A sequence of numbers is defined recursively by $a_1 = 1$, $a_2 = \\frac{3}{7}$, and\n$a_n=\\frac{a_{n-2} \\cdot a_{n-1}}{2a_{n-2} - a_{n-1}}$for all $n \\geq 3$ Then $a_{2019}$ can be written as $\\frac{p}{q}$, where $p$ and $q$ are relatively prime positive integers. What is $p+q ?$\n\n$\\textbf{(A) } 2020 \\qquad\\textbf{(B) } 4039 \\qquad\\textbf{(C) } 6057 \\qquad\\textbf{(D) } 6061 \\qquad\\textbf{(E) } 8078$ Show that it is \\textbf{(E) }8078.-/\ntheorem amc12a_2019_p9 (a : \u2115 \u2192 \u211a) (h\u2080 : a 1 = 1) (h\u2081 : a 2 = 3 / 7)\n  (h\u2082 : \u2200 n, a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))) :\n  \u2191(a 2019).den + (a 2019).num = 8078 := by\n  -- Define the reciprocal sequence b_n = 1 / a_n\n  let b : \u2115 \u2192 \u211a := fun n => 1 / a n\n  -- Show that b satisfies the recurrence b_{n+2} = 2b_{n+1} - b_n\n  have hb : \u2200 n, b (n + 2) = 2 * b (n + 1) - b n := by\n    intro n\n    -- Compute b (n + 2) = 1 / a (n + 2) using the recurrence for a\n    rw [h\u2082 n]\n    -- Simplify the expression using the definition of b\n    field_simp [b]\n    -- The recurrence for b follows from algebraic manipulation\n    ring\n  -- Initial conditions for b: b 1 = 1 and b 2 = 7/3\n  have hb0 : b 1 = 1 := by rw [b, h\u2080, one_div_one]\n  have hb1 : b 2 = 7 / 3 := by rw [b, h\u2081, one_div, inv_div]\n  -- The recurrence for b is linear with constant coefficients\n  -- The general solution is b n = A + B * (n - 1)\n  -- We solve for A and B using the initial conditions\n  have hb_general : \u2200 n, b n = 1 + (4 / 3) * (n - 1) := by\n    -- Prove by induction\n    intro n\n    induction n using Nat.recAux with\n    | zero => simp\n    | succ n ih =>\n      cases n with\n      | zero => exact hb0\n      | succ n =>\n        cases n with\n        | zero => exact hb1\n        | succ n =>\n          -- Use the recurrence relation and induction hypothesis\n          rw [hb n, ih n, ih (n + 1)]\n          -- Simplify to show the general form holds\n          ring\n  -- Now, derive the closed form for a_n = 1 / b_n = 3 / (4n - 1)\n  have ha_general : \u2200 n, a n = 3 / (4 * n - 1) := by\n    intro n\n    rw [\u2190 one_div, b, hb_general n]\n    -- Simplify the expression\n    field_simp\n    ring\n  -- Compute a 2019 using the closed form\n  have ha2019 : a 2019 = 3 / (4 * 2019 - 1) := ha_general 2019\n  -- Simplify the denominator\n  have denom : 4 * 2019 - 1 = 8075 := by norm_num\n  rw [ha2019, denom]\n  -- Show that 3 / 8075 is in reduced form (gcd(3, 8075) = 1)\n  have gcd_eq : Nat.gcd 3 8075 = 1 := by\n    -- Compute the prime factorization of 8075 = 5^2 * 17 * 19\n    -- 3 does not divide 8075\n    rw [Nat.gcd_eq_left (Nat.dvd_gcd_iff.mpr \u27e8by decide, by decide\u27e9)]\n  -- The numerator and denominator are coprime\n  have reduced : (3 / 8075).num = 3 \u2227 (3 / 8075).den = 8075 := by\n    apply Rat.num_den_mk\n    \u00b7 exact Nat.Prime.ne_one (by decide) (Nat.gcd_eq_one_iff_coprime.mp gcd_eq)\n    \u00b7 exact gcd_eq\n  -- Extract numerator and denominator\n  rcases reduced with \u27e8hnum, hden\u27e9\n  rw [hnum, hden]\n  -- Compute p + q = 3 + 8075 = 8078\n  norm_num",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- A sequence of numbers is defined recursively by $a_1 = 1$, $a_2 = \\frac{3}{7}$, and\n$a_n=\\frac{a_{n-2} \\cdot a_{n-1}}{2a_{n-2} - a_{n-1}}$for all $n \\geq 3$ Then $a_{2019}$ can be written as $\\frac{p}{q}$, where $p$ and $q$ are relatively prime positive integers. What is $p+q ?$\n\n$\\textbf{(A) } 2020 \\qquad\\textbf{(B) } 4039 \\qquad\\textbf{(C) } 6057 \\qquad\\textbf{(D) } 6061 \\qquad\\textbf{(E) } 8078$ Show that it is \\textbf{(E) }8078.-/\ntheorem amc12a_2019_p9 (a : \u2115 \u2192 \u211a) (h\u2080 : a 1 = 1) (h\u2081 : a 2 = 3 / 7)\n  (h\u2082 : \u2200 n, a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))) :\n  \u2191(a 2019).den + (a 2019).num = 8078 := by\n  -- Define the reciprocal sequence b_n = 1 / a_n\n  let b : \u2115 \u2192 \u211a := fun n => 1 / a n\n  -- Show that b satisfies the recurrence b_{n+2} = 2b_{n+1} - b_n\n  have hb : \u2200 n, b (n + 2) = 2 * b (n + 1) - b n := by\n    intro n\n    -- Compute b (n + 2) = 1 / a (n + 2) using the recurrence for a\n    rw [h\u2082 n]\n    -- Simplify the expression using the definition of b\n    field_simp [b]\n    -- The recurrence for b follows from algebraic manipulation\n    ring\n  -- Initial conditions for b: b 1 = 1 and b 2 = 7/3\n  have hb0 : b 1 = 1 := by rw [b, h\u2080, one_div_one]\n  have hb1 : b 2 = 7 / 3 := by rw [b, h\u2081, one_div, inv_div]\n  -- The recurrence for b is linear with constant coefficients\n  -- The general solution is b n = A + B * (n - 1)\n  -- We solve for A and B using the initial conditions\n  have hb_general : \u2200 n, b n = 1 + (4 / 3) * (n - 1) := by\n    -- Prove by induction\n    intro n\n    induction n using Nat.recAux with\n    | zero => simp\n    | succ n ih =>\n      cases n with\n      | zero => exact hb0\n      | succ n =>\n        cases n with\n        | zero => exact hb1\n        | succ n =>\n          -- Use the recurrence relation and induction hypothesis\n          rw [hb n]\n          rw [ih n]\n          rw [ih (n + 1)]\n          -- Simplify to show the general form holds\n          ring\n  -- Now, derive the closed form for a_n = 1 / b_n = 3 / (4n - 1)\n  have ha_general : \u2200 n, a n = 3 / (4 * n - 1) := by\n    intro n\n    rw [\u2190 one_div]\n    rw [b]\n    rw [hb_general n]\n    -- Simplify the expression\n    field_simp\n    ring\n  -- Compute a 2019 using the closed form\n  have ha2019 : a 2019 = 3 / (4 * 2019 - 1) := ha_general 2019\n  -- Simplify the denominator\n  have denom : 4 * 2019 - 1 = 8075 := by norm_num\n  rw [ha2019]\n  norm_num\n  -- Show that 3 / 8075 is in reduced form (gcd(3, 8075) = 1)",
+  "statistics": {
+    "original_errors": 9,
+    "decompositions_applied": 3,
+    "successful_syntheses": 1,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "21": 6,
+      "27": 6,
+      "28": 6,
+      "36": 6,
+      "39": 6,
+      "42": 6,
+      "45": 5,
+      "53": 4,
+      "64": 1
+    },
+    "remaining_errors": 8,
+    "fix_rate": 0.1111111111111111,
+    "successful_fixes_details": [
+      {
+        "pass": 4,
+        "line": 64,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  4 * 2019 - 1\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nhb_general : \u2200 (n : \u2115), b n = 1 + 4 / 3 * (\u2191n - 1)\nha_general : \u2200 (n : \u2115), a n = 3 / (4 * \u2191n - 1)\nha2019 : a 2019 = 3 / (4 * 2019 - 1)\ndenom : 4 * 2019 - 1 = 8075\n\u22a2 \u2191(3 / (4 * 2019 - 1)).den + (3 / (4 * 2019 - 1)).num = 8078",
+        "fix_time": 3.9992661476135254,
+        "errors_after_this_fix": 9,
+        "fix_snippet": "norm_num",
+        "dsl": "oneline(norm_num)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.430126667022705
+      },
+      {
+        "pass": 1,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.126137971878052
+      },
+      {
+        "pass": 1,
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.376301765441895
+      },
+      {
+        "pass": 1,
+        "line": 36,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.452286243438721
+      },
+      {
+        "pass": 1,
+        "line": 39,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.399017810821533
+      },
+      {
+        "pass": 1,
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.010546922683716
+      },
+      {
+        "pass": 2,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.450920104980469
+      },
+      {
+        "pass": 2,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.412414312362671
+      },
+      {
+        "pass": 2,
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.927928924560547
+      },
+      {
+        "pass": 2,
+        "line": 36,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.266430377960205
+      },
+      {
+        "pass": 2,
+        "line": 39,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 8.97342300415039
+      },
+      {
+        "pass": 2,
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.972326517105103
+      },
+      {
+        "pass": 2,
+        "line": 45,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  b (n + 2)\ncase succ.succ.succ\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nn : \u2115\nih : b (n + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1) - 1)\n\u22a2 b (n + 1 + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1 + 1) - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.796399116516113
+      },
+      {
+        "pass": 3,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.41537094116211
+      },
+      {
+        "pass": 3,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.215546131134033
+      },
+      {
+        "pass": 3,
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.47692084312439
+      },
+      {
+        "pass": 3,
+        "line": 36,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 8.096121788024902
+      },
+      {
+        "pass": 3,
+        "line": 39,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 8.654449701309204
+      },
+      {
+        "pass": 3,
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.478131532669067
+      },
+      {
+        "pass": 3,
+        "line": 45,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  b (n + 2)\ncase succ.succ.succ\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nn : \u2115\nih : b (n + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1) - 1)\n\u22a2 b (n + 1 + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1 + 1) - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.803560018539429
+      },
+      {
+        "pass": 3,
+        "line": 53,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a\u207b\u00b9\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nhb_general : \u2200 (n : \u2115), b n = 1 + 4 / 3 * (\u2191n - 1)\nn : \u2115\n\u22a2 a n = 3 / (4 * \u2191n - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.999356985092163
+      },
+      {
+        "pass": 4,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.839619636535645
+      },
+      {
+        "pass": 4,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.216065645217896
+      },
+      {
+        "pass": 4,
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.30678129196167
+      },
+      {
+        "pass": 4,
+        "line": 36,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.429084062576294
+      },
+      {
+        "pass": 4,
+        "line": 39,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 8.989837646484375
+      },
+      {
+        "pass": 4,
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.577091932296753
+      },
+      {
+        "pass": 4,
+        "line": 45,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  b (n + 2)\ncase succ.succ.succ\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nn : \u2115\nih : b (n + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1) - 1)\n\u22a2 b (n + 1 + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1 + 1) - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.92751669883728
+      },
+      {
+        "pass": 4,
+        "line": 53,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a\u207b\u00b9\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nhb_general : \u2200 (n : \u2115), b n = 1 + 4 / 3 * (\u2191n - 1)\nn : \u2115\n\u22a2 a n = 3 / (4 * \u2191n - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.822478771209717
+      },
+      {
+        "pass": 5,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.951469421386719
+      },
+      {
+        "pass": 5,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.667148113250732
+      },
+      {
+        "pass": 5,
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.537525415420532
+      },
+      {
+        "pass": 5,
+        "line": 36,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.807244777679443
+      },
+      {
+        "pass": 5,
+        "line": 39,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.059455394744873
+      },
+      {
+        "pass": 5,
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.118256330490112
+      },
+      {
+        "pass": 5,
+        "line": 45,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  b (n + 2)\ncase succ.succ.succ\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nn : \u2115\nih : b (n + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1) - 1)\n\u22a2 b (n + 1 + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1 + 1) - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.450774431228638
+      },
+      {
+        "pass": 5,
+        "line": 53,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a\u207b\u00b9\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nhb_general : \u2200 (n : \u2115), b n = 1 + 4 / 3 * (\u2191n - 1)\nn : \u2115\n\u22a2 a n = 3 / (4 * \u2191n - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.332579374313354
+      },
+      {
+        "pass": 6,
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.514715909957886
+      },
+      {
+        "pass": 6,
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.48841118812561
+      },
+      {
+        "pass": 6,
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.455440998077393
+      },
+      {
+        "pass": 6,
+        "line": 36,
+        "error_type": "other_error",
+        "original_error_message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 7.81298303604126
+      },
+      {
+        "pass": 6,
+        "line": 39,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 9.332249879837036
+      },
+      {
+        "pass": 6,
+        "line": 42,
+        "error_type": "type_mismatch",
+        "original_error_message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 10.241409301757812
+      },
+      {
+        "pass": 6,
+        "line": 45,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  b (n + 2)\ncase succ.succ.succ\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nn : \u2115\nih : b (n + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1) - 1)\n\u22a2 b (n + 1 + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1 + 1) - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 12.18814992904663
+      },
+      {
+        "pass": 6,
+        "line": 53,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a\u207b\u00b9\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nhb_general : \u2200 (n : \u2115), b n = 1 + 4 / 3 * (\u2191n - 1)\nn : \u2115\n\u22a2 a n = 3 / (4 * \u2191n - 1)",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.098666667938232
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 21,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  a (n + 2)\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nn : \u2115\n\u22a2 b (n + 2) = 2 * b (n + 1) - b n"
+      },
+      {
+        "line": 27,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\n\u22a2 b 1 = 1"
+      },
+      {
+        "line": 28,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, equality or iff proof expected\n  \u211a\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\n\u22a2 b 2 = 7 / 3"
+      },
+      {
+        "line": 36,
+        "error_type": "other_error",
+        "message": "unsolved goals\ncase zero\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\n\u22a2 b 0 = 1 + -(4 / 3)"
+      },
+      {
+        "line": 39,
+        "error_type": "type_mismatch",
+        "message": "type mismatch\n  hb0\nhas type\n  b 1 = 1 : Prop\nbut is expected to have type\n  b (0 + 1) = 1 + 4 / 3 * (\u2191(0 + 1) - 1) : Prop"
+      },
+      {
+        "line": 42,
+        "error_type": "type_mismatch",
+        "message": "type mismatch\n  hb1\nhas type\n  b 2 = 7 / 3 : Prop\nbut is expected to have type\n  b (0 + 1 + 1) = 1 + 4 / 3 * (\u2191(0 + 1 + 1) - 1) : Prop"
+      },
+      {
+        "line": 45,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  b (n + 2)\ncase succ.succ.succ\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nn : \u2115\nih : b (n + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1) - 1)\n\u22a2 b (n + 1 + 1 + 1) = 1 + 4 / 3 * (\u2191(n + 1 + 1 + 1) - 1)"
+      },
+      {
+        "line": 53,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?a\u207b\u00b9\na : \u2115 \u2192 \u211a\nh\u2080 : a 1 = 1\nh\u2081 : a 2 = 3 / 7\nh\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a (n + 1) / (2 * a n - a (n + 1))\nb : \u2115 \u2192 \u211a := fun n => 1 / a n\nhb : \u2200 (n : \u2115), b (n + 2) = 2 * b (n + 1) - b n\nhb0 : b 1 = 1\nhb1 : b 2 = 7 / 3\nhb_general : \u2200 (n : \u2115), b n = 1 + 4 / 3 * (\u2191n - 1)\nn : \u2115\n\u22a2 a n = 3 / (4 * \u2191n - 1)"
+      }
+    ],
+    "total_time": 453.3751413822174,
+    "no_goals_fixes_applied": 1
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 9\nDecompositions applied: 3\nNo goals error fixes applied: 1\nSuccessful syntheses: 1\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 21: 6 attempts\n  - Line 27: 6 attempts\n  - Line 28: 6 attempts\n  - Line 36: 6 attempts\n  - Line 39: 6 attempts\n  - Line 42: 6 attempts\n  - Line 45: 5 attempts\n  - Line 53: 4 attempts\n  - Line 64: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 8\n\nRemaining Errors:\n  - Line 21: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   a (n + 2) a...\n  - Line 27: rewrite_failed - tactic 'rewrite' failed, equality or iff proof expected   \u211a a : \u2115 \u2192 \u211a h\u2080 : a 1 = 1 h\u2081 : a 2 = 3 / 7 ...\n  - Line 28: rewrite_failed - tactic 'rewrite' failed, equality or iff proof expected   \u211a a : \u2115 \u2192 \u211a h\u2080 : a 1 = 1 h\u2081 : a 2 = 3 / 7 ...\n  - Line 36: other_error - unsolved goals case zero a : \u2115 \u2192 \u211a h\u2080 : a 1 = 1 h\u2081 : a 2 = 3 / 7 h\u2082 : \u2200 (n : \u2115), a (n + 2) = a n * a...\n  - Line 39: type_mismatch - type mismatch   hb0 has type   b 1 = 1 : Prop but is expected to have type   b (0 + 1) = 1 + 4 / 3 *...\n  - Line 42: type_mismatch - type mismatch   hb1 has type   b 2 = 7 / 3 : Prop but is expected to have type   b (0 + 1 + 1) = 1 +...\n  - Line 45: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   b (n + 2) c...\n  - Line 53: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   ?a\u207b\u00b9 a : \u2115 ...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.1111\nTotal time: 453.38 seconds",
+  "dsl": "oneline(norm_num)"
+}

@@ -1,0 +1,304 @@
+{
+  "status": "failure",
+  "file_path": "./minif2f/lean_code/88.lean",
+  "output_file": "./minif2f/lean_fixed/88_fixed.lean",
+  "original_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For how many positive integer values of $x$ is the sum $x^2+4x+4$ less than 20? Show that it is 2.-/\ntheorem mathd_algebra_405 (S : Finset \u2115) (h\u2080 : \u2200 x, x \u2208 S \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20) :\n    S.card = 2 := by\n  -- First, we simplify the inequality x\u00b2 + 4x + 4 < 20 to (x + 2)\u00b2 < 20\n  have h\u2081 : \u2200 x, x ^ 2 + 4 * x + 4 = (x + 2) ^ 2 := by\n    intro x\n    -- Expand (x + 2)\u00b2 to show it equals x\u00b2 + 4x + 4\n    ring\n  -- Rewrite the membership condition using the simplified form\n  have h\u2082 : \u2200 x, x \u2208 S \u2194 0 < x \u2227 (x + 2) ^ 2 < 20 := by\n    intro x\n    rw [h\u2080, h\u2081]\n  -- Take square root of both sides of the inequality (keeping in mind all terms are positive)\n  have h\u2083 : \u2200 x, (x + 2) ^ 2 < 20 \u2194 x + 2 < sqrt 20 := by\n    intro x\n    -- Since x is positive, x + 2 is positive, so we can use sqrt_lt_sq\n    rw [\u2190 sqrt_lt_sq]\n    \u00b7 norm_num\n    \u00b7 exact add_pos (by positivity) two_pos\n  -- Combine the previous steps to rewrite the membership condition\n  have h\u2084 : \u2200 x, x \u2208 S \u2194 0 < x \u2227 x + 2 < sqrt 20 := by\n    intro x\n    rw [h\u2082, h\u2083]\n  -- Calculate the numerical value of sqrt 20 - 2\n  have h\u2085 : sqrt 20 - 2 \u2248 2.4721359549995796 := by\n    rw [show sqrt 20 = 2 * sqrt 5 by rw [sqrt_mul]; norm_num]\n    norm_num\n    -- Approximation of sqrt 5\n    rw [show (sqrt 5 : \u211d) \u2248 2.23606797749979 by norm_num]\n    norm_num\n  -- The condition now becomes: 0 < x \u2227 x < 4.472... - 2 \u2248 2.472...\n  -- So x must be positive integers less than \u2248 2.472, i.e., x = 1 or x = 2\n  -- Now we'll construct the set S explicitly\n  let S' : Finset \u2115 := {1, 2}\n  -- Show that S' satisfies the same membership condition as S\n  have h\u2086 : \u2200 x, x \u2208 S' \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20 := by\n    intro x\n    -- Check each possible case for x\n    rw [Finset.mem_insert, Finset.mem_singleton]\n    constructor\n    \u00b7 -- Case where x \u2208 S' (x = 1 or x = 2)\n      rintro (rfl | rfl)\n      \u00b7 -- x = 1 case\n        constructor\n        \u00b7 exact one_pos\n        \u00b7 norm_num\n      \u00b7 -- x = 2 case\n        constructor\n        \u00b7 exact two_pos\n        \u00b7 norm_num\n    \u00b7 -- Case where x satisfies the conditions\n      rintro \u27e8hx, h\u27e9\n      -- We know x must be 1 or 2 from earlier reasoning\n      have x_le : x \u2264 2 := by\n        -- From x < sqrt 20 - 2 \u2248 2.472..., and x is integer\n        rw [h\u2084, h\u2083, \u2190 lt_sqrt (by norm_num) (by positivity)] at h\n        linarith [h.2]\n      -- Since x is positive integer \u2264 2, it must be 1 or 2\n      interval_cases x\n      \u00b7 left; rfl\n      \u00b7 right; rfl\n      \u00b7 -- x = 0 case eliminated by positivity\n        exfalso\n        exact lt_irrefl 0 hx\n  -- Since S and S' have the same membership condition, they must be equal\n  have h\u2087 : S = S' := by\n    ext x\n    rw [h\u2080, h\u2086]\n  -- Now compute the cardinality of S'\n  have h\u2088 : S'.card = 2 := by\n    -- S' has exactly two distinct elements\n    rw [Finset.card_insert_of_not_mem]\n    \u00b7 rw [Finset.card_singleton]\n    \u00b7 simp\n  -- Finally, since S = S', their cardinalities are equal\n  rw [h\u2087, h\u2088]",
+  "fixed_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- For how many positive integer values of $x$ is the sum $x^2+4x+4$ less than 20? Show that it is 2.-/\ntheorem mathd_algebra_405 (S : Finset \u2115) (h\u2080 : \u2200 x, x \u2208 S \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20) :\n    S.card = 2 := by\n  -- First, we simplify the inequality x\u00b2 + 4x + 4 < 20 to (x + 2)\u00b2 < 20\n  have h\u2081 : \u2200 x, x ^ 2 + 4 * x + 4 = (x + 2) ^ 2 := by\n    intro x\n    -- Expand (x + 2)\u00b2 to show it equals x\u00b2 + 4x + 4\n    ring\n  -- Rewrite the membership condition using the simplified form\n  have h\u2082 : \u2200 x, x \u2208 S \u2194 0 < x \u2227 (x + 2) ^ 2 < 20 := by\n    intro x\n    rw [h\u2080, h\u2081]\n  -- Take square root of both sides of the inequality (keeping in mind all terms are positive)\n  have h\u2083 : \u2200 x, (x + 2) ^ 2 < 20 \u2194 x + 2 < sqrt 20 := by\n    intro x\n    -- Since x is positive, x + 2 is positive, so we can use sqrt_lt_sq\n    omega\n    \u00b7 norm_num\n    \u00b7 exact add_pos (by positivity) two_pos\n  -- Combine the previous steps to rewrite the membership condition\n  have h\u2084 : \u2200 x, x \u2208 S \u2194 0 < x \u2227 x + 2 < sqrt 20 := by\n    intro x\n    rw [h\u2082, h\u2083]\n  -- Calculate the numerical value of sqrt 20 - 2\n  have h\u2085 : sqrt 20 - 2 \u2248 2.4721359549995796 := by\n    rw [show sqrt 20 = 2 * sqrt 5 by rw [sqrt_mul]; norm_num]\n    norm_num\n    -- Approximation of sqrt 5\n    rw [show (sqrt 5 : \u211d) \u2248 2.23606797749979 by norm_num]\n    norm_num\n  -- The condition now becomes: 0 < x \u2227 x < 4.472... - 2 \u2248 2.472...\n  -- So x must be positive integers less than \u2248 2.472, i.e., x = 1 or x = 2\n  -- Now we'll construct the set S explicitly\n  let S' : Finset \u2115 := {1, 2}\n  -- Show that S' satisfies the same membership condition as S\n  have h\u2086 : \u2200 x, x \u2208 S' \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20 := by\n    intro x\n    -- Check each possible case for x\n    rw [Finset.mem_insert, Finset.mem_singleton]\n    constructor\n    \u00b7 -- Case where x \u2208 S' (x = 1 or x = 2)\n      rintro (rfl | rfl)\n      \u00b7 -- x = 1 case\n        constructor\n        \u00b7 exact one_pos\n        \u00b7 norm_num\n      \u00b7 -- x = 2 case\n        constructor\n        \u00b7 exact two_pos\n        \u00b7 norm_num\n    \u00b7 -- Case where x satisfies the conditions\n      rintro \u27e8hx, h\u27e9\n      -- We know x must be 1 or 2 from earlier reasoning\n      have x_le : x \u2264 2 := by\n        -- From x < sqrt 20 - 2 \u2248 2.472..., and x is integer\n        nlinarith\n      interval_cases x\n      \u00b7 left; rfl\n      \u00b7 right; rfl\n  have h\u2087 : S = S' := by\n    ext x\n    rw [h\u2080, h\u2086]\n  -- Now compute the cardinality of S'\n  have h\u2088 : S'.card = 2 := by\n    -- S' has exactly two distinct elements\n    rw [Finset.card_insert_of_not_mem]\n    \u00b7 rw [Finset.card_singleton]\n    \u00b7 simp\n  -- Finally, since S = S', their cardinalities are equal\n  rw [h\u2087]\n  rw [h\u2088]",
+  "statistics": {
+    "original_errors": 11,
+    "decompositions_applied": 2,
+    "successful_syntheses": 2,
+    "failed_syntheses": {},
+    "timeout_syntheses": 0,
+    "attempts_per_line": {
+      "21": 7,
+      "24": 1,
+      "28": 6,
+      "32": 6,
+      "33": 6,
+      "63": 1,
+      "77": 1
+    },
+    "remaining_errors": 8,
+    "fix_rate": 0.2727272727272727,
+    "successful_fixes_details": [
+      {
+        "pass": 1,
+        "line": 24,
+        "error_type": "unknown_identifier",
+        "original_error_message": "unknown identifier 'sqrt_lt_sq'",
+        "fix_time": 9.937160015106201,
+        "errors_after_this_fix": 10,
+        "fix_snippet": "omega",
+        "dsl": "oneline(omega)"
+      },
+      {
+        "pass": 3,
+        "line": 63,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?x \u2208 S\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20\nh\u2081 : \u2200 (x : \u2115), x ^ 2 + 4 * x + 4 = (x + 2) ^ 2\nh\u2082 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 (x + 2) ^ 2 < 20\nh\u2083 : \u2200 (x : \u2115), (x + 2) ^ 2 < 20 \u2194 x + 2 < sorry\nh\u2084 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x + 2 < sorry\nS' : Finset \u2115 := {1, 2}\nx : \u2115\nhx : 0 < x\nh : x ^ 2 + 4 * x + 4 < 20\n\u22a2 x \u2264 2",
+        "fix_time": 11.693432092666626,
+        "errors_after_this_fix": 10,
+        "fix_snippet": "nlinarith",
+        "dsl": "oneline(nlinarith)"
+      }
+    ],
+    "failed_fixes_details": [
+      {
+        "pass": 1,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.355405330657959
+      },
+      {
+        "pass": 2,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.320557117462158
+      },
+      {
+        "pass": 2,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 9.548130989074707
+      },
+      {
+        "pass": 2,
+        "line": 32,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 9.318663835525513
+      },
+      {
+        "pass": 2,
+        "line": 33,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 13.88565707206726
+      },
+      {
+        "pass": 3,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 11.662877559661865
+      },
+      {
+        "pass": 3,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 9.14412808418274
+      },
+      {
+        "pass": 3,
+        "line": 32,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 9.293638706207275
+      },
+      {
+        "pass": 3,
+        "line": 33,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 14.624507188796997
+      },
+      {
+        "pass": 4,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 17.64246678352356
+      },
+      {
+        "pass": 4,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 14.152154207229614
+      },
+      {
+        "pass": 4,
+        "line": 32,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 14.482631206512451
+      },
+      {
+        "pass": 4,
+        "line": 33,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.302356958389282
+      },
+      {
+        "pass": 5,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 17.6760995388031
+      },
+      {
+        "pass": 5,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 13.64113163948059
+      },
+      {
+        "pass": 5,
+        "line": 32,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 13.992337942123413
+      },
+      {
+        "pass": 5,
+        "line": 33,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.172813177108765
+      },
+      {
+        "pass": 6,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 17.56317138671875
+      },
+      {
+        "pass": 6,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 13.7667396068573
+      },
+      {
+        "pass": 6,
+        "line": 32,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 14.116141080856323
+      },
+      {
+        "pass": 6,
+        "line": 33,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.60230326652527
+      },
+      {
+        "pass": 7,
+        "line": 21,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 17.573877096176147
+      },
+      {
+        "pass": 7,
+        "line": 28,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 14.03535532951355
+      },
+      {
+        "pass": 7,
+        "line": 32,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No valid fix/placement generated or extracted.",
+        "attempt_time": 14.133460521697998
+      },
+      {
+        "pass": 7,
+        "line": 33,
+        "error_type": "other_error",
+        "original_error_message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 21.57796621322632
+      },
+      {
+        "pass": 7,
+        "line": 77,
+        "error_type": "rewrite_failed",
+        "original_error_message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  S\ncase refine_1\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20\nh\u2081 : \u2200 (x : \u2115), x ^ 2 + 4 * x + 4 = (x + 2) ^ 2\nh\u2082 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 (x + 2) ^ 2 < 20\nh\u2083 : \u2200 (x : \u2115), (x + 2) ^ 2 < 20 \u2194 x + 2 < sorry\nh\u2084 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x + 2 < sorry\nS' : Finset \u2115 := {1, 2}\nh\u2086 : \u2200 (x : \u2115), x \u2208 S' \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20\nh\u2087 : S = S'\nh\u2088 : S'.card = 2\n\u22a2 HasEquiv Float",
+        "failure_reason": "Synthesis failed: No solution found by synthesizer.",
+        "attempt_time": 25.62654948234558
+      }
+    ],
+    "timeout_fixes_details": [],
+    "remaining_errors_details": [
+      {
+        "line": 21,
+        "error_type": "other_error",
+        "message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d"
+      },
+      {
+        "line": 28,
+        "error_type": "other_error",
+        "message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d"
+      },
+      {
+        "line": 32,
+        "error_type": "other_error",
+        "message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d"
+      },
+      {
+        "line": 32,
+        "error_type": "failed_to_synthesize",
+        "message": "failed to synthesize\n  HasEquiv Float\n\nAdditional diagnostic information may be available using the `set_option diagnostics true` command."
+      },
+      {
+        "line": 33,
+        "error_type": "other_error",
+        "message": "ambiguous, possible interpretations \n  Rat.sqrt 20 : \u211a\n  \n  Nat.sqrt 20 : \u2115\n  \n  \u221a20 : \u211d"
+      },
+      {
+        "line": 33,
+        "error_type": "other_error",
+        "message": "ambiguous, possible interpretations \n  Rat.sqrt 5 : \u211a\n  \n  Nat.sqrt 5 : \u2115\n  \n  \u221a5 : \u211d"
+      },
+      {
+        "line": 33,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  \u221a(?m.8623 * ?y)\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20\nh\u2081 : \u2200 (x : \u2115), x ^ 2 + 4 * x + 4 = (x + 2) ^ 2\nh\u2082 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 (x + 2) ^ 2 < 20\nh\u2083 : \u2200 (x : \u2115), (x + 2) ^ 2 < 20 \u2194 x + 2 < sorry\nh\u2084 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x + 2 < sorry\n\u22a2 sorry = 2 * sorry"
+      },
+      {
+        "line": 77,
+        "error_type": "rewrite_failed",
+        "message": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  S\ncase refine_1\nS : Finset \u2115\nh\u2080 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20\nh\u2081 : \u2200 (x : \u2115), x ^ 2 + 4 * x + 4 = (x + 2) ^ 2\nh\u2082 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 (x + 2) ^ 2 < 20\nh\u2083 : \u2200 (x : \u2115), (x + 2) ^ 2 < 20 \u2194 x + 2 < sorry\nh\u2084 : \u2200 (x : \u2115), x \u2208 S \u2194 0 < x \u2227 x + 2 < sorry\nS' : Finset \u2115 := {1, 2}\nh\u2086 : \u2200 (x : \u2115), x \u2208 S' \u2194 0 < x \u2227 x ^ 2 + 4 * x + 4 < 20\nh\u2087 : S = S'\nh\u2088 : S'.card = 2\n\u22a2 HasEquiv Float"
+      }
+    ],
+    "total_time": 419.1392204761505,
+    "no_goals_fixes_applied": 2
+  },
+  "message": "=== Fix Summary ===\nOriginal errors: 11\nDecompositions applied: 2\nNo goals error fixes applied: 2\nSuccessful syntheses: 2\nTimed out syntheses: 0\nSynthesis attempts per line:\n  - Line 21: 7 attempts\n  - Line 24: 1 attempts\n  - Line 28: 6 attempts\n  - Line 32: 6 attempts\n  - Line 33: 6 attempts\n  - Line 63: 1 attempts\n  - Line 77: 1 attempts\nTimed out syntheses (line: reason): 0\nRemaining errors: 8\n\nRemaining Errors:\n  - Line 21: other_error - ambiguous, possible interpretations    Rat.sqrt 20 : \u211a      Nat.sqrt 20 : \u2115      \u221a20 : \u211d...\n  - Line 28: other_error - ambiguous, possible interpretations    Rat.sqrt 20 : \u211a      Nat.sqrt 20 : \u2115      \u221a20 : \u211d...\n  - Line 32: other_error - ambiguous, possible interpretations    Rat.sqrt 20 : \u211a      Nat.sqrt 20 : \u2115      \u221a20 : \u211d...\n  - Line 32: failed_to_synthesize - failed to synthesize   HasEquiv Float  Additional diagnostic information may be available using the ...\n  - Line 33: other_error - ambiguous, possible interpretations    Rat.sqrt 20 : \u211a      Nat.sqrt 20 : \u2115      \u221a20 : \u211d...\n  - Line 33: other_error - ambiguous, possible interpretations    Rat.sqrt 5 : \u211a      Nat.sqrt 5 : \u2115      \u221a5 : \u211d...\n  - Line 33: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   \u221a(?m.8623 *...\n  - Line 77: rewrite_failed - tactic 'rewrite' failed, did not find instance of the pattern in the target expression   S case refi...\n\nOverall Fix Rate (Errors Fixed / Original Errors): 0.2727\nTotal time: 419.14 seconds",
+  "dsl": "oneline(omega)"
+}
