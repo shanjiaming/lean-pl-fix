@@ -27,15 +27,34 @@ def module_to_path(module_name: str, base_path: str) -> Path | None:
         return None
 
 def extract_theorems_from_file(file_path: Path) -> set[str]:
-    """Extracts theorem and lemma names declared in a Lean file using regex."""
+    """Extracts theorem and lemma names declared in a Lean file using regex, with namespace tracking."""
     theorems = set()
-    theorem_pattern = re.compile(r"^\s*(?:noncomputable\s+|local\s+)?(?:theorem|lemma)\s+([\w.]+)", re.MULTILINE)
+    theorem_pattern = re.compile(r"^\s*(?:noncomputable\s+|local\s+)?(?:theorem|lemma)\s+([\w.]+)")
+    namespace_pattern = re.compile(r"^\s*namespace\s+([\w.]+)")
+    end_pattern = re.compile(r"^\s*end(?:\s+([\w.]+))?")
+    namespace_stack = []
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        for match in theorem_pattern.finditer(content):
-            theorems.add(match.group(1))
+            for line in f:
+                ns_match = namespace_pattern.match(line)
+                if ns_match:
+                    namespace_stack.append(ns_match.group(1))
+                    continue
+                end_match = end_pattern.match(line)
+                if end_match:
+                    if namespace_stack:
+                        # 如果end带名字，确保和栈顶一致才pop
+                        if end_match.group(1) is None or end_match.group(1) == namespace_stack[-1]:
+                            namespace_stack.pop()
+                    continue
+                thm_match = theorem_pattern.match(line)
+                if thm_match:
+                    name = thm_match.group(1)
+                    if namespace_stack and not name.startswith(namespace_stack[-1] + "."):
+                        full_name = '.'.join(namespace_stack + [name])
+                    else:
+                        full_name = name
+                    theorems.add(full_name)
     except Exception as e:
         print(f"Error reading or parsing file {file_path}: {e}")
     return theorems

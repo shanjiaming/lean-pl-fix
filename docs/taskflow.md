@@ -168,3 +168,9 @@ The goal is to enhance the error handling and synthesis tracking in the Lean enu
 7. **结果记录**:
    - 记录修复尝试的过程和结果
    - 生成详细的JSON格式日志
+
+## 2024-04-27
+
+- Enhanced `extract_theorems_from_file` to support namespace tracking and prefixing theorem names (e.g., `Real.sq_sqrt`).
+- Now all downstream code (auto repair, candidate theorem collection, etc.) can correctly match and suggest theorems as Lean would reference them.
+- All related modules and test functions have been updated and verified.
