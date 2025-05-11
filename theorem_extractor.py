@@ -33,7 +33,7 @@ def extract_theorems_from_module(module_path):
     def extract_names(pattern_type, content):
         names = []
         # Pattern for declarations with regular names, backticked names, and possibly prefixed with @
-        pattern = fr'{pattern_type}\s+((?:@?[a-zA-Z0-9_]+|`[^`]+`))'
+        pattern = fr'{pattern_type}\s+((?:@?[a-zA-Z0-9_]+|`[^`]+`))(?!\s*by)'
         
         matches = re.finditer(pattern, content)
         for match in matches:

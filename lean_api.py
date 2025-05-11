@@ -579,6 +579,55 @@ def example():
     repl.end()
     print("Local REPL for example finished.")
 
+def error_list_net_reduced(orig_errors, new_errors):
+    """
+    Returns True if all new errors are a subset of the original errors (no new errors),
+    and the number of errors is strictly reduced.
+    Each error is compared by line, column, end_line, end_column, and message.
+    """
+    def error_key(e):
+        return (
+            # e.get('line', -1),
+            # e.get('column', -1),
+            # e.get('end_line', -1),
+            # e.get('end_column', -1),
+            e.get('message', '')
+        )
+    orig_set = set(error_key(e) for e in orig_errors)
+    new_set = set(error_key(e) for e in new_errors)
+    # No new errors: new_set must be subset of orig_set, and strictly fewer errors
+    return new_set.issubset(orig_set) and len(new_set) < len(orig_set)
+
+
+def test_error_list_net_reduced():
+    orig = [
+        {'line': 1, 'column': 0, 'end_line': 1, 'end_column': 10, 'message': 'error A'},
+        {'line': 2, 'column': 0, 'end_line': 2, 'end_column': 10, 'message': 'error B'},
+        {'line': 3, 'column': 0, 'end_line': 3, 'end_column': 10, 'message': 'error C'},
+    ]
+    # Case 1: Remove one error, no new errors
+    new1 = [
+        {'line': 1, 'column': 0, 'end_line': 1, 'end_column': 10, 'message': 'error A'},
+        {'line': 2, 'column': 0, 'end_line': 2, 'end_column': 10, 'message': 'error B'},
+    ]
+    assert error_list_net_reduced(orig, new1) == True
+    # Case 2: Add a new error
+    new2 = [
+        {'line': 1, 'column': 0, 'end_line': 1, 'end_column': 10, 'message': 'error A'},
+        {'line': 2, 'column': 0, 'end_line': 2, 'end_column': 10, 'message': 'error B'},
+        {'line': 4, 'column': 0, 'end_line': 4, 'end_column': 10, 'message': 'error D'},
+    ]
+    assert error_list_net_reduced(orig, new2) == False
+    # Case 3: Same errors (not reduced)
+    new3 = orig.copy()
+    assert error_list_net_reduced(orig, new3) == False
+    # Case 4: Remove two errors
+    new4 = [
+        {'line': 1, 'column': 0, 'end_line': 1, 'end_column': 10, 'message': 'error A'},
+    ]
+    assert error_list_net_reduced(orig, new4) == True
+    print('All tests passed for error_list_net_reduced')
+
 if __name__ == "__main__":
     # Add imports here if they are only used in __main__
     # from lean_interact import LeanREPLConfig, LeanServer, Command, TempRequireProject
@@ -603,4 +652,6 @@ if __name__ == "__main__":
     print(test_repl.execute(f"{header1}\n{code1}", env_mode='header')) # Second time for header1
     print(test_repl.execute(f"{header1}\n{code1}", env_mode='header')) # Third time for header1
     print(test_repl.execute(f"{header1}\n{code1}", env_mode='header')) # Fourth time for header1
+    
+    test_error_list_net_reduced()
     

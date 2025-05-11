@@ -8,6 +8,28 @@ This document outlines the planned and completed tasks for improving the Lean en
 
 ## Completed Tasks
 
+### Implement Similar Theorem Repair (Completed)
+
+**Understanding:**
+
+The goal is to automatically repair Lean code errors by identifying and suggesting theorems that are similar to the ones referenced in the code, improving the robustness and automation of the fixing process.
+
+**Plan (as implemented):**
+
+1. **Theorem Similarity Matching:**
+   * Developed logic to extract theorems from the code and error messages.
+   * Implemented a similarity search to find theorems in the environment that closely match the missing or incorrect theorem names.
+   * Integrated this matching into the main repair pipeline so that when a theorem is not found, similar candidates are suggested and tried automatically.
+
+2. **Repair Integration:**
+   * When a fix attempt fails due to a missing or incorrect theorem, the system now automatically attempts to repair the code using similar theorems.
+   * The process is fully automated and integrated with the existing synthesis and validation pipeline.
+
+3. **Data Storage:**
+   * All data related to similar theorem repair attempts and results are stored under `minif2f/similar_theorem_repair/` for traceability and analysis.
+
+**Status:** Completed.
+
 ### Implement Lean Have Extractor (Completed)
 
 **Understanding:**
@@ -174,3 +196,81 @@ The goal is to enhance the error handling and synthesis tracking in the Lean enu
 - Enhanced `extract_theorems_from_file` to support namespace tracking and prefixing theorem names (e.g., `Real.sq_sqrt`).
 - Now all downstream code (auto repair, candidate theorem collection, etc.) can correctly match and suggest theorems as Lean would reference them.
 - All related modules and test functions have been updated and verified.
+
+## Error Reduction Logic Update (2024-06-13)
+
+- Added `lean_api.error_list_net_reduced` to determine if a new error list is a strict subset of the original (no new errors, strictly fewer errors).
+- Added comprehensive pytest unit tests in `tests/test_lean_api.py`, all tests passed.
+- This function is now the recommended way to check for strict error reduction (no new errors) in all relevant modules.
+
+### Batch Lean File Validation and Classification (Completed)
+
+**Understanding:**
+
+The goal is to automate the validation of all Lean files in the `minif2f-dspv2/test` directory by running each file through the Lean REPL (using the same API as in `replace_unknown.py`). Each file will be checked for errors. Files that pass without errors will be copied to `minif2f-dspv2/test_passed`, and those with errors will be copied to `minif2f-dspv2/test_failed` for further inspection.
+
+**Plan (as implemented):**
+
+1. **File Enumeration:**
+   * List all `.lean` files in `minif2f-dspv2/test`.
+2. **Lean Validation:**
+   * For each file, read its content and use `REPLInstance.execute(..., env_mode='header')` to check for errors.
+   * If there are no errors (no message with `severity == 'error'`), classify as passed; otherwise, as failed.
+3. **Classification Output:**
+   * Copy each file to either `minif2f-dspv2/test_passed` or `minif2f-dspv2/test_failed` based on the result.
+   * Print a summary of results to the console and log file.
+
+**Status:** Completed. All files in `minif2f-dspv2/test` have been classified and copied to the appropriate output folders.
+
+## Task: Batch Fix Unknown Identifiers in Failed Tests
+
+**Status:** Completed
+
+**Description:**
+Create a script to process `.lean` files from `minif2f-dspv2/test_failed`. The script will attempt to fix unknown identifiers using the `replace_unknown_with_placeholder` function from `replace_unknown.py`.
+
+**Steps:**
+1.  **Refactor `replace_unknown.py`**: Modified `replace_unknown_with_placeholder` to accept an existing `REPLInstance`.
+2.  **Create `batch_fix_unknown.py` script**: This script defines source and target directories, initializes a `REPLInstance`, processes each file by attempting fixes, classifies results, saves processed code to the new location, and removes the original file.
+3.  **Testing**: The script is ready for testing by running `python batch_fix_unknown.py`.
+4.  **Documentation**: This task entry is updated.
+
+**Depends on:**
+*   `replace_unknown.py`
+*   `lean_api.py`
+
+**Files created/modified:**
+*   `replace_unknown.py` (modified)
+*   `batch_fix_unknown.py` (created)
+*   `docs/taskflow.md` (updated)
+
+## Batch Fix Lean Theorems in `minif2f-dspv2/test_failed_fixed_unknown_failed/`
+
+**Status:** Implemented, Ready to Run
+
+**Goal:** Implement a script (`dpv2_batch_solver`) to iterate through Lean files in a specified directory, extract theorem content, attempt to fix them using `dpv2_solver.solve_theorem_dpv2`, and update the files with fixes.
+
+**Plan:**
+1.  Create `dpv2_batch_solver.py`. (Completed)
+2.  Import necessary functions: `os.listdir`, `os.path.join`, `solve_theorem_dpv2` from `dpv2_solver`. (Completed)
+3.  Define the target directory: `minif2f-dspv2/test_failed_fixed_unknown_failed/`. (Completed)
+4.  Implement a main function: (Completed)
+    a.  Iterate through all `.lean` files in the target directory.
+    b.  For each file:
+        i.  Read the entire file content.
+        ii. Find the start of the "theorem" or "example" keyword. If not found, skip the file with a warning.
+        iii. Separate the content into `header_content` (everything before "theorem"/"example") and `theorem_statement_and_proof` (everything from "theorem"/"example" onwards).
+        iv. Call `solve_theorem_dpv2(theorem_statement_and_proof)`.
+        v.  If the returned content is different from the original `theorem_statement_and_proof` (indicating a fix or change):
+            1.  Construct the new full file content by concatenating `header_content` and the new theorem content.
+            2.  Write the new content back to the original file.
+            3.  Print a success message.
+        vi. If `solve_theorem_dpv2` raises an exception or the content is unchanged, print a message indicating failure or no change for that file.
+5.  Add a `if __name__ == "__main__":` block to run the main function. (Completed)
+6.  Run the script. (Pending)
+7.  Update this document to mark the task as complete.
+
+**File Structure:**
+- `dpv2_solver.py`: Contains the core logic for fixing a single theorem.
+- `dpv2_batch_solver`: The new script for batch processing.
+- `minif2f-dspv2/test_failed_fixed_unknown_failed/`: Directory containing `.lean` files to be processed.
