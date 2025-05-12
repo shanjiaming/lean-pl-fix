@@ -1,0 +1,1 @@
+theorem h₉₄ (x y z : ℝ) (h₀ : 0 < x ∧ 0 < y ∧ 0 < z) (h₁ : 0 < x + y) (h₂ : 0 < y + z) (h₃ : 0 < z + x) (h₄ : 0 < x + y + z) (h₅ : 0 < (x + y) * (y + z) * (z + x)) (h₆ : 0 < (x + y) * (y + z)) (h₇ : 0 < (y + z) * (z + x)) (h₈ : 0 < (z + x) * (x + y)) (h₉₁ : 0 < x + y) (h₉₂ : 0 < y + z) (h₉₃ : 0 < z + x) 0 < (x + y) * (y + z) := by positivity

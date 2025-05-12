@@ -1,0 +1,1 @@
+theorem h₄ (x y z : ℝ) (h₀ : 0 < x ∧ 0 < y ∧ 0 < z) (h₁ : 0 < x + y) (h₂ : 0 < y + z) (h₃ : 0 < z + x) : 0 < x + y + z := by linarith

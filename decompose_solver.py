@@ -101,27 +101,60 @@ class TacticNode:
         is_implicit_name = True
         
         # Try to find an explicit name: have NAME ...
-        explicit_name_match = re.search(r'have\s+([\w\.\']+)', tactic_text)
+        # Name should be between have and the next whitespace or colon
+        head = tactic_text.split(":=")[0]
+        explicit_name_match = re.search(r'have\s+([^\s\(:]+)', head)
         if explicit_name_match:
             name = explicit_name_match.group(1)
             is_implicit_name = False
-        
         # Try to extract the type string: ... : TYPE :=
-        # This regex tries to capture the type robustly, even with complex names or parameters before the colon.
-        # It looks for 'have (optional_name_part) (optional_params) : CAPTURE_TYPE :='
-        type_match = re.search(r'have(?:\s+[\w\.\']+)?(?:\s*\([^)]*\))?\s*:\s*(.+?)\s*:=', tactic_text, re.DOTALL)
+        # Format: have [name] [conditions] : TYPE :=
+        # type_str should contain both: [conditions] : [goal]
         type_str = "_" # Default placeholder type
-        if type_match:
-            type_str = type_match.group(1).strip()
-        else:
-            # Fallback if the above regex fails, try a simpler one if no explicit name was found (anonymous have)
-            if is_implicit_name:
-                simple_type_match = re.search(r'have\s*:\s*(.+?)\s*:=', tactic_text, re.DOTALL)
-                if simple_type_match:
-                    type_str = simple_type_match.group(1).strip()
-            if type_str == "_": # If still not found, log or use a very generic placeholder
-                 print(f"Warning: Could not parse type for have statement: {tactic_text[:100]}...")
-
+        
+        # Step 1: Find the starting position after "have" and name if present
+        have_pos = tactic_text.find("have")
+        start_pos = have_pos + len("have")
+        name_pos = -1
+        
+        # Skip spaces after "have"
+        while start_pos < len(tactic_text) and tactic_text[start_pos].isspace():
+            start_pos += 1
+            
+        # Find name position (if not implicit)
+        if not is_implicit_name:
+            name_pos = start_pos
+            start_pos = start_pos + len(name)
+            # Skip spaces after name
+            while start_pos < len(tactic_text) and tactic_text[start_pos].isspace():
+                start_pos += 1
+        
+        # Step 2: Find the := that ends the type
+        pos = start_pos
+        paren_level = 0
+        type_end = -1
+        
+        while pos < len(tactic_text) - 1:  # -1 because we check pos+1 for :=
+            # Handle parentheses to track nesting level
+            if tactic_text[pos] == '(':
+                paren_level += 1
+            elif tactic_text[pos] == ')':
+                paren_level -= 1
+            
+            # Find the := at the top level
+            if paren_level == 0 and tactic_text[pos:pos+2] == ':=':
+                type_end = pos
+                break
+            
+            pos += 1
+        
+        # Extract the complete type string if we found the end marker
+        type_str = tactic_text[start_pos:type_end].strip()
+        # if type_str.startswith(":"):
+            # type_str = type_str[1:].strip()
+        # Debug info
+        has_by = "by" in tactic_text # Simplified check for has_by
+        print(f"name: {name}, type_str: {type_str}, is_implicit_name: {is_implicit_name}, has_by: {has_by}")
         return {
             "name": name,
             "type": type_str,
@@ -152,6 +185,8 @@ class TacticNode:
 
         name_to_use = structure["name"] # This will be 'this' if originally anonymous
         type_str = structure.get("type", "_") # Get parsed type, or default
+        if type_str.startswith(":"):
+            type_str = type_str[1:].strip()
         
         # Ensure the simplified form correctly represents an anonymous have if applicable
         # The name_to_use will be 'this', which is what we want for the placeholder.
@@ -215,67 +250,11 @@ class TacticNode:
         name = structure["name"]
         goal_type = structure.get("type") # P from 'have name : P :='
 
-        # If parsed type is placeholder or parsing failed.
-        if not goal_type or goal_type == "_":
-            print(f"Warning: Parsed type for 'have {structure.get('name', 'anonymous')}' is '{goal_type}'. Attempting fallbacks.")
-            
-            # Fallback 1: Use by_block_goals if available (context inside 'by' shows '... ⊢ P')
-            if self.by_block_goals and '⊢' in self.by_block_goals:
-                by_block_goal_prop = self.by_block_goals.split('⊢')[1].strip()
-                if by_block_goal_prop: # ensure it's not empty
-                    goal_type = by_block_goal_prop
-                    print(f"  Fallback (1): Used goal from by_block_goals: {goal_type}")
-                else:
-                    print(f"  Fallback (1): by_block_goals present but goal proposition is empty. Type remains '{goal_type}'.")
-            
-            # Fallback 2: If type is still placeholder AND it's an anonymous 'have' like 'have := ...'
-            # then the type is the current goal *before* the 'have' statement.
-            if (not goal_type or goal_type == "_") and \
-               structure.get("name") == "this" and \
-               structure.get("is_implicit_name") and \
-               structure.get("type") == "_" and \
-               self.goals and '⊢' in self.goals:
-                
-                contextual_goal = self.goals.split('⊢')[1].strip()
-                if contextual_goal:
-                    goal_type = contextual_goal
-                    print(f"  Fallback (2a): Anonymous 'have' with no explicit type. Used current goal from self.goals: {goal_type}")
-                else:
-                    print(f"  Fallback (2a): Anonymous 'have', self.goals present but proposition empty. Type remains '{goal_type}'.")
-
-            # Fallback 3: Parse from original signature text (original fallback)
-            if not goal_type or goal_type == "_":
-                print(f"  Fallback (3): Trying to parse type from original signature: {original_tactic_text[:100]}...")
-                original_sig_part = get_signature(original_tactic_text)
-                type_colon_pos = original_sig_part.rfind(" : ")
-                if type_colon_pos != -1:
-                    potential_type = original_sig_part[type_colon_pos + 3:].strip()
-                    # Avoid capturing types from parameters like (h : P := ...)
-                    if potential_type and '(' not in potential_type and ')' not in potential_type: # Simple heuristic
-                        goal_type = potential_type
-                        print(f"    Used type from original signature: {goal_type}")
-                    else:
-                        print(f"    Potential type '{potential_type}' from signature might be parameters or empty. Type remains '{goal_type}'.")
-                else:
-                    print(f"    No ' : ' found in original signature. Type remains '{goal_type}'.")
-
-        # Ultimate fallback
-        if not goal_type or goal_type == "_": # If still not found or is placeholder
-            print(f"  Fallback (Ultimate): All fallbacks failed for '{structure.get('name', 'anonymous')}'. Using 'Prop' as placeholder type.")
-            goal_type = "Prop" # Default placeholder
-
-        # Replace dagger symbol in the finalized goal_type
-        goal_type = goal_type.replace("✝", "_shadow_")
-
         new_signature_part = ""
-        if not dependencies:
-            new_signature_part = f"have {name} : {goal_type}"
-        else:
-            # Replace dagger symbol in each dependency string
-            cleaned_dependencies = [dep.replace("✝", "_shadow_") for dep in dependencies]
-            dependency_params = [f"({dep})" for dep in cleaned_dependencies]
-            combined_params = " ".join(dependency_params)
-            new_signature_part = f"have {name} {combined_params} : {goal_type}"
+        dependency_params = [f"({dep})" for dep in dependencies]
+        combined_params = " ".join(dependency_params)
+        new_signature_part = f"have {name} {combined_params} {goal_type} "
+        new_signature_part = new_signature_part.replace("_shadow_", "✝")
         
         self_contained_tactic = f"{new_signature_part}{actual_body_to_use}"
         return self_contained_tactic, original_tactic_text
