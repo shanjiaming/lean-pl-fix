@@ -604,13 +604,13 @@ open BigOperators Real Nat Topology Rat
 
 header_env = server.run(Command(cmd=header)).env
 
-def run_with_header_env(input_content: str):
+def run_with_header_env(input_content: str, **kwargs):
     # cut from the first "theorem" to the end
     theorem_start = input_content.find("theorem")
     if theorem_start == -1:
         raise ValueError("No theorem found in input")
     input_content = input_content[theorem_start:]
-    return server.run(Command(cmd=input_content, env=header_env))
+    return server.run(Command(cmd=input_content, env=header_env, **kwargs))
 
 
 example_input_content = """theorem ex_mathlib (x : ℝ) : x + 0 = x:= by
