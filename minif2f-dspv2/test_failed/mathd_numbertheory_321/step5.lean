@@ -1,0 +1,1 @@
+theorem h₅ (n : ZMod 1399) (h₁ : n = 160⁻¹) (h₂ h₄ : n = 1058) : n = 1058 := by exact_mod_cast h₄

@@ -1,0 +1,1 @@
+theorem h₄ (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 3 ≤ a * b + b * c + c * a) (h₂ : a + b + c ≥ 3) (x y : ℝ) (hx : 0 < x) (hy : 0 < y) : 0 < x + y := by linarith

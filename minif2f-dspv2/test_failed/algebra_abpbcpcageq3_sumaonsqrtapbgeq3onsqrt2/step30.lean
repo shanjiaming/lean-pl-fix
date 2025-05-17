@@ -1,0 +1,1 @@
+theorem h₆₁ (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 3 ≤ a * b + b * c + c * a) (h₂ : a + b + c ≥ 3) (h₃ : ∀ (x y : ℝ), 0 < x → 0 < y → √(x + y) ≤ (x + y + 2) / (2 * √2)) (h₄ : a / √(a + b) ≥ 2 * √2 * a / (a + b + 2)) (h₅ : b / √(b + c) ≥ 2 * √2 * b / (b + c + 2)) : 0 < c := by linarith

@@ -1,0 +1,1 @@
+theorem h₃ (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : b ≤ a) (h₂ : 0 < a) : 0 < b := by linarith

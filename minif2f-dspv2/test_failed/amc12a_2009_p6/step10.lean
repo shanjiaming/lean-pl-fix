@@ -1,0 +1,1 @@
+theorem h₅₁ (m n p q : ℝ) (h₀ : p = 2 ^ m) (h₁ : q = 3 ^ n) (h₂ : p ^ (2 * n) = 2 ^ (m * (2 * n))) (h₃ : q ^ m = 3 ^ (n * m)) (h₄ : p ^ (2 * n) * q ^ m = 2 ^ (m * (2 * n)) * 3 ^ (n * m)) : m * (2 * n) = 2 * (m * n) := by ring

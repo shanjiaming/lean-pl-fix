@@ -1,0 +1,2 @@
+theorem h₅₃ (h h₁ : Irrational (√2 ^ √2)) (h₂ : Irrational √2) (h₃ : √2 ^ √2 > 0) (h₅₁ : Real.log ((√2 ^ √2) ^ √2) = √2 * Real.log (√2 ^ √2)) (h₅₂ : Real.log (√2 ^ √2) = √2 * Real.log √2) : √2 * (√2 * Real.log √2) = 2 * Real.log √2 := by
+  ring_nf <;> field_simp [Real.sqrt_eq_iff_sq_eq] <;> ring_nf <;> norm_num

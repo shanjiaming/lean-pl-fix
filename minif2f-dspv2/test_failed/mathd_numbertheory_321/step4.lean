@@ -1,0 +1,1 @@
+theorem h₄ (n : ZMod 1399) (h₁ : n = 160⁻¹) (h₂ : n = 1058) : n = 1058 := by simpa using h₂

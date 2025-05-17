@@ -1,0 +1,1 @@
+theorem h₂₅₃ (a b : ℂ) (h₀ : a ^ 3 - 8 = 0) (h₁ : b ^ 3 - 8 * b ^ 2 - 8 * b + 64 = 0) (h₂₁ : a ^ 3 = 8) (h₂₂ : a.abs ^ 3 = 8) (h₂₃ : (a ^ 3).abs = a.abs ^ 3) (h₂₄ : a.abs ^ 3 = 8) (h₂₅₁ : a.abs ≥ 0) (h₂₅₂ : a.abs ^ 3 = 8) : a.abs = 2 := by nlinarith [sq_nonneg (Complex.abs a - 2), sq_nonneg (Complex.abs a + 2)]

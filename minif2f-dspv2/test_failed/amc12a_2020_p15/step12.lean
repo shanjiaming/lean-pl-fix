@@ -1,0 +1,1 @@
+theorem h₆ (a b : ℂ) (h₀ : a ^ 3 - 8 = 0) (h₁ : b ^ 3 - 8 * b ^ 2 - 8 * b + 64 = 0) (h₂ : a.abs = 2) (h₄ : b ^ 3 - 8 * b ^ 2 - 8 * b + 64 = 0) (h₅ : (b - 8) * (b ^ 2 - 8) = 0) : b - 8 = 0 ∨ b ^ 2 - 8 = 0 := by apply eq_zero_or_eq_zero_of_mul_eq_zero h₅

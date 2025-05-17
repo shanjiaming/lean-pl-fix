@@ -1,0 +1,1 @@
+theorem h₄ (p a : ℕ) (h₀ : 0 < a) (h₁ : Nat.Prime p) (h₃ : p ≠ 0) : a ≠ 0 := by linarith

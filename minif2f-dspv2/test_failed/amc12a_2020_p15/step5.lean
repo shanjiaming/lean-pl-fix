@@ -1,0 +1,1 @@
+theorem h₂₃ (a b : ℂ) (h₀ : a ^ 3 - 8 = 0) (h₁ : b ^ 3 - 8 * b ^ 2 - 8 * b + 64 = 0) (h₂₁ : a ^ 3 = 8) (h₂₂ : (a ^ 3).abs = 8) : (a ^ 3).abs = a.abs ^ 3 := by simp [Complex.abs.map_pow]

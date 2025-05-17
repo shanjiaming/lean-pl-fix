@@ -1,0 +1,1 @@
+theorem h₇ (S : Finset ℤ) (h₀ : ∀ (x : ℤ), x ∈ S ↔ (↑|x| : ℝ) < 3 * π) (h_pi_lb : 9 < 3 * π) (h_pi_ub : 3 * π < 10) (x : ℤ) (h : (↑|x| : ℝ) < 3 * π) (h₁ : |(↑x : ℝ)| < 3 * π) (h₃ h₅ : x ≤ -10) (h₆ : |x| ≥ 10) : |(↑x : ℝ)| ≥ 10 := by exact_mod_cast h₆

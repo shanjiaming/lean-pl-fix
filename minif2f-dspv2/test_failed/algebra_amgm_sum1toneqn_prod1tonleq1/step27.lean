@@ -1,0 +1,2 @@
+theorem h₇ (a : ℕ → NNReal) (n : ℕ) (h₀ : ∑ x ∈ Finset.range n, a x = (↑n : NNReal)) (h₁ : ∏ x ∈ Finset.range n, (↑(a x) : ℝ) ≤ 1) (h₃ : (↑(∏ x ∈ Finset.range n, a x) : ℝ) ≤ 1) (h₄ : (↑(∏ x ∈ Finset.range n, a x) : ℝ) = (↑(∏ x ∈ Finset.range n, a x) : ℝ)) (h₅ : (↑(∏ x ∈ Finset.range n, a x) : ℝ) = ∏ x ∈ Finset.range n, (↑(a x) : ℝ)) (h₆ : (↑(∏ x ∈ Finset.range n, a x) : ℝ) ≤ 1) : ∏ x ∈ Finset.range n, a x ≤ 1 := by
+  norm_cast at h₆ ⊢ <;> simp_all [Finset.prod_range_succ] <;> norm_num <;> linarith

@@ -1,0 +1,4 @@
+theorem h₄₁₁ (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 3 ≤ a * b + b * c + c * a) (h₂ : a + b + c ≥ 3) (h₃ : ∀ (x y : ℝ), 0 < x → 0 < y → √(x + y) ≤ (x + y + 2) / (2 * √2)) (h₄₁ : 0 < a) (h₄₂ : 0 < b) (h₄₃ : 0 < a + b) (h₄₄ : 0 < √(a + b)) (h₄₅ : √(a + b) ≤ (a + b + 2) / (2 * √2)) (h₄₆ : a / √(a + b) ≥ a / ((a + b + 2) / (2 * √2))) : a / ((a + b + 2) / (2 * √2)) = 2 * √2 * a / (a + b + 2) := by
+  field_simp [h₄₃.ne', Real.sqrt_eq_iff_sq_eq] <;> ring_nf <;> field_simp [h₄₃.ne', Real.sqrt_eq_iff_sq_eq] <;>
+      ring_nf <;>
+    nlinarith [Real.sqrt_nonneg 2, Real.sq_sqrt (show 0 ≤ 2 by norm_num)]

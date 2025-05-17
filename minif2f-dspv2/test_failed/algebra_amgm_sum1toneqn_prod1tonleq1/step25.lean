@@ -1,0 +1,1 @@
+theorem h₅ (a : ℕ → NNReal) (n : ℕ) (h₀ : ∑ x ∈ Finset.range n, a x = (↑n : NNReal)) (h₁ : ∏ x ∈ Finset.range n, (↑(a x) : ℝ) ≤ 1) (h₃ : (↑(∏ x ∈ Finset.range n, a x) : ℝ) ≤ 1) (h₄ : (↑(∏ x ∈ Finset.range n, a x) : ℝ) = (↑(∏ x ∈ Finset.range n, a x) : ℝ)) : (↑(∏ x ∈ Finset.range n, a x) : ℝ) = ∏ x ∈ Finset.range n, (↑(a x) : ℝ) := by simp

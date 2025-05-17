@@ -1,0 +1,1 @@
+theorem h₄ (p a : ℕ) (h₀ : 0 < a) (h₁ : Nat.Prime p) (h₂ : a ≤ a ^ p) (this : Fact (Nat.Prime p)) : (↑a : ZMod p) ^ p = (↑a : ZMod p) := by rw [ZMod.pow_card]

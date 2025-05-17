@@ -1,0 +1,2 @@
+theorem h₁₀ (x : NNReal) (h₀ : √(60 * (↑x : ℝ)) * √(12 * (↑x : ℝ)) * √(63 * (↑x : ℝ)) = √(60 * (↑x : ℝ) * (12 * (↑x : ℝ)) * (63 * (↑x : ℝ)))) : 60 * (↑x : ℝ) * (12 * (↑x : ℝ)) * (63 * (↑x : ℝ)) = 45360 * (↑x : ℝ) ^ 3 := by
+  ring_nf <;> field_simp <;> ring_nf <;> norm_cast <;> simp [mul_assoc] <;> ring_nf <;> norm_num <;> nlinarith

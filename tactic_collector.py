@@ -11,13 +11,31 @@ def fix_single_proof(input_content):
         tactictxt = tactic.tactic
         print("tactictxt", tactictxt)
         # breakpoint()
-        tactictxt = tactictxt.strip().split()[0]
+        possible_big_tactic = ["calc", "induction", "cases"]
+        tacticname = tactictxt.strip().split()[0]
         if current_location is not None and current_location >= tactic.start_pos:
             continue
+        # going to add parameter
+        paramlist = []
+        if tacticname not in possible_big_tactic:
+            if "only" in tactictxt:
+                paramlist.append("only")
+
+            if "[" in tactictxt and "at" in tactictxt:
+                splitlist = tactictxt.split("at")
+                list1_len = splitlist[0].count(",") + 1
+                list2_len = splitlist[1].count(",") + 1
+                paramlist.append(str(list1_len))
+                paramlist.append("@" + str(list2_len))
+            elif "[" in tactictxt:
+                list1_len = tactictxt.count(",") + 1
+                paramlist.append(str(list1_len))
+        
+        paramstr = "_" + "_".join(paramlist) if paramlist else ""
+
         current_location = tactic.end_pos
-        # if tactic == "sorry":
-            # continue
-        current_list.append(tactictxt)
+            
+        current_list.append(tacticname + paramstr)
     current_file_str += " ".join(current_list) + "\n"
     return input_content
 
@@ -47,84 +65,23 @@ def solve_theorem_dpv2(input_content):
     solve_theorem(input_content, fix_single_proof)
     return current_file_str
 
-s="""theorem algebra_9onxpypzleqsum2onxpy (x y z : ℝ) (h₀ : 0 < x ∧ 0 < y ∧ 0 < z) :
-    9 / (x + y + z) ≤ 2 / (x + y) + 2 / (y + z) + 2 / (z + x) := by
-  have h₁ : 0 < x + y := by linarith
-  have h₂ : 0 < y + z := by linarith
-  have h₃ : 0 < z + x := by linarith
-  have h₄ : 0 < x + y + z := by linarith
-  have h₅ : 0 < (x + y) * (y + z) * (z + x) := by positivity
-  have h₆ : 0 < (x + y) * (y + z) := by positivity
-  have h₇ : 0 < (y + z) * (z + x) := by positivity
-  have h₈ : 0 < (z + x) * (x + y) := by positivity
-  have h₉ : 2 * (x + y + z) * (1 / (x + y) + 1 / (y + z) + 1 / (z + x)) ≥ 9 := by
-    have h₉₁ : 0 < x + y := by linarith
-    have h₉₂ : 0 < y + z := by linarith
-    have h₉₃ : 0 < z + x := by linarith
-    have h₉₄ : 0 < (x + y) * (y + z) := by positivity
-    have h₉₅ : 0 < (y + z) * (z + x) := by positivity
-    have h₉₆ : 0 < (z + x) * (x + y) := by positivity
-    field_simp [h₉₁.ne', h₉₂.ne', h₉₃.ne']
-    rw [le_div_iff (by positivity)]
-    nlinarith [sq_nonneg (x - y), sq_nonneg (y - z), sq_nonneg (z - x),
-      sq_nonneg (x + y - y - z), sq_nonneg (y + z - z - x), sq_nonneg (z + x - x - y)]
-  
-  have h₁₀ : (1 / (x + y) + 1 / (y + z) + 1 / (z + x)) ≥ 9 / (2 * (x + y + z)) := by
-    have h₁₀₁ : 0 < x + y + z := by linarith
-    have h₁₀₂ : 0 < 2 * (x + y + z) := by positivity
-    have h₁₀₃ : 0 < x + y := by linarith
-    have h₁₀₄ : 0 < y + z := by linarith
-    have h₁₀₅ : 0 < z + x := by linarith
-    -- Use the given inequality to derive the desired result
-    calc
-      (1 / (x + y) + 1 / (y + z) + 1 / (z + x)) ≥ 9 / (2 * (x + y + z)) := by
-        -- Use the given inequality to derive the desired result
-        have h₁₀₆ : 2 * (x + y + z) * (1 / (x + y) + 1 / (y + z) + 1 / (z + x)) ≥ 9 := by
-          simpa [add_assoc] using h₉
-        calc
-          (1 / (x + y) + 1 / (y + z) + 1 / (z + x)) = (2 * (x + y + z) * (1 / (x + y) + 1 / (y + z) + 1 / (z + x))) / (2 * (x + y + z)) := by
-            field_simp [h₁₀₁.ne', h₁₀₂.ne']
-            <;> ring
-            <;> field_simp [h₁₀₁.ne', h₁₀₂.ne']
-            <;> ring
-          _ ≥ 9 / (2 * (x + y + z)) := by
-            -- Use the given inequality to derive the desired result
-            rw [ge_iff_le]
-            rw [div_le_div_iff (by positivity) (by positivity)]
-            nlinarith
-      _ = 9 / (2 * (x + y + z)) := by rfl
-  
-  have h₁₁ : (2 / (x + y) + 2 / (y + z) + 2 / (z + x)) ≥ 9 / (x + y + z) := by
-    have h₁₁₁ : 2 / (x + y) + 2 / (y + z) + 2 / (z + x) = 2 * (1 / (x + y) + 1 / (y + z) + 1 / (z + x)) := by
-      ring
-    rw [h₁₁₁]
-    have h₁₁₂ : 9 / (x + y + z) = 2 * (9 / (2 * (x + y + z))) := by
-      field_simp [h₄.ne']
-      <;> ring
-      <;> field_simp [h₄.ne']
-      <;> ring
-    rw [h₁₁₂]
-    have h₁₁₃ : 1 / (x + y) + 1 / (y + z) + 1 / (z + x) ≥ 9 / (2 * (x + y + z)) := by
-      linarith
-    nlinarith
-  
-  have h₁₂ : 9 / (x + y + z) ≤ 2 / (x + y) + 2 / (y + z) + 2 / (z + x) := by
-    linarith
-  
-  exact h₁₂
-"""
 
-s="""theorem ex_mathlib (x : ℝ) : x + 0 = x:= by
-  have (y : ℝ) : y + 0 = y:= by
-    have hh (z : ℝ) : z + 0 = z:= by simp
-    exact hh
-  have h2 : x + 0 = x:= by
-    rw [add_zero]
-  exact h2
-"""
+def collect_tactics(test_folder, result_folder):
+    os.makedirs(result_folder, exist_ok=True)
+    # Iterate through all files in test folder
+    for filename in os.listdir(test_folder):
+        if filename.endswith(".lean"):
+            # Read input file
+            with open(os.path.join(test_folder, filename), 'r') as f:
+                input_content = f.read()
+                
+            # Run solver and get result
+            result = solve_theorem_dpv2(input_content)
+            
+            # Write result to output file
+            result_filename = os.path.splitext(filename)[0] + ".txt"
+            with open(os.path.join(result_folder, result_filename), 'w') as f:
+                f.write(result)
 
-print(solve_theorem_dpv2(s))
-
-
-# 1. 'have this : (y : ℝ)' have bug, 多余的冒号
-# 2. '似乎直接跑会受到错误影响。会自动跳过多余策略吗？未可知'
+collect_tactics("minif2f-dspv2/test_passed", "minif2f-dspv2/test_passed_tactics")
+collect_tactics("minif2f-dspv2/test_failed", "minif2f-dspv2/test_failed_tactics")

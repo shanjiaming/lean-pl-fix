@@ -1,0 +1,1 @@
+theorem h₄ (a : ℝ) (h₀ : √(4 + √(16 + 16 * a)) + √(1 + √(1 + a)) = 6) (h₁ : 16 + 16 * a ≥ 0) (h₃ : 1 + a < 0) : √(1 + a) = 0 := by rw [Real.sqrt_eq_zero_of_nonpos] <;> linarith

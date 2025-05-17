@@ -1,0 +1,1 @@
+theorem h₅₅ (h h₁ : Irrational (√2 ^ √2)) (h₂ : Irrational √2) (h₃ : √2 ^ √2 > 0) (h₅₁ : Real.log ((√2 ^ √2) ^ √2) = √2 * Real.log (√2 ^ √2)) (h₅₂ : Real.log (√2 ^ √2) = √2 * Real.log √2) (h₅₃ : √2 * (√2 * Real.log √2) = 2 * Real.log √2) (h₅₄ : Real.log √2 = Real.log 2 / 2) : 2 * (Real.log 2 / 2) = Real.log 2 := by ring

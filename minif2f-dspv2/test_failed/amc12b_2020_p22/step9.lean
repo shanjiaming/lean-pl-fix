@@ -1,0 +1,1 @@
+theorem h₅ (t : ℝ) (h₀ : ∀ (u : ℝ), u - 3 * u ^ 2 ≤ 1 / 12) (h₁ : 4 ^ t = 2 ^ (2 * t)) (h₂ h₄ : 4 ^ t = (2 ^ t) ^ 2) : 4 ^ t > 0 := by positivity

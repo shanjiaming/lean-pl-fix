@@ -1,0 +1,1 @@
+theorem h₂₂ (a b : ℂ) (h₀ : a ^ 3 - 8 = 0) (h₁ : b ^ 3 - 8 * b ^ 2 - 8 * b + 64 = 0) (h₂₁ : a ^ 3 = 8) : (a ^ 3).abs = 8 := by rw [h₂₁] <;> simp [Complex.abs_of_nonneg] <;> norm_num

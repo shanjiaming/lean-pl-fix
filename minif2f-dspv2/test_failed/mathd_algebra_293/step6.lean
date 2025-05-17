@@ -1,0 +1,1 @@
+theorem h₄ (x : NNReal) (h₂ : 0 ≤ 60 * (↑x : ℝ)) (h₃ : 0 ≤ 12 * (↑x : ℝ)) : 0 ≤ 63 * (↑x : ℝ) := by positivity

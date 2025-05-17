@@ -1,0 +1,1 @@
+theorem h₁₁₂ (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : b ≤ a) (h₂ : 0 < a) (h₃ : 0 < b) (x : ℝ := √a) (h₄ : 0 < x) (y : ℝ := √b) (h₅ : 0 < y) (h₆ : y ≤ x) (h₇ : x ≥ y) (h₈ : 0 < y) (h₉ : 0 < x) (h₁₀ : (a + b) / 2 - √(a * b) = (x - y) ^ 2 / 2) (h₁₁₁ : a = x ^ 2) : b = y ^ 2 := by rw [← Real.sq_sqrt (le_of_lt h₃)] <;> simp [y]

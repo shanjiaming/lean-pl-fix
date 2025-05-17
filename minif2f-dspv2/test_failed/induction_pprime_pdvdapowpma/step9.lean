@@ -1,0 +1,1 @@
+theorem h₆ (p a : ℕ) (h₀ : 0 < a) (h₁ : Nat.Prime p) (h₂ : a ≤ a ^ p) (h₃ : (↑a : ZMod p) ^ p = (↑a : ZMod p)) (this : Fact (Nat.Prime p)) : (↑a : ZMod p) ^ p = (↑a : ZMod p) := by simpa [ZMod.nat_cast_self] using h₃

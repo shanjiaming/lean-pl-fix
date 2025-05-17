@@ -1,6 +1,12 @@
 from lean_interact import TempRequireProject, LeanREPLConfig, LeanServer, Command
 import re
 
+def throw_head(input_str: str) -> str:
+    """
+    remove line that starts with import, set_option, open
+    """
+    return '\n'.join([line for line in input_str.split('\n') if not line.startswith("import") and not line.startswith("set_option") and not line.startswith("open")])
+
 def convert_theorem_to_example_cmd(input_str: str) -> str:
     """
     Converts a string containing a Lean theorem into a command string
@@ -65,6 +71,8 @@ class TacticNode:
         self.tactic = tactic
         self.subhaves = []
         self.by_block_goals = None # Added for storing goals specific to 'by' block context
+        self.parent = None # Added parent attribute
+        self._parsed_structure_cache = None # Cache for parse_have_structure
     
     @property
     def start_pos(self):
@@ -80,7 +88,10 @@ class TacticNode:
     
     def is_have(self):
         """Check if this tactic is a 'have' statement"""
-        return self.tactic.tactic.strip().startswith("have")
+        tactic_text = self.tactic.tactic
+        has_by = re.search(r':=\s+by\b', tactic_text) is not None
+        
+        return tactic_text.strip().startswith("have") and has_by
     
     def get_other_tactics(self):
         """Get tactics that are part of this node but are not subhaves"""
@@ -90,12 +101,16 @@ class TacticNode:
         return []
     
     def parse_have_structure(self):
-        """Parse the structure of a have statement into components."""
-        if not self.is_have():
+        """Public accessor for the parsed structure, uses caching."""
+        if not self.is_have(): # Parsing only makes sense for 'have' statements
             return None
-            
+        if self._parsed_structure_cache is None:
+            self._parsed_structure_cache = self._compute_parsed_structure()
+        return self._parsed_structure_cache
+
+    def _compute_parsed_structure(self):
+        """Parse the structure of a have statement into components."""
         tactic_text = self.tactic.tactic
-        has_by = "by" in tactic_text # Simplified by check, assumes it implies a full have structure for our purposes
 
         name = "this" # Default to 'this' for anonymous haves
         is_implicit_name = True
@@ -110,6 +125,8 @@ class TacticNode:
         # Try to extract the type string: ... : TYPE :=
         # Format: have [name] [conditions] : TYPE :=
         # type_str should contain both: [conditions] : [goal]
+
+
         type_str = "_" # Default placeholder type
         
         # Step 1: Find the starting position after "have" and name if present
@@ -149,26 +166,46 @@ class TacticNode:
             pos += 1
         
         # Extract the complete type string if we found the end marker
-        type_str = tactic_text[start_pos:type_end].strip()
-        # if type_str.startswith(":"):
-            # type_str = type_str[1:].strip()
-        # Debug info
-        has_by = "by" in tactic_text # Simplified check for has_by
-        print(f"name: {name}, type_str: {type_str}, is_implicit_name: {is_implicit_name}, has_by: {has_by}")
+        full_type_str = tactic_text[start_pos:type_end].strip()
+
+        hypotheses_part = ""
+        goal_part = ""
+        paren_level = 0
+        last_colon_idx = -1
+
+        # Iterate from right to left to find the last colon at paren_level 0
+        # This colon separates hypotheses from the final goal assertion of THIS have statement.
+        for i in range(len(full_type_str) - 1, -1, -1):
+            char = full_type_str[i]
+            if char == ')':
+                paren_level += 1
+            elif char == '(':
+                paren_level -= 1
+            elif char == ':' and paren_level == 0:
+                last_colon_idx = i
+                break
+        
+        if last_colon_idx != -1:
+            hypotheses_part = full_type_str[:last_colon_idx].strip()
+            goal_part = full_type_str[last_colon_idx+1:].strip()
+        else:
+            # No colon found at the main level, so the whole string is the goal.
+            hypotheses_part = ""
+            goal_part = full_type_str
+        
         return {
             "name": name,
-            "type": type_str,
+            "type": full_type_str, # Original full type string (e.g., "hyps : goal" or "goal")
+            "hypotheses_str": hypotheses_part, # Just the hypotheses part (e.g., "(x:N) (h:x>0)")
+            "goal_type_str": goal_part,     # Just the goal part (e.g., "x = x")
             "is_implicit_name": is_implicit_name,
-            "has_by": has_by,
-            "full_text": tactic_text # Keep original text for reference if needed
+            "full_text": tactic_text, 
+            # "by_block_goals": self.by_block_goals
         }
     
     def get_have_name(self):
         """Extract the name of the have statement, defaulting to 'this' if anonymous."""
-        if not self.is_have():
-            return None
-            
-        structure = self.parse_have_structure()
+        structure = self.parse_have_structure() # This will now use the cached version
         return structure.get("name") if structure else None # Will be 'this' if anonymous and parsed
     
     def get_simplified_representation(self):
@@ -176,45 +213,122 @@ class TacticNode:
         Get a simplified representation of this tactic, e.g., 'have name : type := by sorry'
         Uses 'this' for anonymous haves.
         """
-        if not self.is_have():
-            return self.tactic.tactic
-            
         structure = self.parse_have_structure()
-        if not structure or not structure.get("has_by"): # Only simplify if it's a 'have ... by ...'
+        if not structure:
             return self.tactic.tactic
 
         name_to_use = structure["name"] # This will be 'this' if originally anonymous
         type_str = structure.get("type", "_") # Get parsed type, or default
-        if type_str.startswith(":"):
-            type_str = type_str[1:].strip()
         
-        # Ensure the simplified form correctly represents an anonymous have if applicable
-        # The name_to_use will be 'this', which is what we want for the placeholder.
-        return f"have {name_to_use} : {type_str} := by sorry"
+        return f"have {name_to_use} {type_str} := by sorry"
     
     def extract_dependencies_from_goals(self):
         """
-        Extract dependencies from the goals of this tactic
-        
-        Returns:
-            list: A list of dependency strings in the format "name : type"
+        Collects context strings for creating a self-contained proof. This includes:
+        1. Definitions from preceding siblings of the current node (and its ancestors in turn) 
+           in the format "name full_type_string" (e.g., "h1 (x:N) : x > 0").
+        2. Hypotheses from an ancestor 'have' statement (e.g., "(x y : ℕ) (h : x > y)").
+        The parent/ancestor 'have' statements themselves are not collected as completed proofs, only their hypotheses.
+        The order of strings returned is from the outermost/earliest defined to innermost/latest.
         """
-        if not self.goals:
-            return []
-        
         dependencies = []
-        goal_lines = self.goals.split('\n')
-        
-        # The last line is usually the goal (starts with ⊢)
-        # Everything before that are dependencies
-        for line in goal_lines:
-            line = line.strip()
-            if line and not line.startswith('⊢'):
-                # This is a dependency
-                dependencies.append(line)
-        
+        # seen_signatures tracks the exact strings added to dependencies to avoid duplicates.
+        seen_signatures = set() 
+
+        node_iterator = self
+        while node_iterator.parent:
+            parent = node_iterator.parent
+
+            # 1. Collect DEFINITIONS from preceding siblings of `node_iterator`
+            # These are children of `parent` that appear before `node_iterator`.
+            if parent.subhaves: 
+                try:
+                    child_index = parent.subhaves.index(node_iterator)
+                    for i in range(child_index):
+                        sibling = parent.subhaves[i]
+                        if sibling.is_have():
+                            structure = sibling.parse_have_structure() # Uses caching
+                            if structure:
+                                # This is a completed proof, use its name and full type string.
+                                # structure['type'] is the full_type_str (e.g. "hyps : goal" or "goal")
+                                dep_text = f"{structure['name']} {structure['type']}" 
+                                if dep_text not in seen_signatures:
+                                    dependencies.append(f"({dep_text})")
+                                    seen_signatures.add(dep_text)
+                except ValueError:
+                    # node_iterator not in parent.subhaves, should not happen in a well-formed tree.
+                    pass
+
+            # 2. Collect HYPOTHESES from the `parent` (ancestor of original `self`)
+            # These are contextual assumptions from the enclosing 'have' block.
+            if parent.is_have():
+                parent_structure = parent.parse_have_structure() # Uses caching
+                if parent_structure:
+                    hyp_str = parent_structure['hypotheses_str']
+                    if hyp_str and hyp_str not in seen_signatures: # Add if non-empty and unique
+                        dependencies.append(hyp_str)
+                        seen_signatures.add(hyp_str)
+            
+            node_iterator = parent # Move up the tree for the next iteration
+
+        dependencies.reverse()
         return dependencies
     
+    # def create_self_contained_proof(self, body_override: str | None = None):
+    #     """
+    #     Create a self-contained version of this proof by incorporating
+    #     all external dependencies from its goals and context.
+    #     Optionally, an existing body (from ':=' onwards) can be provided via body_override.
+        
+    #     Returns:
+    #         tuple: (self_contained_proof, original_tactic_text)
+    #     """
+    #     original_tactic_text = self.tactic.tactic
+
+    #     parsed_self = self.parse_have_structure()
+    #     if not parsed_self: # Should not happen if self.is_have() was true.
+    #         return original_tactic_text, original_tactic_text
+        
+    #     actual_body_to_use = ""
+    #     if body_override is not None:
+    #         actual_body_to_use = body_override
+    #     else:
+    #         colon_equals_pos = original_tactic_text.find(':=')
+    #         if colon_equals_pos != -1:
+    #             actual_body_to_use = original_tactic_text[colon_equals_pos:]
+    #         else:
+    #             return original_tactic_text, original_tactic_text 
+
+    #     name = parsed_self['name']
+    #     current_hypotheses_str = parsed_self['hypotheses_str']
+    #     current_goal_type_str = parsed_self['goal_type_str']
+
+    #     # Get ordered list of context strings (completed sibling proofs & ancestor hypotheses)
+    #     collected_context_strings = self.extract_dependencies_from_goals()
+
+    #     # Assemble all parameter-like parts
+    #     # Order: context from ancestors/siblings, then current node's own hypotheses
+    #     param_parts = []
+    #     param_parts.extend(collected_context_strings)
+    #     if current_hypotheses_str: # Add current node's own hypotheses if they exist
+    #         param_parts.append(current_hypotheses_str)
+        
+    #     # Join all parts that form the signature before the final colon
+    #     # Filter out empty or whitespace-only strings to prevent multiple spaces
+    #     params_string = ' '.join(filter(str.strip, param_parts))
+
+    #     new_signature_part = f"have {name}"
+    #     if params_string: # Add params_string only if it's not empty
+    #         new_signature_part += f" {params_string}"
+    #     new_signature_part += f" : {current_goal_type_str}"
+        
+    #     new_signature_part = new_signature_part.replace("_shadow_", "✝")
+        
+    #     self_contained_tactic = f"{new_signature_part}{actual_body_to_use}"
+    #     return self_contained_tactic, original_tactic_text
+
+
+
     def create_self_contained_proof(self, body_override: str | None = None):
         """
         Create a self-contained version of this proof by incorporating
@@ -226,11 +340,8 @@ class TacticNode:
         """
         original_tactic_text = self.tactic.tactic
 
-        if not self.is_have():
-            return original_tactic_text, original_tactic_text
-        
         structure = self.parse_have_structure()
-        if not structure or not structure.get("has_by", False):
+        if not structure:
             return original_tactic_text, original_tactic_text
         
         actual_body_to_use = ""
@@ -248,12 +359,51 @@ class TacticNode:
         dependencies = self.extract_dependencies_from_goals()
     
         name = structure["name"]
-        goal_type = structure.get("type") # P from 'have name : P :='
+        # goal_type = structure.get("by_block_goals") # P from 'have name : P :='
+        goal_type = self.by_block_goals # P from 'have name : P :='
+        if goal_type is None:
+            breakpoint()
+        # Parse goal_type into signature format
+        goal = goal_type.split("⊢")[1].strip()
+        goal_type = goal_type.split("⊢")[0].strip()
+        # lines = goal_type.strip().split('\n')
+        # dependencies = []
+        
+        # for line in lines:
+        #     line = line.strip()
+        #     dependencies.append(f"({line})")
+        
+        # The instruction is to split goal_type (which contains hypotheses as a string)
+        # into a list called `dependencies`. Each element of this list should be a string
+        # that starts with the pattern "non-whitespace characters :".
+
+        # Initialize a new list for the dependencies.
+        # This will overwrite the `dependencies` list populated by `self.extract_dependencies_from_goals()`
+        # earlier in the method.
+        new_dependencies_list = []
+        if goal_type:  # Ensure goal_type string (hypotheses part) is not empty
+            lines = goal_type.split('\n')
+            current_h = ""
+            for line in lines:
+                if re.match(r'^(?! )[^\(\)\n:]+ :', line):
+                    if current_h:
+                        new_dependencies_list.append(f"({current_h})")
+                    current_h = line
+                else:
+                    current_h += line
+            if current_h:
+                new_dependencies_list.append(f"({current_h})")
+        
+        dependencies = new_dependencies_list
+
+
+        # Combine dependencies and goal into signature format
+        goal_type = f"{' '.join(dependencies)} : {goal}"
+
+        
 
         new_signature_part = ""
-        dependency_params = [f"({dep})" for dep in dependencies]
-        combined_params = " ".join(dependency_params)
-        new_signature_part = f"have {name} {combined_params} {goal_type} "
+        new_signature_part = f"have {name} {goal_type} "
         new_signature_part = new_signature_part.replace("_shadow_", "✝")
         
         self_contained_tactic = f"{new_signature_part}{actual_body_to_use}"
@@ -302,6 +452,7 @@ def extract_proof_framework_from_tree(node):
     """
     # Start with the original proof
     framework = node.tactic.tactic
+    framework = re.sub(r'^(\s*)·\s*(have\b.*)', r'\1·\n\1  \2', framework, flags=re.MULTILINE)
     child_proofs = {}
     
     # Process direct child have statements
@@ -328,10 +479,12 @@ def extract_proof_framework_from_tree(node):
                     if line.strip() == child_lines[0].strip():
                         # Check if this is the actual start of the child tactic
                         is_match = True
-                        for j in range(1, len(child_lines)):
-                            if i + j >= len(framework_lines) or framework_lines[i + j].strip() != child_lines[j].strip():
-                                is_match = False
-                                break
+                        # for j in range(1, len(child_lines)):
+                        #     if i + j >= len(framework_lines) or framework_lines[i + j].strip() != child_lines[j].strip():
+                        #         is_match = False
+                        #         # breakpoint()
+                        #         # some unknown reason cause the format of main and child to be different. Omit this check.
+                        #         break
                         if is_match:
                             start_idx = i
                             break
@@ -340,20 +493,29 @@ def extract_proof_framework_from_tree(node):
                 # Preserve the indentation of the first line
                 first_line_indent = len(framework_lines[start_idx]) - len(framework_lines[start_idx].lstrip())
                 simplified_lines = simplified.split('\n')
-                # Replace the first line
-                framework_lines[start_idx] = ' ' * first_line_indent + simplified_lines[0]
-                # Remove the remaining lines of the child tactic
-                del framework_lines[start_idx + 1:start_idx + len(child_lines)]
-                # Add any remaining lines from the simplified version (if any)
-                for i, line in enumerate(simplified_lines[1:], 1):
-                    if start_idx + i < len(framework_lines):
-                        framework_lines.insert(start_idx + i, ' ' * first_line_indent + line)
-                    else:
-                        framework_lines.append(' ' * first_line_indent + line)
                 
-                # Reconstruct the framework
+                # Determine the end of the child block in the current framework_lines
+                child_block_end_exclusive_idx = start_idx + 1
+                for j in range(start_idx + 1, len(framework_lines)):
+                    line_content = framework_lines[j]
+                    current_line_indent = len(line_content) - len(line_content.lstrip()) if line_content.strip() else float('inf')
+
+                    if not line_content.strip() or current_line_indent > first_line_indent:
+                        child_block_end_exclusive_idx = j + 1
+                    else:
+                        break
+
+                indented_simplified_lines = [' ' * first_line_indent + s_line for s_line in simplified_lines]
+                linenum = len(framework_lines)
+                framework_lines = (
+                    framework_lines[:start_idx] +
+                    indented_simplified_lines +
+                    framework_lines[child_block_end_exclusive_idx:]
+                )
                 framework = '\n'.join(framework_lines)
                 
+                print(f"Reconstructed framework:\n{framework}")
+
     return framework, child_proofs
 
 
@@ -504,18 +666,17 @@ def fix_complete_proof(root_node, fix_single_proof_func: callable):
     using a provided fix_single_proof_func.
     The final returned proof will have all original signatures but fixed bodies.
     """
-    print(f"Fixing complete proof for: {root_node.get_have_name() or 'root example'}")
+    # print(f"Fixing complete proof for: {root_node.get_have_name() or 'root example'}")
 
     # Step 1: Extract the initial framework with 'sorry' placeholders for children,
     # and a map of child names to their original tactic strings.
     # framework_with_sorry_children is like "have R_orig_sig := by own_code; have h_orig_sig := by sorry; ..."
     framework_with_sorry_children, child_proofs_map_name_to_original_text = extract_proof_framework_from_tree(root_node)
-    print(f"Extracted framework with sorry children for {root_node.get_have_name()}:\n{framework_with_sorry_children}")
+    # print(f"Extracted framework with sorry children for {root_node.get_have_name()}:\n{framework_with_sorry_children}")
 
     # Step 2: Construct a self-contained version of the root_node's framework.
     self_contained_framework_for_root = ""
-    if not root_node.is_have() or \
-       not (root_node.parse_have_structure() and root_node.parse_have_structure().get("has_by", False)):
+    if not root_node.is_have():
         # If not a 'have by' structure, its framework likely doesn't need dependency transformation.
         # Use the framework with sorry children (if it's a have) or original tactic.
         self_contained_framework_for_root = framework_with_sorry_children
@@ -527,7 +688,7 @@ def fix_complete_proof(root_node, fix_single_proof_func: callable):
         generated_self_contained_root, _ = root_node.create_self_contained_proof(body_override=body_for_root_self_contained)
         self_contained_framework_for_root = generated_self_contained_root
     
-    print(f"Constructed self-contained framework for root {root_node.get_have_name()}:\n{self_contained_framework_for_root}")
+    # print(f"Constructed self-contained framework for root {root_node.get_have_name()}:\n{self_contained_framework_for_root}")
 
     # Step 3: Fix the self-contained framework of the root_node.
     # This fixes the root_node's own lines of proof, children remain 'sorry'.
@@ -543,7 +704,7 @@ def fix_complete_proof(root_node, fix_single_proof_func: callable):
     # e.g., "have R_self_cont_sig := by fixed_own_code; have h_self_cont_sig := by sorry; ...; done"
     fixed_version_of_self_contained_root_framework = convert_theorem_to_have(fixed_root_as_theorem)
     
-    print(f"Fixed self-contained root framework for {root_node.get_have_name()} (reverted to have):\n{fixed_version_of_self_contained_root_framework}")
+    # print(f"Fixed self-contained root framework for {root_node.get_have_name()} (reverted to have):\n{fixed_version_of_self_contained_root_framework}")
 
     # Step 4: Fix each child proof.
     # The resulting child proofs will have their original signatures but fixed bodies.
@@ -562,14 +723,14 @@ def fix_complete_proof(root_node, fix_single_proof_func: callable):
             continue
 
         if child_node.subhaves: # Recursive case: child has its own subproofs
-            print(f"Recursively fixing child: {name} of parent {root_node.get_have_name()}")
+            # print(f"Recursively fixing child: {name} of parent {root_node.get_have_name()}")
             # The result of recursive call is already in final form (original sig, fixed body)
             fixed_grandchild_proof_with_original_sig = fix_complete_proof(child_node, fix_single_proof_func)
             fixed_child_proofs_final_form[name] = fixed_grandchild_proof_with_original_sig
         else: # Leaf case: child has no subproofs
-            print(f"Fixing leaf child: {name} of parent {root_node.get_have_name()}")
+            # print(f"Fixing leaf child: {name} of parent {root_node.get_have_name()}")
             fixed_child_proofs_final_form[name] = _fix_leaf_tactic(child_node, original_child_tactic_string, fix_single_proof_func)
-        print(f"Fixed child '{name}' for parent '{root_node.get_have_name()}':\n{fixed_child_proofs_final_form[name]}")
+        # print(f"Fixed child '{name}' for parent '{root_node.get_have_name()}':\n{fixed_child_proofs_final_form[name]}")
 
     # Step 5: Prepare the final framework for reconstruction.
     # This framework should have the root_node's *original* signature,
@@ -582,7 +743,7 @@ def fix_complete_proof(root_node, fix_single_proof_func: callable):
         root_original_tactic_string,
         fixed_version_of_self_contained_root_framework
     )
-    print(f"Final framework for reconstruction (root {root_node.get_have_name()} original sig, fixed body, sorry children):\n{final_framework_for_reconstruction}")
+    # print(f"Final framework for reconstruction (root {root_node.get_have_name()} original sig, fixed body, sorry children):\n{final_framework_for_reconstruction}")
     
     # Step 6: Reconstruct the complete proof using the final framework and fixed children.
     # All parts now have original signatures and fixed bodies.
@@ -599,6 +760,7 @@ server = LeanServer(config)
 header = """import Mathlib
 import Aesop
 set_option maxHeartbeats 0
+set_option pp.coercions.types true
 open BigOperators Real Nat Topology Rat
 """
 
@@ -622,7 +784,69 @@ example_input_content = """theorem ex_mathlib (x : ℝ) : x + 0 = x:= by
   exact h2
 """
 
+def remove_lean_comments(lean_code: str) -> str:
+    """
+    Removes comments from a Lean code string.
+
+    Args:
+        lean_code: A string containing Lean code.
+
+    Returns:
+        A string with comments removed.
+    """
+    n = len(lean_code)
+    result_parts = []
+    i = 0
+    while i < n:
+        # Check for string literals first
+        if lean_code[i] == '"':
+            result_parts.append(lean_code[i])
+            i += 1
+            while i < n:
+                char = lean_code[i]
+                result_parts.append(char)
+                if char == '\\': # Handle escape sequences
+                    i += 1
+                    if i < n:
+                        result_parts.append(lean_code[i])
+                elif char == '"': # End of string
+                    i += 1
+                    break
+                i += 1
+            continue # Continue to the next part of the main loop
+
+        # Check for block comments: /- ... -/
+        if i + 1 < n and lean_code[i:i+2] == '/-':
+            # Find the end of the block comment
+            end_block_comment_idx = lean_code.find('-/', i + 2)
+            if end_block_comment_idx != -1:
+                i = end_block_comment_idx + 2
+            else:
+                # Unterminated block comment, goes to end of file
+                i = n
+            continue
+
+        # Check for single-line comments: -- ...
+        if i + 1 < n and lean_code[i:i+2] == '--':
+            # Find the end of the line
+            end_line_comment_idx = lean_code.find('\n', i + 2)
+            if end_line_comment_idx != -1:
+                # The newline character itself is not part of the comment
+                i = end_line_comment_idx
+            else:
+                # Comment goes to the end of the file
+                i = n
+            continue
+
+        # If not a comment or string, it's code
+        result_parts.append(lean_code[i])
+        i += 1
+
+    return "".join(result_parts)
+
 def solve_theorem(input_content: str, fix_single_proof_func: callable):
+    input_content = throw_head(input_content)
+    input_content = remove_lean_comments(input_content)
     cmd_str = convert_theorem_to_example_cmd(input_content)
     print("--- Generated Command String ---")
     print(cmd_str)
@@ -646,6 +870,7 @@ def solve_theorem(input_content: str, fix_single_proof_func: callable):
         # If stack is not empty, current tactic is a direct child of the top of stack
         if stack:
             stack[-1].subhaves.append(node)
+            node.parent = stack[-1] # Set parent for the current node
         
         # Push current tactic to stack
         stack.append(node)
@@ -654,7 +879,7 @@ def solve_theorem(input_content: str, fix_single_proof_func: callable):
     for node in tactic_nodes:
         if node.is_have():
             structure = node.parse_have_structure()
-            if structure and structure.get("has_by"):
+            if structure:
                 if node.subhaves: # Check if there are any tactics inside the 'by' block
                     first_tactic_in_by_block = node.subhaves[0]
                     node.by_block_goals = first_tactic_in_by_block.tactic.goals

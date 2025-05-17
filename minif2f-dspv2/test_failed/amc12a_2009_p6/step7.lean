@@ -1,0 +1,2 @@
+theorem h₃₂ (m n p q : ℝ) (h₀ : p = 2 ^ m) (h₁ : q = 3 ^ n) (h₂ : p ^ (2 * n) = 2 ^ (m * (2 * n))) (h₃₁ : 3 ^ n > 0) : (3 ^ n) ^ m = 3 ^ (n * m) := by
+  rw [← Real.rpow_mul] <;> ring_nf <;> norm_num <;> linarith

@@ -1,0 +1,1 @@
+theorem h₂₃ (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 3 ≤ a * b + b * c + c * a) (h₂₁ : (a + b + c) ^ 2 ≥ 3 * (a * b + b * c + c * a)) (h₂₂ : 3 * (a * b + b * c + c * a) ≥ 9) : (a + b + c) ^ 2 ≥ 9 := by linarith

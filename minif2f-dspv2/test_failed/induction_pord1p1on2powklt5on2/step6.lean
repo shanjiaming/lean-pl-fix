@@ -1,0 +1,1 @@
+theorem h₅ (n : ℕ) (h₀ : 0 < n) (h₁ : ∏ k ∈ Finset.Icc 1 n, 1 = 1) : 1 ≤ 2 ^ sorry := by exact one_le_pow_of_one_le (by norm_num) (k : ℕ)

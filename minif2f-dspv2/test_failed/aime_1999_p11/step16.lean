@@ -1,0 +1,2 @@
+theorem h₃ (m : ℚ) (h₀ : 0 < m) (h₁ : ∑ k ∈ Finset.Icc 1 35, sin (5 * (↑k : ℝ) * π / 180) = tan ((↑m : ℝ) * π / 180)) (h₂✝ : (↑m.num : ℝ) / (↑m.den : ℝ) < 90) (h₂ : 2 * sin (2.5 * π / 180) * ∑ k ∈ Finset.Icc 1 35, sin (5 * (↑k : ℝ) * π / 180) = 2 * cos (2.5 * π / 180)) : sin (2.5 * π / 180) > 0 := by
+  apply Real.sin_pos_of_pos_of_lt_pi <;> norm_num <;> ring_nf <;> norm_num <;> linarith [Real.pi_gt_three]

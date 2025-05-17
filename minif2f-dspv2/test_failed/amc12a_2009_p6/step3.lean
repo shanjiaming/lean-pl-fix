@@ -1,0 +1,1 @@
+theorem h₂₁ (m n p q : ℝ) (h₀ : p = 2 ^ m) (h₁ : q = 3 ^ n) : 2 ^ m > 0 := by positivity

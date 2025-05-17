@@ -1,0 +1,3 @@
+theorem h₃₅ (a b : NNReal) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ^ 2 = 6 * b) (h₂ : a ^ 2 = 54 / b) (h₃₁ : (↑a : ℝ) ^ 2 = 6 * (↑b : ℝ)) (h₃₂ : (↑a : ℝ) ^ 2 = 54 / (↑b : ℝ)) (h₃₃ : 6 * (↑b : ℝ) = 54 / (↑b : ℝ)) (h₃₄ : (↑b : ℝ) > 0) : (↑b : ℝ) ^ 2 = 9 := by
+  field_simp at h₃₃
+  nlinarith

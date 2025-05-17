@@ -1,0 +1,1 @@
+theorem h₃ (h h₁ : Irrational (√2 ^ √2)) (h₂ : Irrational √2) : √2 ^ √2 > 0 := by positivity

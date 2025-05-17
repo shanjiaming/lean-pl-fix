@@ -1,0 +1,1 @@
+theorem h₃ (k : ℕ) (hk : k ∈ Finset.Icc 2 10000) (h₂ : 2 ≤ k ∧ k ≤ 10000) : (↑k : ℝ) ≥ 2 := by exact_mod_cast h₂.1

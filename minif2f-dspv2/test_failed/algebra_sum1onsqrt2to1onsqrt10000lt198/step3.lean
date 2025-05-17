@@ -1,0 +1,1 @@
+theorem h₂ (k : ℕ) (hk : k ∈ Finset.Icc 2 10000) : 2 ≤ k ∧ k ≤ 10000 := by simpa using Finset.mem_Icc.mp hk

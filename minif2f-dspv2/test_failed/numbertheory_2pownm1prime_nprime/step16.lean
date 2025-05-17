@@ -1,0 +1,6 @@
+theorem h₁₁ (n : ℕ) (h₀ : 0 < n) (h₁ : Nat.Prime (2 ^ n - 1)) (h₂ : n ≥ 2) (h h₄ : ¬Nat.Prime n) (m : ℕ) (hm₁ : m ∣ n) (hm₂ : m ≠ 1) (hm₃ : m ≠ n) (h₆ : m ∣ n) (h₇ : m ≠ 1) (h₈ : m ≠ n) (h₉ : m ≥ 2) (h₁₀ : m < n) : 2 ^ m - 1 ∣ 2 ^ n - 1 := by
+  have h₁₁₁ : m ∣ n := h₆
+  obtain ⟨k, hk⟩ := h₁₁₁
+  rw [hk]
+  have h₁₁₂ : 2 ^ m - 1 ∣ 2 ^ (m * k) - 1 := by sorry
+  simpa [pow_mul, mul_comm] using h₁₁₂

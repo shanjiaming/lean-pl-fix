@@ -1,0 +1,1 @@
+theorem h₅ (h₁ : ∀ k ∈ Finset.Icc 2 10000, 1 / √(↑k : ℝ) < 2 * (√(↑k : ℝ) - √((↑k : ℝ) - 1))) (h₃ : ∑ k ∈ Finset.Icc 2 10000, 2 * (√(↑k : ℝ) - √((↑k : ℝ) - 1)) = 2 * (√10000 - √1)) (h₄ : √10000 = 100) : √1 = 1 := by rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num

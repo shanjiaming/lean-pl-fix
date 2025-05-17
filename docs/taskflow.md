@@ -274,3 +274,5 @@ Create a script to process `.lean` files from `minif2f-dspv2/test_failed`. The s
 - `dpv2_solver.py`: Contains the core logic for fixing a single theorem.
 - `dpv2_batch_solver`: The new script for batch processing.
 - `minif2f-dspv2/test_failed_fixed_unknown_failed/`: Directory containing `.lean` files to be processed.
+
+- [x] Create README for `decompose_solver.py`

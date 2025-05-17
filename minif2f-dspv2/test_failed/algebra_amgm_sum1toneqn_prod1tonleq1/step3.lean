@@ -1,0 +1,1 @@
+theorem h₂ (a : ℕ → NNReal) (n : ℕ) (h₀ : ∑ x ∈ Finset.range n, a x = (↑n : NNReal)) : ∑ x ∈ Finset.range n, (↑(a x) : ℝ) = (↑n : ℝ) := by exact_mod_cast h₀

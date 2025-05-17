@@ -1,0 +1,6 @@
+theorem h₁₂ (m n p q : ℝ) (h₀ : p = 2 ^ m) (h₁ : q = 3 ^ n) (h₂ : p ^ (2 * n) = 2 ^ (m * (2 * n))) (h₃ : q ^ m = 3 ^ (n * m)) (h₄ : p ^ (2 * n) * q ^ m = 2 ^ (m * (2 * n)) * 3 ^ (n * m)) (h₅ : 2 ^ (m * (2 * n)) = 2 ^ (2 * (m * n))) (h₆ : 2 ^ (2 * (m * n)) = 4 ^ (m * n)) (h₇ : 2 ^ (m * (2 * n)) = 4 ^ (m * n)) (h₈ : p ^ (2 * n) * q ^ m = 4 ^ (m * n) * 3 ^ (n * m)) (h₉ : 3 ^ (n * m) = 3 ^ (m * n)) (h₁₀ : p ^ (2 * n) * q ^ m = 4 ^ (m * n) * 3 ^ (m * n)) (h₁₁ : 4 ^ (m * n) * 3 ^ (m * n) = 12 ^ (m * n)) : p ^ (2 * n) * q ^ m = 12 ^ (m * n) := by
+  rw [h₁₀]
+  rw [h₁₁] <;> simp [mul_assoc] <;> ring_nf at * <;>
+        simp_all [Real.rpow_mul, Real.rpow_add, Real.rpow_neg, Real.rpow_sub] <;>
+      ring_nf at * <;>
+    linarith

@@ -1,0 +1,2 @@
+theorem h₂₄ (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 3 ≤ a * b + b * c + c * a) (h₂₁ : (a + b + c) ^ 2 ≥ 3 * (a * b + b * c + c * a)) (h₂₂ : 3 * (a * b + b * c + c * a) ≥ 9) (h₂₃ : (a + b + c) ^ 2 ≥ 9) : a + b + c ≥ 3 := by
+  nlinarith [sq_nonneg (a + b + c), sq_nonneg (a - b), sq_nonneg (b - c), sq_nonneg (c - a)]

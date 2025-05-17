@@ -1,0 +1,2 @@
+theorem h₂₁ (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 3 ≤ a * b + b * c + c * a) : (a + b + c) ^ 2 ≥ 3 * (a * b + b * c + c * a) := by
+  nlinarith [sq_nonneg (a - b), sq_nonneg (b - c), sq_nonneg (c - a)]

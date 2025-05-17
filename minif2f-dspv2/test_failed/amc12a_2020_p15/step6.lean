@@ -1,0 +1,1 @@
+theorem h₂₄ (a b : ℂ) (h₀ : a ^ 3 - 8 = 0) (h₁ : b ^ 3 - 8 * b ^ 2 - 8 * b + 64 = 0) (h₂₁ : a ^ 3 = 8) (h₂₂ : a.abs ^ 3 = 8) (h₂₃ : (a ^ 3).abs = a.abs ^ 3) : a.abs ^ 3 = 8 := by norm_num at h₂₂ ⊢ <;> linarith

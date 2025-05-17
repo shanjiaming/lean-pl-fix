@@ -1,0 +1,1 @@
+theorem h₂ (h h₁ : Irrational (√2 ^ √2)) : Irrational √2 := by exact irrational_sqrt_two

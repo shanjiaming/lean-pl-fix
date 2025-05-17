@@ -1,0 +1,6 @@
+theorem h₇ (m : ℚ) (h₀ : 0 < m) (h₁ : ∑ k ∈ Finset.Icc 1 35, sin (5 * (↑k : ℝ) * π / 180) = tan ((↑m : ℝ) * π / 180)) (h₂ : (↑m.num : ℝ) / (↑m.den : ℝ) < 90) (h₃ :  2 * sin (2.5 * π / 180) * ∑ k ∈ Finset.Icc 1 35, sin (5 * (↑k : ℝ) * π / 180) =    ∑ k ∈ Finset.Icc 1 35, 2 * sin (2.5 * π / 180) * sin (5 * (↑k : ℝ) * π / 180)) (h₄ :  ∀ k ∈ Finset.Icc 1 35,    2 * sin (2.5 * π / 180) * sin (5 * (↑k : ℝ) * π / 180) =      cos ((5 * (↑k : ℝ) - 2.5) * π / 180) - cos ((5 * (↑k : ℝ) + 2.5) * π / 180)) (h₅ :  ∑ k ∈ Finset.Icc 1 35, 2 * sin (2.5 * π / 180) * sin (5 * (↑k : ℝ) * π / 180) =    ∑ k ∈ Finset.Icc 1 35, (cos ((5 * (↑k : ℝ) - 2.5) * π / 180) - cos ((5 * (↑k : ℝ) + 2.5) * π / 180))) (h₆ :  ∑ k ∈ Finset.Icc 1 35, (cos ((5 * (↑k : ℝ) - 2.5) * π / 180) - cos ((5 * (↑k : ℝ) + 2.5) * π / 180)) =    cos (2.5 * π / 180) - cos (177.5 * π / 180)) : cos (177.5 * π / 180) = -cos (2.5 * π / 180) :=
+  by
+  have h₇₁ : Real.cos (177.5 * Real.pi / 180) = Real.cos (Real.pi - (2.5 * Real.pi / 180)) := by sorry
+  rw [h₇₁]
+  have h₇₂ : Real.cos (Real.pi - (2.5 * Real.pi / 180)) = -Real.cos (2.5 * Real.pi / 180) := by sorry
+  rw [h₇₂] <;> ring_nf <;> field_simp <;> ring_nf

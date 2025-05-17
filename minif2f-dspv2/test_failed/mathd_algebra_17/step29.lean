@@ -1,0 +1,1 @@
+theorem h₅₁ (a : ℝ) (h₀ : √(4 + √(16 + 16 * a)) + √(1 + √(1 + a)) = 6) (h₁ : 16 + 16 * a ≥ 0) (h₃ : 1 + a < 0) (h₄ : √(1 + a) = 0) : √(1 + 0) = 1 := by rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num
