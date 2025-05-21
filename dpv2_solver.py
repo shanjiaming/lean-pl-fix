@@ -1,8 +1,14 @@
 from openai import OpenAI
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
 client = OpenAI(
   base_url="https://openrouter.ai/api/v1",
-  api_key="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",
+  api_key=OPENROUTER_API_KEY,
 )
 
 
@@ -11,7 +17,8 @@ def query_dpv2(input_content):
         extra_headers={
     },
     extra_body={},
-    model="deepseek/deepseek-prover-v2:free",
+    # model="deepseek/deepseek-prover-v2:free",
+    model="deepseek/deepseek-prover-v2",
     messages=[
         {
         "role": "user",
@@ -175,4 +182,4 @@ s="""theorem algebra_9onxpypzleqsum2onxpy (x y z : ℝ) (h₀ : 0 < x ∧ 0 < y 
 #   exact h2
 # """
 
-solve_theorem_dpv2(s)
+# solve_theorem_dpv2(s)

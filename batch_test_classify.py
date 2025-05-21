@@ -2,9 +2,12 @@ import os
 import shutil
 from lean_api import REPLInstance
 
-TEST_DIR = 'minif2f-dspv2/test'
-PASSED_DIR = 'minif2f-dspv2/test_passed'
-FAILED_DIR = 'minif2f-dspv2/test_failed'
+# TEST_DIR = 'minif2f-dspv2/test'
+# PASSED_DIR = 'minif2f-dspv2/test_passed'
+# FAILED_DIR = 'minif2f-dspv2/test_failed'
+TEST_DIR = 'dataset/proverbench_simpleheader'
+PASSED_DIR = 'dataset/proverbench_simpleheader_passed'
+FAILED_DIR = 'dataset/proverbench_simpleheader_failed'
 
 os.makedirs(PASSED_DIR, exist_ok=True)
 os.makedirs(FAILED_DIR, exist_ok=True)
