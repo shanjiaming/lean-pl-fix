@@ -149,16 +149,13 @@ os.makedirs(output_base_dir, exist_ok=True)
 
 # Pre-filter problems to avoid submitting tasks for already existing files
 problems_to_process_list = []
-if 'train' in ds: # Check if 'train' split exists in the dataset
-    for problem_item_data in ds['train']:
-        problem_item_name = problem_item_data['name']
-        output_file_path_check = os.path.join(output_base_dir, problem_item_name + '.lean')
-        if os.path.exists(output_file_path_check):
-            print(f"File {output_file_path_check} already exists. Skipping problem {problem_item_name} (pre-check).")
-        else:
-            problems_to_process_list.append(problem_item_data)
-else:
-    print("Warning: 'train' split not found in the loaded dataset. No problems to process from 'train'.")
+for problem_item_data in ds:
+    problem_item_name = problem_item_data['name']
+    output_file_path_check = os.path.join(output_base_dir, problem_item_name + '.lean')
+    if os.path.exists(output_file_path_check):
+        print(f"File {output_file_path_check} already exists. Skipping problem {problem_item_name} (pre-check).")
+    else:
+        problems_to_process_list.append(problem_item_data)
 
 
 if not problems_to_process_list:

@@ -4,7 +4,36 @@ This document outlines the planned and completed tasks for improving the Lean en
 
 ## Current Tasks
 
-*(No current tasks)*
+### Setup OCaml SAT Solver Project (In Progress)
+
+**Understanding:**
+
+The user wants to run a command that builds and executes an OCaml-based SAT solver with CDCL (Conflict-Driven Clause Learning) implementation. The command is:
+`dune build bin/main.exe && _build/default/bin/main.exe test/bench/ssa/unsat/ssa2670-130.cnf -s cdcl -c -v debug > debug.log 2>&1`
+
+This suggests we need to set up an OCaml SAT solver project that uses the dune build system.
+
+**Plan:**
+
+1. **Install OCaml and dune:**
+   * Install OCaml compiler and package manager (opam)
+   * Install dune build system
+   * Set up the development environment
+
+2. **Create or Clone SAT Solver Project:**
+   * Either create a new OCaml SAT solver from scratch
+   * Or clone an existing CDCL SAT solver implementation
+   * Set up the project structure with proper dune files
+
+3. **Test Files Setup:**
+   * Create the test directory structure (test/bench/ssa/unsat/)
+   * Ensure the CNF test file (ssa2670-130.cnf) is available
+
+4. **Build and Run:**
+   * Execute the requested dune build command
+   * Run the SAT solver with the specified parameters
+
+**Status:** Not started - Need clarification on whether to create new SAT solver or clone existing one.
 
 ## Completed Tasks
 

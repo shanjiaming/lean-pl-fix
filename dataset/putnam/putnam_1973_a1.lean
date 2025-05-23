@@ -1,0 +1,1 @@
+sInf {volume (convexHull ℝ {A, Y, Z}), volume (convexHull ℝ {B, Z, X}), volume (convexHull ℝ {C, X, Y})} ≤ volume (convexHull ℝ {X, Y, Z})
