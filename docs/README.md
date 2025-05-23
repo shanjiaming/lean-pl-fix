@@ -1,5 +1,5 @@
 # Lean Enumerator
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shanjiaming/lean-pl-fix)
 ## 概述
 
 Lean Enumerator是一个自动修复Lean数学证明代码错误的工具，利用程序合成技术找出并应用合适的修复。它通过与Lean的REPL接口交互，可以自动识别、分析和修复代码中的各种错误，从而提高数学形式化证明的效率。

@@ -1,0 +1,1 @@
+(∀ P : EuclideanSpace ℝ (Fin 2)), P ≠ 0 → ∃ (t : ℝ), t > 0 t • P ∉ S)

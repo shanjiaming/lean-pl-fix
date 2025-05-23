@@ -28,7 +28,8 @@ def query_dpv2(input_content):
     )
     return completion.choices[0].message.content
 
-from decompose_solver import run_with_header_env, header, solve_theorem
+from decompose_solver import run_with_header_env, header, solve_theorem, solve_theorem_unified, solve_theorem_by_id, unified_env
+from unified_problem_manager import Problem, problem_manager
 
 def make_prompt_for_dpv2(header_content, theorem_content, error_msg):
     return f"""Fix this proof:
@@ -50,7 +51,14 @@ def dpv2_fix(input_content, error_message_str):
     theorem_content = "theorem" + theorem_content
     return theorem_content
 
-
+def dpv2_fix_unified(problem: Problem, input_content: str, error_message_str: str):
+    """DPV2 fix function that uses the problem's specific header"""
+    header_content = problem_manager.get_header_content(problem)
+    prompt = make_prompt_for_dpv2(header_content, input_content, error_message_str)
+    answer = query_dpv2(prompt)
+    theorem_content = answer.split("```theorem")[1].split("```")[0]
+    theorem_content = "theorem" + theorem_content
+    return theorem_content
 
 def make_single_fix(fix_func):
     def fix_single_proof(input_content):
@@ -75,36 +83,51 @@ def make_single_fix(fix_func):
                 # return fix_single_proof_dpv2(theorem_content)
     return fix_single_proof
 
+def make_single_fix_unified(problem: Problem, fix_func):
+    """Create a fix function that uses the unified environment with the problem's header"""
+    def fix_single_proof(input_content):
+        header_content = problem_manager.get_header_content(problem)
+        run_result = unified_env.run_with_header(header_content, input_content)
+        print(run_result)
+        error_messages = [m.data for m in getattr(run_result, 'messages', []) if m.severity == "error"]
+        if not error_messages:
+            return input_content
+        else:
+            error_message_str = "\n\n".join(error_messages)
+            # Pass the problem, original input_content and the error_message_str
+            theorem_content = fix_func(problem, input_content, error_message_str)
+            run_result = unified_env.run_with_header(header_content, theorem_content)
+            error_messages = [m.data for m in getattr(run_result, 'messages', []) if m.severity == "error"]
+            if not error_messages:
+                return theorem_content
+            else:
+                print(f"before_fix: \n{input_content}")
+                print(f"after_fix: \n{theorem_content}")
+                assert False, "Failed to solve theorem"
+                return theorem_content
+    return fix_single_proof
+
 fix_single_proof_dpv2 = make_single_fix(dpv2_fix)
 
-# fix_single_proof_dpv2("""import Mathlib
-# import Aesop
-# set_option maxHeartbeats 0
-# open BigOperators Real Nat Topology Rat
-# theorem hh (x_shadow_ x : ℝ) : x + 0 = x:= by 
-#   smp""")
-
-# fix_single_proof_dpv2 = lambda x: save_to_file(x, "dpv2_batch_solver.py")
-
-
-def fix_single_proof_dpv2(proof_framework):
-    print(f"Fixing proof framework using ORIGINAL function: {proof_framework}")
-    # ... (rest of your original logic)
-    import os
-    from datetime import datetime
-    precise_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    folder_name = f"zzz_proof_framework"
-    os.makedirs(folder_name, exist_ok=True)
-    with open(os.path.join(folder_name, f"proof_framework_{precise_timestamp}.lean"), "w") as f:
-        f.write(proof_framework)
-    
-    proof_framework = proof_framework + "\n  done"
-    print(f"{proof_framework}")
-    return proof_framework
-
+# New unified version
+def fix_single_proof_dpv2_unified(problem: Problem):
+    """Create a DPV2 fixer for a specific problem using its header"""
+    return make_single_fix_unified(problem, dpv2_fix_unified)
 
 def solve_theorem_dpv2(input_content):
     return solve_theorem(input_content, fix_single_proof_dpv2)
+
+def solve_theorem_dpv2_unified(problem: Problem):
+    """Solve a theorem using DPV2 with the unified system"""
+    fixer = fix_single_proof_dpv2_unified(problem)
+    return solve_theorem_unified(problem, fixer)
+
+def solve_theorem_dpv2_by_id(dataset: str, problem_id: str):
+    """Solve a theorem by dataset and problem ID using DPV2"""
+    problem = problem_manager.get_problem(dataset, problem_id)
+    if not problem:
+        raise ValueError(f"Problem {dataset}/{problem_id} not found")
+    return solve_theorem_dpv2_unified(problem)
 
 s="""theorem algebra_9onxpypzleqsum2onxpy (x y z : ℝ) (h₀ : 0 < x ∧ 0 < y ∧ 0 < z) :
     9 / (x + y + z) ≤ 2 / (x + y) + 2 / (y + z) + 2 / (z + x) := by

@@ -1,6 +1,8 @@
 import os
-from dpv2_solver import solve_theorem_dpv2
+from dpv2_solver import solve_theorem_dpv2, solve_theorem_dpv2_unified, solve_theorem_dpv2_by_id
+from unified_problem_manager import problem_manager
 
+# Legacy target directory for backward compatibility
 TARGET_DIR = "minif2f-dspv2/test_failed_fixed_unknown_failed/"
 
 def batch_fix_theorems():
@@ -54,5 +56,98 @@ def batch_fix_theorems():
                 print("--- End original theorem content ---")
                 # Continue to the next file
 
+def batch_fix_unified():
+    """Batch fix problems using the unified problem management system"""
+    print("Using unified problem management system for batch fixing...")
+    
+    # Get all problems from all datasets
+    all_problems = problem_manager.list_problems()
+    print(f"Found {len(all_problems)} problems across {len(problem_manager.list_datasets())} datasets")
+    
+    for problem in all_problems:
+        try:
+            print(f"Processing {problem.dataset}/{problem.problem_id}")
+            
+            # Get original content
+            original_content = problem_manager.get_problem_content(problem)
+            
+            print(f"--- Original theorem content of {problem.problem_id} ---")
+            print(original_content[:300] + "..." if len(original_content) > 300 else original_content)
+            print("--- End original theorem content ---")
+            
+            # Fix using unified solver
+            fixed_content = solve_theorem_dpv2_unified(problem)
+            
+            if fixed_content and fixed_content != original_content:
+                # Update the problem content
+                problem_manager.update_problem_content(problem, fixed_content)
+                
+                # Save to decomposed directory
+                problem_manager.save_decomposed_file(problem, "fixed_dpv2.lean", fixed_content)
+                
+                print(f"Successfully fixed and updated {problem.dataset}/{problem.problem_id}")
+                print(f"--- Fixed theorem content ---")
+                print(fixed_content[:300] + "..." if len(fixed_content) > 300 else fixed_content)
+                print("--- End fixed theorem content ---")
+            elif fixed_content == original_content:
+                print(f"No changes made to {problem.dataset}/{problem.problem_id} by the solver.")
+            else:
+                print(f"Solver did not return valid content for {problem.dataset}/{problem.problem_id}. No changes made.")
+                
+        except Exception as e:
+            print(f"Error processing {problem.dataset}/{problem.problem_id}: {e}")
+            print(f"--- Original theorem content that caused error ---")
+            print(original_content[:300] + "..." if len(original_content) > 300 else original_content)
+            print("--- End original theorem content ---")
+            # Continue to the next problem
+
+def batch_fix_dataset(dataset_name: str):
+    """Batch fix problems from a specific dataset"""
+    problems = problem_manager.list_problems(dataset_name)
+    if not problems:
+        print(f"No problems found in dataset: {dataset_name}")
+        return
+    
+    print(f"Fixing {len(problems)} problems from {dataset_name} dataset...")
+    
+    for problem in problems:
+        try:
+            print(f"Processing {problem.problem_id}")
+            
+            # Get original content
+            original_content = problem_manager.get_problem_content(problem)
+            
+            # Fix using unified solver
+            fixed_content = solve_theorem_dpv2_unified(problem)
+            
+            if fixed_content and fixed_content != original_content:
+                # Update the problem content
+                problem_manager.update_problem_content(problem, fixed_content)
+                
+                # Save to decomposed directory
+                problem_manager.save_decomposed_file(problem, "fixed_dpv2.lean", fixed_content)
+                
+                print(f"Successfully fixed {problem.problem_id}")
+            else:
+                print(f"No changes needed for {problem.problem_id}")
+                
+        except Exception as e:
+            print(f"Error processing {problem.problem_id}: {e}")
+
 if __name__ == "__main__":
-    batch_fix_theorems()
+    import sys
+    
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+        if command == "legacy":
+            batch_fix_theorems()
+        elif command == "unified":
+            batch_fix_unified()
+        elif command.startswith("dataset:"):
+            dataset_name = command.split(":")[1]
+            batch_fix_dataset(dataset_name)
+        else:
+            print("Usage: python dpv2_batch_solver.py [legacy|unified|dataset:NAME]")
+    else:
+        # Default to unified approach
+        batch_fix_unified()

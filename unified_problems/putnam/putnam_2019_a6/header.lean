@@ -1,0 +1,1 @@
+∀ C, ∀ᶠ x in 𝓝[>] 0, C < sSup { x' ^ r * |iteratedDeriv 2 g x'| | x' ∈ Set.Ioc 0 x }

@@ -1,0 +1,1 @@
+IsLinearMap.mk' (fun x : Domain => func x) (fun x y => additivity x y) (fun a x => homogeneity a x)

@@ -1,0 +1,1 @@
+(fun a b c d ↦ d = a ∧ b = -c ∨ d = b ∧ a = -c ∨ d = c ∧ a = -b) a b c d

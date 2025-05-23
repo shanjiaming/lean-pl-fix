@@ -1,5 +1,7 @@
 from lean_interact import TempRequireProject, LeanREPLConfig, LeanServer, Command
 import re
+from typing import Dict, Optional
+from unified_problem_manager import Problem, problem_manager
 
 def throw_head(input_str: str) -> str:
     """
@@ -921,3 +923,192 @@ def solve_theorem(input_content: str, fix_single_proof_func: callable):
 # Make sure input_content is defined as before
 # result = solve_theorem(input_content, fix_single_proof) 
 # print(f"Final fixed theorem:\n{result}")
+
+class UnifiedLeanEnvironment:
+    """
+    Manages Lean server and environments with header caching for better performance.
+    Each unique header gets its own cached environment.
+    """
+    
+    def __init__(self):
+        self.config = LeanREPLConfig(verbose=True, project=TempRequireProject("mathlib"))
+        self.server = LeanServer(self.config)
+        self._header_envs: Dict[str, str] = {}  # header_content -> env_id
+    
+    def get_or_create_header_env(self, header_content: str):
+        """Get or create a cached environment for the given header"""
+        if header_content in self._header_envs:
+            return self._header_envs[header_content]
+        
+        # Create new environment with this header
+        result = self.server.run(Command(cmd=header_content))
+        if result.env:
+            self._header_envs[header_content] = result.env
+            return result.env
+        else:
+            raise RuntimeError(f"Failed to create environment with header: {header_content}")
+    
+    def run_with_header(self, header_content: str, input_content: str, **kwargs):
+        """Run a command with the specified header environment"""
+        # Get the environment for this header
+        env = self.get_or_create_header_env(header_content)
+        
+        # Find the theorem start and extract just the theorem part
+        theorem_start = input_content.find("theorem")
+        if theorem_start == -1:
+            raise ValueError("No theorem found in input")
+        theorem_content = input_content[theorem_start:]
+        
+        # Run the command with the header environment
+        return self.server.run(Command(cmd=theorem_content, env=env, **kwargs))
+
+# Global unified environment instance
+unified_env = UnifiedLeanEnvironment()
+
+
+def solve_theorem_unified(problem: Problem, fix_single_proof_func: callable) -> str:
+    """
+    Solve a theorem using the unified problem management system with dynamic headers.
+    
+    Args:
+        problem: The problem object containing header and theorem information
+        fix_single_proof_func: Function to fix individual proof steps
+        
+    Returns:
+        The fixed theorem content
+    """
+    # Get the header and problem content
+    header_content = problem_manager.get_header_content(problem)
+    problem_content = problem_manager.get_problem_content(problem)
+    
+    # Process the theorem content
+    input_content = throw_head(problem_content)
+    input_content = remove_lean_comments(input_content)
+    cmd_str = convert_theorem_to_example_cmd(input_content)
+    
+    print("--- Generated Command String ---")
+    print(cmd_str)
+    print("------------------------------")
+
+    # Run with the problem's specific header
+    result = unified_env.run_with_header(header_content, cmd_str, all_tactics=True)
+
+    # Create TacticNode objects for each tactic
+    tactic_nodes = [TacticNode(tactic) for tactic in result.tactics]
+
+    # Build tree structure in O(n) using a stack
+    # Since tactics are printed in top-down order, we can use a stack to track parent tactics
+    stack = []
+    for node in tactic_nodes:
+        # Pop tactics from stack that don't contain current tactic
+        while stack and not (stack[-1].start_pos <= node.start_pos and stack[-1].end_pos >= node.end_pos):
+            stack.pop()
+        
+        # If stack is not empty, current tactic is a direct child of the top of stack
+        if stack:
+            stack[-1].subhaves.append(node)
+            node.parent = stack[-1] # Set parent for the current node
+        
+        # Push current tactic to stack
+        stack.append(node)
+
+    # Populate by_block_goals for 'have ... by ...' nodes
+    for node in tactic_nodes:
+        if node.is_have():
+            structure = node.parse_have_structure()
+            if structure:
+                if node.subhaves: # Check if there are any tactics inside the 'by' block
+                    first_tactic_in_by_block = node.subhaves[0]
+                    node.by_block_goals = first_tactic_in_by_block.tactic.goals
+                else:
+                    # This case means 'have ... := by' is empty or only contains something
+                    # not registered as a tactic (e.g. 'sorry' if not captured by server)
+                    print(f"Warning: Have statement '{node.tactic.tactic}' has a 'by' block but no sub-tactics were parsed for it. '{node.get_have_name()}'.by_block_goals will be None.")
+
+    # Find top-level nodes (nodes that are not children of any other node)
+    top_level_nodes = []
+    child_nodes = set()
+    for node in tactic_nodes:
+        for child in node.subhaves:
+            child_nodes.add(child)
+    top_level_nodes = [node for node in tactic_nodes if node not in child_nodes]
+
+    parent = top_level_nodes[0]
+    fixed_proof = convert_have_to_theorem(fix_complete_proof(parent, fix_single_proof_func))
+    return fixed_proof
+
+
+def solve_theorem_by_id(dataset: str, problem_id: str, fix_single_proof_func: callable) -> str:
+    """
+    Solve a theorem by its dataset and problem ID.
+    
+    Args:
+        dataset: The dataset name (e.g., 'minif2f', 'putnam', 'proverbench')
+        problem_id: The problem identifier
+        fix_single_proof_func: Function to fix individual proof steps
+        
+    Returns:
+        The fixed theorem content
+    """
+    problem = problem_manager.get_problem(dataset, problem_id)
+    if not problem:
+        raise ValueError(f"Problem {dataset}/{problem_id} not found")
+    
+    return solve_theorem_unified(problem, fix_single_proof_func)
+
+
+def solve_theorem(input_content: str, fix_single_proof_func: callable):
+    input_content = throw_head(input_content)
+    input_content = remove_lean_comments(input_content)
+    cmd_str = convert_theorem_to_example_cmd(input_content)
+    print("--- Generated Command String ---")
+    print(cmd_str)
+    print("------------------------------")
+
+    # have security problem here because of comment.
+
+    result = server.run(Command(cmd=cmd_str, env=header_env, all_tactics=True))
+
+    # Create TacticNode objects for each tactic
+    tactic_nodes = [TacticNode(tactic) for tactic in result.tactics]
+
+    # Build tree structure in O(n) using a stack
+    # Since tactics are printed in top-down order, we can use a stack to track parent tactics
+    stack = []
+    for node in tactic_nodes:
+        # Pop tactics from stack that don't contain current tactic
+        while stack and not (stack[-1].start_pos <= node.start_pos and stack[-1].end_pos >= node.end_pos):
+            stack.pop()
+        
+        # If stack is not empty, current tactic is a direct child of the top of stack
+        if stack:
+            stack[-1].subhaves.append(node)
+            node.parent = stack[-1] # Set parent for the current node
+        
+        # Push current tactic to stack
+        stack.append(node)
+
+    # Populate by_block_goals for 'have ... by ...' nodes
+    for node in tactic_nodes:
+        if node.is_have():
+            structure = node.parse_have_structure()
+            if structure:
+                if node.subhaves: # Check if there are any tactics inside the 'by' block
+                    first_tactic_in_by_block = node.subhaves[0]
+                    node.by_block_goals = first_tactic_in_by_block.tactic.goals
+                else:
+                    # This case means 'have ... := by' is empty or only contains something
+                    # not registered as a tactic (e.g. 'sorry' if not captured by server)
+                    print(f"Warning: Have statement '{node.tactic.tactic}' has a 'by' block but no sub-tactics were parsed for it. '{node.get_have_name()}'.by_block_goals will be None.")
+
+    # Find top-level nodes (nodes that are not children of any other node)
+    top_level_nodes = []
+    child_nodes = set()
+    for node in tactic_nodes:
+        for child in node.subhaves:
+            child_nodes.add(child)
+    top_level_nodes = [node for node in tactic_nodes if node not in child_nodes]
+
+    parent = top_level_nodes[0]
+    fixed_proof = convert_have_to_theorem(fix_complete_proof(parent, fix_single_proof_func))
+    return fixed_proof
