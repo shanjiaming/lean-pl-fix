@@ -1,6 +1,6 @@
 import os
-from solvers.decompose_solver_unified import solve_theorem_unified, get_unified_env
-from data_management.unified_problem_manager import problem_manager, Problem
+from decompose_solver import solve_theorem, run_with_header_env, unified_env
+from unified_problem_manager import problem_manager, Problem
 
 def process_lean_file_decompose(problem: Problem, outpath: str):
     """Process a problem to create decomposed version using unified system"""
@@ -8,8 +8,7 @@ def process_lean_file_decompose(problem: Problem, outpath: str):
     header_content = problem_manager.get_header_content(problem) 
     problem_content = problem_manager.get_problem_content(problem)
     
-    env = get_unified_env()
-    run_result = env.run_with_header(header_content, problem_content, all_tactics=True)
+    run_result = unified_env.run_with_header(header_content, problem_content, all_tactics=True)
     
     # Build decomposed content
     decomposed_lines = []
@@ -37,9 +36,6 @@ def process_lean_file_decompose(problem: Problem, outpath: str):
     
     content = '\n'.join(decomposed_lines)
     
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(outpath), exist_ok=True)
-    
     # Save the content to the output path
     with open(outpath, "w") as f:
         f.write(content)
@@ -50,8 +46,7 @@ def process_legacy_file_decompose(filepath, outpath):
     with open(filepath, "r") as f:
         content = f.read()
     
-    env = get_unified_env()
-    run_result = env.run_with_header(content, all_tactics=True)
+    run_result = run_with_header_env(content, all_tactics=True)
     
     # Build decomposed content with tactics information
     lines = content.split('\n')
@@ -72,9 +67,6 @@ def process_legacy_file_decompose(filepath, outpath):
                         decomposed_lines.append(f"  -- Goal after: {tactic.goal_after}")
     
     content = '\n'.join(decomposed_lines)
-    
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(outpath), exist_ok=True)
     
     # Save the content to the output path
     with open(outpath, "w") as f:

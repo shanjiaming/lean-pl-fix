@@ -217,8 +217,7 @@ class DecomposeSolver(BaseSolver):
             "description": "Unified decomposition solver using lean interaction",
             "capabilities": ["proof_decomposition", "tactic_analysis", "have_extraction"],
             "version": "1.0.0"
-        }
-    
+        }    
     def _solve_with_decomposition(self, content: str, problem: Problem = None) -> Optional[str]:
         """
         Internal method to solve using decomposition

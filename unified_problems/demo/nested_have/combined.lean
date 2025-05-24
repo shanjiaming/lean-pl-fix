@@ -1,3 +1,5 @@
+import Mathlib.Tactic 
+
 theorem nested_proof (a b c : ℕ) : a + b + c = c + b + a := by
   have h1 : a + b = b + a := by hole
     have h2 : a + b = b + a := by hole
