@@ -167,7 +167,7 @@ class DecomposeHoleMergePipeline:
             
             # Create a simple filler that replaces hole with sorry for now
             # In a real implementation, this would use sophisticated hole filling logic
-            filled_content = step.hole_content.replace("hole", "sorry")
+            filled_content = step.hole_content.replace("hole", "admit")
             
             # Verify filled content (without hole macro since we're using sorry)
             print(f"  Verifying filled content for step {step.step_id}...")
@@ -314,11 +314,19 @@ class DecomposeHoleMergePipeline:
             current_step = "initialization"
             
             try:
+                # Step 0: Verify original problem
+                current_step = "verifying_original_problem"
+                print(f"Step 0: Verifying original problem {problem.problem_id}...")
+                original_content = problem_manager.get_problem_content(problem)
+                header_content = problem_manager.get_header_content(problem)
+                original_verification_pass = self.verify_lean_code(header_content, original_content, with_macro=False)
+                print(f"Original problem verification: {'PASS' if original_verification_pass else 'FAIL'}")
+                
                 # Step 1: Decompose
                 current_step = "decomposition"
                 print(f"Step 1: Decomposing problem {problem.problem_id}...")
                 steps, complete_fixed_proof = self.decompose_problem(problem)
-                
+                breakpoint()
                 # Check if decomposition failed (returned empty list)
                 if not steps:
                     error_msg = f"Decomposition failed for problem {problem.problem_id} - no steps generated"
@@ -338,6 +346,8 @@ class DecomposeHoleMergePipeline:
                     results.append({
                         "problem_id": problem.problem_id,
                         "dataset": problem.dataset,
+                        "original_verification_pass": original_verification_pass,
+                        "synthesized_verification_pass": None,  # Not reached
                         "status": "error",
                         "error": error_msg,
                         "processing_time_seconds": processing_time,
@@ -369,7 +379,13 @@ class DecomposeHoleMergePipeline:
                     f.write(complete_fixed_proof)
                 print(f"Complete fixed proof saved to: {complete_proof_path}")
                 
-                # Step 5: Load decomposition steps for detailed recording
+                # Step 5: Verify synthesized proof
+                current_step = "verifying_synthesized_proof"
+                print(f"Step 5: Verifying synthesized proof...")
+                synthesized_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
+                print(f"Synthesized proof verification: {'PASS' if synthesized_verification_pass else 'FAIL'}")
+                breakpoint()
+                # Step 6: Load decomposition steps for detailed recording
                 current_step = "recording_details"
                 final_steps = self.load_decomposition(problem_dir)
                 
@@ -427,6 +443,8 @@ class DecomposeHoleMergePipeline:
                     "problem_dir": problem_dir,
                     "complete_proof_path": complete_proof_path,
                     "complete_fixed_proof": complete_fixed_proof,
+                    "original_verification_pass": original_verification_pass,
+                    "synthesized_verification_pass": synthesized_verification_pass,
                     "num_steps": len(steps),
                     "detailed_steps": detailed_steps,
                     "processing_time_seconds": processing_time,
@@ -457,6 +475,8 @@ class DecomposeHoleMergePipeline:
                 results.append({
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
+                    "original_verification_pass": original_verification_pass,
+                    "synthesized_verification_pass": None,  # Not reached
                     "status": "error",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,

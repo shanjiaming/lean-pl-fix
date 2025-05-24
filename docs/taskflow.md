@@ -711,3 +711,72 @@ decomposition_results/
             ├── step_XXXX_hole.lean      # Hole versions (pure content)
             ├── step_XXXX_filled.lean    # Filled versions  
             └── merged_proof.lean         # Final merged proof
+```
+
+## Recent Updates
+
+### 2024-12-XX: Enhanced Verification System
+
+#### Added Original Problem Verification
+- **Purpose**: Verify if the original problem passes before any fixes are applied
+- **Implementation**: Added verification step before decomposition process
+- **Output**: `original_verification_pass` field in results
+- **Location**: Step 0 in `decompose_hole_merge_pipeline.py`
+
+#### Added Synthesized Proof Verification  
+- **Purpose**: Verify if the complete fixed proof passes after merging all fixes
+- **Implementation**: Added verification step after saving complete fixed proof
+- **Output**: `synthesized_verification_pass` field in results
+- **Location**: Step 5 in `decompose_hole_merge_pipeline.py`
+
+#### Enhanced Results Recording
+- **Added Fields**:
+  - `original_verification_pass`: Boolean indicating if original problem passed verification
+  - `synthesized_verification_pass`: Boolean indicating if synthesized proof passed verification
+  - `filled_content`: Content with holes filled for each decomposition step
+
+#### Error Handling Improvements
+- Both verification results are now recorded even when processing fails
+- Failure cases set `synthesized_verification_pass` to `None` when not reached
+- Consistent error recording across all failure scenarios
+
+#### Verification Process Flow
+1. **Step 0**: Verify original problem (with_macro=False)
+2. **Step 1**: Decompose problem into steps
+3. **Step 2**: Fill and verify individual holes (with_macro=True for filled content)
+4. **Step 3**: Save decomposition steps
+5. **Step 4**: Save complete fixed proof
+6. **Step 5**: Verify synthesized proof (with_macro=False)
+7. **Step 6**: Load and record detailed step information
+
+#### Testing Status
+- ✅ Successfully tested with demo dataset
+- ✅ All verification fields correctly recorded in results
+- ✅ Error handling properly captures verification status
+- ✅ Both successful and failure scenarios handled correctly
+
+## Previous Tasks
+
+### 2024-12-XX: Hole Decomposition and Merging Pipeline
+
+#### Task Overview
+Implemented a comprehensive pipeline for decomposing Lean proofs with holes, fixing individual steps, and merging them back into complete proofs.
+
+#### Key Components
+1. **Decomposition**: Break down complex proofs into manageable steps
+2. **Hole Filling**: Replace `sorry` placeholders with actual proof content
+3. **Verification**: Validate each step and the final merged proof
+4. **Results Recording**: Comprehensive logging of all processing steps
+
+#### Implementation Status
+- ✅ Core pipeline implemented in `decompose_hole_merge_pipeline.py`
+- ✅ Integration with existing hole fixing infrastructure
+- ✅ Comprehensive error handling and logging
+- ✅ Batch processing capabilities
+- ✅ Results export to JSON format
+
+#### Data Storage
+- All decomposition results stored under `decomposition_results/`
+- Individual step files saved with detailed metadata
+- Complete fixed proofs saved for verification
+- Processing logs and error reports maintained
