@@ -1,17 +1,2 @@
-import Mathlib
-import Aesop
-
-set_option maxHeartbeats 0
-
-open BigOperators Real Nat Topology Rat
-
-/-- **Demo Problem with Deep Nesting**
-
-For natural numbers $a$ and $b$, if $a + b = 5$ and $a > b$, 
-prove that $a = 3$ and $b = 2$.
-
-This is a simple demo problem to showcase deep `have` nesting in Lean proofs. -/
-macro "sorry" : tactic => `(tactic| admit)
-
-theorem h5 (a b : ℕ) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a ≤ 5) (h2 : b ≤ 5) (h3 : a > b) (h4 : a + b = 5) : a = 3 ∧ b = 2 := by interval_cases a <;> interval_cases b <;> norm_num at h3 h4 ⊢ <;> omega
+theorem h5 (a b : ℕ) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a ≤ 5) (h2 : b ≤ 5) (h3 : a > b) (h4 : a + b = 5) : a = 3 ∧ b = 2 := by -- -- -- -- interval_cases a <;> interval_cases b <;> norm_num at h3 h4 ⊢ <;> omega
   sorry
