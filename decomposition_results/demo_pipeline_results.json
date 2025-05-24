@@ -1,0 +1,100 @@
+[
+  {
+    "problem_id": "demo_deep_nesting",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_deep_nesting",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_deep_nesting/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem demo_deep_nesting (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) : a = 3 \u2227 b = 2:=\n  by\n  have h1 : a \u2264 5:= by\n    have h1_1 : a + b = 5 := h_eq\n    have h1_2 : b \u2265 0:= by\n      have h1_2_1 : b \u2265 0 := Nat.zero_le b\n      exact h1_2_1\n    have h1_3 : a = 5 - b:= by\n      have h1_3_1 : a + b = 5 := h1_1\n      have h1_3_2 : a = 5 - b:= by omega\n      exact h1_3_2\n    have h1_4 : a \u2264 5:= by\n      rw [h1_3]\n      have h1_4_1 : b \u2265 0 := h1_2\n      have h1_4_2 : 5 - b \u2264 5:= by omega\n      exact h1_4_2\n    exact h1_4\n  have h2 : b \u2264 5:= by\n    have h2_1 : a + b = 5 := h_eq\n    have h2_2 : a \u2265 0:= by\n      have h2_2_1 : a \u2265 0 := Nat.zero_le a\n      exact h2_2_1\n    have h2_3 : b \u2264 5:= by omega\n    exact h2_3\n  have h3 : a > b := h_gt\n  have h4 : a + b = 5 := h_eq\n  have h5 : a = 3 \u2227 b = 2:= by interval_cases a <;> interval_cases b <;> norm_num at h3 h4 \u22a2 <;> omega\n  exact h5",
+    "num_steps": 11,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "theorem demo_deep_nesting (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) : a = 3 \u2227 b = 2 :=\n  by\n  have h1 : a \u2264 5 := by sorry\n  have h2 : b \u2264 5 := by sorry\n  have h3 : a > b := h_gt\n  have h4 : a + b = 5 := h_eq\n  have h5 : a = 3 \u2227 b = 2 := by sorry\n  exact h5",
+        "hole_content": "theorem demo_deep_nesting (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) : a = 3 \u2227 b = 2 :=\n  by\n  have h1 : a \u2264 5 := by sorry\n  have h2 : b \u2264 5 := by sorry\n  have h3 : a > b := h_gt\n  have h4 : a + b = 5 := h_eq\n  have h5 : a = 3 \u2227 b = 2 := by sorry\n  --  exact h5\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "theorem h1 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) : a \u2264 5 := by\n  have h1_1 : a + b = 5 := h_eq\n  have h1_2 : b \u2265 0 := by sorry\n  have h1_3 : a = 5 - b := by sorry\n  have h1_4 : a \u2264 5 := by sorry\n  exact h1_4",
+        "hole_content": "theorem h1 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) : a \u2264 5 := by\n  have h1_1 : a + b = 5 := h_eq\n  have h1_2 : b \u2265 0 := by sorry\n  have h1_3 : a = 5 - b := by sorry\n  have h1_4 : a \u2264 5 := by sorry\n  --  exact h1_4\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0003",
+        "original_content": "theorem h1_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) : b \u2265 0 := by\n  have h1_2_1 : b \u2265 0 := Nat.zero_le b\n  exact h1_2_1",
+        "hole_content": "theorem h1_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) : b \u2265 0 := by\n  have h1_2_1 : b \u2265 0 := Nat.zero_le b\n  --  exact h1_2_1\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0004",
+        "original_content": "theorem h1_3 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) : a = 5 - b := by\n  have h1_3_1 : a + b = 5 := h1_1\n  have h1_3_2 : a = 5 - b := by sorry\n  exact h1_3_2",
+        "hole_content": "theorem h1_3 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) : a = 5 - b := by\n  have h1_3_1 : a + b = 5 := h1_1\n  have h1_3_2 : a = 5 - b := by sorry\n  --  exact h1_3_2\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0005",
+        "original_content": "theorem h1_3_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) (h1_3_1 : a + b = 5) : a = 5 - b := by omega",
+        "hole_content": "theorem h1_3_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) (h1_3_1 : a + b = 5) : a = 5 - b := by -- omega\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0006",
+        "original_content": "theorem h1_4 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) (h1_3 : a = 5 - b) : a \u2264 5 := by\n  rw [h1_3]\n  have h1_4_1 : b \u2265 0 := h1_2\n  have h1_4_2 : 5 - b \u2264 5 := by sorry\n  exact h1_4_2",
+        "hole_content": "theorem h1_4 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) (h1_3 : a = 5 - b) : a \u2264 5 := by\n  --  rw [h1_3]\n  have h1_4_1 : b \u2265 0 := h1_2\n  have h1_4_2 : 5 - b \u2264 5 := by sorry\n  --  exact h1_4_2\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0007",
+        "original_content": "theorem h1_4_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) (h1_3 : a = 5 - b) (h1_4_1 : b \u2265 0) : 5 - b \u2264 5 := by omega",
+        "hole_content": "theorem h1_4_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1_1 : a + b = 5) (h1_2 : b \u2265 0) (h1_3 : a = 5 - b) (h1_4_1 : b \u2265 0) : 5 - b \u2264 5 := by -- omega\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0008",
+        "original_content": "theorem h2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) : b \u2264 5 := by\n  have h2_1 : a + b = 5 := h_eq\n  have h2_2 : a \u2265 0 := by sorry\n  have h2_3 : b \u2264 5 := by sorry\n  exact h2_3",
+        "hole_content": "theorem h2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) : b \u2264 5 := by\n  have h2_1 : a + b = 5 := h_eq\n  have h2_2 : a \u2265 0 := by sorry\n  have h2_3 : b \u2264 5 := by sorry\n  --  exact h2_3\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0009",
+        "original_content": "theorem h2_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) (h2_1 : a + b = 5) : a \u2265 0 := by\n  have h2_2_1 : a \u2265 0 := Nat.zero_le a\n  exact h2_2_1",
+        "hole_content": "theorem h2_2 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) (h2_1 : a + b = 5) : a \u2265 0 := by\n  have h2_2_1 : a \u2265 0 := Nat.zero_le a\n  --  exact h2_2_1\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0010",
+        "original_content": "theorem h2_3 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) (h2_1 : a + b = 5) (h2_2 : a \u2265 0) : b \u2264 5 := by omega",
+        "hole_content": "theorem h2_3 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) (h2_1 : a + b = 5) (h2_2 : a \u2265 0) : b \u2264 5 := by -- omega\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      },
+      {
+        "step_id": "step_0011",
+        "original_content": "theorem h5 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) (h2 : b \u2264 5) (h3 : a > b) (h4 : a + b = 5) : a = 3 \u2227 b = 2 := by interval_cases a <;> interval_cases b <;> norm_num at h3 h4 \u22a2 <;> omega",
+        "hole_content": "theorem h5 (a b : \u2115) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a \u2264 5) (h2 : b \u2264 5) (h3 : a > b) (h4 : a + b = 5) : a = 3 \u2227 b = 2 := by -- -- -- -- interval_cases a <;> interval_cases b <;> norm_num at h3 h4 \u22a2 <;> omega\n  hole",
+        "hole_verification_pass": true,
+        "filled_verification_pass": null
+      }
+    ],
+    "processing_time_seconds": 14.469432,
+    "status": "success",
+    "timestamp": "2025-05-24T22:32:03.042507"
+  },
+  {
+    "problem_id": "demo_simple_arithmetic",
+    "dataset": "demo",
+    "status": "error",
+    "error": "Decomposition failed for problem demo_simple_arithmetic - no steps generated",
+    "processing_time_seconds": 0.055364,
+    "timestamp": "2025-05-24T22:32:03.097896"
+  }
+]
