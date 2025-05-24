@@ -354,6 +354,145 @@
 5. 创建可视化图表
 6. 保存结果到指定目录
 
+## Solver组件
+
+### 基础求解器架构 (solvers/base_solver.py)
+
+#### `SolverStatus` (枚举)
+
+求解器执行状态的枚举类型：
+- `SUCCESS`: 成功找到解决方案
+- `FAILURE`: 求解失败
+- `TIMEOUT`: 超时
+- `ERROR`: 出现错误
+- `PARTIAL`: 找到部分解决方案
+
+#### `SolverResult` (数据类)
+
+求解器执行结果的数据结构：
+
+**属性**:
+- `status` (SolverStatus): 求解状态
+- `solution` (str, optional): 解决方案代码
+- `original_problem` (str, optional): 原始问题
+- `execution_time` (float, optional): 执行时间（秒）
+- `error_message` (str, optional): 错误消息
+- `metadata` (dict, optional): 额外元数据
+- `intermediate_steps` (list, optional): 中间步骤
+- `confidence_score` (float, optional): 置信度分数
+
+**方法**:
+- `is_success()`: 检查是否成功
+- `is_partial()`: 检查是否为部分解决方案
+- `has_solution()`: 检查是否有任何解决方案
+
+#### `SolverConfig` (数据类)
+
+求解器配置类：
+
+**属性**:
+- `timeout` (float, optional): 超时时间（秒）
+- `max_iterations` (int, optional): 最大迭代次数
+- `debug` (bool): 是否启用调试模式，默认False
+- `save_intermediate` (bool): 是否保存中间结果，默认False
+- `custom_params` (dict, optional): 自定义参数
+
+**方法**:
+- `get_param(key, default=None)`: 获取自定义参数值
+
+#### `BaseSolver` (抽象基类)
+
+所有求解器的基类，定义了统一的接口。
+
+**方法**:
+- `solve(problem, **kwargs)`: 抽象方法，解决问题
+- `solve_with_timeout(problem, timeout=None, **kwargs)`: 带超时的求解
+- `solve_batch(problems, **kwargs)`: 批量求解
+- `get_solver_info()`: 抽象方法，获取求解器信息
+- `get_stats()`: 获取求解器统计信息
+- `reset_stats()`: 重置统计信息
+
+#### `CompositeSolver` (组合求解器)
+
+组合多个求解器的复合求解器，支持多种组合策略。
+
+##### 初始化
+
+```python
+CompositeSolver(name, solvers, strategy="first_success", config=None)
+```
+
+**参数**:
+- `name` (str): 求解器名称
+- `solvers` (List[BaseSolver]): 子求解器列表
+- `strategy` (str): 组合策略，支持以下选项：
+  - `"first_success"`: 使用第一个成功的求解器结果
+  - `"best_result"`: 尝试所有求解器，返回最好的结果
+  - `"majority_vote"`: 多数投票机制
+  - `"chain_fix"`: **链式修复模式**（推荐用于Lean证明错误修复）
+- `config` (SolverConfig, optional): 求解器配置
+
+##### 策略详解
+
+###### `"chain_fix"` 策略（链式修复）
+
+**专为Lean证明错误修复设计**，特别适用于需要多步修复的复杂错误场景。
+
+**工作原理**:
+1. 第一个求解器尝试修复原始问题
+2. 如果成功，将修复结果作为输入传递给下一个求解器
+3. 每个后续求解器都基于前一个求解器的输出进行进一步修复
+4. 形成修复链，逐步改进解决方案
+5. 返回最后一个成功修复的结果
+
+**优势**:
+- **协作修复**: 不同求解器可以处理不同类型的错误
+- **递进改进**: 每一步都可能解决部分问题，逐步接近完整解决方案
+- **适合Lean**: Lean证明只有通过/不通过两种状态，链式修复比投票更有意义
+- **错误消除**: 一个求解器修复语法错误，另一个求解器修复逻辑错误
+
+**使用示例**:
+```python
+from solvers.base_solver import CompositeSolver
+from solvers.syntax_fixer import SyntaxFixerSolver
+from solvers.logic_fixer import LogicFixerSolver
+from solvers.tactic_fixer import TacticFixerSolver
+
+# 创建专门的修复求解器链
+composite_solver = CompositeSolver(
+    name="lean_error_fixer",
+    solvers=[
+        SyntaxFixerSolver("syntax_fixer"),    # 先修复语法错误
+        LogicFixerSolver("logic_fixer"),      # 再修复逻辑错误  
+        TacticFixerSolver("tactic_fixer")     # 最后优化证明策略
+    ],
+    strategy="chain_fix"
+)
+
+# 修复Lean证明代码
+result = composite_solver.solve(lean_code_with_errors)
+```
+
+**元数据**:
+链式修复完成后，结果包含详细的元数据：
+- `chain_fix`: True（标识使用了链式修复）
+- `chain_length`: 求解器链的总长度
+- `successful_fixes`: 成功修复的求解器数量
+- `final_solver`: 最终成功的求解器名称
+- `chain_details`: 每个求解器的执行详情
+- `successful_solvers`: 成功的求解器列表
+
+###### 其他策略
+
+- `"first_success"`: 按顺序尝试求解器，返回第一个成功的结果
+- `"best_result"`: 尝试所有求解器，根据置信度分数选择最佳结果
+- `"majority_vote"`: 对成功的求解器结果进行多数投票
+
+##### 方法
+
+- `solve(problem, **kwargs)`: 根据配置的策略求解问题
+- `get_solver_info()`: 返回组合求解器的详细信息
+
 ## 配置选项
 
 可以通过命令行参数和全局变量配置系统行为：

@@ -4,6 +4,21 @@
 
 Lean Enumerator是一个自动修复Lean数学证明代码错误的工具，利用程序合成技术找出并应用合适的修复。它通过与Lean的REPL接口交互，可以自动识别、分析和修复代码中的各种错误，从而提高数学形式化证明的效率。
 
+## 项目架构
+
+该项目采用模块化架构，主要包含以下模块：
+
+- **core/**: 核心接口和主要逻辑
+- **solvers/**: 不同的求解策略
+- **data_management/**: 数据处理和问题管理  
+- **theorem_search/**: 定理搜索和提取
+- **utils/**: 通用工具函数
+- **scripts/**: 实用脚本
+- **tests/**: 测试文件
+- **examples/**: 示例和演示
+
+详细的架构信息请参见 [模块化架构文档](MODULAR_ARCHITECTURE_COMPLETE.md)。
+
 ## 主要特性
 
 - **自动错误修复**：能够自动检测和修复Lean代码中的多种类型错误
@@ -15,12 +30,12 @@ Lean Enumerator是一个自动修复Lean数学证明代码错误的工具，利�
 - **智能Tyrell规范选择**：根据错误类型自动选择最合适的Tyrell规范文件，区分本地定理(have)和库定理
 - **并行批处理**：支持并行处理多个Lean文件，提高修复效率
 - **可视化报告**：提供修复结果的可视化统计和图表
-- **定理引用分析**：通过`lean_theorem_analyzer.py`分析Lean文件中使用的mathlib定理（查看[文档](LeanTheoremAnalyzer.md)）
+- **定理引用分析**：通过定理分析器分析Lean文件中使用的mathlib定理
 - **定理数据提取与处理**：包含用于提取库路径、基于静态分析过滤定理以及更新Tyrell语法文件的脚本。
 
 ## 安装
 
-确保您已经安装了Lean和Lake。如果需要使用基于 `lean-interact` 的新API (`lean_interact_api.py`)，请确保也安装了 `lean-interact` 库。
+确保您已经安装了Lean和Lake。如果需要使用基于 `lean-interact` 的新API，请确保也安装了 `lean-interact` 库。
 
 ```bash
 # 安装基本依赖
@@ -53,34 +68,34 @@ python lean_batch_enumerator.py --input_dir path/to/lean/files --output_dir path
 分析修复日志并生成报告：
 
 ```bash
-python log_analyzer.py --input-dir path/to/logs --output-dir path/to/analysis/output
+python utils/log_analyzer.py --input-dir path/to/logs --output-dir path/to/analysis/output
 ```
 
 ### 定理和库路径处理
 
 1.  **提取 'have' 定理**: 
-    运行 `extract_have.py` 处理 Lean 文件或整个目录，提取所有 'have' 语句后面的定理名。对于目录处理，脚本会递归查找所有 .lean 文件，并为每个文件创建对应的JSON输出文件。
+    运行 `utils/extract_have.py` 处理 Lean 文件或整个目录，提取所有 'have' 语句后面的定理名。对于目录处理，脚本会递归查找所有 .lean 文件，并为每个文件创建对应的JSON输出文件。
     ```bash
     # 处理单个文件
-    python extract_have.py ./minif2f/lean_code/100.lean ./minif2f/have_theorems/100.json
+    python utils/extract_have.py ./minif2f/lean_code/100.lean ./minif2f/have_theorems/100.json
     
     # 批量处理整个目录（为每个文件生成对应的JSON文件）
     mkdir -p ./minif2f/have_theorems
-    python extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
+    python utils/extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
     ```
 
 2.  **收集库路径**: 
-    运行 `collectpath.py` 处理 `./minif2f/lean_code` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `./minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
+    运行 `utils/collectpath.py` 处理 `./minif2f/lean_code` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `./minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
     ```bash
     # (确保 Lean 环境已激活: source /data/lean.sh)
     mkdir -p ./minif2f/module_paths_output
-    python collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
+    python utils/collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
     ```
 
 3.  **静态过滤定理**: 
-    运行 `static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理和模块保存到多个输出目录：
+    运行 `theorem_search/static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理和模块保存到多个输出目录：
     ```bash
-    python static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f
+    python theorem_search/static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f
     ```
     这会创建以下输出目录：
     - `minif2f/static_theorems`: 包含定理列表的JSON文件
@@ -88,18 +103,18 @@ python log_analyzer.py --input-dir path/to/logs --output-dir path/to/analysis/ou
     - `minif2f/static_filtered_theorems_output`: 包含定理和模块的JSON文件（向后兼容）
 
 4.  **生成 Tyrell 文件**: 
-    运行 `update_tyrell_theorems.py` 两次，一次处理静态过滤的定理，一次处理'have'定理：
+    运行 `theorem_search/update_tyrell_theorems.py` 两次，一次处理静态过滤的定理，一次处理'have'定理：
     ```bash
     # 使用静态过滤的定理生成Tyrell文件
-    python update_tyrell_theorems.py --input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/static_tyrell_output
+    python theorem_search/update_tyrell_theorems.py --input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/static_tyrell_output
     
     # 使用'have'定理生成Tyrell文件
-    python update_tyrell_theorems.py --input-dir minif2f/have_theorems --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/have_tyrell_output
+    python theorem_search/update_tyrell_theorems.py --input-dir minif2f/have_theorems --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/have_tyrell_output
     ```
 
-这些步骤可以通过使用 `gen_tyrell.sh` 脚本一次性执行：
+这些步骤可以通过使用 `scripts/gen_tyrell.sh` 脚本一次性执行：
 ```bash
-bash gen_tyrell.sh
+bash scripts/gen_tyrell.sh
 ```
 
 执行完这些步骤后，将生成以下文件：
@@ -123,7 +138,7 @@ bash gen_tyrell.sh
 
 *省略了已在 `API.md` 中详细记录的参数说明，这里仅展示新增或关键脚本的概览*
 
-#### `collectpath.py` 参数
+#### `utils/collectpath.py` 参数
 
 - `--file FILE`: 处理单个 Lean 文件。
 - `--dir DIR`: 处理目录中的所有 Lean 文件。
@@ -131,7 +146,7 @@ bash gen_tyrell.sh
 - `--output-dir OUTPUT_DIR`: (与 `--dir` 配合) 输出 JSON 文件的目录。
 - `--batch-size BATCH_SIZE`: REPL 查询批次大小。
 
-#### `static_theorem_filter.py` 参数
+#### `theorem_search/static_theorem_filter.py` 参数
 
 - `--input-dir INPUT_DIR`: 包含 `identifier: module_path` JSON 文件的输入目录。
 - `--output-dir OUTPUT_DIR`: 输出基本目录，会在其下创建以下子目录：
@@ -139,7 +154,7 @@ bash gen_tyrell.sh
   - `static_modules`: 包含从静态分析中提取的模块列表的JSON文件
   - `static_filtered_theorems_output`: 包含定理和模块的JSON文件（向后兼容）
 
-#### `update_tyrell_theorems.py` 参数
+#### `theorem_search/update_tyrell_theorems.py` 参数
 
 - `--input-dir INPUT_DIR`: 包含定理列表文件的输入目录（支持JSON格式）。
 - `--tyrell-input TYRELL_INPUT`: Tyrell 模板文件路径。
@@ -150,19 +165,19 @@ bash gen_tyrell.sh
 Lean Enumerator由以下主要组件构成：
 
 1.  **REPL接口**：
-    *   `lean_api.py`: 提供与 Lean REPL 的交互，优先使用 `lean-interact`。
-    *   `lean_interact_api.py`: 基于 `lean-interact` 的独立实现。
-2.  **错误分析器** (`lean_enumerator.py`)：通过`extract_error_type`和`similar_error_types`函数分析和分类错误。
-3.  **代码合成器** (`lean_enumerator.py`)：基于Tyrell框架的程序合成系统，尝试生成可能的修复方案。
-4.  **评估器** (`lean_enumerator.py`)：使用`evaluate_fix`和`checker`验证修复是否有效。
+    *   `core/lean_api.py`: 提供与 Lean REPL 的交互，优先使用 `lean-interact`。
+    *   `core/lean_interact_api.py`: 基于 `lean-interact` 的独立实现（如果存在）。
+2.  **错误分析器** (`core/lean_enumerator.py`)：通过`extract_error_type`和`similar_error_types`函数分析和分类错误。
+3.  **代码合成器** (`core/lean_enumerator.py`)：基于Tyrell框架的程序合成系统，尝试生成可能的修复方案。
+4.  **评估器** (`core/lean_enumerator.py`)：使用`evaluate_fix`和`checker`验证修复是否有效。
 5.  **日志系统**：详细记录修复过程和结果。
-6.  **批处理系统** (`lean_batch_enumerator.py`)：并行处理多个文件的错误修复。
-7.  **分析系统** (`log_analyzer.py`)：分析修复日志并生成报告。
+6.  **批处理系统** (`core/lean_batch_enumerator.py`)：并行处理多个文件的错误修复。
+7.  **分析系统** (`utils/log_analyzer.py`)：分析修复日志并生成报告。
 8.  **定理/库路径处理工具**：
-    *   `collectpath.py`: 收集标识符的库路径。
-    *   `static_theorem_filter.py`: 基于静态分析过滤定理。
-    *   `update_tyrell_theorems.py`: 更新 Tyrell 语法文件。
-9.  **定理分析器** (`lean_theorem_analyzer.py`)：(旧) 分析 Lean 文件中使用的 mathlib 定理。
+    *   `utils/collectpath.py`: 收集标识符的库路径。
+    *   `theorem_search/static_theorem_filter.py`: 基于静态分析过滤定理。
+    *   `theorem_search/update_tyrell_theorems.py`: 更新 Tyrell 语法文件。
+9.  **定理分析器** (`utils/lean_theorem_analyzer.py`)：分析 Lean 文件中使用的 mathlib 定理。
 10. **智能Tyrell选择器**：根据错误类型和涉及的定理自动选择合适的Tyrell规范文件。
 
 ## 错误修复流程
@@ -222,28 +237,28 @@ python log_analyzer.py --input-dir path/to/logs
 **步骤**: 
 
 1.  **提取 'have' 定理**: 
-    运行 `extract_have.py` 处理 Lean 文件或整个目录，提取所有 'have' 语句后面的定理名。对于目录处理，脚本会递归查找所有 .lean 文件，并为每个文件创建对应的JSON输出文件。
+    运行 `utils/extract_have.py` 处理 Lean 文件或整个目录，提取所有 'have' 语句后面的定理名。对于目录处理，脚本会递归查找所有 .lean 文件，并为每个文件创建对应的JSON输出文件。
     ```bash
     # 处理单个文件
-    python extract_have.py ./minif2f/lean_code/100.lean ./minif2f/have_theorems/100.json
+    python utils/extract_have.py ./minif2f/lean_code/100.lean ./minif2f/have_theorems/100.json
     
     # 批量处理整个目录（为每个文件生成对应的JSON文件）
     mkdir -p ./minif2f/have_theorems
-    python extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
+    python utils/extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
     ```
 
 2.  **收集库路径**: 
-    运行 `collectpath.py` 处理 `./minif2f/lean_code` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `./minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
+    运行 `utils/collectpath.py` 处理 `./minif2f/lean_code` 目录下的所有 `.lean` 文件。对于每个输入文件（如 `1.lean`），脚本会查询其中标识符的来源库，并将 `identifier: module_path` 映射保存到 `./minif2f/module_paths_output` 目录下的对应 JSON 文件（如 `1.json`）。
     ```bash
     # (确保 Lean 环境已激活: source /data/lean.sh)
     mkdir -p ./minif2f/module_paths_output
-    python collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
+    python utils/collectpath.py --dir ./minif2f/lean_code --output-dir ./minif2f/module_paths_output
     ```
 
 3.  **静态过滤定理**: 
-    运行 `static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理和模块保存到多个输出目录：
+    运行 `theorem_search/static_theorem_filter.py` 处理上一步生成的 `./minif2f/module_paths_output` 目录下的所有 JSON 文件。对于每个 JSON 文件，脚本会读取其中的库模块路径，然后静态扫描对应的 Mathlib 源文件（使用正则表达式查找 `theorem` 和 `lemma` 声明），最后将找到的定理和模块保存到多个输出目录：
     ```bash
-    python static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f
+    python theorem_search/static_theorem_filter.py --input-dir ./minif2f/module_paths_output --output-dir minif2f
     ```
     这会创建以下输出目录：
     - `minif2f/static_theorems`: 包含定理列表的JSON文件
@@ -251,18 +266,18 @@ python log_analyzer.py --input-dir path/to/logs
     - `minif2f/static_filtered_theorems_output`: 包含定理和模块的JSON文件（向后兼容）
 
 4.  **生成 Tyrell 文件**: 
-    运行 `update_tyrell_theorems.py` 两次，一次处理静态过滤的定理，一次处理'have'定理：
+    运行 `theorem_search/update_tyrell_theorems.py` 两次，一次处理静态过滤的定理，一次处理'have'定理：
     ```bash
     # 使用静态过滤的定理生成Tyrell文件
-    python update_tyrell_theorems.py --input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/static_tyrell_output
+    python theorem_search/update_tyrell_theorems.py --input-dir minif2f/static_filtered_theorems_output --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/static_tyrell_output
     
     # 使用'have'定理生成Tyrell文件
-    python update_tyrell_theorems.py --input-dir minif2f/have_theorems --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/have_tyrell_output
+    python theorem_search/update_tyrell_theorems.py --input-dir minif2f/have_theorems --tyrell-input semantic/lean.tyrell --tyrell-output-dir minif2f/have_tyrell_output
     ```
 
-这些步骤可以通过使用 `gen_tyrell.sh` 脚本一次性执行：
+这些步骤可以通过使用 `scripts/gen_tyrell.sh` 脚本一次性执行：
 ```bash
-bash gen_tyrell.sh
+bash scripts/gen_tyrell.sh
 ```
 
 执行完这些步骤后，将生成以下文件：

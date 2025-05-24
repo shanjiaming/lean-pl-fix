@@ -11,13 +11,13 @@ In Lean theorem proving, 'have' statements are used to introduce local facts or 
 ### Single File Mode
 
 ```bash
-python extract_have.py <lean_file_path> <output_json_path>
+python utils/extract_have.py <lean_file_path> <output_json_path>
 ```
 
 ### Directory Mode
 
 ```bash
-python extract_have.py <directory_path> <output_directory>
+python utils/extract_have.py <directory_path> <output_directory>
 ```
 
 ### Parameters
@@ -32,13 +32,13 @@ python extract_have.py <directory_path> <output_directory>
 #### Process a single file:
 
 ```bash
-python extract_have.py /home/matheye/lean-pl-fix/minif2f/lean_code/100.lean /path/to/output/theorems.json
+python utils/extract_have.py /home/matheye/lean-pl-fix/minif2f/lean_code/100.lean /path/to/output/theorems.json
 ```
 
 #### Process an entire directory:
 
 ```bash
-python extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
+python utils/extract_have.py ./minif2f/lean_code ./minif2f/have_theorems
 ```
 
 This will create files like:
