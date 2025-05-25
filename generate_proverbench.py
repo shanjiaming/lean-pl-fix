@@ -138,7 +138,7 @@ def process_single_problem(problem_data, base_dir, global_rate_limiter):
 
 # --- Main script execution logic, replacing the original loop ---
 
-ds = load_dataset("deepseek-ai/DeepSeek-ProverBench")
+ds = load_dataset("deepseek-ai/DeepSeek-ProverBench")["train"]
 output_base_dir = "proverbench"
 
 # Ensure the base output directory exists. This is thread-safe.
