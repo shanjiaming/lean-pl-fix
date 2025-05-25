@@ -35,9 +35,74 @@ This suggests we need to set up an OCaml SAT solver project that uses the dune b
 
 **Status:** Not started - Need clarification on whether to create new SAT solver or clone existing one.
 
+### Improve Decompose-Hole-Merge Pipeline Data Storage and Recording
+**Status**: In Progress
+**Understanding**: The current pipeline saves results only at the end of processing, which can lead to data loss if the process is interrupted. We need to modify the code to save results after each problem is processed.
+
+**Plan**:
+1. Add a new method to save individual problem results
+2. Modify the process_dataset method to save results incrementally
+3. Ensure proper error handling and logging
+
+### Implement Similar Theorem Repair
+**Status**: Pending
+**Understanding**: When Lean code has errors, we want to suggest similar theorems that might help fix the issue automatically.
+
+**Plan**:
+1. Create a database of common theorem patterns
+2. Implement similarity matching algorithm
+3. Integrate with the error handling system
+
+### Implement Lean Have Extractor
+**Status**: Pending
+**Understanding**: Extract theorem names from 'have' statements in Lean files to build a knowledge base.
+
+**Plan**:
+1. Parse Lean files to identify 'have' statements
+2. Extract theorem names and their contexts
+3. Store in a structured format for later use
+
+### Implement `rw` Decomposition and Iterative Fixing
+**Status**: Pending
+**Understanding**: Handle complex `rw` tactics and improve the iterative fixing strategy.
+
+**Plan**:
+1. Analyze `rw` tactic patterns
+2. Implement decomposition logic for `rw` statements
+3. Enhance iterative fixing with better heuristics
+
+### Improved Error Handling and Fix Synthesis
+**Status**: Pending
+**Understanding**: Enhance error tracking and synthesis attempts.
+
+**Plan**:
+1. Improve error categorization
+2. Implement better fix synthesis strategies
+3. Add comprehensive logging
+
 ## Completed Tasks
 
-### Improve Decompose-Hole-Merge Pipeline Data Storage and Recording (Completed)
+### Refactor Decompose-Hole-Merge Pipeline
+**Status**: ✅ Completed  
+**Description**: Improved code quality and workflow, ensuring all verification checks function correctly.
+
+### Implement Dynamic Hole Filling Function Support
+**Status**: ✅ Completed  
+**Description**: Added support for different hole filling methods via command line interface.
+- Users can specify `simple` or `unigram` methods
+- Structured recording of tactics tried (successful/failed tactics, best tactic)
+- Verification status tracking
+- Clean and extensible architecture for future strategies
+
+### Save Header and Problem Files in Decomposed Folder
+**Status**: ✅ Completed  
+**Description**: Enhanced the decomposition pipeline to save `header.lean` and `problem.lean` files alongside decomposition steps.
+- Makes the `decomposed` folder self-contained with all necessary information
+- No need to reference other locations for complete problem context
+- Updated metadata to include references to saved header and problem files
+- Tested and verified functionality with demo dataset
+
+### Refactor Decompose-Hole-Merge Pipeline Data Storage and Recording (Completed)
 
 **Understanding:**
 

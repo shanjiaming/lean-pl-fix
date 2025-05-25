@@ -991,25 +991,6 @@ class UnifiedLeanEnvironment:
             self.reset()
         return ret
     
-    # def verify_lean_code(self, header: str, content: str) -> bool:
-    #     """
-    #     Verify if Lean code has no errors.
-    #     Returns True if no errors, False if there are errors.
-    #     """
-    #     # Check if content already contains the header (starts with imports)
-    #     content_lines = content.strip().split('\n')
-    #     has_header = any(line.strip().startswith('import ') for line in content_lines[:10])
-        
-    #     if has_header:
-    #         # Content already includes header, run directly without additional header
-    #         result = self.server.run(Command(cmd=content))
-    #     else:
-    #         # Content needs header, use run_with_header
-    #         result = self.run_with_header(header, content)
-        
-    #     # Check if there are no error messages
-    #     return not any(msg.severity == 'error' for msg in result.messages)
-    
     def reset(self):
         self.server.restart()
         self._header_envs.clear()

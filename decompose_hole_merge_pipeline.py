@@ -21,6 +21,7 @@ class DecompositionStep:
     filled_content: Optional[str] = None
     hole_verification_pass: Optional[bool] = None
     filled_verification_pass: Optional[bool] = None
+    additional_info: Optional[Dict] = None
 
 
 class DecomposeHoleMergePipeline:
@@ -45,13 +46,21 @@ class DecomposeHoleMergePipeline:
         self.step_counter["count"] += 1
         return f"step_{self.step_counter['count']:04d}"
         
-    def decompose_problem(self, problem: Problem) -> tuple[List[DecompositionStep], str]:
+    def decompose_problem(self, problem: Problem, hole_filling_function=None) -> tuple[List[DecompositionStep], str]:
         """
         Decompose a problem into substeps with hole versions and get the complete fixed proof
         Returns (decomposition_steps, complete_fixed_proof)
         Raises an exception if decomposition fails completely
+        
+        Args:
+            problem: The problem to decompose
+            hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
         """
         print(f"Decomposing problem: {problem.dataset}/{problem.problem_id}")
+        
+        # Set default hole filling function if none provided
+        if hole_filling_function is None:
+            hole_filling_function = self.fill_hole_content
         
         decomposition_steps = []
         
@@ -76,19 +85,30 @@ class DecomposeHoleMergePipeline:
             hole_verification_pass = self.verify_lean_code(header_content, hole_content, with_macro=True)
             print(f"    Hole verification: {'PASS' if hole_verification_pass else 'FAIL'}")
             
-            # Create decomposition step with verification results
+            # Use the provided hole filling function
+            filled_content, additional_info = hole_filling_function(hole_content, header_content)
+            print(f"    Using filling method: {additional_info.get('method', 'unknown')}")
+            
+            # Verify filled content
+            print(f"  Verifying filled content for step {step_id}...")
+            filled_verification_pass = self.verify_lean_code(header_content, filled_content, with_macro=False)
+            print(f"    Filled verification: {'PASS' if filled_verification_pass else 'FAIL'}")
+            
+            # Create decomposition step with verification results and additional info
             step = DecompositionStep(
                 step_id=step_id,
                 original_content=proof_framework,
                 hole_content=hole_content,
-                filled_content=None,
-                hole_verification_pass=hole_verification_pass
+                filled_content=filled_content,
+                hole_verification_pass=hole_verification_pass,
+                filled_verification_pass=filled_verification_pass,
+                additional_info=additional_info
             )
             
             decomposition_steps.append(step)
             print(f"Created decomposition step: {step_id}")
             
-            return proof_framework
+            return filled_content
         
         try:
             print("Starting solve_theorem_unified...")
@@ -154,59 +174,34 @@ class DecomposeHoleMergePipeline:
             # Fallback: use hole without macro
             return proof_framework + "\n  hole"
     
-    def fill_and_verify_holes(self, problem: Problem, steps: List[DecompositionStep]) -> List[DecompositionStep]:
-        """
-        Fill holes in decomposition steps and verify the filled content
-        Returns updated steps with filled_content and filled_verification_pass
-        """
-        header_content = problem_manager.get_header_content(problem)
-        updated_steps = []
-        
-        for step in steps:
-            print(f"Filling and verifying holes for step {step.step_id}...")
-            
-            # Create a simple filler that replaces hole with sorry for now
-            # In a real implementation, this would use sophisticated hole filling logic
-            filled_content = step.hole_content.replace("hole", "admit")
-            
-            # Verify filled content (without hole macro since we're using sorry)
-            print(f"  Verifying filled content for step {step.step_id}...")
-            filled_verification_pass = self.verify_lean_code(header_content, filled_content, with_macro=True)
-            print(f"    Filled verification: {'PASS' if filled_verification_pass else 'FAIL'}")
-            
-            # Create updated step
-            updated_step = DecompositionStep(
-                step_id=step.step_id,
-                original_content=step.original_content,
-                hole_content=step.hole_content,
-                filled_content=filled_content,
-                hole_verification_pass=step.hole_verification_pass,
-                filled_verification_pass=filled_verification_pass
-            )
-            updated_steps.append(updated_step)
-            
-        return updated_steps
-    
-    def save_decomposition(self, problem: Problem, steps: List[DecompositionStep]) -> str:
+    def save_decomposition(self, problem_dir: str, problem: Problem, steps: List[DecompositionStep]) -> str:
         """Save decomposition steps to files"""
-        problem_dir = os.path.join(
-            self.output_base_dir, 
-            problem.dataset, 
-            "decomposed",
-            problem.problem_id.replace('/', '_')
-        )
+        # Ensure the directory exists
         os.makedirs(problem_dir, exist_ok=True)
+        
+        # Save header.lean and problem.lean for self-contained information
+        header_content = problem_manager.get_header_content(problem)
+        problem_content = problem_manager.get_problem_content(problem)
+        
+        with open(os.path.join(problem_dir, "header.lean"), "w") as f:
+            f.write(header_content)
+        
+        with open(os.path.join(problem_dir, "problem.lean"), "w") as f:
+            f.write(problem_content)
         
         # Save metadata
         metadata = {
             "problem_id": problem.problem_id,
             "dataset": problem.dataset,
             "timestamp": datetime.now().isoformat(),
+            "header_file": "header.lean",
+            "problem_file": "problem.lean",
             "steps": [
                 {
                     "step_id": step.step_id,
                     "hole_verification_pass": step.hole_verification_pass,
-                    "filled_verification_pass": step.filled_verification_pass
+                    "filled_verification_pass": step.filled_verification_pass,
+                    "additional_info": step.additional_info
                 }
                 for step in steps
             ]
@@ -231,6 +226,7 @@ class DecomposeHoleMergePipeline:
                     f.write(step.filled_content)
         
         print(f"Saved {len(steps)} decomposition steps to {problem_dir}")
+        print(f"Also saved header.lean and problem.lean for self-contained information")
         return problem_dir
     
     def load_decomposition(self, problem_dir: str) -> List[DecompositionStep]:
@@ -268,7 +264,8 @@ class DecomposeHoleMergePipeline:
                 filled_content=filled_content,
                 # Load verification results if available in metadata
                 hole_verification_pass=step_info.get("hole_verification_pass"),
-                filled_verification_pass=step_info.get("filled_verification_pass")
+                filled_verification_pass=step_info.get("filled_verification_pass"),
+                additional_info=step_info.get("additional_info")
             )
             steps.append(step)
         
@@ -285,14 +282,152 @@ class DecomposeHoleMergePipeline:
             header = header + "\nmacro \"hole\" : tactic => `(tactic| admit)"
         try:
             result = self.lean_verifier.run_with_header(header, content)
-            return not any(msg.severity == 'error' for msg in result.messages)
+            return not result.has_errors()
         except Exception as e:
             # If verification fails due to server issues, return False
             print(f"Verification exception: {e}")
             return False
 
-    def process_dataset(self, dataset_name: str, limit: Optional[int] = None):
-        """Process entire dataset through the pipeline"""
+    def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
+        """
+        Convert hole content to filled content with basic information.
+        Simply replaces "hole" with "admit".
+        
+        Args:
+            hole_content: The content containing "hole" placeholders
+            header_content: The header content for context (unused for now)
+            
+        Returns:
+            Tuple of (filled_content, additional_info)
+        """
+        filled_content = hole_content.replace("hole", "admit")
+        
+        additional_info = {
+            "method": "simple_replace"
+        }
+        
+        return filled_content, additional_info
+
+    def try_unigram_tactics(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
+        """
+        Try different unigram tactics to replace holes and find working solutions.
+        
+        Args:
+            hole_content: The content containing "hole" placeholders
+            header_content: The header content for verification
+            
+        Returns:
+            Tuple of (best_filled_content, additional_info)
+        """
+        # Define common unigram tactics to try
+        unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp"]
+        
+        additional_info = {
+            "method": "unigram_tactics",
+            "tactics_tried": unigrams,
+            "successful_tactics": [],
+            "failed_tactics": [],
+            "best_tactic": None
+        }
+        
+        # First check if hole version passes (sanity check)
+        sanity_check = self.verify_lean_code(header_content, hole_content, with_macro=True)
+        additional_info["sanity_check_pass"] = sanity_check
+        
+        if not sanity_check:
+            # If hole version doesn't pass, skip tactic testing
+            additional_info["skip_reason"] = "sanity_check_failed"
+            fallback_content = hole_content.replace("hole", "admit")
+            return fallback_content, additional_info
+        
+        # Try each unigram tactic
+        for tactic in unigrams:
+            candidate_content = hole_content.replace("hole", tactic)
+            if self.verify_lean_code(header_content, candidate_content, with_macro=False):
+                additional_info["successful_tactics"].append(tactic)
+                if additional_info["best_tactic"] is None:
+                    additional_info["best_tactic"] = tactic
+            else:
+                additional_info["failed_tactics"].append(tactic)
+        
+        # Return best solution or fallback to admit
+        if additional_info["best_tactic"]:
+            best_content = hole_content.replace("hole", additional_info["best_tactic"])
+            return best_content, additional_info
+        else:
+            # No tactic worked, use hole as fallback. Won't pass verification without macro.
+            return hole_content, additional_info
+
+    def _append_result_to_file(self, dataset_name: str, result_record: dict):
+        """
+        Append a single result to the JSON file immediately after processing each problem.
+        This ensures results are saved incrementally and not lost if processing is interrupted.
+        """
+        results_path = os.path.join(self.output_base_dir, f"{dataset_name}_pipeline_results.json")
+        
+        # Read existing results if file exists
+        existing_results = []
+        if os.path.exists(results_path):
+            try:
+                with open(results_path, "r") as f:
+                    existing_results = json.load(f)
+                    if not isinstance(existing_results, list):
+                        existing_results = []
+            except (json.JSONDecodeError, FileNotFoundError):
+                # If file is corrupted or doesn't exist, start with empty list
+                existing_results = []
+        
+        # Check if this problem_id already exists to avoid duplicates
+        problem_id = result_record.get("problem_id")
+        if problem_id:
+            # Remove any existing entries for this problem_id (in case of rerun)
+            existing_results = [r for r in existing_results if r.get("problem_id") != problem_id]
+        
+        # Append new result
+        existing_results.append(result_record)
+        
+        # Save updated results
+        with open(results_path, "w") as f:
+            json.dump(existing_results, f, indent=2)
+        
+        print(f"Result saved to {results_path} (total: {len(existing_results)} problems)")
+    
+    def _append_failure_to_file(self, dataset_name: str, failure_record: dict):
+        """
+        Append a single failure record to the failures JSON file immediately.
+        """
+        failures_path = os.path.join(self.output_base_dir, f"{dataset_name}_detailed_failures.json")
+        
+        # Read existing failures if file exists
+        existing_failures = []
+        if os.path.exists(failures_path):
+            try:
+                with open(failures_path, "r") as f:
+                    existing_failures = json.load(f)
+                    if not isinstance(existing_failures, list):
+                        existing_failures = []
+            except (json.JSONDecodeError, FileNotFoundError):
+                # If file is corrupted or doesn't exist, start with empty list
+                existing_failures = []
+        
+        # Append new failure
+        existing_failures.append(failure_record)
+        
+        # Save updated failures
+        with open(failures_path, "w") as f:
+            json.dump(existing_failures, f, indent=2)
+        
+        print(f"Failure logged to {failures_path}")
+
+    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, hole_filling_function=None):
+        """
+        Process entire dataset through the pipeline
+        
+        Args:
+            dataset_name: Name of the dataset to process
+            limit: Maximum number of problems to process
+            hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
+        """
         problems = problem_manager.list_problems(dataset_name)
         if not problems:
             print(f"No problems found in dataset: {dataset_name}")
@@ -301,7 +436,12 @@ class DecomposeHoleMergePipeline:
         if limit:
             problems = problems[:limit]
         
+        # Set default hole filling function if none provided
+        if hole_filling_function is None:
+            hole_filling_function = self.fill_hole_content
+        
         print(f"Processing {len(problems)} problems from {dataset_name}")
+        print(f"Using hole filling method: {hole_filling_function.__name__}")
         
         results = []
         all_failures = []
@@ -325,8 +465,8 @@ class DecomposeHoleMergePipeline:
                 # Step 1: Decompose
                 current_step = "decomposition"
                 print(f"Step 1: Decomposing problem {problem.problem_id}...")
-                steps, complete_fixed_proof = self.decompose_problem(problem)
-                breakpoint()
+                steps, complete_fixed_proof = self.decompose_problem(problem, hole_filling_function)
+                
                 # Check if decomposition failed (returned empty list)
                 if not steps:
                     error_msg = f"Decomposition failed for problem {problem.problem_id} - no steps generated"
@@ -355,37 +495,43 @@ class DecomposeHoleMergePipeline:
                     })
                     
                     print(f"Skipping to next problem...")
+                    
+                    # Append result and failure to files immediately 
+                    self._append_result_to_file(dataset_name, results[-1])
+                    self._append_failure_to_file(dataset_name, failure_record)
+                    
                     continue
                 
                 print(f"Decomposition successful: {len(steps)} steps generated")
                 print(f"Complete fixed proof: {len(complete_fixed_proof)} chars")
                 
-                # Step 2: Fill and verify holes
-                current_step = "filling_and_verifying_holes"
-                print(f"Step 2: Filling and verifying holes...")
-                updated_steps = self.fill_and_verify_holes(problem, steps)
-                
-                # Step 3: Save decomposition
+                # Step 2: Save decomposition
                 current_step = "saving_decomposition"
-                print(f"Step 3: Saving decomposition...")
-                problem_dir = self.save_decomposition(problem, updated_steps)
+                print(f"Step 2: Saving decomposition...")
+                problem_dir = os.path.join(
+                    self.output_base_dir, 
+                    problem.dataset, 
+                    "decomposed",
+                    problem.problem_id.replace('/', '_')
+                )
+                self.save_decomposition(problem_dir, problem, steps)
                 print(f"Decomposition saved to: {problem_dir}")
                 
-                # Step 4: Save the complete fixed proof directly
+                # Step 3: Save the complete fixed proof directly
                 current_step = "saving_complete_proof"
-                print(f"Step 4: Saving complete fixed proof...")
+                print(f"Step 3: Saving complete fixed proof...")
                 complete_proof_path = os.path.join(problem_dir, "complete_fixed_proof.lean")
                 with open(complete_proof_path, "w") as f:
                     f.write(complete_fixed_proof)
                 print(f"Complete fixed proof saved to: {complete_proof_path}")
                 
-                # Step 5: Verify synthesized proof
+                # Step 4: Verify synthesized proof
                 current_step = "verifying_synthesized_proof"
-                print(f"Step 5: Verifying synthesized proof...")
+                print(f"Step 4: Verifying synthesized proof...")
                 synthesized_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
                 print(f"Synthesized proof verification: {'PASS' if synthesized_verification_pass else 'FAIL'}")
-                breakpoint()
-                # Step 6: Load decomposition steps for detailed recording
+                
+                # Step 5: Load decomposition steps for detailed recording
                 current_step = "recording_details"
                 final_steps = self.load_decomposition(problem_dir)
                 
@@ -413,7 +559,8 @@ class DecomposeHoleMergePipeline:
                         "hole_content": step.hole_content,
                         "filled_content": step.filled_content,
                         "hole_verification_pass": hole_verification_pass,
-                        "filled_verification_pass": step.filled_verification_pass
+                        "filled_verification_pass": step.filled_verification_pass,
+                        "additional_info": step.additional_info
                     }
                     detailed_steps.append(step_info)
                 
@@ -454,6 +601,9 @@ class DecomposeHoleMergePipeline:
                 
                 print(f"✓ Successfully processed {problem.problem_id} in {processing_time:.1f}s")
                 
+                # Append result to file immediately
+                self._append_result_to_file(dataset_name, results[-1])
+                
             except Exception as e:
                 import traceback
                 
@@ -484,34 +634,52 @@ class DecomposeHoleMergePipeline:
                 })
                 
                 print(f"Failure recorded. Continuing to next problem...")
+                
+                # Append failure to file immediately
+                self._append_failure_to_file(dataset_name, failure_record)
         
-        # Save results summary
+        # Since results are saved incrementally, read final statistics from files
         results_path = os.path.join(self.output_base_dir, f"{dataset_name}_pipeline_results.json")
-        with open(results_path, "w") as f:
-            json.dump(results, f, indent=2)
+        failures_path = os.path.join(self.output_base_dir, f"{dataset_name}_detailed_failures.json")
         
-        # Save detailed failure log
-        if all_failures:
-            failures_path = os.path.join(self.output_base_dir, f"{dataset_name}_detailed_failures.json")
-            with open(failures_path, "w") as f:
-                json.dump(all_failures, f, indent=2)
-            print(f"Detailed failures logged to: {failures_path}")
+        # Read final results from file to get accurate counts
+        final_results = []
+        if os.path.exists(results_path):
+            with open(results_path, "r") as f:
+                final_results = json.load(f)
+        
+        # Read final failures from file
+        final_failures = []
+        if os.path.exists(failures_path):
+            with open(failures_path, "r") as f:
+                final_failures = json.load(f)
+        
+        # Calculate statistics from saved files
+        total_processed = len(final_results)
+        successful_from_file = len([r for r in final_results if r.get("status") == "success"])
+        failed_from_file = total_processed - successful_from_file
         
         # Print comprehensive summary
         print(f"\n=== Pipeline Results Summary ===")
         print(f"Dataset: {dataset_name}")
-        print(f"Total problems processed: {len(results)}")
-        print(f"Successful: {successful_count}")
-        print(f"Failed: {len(results) - successful_count}")
+        print(f"Total problems processed: {total_processed}")
+        print(f"Successful: {successful_from_file}")
+        print(f"Failed: {failed_from_file}")
         
         print(f"\nResults saved to: {results_path}")
-        print(f"Success rate: {successful_count}/{len(results)} ({100*successful_count/len(results):.1f}%)")
+        if total_processed > 0:
+            print(f"Success rate: {successful_from_file}/{total_processed} ({100*successful_from_file/total_processed:.1f}%)")
+        else:
+            print("Success rate: N/A (no problems processed)")
+            
+        if final_failures:
+            print(f"Detailed failures logged to: {failures_path}")
         
         return {
-            "total": len(results),
-            "successful": successful_count,
-            "failed": len(results) - successful_count,
-            "failures": all_failures,
+            "total": total_processed,
+            "successful": successful_from_file,
+            "failed": failed_from_file,
+            "failures": final_failures,
             "results_path": results_path
         }
 
@@ -526,7 +694,8 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python decompose_hole_merge_pipeline.py <command> [args]")
         print("Commands:")
-        print("  dataset <name> [limit] - Process entire dataset")
+        print("  dataset <name> [limit] [filling_method] - Process entire dataset")
+        print("    filling_method options: simple, unigram")
         print("  problem <dataset> <problem_id> - Process single problem")
         return
     
@@ -536,8 +705,16 @@ def main():
     if command == "dataset":
         dataset_name = sys.argv[2]
         limit = int(sys.argv[3]) if len(sys.argv) > 3 else None
-        print(f"Processing dataset: {dataset_name}, limit: {limit}")
-        pipeline.process_dataset(dataset_name, limit)
+        filling_method = sys.argv[4] if len(sys.argv) > 4 else "simple"
+        
+        # Choose hole filling function based on method
+        if filling_method == "unigram":
+            hole_filling_function = pipeline.try_unigram_tactics
+        else:  # default to simple
+            hole_filling_function = pipeline.fill_hole_content
+        
+        print(f"Processing dataset: {dataset_name}, limit: {limit}, method: {filling_method}")
+        pipeline.process_dataset(dataset_name, limit, hole_filling_function)
         
 if __name__ == "__main__":
     main() 
