@@ -25,7 +25,7 @@ theorem aime_2025i_p11 (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ),
       have h₄₄ : f (0 : ℝ) = 0:= by
         have h₄₅ := h₀ (0 : ℝ) h₄₃
         --  linarith
-        admit
+        hole
       --  --  rw [h₄₄] <;> norm_num
       nlinarith
     have h₄₅ : (0 : ℝ) ∈ S:= by
@@ -114,4 +114,4 @@ theorem aime_2025i_p11 (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ),
                 Nat.Coprime a d ∧
                   Nat.Coprime b d ∧ Squarefree c ∧ (∑ x in S, f x) = (a + b * Real.sqrt c) / d ∧ a + b + c + d = 259 := by sorry
   --  exact h₆
-  admit
+  hole

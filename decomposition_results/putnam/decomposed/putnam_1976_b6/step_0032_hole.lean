@@ -1,0 +1,6 @@
+theorem h₄₃ (σ : ℕ → ℤ) (hσ : σ = fun N => ∑ d ∈ N.divisors, (↑d : ℤ)) (quasiperfect : ℕ → Prop) (quasiperfect_def : ∀ (N : ℕ), quasiperfect N ↔ σ N = 2 * (↑N : ℤ) + 1) (N : ℕ) (h_quasiperfect : quasiperfect N) (h₂ : ∑ d ∈ N.divisors, (↑d : ℤ) = 2 * (↑N : ℤ) + 1) (h₃ : σ N = ∑ d ∈ N.divisors, (↑d : ℤ)) (h₄ : ∑ d ∈ N.divisors, (↑d : ℤ) = 2 * (↑N : ℤ) + 1) (h₅ : N ≥ 2) (h₆ : ∑ d ∈ N.divisors, (↑d : ℤ) ≥ (↑N : ℤ) + 1) (h₇ : 2 * (↑N : ℤ) + 1 ≥ (↑N : ℤ) + 1) (h₉ : ∑ d ∈ N.divisors, (↑d : ℤ) ≥ (↑N : ℤ) + 1) (h₁₀ : (↑N : ℤ) ≥ 2) (h₁₂ : ∑ d ∈ N.divisors, (↑d : ℤ) ≤ 2 * (↑N : ℤ) + 1) (h₁₃ : ∑ d ∈ N.divisors, (↑d : ℤ) = 2 * (↑N : ℤ) + 1) (h₁₄ : ∑ d ∈ N.divisors, (↑d : ℤ) ≥ (↑N : ℤ) + 1) (h₁₅ : (↑N : ℤ) + 1 ≤ 2 * (↑N : ℤ) + 1) (h₁₆ : (↑N : ℤ) ≤ 2 * (↑N : ℤ)) (h₁₇ : (↑N : ℤ) ≥ 0) (h₁₈ : N ≥ 2) (d : ℕ) (hd : d ∈ N.divisors) (hd₁ : d ≠ 1) (hd₂ : d ≠ N) : d > 0 := by
+  have h₄₄ : d ∈ Nat.divisors N := hd
+  have h₄₅ : d ∣ N := by sorry
+  have h₄₆ : d > 0 := Nat.pos_of_dvd_of_pos h₄₅ (by omega)
+  --  exact h₄₆
+  hole

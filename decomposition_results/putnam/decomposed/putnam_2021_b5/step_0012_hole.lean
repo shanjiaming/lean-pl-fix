@@ -1,0 +1,6 @@
+theorem h₁₀ (n : ℕ) (npos : n ≥ 1) (veryodd : Matrix (Fin n) (Fin n) ℤ → Prop) (hveryodd :  ∀ (A : Matrix (Fin n) (Fin n) ℤ),    veryodd A ↔      ∀ m ∈ Set.Icc 1 n, ∀ (reind : Fin m → Fin n), Function.Injective reind → Odd (A.submatrix reind reind).det) (A : Matrix (Fin n) (Fin n) ℤ) (hA : veryodd A) (k : ℕ) (hk : k ≥ 1) (m : ℕ) (hm : m ∈ Set.Icc 1 n) (reind : Fin m → Fin n) (hreind : Function.Injective reind) (h₁ : (A ^ k).submatrix reind reind = A.submatrix reind reind ^ k) (h₂ : Odd (A.submatrix reind reind).det) (h₄ : (A.submatrix reind reind ^ k).det = (A.submatrix reind reind).det ^ k) (h₅ h₇ : Odd (A.submatrix reind reind).det) (h₉ : (A.submatrix reind reind).det % 2 = 1) : (A.submatrix reind reind).det ^ k % 2 = 1 :=
+  by
+  have h₁₁ : (A.submatrix reind reind).det % 2 = 1 := h₉
+  have h₁₂ : ((A.submatrix reind reind).det ^ k) % 2 = 1 := by sorry
+  --  exact h₁₂
+  hole

@@ -1,0 +1,2 @@
+theorem h₇ (K : Type u_1) (inst✝ : Fintype K) (V E : ℕ) (hV : V = Nat.card K) (hE : 4 * E ≤ V ^ 2) (h : ¬E = 0) (h₂ : 1 ≤ E) (h₄ : V = 0) (h₅ : Nat.card K = 0) (h₆ : Fintype.card K = 0) : IsEmpty K := by apply Fintype.card_eq_zero_iff.mp h₆
+  hole

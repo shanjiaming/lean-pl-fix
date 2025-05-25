@@ -70,6 +70,6 @@ theorem aime_2025i_p9 (x y x' y' : ℝ) (hx : 0 < x) (hy : y < 0)
     by
     --  exfalso
     --  exact h₂
-    admit
+    hole
   --  exact h₃
-  admit
+  hole

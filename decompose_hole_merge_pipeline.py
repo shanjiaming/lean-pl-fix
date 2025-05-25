@@ -174,7 +174,9 @@ class DecomposeHoleMergePipeline:
             # Fallback: use hole without macro
             return proof_framework + "\n  hole"
     
-    def save_decomposition(self, problem_dir: str, problem: Problem, steps: List[DecompositionStep]) -> str:
+    def save_decomposition(self, problem_dir: str, problem: Problem, steps: List[DecompositionStep], 
+                          original_verification_pass: Optional[bool] = None, 
+                          synthesized_verification_pass: Optional[bool] = None) -> str:
         """Save decomposition steps to files"""
         # Ensure the directory exists
         os.makedirs(problem_dir, exist_ok=True)
@@ -196,6 +198,8 @@ class DecomposeHoleMergePipeline:
             "timestamp": datetime.now().isoformat(),
             "header_file": "header.lean",
             "problem_file": "problem.lean",
+            "original_verification_pass": original_verification_pass,
+            "synthesized_verification_pass": synthesized_verification_pass,
             "steps": [
                 {
                     "step_id": step.step_id,
@@ -337,8 +341,7 @@ class DecomposeHoleMergePipeline:
         if not sanity_check:
             # If hole version doesn't pass, skip tactic testing
             additional_info["skip_reason"] = "sanity_check_failed"
-            fallback_content = hole_content.replace("hole", "admit")
-            return fallback_content, additional_info
+            return hole_content, additional_info
         
         # Try each unigram tactic
         for tactic in unigrams:
@@ -450,6 +453,9 @@ class DecomposeHoleMergePipeline:
         for i, problem in enumerate(problems):
             print(f"\n--- Processing {i+1}/{len(problems)}: {problem.problem_id} ---")
             
+            # Reset step counter for each new problem
+            self.step_counter = {"count": 0}
+            
             problem_start_time = datetime.now()
             current_step = "initialization"
             
@@ -459,8 +465,48 @@ class DecomposeHoleMergePipeline:
                 print(f"Step 0: Verifying original problem {problem.problem_id}...")
                 original_content = problem_manager.get_problem_content(problem)
                 header_content = problem_manager.get_header_content(problem)
+                
+                # Check if code is too long (>400 lines)
+                original_lines = len(original_content.split('\n'))
+                if original_lines > 400:
+                    error_msg = f"Problem {problem.problem_id} skipped: code too long ({original_lines} lines > 400 lines limit)"
+                    print(f"✗ {error_msg}")
+                    processing_time = (datetime.now() - problem_start_time).total_seconds()
+                    
+                    # Record this as a length limit failure
+                    failure_record = {
+                        "problem_id": problem.problem_id,
+                        "dataset": problem.dataset,
+                        "error_message": error_msg,
+                        "failure_reason": "code_too_long",
+                        "code_lines": original_lines,
+                        "processing_time_seconds": processing_time,
+                        "timestamp": datetime.now().isoformat()
+                    }
+                    all_failures.append(failure_record)
+                    
+                    results.append({
+                        "problem_id": problem.problem_id,
+                        "dataset": problem.dataset,
+                        "original_verification_pass": None,  # Not verified due to length
+                        "synthesized_verification_pass": None,  # Not reached
+                        "status": "skipped_too_long",
+                        "error": error_msg,
+                        "code_lines": original_lines,
+                        "processing_time_seconds": processing_time,
+                        "timestamp": datetime.now().isoformat()
+                    })
+                    
+                    print(f"Skipping to next problem...")
+                    
+                    # Append result and failure to files immediately 
+                    self._append_result_to_file(dataset_name, results[-1])
+                    self._append_failure_to_file(dataset_name, failure_record)
+                    
+                    continue
+                
                 original_verification_pass = self.verify_lean_code(header_content, original_content, with_macro=False)
-                print(f"Original problem verification: {'PASS' if original_verification_pass else 'FAIL'}")
+                print(f"Original problem verification: {'PASS' if original_verification_pass else 'FAIL'} ({original_lines} lines)")
                 
                 # Step 1: Decompose
                 current_step = "decomposition"
@@ -514,7 +560,7 @@ class DecomposeHoleMergePipeline:
                     "decomposed",
                     problem.problem_id.replace('/', '_')
                 )
-                self.save_decomposition(problem_dir, problem, steps)
+                self.save_decomposition(problem_dir, problem, steps, original_verification_pass, None)
                 print(f"Decomposition saved to: {problem_dir}")
                 
                 # Step 3: Save the complete fixed proof directly
@@ -530,6 +576,16 @@ class DecomposeHoleMergePipeline:
                 print(f"Step 4: Verifying synthesized proof...")
                 synthesized_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
                 print(f"Synthesized proof verification: {'PASS' if synthesized_verification_pass else 'FAIL'}")
+                
+                # Step 4.5: Update metadata with synthesized verification result
+                print(f"Step 4.5: Updating metadata with synthesized verification result...")
+                metadata_path = os.path.join(problem_dir, "metadata.json")
+                with open(metadata_path, "r") as f:
+                    metadata = json.load(f)
+                metadata["synthesized_verification_pass"] = synthesized_verification_pass
+                with open(metadata_path, "w") as f:
+                    json.dump(metadata, f, indent=2)
+                print(f"Metadata updated with synthesized verification result")
                 
                 # Step 5: Load decomposition steps for detailed recording
                 current_step = "recording_details"
@@ -634,7 +690,7 @@ class DecomposeHoleMergePipeline:
                 })
                 
                 print(f"Failure recorded. Continuing to next problem...")
-                
+        
                 # Append failure to file immediately
                 self._append_failure_to_file(dataset_name, failure_record)
         
@@ -681,6 +737,24 @@ class DecomposeHoleMergePipeline:
             "failed": failed_from_file,
             "failures": final_failures,
             "results_path": results_path
+        }
+
+    def load_overall_results(self, problem_dir: str) -> Dict:
+        """Load overall verification results from metadata"""
+        metadata_path = os.path.join(problem_dir, "metadata.json")
+        if not os.path.exists(metadata_path):
+            raise ValueError(f"No metadata found in {problem_dir}")
+        
+        with open(metadata_path, "r") as f:
+            metadata = json.load(f)
+        
+        return {
+            "problem_id": metadata.get("problem_id"),
+            "dataset": metadata.get("dataset"),
+            "original_verification_pass": metadata.get("original_verification_pass"),
+            "synthesized_verification_pass": metadata.get("synthesized_verification_pass"),
+            "timestamp": metadata.get("timestamp"),
+            "num_steps": len(metadata.get("steps", []))
         }
 
 

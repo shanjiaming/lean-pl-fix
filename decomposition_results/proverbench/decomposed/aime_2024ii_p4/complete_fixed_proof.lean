@@ -164,7 +164,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
               ring_nf at * <;>
             simp_all [Real.log_mul, Real.log_mul] <;>
           nlinarith
-        admit
+        hole
       have h₅₆ : Real.log (x / (y * z)) = Real.log x - Real.log (y * z):= by
         --  rw [Real.log_div (by positivity) (by positivity)]
         hole
@@ -179,7 +179,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
         --    nlinarith [Real.log_pos (by norm_num : (1 : ℝ) < 2), Real.log_mul (by positivity) (by positivity)]
         hole
       --  linarith
-      admit
+      hole
     have h₅₂ : Real.log y - Real.log x - Real.log z = (Real.log 2) / 3:=
       by
       have h₅₃ : Real.logb 2 (y / (x * z)) = (1 : ℝ) / 3 := h₁
@@ -262,7 +262,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
     --  rw [h₇₁]
     --  --  --  rw [h₆] <;> field_simp [Real.log_mul, Real.log_pow, Real.log_rpow, Real.log_inv, Real.log_div] <;> ring_nf at * <;>
       nlinarith [Real.log_pos (by norm_num : (1 : ℝ) < 2)]
-    admit
+    hole
   have h₈ : ans = (25 / 8 : ℚ):= by
     --  rw [answer]
     rw [h₇] <;>
@@ -276,7 +276,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
           simp_all [abs_of_nonpos, abs_of_nonneg, le_of_lt] <;>
         norm_num <;>
       linarith
-    admit
+    hole
   have h₉ : ↑ans.den + ans.num = 33:= by
     have h₉₁ : ans = (25 / 8 : ℚ) := h₈
     --  rw [h₉₁]

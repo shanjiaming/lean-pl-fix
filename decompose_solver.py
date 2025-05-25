@@ -1,7 +1,8 @@
-from lean_interact import TempRequireProject, LeanREPLConfig, LeanServer, Command
+from lean_interact import TempRequireProject, LeanREPLConfig, LeanServer, AutoLeanServer, Command
 import re
 from typing import Dict, Optional
 from unified_problem_manager import Problem, problem_manager
+import concurrent.futures
 
 def throw_head(input_str: str) -> str:
     """
@@ -975,7 +976,24 @@ class UnifiedLeanEnvironment:
         if header_content in self._header_envs:
             return self._header_envs[header_content]
         
-        result = self.server.run(Command(cmd=header_content))
+        executor = concurrent.futures.ThreadPoolExecutor()
+        try:
+            future = executor.submit(self.server.run, Command(cmd=header_content))
+            try:
+                result = future.result(timeout=60)  # 60 seconds timeout
+            except Exception:  # Catch any exception, not just TimeoutError
+                # Don't wait for the executor to finish, just abandon it
+                executor.shutdown(wait=False)
+                self.reset()
+                raise  # Re-raise the original exception
+        finally:
+            # Normal cleanup if no exception occurred
+            if 'result' in locals():
+                executor.shutdown(wait=True)
+            else:
+                # If we got here due to exception, don't wait
+                executor.shutdown(wait=False)
+        
         # Cache the environment before returning it
         self._header_envs[header_content] = result.env
         return result.env
@@ -986,13 +1004,30 @@ class UnifiedLeanEnvironment:
         # breakpoint()
         env = self.get_or_create_header_env(header_content)
         
-        ret = self.server.run(Command(cmd=input_content, env=env, **kwargs))
-        if env > 200:
+        executor = concurrent.futures.ThreadPoolExecutor()
+        try:
+            future = executor.submit(self.server.run, Command(cmd=input_content, env=env, **kwargs))
+            try:
+                ret = future.result(timeout=60)  # 60 seconds timeout
+            except Exception:  # Catch any exception, not just TimeoutError
+                # Don't wait for the executor to finish, just abandon it
+                executor.shutdown(wait=False)
+                self.reset()
+                raise  # Re-raise the original exception
+        finally:
+            # Normal cleanup if no exception occurred
+            if 'ret' in locals():
+                executor.shutdown(wait=True)
+            else:
+                # If we got here due to exception, don't wait
+                executor.shutdown(wait=False)
+        
+        if env > 100:
             self.reset()
         return ret
     
     def reset(self):
-        self.server.restart()
+        self.server = LeanServer(self.config) 
         self._header_envs.clear()
 
 # Global unified environment instance

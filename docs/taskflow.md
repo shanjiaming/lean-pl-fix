@@ -51,6 +51,53 @@ This document outlines the planned and completed tasks for improving the Lean en
 
 ## Completed Tasks
 
+### Implement Timeout Mechanism for Step Processing
+**Status**: ✅ Completed  
+**Description**: Added a 2-minute timeout mechanism for each step in the decomposition pipeline to prevent infinite loops and improve system reliability.
+
+**Understanding:**
+The decomposition pipeline could potentially hang on complex problems or get stuck in infinite loops during step processing. This creates reliability issues and makes the system unpredictable.
+
+**Plan (as implemented):**
+
+1. **Timeout Infrastructure:**
+   * Added `StepTimeoutError` custom exception class for handling timeout scenarios
+   * Implemented `timeout_handler` function using the `signal` module
+   * Set 2-minute (120 seconds) timeout for each step processing using `signal.alarm()`
+
+2. **Step Processing Timeout:**
+   * Modified `step_decomposer` function in `decompose_hole_merge_pipeline.py` to include timeout control
+   * Each step now has a 2-minute timeout limit during processing
+   * Timeout is set at the beginning of each step and cleared after completion
+   * Added proper exception handling for timeout scenarios
+
+3. **Timeout Handling:**
+   * When timeout occurs, creates a fallback `DecompositionStep` with:
+     - Simple hole content (`proof_framework + "\n  hole"`)
+     - Admit as filled content (`proof_framework + "\n  admit"`)
+     - Timeout information in `additional_info` including processing time and error message
+     - Verification status set to `None` (not verified due to timeout)
+   * Logs timeout events with processing time for debugging
+
+4. **Error Handling:**
+   * Added similar fallback mechanism for other exceptions during step processing
+   * Ensures the pipeline continues even when individual steps fail
+   * All exceptions are properly logged with timing information
+
+5. **Signal Management:**
+   * Added `finally` block in `decompose_problem` method to ensure `signal.alarm(0)` is called
+   * Prevents signal leakage between different problem processing sessions
+   * Ensures clean signal state regardless of success or failure
+
+**Benefits:**
+* Prevents infinite loops and hanging during step processing
+* Improves system reliability and predictability
+* Provides fallback mechanisms for problematic steps
+* Maintains detailed logging for debugging timeout issues
+* Ensures the pipeline can continue processing even when individual steps timeout
+
+**Status:** Completed.
+
 ### Refactor Decompose-Hole-Merge Pipeline
 **Status**: ✅ Completed  
 **Description**: Improved code quality and workflow, ensuring all verification checks function correctly.
@@ -837,7 +884,3 @@ theorem h₇₁ (x y : ℝ) (hx : 1 < x) (hy : 1 < y) (h₁ : logb x (y ^ x) = 1
 ```
 
 better to be fixed in a more standard way(symtree)
-
-2. 整体 pass and fail should 也在各自的文件夹中能看到。
-3. filter long decomposition task
-4. counting number should reset from 1

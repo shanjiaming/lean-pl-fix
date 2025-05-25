@@ -17,8 +17,8 @@ def query_dpv2(input_content):
         extra_headers={
     },
     extra_body={},
-    # model="deepseek/deepseek-prover-v2:free",
-    model="deepseek/deepseek-prover-v2",
+    model="deepseek/deepseek-prover-v2:free",
+    # model="deepseek/deepseek-prover-v2",
     messages=[
         {
         "role": "user",

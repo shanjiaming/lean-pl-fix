@@ -85,12 +85,12 @@ theorem aime_2025i_p1 (S : Finset ℕ) (h₀ : ∀ (b : ℕ), b ∈ S ↔ b > 9 
     --      norm_num <;> (try decide) <;>
     --        (try {norm_num <;> (try decide)
     --          })
-    admit
+    hole
   have h₂ : (∑ b in S, b) = 70:= by
     --  rw [h₁]
     --  norm_num <;> (try decide) <;>
       (try {norm_num <;> (try decide)
         })
-    admit
+    hole
   --  exact h₂
   linarith

@@ -1,0 +1,7 @@
+theorem h₉ (dist_fun : ℝ → ℝ) (hdist_fun : dist_fun = fun x => min (x - (↑⌊x⌋ : ℝ)) ((↑⌈x⌉ : ℝ) - x)) (fact h₁ : sorry) (h₂ : 3 < π) (h₃ : π ≤ 4) (h₄ : (fun N => ∏ n ∈ Finset.Icc 1 N, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1))) 1 = 4 / 3) (h₅ : ∏ n ∈ Finset.Icc 1 1, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1)) = 4 / 3) (h₆ : sorry) (h₇ : ∏ n ∈ Finset.Icc 1 1, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1)) = 4 / 3) (h₈ : sorry) : ∀ N ≥ 1, ∏ n ∈ Finset.Icc 1 N, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1)) > 1 :=
+  by
+  --  intro N hN
+  have h₁₀ : ∀ n : ℕ, n ≥ 1 → ((2 * n : ℝ) / (2 * n - 1)) * ((2 * n : ℝ) / (2 * n + 1)) > 1 := by sorry
+  have h₁₁ : ∀ N : ℕ, N ≥ 1 → ∏ n in Finset.Icc 1 N, ((2 * n : ℝ) / (2 * n - 1)) * ((2 * n : ℝ) / (2 * n + 1)) > 1 := by sorry
+  --  exact h₁₁ N hN
+  hole

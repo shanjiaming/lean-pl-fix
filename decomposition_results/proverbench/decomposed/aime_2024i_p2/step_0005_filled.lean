@@ -8,4 +8,4 @@ theorem h₇₁ (x y : ℝ) (hx : 1 < x) (hy : 1 < y) (h₁ : logb x (y ^ x) = 1
         Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < x) (by linarith : x ≠ 1),
         Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < y) (by linarith : y ≠ 1)] <;>
     ring
-  admit
+  hole

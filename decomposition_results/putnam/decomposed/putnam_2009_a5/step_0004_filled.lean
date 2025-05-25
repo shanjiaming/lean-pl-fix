@@ -1,0 +1,2 @@
+theorem h3 (G : Type u_2) (w✝¹ : CommGroup G) (w✝ : Fintype G) (hG h1 h2 : ∏ g, orderOf g = 2 ^ 2009) : 2 ^ 2009 > 1 := by apply Nat.one_lt_pow (by norm_num) (by norm_num)
+  hole

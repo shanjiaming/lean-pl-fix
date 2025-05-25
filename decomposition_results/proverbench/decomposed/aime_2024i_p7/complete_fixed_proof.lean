@@ -10,7 +10,7 @@ theorem aime_2024i_p7 (f : ℂ → ℂ) (h₀ : ∀ (z : ℂ), f z = (75 + 117 *
         --        rw [Real.sqrt_eq_iff_sq_eq] <;>
             ring_nf <;>
           norm_num
-        admit
+        hole
       have h₂ : (f ((12 / 5 : ℂ) - (16 / 5 : ℂ) * Complex.I)).re = (540 : ℝ):=
         by
         --  rw [h₀]
@@ -21,7 +21,7 @@ theorem aime_2024i_p7 (f : ℂ → ℂ) (h₀ : ∀ (z : ℂ), f z = (75 + 117 *
               simp_all [Complex.ext_iff, Complex.div_re, Complex.div_im, Complex.normSq, pow_two] <;>
             norm_num <;>
           linarith
-        admit
+        hole
     --    exact ⟨h₁, h₂⟩
     --  · rintro x ⟨z, hz, hx⟩
       have h₁ : Complex.abs z = 4 := hz
@@ -35,7 +35,7 @@ theorem aime_2024i_p7 (f : ℂ → ℂ) (h₀ : ∀ (z : ℂ), f z = (75 + 117 *
                 simp_all [Complex.ext_iff, Complex.div_re, Complex.div_im, Complex.normSq, pow_two] <;>
               norm_num <;>
             linarith
-          admit
+          hole
         have h₅ : (((75 + 117 * Complex.I) * z + (96 + 144 * Complex.I) / z) : ℂ).re ≤ 540:=
           by
           have h₅₁ : (((75 + 117 * Complex.I) * z + (96 + 144 * Complex.I) / z) : ℂ).re = 81 * z.re - 108 * z.im:= by
@@ -79,7 +79,7 @@ theorem aime_2024i_p7 (f : ℂ → ℂ) (h₀ : ∀ (z : ℂ), f z = (75 + 117 *
               have h₅₂₇ : Real.sqrt (z.re * z.re + z.im * z.im) ^ 2 = z.re * z.re + z.im * z.im := by
                 rw [Real.sq_sqrt] <;> nlinarith
               nlinarith
-              admit
+              hole
             --  exact h₅₂₄
             linarith
           --  nlinarith [sq_nonneg (z.re - 12 / 5), sq_nonneg (z.im + 16 / 5), sq_nonneg (z.re + 12 / 5), sq_nonneg (z.im - 16 / 5)]
@@ -87,6 +87,6 @@ theorem aime_2024i_p7 (f : ℂ → ℂ) (h₀ : ∀ (z : ℂ), f z = (75 + 117 *
         --  simpa [Complex.ext_iff, Complex.div_re, Complex.div_im, Complex.normSq, pow_two] using h₅
         hole
     --    linarith
-    admit
+    hole
   --  exact h_main
   simpa

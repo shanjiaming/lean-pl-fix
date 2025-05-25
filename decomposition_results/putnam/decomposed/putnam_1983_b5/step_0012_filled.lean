@@ -1,0 +1,4 @@
+theorem h₁₀ (dist_fun : ℝ → ℝ) (hdist_fun : dist_fun = fun x => min (x - (↑⌊x⌋ : ℝ)) ((↑⌈x⌉ : ℝ) - x)) (fact h₁ : sorry) (h₂ : 3 < π) (h₃ : π ≤ 4) (h₄ : (fun N => ∏ n ∈ Finset.Icc 1 N, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1))) 1 = 4 / 3) (h₅ : ∏ n ∈ Finset.Icc 1 1, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1)) = 4 / 3) (h₆ : sorry) (h₇ : ∏ n ∈ Finset.Icc 1 1, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1)) = 4 / 3) (h₈ : sorry) (h₉ : ∀ N ≥ 1, ∏ n ∈ Finset.Icc 1 N, 2 * (↑n : ℝ) / (2 * (↑n : ℝ) - 1) * (2 * (↑n : ℝ) / (2 * (↑n : ℝ) + 1)) > 1) : π / 2 > 1 := by
+  have h₁₁ := Real.pi_gt_three
+  --  linarith
+  hole

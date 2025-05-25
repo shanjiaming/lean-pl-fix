@@ -19,7 +19,7 @@ theorem aime_2024i_p2 (x y : ℝ) (hx : 1 < x) (hy : 1 < y) (h₁ : Real.logb x 
             Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < x) (by linarith : x ≠ 1),
             Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < y) (by linarith : y ≠ 1)] <;>
         ring
-      admit
+      hole
     --  rw [h₇₁] at h₁
     have h₇₂ : (x * Real.log y) / Real.log x = 10:= by -- linarith
       linarith
@@ -40,7 +40,7 @@ theorem aime_2024i_p2 (x y : ℝ) (hx : 1 < x) (hy : 1 < y) (h₁ : Real.logb x 
       --  rw [h₈₃] <;> field_simp [Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < y) (by linarith : y ≠ 1)] <;> ring <;>
           field_simp [Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < y) (by linarith : y ≠ 1)] <;>
         ring
-      admit
+      hole
     --  rw [h₈₁] at h₂
     have h₈₄ : (4 * y * Real.log x) / Real.log y = 10:= by -- linarith
       linarith

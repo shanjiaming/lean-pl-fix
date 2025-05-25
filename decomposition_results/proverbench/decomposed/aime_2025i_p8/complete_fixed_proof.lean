@@ -22,7 +22,7 @@ theorem aime_2025i_p8 (ans : ℚ) (S : Finset ℝ)
           ring_nf at * <;>
         field_simp at * <;>
       nlinarith [Real.sq_sqrt (show 0 ≤ 639760 by norm_num), Real.sqrt_nonneg (639760 : ℝ)]
-    admit
+    hole
   have h₂ : ans.num = 73:= by
     have h₃ : ans = 73 / 4 := h₁
     --  --  rw [h₃] <;> norm_num [Rat.num_div_den] <;> rfl

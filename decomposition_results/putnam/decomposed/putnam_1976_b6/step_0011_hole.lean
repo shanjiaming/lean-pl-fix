@@ -1,0 +1,2 @@
+theorem h₈ (σ : ℕ → ℤ) (hσ : σ = fun N => ∑ d ∈ N.divisors, (↑d : ℤ)) (quasiperfect : ℕ → Prop) (quasiperfect_def : ∀ (N : ℕ), quasiperfect N ↔ σ N = 2 * (↑N : ℤ) + 1) (N : ℕ) (h_quasiperfect : quasiperfect N) (h₂ : ∑ d ∈ N.divisors, (↑d : ℤ) = 2 * (↑N : ℤ) + 1) (h₃ : σ N = ∑ d ∈ N.divisors, (↑d : ℤ)) (h₄ : ∑ d ∈ N.divisors, (↑d : ℤ) = 2 * (↑N : ℤ) + 1) (h₅ : N ≥ 2) (h₇ : sorry) : sorry := by -- simp [Nat.mem_divisors, Nat.dvd_refl] <;> omega
+  hole

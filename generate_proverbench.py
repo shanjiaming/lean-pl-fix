@@ -108,6 +108,8 @@ def process_single_problem(problem_data, base_dir, global_rate_limiter):
     start_tag = "```lean4"
     end_tag = "```"
     start_index = api_response_content.rfind(start_tag)
+    if start_index == -1:
+        start_index = api_response_content.rfind("```lean")
     
     extracted_code = ""
     if start_index != -1:

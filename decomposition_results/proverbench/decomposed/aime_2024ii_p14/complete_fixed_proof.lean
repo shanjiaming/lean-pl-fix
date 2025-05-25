@@ -11,7 +11,7 @@ theorem aime_2024ii_p14 (b : ℕ) (h₀ : 2 ≤ b) (h₁ : (beautifulSet b).card
       --  intro h₇
       have h₈ : (beautifulSet b).card < 10 := h₂ b h₇
       --  linarith
-      admit
+      hole
     have h₉ : b ∉ Finset.Ico 2 b:= by
       --  intro h₇
       --  exact h₆ h₇
@@ -46,9 +46,9 @@ theorem aime_2024ii_p14 (b : ℕ) (h₀ : 2 ≤ b) (h₁ : (beautifulSet b).card
         --    trivial
         hole
       --  exact h₉
-      admit
+      hole
     --  omega <;> trivial <;> omega
-    admit
+    hole
   have h₅ : b = 211:= by
     have h₅₁ : b ≥ 211 := h₃
     have h₅₂ : b ≤ 211 := h₄
