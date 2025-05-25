@@ -704,8 +704,21 @@ def main():
     
     if command == "dataset":
         dataset_name = sys.argv[2]
-        limit = int(sys.argv[3]) if len(sys.argv) > 3 else None
-        filling_method = sys.argv[4] if len(sys.argv) > 4 else "simple"
+        
+        # Smart parameter parsing: check if 3rd argument is a number or method name
+        limit = None
+        filling_method = "simple"
+        
+        if len(sys.argv) > 3:
+            try:
+                # Try to parse 3rd argument as integer (limit)
+                limit = int(sys.argv[3])
+                # If successful, 4th argument (if exists) is filling_method
+                filling_method = sys.argv[4] if len(sys.argv) > 4 else "simple"
+            except ValueError:
+                # 3rd argument is not a number, treat it as filling_method
+                filling_method = sys.argv[3]
+                limit = None
         
         # Choose hole filling function based on method
         if filling_method == "unigram":

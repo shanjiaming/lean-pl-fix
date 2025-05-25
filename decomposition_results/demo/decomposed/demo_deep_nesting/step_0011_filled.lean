@@ -1,2 +1,0 @@
-theorem h5 (a b : ℕ) (h_eq : a + b = 5) (h_gt : a > b) (h1 : a ≤ 5) (h2 : b ≤ 5) (h3 : a > b) (h4 : a + b = 5) : a = 3 ∧ b = 2 := by -- -- -- -- interval_cases a <;> interval_cases b <;> norm_num at h3 h4 ⊢ <;> omega
-  admit

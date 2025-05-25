@@ -4,37 +4,6 @@ This document outlines the planned and completed tasks for improving the Lean en
 
 ## Current Tasks
 
-### Setup OCaml SAT Solver Project (In Progress)
-
-**Understanding:**
-
-The user wants to run a command that builds and executes an OCaml-based SAT solver with CDCL (Conflict-Driven Clause Learning) implementation. The command is:
-`dune build bin/main.exe && _build/default/bin/main.exe test/bench/ssa/unsat/ssa2670-130.cnf -s cdcl -c -v debug > debug.log 2>&1`
-
-This suggests we need to set up an OCaml SAT solver project that uses the dune build system.
-
-**Plan:**
-
-1. **Install OCaml and dune:**
-   * Install OCaml compiler and package manager (opam)
-   * Install dune build system
-   * Set up the development environment
-
-2. **Create or Clone SAT Solver Project:**
-   * Either create a new OCaml SAT solver from scratch
-   * Or clone an existing CDCL SAT solver implementation
-   * Set up the project structure with proper dune files
-
-3. **Test Files Setup:**
-   * Create the test directory structure (test/bench/ssa/unsat/)
-   * Ensure the CNF test file (ssa2670-130.cnf) is available
-
-4. **Build and Run:**
-   * Execute the requested dune build command
-   * Run the SAT solver with the specified parameters
-
-**Status:** Not started - Need clarification on whether to create new SAT solver or clone existing one.
-
 ### Improve Decompose-Hole-Merge Pipeline Data Storage and Recording
 **Status**: In Progress
 **Understanding**: The current pipeline saves results only at the end of processing, which can lead to data loss if the process is interrupted. We need to modify the code to save results after each problem is processed.
@@ -845,3 +814,30 @@ Implemented a comprehensive pipeline for decomposing Lean proofs with holes, fix
 - Individual step files saved with detailed metadata
 - Complete fixed proofs saved for verification
 - Processing logs and error reports maintained
+
+tobedone:
+1. inline tab has recognition problem
+```lean4
+import Mathlib
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat
+theorem h₇₁ (x y : ℝ) (hx : 1 < x) (hy : 1 < y) (h₁ : logb x (y ^ x) = 10) (h₂ : logb y (x ^ (4 * y)) = 10) (h₃ : x > 0) (h₄ : y > 0) (h₅ : Real.log x > 0) (h₆ : Real.log y > 0) : logb x (y ^ x) = x * Real.log y / Real.log x := by
+  --  rw [Real.logb, Real.log_pow, Real.log_pow] <;>
+          field_simp [Real.log_mul, Real.log_rpow, h₃.ne', h₄.ne',
+            Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < x) (by linarith : x ≠ 1),
+            Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < y) (by linarith : y ≠ 1)] <;>
+          ring <;>
+          field_simp [Real.log_mul, Real.log_rpow, h₃.ne', h₄.ne',
+          Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < x) (by linarith : x ≠ 1),
+          Real.log_ne_zero_of_pos_of_ne_one (by linarith : 0 < y) (by linarith : y ≠ 1)] <;>
+          ring
+  -- admit
+```
+
+better to be fixed in a more standard way(symtree)
+
+2. 整体 pass and fail should 也在各自的文件夹中能看到。
+3. filter long decomposition task
+4. counting number should reset from 1
