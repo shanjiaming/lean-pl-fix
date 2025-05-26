@@ -1,0 +1,266 @@
+theorem h₉ (f : ℤ → ℤ) (hf : f = fun n => ∑ m ∈ Finset.Icc 0 n, if Even m then m / 2 else (m - 1) / 2) (x y : ℤ) (hx : x > 0) (hy : y > 0) (hxy : x > y) (h₁ : f = fun n => ∑ m ∈ Finset.Icc 0 n, if Even m then m / 2 else (m - 1) / 2) (h₂ : x + y > 0) (h₃ : x - y > 0) (h₄ : x + y > 0) (h₅ : x - y > 0) (h₆ : (x + y) % 2 = 0 ∨ (x + y) % 2 = 1) (h₇ : (x - y) % 2 = 0 ∨ (x - y) % 2 = 1) (h₈ : (x + y) % 2 = (x - y) % 2) : x * y =
+    (∑ m ∈ Finset.Icc 0 (x + y), if Even m then m / 2 else (m - 1) / 2) -
+      ∑ m ∈ Finset.Icc 0 (x - y), if Even m then m / 2 else (m - 1) / 2 :=
+  by
+  have h₉₁ : (x + y) % 2 = 0 ∨ (x + y) % 2 = 1 := by sorry
+  cases h₉₁ with
+  | inl h₉₁ =>
+    have h₉₂ : (x - y) % 2 = 0 := by omega
+    have h₉₃ : ∃ k, x + y = 2 * k := by
+      use (x + y) / 2
+      have h₉₄ : (x + y) % 2 = 0 := h₉₁
+      omega
+    have h₉₄ : ∃ l, x - y = 2 * l := by
+      use (x - y) / 2
+      have h₉₅ : (x - y) % 2 = 0 := h₉₂
+      omega
+    rcases h₉₃ with ⟨k, hk⟩
+    rcases h₉₄ with ⟨l, hl⟩
+    have h₉₅ : k > l := by
+      have h₉₅₁ : x + y = 2 * k := hk
+      have h₉₅₂ : x - y = 2 * l := hl
+      nlinarith
+    have h₉₆ : k > 0 := by nlinarith
+    have h₉₇ : l > 0 := by nlinarith
+    have h₉₈ : (∑ m in Finset.Icc 0 (x + y), (if Even m then m / 2 else (m - 1) / 2)) = k ^ 2 :=
+      by
+      have h₉₈₁ : x + y = 2 * k := hk
+      have h₉₈₂ :
+        (∑ m in Finset.Icc 0 (x + y), (if Even m then m / 2 else (m - 1) / 2)) =
+          (∑ m in Finset.Icc 0 (2 * k), (if Even m then m / 2 else (m - 1) / 2)) :=
+        by rw [h₉₈₁]
+      rw [h₉₈₂]
+      have h₉₈₃ : (∑ m in Finset.Icc 0 (2 * k), (if Even m then m / 2 else (m - 1) / 2)) = k ^ 2 :=
+        by
+        have h₉₈₄ : ∀ (n : ℤ), n ≥ 0 → (∑ m in Finset.Icc 0 (2 * n), (if Even m then m / 2 else (m - 1) / 2)) = n ^ 2 :=
+          by
+          intro n hn
+          have h₉₈₅ :
+            ∀ (n : ℕ),
+              (∑ m in Finset.Icc 0 (2 * n), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) = n ^ 2 :=
+            by
+            intro n
+            induction n with
+            | zero => simp [Finset.sum_range_zero, Finset.Icc_self]
+            | succ n ih =>
+              rw [show (2 * (n + 1) : ℤ) = 2 * n + 2 by ring]
+              rw [Finset.sum_Icc_succ_top (by omega : (2 * n : ℤ) ≤ 2 * n + 2)]
+              rw [ih]
+              simp [Finset.sum_Icc_succ_top, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ,
+                        Even] <;>
+                      (try omega) <;>
+                    (try ring_nf at * <;> omega) <;>
+                  (try
+                      {cases' Nat.even_or_odd n with h h <;> cases' Nat.even_or_odd (n + 1) with h₁ h₁ <;>
+                            simp_all [Nat.even_iff, Nat.odd_iff, Nat.mod_eq_of_lt, Nat.succ_pos] <;>
+                          ring_nf at * <;>
+                        omega
+                    }) <;>
+                (try
+                    {simp_all [Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero,
+                          Nat.cast_succ, Even] <;>
+                        ring_nf at * <;>
+                      omega
+                  })
+          have h₉₈₆ : n ≥ 0 := hn
+          have h₉₈₇ : (n : ℤ) ≥ 0 := by exact_mod_cast h₉₈₆
+          have h₉₈₈ :
+            (∑ m in Finset.Icc 0 (2 * n), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) = n ^ 2 := by
+            exact_mod_cast h₉₈₅ n.toNat
+          simpa [h₉₈₇] using h₉₈₈
+        have h₉₈₉ : k ≥ 0 := by nlinarith
+        have h₉₉₀ : (∑ m in Finset.Icc 0 (2 * k), (if Even m then m / 2 else (m - 1) / 2)) = k ^ 2 := by
+          exact h₉₈₄ k h₉₈₉
+        exact h₉₉₀
+      rw [h₉₈₃]
+    have h₉₉₁ : (∑ m in Finset.Icc 0 (x - y), (if Even m then m / 2 else (m - 1) / 2)) = l ^ 2 :=
+      by
+      have h₉₉₁₁ : x - y = 2 * l := hl
+      have h₉₉₁₂ :
+        (∑ m in Finset.Icc 0 (x - y), (if Even m then m / 2 else (m - 1) / 2)) =
+          (∑ m in Finset.Icc 0 (2 * l), (if Even m then m / 2 else (m - 1) / 2)) :=
+        by rw [h₉₉₁₁]
+      rw [h₉₉₁₂]
+      have h₉₉₁₃ : (∑ m in Finset.Icc 0 (2 * l), (if Even m then m / 2 else (m - 1) / 2)) = l ^ 2 :=
+        by
+        have h₉₉₁₄ :
+          ∀ (n : ℤ), n ≥ 0 → (∑ m in Finset.Icc 0 (2 * n), (if Even m then m / 2 else (m - 1) / 2)) = n ^ 2 :=
+          by
+          intro n hn
+          have h₉₉₁₅ :
+            ∀ (n : ℕ),
+              (∑ m in Finset.Icc 0 (2 * n), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) = n ^ 2 :=
+            by
+            intro n
+            induction n with
+            | zero => simp [Finset.sum_range_zero, Finset.Icc_self]
+            | succ n ih =>
+              rw [show (2 * (n + 1) : ℤ) = 2 * n + 2 by ring]
+              rw [Finset.sum_Icc_succ_top (by omega : (2 * n : ℤ) ≤ 2 * n + 2)]
+              rw [ih]
+              simp [Finset.sum_Icc_succ_top, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ,
+                        Even] <;>
+                      (try omega) <;>
+                    (try ring_nf at * <;> omega) <;>
+                  (try
+                      {cases' Nat.even_or_odd n with h h <;> cases' Nat.even_or_odd (n + 1) with h₁ h₁ <;>
+                            simp_all [Nat.even_iff, Nat.odd_iff, Nat.mod_eq_of_lt, Nat.succ_pos] <;>
+                          ring_nf at * <;>
+                        omega
+                    }) <;>
+                (try
+                    {simp_all [Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero,
+                          Nat.cast_succ, Even] <;>
+                        ring_nf at * <;>
+                      omega
+                  })
+          have h₉₉₁₆ : n ≥ 0 := hn
+          have h₉₉₁₇ : (n : ℤ) ≥ 0 := by exact_mod_cast h₉₉₁₆
+          have h₉₉₁₈ :
+            (∑ m in Finset.Icc 0 (2 * n), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) = n ^ 2 := by
+            exact_mod_cast h₉₉₁₅ n.toNat
+          simpa [h₉₉₁₇] using h₉₉₁₈
+        have h₉₉₁₉ : l ≥ 0 := by nlinarith
+        have h₉₉₂₀ : (∑ m in Finset.Icc 0 (2 * l), (if Even m then m / 2 else (m - 1) / 2)) = l ^ 2 := by
+          exact h₉₉₁₄ l h₉₉₁₉
+        exact h₉₉₂₀
+      rw [h₉₉₁₃]
+    have h₉₉₂₁ : x * y = k ^ 2 - l ^ 2 := by
+      have h₉₉₂₁₁ : x = k + l := by nlinarith
+      have h₉₉₂₁₂ : y = k - l := by nlinarith
+      rw [h₉₉₂₁₁, h₉₉₂₁₂]
+      ring_nf <;> nlinarith
+    rw [h₉₈, h₉₉₁, h₉₉₂₁] <;> ring_nf <;> nlinarith
+  | inr h₉₁ =>
+    have h₉₂ : (x - y) % 2 = 1 := by omega
+    have h₉₃ : ∃ k, x + y = 2 * k + 1 := by
+      use ((x + y) - 1) / 2
+      have h₉₄ : (x + y) % 2 = 1 := by omega
+      omega
+    have h₉₄ : ∃ l, x - y = 2 * l + 1 := by
+      use ((x - y) - 1) / 2
+      have h₉₅ : (x - y) % 2 = 1 := by omega
+      omega
+    rcases h₉₃ with ⟨k, hk⟩
+    rcases h₉₄ with ⟨l, hl⟩
+    have h₉₅ : k > l := by
+      have h₉₅₁ : x + y = 2 * k + 1 := hk
+      have h₉₅₂ : x - y = 2 * l + 1 := hl
+      nlinarith
+    have h₉₆ : k > 0 := by nlinarith
+    have h₉₇ : l ≥ 0 := by nlinarith
+    have h₉₈ : (∑ m in Finset.Icc 0 (x + y), (if Even m then m / 2 else (m - 1) / 2)) = k * (k + 1) :=
+      by
+      have h₉₈₁ : x + y = 2 * k + 1 := hk
+      have h₉₈₂ :
+        (∑ m in Finset.Icc 0 (x + y), (if Even m then m / 2 else (m - 1) / 2)) =
+          (∑ m in Finset.Icc 0 (2 * k + 1), (if Even m then m / 2 else (m - 1) / 2)) :=
+        by rw [h₉₈₁]
+      rw [h₉₈₂]
+      have h₉₈₃ : (∑ m in Finset.Icc 0 (2 * k + 1), (if Even m then m / 2 else (m - 1) / 2)) = k * (k + 1) :=
+        by
+        have h₉₈₄ :
+          ∀ (n : ℤ), n ≥ 0 → (∑ m in Finset.Icc 0 (2 * n + 1), (if Even m then m / 2 else (m - 1) / 2)) = n * (n + 1) :=
+          by
+          intro n hn
+          have h₉₈₅ :
+            ∀ (n : ℕ),
+              (∑ m in Finset.Icc 0 (2 * n + 1), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) =
+                n * (n + 1) :=
+            by
+            intro n
+            induction n with
+            | zero => simp [Finset.sum_range_zero, Finset.Icc_self]
+            | succ n ih =>
+              rw [show (2 * (n + 1 : ℕ) + 1 : ℤ) = 2 * n + 1 + 2 by ring]
+              rw [Finset.sum_Icc_succ_top (by omega : (2 * n + 1 : ℤ) ≤ 2 * n + 1 + 2)]
+              rw [ih]
+              simp [Finset.sum_Icc_succ_top, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ,
+                        Even] <;>
+                      (try omega) <;>
+                    (try ring_nf at * <;> omega) <;>
+                  (try
+                      {cases' Nat.even_or_odd n with h h <;> cases' Nat.even_or_odd (n + 1) with h₁ h₁ <;>
+                            simp_all [Nat.even_iff, Nat.odd_iff, Nat.mod_eq_of_lt, Nat.succ_pos] <;>
+                          ring_nf at * <;>
+                        omega
+                    }) <;>
+                (try
+                    {simp_all [Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero,
+                          Nat.cast_succ, Even] <;>
+                        ring_nf at * <;>
+                      omega
+                  })
+          have h₉₈₆ : n ≥ 0 := hn
+          have h₉₈₇ : (n : ℤ) ≥ 0 := by exact_mod_cast h₉₈₆
+          have h₉₈₈ :
+            (∑ m in Finset.Icc 0 (2 * n + 1), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) =
+              n * (n + 1) :=
+            by exact_mod_cast h₉₈₅ n.toNat
+          simpa [h₉₈₇] using h₉₈₈
+        have h₉₈₉ : k ≥ 0 := by nlinarith
+        have h₉₉₀ : (∑ m in Finset.Icc 0 (2 * k + 1), (if Even m then m / 2 else (m - 1) / 2)) = k * (k + 1) := by
+          exact h₉₈₄ k h₉₈₉
+        exact h₉₉₀
+      rw [h₉₈₃]
+    have h₉₉₁ : (∑ m in Finset.Icc 0 (x - y), (if Even m then m / 2 else (m - 1) / 2)) = l * (l + 1) :=
+      by
+      have h₉₉₁₁ : x - y = 2 * l + 1 := hl
+      have h₉₉₁₂ :
+        (∑ m in Finset.Icc 0 (x - y), (if Even m then m / 2 else (m - 1) / 2)) =
+          (∑ m in Finset.Icc 0 (2 * l + 1), (if Even m then m / 2 else (m - 1) / 2)) :=
+        by rw [h₉₉₁₁]
+      rw [h₉₉₁₂]
+      have h₉₉₁₃ : (∑ m in Finset.Icc 0 (2 * l + 1), (if Even m then m / 2 else (m - 1) / 2)) = l * (l + 1) :=
+        by
+        have h₉₉₁₄ :
+          ∀ (n : ℤ), n ≥ 0 → (∑ m in Finset.Icc 0 (2 * n + 1), (if Even m then m / 2 else (m - 1) / 2)) = n * (n + 1) :=
+          by
+          intro n hn
+          have h₉₉₁₅ :
+            ∀ (n : ℕ),
+              (∑ m in Finset.Icc 0 (2 * n + 1), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) =
+                n * (n + 1) :=
+            by
+            intro n
+            induction n with
+            | zero => simp [Finset.sum_range_zero, Finset.Icc_self]
+            | succ n ih =>
+              rw [show (2 * (n + 1 : ℕ) + 1 : ℤ) = 2 * n + 1 + 2 by ring]
+              rw [Finset.sum_Icc_succ_top (by omega : (2 * n + 1 : ℤ) ≤ 2 * n + 1 + 2)]
+              rw [ih]
+              simp [Finset.sum_Icc_succ_top, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ,
+                        Even] <;>
+                      (try omega) <;>
+                    (try ring_nf at * <;> omega) <;>
+                  (try
+                      {cases' Nat.even_or_odd n with h h <;> cases' Nat.even_or_odd (n + 1) with h₁ h₁ <;>
+                            simp_all [Nat.even_iff, Nat.odd_iff, Nat.mod_eq_of_lt, Nat.succ_pos] <;>
+                          ring_nf at * <;>
+                        omega
+                    }) <;>
+                (try
+                    {simp_all [Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero,
+                          Nat.cast_succ, Even] <;>
+                        ring_nf at * <;>
+                      omega
+                  })
+          have h₉₉₁₆ : n ≥ 0 := hn
+          have h₉₉₁₇ : (n : ℤ) ≥ 0 := by exact_mod_cast h₉₉₁₆
+          have h₉₉₁₈ :
+            (∑ m in Finset.Icc 0 (2 * n + 1), (if Even (m : ℤ) then (m : ℤ) / 2 else ((m : ℤ) - 1) / 2)) =
+              n * (n + 1) :=
+            by exact_mod_cast h₉₉₁₅ n.toNat
+          simpa [h₉₉₁₇] using h₉₉₁₈
+        have h₉₉₁₉ : l ≥ 0 := by nlinarith
+        have h₉₉₂₀ : (∑ m in Finset.Icc 0 (2 * l + 1), (if Even m then m / 2 else (m - 1) / 2)) = l * (l + 1) := by
+          exact h₉₉₁₄ l h₉₉₁₉
+        exact h₉₉₂₀
+      rw [h₉₉₁₃]
+    have h₉₉₂₁ : x * y = k * (k + 1) - l * (l + 1) :=
+      by
+      have h₉₉₂₁₁ : x = k + l + 1 := by nlinarith
+      have h₉₉₂₁₂ : y = k - l := by nlinarith
+      rw [h₉₉₂₁₁, h₉₉₂₁₂]
+      ring_nf <;> nlinarith
+    rw [h₉₈, h₉₉₁, h₉₉₂₁] <;> ring_nf <;> nlinarith

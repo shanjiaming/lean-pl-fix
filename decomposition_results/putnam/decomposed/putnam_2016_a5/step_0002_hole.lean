@@ -1,0 +1,2 @@
+theorem h1 (G : Type u_1) (inst✝ : Group G) (Gfin : Fintype G) (g h : G) (ghgen : sorry = G ∧ ¬sorry = G ∧ ¬sorry = G) (godd : Odd (orderOf g)) (S : Set G) (hS : S = {g * h, g⁻¹ * h, g * h⁻¹, g⁻¹ * h⁻¹}) : False := by sorry
+  hole

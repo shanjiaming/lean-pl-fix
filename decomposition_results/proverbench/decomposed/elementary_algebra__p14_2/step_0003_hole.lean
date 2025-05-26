@@ -1,0 +1,2 @@
+theorem h₁ (h : sorry ≠ 0) : sorry ^ 3 ≠ 0 := by -- exact pow_ne_zero 3 h
+  hole

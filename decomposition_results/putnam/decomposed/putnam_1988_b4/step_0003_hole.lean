@@ -1,0 +1,2 @@
+theorem h₂ (a : ℕ → ℝ) (IsPosConv : (ℕ → ℝ) → Prop) (IsPosConv_def : ∀ (a' : ℕ → ℝ), IsPosConv a' ↔ (∀ n ≥ 1, a' n > 0) ∧ ∃ s, sorry) (h : IsPosConv a) (h₁ : (∀ n ≥ 1, a n > 0) ∧ ∃ s, sorry) : ∀ n ≥ 1, a n > 0 := by -- exact h₁.1
+  hole

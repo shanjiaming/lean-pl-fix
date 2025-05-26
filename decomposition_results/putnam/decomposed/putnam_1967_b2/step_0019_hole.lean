@@ -1,0 +1,3 @@
+theorem h₁ (p r A B C α β γ : ℝ) (prbound : 0 ≤ p ∧ p ≤ 1 ∧ 0 ≤ r ∧ r ≤ 1) (id1 : ∀ (x y : ℝ), (p * x + (1 - p) * y) ^ 2 = A * x ^ 2 + B * x * y + C * y ^ 2) (id2 : ∀ (x y : ℝ), (p * x + (1 - p) * y) * (r * x + (1 - r) * y) = α * x ^ 2 + β * x * y + γ * y ^ 2) (hA : A = p ^ 2) (hB : B = 2 * p * (1 - p)) (hC : C = (1 - p) ^ 2) (h_max_ABC : max (max A B) C ≥ 4 / 9) (hα : α = p * r) (hβ : β = p + r - 2 * p * r) (hγ : γ = (1 - p) * (1 - r)) : α + γ = 1 - β := by
+  --  --  rw [hα, hβ, hγ] <;> ring <;> nlinarith [prbound.1, prbound.2.1, prbound.2.2.1, prbound.2.2.2]
+  hole

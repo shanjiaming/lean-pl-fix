@@ -1,0 +1,8 @@
+theorem h₂ (f : ℕ → ℕ) (hf : ∀ (n : ℕ), some (f n) = List.find? (fun d => decide (d ≠ 0)) (digits 10 n !)) (IsPeriodicFrom : ℕ → (ℕ → ℕ) → ℕ → Prop) (IsPeriodicFrom_def : ∀ (x : ℕ) (f : ℕ → ℕ) (p : ℕ), IsPeriodicFrom x f p ↔ sorry) (P : ℕ → (ℕ → ℕ) → ℕ → Prop) (P_def :  ∀ (x : ℕ) (g : ℕ → ℕ) (p : ℕ),    P x g p ↔ if p = 0 then ∀ q > 0, ¬IsPeriodicFrom x g q else IsLeast {q | 0 < q ∧ IsPeriodicFrom x g q} p) (h₁ : f 125 = 6) : f 30 = 8 :=
+  by
+  have h₃ : some (f 30) = (Nat.digits 10 (30!)).find? (fun d => d ≠ 0) := hf 30
+  have h₄ : (Nat.digits 10 (30!)).find? (fun d => d ≠ 0) = some 8 := by sorry
+  have h₅ : some (f 30) = some 8 := by sorry
+  have h₆ : f 30 = 8 := by sorry
+  --  exact h₆
+  hole

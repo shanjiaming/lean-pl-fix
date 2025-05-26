@@ -1,0 +1,1 @@
+theorem h₁  : sorry = 40 * 2.5 - 16 * 2.5 ^ 2 := by rfl

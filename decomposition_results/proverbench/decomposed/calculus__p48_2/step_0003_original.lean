@@ -1,0 +1,1 @@
+theorem h₃ (x : ℝ) (h₂ : HasSum (fun n => (-1) ^ n / (↑(2 * n)! : ℝ) * x ^ (2 * n)) (cos x)) : ∑' (n : ℕ), (-1) ^ n / (↑(2 * n)! : ℝ) * x ^ (2 * n) = cos x := by exact h₂.tsum_eq

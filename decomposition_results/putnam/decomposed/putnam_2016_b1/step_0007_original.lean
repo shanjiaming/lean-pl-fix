@@ -1,0 +1,1 @@
+theorem h₄ (x : ℕ → ℝ) (hx0 : x 0 = 1) (hxn : ∀ (n : ℕ), x (n + 1) = Real.log (rexp (x n) - x n)) (h_pos : ∀ (n : ℕ), rexp (x n) - x n > 0) (h_pos' : ∀ (n : ℕ), x n > 0) (n : ℕ) (h₁ : x (n + 1) = Real.log (rexp (x n) - x n)) (h₂ : rexp (x n) - x n > 0) : rexp (x n) - x n < rexp (x n) := by linarith [Real.exp_pos (x n)]

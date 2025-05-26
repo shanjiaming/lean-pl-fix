@@ -1,0 +1,1 @@
+theorem h₁₂ (x y : ℤ) (hx : 2 < x) (hy : 2 < y) (z : ℤ) (hz : x ^ 2 + 1 = z * (y ^ 2 - 5)) (h₁ : y = 3 → False) (h₂ : y = 4 → False) (h_y h₄ h₅ : y ≥ 5) (h₆ : y ^ 2 - 5 > 0) (h₇ : x ≥ 3) (h₈ : y ≥ 5) (h₉ : y ^ 2 - 5 > 0) (h₁₀ : x ^ 2 + 1 > 0) (h₁₁ : z > 0) : y ^ 2 - 5 ≥ 20 := by nlinarith

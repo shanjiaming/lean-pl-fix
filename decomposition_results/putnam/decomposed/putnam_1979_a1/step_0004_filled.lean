@@ -1,0 +1,2 @@
+theorem h₃ (P : Multiset ℕ → Prop) (hP : ∀ (a : Multiset ℕ), P a ↔ a.card > 0 ∧ (∀ i ∈ a, i > 0) ∧ a.sum = 1979) (i : ℕ) (hi h₂ : i ∈ Multiset.replicate 659 3 + {2}) : i ∈ Multiset.replicate 659 3 ∨ i ∈ {2} := by simpa [Multiset.mem_add] using h₂
+  hole

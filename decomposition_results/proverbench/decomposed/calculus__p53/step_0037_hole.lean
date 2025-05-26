@@ -1,0 +1,2 @@
+theorem h₅₄ (h₁ : sorry = 100) (h₂ : sorry = 200) (h₄ :  ∫ (x : ℝ) in 100 ..200, 4 / (x ^ 2 - 7 * x + 12) =    4 * (Real.log (200 - 4) - Real.log (200 - 3)) - 4 * (Real.log (100 - 4) - Real.log (100 - 3))) (h₅₁ : Real.log (200 - 4) = Real.log 196) (h₅₂ : Real.log (200 - 3) = Real.log 197) (h₅₃ : Real.log (100 - 4) = Real.log 96) : Real.log (100 - 3) = Real.log 97 := by norm_num
+  hole

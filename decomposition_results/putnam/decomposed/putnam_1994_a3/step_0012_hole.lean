@@ -1,0 +1,8 @@
+theorem h₁₀ (T : Set (EuclideanSpace ℝ (Fin 2))) (hT :  T =    (convexHull ℝ : Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))) → Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))))      {!₂[0, 0], !₂[1, 0], !₂[0, 1]}) (Tcolors : (↑T : Type) → Fin 4) (h₁ : !₂[0, 0] ∈ T) (h₂ : !₂[1, 0] ∈ T) (h₃ : !₂[0, 1] ∈ T) (h₄ : 2 - √2 > 0) (h₅ : 0 < 2 - √2) (h₇ :  !₂[0, 0] ∈    (convexHull ℝ : Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))) → Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))))      {!₂[0, 0], !₂[1, 0], !₂[0, 1]}) (h₈ :  !₂[1, 0] ∈    (convexHull ℝ : Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))) → Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))))      {!₂[0, 0], !₂[1, 0], !₂[0, 1]}) (h₉ :  !₂[0, 1] ∈    (convexHull ℝ : Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))) → Set (WithLp 2 (EuclideanSpace ℝ (Fin 2))))      {!₂[0, 0], !₂[1, 0], !₂[0, 1]}) : False :=
+  by
+  have h₁₁ : (0 : ℝ) < 2 - Real.sqrt 2 := by sorry
+  --  exfalso
+  have h₁₂ : (0 : ℝ) < 2 - Real.sqrt 2 := by sorry
+  have h₁₃ : False := by sorry
+  --  exact h₁₃
+  hole

@@ -1,0 +1,5 @@
+theorem h₆₈ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) (h₃ : 2 * k + 1 > 0) (h : k + 1 < n) (h₄ h₅₁ : n > k + 1) (s : Equiv.Perm (Fin n)) (hs : sorry) (h₅₃ : ∀ (i : Fin n), |(↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) - (↑(↑i : ℕ) : ℤ)| ≤ (↑k : ℤ)) (i : Fin n) (h₅₅ : |(↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) - (↑(↑i : ℕ) : ℤ)| ≤ (↑k : ℤ)) (h₅₇ : (↑((s : Fin n → Fin n) i) : ℕ) ≠ (↑i : ℕ)) (h₅₈ : (↑((s : Fin n → Fin n) i) : ℕ) < n) (h₅₉ : (↑i : ℕ) < n) (h₆₀ : |(↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) - (↑(↑i : ℕ) : ℤ)| ≤ (↑k : ℤ)) (h₆₁ : (↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) - (↑(↑i : ℕ) : ℤ) ≤ (↑k : ℤ)) (h₆₂ : (↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) - (↑(↑i : ℕ) : ℤ) ≥ -(↑k : ℤ)) (h₆₃ : (↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) ≤ (↑(↑i : ℕ) : ℤ) + (↑k : ℤ)) (h₆₄ : (↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) ≥ (↑(↑i : ℕ) : ℤ) - (↑k : ℤ)) (h₆₆ : (↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) ≤ (↑(↑i : ℕ) : ℤ) + (↑k : ℤ)) (h₆₇ : (↑(↑((s : Fin n → Fin n) i) : ℕ) : ℤ) ≥ (↑(↑i : ℕ) : ℤ) - (↑k : ℤ)) : (↑((s : Fin n → Fin n) i) : ℕ) ≤ (↑i : ℕ) + k := by
+  by_contra h₆₉
+  have h₇₀ : i + k < (s i : ℕ) := by sorry
+  have h₇₁ : (s i : ℤ) > (i : ℤ) + k := by sorry
+  linarith

@@ -1,0 +1,42 @@
+theorem h_main  : ∀ n ≥ 12, 5 ^ n ≤ n ! :=
+  by
+  intro n hn
+  induction' hn with n hn IH
+  · norm_num [Nat.factorial_succ, Nat.pow_succ]
+  ·
+    cases n with
+    | zero => contradiction
+    | succ n =>
+      cases n with
+      | zero => contradiction
+      | succ n =>
+        cases n with
+        | zero => contradiction
+        | succ n =>
+          cases n with
+          | zero => contradiction
+          | succ n =>
+            cases n with
+            | zero => contradiction
+            | succ n =>
+              cases n with
+              | zero => contradiction
+              | succ n =>
+                cases n with
+                | zero => contradiction
+                | succ n =>
+                  cases n with
+                  | zero => contradiction
+                  | succ n =>
+                    cases n with
+                    | zero => contradiction
+                    | succ n =>
+                      cases n with
+                      | zero => contradiction
+                      | succ n =>
+                        cases n with
+                        | zero => contradiction
+                        | succ n =>
+                          cases n with
+                          | zero => contradiction
+                          | succ n => simp_all [Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] <;> nlinarith

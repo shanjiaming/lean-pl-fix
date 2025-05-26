@@ -1,0 +1,2 @@
+theorem h₁₃ (h₀ : sorry) (h₁₂ : ContinuousAt (fun x => 1 / x) 3) : sorry := by -- simpa using h₁₂.tendsto
+  hole

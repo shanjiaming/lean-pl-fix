@@ -1,0 +1,2 @@
+theorem h₁ (m : ℕ) : (15 * m + 8) % 3 = 2 := by -- norm_num [Nat.add_mod, Nat.mul_mod, Nat.mod_mod] <;> omega
+  omega

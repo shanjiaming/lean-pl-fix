@@ -1,0 +1,2 @@
+theorem h₃₃ (x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃₁ : 0 < x) (h₃₂ : x < 8) : 0 < 8 - x := by -- linarith
+  hole

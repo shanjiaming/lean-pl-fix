@@ -1,0 +1,2 @@
+theorem h₅₅ (a : ℤ → ℝ) (haineq : ∀ n ≥ 1, ∀ (k : ℤ), n ≤ k ∧ k ≤ 2 * n → 0 ≤ a k ∧ a k ≤ 100 * a n) (haseries : ∃ S, sorry) (h₁ : ∀ n ≥ 1, 0 ≤ a n) (h₂ : ∀ n ≥ 1, a n ≥ 0) (h₃ : sorry) (h₅₁ : sorry) : sorry := by -- exact tendsto_atTop_atTop.mpr fun n => ⟨n, by -- linarith⟩
+  hole

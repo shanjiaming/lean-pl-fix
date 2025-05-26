@@ -1,0 +1,1 @@
+theorem h₇ (p : ℕ) (hp : sorry) (N : ℕ := sorry) (h₁ : p = 2 → N % p = 0) (h₂ : p = 3 → N % p = 4) (h₃ : p = 5 → N % p = 0) (h h₅ : p = 7) (h₆ : N = 44200) : N % p = 44200 % 7 := by rw [h₆, h₅] <;> norm_num

@@ -1,0 +1,2 @@
+theorem h₅ (c : ℝ) (h : c ≥ 1 / 2) (x : ℝ) (h₂ : cosh x ≤ rexp (x ^ 2 / 2)) (h₃ : rexp (x ^ 2 / 2) ≤ rexp (c * x ^ 2)) : cosh x = (rexp x + rexp (-x)) / 2 := by
+  rw [Real.cosh_eq] <;> ring_nf <;> field_simp [Real.exp_neg] <;> ring_nf

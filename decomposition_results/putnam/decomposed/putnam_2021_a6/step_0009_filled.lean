@@ -1,0 +1,2 @@
+theorem h₈ (P : Polynomial ℤ) (h_coeff : ∀ (n : ℕ), P.coeff n = 0 ∨ P.coeff n = 1) (h_factor : ∃ Q R, Q.degree > 0 ∧ R.degree > 0 ∧ P = Q * R) (h h₂ : Polynomial.eval 2 P = 0) (Q R : Polynomial ℤ) (hQ : Q.degree > 0) (hR : R.degree > 0) (hP : P = Q * R) (h₄ : 0 = Polynomial.eval 2 Q * Polynomial.eval 2 R) (h₅ h₆ h₇ : Polynomial.eval 2 Q = 0) : Q.degree ≤ 0 := by -- apply Polynomial.degree_le_of_ne_zero_of_eval₂_eq_zero _ _ h₇ <;> norm_num
+  hole

@@ -1,0 +1,2 @@
+theorem h₃ (m : ℕ) (mpos : m > 0) (S : Set (ℕ × ℕ × ℕ)) (hS : ∀ (n x y : ℕ), (n, x, y) ∈ S ↔ n > 0 ∧ x > 0 ∧ y > 0 ∧ n.Coprime m ∧ (x ^ 2 + y ^ 2) ^ m = (x * y) ^ n) (h : Odd m) (n x y : ℕ) (h₂ : (n, x, y) ∈ S) : n > 0 ∧ x > 0 ∧ y > 0 ∧ n.Coprime m ∧ (x ^ 2 + y ^ 2) ^ m = (x * y) ^ n := by -- simpa [hS] using h₂
+  hole

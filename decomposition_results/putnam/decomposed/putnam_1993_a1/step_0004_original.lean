@@ -1,0 +1,1 @@
+theorem h₂₁ (h₁ : 0 < 4 / 9) : √2 > 1 := by norm_num [Real.lt_sqrt, Real.sqrt_lt]

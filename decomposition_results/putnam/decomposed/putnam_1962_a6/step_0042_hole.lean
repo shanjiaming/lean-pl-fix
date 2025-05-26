@@ -1,0 +1,2 @@
+theorem h₆ (S : Set ℚ) (hSadd : ∀ a ∈ S, ∀ b ∈ S, a + b ∈ S) (hSprod : ∀ a ∈ S, ∀ b ∈ S, a * b ∈ S) (hScond : ∀ (r : ℚ), (r ∈ S ∨ -r ∈ S ∨ r = 0) ∧ ¬(r ∈ S ∧ -r ∈ S) ∧ ¬(r ∈ S ∧ r = 0) ∧ ¬(-r ∈ S ∧ r = 0)) (h1 : 1 ∈ S) (h2 : ∀ (n : ℕ), (↑n : ℚ) ≥ 1 → (↑n : ℚ) ∈ S) (h3 : ∀ n > 0, 1 / (↑n : ℚ) ∈ S) (r : ℚ) (hr h₄✝ : r > 0) (m n : ℕ) (hm : m > 0) (hn : n > 0) (h₁ : r = (↑m : ℚ) / (↑n : ℚ)) (h₂ : (↑m : ℚ) ∈ S) (h₃ : 1 / (↑n : ℚ) ∈ S) (h₄ : (↑m : ℚ) / (↑n : ℚ) ∈ S) (h₅ : (↑m : ℚ) * (1 / (↑n : ℚ)) = (↑m : ℚ) / (↑n : ℚ)) : r = (↑m : ℚ) / (↑n : ℚ) := by linarith
+  hole

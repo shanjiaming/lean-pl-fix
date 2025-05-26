@@ -1,0 +1,8 @@
+theorem h13 (f : Polynomial ℤ) (hf : ∀ (n : ℕ), f.coeff n ≥ 0) (hfnconst : ∃ n > 0, f.coeff n > 0) (n : ℤ) (hn : n > 0) (h1 : Polynomial.eval 1 f > 0) (h2 : n ≥ 1) (h3 : n ≠ 1 → Polynomial.eval n f > Polynomial.eval 1 f) (h4 : n = 1 → Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) (h_div : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) (h6 : n ≠ 1) (h7 : Polynomial.eval n f > Polynomial.eval 1 f) (h8 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) (h10 h11 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f - Polynomial.eval 1 f) (h12 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) : Polynomial.eval n f ∣ Polynomial.eval 1 f :=
+  by
+  have h14 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f - Polynomial.eval 1 f := h11
+  have h15 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f := h12
+  have h16 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f - Polynomial.eval 1 f := h14
+  have h17 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f := h15
+  have h18 : Polynomial.eval n f ∣ Polynomial.eval 1 f := by sorry
+  exact h18

@@ -1,0 +1,2 @@
+theorem h₅₇ (f : ℤ → ℤ) (h_imp : (f = fun n => 1 - n) → (∀ (n : ℤ), f (f n) = n) ∧ (∀ (n : ℤ), f (f (n + 2) + 2) = n) ∧ f 0 = 1) (h : (∀ (n : ℤ), f (f n) = n) ∧ (∀ (n : ℤ), f (f (n + 2) + 2) = n) ∧ f 0 = 1) (h₁ : ∀ (n : ℤ), f (f n) = n) (h₂ : ∀ (n : ℤ), f (f (n + 2) + 2) = n) (h₃ : f 0 = 1) (h₄ : f 1 = 0) (n : ℤ) (h₅₁ : f (f (n + 2) + 2) = n) (h₅₂ : f (f (n + 2)) = n + 2) (h₅₃ : f (f n) = n) (h₅₄ : f (f (n + 2) + 2) = n) (h₅₅ : f (f n) = n) (h₅₆ : f (f (n + 2)) = n + 2) : f (f (n + 2) + 2) = f (f n) := by -- linarith
+  hole

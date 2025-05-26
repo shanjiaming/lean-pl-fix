@@ -1,0 +1,3 @@
+theorem h₆ (h : sorry ≠ 1) (h₁ : sorry ^ 2 - sorry * sorry ^ 2 = 1) (h₂ : sorry ≠ 1) (h₄ : sorry = 0) (h₅ : sorry ^ 2 - sorry * sorry ^ 2 = 1) : sorry ^ 2 = 1 := by
+  --  --  --  --  --  --  simp [h₄] at h₅ ⊢ <;> norm_num at h₅ ⊢ <;> (try simp_all) <;> (try nlinarith) <;> (try linarith) <;> (try nlinarith)
+  hole

@@ -1,0 +1,123 @@
+theorem h₁₅ (n : ℕ) (hn : n > 1) (won : Fin n → Fin n → Bool) (hirrefl : ∀ (i : Fin n), won i i = false) (hantisymm : ∀ (i j : Fin n), i ≠ j → (won i j = true) = ¬won j i = true) (w l : Fin n → ℤ) (hw : w = fun r => ∑ j, if won r j = true then 1 else 0) (hl : l = fun r => (↑n : ℤ) - 1 - w r) (h₁ : ∑ r, w r = ∑ r, ∑ j, if won r j = true then 1 else 0) (h₂ h₃ h₄ : (∑ r, ∑ j, if won r j = true then 1 else 0) = ∑ r, ∑ j, if won r j = true then 1 else 0) (h₅ : (∑ r, ∑ j, if won r j = true then 1 else 0) = ∑ x, if won x.1 x.2 = true then 1 else 0) (h₆ : (∑ x, if won x.1 x.2 = true then 1 else 0) = (↑{x | won x.1 x.2 = true}.card : ℤ)) (h₈ : {x | won x.1 x.2 = true}.card = {x | won x.1 x.2 = true}.card) (h₉ : ∀ (i j : Fin n), i ≠ j → won i j = true ∨ won j i = true) (h₁₂ : ∀ (i : Fin n), won i i = false) (h₁₃ : ∀ (i j : Fin n), i ≠ j → won i j = true ∨ won j i = true) : {x | won x.1 x.2 = true}.card = n * (n - 1) / 2 :=
+  by
+  classical
+  have h₁₆ :
+    Finset.card (Finset.filter (fun x => won x.1 x.2 = true) (Finset.univ : Finset (Fin n × Fin n))) =
+      n * (n - 1) / 2 :=
+    by
+    have h₁₇ : ∀ (i j : Fin n), i ≠ j → (won i j = true → won j i = false) :=
+      by
+      intro i j h h₁₈
+      have h₁₉ := hantisymm i j h
+      cases Classical.em (won j i = true) <;> simp_all [Bool.not_eq_true] <;> aesop
+    have h₁₈ :
+      Finset.card (Finset.filter (fun x => won x.1 x.2 = true) (Finset.univ : Finset (Fin n × Fin n))) =
+        n * (n - 1) / 2 :=
+      by
+      have h₁₉ :
+        Finset.card (Finset.filter (fun x => won x.1 x.2 = true) (Finset.univ : Finset (Fin n × Fin n))) =
+          n * (n - 1) / 2 :=
+        by
+        have h₂₀ : n ≥ 2 := by omega
+        have h₂₁ : n * (n - 1) / 2 = n * (n - 1) / 2 := rfl
+        classical
+          calc
+          Finset.card (Finset.filter (fun x => won x.1 x.2 = true) (Finset.univ : Finset (Fin n × Fin n))) =
+              ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+            by simp [Finset.sum_filter, Finset.sum_product] <;> aesop
+          _ = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 := rfl
+          _ = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 := rfl
+          _ = n * (n - 1) / 2 :=
+            by
+            have h₂₂ : ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 = n * (n - 1) / 2 :=
+              by
+              have h₂₃ :
+                ∑ i : Fin n,
+                  ∑ j : Fin n,
+                    if won i j = true then 1 else 0 = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                rfl
+              rw [h₂₃]
+              have h₂₄ : ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 = n * (n - 1) / 2 := by
+                classical
+                have h₂₅ :
+                  ∑ i : Fin n,
+                    ∑ j : Fin n,
+                      if won i j = true then 1 else 0 = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                  rfl
+                rw [h₂₅]
+                have h₂₆ : ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 = n * (n - 1) / 2 :=
+                  by
+                  have h₂₇ :
+                    ∀ i : Fin n,
+                      ∑ j : Fin n, if won i j = true then 1 else 0 = ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                    by simp
+                  have h₂₈ :
+                    ∑ i : Fin n,
+                      ∑ j : Fin n,
+                        if won i j = true then 1 else 0 = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                    rfl
+                  rw [h₂₈]
+                  have h₂₉ : ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 = n * (n - 1) / 2 :=
+                    by
+                    have h₃₀ :
+                      ∑ i : Fin n,
+                        ∑ j : Fin n,
+                          if won i j = true then 1 else 0 = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                      rfl
+                    rw [h₃₀]
+                    have h₃₁ : ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 = n * (n - 1) / 2 :=
+                      by
+                      have h₃₂ :
+                        ∑ i : Fin n,
+                          ∑ j : Fin n,
+                            if won i j = true then 1
+                            else 0 = ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                        rfl
+                      rw [h₃₂]
+                      have h₃₃ : ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 = n * (n - 1) / 2 := by
+                        classical
+                          calc
+                          (∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0) =
+                              ∑ i : Fin n, ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                            rfl
+                          _ = ∑ i : Fin n, (∑ j : Fin n, if won i j = true then 1 else 0) := rfl
+                          _ = ∑ i : Fin n, (∑ j : Fin n, if won i j = true then 1 else 0) := rfl
+                          _ = n * (n - 1) / 2 :=
+                            by
+                            have h₃₄ : ∑ i : Fin n, (∑ j : Fin n, if won i j = true then 1 else 0) = n * (n - 1) / 2 :=
+                              by
+                              have h₃₅ :
+                                ∀ i : Fin n,
+                                  ∑ j : Fin n,
+                                    if won i j = true then 1 else 0 = ∑ j : Fin n, if won i j = true then 1 else 0 :=
+                                by simp
+                              have h₃₆ :
+                                ∑ i : Fin n, (∑ j : Fin n, if won i j = true then 1 else 0) = n * (n - 1) / 2 := by
+                                classical
+                                have h₃₇ :
+                                  ∑ i : Fin n, (∑ j : Fin n, if won i j = true then 1 else 0) = n * (n - 1) / 2 :=
+                                  by
+                                  have h₃₈ :
+                                    ∑ i : Fin n, (∑ j : Fin n, if won i j = true then 1 else 0) = n * (n - 1) / 2 := by
+                                    cases n with
+                                    | zero => contradiction
+                                    | succ n =>
+                                      simp_all [Fin.sum_univ_succ, Fin.ext_iff, Nat.div_eq_of_lt] <;> ring_nf at * <;>
+                                              norm_num <;>
+                                            simp_all [Fin.forall_fin_succ, Fin.ext_iff, Nat.div_eq_of_lt] <;>
+                                          norm_num <;>
+                                        omega
+                                  exact h₃₈
+                                exact h₃₇
+                              exact h₃₆
+                            exact h₃₄
+                      exact h₃₃
+                    exact h₃₁
+                  exact h₂₉
+                exact h₂₆
+              exact h₂₄
+            exact h₂₂
+          _ = n * (n - 1) / 2 := by rfl
+      exact h₁₈
+    exact h₁₈
+  exact h₁₆

@@ -1,0 +1,1 @@
+theorem h3 (h1 : (2 - 5 * sorry) * sorry = 2 * sorry - 5 * sorry * sorry) (h2 : 2 * sorry - 5 * sorry * sorry = 2 * sorry - 5 * sorry) : 2 * sorry - 5 * sorry = 2 * sorry - 5 * sorry := by rfl

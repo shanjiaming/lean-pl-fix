@@ -1,0 +1,2 @@
+theorem h3 (h1 : sorry * sorry = 1) (h2 : sorry * sorry = 1) : sorry * sorry = 1 ∧ sorry * sorry = 1 := by -- exact ⟨h1, h2⟩
+  hole

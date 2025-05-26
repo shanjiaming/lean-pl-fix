@@ -1,0 +1,2 @@
+theorem h₁ (f : (↑(Set.Ioi 1) : Type) → (↑(Set.Ioi 1) : Type)) (c : ℝ) (hc : c > 0) (hf : ∀ (x : (↑(Set.Ioi 1) : Type)), (↑(f x) : ℝ) = (↑x : ℝ) ^ c) (x y : (↑(Set.Ioi 1) : Type)) (hxy : (↑x : ℝ) ^ 2 ≤ (↑y : ℝ) ∧ (↑y : ℝ) ≤ (↑x : ℝ) ^ 3) : (↑(f x) : ℝ) = (↑x : ℝ) ^ c := by -- simpa using hf x
+  hole

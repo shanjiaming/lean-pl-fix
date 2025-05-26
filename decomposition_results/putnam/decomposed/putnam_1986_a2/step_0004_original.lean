@@ -1,0 +1,1 @@
+theorem h₂  : 3 ^ 200 < 10 ^ 100 + 3 := by norm_num [pow_succ] <;> decide

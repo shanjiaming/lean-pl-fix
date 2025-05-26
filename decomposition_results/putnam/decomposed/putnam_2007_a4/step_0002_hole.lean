@@ -1,0 +1,3 @@
+theorem h₁ (S : Set (Polynomial ℝ)) (repunit : ℝ → Prop) (hrepunit : ∀ (x : ℝ), repunit x ↔ x > 0 ∧ x = (↑⌊x⌋₊ : ℝ) ∧ ∀ d ∈ digits 10 ⌊x⌋₊, d = 1) (hS : ∀ (f : Polynomial ℝ), f ∈ S ↔ ∀ (n : ℝ), repunit n → repunit (Polynomial.eval n f)) : S = {f | ∃ d, ∃ c ≥ 1 - (↑d : ℤ), ∀ (n : ℝ), Polynomial.eval n f = 1 / 9 * (10 ^ c * (9 * n + 1) ^ d - 1)} :=
+  --  by sorry
+  hole

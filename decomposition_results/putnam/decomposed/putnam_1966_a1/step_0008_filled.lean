@@ -1,0 +1,2 @@
+theorem h₇ (f : ℤ → ℤ) (hf : f = fun n => ∑ m ∈ Finset.Icc 0 n, if Even m then m / 2 else (m - 1) / 2) (x y : ℤ) (hx : x > 0) (hy : y > 0) (hxy : x > y) (h₁ : f = fun n => ∑ m ∈ Finset.Icc 0 n, if Even m then m / 2 else (m - 1) / 2) (h₂ : x + y > 0) (h₃ : x - y > 0) (h₄ : x + y > 0) (h₅ : x - y > 0) (h₆ : (x + y) % 2 = 0 ∨ (x + y) % 2 = 1) : (x - y) % 2 = 0 ∨ (x - y) % 2 = 1 := by -- omega
+  omega

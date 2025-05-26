@@ -1,0 +1,2 @@
+theorem h₈ (lambda : ℝ) (hlambda : lambda > 1 / 2) (u : ℝ → ℝ) (hu : ∀ x ∈ Set.Icc 0 1, u x = 1 + lambda * ∫ (y : ℝ) in Set.Ioo x 1, u y * u (y - x)) (h₂ : u 1 = 1 + lambda * ∫ (y : ℝ) in Set.Ioo 1 1, u y * u (y - 1)) (h₃ : ∫ (y : ℝ) in Set.Ioo 1 1, u y * u (y - 1) = 0) (h₄ : u 1 = 1 + lambda * 0) (h₅ : u 1 = 1) (h₆ : u 0 = 1 + lambda * ∫ (y : ℝ) in Set.Ioo 0 1, u y * u (y - 0)) (h₇ : ∫ (y : ℝ) in Set.Ioo 0 1, u y * u (y - 0) = ∫ (y : ℝ) in Set.Ioo 0 1, u y * u y) : u 0 = 1 + lambda * ∫ (y : ℝ) in Set.Ioo 0 1, u y * u (y - 0) := by -- simpa using h₆
+  hole

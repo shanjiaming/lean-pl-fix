@@ -1,0 +1,2 @@
+theorem h₃ (contfrac : ℝ) (hcontfrac : contfrac = 2207 - 1 / contfrac) (hcontfrac' : 1 < contfrac) (h₂ : contfrac > 0) : contfrac ≠ 0 := by -- linarith
+  hole

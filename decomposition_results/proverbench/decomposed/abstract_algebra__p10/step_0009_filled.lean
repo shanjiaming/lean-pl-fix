@@ -1,0 +1,2 @@
+theorem h₁₇₂ (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h_sum : a ^ 2 / (1 + a ^ 2) + b ^ 2 / (1 + b ^ 2) + c ^ 2 / (1 + c ^ 2) = 1) (h₁₁ : 0 < a * b * c) (h₁₂ : 0 < a * b) (h₁₃ : 0 < a * c) (h₁₄ : 0 < b * c) (h₁₅ : 0 < √2) (h₁₆ : a ^ 2 / (1 + a ^ 2) + b ^ 2 / (1 + b ^ 2) + c ^ 2 / (1 + c ^ 2) = 1) (h₁₇₁ : 0 < 1 + a ^ 2) : 0 < 1 + b ^ 2 := by -- positivity
+  nlinarith

@@ -1,0 +1,61 @@
+theorem h₁ (n : ℕ) (hn : n > 1) (won : Fin n → Fin n → Bool) (hirrefl : ∀ (i : Fin n), won i i = false) (hantisymm : ∀ (i j : Fin n), i ≠ j → (won i j = true) = ¬won j i = true) (w l : Fin n → ℤ) (hw : w = fun r => ∑ j, if won r j = true then 1 else 0) (hl : l = fun r => (↑n : ℤ) - 1 - w r) (h_total_wins : ∑ r, w r = (↑n : ℤ) * ((↑n : ℤ) - 1) / 2) : ∑ r, l r ^ 2 = ∑ r, w r ^ 2 := by
+  --  calc
+  --    (∑ r : Fin n, (l r : ℤ) ^ 2) = ∑ r : Fin n, ((n - 1 : ℤ) - w r) ^ 2 := by
+  --      simp_all [hl] <;> simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib] <;> ring_nf <;>
+  --        simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib]
+  --    _ = ∑ r : Fin n, ((n - 1 : ℤ) ^ 2 - 2 * (n - 1 : ℤ) * w r + (w r) ^ 2) :=
+  --      by
+  --      apply Finset.sum_congr rfl
+  --      intro r _
+  --      ring_nf <;> simp_all [sub_eq_add_neg] <;> ring_nf <;> simp_all [sub_eq_add_neg]
+  --    _ = ∑ r : Fin n, ((n - 1 : ℤ) ^ 2 - 2 * (n - 1 : ℤ) * w r + (w r) ^ 2) := by rfl
+  --    _ = (∑ r : Fin n, (n - 1 : ℤ) ^ 2) - ∑ r : Fin n, 2 * (n - 1 : ℤ) * w r + ∑ r : Fin n, (w r) ^ 2 := by
+  --      rw [Finset.sum_sub_distrib, Finset.sum_add_distrib] <;> simp [Finset.mul_sum, Finset.sum_mul, mul_assoc] <;>
+  --        ring_nf
+  --    _ = (n : ℤ) * (n - 1 : ℤ) ^ 2 - 2 * (n - 1 : ℤ) * ∑ r : Fin n, w r + ∑ r : Fin n, (w r) ^ 2 := by
+  --      simp [Finset.mul_sum, Finset.sum_mul, mul_assoc] <;> simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib] <;>
+  --            ring_nf <;>
+  --          simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib] <;>
+  --        simp [Finset.mul_sum, Finset.sum_mul, mul_assoc]
+  --    _ = (n : ℤ) * (n - 1 : ℤ) ^ 2 - 2 * (n - 1 : ℤ) * ((n * (n - 1) / 2 : ℤ)) + ∑ r : Fin n, (w r) ^ 2 := by
+  --      rw [h_total_wins] <;> simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib] <;> ring_nf <;>
+  --        simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib]
+  --    _ = ∑ r : Fin n, (w r) ^ 2 :=
+  --      by
+  --      have h₂ : (n : ℤ) * (n - 1 : ℤ) ^ 2 - 2 * (n - 1 : ℤ) * ((n * (n - 1) / 2 : ℤ)) = 0 :=
+  --        by
+  --        have h₃ : (n : ℤ) ≥ 2 := by exact_mod_cast (by omega)
+  --        have h₄ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 :=
+  --          by
+  --          have h₅ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 :=
+  --            by
+  --            have h₆ : (n : ℤ) % 2 = 0 ∨ (n : ℤ) % 2 = 1 := by omega
+  --            rcases h₆ with (h₆ | h₆)
+  --            ·
+  --              have h₇ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 :=
+  --                by
+  --                have h₈ : (n : ℤ) % 2 = 0 := h₆
+  --                have h₉ : (n - 1 : ℤ) % 2 = 1 := by omega
+  --                have h₁₀ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 := by norm_num [Int.mul_emod, h₈, h₉]
+  --                exact h₁₀
+  --              exact h₇
+  --            ·
+  --              have h₇ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 :=
+  --                by
+  --                have h₈ : (n : ℤ) % 2 = 1 := h₆
+  --                have h₉ : (n - 1 : ℤ) % 2 = 0 := by omega
+  --                have h₁₀ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 := by norm_num [Int.mul_emod, h₈, h₉]
+  --                exact h₁₀
+  --              exact h₇
+  --          exact h₅
+  --        have h₅ : (n : ℤ) * (n - 1 : ℤ) / 2 * 2 = (n : ℤ) * (n - 1 : ℤ) :=
+  --          by
+  --          have h₅₁ : (n : ℤ) * (n - 1 : ℤ) % 2 = 0 := h₄
+  --          have h₅₂ : (n : ℤ) * (n - 1 : ℤ) / 2 * 2 = (n : ℤ) * (n - 1 : ℤ) := by omega
+  --          exact h₅₂
+  --        have h₆ : (n : ℤ) * (n - 1 : ℤ) ^ 2 - 2 * (n - 1 : ℤ) * ((n * (n - 1) / 2 : ℤ)) = 0 := by nlinarith
+  --        exact h₆
+  --      rw [h₂] <;> simp [add_zero] <;> simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib] <;> ring_nf <;>
+  --        simp_all [Finset.sum_sub_distrib, Finset.sum_add_distrib]
+  --    _ = ∑ r : Fin n, (w r : ℤ) ^ 2 := by rfl
+  hole

@@ -1,0 +1,1 @@
+theorem h₃ (h :  (∀ (x : ℤ), Polynomial.eval x (sorry %ₘ (sorry - 1) ^ 3) = -1) ∧    ∀ (x : ℕ), Polynomial.eval x (sorry %ₘ (sorry + 1) ^ 3) = 1) (h₁ : sorry %ₘ (sorry - 1) ^ 3 = -1) : ∀ (x : ℝ), Polynomial.eval x (sorry %ₘ (sorry + 1) ^ 3) = 1 := by simpa [add_comm, pow_three] using h.2

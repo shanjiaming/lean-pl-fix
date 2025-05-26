@@ -1,0 +1,1 @@
+theorem h₁ (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (i j : ℕ) (hij : i < j) (hj : j ≤ n) (hdiff :  |(↑j : ℝ) * α - (↑i : ℝ) * α - ((↑(round ((↑j : ℝ) * α)) : ℝ) - (↑(round ((↑i : ℝ) * α)) : ℝ))| < 1 / ((↑n : ℝ) + 1)) (h : ¬i = 0) : 0 < j - i := by omega

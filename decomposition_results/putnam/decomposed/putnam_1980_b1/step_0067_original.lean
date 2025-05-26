@@ -1,0 +1,1 @@
+theorem h₆ (c : ℝ) (h : c ≥ 1 / 2) (x : ℝ) (h₂ : cosh x ≤ rexp (x ^ 2 / 2)) (h₅ : c ≥ 1 / 2) : x ^ 2 / 2 ≤ c * x ^ 2 := by nlinarith [sq_nonneg x, sq_nonneg (x - 1), sq_nonneg (x + 1)]

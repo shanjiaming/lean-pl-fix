@@ -1,0 +1,2 @@
+theorem h20 (h1 : sorry) (h2 : sorry) (h4 : sorry) (h10 :  (fun x => sin (3 * x + x ^ 2) / (3 * x + x ^ 2) * ((3 * x + x ^ 2) / (5 * x + 2 * x ^ 2))) =ᶠ[𝓝[≠] 0] fun x =>    sin (3 * x + x ^ 2) / (5 * x + 2 * x ^ 2)) (h17 : sorry) (h18 :  (fun x => sin (3 * x + x ^ 2) / (3 * x + x ^ 2) * ((3 * x + x ^ 2) / (5 * x + 2 * x ^ 2))) =ᶠ[𝓝[≠] 0] fun x =>    sin (3 * x + x ^ 2) / (5 * x + 2 * x ^ 2)) (h19 : sorry) : sorry := by
+  simpa [mul_comm] using h19

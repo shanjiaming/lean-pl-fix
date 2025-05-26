@@ -1,0 +1,3 @@
+theorem h2 (G : Type u_1) (inst✝ : Group G) (Gfin : Fintype G) (g h : G) (ghgen : sorry = G ∧ ¬sorry = G ∧ ¬sorry = G) (godd : Odd (orderOf g)) (S : Set G) (hS : S = {g * h, g⁻¹ * h, g * h⁻¹, g⁻¹ * h⁻¹}) (h1 : False) : ∀ (x : G), ∃ mn, 1 ≤ mn.length ∧ mn.length ≤ Fintype.card G ∧ ∀ (i : Fin mn.length), mn.get i ∈ S ∧ x = mn.prod :=
+  by sorry
+  hole

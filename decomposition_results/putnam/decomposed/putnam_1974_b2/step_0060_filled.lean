@@ -1,0 +1,2 @@
+theorem h₁₁ (y : ℝ → ℝ) (ycontdiff : ContDiff ℝ 1 y) (limy : sorry) (h_y_tendsto : sorry) (h₁ : sorry) (h₃ : sorry) (h₇ : sorry) (h₁₀ : sorry) : ∀ᶠ (x : ℝ) in sorry, |deriv y x ^ 2 - 0| < 1 := by -- exact Metric.tendsto_nhds.mp h₁₀ 1 (by norm_num)
+  hole

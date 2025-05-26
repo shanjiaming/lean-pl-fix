@@ -1,0 +1,1 @@
+theorem h11 (x y : ℤ) (hx : 2 < x) (hy : 2 < y) (z : ℤ) (hz : x ^ 2 + 1 = z * (3 ^ 2 - 5)) (h_y_eq_3 h2 : y = 3) (h3 : x ^ 2 + 1 = z * (3 ^ 2 - 5)) (h4 : x ^ 2 + 1 = z * 4) (h5 : (x ^ 2 + 1) % 4 = 0) (h6 h8 h10 : x % 4 = 0) : x ^ 2 % 4 = 0 := by norm_num [pow_two, Int.mul_emod, h10]

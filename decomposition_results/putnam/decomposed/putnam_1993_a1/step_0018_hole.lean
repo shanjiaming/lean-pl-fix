@@ -1,0 +1,2 @@
+theorem h₃₂₃ (h₁ : 0 < 4 / 9) (h₂ : 4 / 9 < 4 * √2 / 9) (h₃₁ : ∫ (x : ℝ) in Set.Ioo 0 (√2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0) (x : ℝ) (hx : x ∈ Set.Ioo 0 (√6 / 3)) (h₃₂₂ : 0 < x) : x < √6 / 3 := by -- exact hx.2
+  hole

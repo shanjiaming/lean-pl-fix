@@ -1,0 +1,1 @@
+theorem h₁₁ (n : ℕ) : 3 ^ n > 0 := by positivity

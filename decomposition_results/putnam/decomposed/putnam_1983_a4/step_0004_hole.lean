@@ -1,0 +1,2 @@
+theorem h₄ (k m : ℕ) (S : ℤ) (kpos : k > 0) (hm : m = 6 * k - 1) (hS h₁ : S = ∑ j ∈ Finset.Icc 1 (2 * k - 1), (-1) ^ (j + 1) * (↑(m.choose (3 * j - 1)) : ℤ)) (j : ℕ) (hj : j ∈ Finset.Icc 1 (2 * k - 1)) (h₃ : m = 6 * k - 1) : m = 6 * k - 1 := by -- omega
+  hole

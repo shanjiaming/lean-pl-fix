@@ -1,0 +1,14 @@
+theorem h_final (h_main :  ∀ (f : ℝ × ℝ → ℝ),    (∀ (O v : ℝ × ℝ),        v ≠ (0, 0) →          f (O.1, O.2) + f (O.1 + v.1, O.2 + v.2) + f (O.1 + v.1 - v.2, O.2 + v.2 + v.1) + f (O.1 - v.2, O.2 + v.1) =            0) →      ∀ (P : ℝ × ℝ), f P = 0) : (∀ (f : ℝ × ℝ → ℝ),
+      (∀ (O v : ℝ × ℝ),
+          v ≠ (0, 0) →
+            f (O.1, O.2) + f (O.1 + v.1, O.2 + v.2) + f (O.1 + v.1 - v.2, O.2 + v.2 + v.1) + f (O.1 - v.2, O.2 + v.1) =
+              0) →
+        ∀ (P : ℝ × ℝ), f P = 0) ↔
+    True :=
+  by
+  --  constructor
+  --  · intro h
+  --    trivial
+  --  · intro h
+  --    exact h_main
+  hole

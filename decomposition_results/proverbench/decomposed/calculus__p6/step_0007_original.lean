@@ -1,0 +1,2 @@
+theorem h8 (h1 : HasDerivAt (fun x => x ^ 3) (3 * sorry ^ 2) sorry) (h3 : HasDerivAt (fun x => x ^ 3) (3 * sorry ^ 2) sorry) (h5 : HasDerivAt (fun x => x ^ 3) (3 * sorry ^ 2) sorry) (h7 : HasDerivAt (fun x => x ^ 3) (3 * sorry ^ 2) sorry) : HasDerivAt (fun x => cos (x ^ 3)) (-sin (sorry ^ 3) * (3 * sorry ^ 2)) sorry := by
+  convert HasDerivAt.cos (h7) using 1 <;> ring

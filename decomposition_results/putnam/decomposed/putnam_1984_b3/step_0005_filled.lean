@@ -1,0 +1,2 @@
+theorem h_trivial (h_main :  ∀ (F : Type u_2) (x : Fintype F),    Fintype.card F ≥ 2 → ∃ mul, ∀ (x y z : F), (mul x z = mul y z → x = y) ∧ mul x (mul y z) ≠ mul (mul x y) z) : True := by -- trivial
+  hole

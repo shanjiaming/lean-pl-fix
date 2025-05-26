@@ -1,0 +1,5 @@
+theorem h₈ (n✝¹ n✝ : ℕ) (h₁ :  ∏ i ∈ Finset.Icc 1 n✝, List.foldl Nat.lcm 1 (List.map succ (List.range ⌊n✝ / i⌋₊)) =    ∏ i ∈ Finset.Icc 1 n✝, List.foldl Nat.lcm 1 (List.map succ (List.range ⌊n✝ / i⌋₊))) (h₃ :  ∀ (k : ℕ),    List.foldl Nat.lcm 1 (List.map succ (List.range k)) =      Nat.lcm 1 (List.foldl Nat.lcm 1 (List.map succ (List.range k)))) (h₄ :  ∀ (k : ℕ), List.foldl Nat.lcm 1 (List.map succ (List.range k)) = List.foldl Nat.lcm 1 (List.map succ (List.range k))) (h₅ :  ∏ i ∈ Finset.Icc 1 n✝, List.foldl Nat.lcm 1 (List.map succ (List.range ⌊n✝ / i⌋₊)) =    ∏ i ∈ Finset.Icc 1 n✝, List.foldl Nat.lcm 1 (List.map succ (List.range ⌊n✝ / i⌋₊))) (n : ℕ) : ∏ i ∈ Finset.Icc 1 n, List.foldl Nat.lcm 1 (List.map succ (List.range ⌊n / i⌋₊)) = n ! :=
+  by
+  have h₉ : ∀ (n : ℕ), ∏ i in Finset.Icc 1 n, (List.range ⌊n / i⌋₊ |>.map Nat.succ).foldl Nat.lcm 1 = n ! := by sorry
+  exact h₉ n
+  hole

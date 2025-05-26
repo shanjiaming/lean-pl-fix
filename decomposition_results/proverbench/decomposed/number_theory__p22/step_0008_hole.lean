@@ -1,0 +1,2 @@
+theorem h₅ (p q : ℤ) (hq : ¬q = 0) (r : ℚ) (hr : cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ)) (h₄ : (↑r : ℝ) = cos ((↑p : ℝ) * π / (↑q : ℝ))) : r = 0 ∨ r = 1 ∨ r = -1 ∨ r = 1 / 2 ∨ r = -1 / 2 := by -- sorry
+  hole

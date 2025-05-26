@@ -1,0 +1,3 @@
+theorem h₆ (a b : ℝ) (abpos : a > 0 ∧ b > 0) (h_main :  ∫ (x : ℝ) in Set.Ioo 0 a, ∫ (y : ℝ) in Set.Ioo 0 b, rexp (max (b ^ 2 * x ^ 2) (a ^ 2 * y ^ 2)) =    (rexp (a ^ 2 * b ^ 2) - 1) / (a * b)) (h₁ : a > 0) (h₂ : b > 0) (h₃ : a * b > 0) (h₄ : a * b ≠ 0) (h₅ :  ∫ (x : ℝ) in Set.Ioo 0 a, ∫ (y : ℝ) in Set.Ioo 0 b, rexp (max (b ^ 2 * x ^ 2) (a ^ 2 * y ^ 2)) =    (rexp (a ^ 2 * b ^ 2) - 1) / (a * b)) : (fun a b => (rexp (a ^ 2 * b ^ 2) - 1) / (a * b)) a b = (rexp (a ^ 2 * b ^ 2) - 1) / (a * b) :=
+  --  by simp [h₁.ne', h₂.ne', h₃.ne', h₄]
+  hole

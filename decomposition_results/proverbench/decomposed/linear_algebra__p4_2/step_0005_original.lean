@@ -1,0 +1,1 @@
+theorem h₃ (A : Matrix (Fin 2) (Fin 4) ℝ) (j : Fin 4) (h : sorry) (h₀ : j = 3 ∨ j ≠ 3) (hj : j = 3) : sorry := by simpa [hj] using h

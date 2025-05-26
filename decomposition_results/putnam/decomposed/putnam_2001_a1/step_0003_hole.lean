@@ -1,0 +1,2 @@
+theorem h3 (S : Type u_1) (inst✝ : Mul S) (hS : ∀ (a b : S), a * b * a = b) (a b : S) (h2 : a * b * a = b) : a * b * a * (a * b) = b * (a * b) := by rw [h2]
+  hole

@@ -1,0 +1,2 @@
+theorem h₂ (p q : ℤ) (h : ∃ r, cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ)) (hq : q = 0) : (↑q : ℝ) = 0 := by -- exact_mod_cast hq
+  simpa

@@ -1,0 +1,1 @@
+theorem h₄₅ (x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) (h₄₃ : HasDerivAt (fun x => 8 * x) 8 x) (h₄₄ : HasDerivAt (fun x => x ^ 2) (2 * x) x) : HasDerivAt (fun x => 8 * x - x ^ 2) (8 - 2 * x) x := by convert h₄₃.sub h₄₄ using 1 <;> ring

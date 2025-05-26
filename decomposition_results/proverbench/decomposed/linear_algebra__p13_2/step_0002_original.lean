@@ -1,0 +1,1 @@
+theorem h (x y : ℤ) : sorry = 3 * x - 5 * y := by apply T_expression <;> assumption

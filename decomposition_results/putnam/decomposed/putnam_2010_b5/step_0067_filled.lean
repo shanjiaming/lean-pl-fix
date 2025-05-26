@@ -1,0 +1,2 @@
+theorem h₇₂ (f : ℝ → ℝ) (hf_strict_mono : StrictMono f) (hf_diff : Differentiable ℝ f) (hf_eq h₁ : ∀ (x : ℝ), deriv f x = f (f x)) (h₂ : StrictMono f) (h₃ : Differentiable ℝ f) (h₄ h₅ : ∀ (x : ℝ), deriv f x > 0) (h₆ : ContinuousOn f Set.univ) (x : ℝ) : f x ≤ x := by -- linarith
+  hole

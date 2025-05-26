@@ -1,0 +1,1 @@
+theorem h₁ (n : ℕ) (hn : n > 1) (a : Fin n → ℝ) (A : ℝ) (hA : A + ∑ i, a i ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ i, a i) ^ 2) : (↑n : ℝ) ≥ 2 := by norm_num at hn ⊢ <;> exact_mod_cast Nat.succ_le_iff.mpr hn

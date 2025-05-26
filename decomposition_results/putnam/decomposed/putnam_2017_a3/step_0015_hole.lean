@@ -1,0 +1,108 @@
+theorem h₅₆ (a b : ℝ) (f g : ℝ → ℝ) (I : ℕ → ℝ) (altb : a < b) (fgcont : ContinuousOn f (Set.Icc a b) ∧ ContinuousOn g (Set.Icc a b)) (fgimg : f '' Set.Icc a b ⊆ Set.Ioi 0 ∧ g '' Set.Icc a b ⊆ Set.Ioi 0) (fgint : ∫ (x : ℝ) in Set.Ioo a b, f x = ∫ (x : ℝ) in Set.Ioo a b, g x) (fneg : ∃ x, f (↑x : ℝ) ≠ g (↑x : ℝ)) (hI : ∀ n > 0, I n = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n) (n : ℕ) (hn : n > 0) (h₁ : I (n + 1) = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1 + 1) / g x ^ (n + 1)) (h₂ : I n = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n) (h₃ :  ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1 + 1) / g x ^ (n + 1) =    ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x)) (h₄ h₅₁ :  ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x) =    ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x)) : ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x) > ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n :=
+  by
+  --  exact
+  --    by
+  --    have h₅₇ :
+  --      ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --        ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --      by
+  --      have h₅₈ :
+  --        ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --          ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --        by
+  --        exact
+  --          by
+  --          have h₅₉ :
+  --            ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --              ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --            by
+  --            exact
+  --              by
+  --              have h₆₀ :
+  --                ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                  ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                by
+  --                exact
+  --                  by
+  --                  have h₆₁ :
+  --                    ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                      ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                    by
+  --                    exact
+  --                      by
+  --                      have h₆₂ :
+  --                        ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                          ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                        by
+  --                        exact
+  --                          by
+  --                          have h₆₃ :
+  --                            ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                              ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                            by
+  --                            exact
+  --                              by
+  --                              have h₆₄ :
+  --                                ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                  ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                by
+  --                                exact
+  --                                  by
+  --                                  have h₆₅ :
+  --                                    ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                      ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                    by
+  --                                    exact
+  --                                      by
+  --                                      have h₆₆ :
+  --                                        ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                          ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                        by
+  --                                        exact
+  --                                          by
+  --                                          have h₆₇ :
+  --                                            ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                              ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                            by
+  --                                            exact
+  --                                              by
+  --                                              have h₆₈ :
+  --                                                ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                                  ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                                by
+  --                                                exact
+  --                                                  by
+  --                                                  have h₆₉ :
+  --                                                    ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                                      ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                                    by
+  --                                                    exact
+  --                                                      by
+  --                                                      have h₇₀ :
+  --                                                        ∫ x in Set.Ioo a b,
+  --                                                            ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                                          ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                                        by
+  --                                                        exact
+  --                                                          by
+  --                                                          have h₇₁ :
+  --                                                            ∫ x in Set.Ioo a b,
+  --                                                                ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) >
+  --                                                              ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) :=
+  --                                                            by exact by sorry
+  --                                                          exact h₇₁
+  --                                                      exact h₇₀
+  --                                                  exact h₆₉
+  --                                              exact h₆₈
+  --                                          exact h₆₇
+  --                                      exact h₆₆
+  --                                  exact h₆₅
+  --                              exact h₆₄
+  --                          exact h₆₃
+  --                      exact h₆₂
+  --                  exact h₆₁
+  --              exact h₆₀
+  --          exact h₅₉
+  --      exact h₅₈
+  --    exact h₅₇ <;> simp_all [hI] <;> norm_num <;> linarith
+  hole

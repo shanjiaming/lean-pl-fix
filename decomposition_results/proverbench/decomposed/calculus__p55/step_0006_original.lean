@@ -1,0 +1,1 @@
+theorem h₃ (h₁ : sorry = 512) (h₂ : sorry = 34) : sorry = 512 ∧ sorry = 34 := by exact ⟨h₁, h₂⟩

@@ -1,0 +1,2 @@
+theorem h₀  : sorry ^ 3 * sorry ^ 2 * sorry = 4 * sorry ^ 4 * sorry ^ 7 * sorry ^ 8 := by -- apply combine_numerator
+  hole

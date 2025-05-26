@@ -1,0 +1,2 @@
+theorem h₉ (h₅_mem : sorry) (a' : ℤ) (P : Polynomial ℤ) (hP₁ : P.degree = 2) (z₁ z₂ : (↑(Set.Ioo 0 1) : Type)) (hz₁₂ : z₁ ≠ z₂) (hz₁ : sorry = 0) (hz₂ : sorry = 0) (hP₂ : P.coeff 2 = a') (hP₃ : a' > 0) (hP₄ : P.degree = 2) (hP₅ : P.coeff 2 = a') (hP₆ : a' > 0) (h₂ : a' ≤ 4) (h₃ : a' ≥ 1) (h₄ : a' ≤ 4) (h₅ : P.degree = 2) (h₆ : P.coeff 2 = a') (h₇ : a' > 0) (h₈ : ∃ z1 z2, z1 ≠ z2 ∧ sorry = 0 ∧ sorry = 0) : a' ≤ 4 := by -- omega
+  hole

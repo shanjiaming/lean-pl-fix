@@ -1,0 +1,2 @@
+theorem h₄ (h₁ : cos (π / 3) = 1 / 2) (h₂ : tan (π / 3) = √3) (h₃ : (1 / cos (π / 3)) ^ 2 = 4) : 2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3) = 8 * √3 := by
+  rw [h₃, h₂] <;> ring_nf <;> linarith [Real.sqrt_nonneg 3]

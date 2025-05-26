@@ -1,0 +1,1 @@
+theorem h₂ (h₁ : sorry = 55) : sorry = 20 := by simp [h_at_5, eval_mul, eval_X, eval_C] <;> norm_num <;> rfl

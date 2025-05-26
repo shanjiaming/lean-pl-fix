@@ -1,0 +1,2 @@
+theorem h₂₂ (h₁ : ∫ (x : ℝ) in Set.Icc 2 8, 1 / x + x ^ 2 = (∫ (x : ℝ) in Set.Icc 2 8, 1 / x) + ∫ (x : ℝ) in Set.Icc 2 8, x ^ 2) : Real.log 8 - Real.log 2 = Real.log (8 / 2) := by -- rw [Real.log_div (by norm_num) (by norm_num)] <;> ring
+  hole

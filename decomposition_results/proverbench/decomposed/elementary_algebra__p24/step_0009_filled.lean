@@ -1,0 +1,2 @@
+theorem h5₃ (h3 : 45 * sorry + 75 * sorry = 465) (h4 : 40 * sorry + 72 * sorry = 424) (h5₂ : 45 * sorry + 75 * sorry - (40 * sorry + 72 * sorry) = 465 - 424) : 5 * sorry + 3 * sorry = 41 := by -- omega
+  hole

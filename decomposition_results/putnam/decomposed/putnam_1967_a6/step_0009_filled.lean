@@ -1,0 +1,6 @@
+theorem h₄ (abneq0 : (Fin 4 → ℝ) → (Fin 4 → ℝ) → Prop) (habneq0 : abneq0 = fun a b => a 0 * b 1 - a 1 * b 0 ≠ 0) (numtuples : (Fin 4 → ℝ) → (Fin 4 → ℝ) → ℕ) (hnumtuples :  ∀ (a b : Fin 4 → ℝ),    (↑(numtuples a b) : ℕ∞) =      {s |          ∃ x,            (∀ (i : Fin 4), x i ≠ 0) ∧ ∑ i, a i * x i = 0 ∧ ∑ i, b i * x i = 0 ∧ ∀ (i : Fin 4), s i = (x i).sign}.encard) (h₁ : ∃ a b, abneq0 a b ∧ numtuples a b = 8) (a b : Fin 4 → ℝ) (h h₃ : a 0 * b 1 - a 1 * b 0 ≠ 0) : (↑(numtuples a b) : ℕ∞) =
+    {s |
+        ∃ x,
+          (∀ (i : Fin 4), x i ≠ 0) ∧ ∑ i, a i * x i = 0 ∧ ∑ i, b i * x i = 0 ∧ ∀ (i : Fin 4), s i = (x i).sign}.encard :=
+  --  by apply hnumtuples
+  hole

@@ -1,0 +1,7 @@
+theorem putnam_1995_b1 (Pi : Finpartition (Finset.range 9) → { x // x ∈ Finset.range 9 } → ℕ) (Pi_def : ∀ (partition : Finpartition (Finset.range 9)) (k : { x // x ∈ Finset.range 9 }), Pi partition k = ⋯.choose.card) : ∀ (Pt1 Pt2 : Finpartition (Finset.range 9)), ∃ x y, x ≠ y ∧ Pi Pt1 x = Pi Pt1 y ∧ Pi Pt2 x = Pi Pt2 y :=
+  by
+  have h_main :
+    ∀ (Pt1 Pt2 : Finpartition (Finset.range 9)),
+      ∃ (x y : Finset.range 9), x ≠ y ∧ Pi Pt1 x = Pi Pt1 y ∧ Pi Pt2 x = Pi Pt2 y := by sorry
+  --  sorry
+  hole

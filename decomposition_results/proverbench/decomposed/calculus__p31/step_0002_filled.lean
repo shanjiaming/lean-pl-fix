@@ -1,0 +1,2 @@
+theorem h₁ (ha : 0 < sorry) : (fun x => √(sorry ^ 2 - x ^ 2)) = fun x => √(sorry ^ 2 - x ^ 2) := by -- rfl
+  hole

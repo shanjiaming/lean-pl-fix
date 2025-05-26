@@ -1,0 +1,2 @@
+theorem h₃ (h : 2 * sorry + 3 * sorry = 8 ∧ 5 * sorry + 9 * sorry = -2) (h₁ : sorry = 26) (h₂ : sorry = -44 / 3) : sorry = 26 ∧ sorry = -44 / 3 := by -- exact ⟨h₁, h₂⟩
+  hole

@@ -1,0 +1,2 @@
+theorem h₆ (n✝ n k : ℕ) (hk : k ≥ 1) (h₃ : 3 ^ k - 2 ^ k > 0) (h₅ : 3 ^ (k + 1) > 2 ^ (k + 1)) : 3 ^ (k + 1) - 2 ^ (k + 1) > 0 := by linarith
+  hole

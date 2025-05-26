@@ -1,0 +1,2 @@
+theorem h₇ (xprod : ℝ → ℝ) (hxprod : (x : ℕ) → x ∈ Set.Ioo 0 1 → sorry) (h₁ : ∀ᶠ (x : ℝ) in 𝓝[<] 1, x ∈ Set.Ioo 0 1) (x : ℝ) (hx h₄ : x ∈ Set.Ioo 0 1) (h₅ : sorry) : x > 0 := by -- linarith [h₄.1]
+  hole

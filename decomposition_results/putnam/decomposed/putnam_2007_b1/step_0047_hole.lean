@@ -1,0 +1,2 @@
+theorem h6 (f : Polynomial ℤ) (hf : ∀ (n : ℕ), f.coeff n ≥ 0) (hfnconst : ∃ n > 0, f.coeff n > 0) (n : ℤ) (hn : n > 0) (h1 : Polynomial.eval 1 f > 0) (h2 : n ≥ 1) (h3 : n ≠ 1 → Polynomial.eval n f > Polynomial.eval 1 f) (hn1 : n = 1) : Polynomial.eval (Polynomial.eval 1 f + 1) f = Polynomial.eval (1 + Polynomial.eval 1 f) f := by -- ring
+  hole

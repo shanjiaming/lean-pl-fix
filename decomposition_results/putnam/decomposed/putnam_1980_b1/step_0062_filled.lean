@@ -1,0 +1,2 @@
+theorem h₅₁₂ (c : ℝ) (h : c ≥ 1 / 2) (x✝ x : ℝ) : Real.log (cosh x) ≤ x ^ 2 / 2 := by exact?
+  hole

@@ -1,0 +1,2 @@
+theorem h₂ (IsValid : Polynomial ℝ → Prop) (pair : Polynomial ℝ → Polynomial ℝ → Prop) (IsValid_def : ∀ (p : Polynomial ℝ), IsValid p ↔ p ≠ 0 ∧ p.degree < 1992 ∧ IsCoprime p (sorry ^ 3 - sorry)) (hpair :  ∀ (p f : Polynomial ℝ),    pair p f ↔      ∃ g,        (iteratedDeriv 1992 fun x => Polynomial.eval x p / (x ^ 3 - x)) = fun x =>          Polynomial.eval x f / Polynomial.eval x g) (h₁ : 3984 ∈ {k | ∃ p f, IsValid p ∧ pair p f ∧ (↑k : WithBot ℕ) = f.degree}) : ∀ k ∈ {k | ∃ p f, IsValid p ∧ pair p f ∧ (↑k : WithBot ℕ) = f.degree}, 3984 ≤ k := by -- sorry
+  hole

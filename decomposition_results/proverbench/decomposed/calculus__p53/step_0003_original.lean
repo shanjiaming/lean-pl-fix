@@ -1,0 +1,1 @@
+theorem h₂ (h₁ : sorry = 100) : sorry = 200 := by exact h_b

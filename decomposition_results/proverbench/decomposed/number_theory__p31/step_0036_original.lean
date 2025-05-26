@@ -1,0 +1,1 @@
+theorem h₁₆ (x y : ℤ) (hx : 2 < x) (hy : 2 < y) (z : ℤ) (hz : x ^ 2 + 1 = z * (y ^ 2 - 5)) (h₁ : y = 3 → False) (h₂ : y = 4 → False) (h₃ : y ≥ 5 → False) (h₅ : ¬y = 3) (h₈ : ¬y = 4) (h₁₂ : y > 2) (h₁₃ : y ≠ 3) (h₁₄ : y ≠ 4) : y ≤ 4 := by linarith

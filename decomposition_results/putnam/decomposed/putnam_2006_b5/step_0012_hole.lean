@@ -1,0 +1,5 @@
+theorem h₁₀ (I J : (ℝ → ℝ) → ℝ) (hI : (fun f => ∫ (x : ℝ) in 0 ..1, x ^ 2 * f x) = fun f => ∫ (x : ℝ) in 0 ..1, x ^ 2 * f x) (hJ : (fun f => ∫ (x : ℝ) in 0 ..1, x * f x ^ 2) = fun f => ∫ (x : ℝ) in 0 ..1, x * f x ^ 2) (h₁ :  1 / 16 ∈    {y |      ∃ f,        ContinuousOn f sorry ∧          (fun f => ∫ (x : ℝ) in 0 ..1, x ^ 2 * f x) f - (fun f => ∫ (x : ℝ) in 0 ..1, x * f x ^ 2) f = y}) (y : ℝ) (f : ℝ → ℝ) (hf_cont : ContinuousOn f sorry) (hf h₃ : (fun f => ∫ (x : ℝ) in 0 ..1, x ^ 2 * f x) f - (fun f => ∫ (x : ℝ) in 0 ..1, x * f x ^ 2) f = y) (x : ℝ) (hx : x ∈ Set.Icc 0 1) (h₈ : 0 ≤ x) (h₉ : x ≤ 1) : x ^ 2 * f x - x * f x ^ 2 ≤ x ^ 3 / 4 :=
+  by
+  have h₁₁ : x * (f x) ^ 2 - x ^ 2 * f x + x ^ 3 / 4 ≥ 0 := by sorry
+  linarith
+  hole

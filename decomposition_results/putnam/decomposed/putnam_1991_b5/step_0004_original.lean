@@ -1,0 +1,1 @@
+theorem h₃ (p : ℕ) (podd : Odd p) (pprime : sorry) (h₁ : p > 2) : p ≥ 3 := by omega

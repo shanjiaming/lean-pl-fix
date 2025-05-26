@@ -1,0 +1,2 @@
+theorem h₂ (p : ℕ) : 15 * (7 * p) + 8 = 105 * p + 8 := by -- ring
+  hole

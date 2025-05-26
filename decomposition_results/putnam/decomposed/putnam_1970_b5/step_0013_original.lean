@@ -1,0 +1,4 @@
+theorem h₉ (ramp : ℤ → ℝ → ℝ) (ramp_def : ramp = fun n x => if x ≤ -(↑n : ℝ) then -(↑n : ℝ) else if -(↑n : ℝ) < x ∧ x ≤ (↑n : ℝ) then x else (↑n : ℝ)) (F : ℝ → ℝ) (hF : Continuous F) (n : ℕ) (h₄ :  ContinuousAt (fun x => if x ≤ -(↑n : ℝ) then -(↑n : ℝ) else if -(↑n : ℝ) < x ∧ x ≤ (↑n : ℝ) then x else (↑n : ℝ))    (-(↑n : ℝ))) (h₅ :  ContinuousAt (fun x => if x ≤ -(↑n : ℝ) then -(↑n : ℝ) else if -(↑n : ℝ) < x ∧ x ≤ (↑n : ℝ) then x else (↑n : ℝ))    (↑n : ℝ)) (x : ℝ) (hx₁ : x ≠ -(↑n : ℝ)) (hx₂ : x ≠ (↑n : ℝ)) (h₇ : x ≤ -(↑n : ℝ)) (h₈ : ContinuousAt (fun x => -(↑n : ℝ)) x) : ContinuousAt (fun x => if x ≤ -(↑n : ℝ) then -(↑n : ℝ) else if -(↑n : ℝ) < x ∧ x ≤ (↑n : ℝ) then x else (↑n : ℝ)) x :=
+  by
+  have h₁₀ : ContinuousAt (fun (x : ℝ) => (-(n : ℝ) : ℝ)) x := continuousAt_const
+  convert h₁₀ using 1 <;> simp_all [ContinuousAt] <;> norm_num <;> linarith

@@ -1,0 +1,22 @@
+theorem h₃₃ (h_main :  ∀ (n : ℕ),    ∑ k ∈ Finset.Icc 1 n, 6 ^ k / ((3 ^ (k + 1) - 2 ^ (k + 1)) * (3 ^ k - 2 ^ k)) =      2 - 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1))) (h₂ : ∀ (n : ℕ), 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) = 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1))) (h₄ : ∀ n ≥ 1, 3 ^ n ≥ 2 ^ n + 1) (h₅ : ∀ n ≥ 1, 3 ^ n - 2 ^ n ≥ 1) (h₆ h₇ : ∀ n ≥ 1, 3 ^ (n + 1) - 2 ^ (n + 1) ≥ 1) (h₈ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) (h₉ : sorry) (h₁₁ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) (h₁₃ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≥ 0) (h₁₅ : sorry) (h₁₇ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) (h₁₈ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≥ 0) (h₂₁ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) (h₂₂ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≥ 0) (h₂₄ : sorry) (h₂₆ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) (h₂₇ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≥ 0) (h₂₉ : sorry) (h₃₁ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) (h₃₂ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≥ 0) : sorry := by
+  --  exact
+  --    tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds h₂₄
+  --      (eventually_of_forall fun n => by
+  --        cases n with
+  --        | zero => norm_num
+  --        | succ n =>
+  --          exact
+  --            by
+  --            have h₃₄ : (2 : ℚ) ^ (n.succ + 1) / (3 ^ (n.succ + 1) - 2 ^ (n.succ + 1)) ≥ 0 := by
+  --              exact h₁₃ (n.succ) (by simp)
+  --            linarith [h₃₄, h₁₁ (n.succ) (by simp)])
+  --      (eventually_of_forall fun n => by
+  --        cases n with
+  --        | zero => norm_num
+  --        | succ n =>
+  --          exact
+  --            by
+  --            have h₃₄ : (2 : ℚ) ^ (n.succ + 1) / (3 ^ (n.succ + 1) - 2 ^ (n.succ + 1)) ≤ (2 : ℚ) ^ (n.succ + 1) := by
+  --              exact h₁₁ (n.succ) (by simp)
+  --            linarith [h₃₄, h₁₃ (n.succ) (by simp)])
+  hole

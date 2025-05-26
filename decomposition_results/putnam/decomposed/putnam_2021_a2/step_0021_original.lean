@@ -1,0 +1,1 @@
+theorem h₈ (g : ℝ → ℝ) (hg : (x : ℕ) → x > 0 → sorry) (h₁ : sorry) (x : ℝ) (hx : x > 0) (h₃ : sorry) (h₄ h₆ : g x = (x + 1) ^ (x + 1) / x ^ x) : 0 < x := by linarith

@@ -1,0 +1,1 @@
+theorem h₅ (h₁ : HasDerivAt sorry (8 * √3) (π / 3)) (h₃ : sorry = 4) : π / 3 - π / 3 = 0 := by ring

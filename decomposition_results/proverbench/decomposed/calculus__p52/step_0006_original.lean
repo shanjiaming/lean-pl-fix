@@ -1,0 +1,2 @@
+theorem h₅ (x : ℝ) (h₁ h₂ : ∫ (t : ℝ) in Set.Icc 0 x, 1 / cos t = Real.log |1 / cos x + sin x / cos x| + sorry) (h₃ : ∫ (t : ℝ) in Set.Icc 0 0, 1 / cos t = Real.log |1 / cos 0 + sin 0 / cos 0| + sorry) (h₄ : ∫ (t : ℝ) in Set.Icc 0 0, 1 / cos t = 0) : Real.log |1 / cos 0 + sin 0 / cos 0| + sorry = sorry := by
+  norm_num [Real.log_one] <;> ring_nf <;> norm_num <;> aesop

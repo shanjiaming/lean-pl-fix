@@ -1,0 +1,2 @@
+theorem h₈ (T : ℝ) (hT : 0 < T) (h : ¬False) (h₁ h₂ : T > 0) (t : ℝ) (ht₁ : t ≥ T) (ht₂ : ⌊t⌋₊ = 2 * ⌊t - T⌋₊) (h₄ : t ≥ T) (h₅ : ⌊t⌋₊ = 2 * ⌊t - T⌋₊) (h₆ : T > 0) : (↑⌊t⌋₊ : ℝ) ≤ t := by -- exact_mod_cast Nat.floor_le (by linarith)
+  hole

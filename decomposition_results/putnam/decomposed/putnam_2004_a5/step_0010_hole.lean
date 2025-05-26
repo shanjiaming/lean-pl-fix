@@ -1,0 +1,5 @@
+theorem h_main (m n : ℕ) (mnpos : Inhabited (Fin m × Fin n)) (adj : Fin m × Fin n → Fin m × Fin n → Prop) (connected : (Fin m × Fin n → Prop) → Fin m × Fin n → Fin m × Fin n → Prop) (cmr : (Fin m × Fin n → Prop) → ℕ) (hadj :  adj = fun x x_1 =>    match x with    | (⟨a, isLt⟩, ⟨b, isLt_1⟩) =>      match x_1 with      | (⟨c, isLt⟩, ⟨d, isLt_2⟩) => a = c ∧ b.dist d = 1 ∨ b = d ∧ a.dist c = 1) (hconnected :  connected = fun C P Q =>    ∃ S,      ∃ (hS : S ≠ []),        S.head hS = P ∧          S.getLast hS = Q ∧            (∃ p, ∀ i ∈ Finset.range S.length, C S[i]! = p) ∧ ∀ i ∈ Finset.range (S.length - 1), adj S[i]! S[i + 1]!) (hcmr : cmr = fun C => {R | ∃ P ∈ R, ∀ (Q : Fin m × Fin n), Q ∈ R ↔ connected C P Q}.ncard) (h_false : False) : (↑(∑ C, cmr C) : ℚ) > 2 ^ (m * n) * ((↑m : ℚ) * (↑n : ℚ) / 8) :=
+  by
+  exfalso
+  exact h_false
+  hole

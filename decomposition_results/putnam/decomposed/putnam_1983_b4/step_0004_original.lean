@@ -1,0 +1,1 @@
+theorem h_exists_square (f : ℕ → ℤ) (a : ℕ → ℕ) (hf : f = fun n => (↑n : ℤ) + ⌊√(↑n : ℝ)⌋) (ha0 : a 0 > 0) (han : ∀ (n : ℕ), (↑(a (n + 1)) : ℤ) = f (a n)) (hf_pos : ∀ (n : ℕ), (↑n : ℤ) + ⌊√(↑n : ℝ)⌋ ≥ (↑n : ℤ)) (h_seq_strict_mono : ∀ (n : ℕ), a (n + 1) > a n) : ∃ i s, (↑(a i) : ℤ) = s ^ 2 := by sorry

@@ -1,0 +1,8 @@
+theorem h₆₅₄ (m : ℤ) (h : (↑m : ℝ) = 2 + 2 * √(28 * sorry ^ 2 + 1)) (k : ℤ) (hk : √(28 * sorry ^ 2 + 1) = (↑k : ℝ)) (h₁ : (↑k : ℝ) = √(28 * sorry ^ 2 + 1)) (h₂ : (↑k : ℝ) ^ 2 = 28 * sorry ^ 2 + 1) (h₃ : k ^ 2 = 28 * sorry ^ 2 + 1) (h₄ : m = 2 + 2 * k) (h₅ : k ≥ 0) (h₆₁ : m = 2 + 2 * k) (h₆₂ : k ^ 2 = 28 * sorry ^ 2 + 1) (h₆₃ : k ≥ 0) (h₆₄₁ : (k - 1) % 2 = 0) (h₆₄₂ : (k + 1) % 2 = 0) (h₆₄₄ : (k - 1) / 2 * ((k - 1) / 2 + 1) = 7 * sorry ^ 2) (h₆₄₆ : (k - 1) / 2 ≥ 0) (h₆₅₁ : (k + 1) / 2 ≥ 0) (h₆₅₃ : (k - 1) / 2 * ((k - 1) / 2 + 1) = 7 * sorry ^ 2) : ∃ a b, (k - 1) / 2 = 7 * a ^ 2 ∧ (k + 1) / 2 = b ^ 2 :=
+  by
+  have h₆₅₅ : ∃ (a : ℤ), (k - 1) / 2 = 7 * a ^ 2 := by sorry
+  --  obtain ⟨a, ha⟩ := h₆₅₅
+  have h₆₅₆ : ∃ (b : ℤ), (k + 1) / 2 = b ^ 2 := by sorry
+  --  obtain ⟨b, hb⟩ := h₆₅₆
+  --  --  refine' ⟨a, b, _⟩ <;> simp_all [ha, hb] <;> ring_nf at * <;> omega
+  hole

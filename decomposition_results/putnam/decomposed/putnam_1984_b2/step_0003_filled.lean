@@ -1,0 +1,2 @@
+theorem h₂ (f : ℝ → ℝ → ℝ) (hf : ∀ (u v : ℝ), f u v = (u - v) ^ 2 + (√(2 - u ^ 2) - 9 / v) ^ 2) (h₁ : 0 < √2) : 1 < √2 := by -- nlinarith [Real.sq_sqrt (show 0 ≤ 2 by -- norm_num)]
+  hole

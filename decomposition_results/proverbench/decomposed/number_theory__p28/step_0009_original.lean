@@ -1,0 +1,1 @@
+theorem h₄ (p : ℕ) (hp : sorry) (N : ℕ := sorry) (h₁ : p = 2 → N % p = 0) (h h₃ : p = 3) : N = 2 := by simp [N, h₃, Finset.prod_range_succ] <;> norm_num

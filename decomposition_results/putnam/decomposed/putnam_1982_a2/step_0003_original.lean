@@ -1,0 +1,1 @@
+theorem h₂ (B : ℕ → ℝ → ℝ) (hB : B = fun n x => ∑ k ∈ Finset.Icc 1 n, (↑k : ℝ) ^ x) (f : ℕ → ℝ) (hf : f = fun n => B n (logb (↑n : ℝ) 2) / ((↑n : ℝ) * logb 2 (↑n : ℝ)) ^ 2) : sorry := by sorry

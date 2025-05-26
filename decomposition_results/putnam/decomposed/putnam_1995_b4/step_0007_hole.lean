@@ -1,0 +1,2 @@
+theorem h₆ (contfrac : ℝ) (hcontfrac : contfrac = 2207 - 1 / contfrac) (hcontfrac' : 1 < contfrac) (h₂ : contfrac > 0) (h₃ : contfrac ≠ 0) (h₄ : contfrac ^ 2 - 2207 * contfrac + 1 = 0) (h₅ : contfrac ≤ 2207) : contfrac ≥ 2207 := by -- nlinarith [sq_nonneg (contfrac - 2207)]
+  hole

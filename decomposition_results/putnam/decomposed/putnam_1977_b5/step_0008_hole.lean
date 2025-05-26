@@ -1,0 +1,37 @@
+theorem h₅ (n : ℕ) (hn : n > 1) (a : Fin n → ℝ) (A : ℝ) (hA : A + ∑ i, a i ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ i, a i) ^ 2) (h_pos_n : (↑n : ℝ) - 1 > 0) (i j : Fin n) (hij : i < j) (h₁ : A + ∑ k, a k ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ k, a k) ^ 2) (h₃ : (∑ k, a k) ^ 2 = ∑ k, ∑ l, a k * a l) (h₄ :  ∑ k, ∑ l, a k * a l =    ((∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) +        ∑ k, ∑ l, if (↑k : ℕ) = (↑l : ℕ) then a k * a l else 0) +      ∑ k, ∑ l, if (↑l : ℕ) < (↑k : ℕ) then a k * a l else 0) : (∑ k, ∑ l, if (↑k : ℕ) = (↑l : ℕ) then a k * a l else 0) = ∑ k, a k ^ 2 := by
+  --  calc
+  --    ∑ k : Fin n, ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) =
+  --        ∑ k : Fin n, (∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0)) :=
+  --      by rfl
+  --    _ = ∑ k : Fin n, (a k * a k) := by
+  --      apply Finset.sum_congr rfl
+  --      intro k _
+  --      calc
+  --        ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) = ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) := rfl
+  --        _ = a k * a k :=
+  --          by
+  --          have h₆ : ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) = a k * a k := by
+  --            calc
+  --              ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) =
+  --                  ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) :=
+  --                rfl
+  --              _ = a k * a k :=
+  --                by
+  --                have h₇ : ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) = a k * a k := by
+  --                  calc
+  --                    ∑ l : Fin n, (if (k : ℕ) = l then a k * a l else 0) =
+  --                        ∑ l in ({ k } : Finset (Fin n)), (if (k : ℕ) = l then a k * a l else 0) :=
+  --                      by
+  --                      apply Finset.sum_subset
+  --                      · intro l _
+  --                        simp_all [Finset.mem_singleton] <;> aesop
+  --                      · intro l _ h₈
+  --                        simp_all [Finset.mem_singleton] <;> aesop
+  --                    _ = a k * a k := by simp_all [Finset.sum_ite_eq', Finset.mem_singleton] <;> ring_nf <;> aesop
+  --                exact h₇
+  --          exact h₆
+  --    _ = ∑ k : Fin n, (a k) ^ 2 := by
+  --      apply Finset.sum_congr rfl
+  --      intro k _
+  --      ring
+  hole

@@ -1,0 +1,3 @@
+theorem h16 (x y : ℝ) (h1 : sorry = fun x y => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) (h3 : deriv (fun x => sorry) x = deriv (fun x => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) x) (h6 h15 : HasDerivAt (fun x => x ^ 2 + (y - x) ^ 2) (4 * x - 2 * y) x) : HasDerivAt (fun x => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) ((4 * x - 2 * y) * rexp (-y)) x := by
+  --  --  convert h15.mul (hasDerivAt_const x (exp (-y))) using 1 <;> ring_nf <;> simp [exp_ne_zero] <;> ring
+  hole

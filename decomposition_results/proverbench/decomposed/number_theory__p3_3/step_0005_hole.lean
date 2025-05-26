@@ -1,0 +1,2 @@
+theorem h₂ (h_main_claim : sorry ∧ sorry ∧ sorry) (n : ℕ+) (hn : sorry ∧ sorry ∧ sorry) : (↑n : ℕ) ≤ 7 := by -- omega
+  hole

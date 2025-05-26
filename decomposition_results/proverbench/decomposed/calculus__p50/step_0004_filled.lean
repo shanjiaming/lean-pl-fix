@@ -1,0 +1,3 @@
+theorem h₃ (h₂ : ∫ (x : ℝ) in 0 ..π / 2, x * sin x = 1) : ∫ (x : ℝ) in sorry, x * sin x = ∫ (x : ℝ) in 0 ..π / 2, x * sin x := by
+  simp [intervalIntegral.integral_of_le (by linarith [Real.pi_pos, Real.pi_gt_three] : (0 : ℝ) ≤ π / 2)]
+  hole

@@ -1,0 +1,2 @@
+theorem h₁₆ (x y u : ℤ) (n : ℕ) (h₀ : x ^ 2 + y ^ 2 - 1 = 4 * x * y) (h₂ : x = 0 ∧ y = 1 ∧ u = 0 ∧ n = 0 → False) (h₈ : ¬(x = 0 ∧ y = 1 ∧ u = 0 ∧ n = 0)) (h₉ : x = 0) (h₁₀ : y = 1) (h₁₁ : u = 0) (h₁₃ h₁₄ : (↑x : ℝ) + (↑u : ℝ) * √3 = (2 + √3) ^ n) (h₁₅ : x = 0) : y = 1 := by -- exact_mod_cast h₁₀
+  hole

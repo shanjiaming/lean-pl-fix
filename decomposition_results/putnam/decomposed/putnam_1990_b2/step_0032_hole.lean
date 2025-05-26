@@ -1,0 +1,2 @@
+theorem h_final (x z : ℝ) (P : ℕ → ℝ) (xlt1 : |x| < 1) (zgt1 : |z| > 1) (hP : ∀ j ≥ 1, P j = (∏ i, (1 - z * x ^ (↑i : ℕ))) / ∏ i, (z - x ^ (↑i : ℕ))) (h_main : ∑' (j : (↑(Set.Ici 1) : Type)), (1 + x ^ (↑j : ℕ)) * P (↑j : ℕ) = -1) : 1 + ∑' (j : (↑(Set.Ici 1) : Type)), (1 + x ^ (↑j : ℕ)) * P (↑j : ℕ) = 0 := by -- -- rw [h_main] <;> norm_num <;> linarith
+  hole

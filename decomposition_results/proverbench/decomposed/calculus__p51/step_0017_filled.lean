@@ -1,0 +1,3 @@
+theorem h₂₁ (x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ h₉ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) (h₁₀ : 4 * sin x + 3 * cos x ≠ 0) : HasDerivAt (fun x => Real.log (4 * sin x + 3 * cos x)) ((4 * cos x - 3 * sin x) / (4 * sin x + 3 * cos x)) x := by
+  --  --  convert (Real.hasDerivAt_log (by positivity)).comp x h₉ using 1 <;> field_simp [h₁₀] <;> ring
+  hole

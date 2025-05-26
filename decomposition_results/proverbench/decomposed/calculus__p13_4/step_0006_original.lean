@@ -1,0 +1,1 @@
+theorem h₄ (x y : ℝ) (h : y - sorry = 2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3) * (x - π / 3)) (h₁ : y - sorry = 2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3) * (x - π / 3)) (h₂ : 2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3) = 8 * √3) (h₃ : y - sorry = 8 * √3 * (x - π / 3)) : y = 8 * √3 * (x - π / 3) + sorry := by linarith

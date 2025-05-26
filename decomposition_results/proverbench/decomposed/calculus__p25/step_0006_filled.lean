@@ -1,0 +1,2 @@
+theorem h3 (x : ℝ) (h2 : HasDerivAt (fun x => 3 * x) 3 x) : HasDerivAt (fun x => x ^ 2) (2 * x) x := by -- simpa using (hasDerivAt_pow 2 x)
+  hole

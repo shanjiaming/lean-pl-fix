@@ -1,0 +1,1 @@
+theorem h₂ (h : sorry ≠ 0) (h₁ : sorry ^ 3 ≠ 0) : 2 * sorry ^ 3 ≠ 0 := by positivity

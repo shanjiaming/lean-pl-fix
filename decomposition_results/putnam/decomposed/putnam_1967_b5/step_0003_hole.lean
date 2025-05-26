@@ -1,0 +1,15 @@
+theorem h_inductive_step (n : ℕ) (hn : n > 0) (h_base : 1 / 2 = ∑ i ∈ Finset.range 1, (↑((1 + i - 1).choose i) : ℚ) * 2 ^ (-1 - (↑i : ℤ))) : ∀ k > 0,
+    1 / 2 = ∑ i ∈ Finset.range k, (↑((k + i - 1).choose i) : ℚ) * 2 ^ (-(↑k : ℤ) - (↑i : ℤ)) →
+      1 / 2 = ∑ i ∈ Finset.range (k + 1), (↑((k + 1 + i - 1).choose i) : ℚ) * 2 ^ (-((↑k : ℤ) + 1) - (↑i : ℤ)) :=
+  by
+  --  intro k hk hk_sum
+  have h₁ :
+    (1 : ℚ) / 2 = ∑ i in Finset.range (k + 1), (Nat.choose (k + 1 + i - 1) i : ℚ) * (2 : ℚ) ^ (-(k + 1 : ℤ) - i) := by sorry
+  --  rw [h₁] <;> simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, add_comm, add_left_comm, add_assoc] <;>
+              ring_nf at * <;>
+            norm_num at * <;>
+          field_simp at * <;>
+        ring_nf at * <;>
+      norm_num at * <;>
+    linarith
+  hole

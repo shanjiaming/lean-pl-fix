@@ -1,0 +1,1 @@
+theorem h₅ (f : ℤ → ℤ) (hf : f = fun n => ∑ m ∈ Finset.Icc 0 n, if Even m then m / 2 else (m - 1) / 2) (x y : ℤ) (hx : x > 0) (hy : y > 0) (hxy : x > y) (h₁ : f = fun n => ∑ m ∈ Finset.Icc 0 n, if Even m then m / 2 else (m - 1) / 2) (h₂ : x + y > 0) (h₃ : x - y > 0) (h₄ : x + y > 0) : x - y > 0 := by exact_mod_cast h₃

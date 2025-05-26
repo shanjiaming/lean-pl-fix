@@ -1,0 +1,1 @@
+theorem h₈ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : p ∣ sorry) (h₃ : p ∣ sorry) (h₄ : p ∣ sorry) (h₅ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) (h₇ : p ∣ sorry ^ 8) : p ∣ sorry ^ 4 := by exact dvd_trans h₃ (dvd_pow_self n (by omega))

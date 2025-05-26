@@ -1,0 +1,8 @@
+theorem h₂₀ (f : (↑(Set.Ioi 1) : Type) → (↑(Set.Ioi 1) : Type)) (c : ℝ) (hc : c > 0) (hf : ∀ (x : (↑(Set.Ioi 1) : Type)), (↑(f x) : ℝ) = (↑x : ℝ) ^ c) (x y : (↑(Set.Ioi 1) : Type)) (hxy : (↑x : ℝ) ^ 2 ≤ (↑y : ℝ) ∧ (↑y : ℝ) ≤ (↑x : ℝ) ^ 3) (h₁ : (↑(f x) : ℝ) = (↑x : ℝ) ^ c) (h₂ : (↑(f y) : ℝ) = (↑y : ℝ) ^ c) (h₃ : (↑x : ℝ) ^ 2 ≤ (↑y : ℝ)) (h₄ : (↑y : ℝ) ≤ (↑x : ℝ) ^ 3) (h₅ : 1 < (↑x : ℝ)) (h₆ : 1 < (↑y : ℝ)) (h₇ : (↑(f x) : ℝ) ^ 2 ≤ (↑(f y) : ℝ)) (h₉ : 0 < c) (h₁₀ : 0 < (↑x : ℝ)) (h₁₁ : 0 < (↑y : ℝ)) (h₁₂ : 0 < (↑x : ℝ) ^ c) (h₁₃ : 0 < (↑y : ℝ) ^ c) (h₁₄ : (↑y : ℝ) ≤ (↑x : ℝ) ^ 3) (h₁₅ : 0 < (↑x : ℝ) ^ 3) (h₁₆ : 0 < (↑y : ℝ)) (h₁₇ : (↑y : ℝ) ^ c ≤ ((↑x : ℝ) ^ 3) ^ c) (h₁₈ : ((↑x : ℝ) ^ 3) ^ c = (↑x : ℝ) ^ (3 * c)) : (↑x : ℝ) ^ (3 * c) = ((↑x : ℝ) ^ c) ^ 3 := by
+  --  calc
+  --    (x : ℝ) ^ (3 * c) = (x : ℝ) ^ (c + c + c) := by ring_nf
+  --    _ = (x : ℝ) ^ c * (x : ℝ) ^ c * (x : ℝ) ^ c := by
+  --      rw [Real.rpow_add (by positivity : (0 : ℝ) < (x : ℝ)), Real.rpow_add (by positivity : (0 : ℝ) < (x : ℝ))] <;>
+  --        ring_nf
+  --    _ = ((x : ℝ) ^ c) ^ 3 := by ring
+  hole

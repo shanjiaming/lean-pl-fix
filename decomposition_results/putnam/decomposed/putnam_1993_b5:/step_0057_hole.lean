@@ -1,0 +1,73 @@
+theorem h₄₃ (p : Fin 4 → EuclideanSpace ℝ (Fin 2)) (h : ∀ (i j : Fin 4), i ≠ j → ∃ n, Dist.dist (p i) (p j) = (↑n : ℝ) ∧ Odd n) (n₁ : ℤ) (hn₁ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨1, ⋯⟩) = (↑n₁ : ℝ)) (hn₁_odd : Odd n₁) (n₂ : ℤ) (hn₂ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨2, ⋯⟩) = (↑n₂ : ℝ)) (hn₂_odd : Odd n₂) (n₃ : ℤ) (hn₃ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₃ : ℝ)) (hn₃_odd : Odd n₃) (n₄ : ℤ) (hn₄ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨2, ⋯⟩) = (↑n₄ : ℝ)) (hn₄_odd : Odd n₄) (n₅ : ℤ) (hn₅ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₅ : ℝ)) (hn₅_odd : Odd n₅) (n₆ : ℤ) (hn₆ : Dist.dist (p ⟨2, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₆ : ℝ)) (hn₆_odd : Odd n₆) (h₇ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨1, ⋯⟩) = (↑n₁ : ℝ)) (h₈ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨2, ⋯⟩) = (↑n₂ : ℝ)) (h₉ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₃ : ℝ)) (h₁₀ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨2, ⋯⟩) = (↑n₄ : ℝ)) (h₁₁ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₅ : ℝ)) (h₁₂ : Dist.dist (p ⟨2, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₆ : ℝ)) (h₁₃ : n₁ % 2 = 1) (h₁₄ : n₂ % 2 = 1) (h₁₅ : n₃ % 2 = 1) (h₁₆ : n₄ % 2 = 1) (h₁₇ : n₅ % 2 = 1) (h₁₈ : n₆ % 2 = 1) (h₁₉ : n₁ ^ 2 % 4 = 1) (h₂₀ : n₂ ^ 2 % 4 = 1) (h₂₁ : n₃ ^ 2 % 4 = 1) (h₂₂ : n₄ ^ 2 % 4 = 1) (h₂₃ : n₅ ^ 2 % 4 = 1) (h₂₄ : n₆ ^ 2 % 4 = 1) (h₂₅ : (↑n₁ : ℝ) ^ 2 = (↑n₁ : ℝ) ^ 2) (h₂₆ : (↑n₂ : ℝ) ^ 2 = (↑n₂ : ℝ) ^ 2) (h₂₇ : (↑n₃ : ℝ) ^ 2 = (↑n₃ : ℝ) ^ 2) (h₂₈ : (↑n₄ : ℝ) ^ 2 = (↑n₄ : ℝ) ^ 2) (h₂₉ : (↑n₅ : ℝ) ^ 2 = (↑n₅ : ℝ) ^ 2) (h₃₀ : (↑n₆ : ℝ) ^ 2 = (↑n₆ : ℝ) ^ 2) (h₃₁ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨1, ⋯⟩) ^ 2 = (↑n₁ : ℝ) ^ 2) (h₃₂ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨2, ⋯⟩) ^ 2 = (↑n₂ : ℝ) ^ 2) (h₃₃ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨3, ⋯⟩) ^ 2 = (↑n₃ : ℝ) ^ 2) (h₃₄ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨2, ⋯⟩) ^ 2 = (↑n₄ : ℝ) ^ 2) (h₃₅ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨3, ⋯⟩) ^ 2 = (↑n₅ : ℝ) ^ 2) (h₃₆ : Dist.dist (p ⟨2, ⋯⟩) (p ⟨3, ⋯⟩) ^ 2 = (↑n₆ : ℝ) ^ 2) (h₃₇ : (↑n₁ : ℝ) ^ 2 = (↑n₁ : ℝ) ^ 2) (h₃₈ : (↑n₂ : ℝ) ^ 2 = (↑n₂ : ℝ) ^ 2) (h₃₉ : (↑n₃ : ℝ) ^ 2 = (↑n₃ : ℝ) ^ 2) (h₄₀ : (↑n₄ : ℝ) ^ 2 = (↑n₄ : ℝ) ^ 2) (h₄₁ : (↑n₅ : ℝ) ^ 2 = (↑n₅ : ℝ) ^ 2) (h₄₂ : (↑n₆ : ℝ) ^ 2 = (↑n₆ : ℝ) ^ 2) : False := by
+  have h₄₄ : (p (⟨0, by decide⟩ : Fin 4)) = (p (⟨0, by decide⟩ : Fin 4)) := rfl
+  have h₄₅ : (p (⟨1, by decide⟩ : Fin 4)) = (p (⟨1, by decide⟩ : Fin 4)) := rfl
+  have h₄₆ : (p (⟨2, by decide⟩ : Fin 4)) = (p (⟨2, by decide⟩ : Fin 4)) := rfl
+  have h₄₇ : (p (⟨3, by decide⟩ : Fin 4)) = (p (⟨3, by decide⟩ : Fin 4)) := rfl
+  have h₄₈ : (n₁ : ℤ) ^ 2 % 4 = 1 := h₁₉
+  have h₄₉ : (n₂ : ℤ) ^ 2 % 4 = 1 := h₂₀
+  have h₅₀ : (n₃ : ℤ) ^ 2 % 4 = 1 := h₂₁
+  have h₅₁ : (n₄ : ℤ) ^ 2 % 4 = 1 := h₂₂
+  have h₅₂ : (n₅ : ℤ) ^ 2 % 4 = 1 := h₂₃
+  have h₅₃ : (n₆ : ℤ) ^ 2 % 4 = 1 := h₂₄
+  --  norm_num [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ, Fin.val_zero,
+  --                                      Fin.val_succ, Fin.val_zero, Fin.val_succ] at * <;>
+  --                                    (try omega) <;>
+  --                                  (try ring_nf at *) <;>
+  --                                (try norm_num at *) <;>
+  --                              (try linarith) <;>
+  --                            (try nlinarith) <;>
+  --                          (try omega) <;>
+  --                        (try ring_nf at *) <;>
+  --                      (try norm_num at *) <;>
+  --                    (try linarith) <;>
+  --                  (try nlinarith) <;>
+  --                (try omega) <;>
+  --              (try
+  --                  {simp_all [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ,
+  --                            Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ] <;>
+  --                          norm_num at * <;>
+  --                        ring_nf at * <;>
+  --                      norm_num at * <;>
+  --                    linarith
+  --                }) <;>
+  --            (try
+  --                {simp_all [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ,
+  --                          Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ] <;>
+  --                        norm_num at * <;>
+  --                      ring_nf at * <;>
+  --                    norm_num at * <;>
+  --                  linarith
+  --              }) <;>
+  --          (try
+  --              {simp_all [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ,
+  --                        Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ] <;>
+  --                      norm_num at * <;>
+  --                    ring_nf at * <;>
+  --                  norm_num at * <;>
+  --                linarith
+  --            }) <;>
+  --        (try
+  --            {simp_all [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ,
+  --                      Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ] <;>
+  --                    norm_num at * <;>
+  --                  ring_nf at * <;>
+  --                norm_num at * <;>
+  --              linarith
+  --          }) <;>
+  --      (try
+  --          {simp_all [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ,
+  --                    Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ] <;>
+  --                  norm_num at * <;>
+  --                ring_nf at * <;>
+  --              norm_num at * <;>
+  --            linarith
+  --        }) <;>
+  --    (try
+  --        {simp_all [Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ,
+  --                  Fin.val_zero, Fin.val_succ, Fin.val_zero, Fin.val_succ] <;>
+  --                norm_num at * <;>
+  --              ring_nf at * <;>
+  --            norm_num at * <;>
+  --          linarith
+  --      })
+  hole

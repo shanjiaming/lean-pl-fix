@@ -1,0 +1,4 @@
+theorem h₁₇ (f : (↑(Set.Ioi 1) : Type) → (↑(Set.Ioi 1) : Type)) (c : ℝ) (hc : c > 0) (hf : ∀ (x : (↑(Set.Ioi 1) : Type)), (↑(f x) : ℝ) = (↑x : ℝ) ^ c) (x y : (↑(Set.Ioi 1) : Type)) (hxy : (↑x : ℝ) ^ 2 ≤ (↑y : ℝ) ∧ (↑y : ℝ) ≤ (↑x : ℝ) ^ 3) (h₁ : (↑(f x) : ℝ) = (↑x : ℝ) ^ c) (h₂ : (↑(f y) : ℝ) = (↑y : ℝ) ^ c) (h₃ : (↑x : ℝ) ^ 2 ≤ (↑y : ℝ)) (h₄ : (↑y : ℝ) ≤ (↑x : ℝ) ^ 3) (h₅ : 1 < (↑x : ℝ)) (h₆ : 1 < (↑y : ℝ)) (h₈ : 0 < c) (h₉ : 0 < (↑x : ℝ)) (h₁₀ : 0 < (↑y : ℝ)) (h₁₁ : 0 < (↑x : ℝ) ^ c) (h₁₂ : 0 < (↑y : ℝ) ^ c) (h₁₃ : (↑x : ℝ) ^ 2 ≤ (↑y : ℝ)) (h₁₄ : 0 < (↑x : ℝ) ^ 2) (h₁₅ : 0 < (↑y : ℝ)) (h₁₆ : ((↑x : ℝ) ^ 2) ^ c ≤ (↑y : ℝ) ^ c) : ((↑x : ℝ) ^ 2) ^ c = (↑x : ℝ) ^ (2 * c) :=
+  by
+  rw [← Real.rpow_nat_cast]
+  rw [← Real.rpow_mul] <;> ring_nf <;> nlinarith

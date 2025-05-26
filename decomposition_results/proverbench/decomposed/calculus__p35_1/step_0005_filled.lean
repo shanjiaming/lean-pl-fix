@@ -1,0 +1,2 @@
+theorem h₃ (h : sorry = 0) (h₁ : 3 * sorry ^ 2 - 18 * sorry + 24 = 0) : sorry ^ 2 - 6 * sorry + 8 = 0 := by -- nlinarith
+  linarith

@@ -1,0 +1,2 @@
+theorem h₂ (N : (n : ℕ+) → Set (Fin (↑n : ℕ) → ℕ+)) (hN h₁ : N = fun n => {t | (∀ (i j : Fin (↑n : ℕ)), i < j → t i ≤ t j) ∧ ∑ i, 1 / (↑(↑(t i) : ℕ) : ℝ) = 1}) : N 10 = {fun x => 10} := by -- sorry
+  hole

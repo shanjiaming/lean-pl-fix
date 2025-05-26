@@ -1,0 +1,3 @@
+theorem h3 (x : ℝ) (h2 : ∫ (x : ℝ), sin x ^ 3 * cos x ^ 6 = ∫ (x : ℝ), sin x * cos x ^ 6 - sin x * cos x ^ 8) : ∫ (x : ℝ), sin x * cos x ^ 6 - sin x * cos x ^ 8 = (∫ (x : ℝ), sin x * cos x ^ 6) - ∫ (x : ℝ), sin x * cos x ^ 8 :=
+  --  by apply Integral_sub (integrable_sin_mul_cos_pow 6) (integrable_sin_mul_cos_pow 8)
+  hole

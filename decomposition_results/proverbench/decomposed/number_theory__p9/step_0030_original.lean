@@ -1,0 +1,4 @@
+theorem h₆₄₇ (m : ℤ) (h : (↑m : ℝ) = 2 + 2 * √(28 * sorry ^ 2 + 1)) (k : ℤ) (hk : √(28 * sorry ^ 2 + 1) = (↑k : ℝ)) (h₁ : (↑k : ℝ) = √(28 * sorry ^ 2 + 1)) (h₂ : (↑k : ℝ) ^ 2 = 28 * sorry ^ 2 + 1) (h₃ : k ^ 2 = 28 * sorry ^ 2 + 1) (h₄ : m = 2 + 2 * k) (h₅ : k ≥ 0) (h₆₁ : m = 2 + 2 * k) (h₆₂ : k ^ 2 = 28 * sorry ^ 2 + 1) (h₆₃ : k ≥ 0) (h₆₄₄ : k % 2 = 0) (h₆₄₅ : k ^ 2 % 4 = 0) : sorry ^ 2 % 4 = 0 ∨ sorry ^ 2 % 4 = 1 :=
+  by
+  have h₆₄₈ : (n : ℤ) % 4 = 0 ∨ (n : ℤ) % 4 = 1 ∨ (n : ℤ) % 4 = 2 ∨ (n : ℤ) % 4 = 3 := by sorry
+  rcases h₆₄₈ with (h₆₄₈ | h₆₄₈ | h₆₄₈ | h₆₄₈) <;> simp [h₆₄₈, pow_two, Int.mul_emod, Int.add_emod]

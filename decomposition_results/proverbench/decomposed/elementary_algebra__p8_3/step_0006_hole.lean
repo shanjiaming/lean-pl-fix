@@ -1,0 +1,2 @@
+theorem h5 (h1 : (2 - 5 * sorry) * sorry = 2 * sorry - 5 * sorry * sorry) (h2 : 2 * sorry - 5 * sorry * sorry = 2 * sorry - 5 * sorry) (h3 : 2 * sorry - 5 * sorry = 2 * sorry - 5 * sorry) (h4 : (2 - 5 * sorry) * sorry = 2 * sorry - 5 * sorry) : 2 * sorry - 5 * sorry = (2 - 5 * sorry) * sorry := by -- linarith
+  hole

@@ -1,0 +1,1 @@
+theorem h₁ (D : (n : ℕ) → Matrix (Fin n) (Fin n) ℝ) (hD : D = fun n i j => |(↑(↑i : ℕ) : ℝ) - (↑(↑j : ℕ) : ℝ)|) (n : ℕ) (hn : n ≥ 2) : D = fun n i j => |(↑(↑i : ℕ) : ℝ) - (↑(↑j : ℕ) : ℝ)| := by rw [hD]

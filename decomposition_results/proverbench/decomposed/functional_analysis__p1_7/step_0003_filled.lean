@@ -1,0 +1,2 @@
+theorem h₁ (u v : ℝ) (h : sorry = 0) : (u ^ 2 + v ^ 2) * rexp (-(u + v)) = 0 := by -- simpa [f] using h
+  hole

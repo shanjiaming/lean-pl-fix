@@ -1,0 +1,1 @@
+theorem h₄ (p : ℕ → ℝ → ℝ) (x✝ y : ℝ) (n : ℕ) (h0 : p 0 = fun x => 1) (hp : ∀ n > 0, p n = fun x => ∏ i ∈ Finset.range n, (x - (↑i : ℝ))) (x : ℝ) (h₂ : p 0 x = 1) : ∏ i ∈ Finset.range 0, (x - (↑i : ℝ)) = 1 := by simp

@@ -1,0 +1,2 @@
+theorem h₂ (n : ℕ) (P : Polynomial ℤ) (r : ℚ) (Pdeg : P.degree = (↑n : WithBot ℕ)) (Preq0 : (Polynomial.aeval r : Polynomial ℤ → ℚ) P = 0) (i : ℕ) (hi : i ∈ Finset.range n) (h₁ : i < n) : i + 1 ≤ n := by -- linarith
+  hole

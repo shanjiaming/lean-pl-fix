@@ -1,0 +1,1 @@
+theorem h₁ (h_expand_square : sorry = 4 * sorry ^ 4 * sorry ^ 4 * sorry ^ 6) : sorry ^ 3 * sorry ^ 2 * (4 * sorry ^ 4 * sorry ^ 4 * sorry ^ 6) = 4 * sorry ^ 4 * sorry ^ 7 * sorry ^ 8 := by ring

@@ -1,0 +1,1 @@
+theorem h₁ (h₀ : sorry ^ 3 * sorry ^ 2 * sorry / (2 * sorry ^ 3) = 4 * sorry ^ 4 * sorry ^ 7 * sorry ^ 8 / (2 * sorry ^ 3)) : 4 * sorry ^ 4 * sorry ^ 7 * sorry ^ 8 / (2 * sorry ^ 3) = 2 * sorry * sorry ^ 7 * sorry ^ 8 := by sorry

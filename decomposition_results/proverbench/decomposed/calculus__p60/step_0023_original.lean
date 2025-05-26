@@ -1,0 +1,2 @@
+theorem h12 (h1 : sorry) (h2 : sorry) (h4 : sorry) (h9 : sorry) (h10 : sorry) : (fun x => sin (3 * x + x ^ 2) / (3 * x + x ^ 2)) = (fun x => sin x / x) ∘ fun x => 3 * x + x ^ 2 :=
+  by funext x <;> simp [Function.comp_apply] <;> ring_nf <;> field_simp [add_assoc] <;> ring_nf

@@ -1,0 +1,25 @@
+theorem h₁ (a b : ℕ → ℕ) (ha : StrictMono a ∧ ∀ (n : ℕ), a n > 0) (hb : b 0 = a 0 ∧ ∀ (n : ℕ), b (n + 1) = sorry) (n : ℕ) : ∀ (n : ℕ), b n > 0 := by
+  --  intro n
+  --  induction n with
+  --  | zero =>
+  --    have h₂ : b 0 = a 0 := hb.1
+  --    have h₃ : a 0 > 0 := ha.2 0
+  --    rw [h₂]
+  --    exact h₃
+  --  | succ n ih =>
+  --    have h₂ : b (n + 1) = lcm (b n) (a (n + 1)) := hb.2 n
+  --    rw [h₂]
+  --    have h₃ : b n > 0 := ih
+  --    have h₄ : a (n + 1) > 0 := ha.2 (n + 1)
+  --    have h₅ : lcm (b n) (a (n + 1)) > 0 := by
+  --      have h₅₁ : b n > 0 := h₃
+  --      have h₅₂ : a (n + 1) > 0 := h₄
+  --      have h₅₃ : Nat.lcm (b n) (a (n + 1)) > 0 :=
+  --        by
+  --        have h₅₄ : 0 < b n := by linarith
+  --        have h₅₅ : 0 < a (n + 1) := by linarith
+  --        have h₅₆ : 0 < Nat.lcm (b n) (a (n + 1)) := by apply Nat.lcm_pos h₅₄ h₅₅
+  --        linarith
+  --      exact h₅₃
+  --    exact h₅
+  hole

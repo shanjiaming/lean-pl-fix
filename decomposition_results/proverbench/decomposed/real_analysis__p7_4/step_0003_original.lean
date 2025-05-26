@@ -1,0 +1,1 @@
+theorem h₁  : 4 ∈ Set.Ioo 0 8 := by constructor <;> norm_num

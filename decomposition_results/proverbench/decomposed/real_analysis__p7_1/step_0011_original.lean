@@ -1,0 +1,1 @@
+theorem h₄₃ (x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) : HasDerivAt (fun x => 8 * x) 8 x := by simpa using (hasDerivAt_id x).const_mul 8

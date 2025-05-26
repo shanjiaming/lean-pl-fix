@@ -1,0 +1,2 @@
+theorem h₂ (P : Polynomial ℤ) (h_coeff : ∀ (n : ℕ), P.coeff n = 0 ∨ P.coeff n = 1) (h_factor : ∃ Q R, Q.degree > 0 ∧ R.degree > 0 ∧ P = Q * R) (h : Polynomial.eval 2 P = 0) : Polynomial.eval 2 P = 0 := by -- simpa using h
+  linarith

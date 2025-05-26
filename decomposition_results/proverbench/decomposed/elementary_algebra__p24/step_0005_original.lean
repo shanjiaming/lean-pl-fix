@@ -1,0 +1,1 @@
+theorem h4₁ (h3 : 45 * sorry + 75 * sorry = 465) : 40 * sorry + 72 * sorry = 8 * (5 * sorry + 9 * sorry) := by ring

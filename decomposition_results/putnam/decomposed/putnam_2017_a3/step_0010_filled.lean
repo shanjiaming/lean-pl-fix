@@ -1,0 +1,11 @@
+theorem h₅ (a b : ℝ) (f g : ℝ → ℝ) (I : ℕ → ℝ) (altb : a < b) (fgcont : ContinuousOn f (Set.Icc a b) ∧ ContinuousOn g (Set.Icc a b)) (fgimg : f '' Set.Icc a b ⊆ Set.Ioi 0 ∧ g '' Set.Icc a b ⊆ Set.Ioi 0) (fgint : ∫ (x : ℝ) in Set.Ioo a b, f x = ∫ (x : ℝ) in Set.Ioo a b, g x) (fneg : ∃ x, f (↑x : ℝ) ≠ g (↑x : ℝ)) (hI : ∀ n > 0, I n = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n) (n : ℕ) (hn : n > 0) (h₁ : I (n + 1) = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1 + 1) / g x ^ (n + 1)) (h₂ : I n = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n) (h₃ :  ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1 + 1) / g x ^ (n + 1) =    ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x)) (h₄ :  ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x) =    ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x)) : ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n * (f x / g x) > ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n :=
+  by
+  have h₅₁ :
+    ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) =
+      ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) :=
+    rfl
+  --  rw [h₅₁]
+  have h₅₂ :
+    ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) * (f x / g x) > ∫ x in Set.Ioo a b, ((f x) ^ (n + 1) / (g x) ^ n) := by sorry
+  --  exact h₅₂
+  linarith

@@ -1,0 +1,1 @@
+theorem h₅ (h₁ : sorry = 0) (h₂ : sorry = 0) (h₄ : sorry ^ 2 / 4 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 = 0) : (sorry - sorry / 2) ^ 2 = 0 := by nlinarith [sq_nonneg (a / 2), sq_nonneg (b - a / 2), sq_nonneg (d - a / 2)]

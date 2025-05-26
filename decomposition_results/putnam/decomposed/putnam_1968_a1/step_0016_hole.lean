@@ -1,0 +1,3 @@
+theorem h₄ (h₁ :  ∫ (x : ℝ) in 0 ..1, x ^ 4 * (1 - x) ^ 4 / (1 + x ^ 2) =    ∫ (x : ℝ) in 0 ..1, x ^ 6 - 4 * x ^ 5 + 5 * x ^ 4 - 4 * x ^ 2 + 4 - 4 / (1 + x ^ 2)) (h₃ :  ∫ (x : ℝ) in 0 ..1, x ^ 6 - 4 * x ^ 5 + 5 * x ^ 4 - 4 * x ^ 2 + 4 - 4 / (1 + x ^ 2) =    (∫ (x : ℝ) in 0 ..1, x ^ 6 - 4 * x ^ 5 + 5 * x ^ 4 - 4 * x ^ 2 + 4) - ∫ (x : ℝ) in 0 ..1, 4 / (1 + x ^ 2)) : ∫ (x : ℝ) in 0 ..1, x ^ 6 - 4 * x ^ 5 + 5 * x ^ 4 - 4 * x ^ 2 + 4 = 22 / 7 := by
+  norm_num [integral_id, mul_comm] <;> ring_nf <;> norm_num <;> linarith
+  hole

@@ -1,0 +1,2 @@
+theorem h₅₉ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) (h₃ : 2 * k + 1 > 0) (h : k + 1 < n) (h₄ h₅₁ : n > k + 1) (h₅₂ : ∀ (s : Equiv.Perm (Fin n)), sorry → s = 1) (s : Equiv.Perm (Fin n)) (hs : s ∈ {1}) : s = 1 := by simpa using hs
+  hole

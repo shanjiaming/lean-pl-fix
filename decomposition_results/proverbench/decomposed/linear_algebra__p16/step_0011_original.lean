@@ -1,0 +1,1 @@
+theorem h₅₂ (h : ∀ (x y : EuclideanSpace ℝ (Fin 2)), ‖x + y‖ = ‖x‖ + ‖y‖) (h₁ : ‖![1, 0] + ![0, 1]‖ = ‖![1, 0]‖ + ‖![0, 1]‖) (h₂ : ‖![1, 0] + ![0, 1]‖ = √2) (h₃ : ‖![1, 0]‖ + ‖![0, 1]‖ = 2) (h₄ : √2 = 2) : √2 < 2 := by nlinarith [Real.sqrt_nonneg 2, Real.sq_sqrt (show 0 ≤ 2 by norm_num)]

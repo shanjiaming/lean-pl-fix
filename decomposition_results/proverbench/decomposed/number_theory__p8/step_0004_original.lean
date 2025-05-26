@@ -1,0 +1,1 @@
+theorem h₃ (x y z : ℕ) (h : x * y = z ^ 2 + 1) (hx : x = 1) : x * y = z ^ 2 + 1 := by simpa using h

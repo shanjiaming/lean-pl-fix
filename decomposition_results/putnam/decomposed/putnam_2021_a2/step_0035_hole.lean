@@ -1,0 +1,3 @@
+theorem h₄ (g : ℝ → ℝ) (hg : (x : ℕ) → x > 0 → sorry) (h₁ : sorry) (h₂ : ∀ x > 0, g x / x = (1 + 1 / x) ^ (x + 1)) : ∀ᶠ (x : ℝ) in sorry, g x / x = (1 + 1 / x) ^ (x + 1) := by
+  --  filter_upwards [eventually_gt_atTop 0] with x hx using h₂ x hx
+  hole

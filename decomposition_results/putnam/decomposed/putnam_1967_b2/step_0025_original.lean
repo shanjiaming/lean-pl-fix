@@ -1,0 +1,7 @@
+theorem h₇ (p r A B C α β γ : ℝ) (prbound : 0 ≤ p ∧ p ≤ 1 ∧ 0 ≤ r ∧ r ≤ 1) (id1 : ∀ (x y : ℝ), (p * x + (1 - p) * y) ^ 2 = A * x ^ 2 + B * x * y + C * y ^ 2) (id2 : ∀ (x y : ℝ), (p * x + (1 - p) * y) * (r * x + (1 - r) * y) = α * x ^ 2 + β * x * y + γ * y ^ 2) (hA : A = p ^ 2) (hB : B = 2 * p * (1 - p)) (hC : C = (1 - p) ^ 2) (h_max_ABC : max (max A B) C ≥ 4 / 9) (hα : α = p * r) (hβ : β = p + r - 2 * p * r) (hγ : γ = (1 - p) * (1 - r)) (h₁ : α + γ = 1 - β) (h₂ : α * γ ≤ ((α + γ) / 2) ^ 2) (h₃ : max (max α β) γ < 4 / 9) (h₄ : α < 4 / 9) (h₅ : γ < 4 / 9) (h₆ : α * γ < 16 / 81) : β < 1 / 9 := by
+  have h₇₁ : α * γ ≤ ((α + γ) / 2) ^ 2 := h₂
+  have h₇₂ : α + γ = 1 - β := h₁
+  have h₇₃ : α * γ < 16 / 81 := h₆
+  have h₇₄ : (1 - β) ^ 2 > 64 / 81 := by sorry
+  have h₇₅ : β < 1 / 9 := by sorry
+  exact h₇₅

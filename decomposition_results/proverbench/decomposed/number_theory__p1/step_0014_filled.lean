@@ -1,0 +1,2 @@
+theorem h₁₆ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : p ∣ sorry) (h₃ : p ∣ sorry) (h₄ : p ∣ sorry) (h₅ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) (h₇ : p ∣ sorry ^ 8) (h₈ : p ∣ sorry ^ 4) (h₉ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) (h₁₁ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) (h₁₂ : p ∣ sorry ^ 8) (h₁₃ : p ∣ sorry ^ 4) (h₁₄ : p ∣ sorry ^ 8 - sorry ^ 4) (h₁₅ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) : p ∣ sorry ^ 8 - sorry ^ 4 + 1 - (sorry ^ 8 - sorry ^ 4) := by -- exact Nat.dvd_sub' h₁₅ h₁₄
+  hole

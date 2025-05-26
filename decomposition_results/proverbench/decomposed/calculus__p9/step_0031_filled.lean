@@ -1,0 +1,2 @@
+theorem h19 (x : ℝ) (h2 : ∫ (x : ℝ), sin x ^ 3 * cos x ^ 6 = ∫ (x : ℝ), sin x * cos x ^ 6 - sin x * cos x ^ 8) (h3 : ∫ (x : ℝ), sin x * cos x ^ 6 - sin x * cos x ^ 8 = (∫ (x : ℝ), sin x * cos x ^ 6) - ∫ (x : ℝ), sin x * cos x ^ 8) (h4 : ∫ (x : ℝ), sin x * cos x ^ 6 = -(cos x ^ 7 / 7)) (h8 h17 : HasDerivAt (fun x => -(cos x ^ 9 / 9)) (sin x * cos x ^ 8) x) : ∫ (x : ℝ), sin x * cos x ^ 8 = -(cos x ^ 9 / 9) := by -- exact?
+  hole

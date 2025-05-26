@@ -1,0 +1,1 @@
+theorem h₄ (S : Type u_3) (x✝ : Mul S) (h : ∀ (x y : S), x * (x * y) = y ∧ y * x * x = y) (x y : S) (h₂ : x * y * x = y) (h₃ : y * x * x = y) : x * y * x = y * x * x := by rw [h₂, h₃]

@@ -1,0 +1,2 @@
+theorem h₁₁ (f : ℕ → ℤ) (hf : ∀ n > 0, f n = ∑ i, (↑(↑i : ℕ)! : ℤ)) (n : ℕ) (hn : n ≥ 1) : f (n + 2) = ∑ i, (↑(↑i : ℕ)! : ℤ) := by -- -- apply hf <;> linarith
+  hole

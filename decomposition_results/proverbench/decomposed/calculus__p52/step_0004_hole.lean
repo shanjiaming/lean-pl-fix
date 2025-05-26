@@ -1,0 +1,3 @@
+theorem h₃ (x : ℝ) (h₁ h₂ : ∫ (t : ℝ) in Set.Icc 0 x, 1 / cos t = Real.log |1 / cos x + sin x / cos x| + sorry) : ∫ (t : ℝ) in Set.Icc 0 0, 1 / cos t = Real.log |1 / cos 0 + sin 0 / cos 0| + sorry :=
+  --  by simpa using h₂
+  hole

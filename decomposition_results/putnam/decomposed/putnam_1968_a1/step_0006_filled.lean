@@ -1,0 +1,2 @@
+theorem h₄ (x : ℝ) (hx : x ∈ Set.uIcc 0 1) (h₂ : x ∈ Set.Icc 0 1) (h₃ : 0 ≤ x) : x ≤ 1 := by -- linarith [h₂.2]
+  hole

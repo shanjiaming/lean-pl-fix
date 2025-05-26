@@ -1,0 +1,2 @@
+theorem h3 (u v : ℝ) (h1 : deriv (fun u => sorry) u = (2 * u - (u ^ 2 + v ^ 2)) * rexp (-(u + v))) (h2 : deriv (fun v => sorry) v = (2 * v - (u ^ 2 + v ^ 2)) * rexp (-(u + v))) : deriv (fun u => sorry) u - deriv (fun v => sorry) v = 2 * (u - v) * rexp (-(u + v)) := by
+  rw [h1, h2] <;> ring_nf <;> field_simp [Real.exp_neg] <;> ring_nf <;> linarith

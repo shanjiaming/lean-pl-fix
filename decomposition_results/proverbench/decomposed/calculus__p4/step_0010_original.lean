@@ -1,0 +1,1 @@
+theorem h₃ (x : ℝ) (h₂ : cos (2 * x - 6) = cos (2 * (x - 3))) : cos (2 * (x - 3)) = 1 - 2 * sin (x - 3) ^ 2 := by rw [Real.cos_two_mul, Real.sin_sq] <;> ring

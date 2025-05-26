@@ -1,0 +1,1 @@
+theorem h7 (x y : ℝ) (h1 : sorry = fun x y => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) (h3 : deriv (fun x => sorry) x = deriv (fun x => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) x) : HasDerivAt (fun x => x ^ 2) (2 * x) x := by simpa using (hasDerivAt_pow 2 x)

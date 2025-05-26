@@ -1,0 +1,1 @@
+theorem h₂ (f : ℝ → ℝ) (hf : Continuous f) (h_diff : ∀ (x : ℝ), DifferentiableAt ℝ f x) (h_deriv : ∀ (x : ℝ), deriv f x = 1 / 5 * sin (5 * x)) (h₁ : deriv f 0 = 1 / 5 * sin (5 * 0)) : deriv f 0 = 0 := by norm_num [h₁] <;> simp [Real.sin_zero]

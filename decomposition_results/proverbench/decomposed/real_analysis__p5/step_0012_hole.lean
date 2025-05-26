@@ -1,0 +1,3 @@
+theorem h₄ (h₁ : sorry = 0) (h₂ : sorry = 0) : sorry ^ 2 / 4 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 = 0 := by
+  --  nlinarith [sq_nonneg (b - a / 2), sq_nonneg (c - a / 2), sq_nonneg (d - a / 2), sq_nonneg (b + c + d - 3 * a / 2)]
+  hole

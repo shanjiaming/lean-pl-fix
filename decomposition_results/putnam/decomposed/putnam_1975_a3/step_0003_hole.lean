@@ -1,0 +1,2 @@
+theorem h₅ (a b c : ℝ) (hi : 0 < a ∧ a < b ∧ b < c) (P : ℝ × ℝ × ℝ → Prop) (f : ℝ × ℝ × ℝ → ℝ) (hP :  P = fun x =>    match x with    | (x, y, z) => x ≥ 0 ∧ y ≥ 0 ∧ z ≥ 0 ∧ x ^ b + y ^ b + z ^ b = 1) (hf :  f = fun x =>    match x with    | (x, y, z) => x ^ a + y ^ b + z ^ c) (h₂ : 0 < a) (h₃ : a < b) (h₄ : b < c) : 0 < b := by -- linarith
+  hole

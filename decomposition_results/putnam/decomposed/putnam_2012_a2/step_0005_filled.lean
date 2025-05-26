@@ -1,0 +1,2 @@
+theorem h3 (S : Type u_1) (inst✝ : CommSemigroup S) (a b c : S) (hS : ∀ (x y : S), ∃ z, x * z = y) (habc : a * c = b * c) (e : S) (he : a * e = a) (x z : S) (hz : a * z = x) (h1 : x * e = a * z * e) (h2 : a * z * e = a * (z * e)) : a * (z * e) = a * (e * z) := by rw [mul_comm z e]
+  hole

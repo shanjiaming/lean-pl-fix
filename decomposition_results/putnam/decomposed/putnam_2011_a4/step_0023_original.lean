@@ -1,0 +1,1 @@
+theorem h_final (nmat : ℕ → Prop) (hnmat : ∀ (n : ℕ), nmat n ↔ ∃ A, (∀ (r : Fin n), Even (A r ⬝ᵥ A r)) ∧ Pairwise fun r1 r2 => Odd (A r1 ⬝ᵥ A r2)) (n : ℕ) (npos : 0 < n) (h_main : nmat n ↔ Odd n) : nmat n ↔ n ∈ {n | Odd n} := by rw [h_main] <;> simp [Set.mem_setOf_eq] <;> aesop

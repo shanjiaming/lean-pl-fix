@@ -1,0 +1,2 @@
+theorem h₁₂ (Γ : Polynomial ℝ → ℝ) (f : Polynomial ℝ) (hΓ : Γ = fun p => ∑ k ∈ Finset.range (p.natDegree + 1), sorry ^ 2) (hf : f = 3 * sorry ^ 2 + 7 * sorry + 2) (g : Polynomial ℝ := 6 * sorry ^ 2 + 5 * sorry + 1) (h₁ : Polynomial.eval 0 g = 1) (n : ℕ) (hn : n ≥ 1) (h₃ : Γ = fun p => ∑ k ∈ Finset.range (p.natDegree + 1), sorry ^ 2) (h₄ : f = 3 * sorry ^ 2 + 7 * sorry + 2) (h₅ : g = 6 * sorry ^ 2 + 5 * sorry + 1) (h₆ : n ≥ 1) (h₈ h₉ : n ≥ 2) : n ≥ 3 := by -- omega
+  hole

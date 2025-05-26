@@ -1,0 +1,2 @@
+theorem h₆ (p : ℕ) (hp : sorry) (N : ℕ := sorry) (h₁ : p = 2 → N % p = 0) (h₂ : p = 3 → N % p = 4) (h h₄ : p = 5) (h₅ : N = 100) : N % p = 100 % 5 := by -- rw [h₅, h₄] <;> norm_num
+  hole

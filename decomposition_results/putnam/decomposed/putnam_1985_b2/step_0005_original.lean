@@ -1,0 +1,1 @@
+theorem h₄ (f : ℕ → Polynomial ℕ) (hf0x : f 0 = 1) (hfn0 : ∀ n ≥ 1, Polynomial.eval 0 (f n) = 0) (hfderiv : ∀ (n : ℕ), sorry = ((↑n : Polynomial ℕ) + 1) * (f n).comp (sorry + 1)) : sorry = (↑(0 + 1) : Polynomial ℕ) * (f 0).comp (sorry + 1) := by simpa using hfderiv 0

@@ -1,0 +1,2 @@
+theorem h₁ (P : Polynomial ℝ) (h_main :  (Polynomial.eval 0 P = 0 ∧ ∀ (x : ℝ), Polynomial.eval (x ^ 2 + 1) P = Polynomial.eval x P ^ 2 + 1) →    P ∈ {Polynomial.X}) (h : P ∈ {Polynomial.X}) : P = Polynomial.X := by simpa using h
+  hole

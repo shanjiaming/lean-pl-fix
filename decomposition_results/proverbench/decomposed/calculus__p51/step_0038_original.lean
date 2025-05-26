@@ -1,0 +1,1 @@
+theorem h₄₈ (h₃ h₃₈ :  ∀ x ∈ Set.Icc 0 (π / 4),    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * Real.log (4 * sin x + 3 * cos x))      ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x) (h₄₀ : IsCompact (Set.Icc 0 (π / 4))) (x : ℝ) (hx h₄₂ : x ∈ Set.Icc 0 (π / 4)) (h₄₃ : 0 ≤ x) (h₄₄ : x ≤ π / 4) (h₄₅ h₄₆ : 0 < √2) : 0 ≤ x := by linarith [h₄₂.1]

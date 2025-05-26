@@ -1,0 +1,2 @@
+theorem h₇ (p m n : ℕ) (hp : Nat.Prime p) (hmgen : m ≥ n) (h₂ : p > 0) (h₄ : (0 + p * m).choose (0 + p * n) ≡ choose 0 0 * m.choose n [MOD p]) (h₅ : choose 0 0 = 1) (h₆ : (0 + p * m).choose (0 + p * n) = (p * m).choose (p * n)) : choose 0 0 * m.choose n = m.choose n := by -- simp [h₅]
+  hole

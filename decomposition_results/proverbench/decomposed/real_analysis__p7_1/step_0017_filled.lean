@@ -1,0 +1,3 @@
+theorem h₅₅ (x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) (h₄ h₅₁ h₅₂ : HasDerivAt (fun x => 8 * x - x ^ 2) (8 - 2 * x) x) : HasDerivAt (fun y => y ^ (1 / 3)) (1 / 3 * (8 * x - x ^ 2) ^ (1 / 3 - 1)) (8 * x - x ^ 2) :=
+  --  by apply hasDerivAt_rpow_const <;> norm_num at h₃ ⊢ <;> (try norm_num) <;> (try linarith) <;> (try nlinarith)
+  hole

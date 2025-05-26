@@ -1,0 +1,84 @@
+theorem h₆ (n : ℤ) (ng1 : n > 1) (h₂ h₃ : n ≥ 2) (h₄ : (↑n : ℝ) ≥ 2) (h₅ : (3 * (↑n : ℝ) + 1) / (2 * (↑n : ℝ) + 2) < ∑ i, ((↑(↑i : ℤ) : ℝ) / (↑n : ℝ)) ^ (↑n : ℝ)) : ∑ i, ((↑(↑i : ℤ) : ℝ) / (↑n : ℝ)) ^ (↑n : ℝ) < 2 :=
+  by
+  have h₆₁ : n ≤ 5 ∨ n ≥ 6 := by sorry
+  --  cases h₆₁ with
+  --  | inl
+  --    h₆₁ =>
+  --    have h₆₂ : n = 2 ∨ n = 3 ∨ n = 4 ∨ n = 5 := by
+  --      have h₆₃ : n ≤ 5 := h₆₁
+  --      have h₆₄ : n ≥ 2 := h₂
+  --      have h₆₅ : n = 2 ∨ n = 3 ∨ n = 4 ∨ n = 5 := by omega
+  --      exact h₆₅
+  --    rcases h₆₂ with (rfl | rfl | rfl | rfl)
+  --    ·
+  --      norm_num [Finset.sum_Icc_succ_top, Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul,
+  --                Nat.cast_ofNat] <;>
+  --              norm_num <;>
+  --            ring_nf <;>
+  --          norm_num <;>
+  --        linarith
+  --    ·
+  --      norm_num [Finset.sum_Icc_succ_top, Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul,
+  --                Nat.cast_ofNat] <;>
+  --              norm_num <;>
+  --            ring_nf <;>
+  --          norm_num <;>
+  --        linarith
+  --    ·
+  --      norm_num [Finset.sum_Icc_succ_top, Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul,
+  --                Nat.cast_ofNat] <;>
+  --              norm_num <;>
+  --            ring_nf <;>
+  --          norm_num <;>
+  --        linarith
+  --    ·
+  --      norm_num [Finset.sum_Icc_succ_top, Finset.sum_range_succ, Nat.cast_add, Nat.cast_one, Nat.cast_mul,
+  --                Nat.cast_ofNat] <;>
+  --              norm_num <;>
+  --            ring_nf <;>
+  --          norm_num <;>
+  --        linarith
+  --  | inr h₆₁ =>
+  --    have h₆₂ : n ≥ 6 := h₆₁
+  --    have h₆₃ : (n : ℝ) ≥ 6 := by exact_mod_cast h₆₂
+  --    have h₆₄ : ∑ i : Finset.Icc 1 n, ((i : ℝ) / n) ^ (n : ℝ) < 2 :=
+  --      by
+  --      have h₆₅ : ∑ i : Finset.Icc 1 n, ((i : ℝ) / n) ^ (n : ℝ) < 2 :=
+  --        by
+  --        have h₆₅₁ : (n : ℤ) ≥ 6 := by exact_mod_cast h₆₂
+  --        have h₆₅₂ : (n : ℤ) ≥ 6 := by exact_mod_cast h₆₂
+  --        have h₆₅₃ : ∑ i : Finset.Icc 1 n, ((i : ℝ) / n) ^ (n : ℝ) < 2 :=
+  --          by
+  --          have h₆₅₄ : (n : ℤ) ≥ 6 := by exact_mod_cast h₆₂
+  --          have h₆₅₅ : (n : ℤ) ≥ 6 := by exact_mod_cast h₆₂
+  --          have h₆₅₆ : ∑ i : Finset.Icc 1 n, ((i : ℝ) / n) ^ (n : ℝ) < 2 :=
+  --            by
+  --            have h₆₅₇ : (n : ℤ) ≥ 6 := by exact_mod_cast h₆₂
+  --            have h₆₅₈ : (n : ℤ) ≥ 6 := by exact_mod_cast h₆₂
+  --            have h₆₅₉ : ∑ i : Finset.Icc 1 n, ((i : ℝ) / n) ^ (n : ℝ) < 2 :=
+  --              by
+  --              cases' n with n
+  --              · norm_num at h₆₅₇
+  --              · cases' n with n
+  --                · norm_num at h₆₅₇
+  --                · cases' n with n
+  --                  · norm_num at h₆₅₇
+  --                  · cases' n with n
+  --                    · norm_num at h₆₅₇
+  --                    · cases' n with n
+  --                      · norm_num at h₆₅₇
+  --                      · cases' n with n
+  --                        · norm_num at h₆₅₇
+  --                        ·
+  --                          simp_all [Finset.sum_Icc_succ_top, Nat.cast_add, Nat.cast_one, Nat.cast_zero,
+  --                                    Nat.cast_succ] <;>
+  --                                  norm_num <;>
+  --                                ring_nf <;>
+  --                              norm_num <;>
+  --                            linarith
+  --            exact h₆₅₉
+  --          exact h₆₅₆
+  --        exact h₆₅₃
+  --      exact h₆₅
+  --    exact h₆₄
+  hole

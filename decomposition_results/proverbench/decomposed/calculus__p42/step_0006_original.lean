@@ -1,0 +1,1 @@
+theorem h4 (x : ℝ) : HasDerivAt (fun x => cos x) (-sin x) x := by exact Real.hasDerivAt_cos x

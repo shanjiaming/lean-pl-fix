@@ -1,0 +1,1 @@
+theorem h₇ (h₁ : sorry) (h₂ : sorry) (h₃ : sorry) (h₄ : sorry) (h₅ : (fun x => (rexp (8 * x) - 1) / x) =ᶠ[𝓝[>] 0] fun x => 8 * ((rexp (8 * x) - 1) / (8 * x))) : sorry := by apply Tendsto.congr' h₅ h₄

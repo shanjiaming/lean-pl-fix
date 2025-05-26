@@ -1,0 +1,2 @@
+theorem h₆ (h_main_claim : sorry ∧ sorry ∧ sorry) (n : ℕ+) (hn : sorry ∧ sorry ∧ sorry) (h₂ : (↑n : ℕ) ≤ 7) (h₃ : sorry) (h₄ : sorry) (h₅ : sorry) : n ≤ 7 := by -- exact_mod_cast h₂
+  simpa

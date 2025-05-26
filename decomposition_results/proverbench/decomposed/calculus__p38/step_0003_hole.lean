@@ -1,0 +1,2 @@
+theorem h₄ (h₁ : sorry ^ 2 + sorry ^ 2 = 1) (h₂ : sorry * sorry ≤ 1 / 2 ∧ (sorry = 1 / sorry ∧ sorry = 1 / sorry ∨ sorry ∧ sorry)) : sorry = 1 / √2 ∧ sorry = 1 / √2 ∨ sorry = -1 / √2 ∧ sorry = -1 / √2 := by -- exact h₂.2
+  hole

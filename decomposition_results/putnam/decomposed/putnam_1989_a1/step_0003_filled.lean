@@ -1,0 +1,2 @@
+theorem h₁ (pdigalt : List ℕ → Prop) (hpdigalt : ∀ (l : List ℕ), pdigalt l ↔ Odd l.length ∧ ∀ (i : Fin l.length), l.get i = if Even (↑i : ℕ) then 1 else 0) (h₀ : {p | Nat.Prime p ∧ pdigalt (digits 10 p)} = {101}) : {p | Nat.Prime p ∧ pdigalt (digits 10 p)}.encard = 1 := by -- sorry
+  hole

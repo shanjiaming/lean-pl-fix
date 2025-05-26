@@ -1,0 +1,2 @@
+theorem h₂ (h : sorry) (h₁ : 2 = -12 + 2 * sorry) : 14 = 2 * sorry := by -- linarith
+  hole

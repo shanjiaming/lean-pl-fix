@@ -1,0 +1,1 @@
+theorem h₃ (G : Type u_1) (inst✝ : Group G) (A B : G) (hab : A * B * A = B * A ^ 2 * B ∧ A ^ 3 = 1 ∧ ∃ n > 0, B ^ (2 * n - 1) = 1) (n : ℤ) (hn : n > 0) (hn' : B ^ (2 * n - 1) = 1) (h₂ : B ^ (2 * 1 - 1) = 1) : B = 1 := by simpa [sub_eq_add_neg, add_assoc] using h₂

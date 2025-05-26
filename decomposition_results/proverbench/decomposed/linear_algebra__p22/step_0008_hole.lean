@@ -1,0 +1,3 @@
+theorem h₆ (h₀ : sorry = 37) (h₁ : sorry = 1) (h₂ : sorry = -24) (h₃ : sorry = -62) (h₄ : sorry = -3) (h₅ : sorry = -40) : sorry + sorry + sorry - sorry - sorry - sorry = 119 := by
+  --  rw [h₀, h₁, h₂, h₃, h₄, h₅] <;> norm_num <;> rfl
+  hole

@@ -1,0 +1,1 @@
+theorem h₁ (Γ : Polynomial ℝ → ℝ) (f : Polynomial ℝ) (hΓ : Γ = fun p => ∑ k ∈ Finset.range (p.natDegree + 1), sorry ^ 2) (hf : f = 3 * sorry ^ 2 + 7 * sorry + 2) (g : Polynomial ℝ := 6 * sorry ^ 2 + 5 * sorry + 1) : Polynomial.eval 0 g = 1 := by norm_num [g, eval_add, eval_mul, eval_pow, eval_X, eval_C, eval_bit0, eval_one] <;> rfl

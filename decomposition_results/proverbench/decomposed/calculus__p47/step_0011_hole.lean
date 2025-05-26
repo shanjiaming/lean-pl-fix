@@ -1,0 +1,3 @@
+theorem h₁₂ (x : ℝ) (h₃ : HasDerivAt (fun x => x ^ 2 + 1) (2 * x) x) (h₄ : HasDerivAt (fun x => Real.log (x ^ 2 + 1)) (2 * x / (x ^ 2 + 1)) x) (h₇ h₁₁ : HasDerivAt (fun x => 1 / 2 * Real.log (x ^ 2 + 1)) (1 / 2 * (2 * x / (x ^ 2 + 1))) x) : HasDerivAt (fun x => 1 / 2 * Real.log (x ^ 2 + 1) + sorry) (1 / 2 * (2 * x / (x ^ 2 + 1)) + 0) x := by
+  --  --  convert h₁₁.add_const C using 1 <;> simp
+  hole

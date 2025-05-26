@@ -1,0 +1,1 @@
+theorem h₁ (h : 7 = 7) : sorry := by rw [isolate_r] <;> norm_num

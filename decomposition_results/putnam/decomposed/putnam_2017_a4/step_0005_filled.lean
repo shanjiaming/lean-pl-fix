@@ -1,0 +1,2 @@
+theorem h₃ (N : ℕ) (score : Fin (2 * N) → Fin 11) (hsurj : ∀ (k : Fin 11), ∃ i, score i = k) (havg : (∑ i, (↑(↑(score i) : ℕ) : ℝ)) / (2 * (↑N : ℝ)) = 7.4) (h : N ≤ 0) (h₁ : N = 0) (h₂ : 2 * N = 0) : Fin (2 * N) ≃ Fin 0 := by -- rw [h₂] <;> simp [Fin.ext_iff]
+  hole

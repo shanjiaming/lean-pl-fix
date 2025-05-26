@@ -1,0 +1,2 @@
+theorem h₄₁ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : ¬p ∣ sorry) (h₃ : ∃ d, 0 < d ∧ sorry ^ d ≡ 1 [ZMOD (↑p : ℤ)]) : p ∣ sorry ^ 8 - sorry ^ 4 + 1 := by -- simpa [polynomial] using hdiv
+  hole

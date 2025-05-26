@@ -1,0 +1,2 @@
+theorem h₂ (x : ℝ) (h : (1 - Real.log x) / x ^ 2 < 0) (h₁ : ¬x > rexp 1) : x ≤ rexp 1 := by -- linarith
+  hole

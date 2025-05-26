@@ -1,0 +1,2 @@
+theorem h₉ (T : ℝ) (hT : 0 < T) (h : ¬False) (h₁ h₂ : T > 0) (t : ℝ) (ht₁ : t ≥ T) (ht₂ : ⌊t⌋₊ = 2 * ⌊t - T⌋₊) (h₄ : t ≥ T) (h₅ : ⌊t⌋₊ = 2 * ⌊t - T⌋₊) (h₆ : T > 0) (h₈ : (↑⌊t⌋₊ : ℝ) ≤ t) : t < (↑⌊t⌋₊ : ℝ) + 1 := by -- exact_mod_cast Nat.lt_floor_add_one t
+  hole

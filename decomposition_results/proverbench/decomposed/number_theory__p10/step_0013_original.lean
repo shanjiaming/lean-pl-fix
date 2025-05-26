@@ -1,0 +1,1 @@
+theorem h₄ (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (i j : ℕ) (hij : i < j) (hj : j ≤ n) (hdiff :  |(↑j : ℝ) * α - (↑i : ℝ) * α - ((↑(round ((↑j : ℝ) * α)) : ℝ) - (↑(round ((↑i : ℝ) * α)) : ℝ))| < 1 / ((↑n : ℝ) + 1)) (h : ¬i = 0) (h₁ : 0 < j - i) (h₂ : j - i ≤ n) : (↑j : ℝ) * α - (↑i : ℝ) * α = ((↑j : ℝ) - (↑i : ℝ)) * α := by ring

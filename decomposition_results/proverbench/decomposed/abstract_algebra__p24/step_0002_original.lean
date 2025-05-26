@@ -1,0 +1,1 @@
+theorem h_charZero (hchar : sorry) : sorry := by exact CharP.charP_to_charZero R <;> assumption

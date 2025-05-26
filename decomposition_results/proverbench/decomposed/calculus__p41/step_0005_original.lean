@@ -1,0 +1,1 @@
+theorem h₃ (h₁ : sorry) : Continuous fun x => 8 * x := by continuity

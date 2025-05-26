@@ -1,0 +1,1 @@
+theorem h₃ (h₁ : 2.5 - 2 ≠ 0) (h₂ : sorry - sorry = (2.5 - 2) * -32) : (2.5 - 2) * -32 = sorry - sorry := by rw [h₂] <;> ring_nf at * <;> linarith

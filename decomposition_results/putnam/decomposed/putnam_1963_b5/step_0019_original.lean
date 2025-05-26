@@ -1,0 +1,2 @@
+theorem h₅₁₇ (a : ℤ → ℝ) (haineq : ∀ n ≥ 1, ∀ (k : ℤ), n ≤ k ∧ k ≤ 2 * n → 0 ≤ a k ∧ a k ≤ 100 * a n) (haseries : ∃ S, sorry) (h₁ : ∀ n ≥ 1, 0 ≤ a n) (h₂ : ∀ n ≥ 1, a n ≥ 0) (h₃ : sorry) (h₅₁ : sorry) (h₅₃ : sorry) (h₅₁₁ : sorry) (h₅₁₂ : sorry) (h₅₁₅ : sorry) (h₅₁₆ : sorry) : sorry :=
+  by apply Tendsto.sub h₅₁₅ h₅₁₆

@@ -1,0 +1,2 @@
+theorem h₅ (a b c : ℝ) (h₁ : 0 ≤ (a - b) ^ 2 + (b - c) ^ 2 + (c - a) ^ 2) (h₂ : (a - b) ^ 2 + (b - c) ^ 2 + (c - a) ^ 2 = 2 * (a ^ 2 + b ^ 2 + c ^ 2 - (a * b + b * c + c * a))) (h₃ : 0 ≤ 2 * (a ^ 2 + b ^ 2 + c ^ 2 - (a * b + b * c + c * a))) (h₄ : 0 ≤ a ^ 2 + b ^ 2 + c ^ 2 - (a * b + b * c + c * a)) : a * b + b * c + c * a ≤ a ^ 2 + b ^ 2 + c ^ 2 := by -- linarith
+  hole

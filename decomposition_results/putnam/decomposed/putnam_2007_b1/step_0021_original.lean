@@ -1,0 +1,6 @@
+theorem h9 (f : Polynomial ℤ) (hf : ∀ (n : ℕ), f.coeff n ≥ 0) (hfnconst : ∃ n > 0, f.coeff n > 0) (n : ℤ) (hn : n > 0) (h1 : Polynomial.eval 1 f > 0) (h2 : n ≥ 1) (hn1 : n ≠ 1) (h4 h5 : n ≥ 2) (m : ℕ) (hm1 : m > 0) (hm2 : f.coeff m > 0) (h8 : m > 0) : Polynomial.eval n f > Polynomial.eval 1 f :=
+  by
+  have h10 : (Polynomial.eval n f : ℤ) = Polynomial.eval n f := by sorry
+  have h11 : (Polynomial.eval 1 f : ℤ) = Polynomial.eval 1 f := by sorry
+  have h12 : (Polynomial.eval n f : ℤ) - (Polynomial.eval 1 f : ℤ) > 0 := by sorry
+  linarith

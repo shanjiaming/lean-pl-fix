@@ -1,0 +1,5 @@
+theorem h5 (n : ℕ) (npos : n ≥ 1) (mats01 : Set (Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ)) (hmats01 : mats01 = {A | ∀ (i j : Fin (2 * n)), A i j = 0 ∨ A i j = 1}) (h1 : mats01.Infinite) (h2 : mats01.ncard = 0) (A : (↑mats01 : Type)) (h4 : (fun n => (↑(2 * n)! : ℝ) / (4 ^ n * (↑n ! : ℝ))) n = 0) : (∑' (A : (↑mats01 : Type)),
+        ((↑A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) - (↑A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ).transpose).det) /
+      (↑mats01.ncard : ℝ) =
+    (fun n => (↑(2 * n)! : ℝ) / (4 ^ n * (↑n ! : ℝ))) n :=
+  by rw [h3, h4] <;> simp_all <;> aesop

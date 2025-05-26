@@ -1,0 +1,1 @@
+theorem h₆ (h₁ : sorry = 0) (h₃ : sorry ^ 2 / 4 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 = 0) (h₄ : (sorry - sorry / 2) ^ 2 = 0) (h₅ : sorry - sorry / 2 = 0) : sorry = sorry / 2 := by linarith

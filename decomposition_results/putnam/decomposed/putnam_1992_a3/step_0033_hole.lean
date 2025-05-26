@@ -1,0 +1,4 @@
+theorem h₁₀ (m : ℕ) (mpos : m > 0) (S : Set (ℕ × ℕ × ℕ)) (hS : ∀ (n x y : ℕ), (n, x, y) ∈ S ↔ n > 0 ∧ x > 0 ∧ y > 0 ∧ n.Coprime m ∧ (x ^ 2 + y ^ 2) ^ m = (x * y) ^ n) (h h₁ : ¬Odd m) (n x y : ℕ) (h₃ : (n, x, y) ∈ {(m + 1, 2 ^ (m / 2), 2 ^ (m / 2))}) (h₄ : n = m + 1 ∧ x = 2 ^ (m / 2) ∧ y = 2 ^ (m / 2)) (h₅ : n = m + 1) (h₆ : x = 2 ^ (m / 2)) (h₇ : y = 2 ^ (m / 2)) (h₉ : x = 2 ^ (m / 2)) : x > 0 := by
+  rw [h₉]
+  exact Nat.pos_pow_of_pos _ (by norm_num)
+  hole
