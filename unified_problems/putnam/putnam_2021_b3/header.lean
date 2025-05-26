@@ -1,1 +1,0 @@
-rho h p = p 1 * deriv (fun x' => h ( ![x', p 1] )) (p 0) - p 0 * deriv (fun y' => h ( ![p 0, y'] )) (p 1)

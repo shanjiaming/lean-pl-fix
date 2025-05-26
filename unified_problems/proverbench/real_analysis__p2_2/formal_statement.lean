@@ -1,1 +1,0 @@
-lemma in_interval_of_log_inequality (h : log_inequality x) : x ∈ target_interval :=

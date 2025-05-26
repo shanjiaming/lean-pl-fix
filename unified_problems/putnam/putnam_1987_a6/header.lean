@@ -1,1 +1,0 @@
-a = fun n ↦ ((digits 3 n).filter (· = 0)).length

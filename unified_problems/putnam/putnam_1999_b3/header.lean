@@ -1,1 +1,0 @@
-nhdsWithin A (1,1) = (nhds (1,1) ⊓ 𝓟 A) = 𝓝 (1, 1) -- because (1,1) is in closure A.
