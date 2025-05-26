@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+-- (fun p : ℕ => Nat.ceil ((p : ℝ) / 4))
+/--
+Let $p$ be an odd prime and let $\mathbb{Z}_p$ denote (the field of) integers modulo $p$. How many elements are in the set $\{x^2:x \in \mathbb{Z}_p\} \cap \{y^2+1:y \in \mathbb{Z}_p\}$?
+-/

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Matrix Filter Topology Set Nat
+
+/--
+Let $(x_n)$ be a sequence, and let $y_n = x_{n-1} + 2*x_n$ for $n \geq 2$. Suppose that $(y_n)$ converges, then prove that $(x_n)$ converges.
+-/

@@ -1,5 +1,11 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open MvPolynomial Real Nat
+
+-- 1
+/--
+Evaluate
+\[
+\int_2^4 \frac{\sqrt{\ln(9-x)}\,dx}{\sqrt{\ln(9-x)}+\sqrt{\ln(x+3)}}.
+\]
+-/

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Filter Topology Set MeasureTheory Metric
+
+/--
+Let $A$ and $B$ be two elements in a group such that $ABA = BA^2B$, $A^3 = 1$, and $B^{2n-1} = 1$ for some positive integer $n$. Prove that $B = 1$.
+-/

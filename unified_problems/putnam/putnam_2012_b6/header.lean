@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Matrix Function Real Topology Filter
+
+/--
+Let $p$ be an odd prime number such that $p \equiv 2 \pmod{3}$. Define a permutation $\pi$ of the residue classes modulo $p$ by $\pi(x) \equiv x^3 \pmod{p}$. Show that $\pi$ is an even permutation if and only if $p \equiv 3 \pmod{4}$.
+-/

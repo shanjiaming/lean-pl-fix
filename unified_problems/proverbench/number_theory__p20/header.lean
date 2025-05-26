@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Prove that there is no positive integer n for which n^5 can be written as a product of six consecutive positive integers.
+-/

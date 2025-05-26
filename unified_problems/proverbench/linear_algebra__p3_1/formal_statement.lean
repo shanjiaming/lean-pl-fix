@@ -1,0 +1,1 @@
+theorem det_identity : det (1 : Matrix n n ℝ) = 1 :=

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Nat Polynomial Filter Topology
+
+/--
+Prove that if $\alpha$ is a real number such that $\cos (\pi \alpha) = 1/3$, the $\alpha$ is irrational.
+-/

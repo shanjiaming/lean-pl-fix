@@ -1,0 +1,1 @@
+lemma solve_congruence3 (p : ℕ) : ∃ m : ℕ, (15 * m + 8) % 7 = 1 ∧ m = 7 * p :=

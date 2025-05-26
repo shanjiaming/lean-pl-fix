@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 3987
+/--
+Find the smallest positive integer $n$ such that for every integer $m$ with $0<m<1993$, there exists an integer $k$ for which $\frac{m}{1993}<\frac{k}{n}<\frac{m+1}{1994}$.
+-/

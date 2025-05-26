@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Set Polynomial Function
+
+-- 12 - 8 * Real.sqrt 2
+/--
+Determine the minimum value attained by $$(r - 1)^2 + (\frac{s}{r} - 1)^2 + (\frac{t}{s} - 1)^2 + (\frac{4}{t} - 1)^2$$ across all choices of real $r$, $s$, and $t$ that satisfy $1 \le r \le s \le t \le 4$.
+-/

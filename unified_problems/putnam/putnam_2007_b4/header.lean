@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Nat Function
+
+-- fun n ↦ 2 ^ (n + 1)
+/--
+Let $n$ be a positive integer. Find the number of pairs $P, Q$ of polynomials with real coefficients such that
+\[
+(P(X))^2 + (Q(X))^2 = X^{2n} + 1
+\]
+and $\deg P > \deg Q$.
+-/

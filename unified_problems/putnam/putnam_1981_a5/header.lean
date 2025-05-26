@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Set Polynomial Function
+
+-- True
+/--
+Let $P(x)$ be a polynomial with real coefficients; let $$Q(x) = (x^2 + 1)P(x)P'(x) + x((P(x))^2 + (P'(x))^2).$$
+Given that $P$ has $n$ distinct real roots all greater than $1$, prove or disprove that $Q$ must have at least $2n - 1$ distinct real roots.
+-/

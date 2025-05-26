@@ -1,0 +1,1 @@
+lemma heightAtTwo : heightFunction 2 = 16 :=

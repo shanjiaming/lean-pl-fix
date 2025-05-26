@@ -1,5 +1,2 @@
-import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+def Nat.ofDigits (b : ℕ) (L : List ℕ) : ℕ :=
+  L.foldr (fun x y => x + b * y) 0

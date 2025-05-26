@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Function Nat
+
+-- False
+/--
+For any square matrix $A$, we can define $\sin A$ by the usual power series: $\sin A=\sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)!}A^{2n+1}$. Prove or disprove: there exists a $2 \times 2$ matrix $A$ with real entries such that $\sin A=\begin{pmatrix} 1 & 1996 \\ 0 & 1 \end{pmatrix}$.
+-/

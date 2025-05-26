@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Nat Function
+
+-- fun n ↦ 2 * n - 3
+/--
+Let $S$ be a set of $n$ distinct real numbers. Let $A_S$ be the set of numbers that occur as averages of two distinct elements of $S$. For a given $n \geq 2$, what is the smallest possible number of elements in $A_S$?
+-/

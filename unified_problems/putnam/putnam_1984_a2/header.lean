@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 2
+/--
+Express $\sum_{k=1}^\infty (6^k/(3^{k+1}-2^{k+1})(3^k-2^k))$ as a rational number.
+-/

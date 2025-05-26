@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+Consider a set $S$ and a binary operation $*$, i.e., for each $a,b\in S$, $a*b\in S$.  Assume $(a*b)*a=b$ for all $a,b\in S$.  Prove that $a*(b*a)=b$ for all $a,b\in S$.
+-/

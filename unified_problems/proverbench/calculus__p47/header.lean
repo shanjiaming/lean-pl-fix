@@ -1,5 +1,10 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The indefinite integral \[\int \frac{x}{x^2+1}\,dx\] is equal to \[\frac12\ln(x^2+1)+C.\]
+-/
+
+-- Define the function to be integrated
+noncomputable def integrand (x : ℝ) : ℝ := x / (x^2 + 1)
+
+-- Theorem statement

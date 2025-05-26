@@ -1,5 +1,11 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+For the imaginary unit $i$, where $i^2 = -1$, the following equality holds:
+
+    $i^{73} = i$
+-/
+
+open Complex
+
+axiom i_pow_73 : I ^ 73 = I

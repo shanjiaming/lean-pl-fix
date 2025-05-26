@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral \[\iint_{R}f(x,y)\,dxdy,\] where \(f(x,y)=11-2x-3y^2\) and \(R\) is the rectangle \([1,3]\times[-2,5]\) is equal to -168.
+-/
+
+open Set Filter MeasureTheory
+
+variable (f : ℝ → ℝ → ℝ) (R : Set (ℝ × ℝ))

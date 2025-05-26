@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral of \(\sin^3 x\cos^{6}x\,dx\) is equal to \(-\frac{\cos^7 x}{7} + \frac{\cos^9 x}{9} + C\).
+-/

@@ -1,0 +1,2 @@
+theorem h₃ (q : ℕ+ → ℚ) (hq : Function.Bijective q) (hq' : Function.Surjective q) (a b : ℝ) (hab : a < b) (h₁ : {n | (↑(q n) : ℝ) < a} ⊆ {n | (↑(q n) : ℝ) < b}) (h₂ : {n | (↑(q n) : ℝ) < a} ≠ {n | (↑(q n) : ℝ) < b}) : {n | (↑(q n) : ℝ) < a} ⊂ {n | (↑(q n) : ℝ) < b} := by -- refine' Set.ssubset_iff_subset_ne.mpr ⟨h₁, h₂⟩
+  hole

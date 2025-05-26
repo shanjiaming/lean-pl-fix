@@ -1,0 +1,1 @@
+theorem formal_statement : ∀ x : ℝ, (deriv F x = φ x) ∧ (deriv K x = φ x) ∧ (deriv G x ≠ φ x) ∧ (deriv H x ≠ φ x) :=

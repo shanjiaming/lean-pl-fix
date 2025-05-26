@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Real Nat
+
+-- ⟨3,1,5,2⟩
+/--
+Evaluate \[ \sqrt[8]{2207 - \frac{1}{2207-\frac{1}{2207-\dots}}}. \] Express your answer in the form $\frac{a+b\sqrt{c}}{d}$, where $a,b,c,d$ are integers.
+-/

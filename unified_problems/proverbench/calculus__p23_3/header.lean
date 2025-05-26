@@ -1,5 +1,22 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Let $a_n = \frac{3^n+2^n}{3^{n+1}-2^{n+1}}$ for $n \in \mathbb{N}$. Then,
+
+  $\lim_{n\rightarrow\infty} a_n = \frac{1}{3}$
+-/
+
+open Real
+open Filter (Tendsto)
+
+variable (n : ℕ)
+
+/-- Define `a_n`: The sequence defined by a_n = (3^n + 2^n) / (3^(n+1) - 2^(n+1)) -/
+noncomputable def a_n (n : ℕ) : ℝ := (3^n + 2^n) / (3^(n+1) - 2^(n+1))
+
+/-- Lemma 1: Rewrite a_n as (1 + (2/3)^n) / (3 * (1 - (2/3)^(n+1))) -/
+axiom sequence_rewrite (n : ℕ) : a_n n = (1 + (2/3)^n) / (3 * (1 - (2/3)^(n+1)))
+
+/-- Lemma 2: As n approaches infinity, (2/3)^n approaches 0 -/
+axiom geometric_limit :
+  Tendsto (λ n : ℕ => (2/3 : ℝ)^n) Filter.atTop (nhds 0)

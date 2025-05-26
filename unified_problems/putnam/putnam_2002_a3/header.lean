@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat
+
+/--
+Let $n \geq 2$ be an integer and $T_n$ be the number of non-empty subsets $S$ of $\{1, 2, 3, \dots, n\}$ with the property that the average of the elements of $S$ is an integer. Prove that $T_n - n$ is always even.
+-/

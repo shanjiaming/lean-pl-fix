@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+Prove that $f(n) = 1-n$ is the only integer-valued function defined on the integers that satisfies the following conditions.
+\begin{itemize}
+\item[(i)] $f(f(n)) = n$, for all integers $n$;
+\item[(ii)] $f(f(n+2)+2) = n$ for all integers $n$;
+\item[(iii)] $f(0) = 1$.
+\end{itemize}
+-/

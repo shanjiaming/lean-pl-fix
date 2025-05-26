@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Nat
+
+-- (fun n ↦ (1 : ℚ) / (2 ^ (n - 1)) * (n * (n - 1).choose ⌊n / 2⌋₊))
+
+/--
+Evaluate in closed form: $\frac{1}{2^{n-1}} \sum_{k < n/2} (n-2k)*{n \choose k}$.
+-/

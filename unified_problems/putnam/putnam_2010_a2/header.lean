@@ -1,5 +1,10 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- {f : ℝ → ℝ | ∃ c d : ℝ, ∀ x : ℝ, f x = c*x + d}
+/--
+Find all differentiable functions $f:\mathbb{R} \to \mathbb{R}$ such that
+\[
+f'(x) = \frac{f(x+n)-f(x)}{n}
+\]
+for all real numbers $x$ and all positive integers $n$.
+-/

@@ -1,0 +1,1 @@
+lemma exponent_simplification : exp (I * (5 * π / 2)) = exp (I * (π / 2)) :=

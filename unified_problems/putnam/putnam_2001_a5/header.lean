@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Polynomial Set
+
+/--
+Prove that there are unique positive integers $a$, $n$ such that $a^{n+1}-(a+1)^n=2001$.
+-/

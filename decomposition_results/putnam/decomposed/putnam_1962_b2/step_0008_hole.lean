@@ -1,0 +1,2 @@
+theorem hn'' (q : ℕ+ → ℚ) (hq : Function.Bijective q) (hq' : Function.Surjective q) (a b : ℝ) (hab : a < b) (n : ℕ+) (hn : n ∈ {n | (↑(q n) : ℝ) < a}) (hn' : (↑(q n) : ℝ) < a) : (↑(q n) : ℝ) < b := by -- linarith
+  hole

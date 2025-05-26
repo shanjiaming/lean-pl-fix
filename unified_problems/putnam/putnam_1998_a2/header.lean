@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/--
+Let $s$ be any arc of the unit circle lying entirely in the first quadrant. Let $A$ be the area of the region lying below $s$ and above the $x$-axis and let $B$ be the area of the region lying to the right of the $y$-axis and to the left of $s$. Prove that $A+B$ depends only on the arc length, and not on the position, of $s$.
+-/

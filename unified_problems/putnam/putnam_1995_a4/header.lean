@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Real
+
+/--
+Suppose we have a necklace of $n$ beads. Each bead is labeled with an integer and the sum of all these labels is $n-1$. Prove that we can cut the necklace to form a string whose consecutive labels $x_{1},x\_{2},\dots,x_{n}$ satisfy \[\sum_{i=1}^{k} x_{i} \leq k-1 \qquad \mbox{for} \quad k=1,2,\dots,n.\]
+-/

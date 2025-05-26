@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Function Metric
+
+/--
+Prove that, for any integers $a, b, c$, there exists a positive integer $n$ such that $\sqrt{n^3+an^2+bn+c}$ is not an integer.
+-/

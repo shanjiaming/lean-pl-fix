@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+-- Note: uses (ℝ → ℝ) instead of (Set.Icc a b → Set.Ioi (0 : ℝ))
+/--
+Let $a$ and $b$ be real numbers with $a<b$, and let $f$ and $g$ be continuous functions from $[a,b]$ to $(0,\infty)$ such that $\int_a^b f(x)\,dx=\int_a^b g(x)\,dx$ but $f \neq g$. For every positive integer $n$, define $I_n=\int_a^b \frac{(f(x))^{n+1}}{(g(x))^n}\,dx$. Show that $I_1,I_2,I_3,\dots$ is an increasing sequence with $\lim_{n \to \infty} I_n=\infty$.
+-/

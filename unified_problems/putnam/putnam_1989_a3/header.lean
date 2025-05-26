@@ -1,5 +1,10 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+open Complex
+
+/--
+Prove that if
+\[
+11z^{10}+10iz^9+10iz-11=0,
+\]
+then $|z|=1.$ (Here $z$ is a complex number and $i^2=-1$.)
+-/

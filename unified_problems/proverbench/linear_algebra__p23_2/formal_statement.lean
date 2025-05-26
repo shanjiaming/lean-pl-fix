@@ -1,0 +1,1 @@
+theorem rank_equivalence : Matrix.rank A = Matrix.rank (transpose A) :=

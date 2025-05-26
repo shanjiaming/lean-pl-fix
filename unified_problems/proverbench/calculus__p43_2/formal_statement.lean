@@ -1,0 +1,1 @@
+lemma heightAtTwoPointFive : heightFunction 2.5 = 0 :=

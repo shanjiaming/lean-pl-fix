@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Topology Filter Complex
+
+/--
+Prove that there are exactly three right triangles (up to orientation and translation) with integer side lengths and area equal to twice their perimeter.
+-/

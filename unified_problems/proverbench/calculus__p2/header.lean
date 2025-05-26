@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral of \(\displaystyle \int_0^1\frac{8x^2 +6x +5}{x^2 +2x+2 }\,dx\) is equal to \(-5\ln\frac52 - \left(\tan^{-1}2-\frac{\pi}4\right)+8\).
+-/
+
+open Real

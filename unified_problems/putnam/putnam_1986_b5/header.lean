@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open  Real Equiv Polynomial Filter Topology MvPolynomial
+
+-- False
+/--
+Let $f(x,y,z) = x^2+y^2+z^2+xyz$. Let $p(x,y,z), q(x,y,z)$, $r(x,y,z)$ be polynomials with real coefficients satisfying
+\[
+f(p(x,y,z), q(x,y,z), r(x,y,z)) = f(x,y,z).
+\]
+Prove or disprove the assertion that the sequence $p,q,r$ consists of some permutation of $\pm x, \pm y, \pm z$, where the number of minus signs is $0$ or $2$.
+-/

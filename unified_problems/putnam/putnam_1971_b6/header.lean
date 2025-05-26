@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set MvPolynomial
+
+/--
+Let $\delta(x) be the greatest odd divisor of the positive integer $x$. Show that $|\sum_{n = 1}^x \delta(n)/n - 2x/3| < 1$ for all positive integers $x$.
+-/

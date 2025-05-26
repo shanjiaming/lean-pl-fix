@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+/--
+Suppose that a sequence $a_1,a_2,a_3,\dots$ satisfies $0<a_n \leq a_{2n}+a_{2n+1}$ for all $n \geq 1$. Prove that the series $\sum_{n=1}^\infty a_n$ diverges.
+-/

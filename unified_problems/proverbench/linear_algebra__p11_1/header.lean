@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Let $A$ be a real $2 \times 2$ matrix. Then the determinant of $A^2$ is always nonnegative, i.e., $\det(A^2) \geq 0$.
+-/
+
+open Matrix
+
+variable (A : Matrix (Fin 2) (Fin 2) ℝ)

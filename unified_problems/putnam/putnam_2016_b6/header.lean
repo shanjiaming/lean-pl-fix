@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Polynomial Filter Topology Real Set Nat List
+
+-- 1
+/--
+Evaluate $\sum_{k=1}^\infty \frac{(-1)^{k-1}}{k} \sum_{n=0}^\infty \frac{1}{k2^n+1}$.
+-/

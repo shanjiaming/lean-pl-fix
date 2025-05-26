@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open RingHom Set Nat
+
+/--
+Let $p$ be a prime and $m \geq n$ be non-negative integers. Show that $\binom{pm}{pn} = \binom{m}{n} \pmod p$, where $\binom{m}{n}$ is the binomial coefficient.
+-/

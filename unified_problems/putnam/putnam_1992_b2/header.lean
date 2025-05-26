@@ -1,5 +1,11 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Nat Function Polynomial
+
+/--
+For nonnegative integers $n$ and $k$, define $Q(n, k)$ to be the coefficient of $x^k$ in the expansion of $(1 + x + x^2 + x^3)^n$. Prove that
+\[
+Q(n, k) = \sum_{j=0}^k \binom{n}{j} \binom{n}{k-2j},
+\]
+where $\binom{a}{b}$ is the standard binomial coefficient. (Reminder: For integers $a$ and $b$ with $a \geq 0$, $\binom{a}{b} = \frac{a!}{b!(a-b)!}$ for $0 \leq b \leq a$, with $\binom{a}{b} = 0$ otherwise.)
+-/

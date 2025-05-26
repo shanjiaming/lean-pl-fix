@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Set
+
+-- False
+/--
+Is there an infinite sequence of real numbers $a_1, a_2, a_3, \dots$ such that \[ a_1^m + a_2^m + a_3^m + \cdots = m \] for every positive integer $m$?
+-/

@@ -1,0 +1,1 @@
+lemma lambda_eq_1 (h : 1 - exp (-1) = 1 - exp (-(lambda : ℝ))) : lambda = 1 :=

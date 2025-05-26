@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Nat
+
+-- False
+/--
+If $\mathbf{A}$ and $\mathbf{B}$ are square matrices of the same size such that $\mathbf{ABAB}=\mathbf{0}$, does it follow that $\mathbf{BABA}=\mathbf{0}$?
+-/

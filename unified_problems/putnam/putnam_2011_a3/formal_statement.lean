@@ -1,0 +1,2 @@
+theorem putnam_2011_a3
+: ((-1, 2 / Real.pi) : ℝ × ℝ ).2 > 0 ∧ Tendsto (fun r : ℝ => (r ^ ((-1, 2 / Real.pi) : ℝ × ℝ ).1 * ∫ x in Set.Ioo 0 (Real.pi / 2), x ^ r * Real.sin x) / (∫ x in Set.Ioo 0 (Real.pi / 2), x ^ r * Real.cos x)) atTop (𝓝 ((-1, 2 / Real.pi) : ℝ × ℝ ).2) := by

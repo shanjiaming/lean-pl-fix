@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Real
+
+-- Real.pi / 15
+/--
+Let $\triangle ABC$ satisfy $\angle CAB < \angle BCA < \frac{\pi}{2} < \angle ABC$. If the bisector of the external angle at $A$ meets line $BC$ at $P$, the bisector of the external angle at $B$ meets line $CA$ at $Q$, and $AP = BQ = AB$, find $\angle CAB$.
+-/

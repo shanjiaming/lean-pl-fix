@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- fun k : ℝ => k ≥ 0
+/--
+For which real numbers $k$ does there exist a continuous function $f : \mathbb{R} \to \mathbb{R}$ such that $f(f(x)) = kx^9$ for all real $x$?
+-/

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+Let $U$ and $V$ be distinct points on an ellipse, with $M$ the midpoint of chord $\overline{UV}$, and let $\overline{AB}$ and $\overline{CD}$ be any two other chords through $M$. If line $UV$ intersects line $AC$ at $P$ and line $BD$ at $Q$, prove that $M$ is the midpoint of segment $\overline{PQ}$.
+-/

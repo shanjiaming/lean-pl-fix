@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open MvPolynomial Set
+
+-- False
+/--
+Do there exist polynomials $a(x), b(x), c(y), d(y)$ such that \[ 1 + xy + x^2y^2 = a(x)c(y) + b(x)d(y)\] holds identically?
+-/

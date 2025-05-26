@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Filter Topology
+
+/--
+A \emph{composite} (positive integer) is a product $ab$ with $a$ and $b$ not necessarily distinct integers in $\{2,3,4,\dots\}$. Show that every composite is expressible as $xy+xz+yz+1$, with $x,y,z$ positive integers.
+-/

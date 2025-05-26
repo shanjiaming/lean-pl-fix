@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- (5 / 4, -1 / 4)
+/--
+Two real numbers $x$ and $y$ are chosen at random in the interval $(0,1)$ with respect to the uniform distribution. What is the probability that the closest integer to $x/y$ is even? Express the answer in the form $r+s\pi$, where $r$ and $s$ are rational numbers.
+-/

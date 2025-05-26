@@ -1,0 +1,1 @@
+theorem abs_sin_le_one (x : ℝ) : |Real.sin x| ≤ 1 :=

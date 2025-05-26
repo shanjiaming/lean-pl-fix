@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Let \(n\geq 3\) be an odd integer. Every integer \(l\) satisfying \(1\leq l\leq n\) can be represented as a sum or difference of two integers each of which is less than \(n\) and relatively prime to \(n\).
+-/
+
+variable {n : ℤ} (hn : n ≥ 3 ∧ n % 2 = 1)

@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral \(\displaystyle \int \frac{1}{\sqrt{81-x^2}}\,dx\)
+is equivalent to \(\arcsin\left(\frac{x}{9}\right)+C\).
+-/
+
+open Real

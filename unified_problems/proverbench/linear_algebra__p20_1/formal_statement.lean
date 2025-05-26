@@ -1,0 +1,1 @@
+lemma null_space_non_trivial (hAB : A * B = 0) (hA : A ≠ 0) : ¬LinearIndependent ℝ (fun i => A i) :=

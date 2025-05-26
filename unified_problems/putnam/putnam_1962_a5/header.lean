@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- fun n : ℕ => n * (n + 1) * 2^(n - 2)
+/--
+Evaluate in closed form \[ \sum_{k=1}^n {n \choose k} k^2. \]
+-/

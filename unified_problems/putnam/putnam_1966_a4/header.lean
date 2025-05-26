@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+Prove that the $n$th item in the ascending list of non-perfect-square positive integers equals $n + \{\sqrt{n}\}$, where $\{m\}$ denotes the closest integer to $m$.
+-/

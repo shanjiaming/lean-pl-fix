@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Bornology Set Polynomial
+
+/--
+Let $a_{m,n}$ denote the coefficient of $x^n$ in the expansion of $(1+x+x^2)^m$.  Prove that for all [integers] $k\geq 0$, \[0\leq \sum_{i=0}^{\lfloor \frac{2k}{3}\rfloor} (-1)^i a_{k-i,i}\leq 1.\]
+-/

@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+For any prime number \(p\equiv1\) (mod 6), there exist \(a,b\in\mathbb{Z}\) such that \(p=a^2-ab+b^2\).
+-/

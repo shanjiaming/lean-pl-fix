@@ -1,5 +1,10 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+For a polynomial P, the equation \(16P(x^2)=P(2x)^2\) holds if and only if
+\(P(x)=16\left(\frac14x\right)^n\) for some \(n\in\mathbb{N}\).
+-/
+
+open Polynomial
+
+variable {P : Polynomial ℝ}

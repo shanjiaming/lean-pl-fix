@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Polynomial Filter Topology Real Set Nat List
+
+/--
+Suppose that $S$ is a finite set of points in the plane such that the area of triangle $\triangle ABC$ is at most $1$ whenever $A$, $B$, and $C$ are in $S$. Show that there exists a triangle of area $4$ that (together with its interior) covers the set $S$.
+-/

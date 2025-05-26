@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The limit of the function \(\displaystyle \lim_{x\to +\infty}\frac{\sin\left(2x+x^3\right)}{x+3x^3}\) as x approaches infinity is equal to 0.
+-/
+
+open Filter Topology Real

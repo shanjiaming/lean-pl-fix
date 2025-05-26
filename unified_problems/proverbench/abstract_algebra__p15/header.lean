@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Let $\mathbb{Z}_3$ be the finite field of integers modulo 3, and let $c \in \mathbb{Z}_3$. The quotient ring $\mathbb{Z}_3[x]/(x^3 + x^2 + c)$ is a field if and only if $c = 2$.
+-/
+
+open Polynomial Ideal
+
+variable {R : Type*} [CommRing R]

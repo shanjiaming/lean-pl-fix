@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Metric Set EuclideanGeometry
+
+/--
+Prove that, for all $a > 0$ and $b > 0$, the power series of $e^{ax} \cos (bx)$ with respect to $x$ has either zero or infinitely many zero coefficients.
+-/

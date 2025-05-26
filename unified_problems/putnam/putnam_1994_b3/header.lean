@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+-- Set.Iio 1
+/--
+Find the set of all real numbers $k$ with the following property: For any positive, differentiable function $f$ that satisfies $f'(x)>f(x)$ for all $x$, there is some number $N$ such that $f(x)>e^{kx}$ for all $x>N$.
+-/

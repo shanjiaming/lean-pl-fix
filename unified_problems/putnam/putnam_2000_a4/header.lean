@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+Show that the improper integral $\lim_{B \to \infty} \int_0^B \sin(x)\sin(x^2)\,dx$ converges.
+-/

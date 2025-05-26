@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- {2 / 3, 3 / 2, (13 + √601) / 12, (13 - √601) / 12}
+
+/--
+Find all values of $\alpha$ for which the curves $y = \alpha*x^2 + \alpha*x + 1/24$ and $x = \alpha*y^2 + \alpha*y + 1/24$ are tangent to each other.
+-/

@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/--
+Show there do not exist four points in the Euclidean plane such that the pairwise distances between the points are all odd integers.
+-/

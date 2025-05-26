@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 1
+/--
+How many primes among the positive integers, written as usual in base $10$, are alternating $1$'s and $0$'s, beginning and ending with $1$?
+-/

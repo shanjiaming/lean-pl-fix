@@ -1,5 +1,13 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The value of \(\alpha-\beta+\gamma\), when the fraction
+\(\displaystyle \frac{7x^2 -9x +32}{\left(x^2+25\right)(x -3)}\)
+is expressed in the form \(\displaystyle \frac{\alpha x+\beta}{x^2+ 25}+\frac{\gamma}{(x-3)}\), is 1.
+-/
+
+variable (α β γ : ℤ)(x : ℝ)
+
+noncomputable def fraction: ℝ := (7 * x^2 - 9 * x + 32) / ((x^2 + 25) * (x - 3))
+
+noncomputable def decomposed: ℝ  := (α * x + β) / (x^2 + 25) + γ / (x - 3)

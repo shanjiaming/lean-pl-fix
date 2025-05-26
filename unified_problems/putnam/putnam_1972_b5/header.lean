@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Set Metric
+
+/--
+Let $ABCD$ be a skew (non-planar) quadrilateral. Prove that if $\angle ABC = \angle CDA$ and $\angle BCD = \angle DAB$, then $AB = CD$ and $AD = BC$.
+-/

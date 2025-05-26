@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Metric Set EuclideanGeometry Filter Topology
+
+/--
+A closed subset $S$ of $\mathbb{R}^2$ lies in $a < x < b$. Show that its projection on the y-axis is closed.
+-/

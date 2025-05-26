@@ -14,6 +14,7 @@ class Problem:
     decomposed_dir: str
     hole_dir: str
     original_path: Optional[str] = None  # Path to original file for reference
+    formal_statement_path: Optional[str] = None  # Path to formal statement file
     
     @property
     def base_dir(self) -> str:
@@ -32,6 +33,7 @@ class UnifiedProblemManager:
     │   ├── problem_id/
     │   │   ├── header.lean
     │   │   ├── problem.lean
+    │   │   ├── formal_statement.lean (optional)
     │   │   ├── decomposed/
     │   │   └── hole/
     │   └── ...
@@ -62,6 +64,7 @@ class UnifiedProblemManager:
                 problem_id = problem_dir.name
                 header_path = problem_dir / "header.lean"
                 problem_path = problem_dir / "problem.lean"
+                formal_statement_path = problem_dir / "formal_statement.lean"
                 decomposed_dir = problem_dir / "decomposed"
                 hole_dir = problem_dir / "hole"
                 
@@ -73,7 +76,8 @@ class UnifiedProblemManager:
                         header_path=str(header_path),
                         problem_path=str(problem_path),
                         decomposed_dir=str(decomposed_dir),
-                        hole_dir=str(hole_dir)
+                        hole_dir=str(hole_dir),
+                        formal_statement_path=str(formal_statement_path) if formal_statement_path.exists() else None
                     )
                     key = f"{dataset_name}/{problem_id}"
                     self._problems_cache[key] = problem
@@ -96,7 +100,8 @@ class UnifiedProblemManager:
         return sorted(list(datasets))
     
     def add_problem(self, dataset: str, problem_id: str, header_content: str, 
-                   problem_content: str, original_path: Optional[str] = None) -> Problem:
+                   problem_content: str, original_path: Optional[str] = None,
+                   formal_statement: Optional[str] = None) -> Problem:
         """Add a new problem to the unified structure"""
         # Create directory structure
         problem_dir = self.base_dir / dataset / problem_id
@@ -111,12 +116,20 @@ class UnifiedProblemManager:
         # Write files
         header_path = problem_dir / "header.lean"
         problem_path = problem_dir / "problem.lean"
+        formal_statement_path = problem_dir / "formal_statement.lean"
         
         with open(header_path, 'w', encoding='utf-8') as f:
             f.write(header_content)
         
         with open(problem_path, 'w', encoding='utf-8') as f:
             f.write(problem_content)
+        
+        # Write formal statement if provided
+        formal_statement_path_str = None
+        if formal_statement:
+            with open(formal_statement_path, 'w', encoding='utf-8') as f:
+                f.write(formal_statement)
+            formal_statement_path_str = str(formal_statement_path)
         
         # Create problem object
         problem = Problem(
@@ -126,7 +139,8 @@ class UnifiedProblemManager:
             problem_path=str(problem_path),
             decomposed_dir=str(decomposed_dir),
             hole_dir=str(hole_dir),
-            original_path=original_path
+            original_path=original_path,
+            formal_statement_path=formal_statement_path_str
         )
         
         # Add to cache
@@ -144,6 +158,13 @@ class UnifiedProblemManager:
         """Get the problem content (theorem + proof)"""
         with open(problem.problem_path, 'r', encoding='utf-8') as f:
             return f.read()
+    
+    def get_formal_statement(self, problem: Problem) -> Optional[str]:
+        """Get the formal statement content if available"""
+        if problem.formal_statement_path and os.path.exists(problem.formal_statement_path):
+            with open(problem.formal_statement_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        return None
     
     def get_full_content(self, problem: Problem) -> str:
         """Get header + problem content combined"""
@@ -181,7 +202,8 @@ class UnifiedProblemManager:
                 'problem_path': problem.problem_path,
                 'decomposed_dir': problem.decomposed_dir,
                 'hole_dir': problem.hole_dir,
-                'original_path': problem.original_path
+                'original_path': problem.original_path,
+                'formal_statement_path': problem.formal_statement_path
             }
         
         with open(filepath, 'w', encoding='utf-8') as f:

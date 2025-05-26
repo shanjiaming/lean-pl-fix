@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Nat
+
+-- 1 / 3
+/--
+Suppose $X$ is a random variable that takes on only nonnegative integer values, with $E\left[X\right]=1$, $E\left[X^2\right]=2$, and $E\left[X^3\right]=5$. (Here $E\left[Y\right]$ denotes the expectation of the random variable $Y$.) Determine the smallest possible value of the probability of the event $X=0$.
+-/

@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/--
+Curves $A$, $B$, $C$, and $D$ are defined in the plane as follows:
+\begin{align*}
+A&=\left\{ (x,y):x^2-y^2=\frac{x}{x^2+y^2} \right\}, \\
+B&=\left\{ (x,y):2xy+\frac{y}{x^2+y^2}=3 \right\}, \\
+C&=\left\{ (x,y):x^3-3xy^2+3y=1 \right\}, \\
+D&=\left\{ (x,y):3x^2y-3x-y^3=0 \right\}.
+\end{align*}
+Prove that $A \cap B=C \cap D$.
+-/

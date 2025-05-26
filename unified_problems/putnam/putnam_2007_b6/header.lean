@@ -1,5 +1,10 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Nat Function
+
+/--
+For each positive integer $n$, let $f(n)$ be the number of ways to make $n!$ cents using an unordered collection of coins, each worth $k!$ cents for some $k$, $1 \leq k \leq n$. Prove that for some constant $C$, independent of $n$,
+\[
+n^{n^2/2 - Cn} e^{-n^2/4} \leq f(n) \leq n^{n^2/2 + Cn}e^{-n^2/4}.
+\]
+-/

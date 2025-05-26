@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Nat
+
+/--
+Prove that for $|x|<1$, $|z|>1$, $1+\sum_{j=1}^\infty (1+x^j)P_j=0$, where $P_j$ is $\frac{(1-z)(1-zx)(1-zx^2) \cdots (1-zx^{j-1})}{(z-x)(z-x^2)(z-x^3) \cdots (z-x^j)}$.
+-/

@@ -1,0 +1,1 @@
+lemma two_le_log_iff (x : ℝ) (hx : x > 0) : 2 ≤ log x ↔ exp 2 ≤ x :=

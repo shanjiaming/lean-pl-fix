@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat Topology Filter
+
+/--
+For any positive integer $n$, prove that the sum of the first $n$ terms of the bimonial expansion of $(2 - 1)^{-n}$ (starting with the maximal exponent of $2$) is $\frac{1}{2}.$
+-/

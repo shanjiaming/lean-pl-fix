@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open ProbabilityTheory Set
+
+-- (fun n : ℕ ↦ (2 * (n : ℝ) + 2) / 3)
+/--
+A sequence $y_1, y_2, \ldots, y_k$ of real numbers is called zigzag if $k = 1$, or if $y_2 - y_1, y_3 - y_2, \ldots, y_k - y_{k-1}$ are nonzero and alternate in sign. Let $X_1, X_2,\ldots, X_n$ be chosen independently from the uniform distribution on $[0,1]$. Let $a(X_1, X_2, \ldots, X_n)$ be the largest value of $k$ for which there exists an increasing sequence of integers $i_1, i_2, \ldots, i_k$ such that $X_{i_1}, X_{i_2}, \ldots, X_{i_k}$ is zigzag. Find the expected value of $a(X_1, X_2, \ldots, X_n)$ for $n \ge 2$.
+-/

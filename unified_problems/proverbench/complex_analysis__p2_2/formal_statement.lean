@@ -1,0 +1,1 @@
+lemma final_simplification : exp (I * (π / 2)) = I :=

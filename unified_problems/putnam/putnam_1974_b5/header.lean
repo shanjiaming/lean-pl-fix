@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Nat Polynomial Filter Topology
+
+/--
+Show that $1 + (n/1!) + (n^2/2!) + \dots + (n^n/n!) > e^n/2$ for every integer $n \geq 0$.
+-/

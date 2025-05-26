@@ -1,0 +1,1 @@
+theorem composition_of_sine_and_quadratic (x : ℝ) : u (v x) = Real.sin (x ^ 2) :=

@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+-- Real.exp 1
+/--
+For every positive real number $x$, let $g(x)=\lim_{r \to 0}((x+1)^{r+1}-x^{r+1})^\frac{1}{r}$. Find $\lim_{x \to \infty}\frac{g(x)}{x}$.
+-/

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Function
+
+/--
+Show that for every positive integer $n$, $(\frac{2n-1}{e})^{\frac{2n-1}{2}}<1 \cdot 3 \cdot 5 \cdots (2n-1)<(\frac{2n+1}{e})^{\frac{2n+1}{2}}$.
+-/

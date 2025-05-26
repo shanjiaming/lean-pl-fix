@@ -884,3 +884,7 @@ theorem h₇₁ (x y : ℝ) (hx : 1 < x) (hy : 1 < y) (h₁ : logb x (y ^ x) = 1
 ```
 
 better to be fixed in a more standard way(symtree)
+
+
+todo:
+1.注意一下repl

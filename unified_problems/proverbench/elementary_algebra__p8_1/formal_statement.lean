@@ -1,0 +1,1 @@
+theorem given_equality_holds : LHS = RHS :=

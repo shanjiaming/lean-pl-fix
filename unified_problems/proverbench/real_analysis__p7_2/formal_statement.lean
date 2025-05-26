@@ -1,0 +1,1 @@
+lemma f_continuous : ContinuousOn f (Set.Icc 0 8) :=

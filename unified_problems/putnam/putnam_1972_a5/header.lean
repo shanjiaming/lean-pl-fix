@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Filter Topology Set
+
+/--
+Show that if $n$ is an integer greater than $1$, then $n$ does not divide $2^n - 1$.
+-/

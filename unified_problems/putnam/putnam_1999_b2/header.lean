@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Metric
+
+/--
+Let $P(x)$ be a polynomial of degree $n$ such that $P(x)=Q(x)P''(x)$, where $Q(x)$ is a quadratic polynomial and $P''(x)$ is the second derivative of $P(x)$.  Show that if $P(x)$ has at least two distinct roots then it must have $n$ distinct roots.
+-/

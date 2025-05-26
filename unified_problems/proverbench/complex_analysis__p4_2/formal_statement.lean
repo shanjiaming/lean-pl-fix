@@ -1,0 +1,1 @@
+theorem i_pow_mod_4 (n : ℕ) : I ^ n = I ^ (n % 4) :=

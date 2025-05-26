@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 508536
+/--
+Find the number of positive integers $N$ satisfying: (i) $N$ is divisible by $2020$, (ii) $N$ has at most $2020$ decimal digits, (iii) The decimal digits of $N$ are a string of consecutive ones followed by a string of consecutive zeros.
+-/

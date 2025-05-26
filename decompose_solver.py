@@ -4,11 +4,11 @@ from typing import Dict, Optional
 from unified_problem_manager import Problem, problem_manager
 import concurrent.futures
 
-def throw_head(input_str: str) -> str:
-    """
-    remove line that starts with import, set_option, open
-    """
-    return '\n'.join([line for line in input_str.split('\n') if not line.startswith("import") and not line.startswith("set_option") and not line.startswith("open")])
+# def throw_head(input_str: str) -> str:
+#     """
+#     remove line that starts with import, set_option, open
+#     """
+#     return '\n'.join([line for line in input_str.split('\n') if not line.startswith("import") and not line.startswith("set_option") and not line.startswith("open")])
 
 def convert_theorem_to_example_cmd(input_str: str) -> str:
     """
@@ -880,7 +880,7 @@ def solve_theorem(input_content: str, fix_single_proof_func: callable, header_co
         The fixed theorem content
     """
     # Process the theorem content
-    input_content = throw_head(input_content)
+    # input_content = throw_head(input_content)
     input_content = remove_lean_comments(input_content)
     cmd_str = convert_theorem_to_example_cmd(input_content)
     print("--- Generated Command String ---")

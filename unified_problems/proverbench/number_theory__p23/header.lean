@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Prove that for `n∈ℕ` every prime divisor `p` of number `n^4-n^2+1` is of the form `12k+1`.
+-/
+
+variable (n : ℕ)

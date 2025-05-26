@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 6 * Real.pi ^ 2
+/--
+Find the volume of the region of points $(x,y,z)$ such that
+\[
+(x^2 + y^2 + z^2 + 8)^2 \leq 36(x^2 + y^2).
+\]
+-/

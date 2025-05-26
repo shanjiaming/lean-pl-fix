@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Real
+
+-- {c : ℝ | c ≥ 1 / 2}
+/--
+For which real numbers $c$ is $(e^x+e^{-x})/2 \leq e^{cx^2}$ for all real $x$?
+-/

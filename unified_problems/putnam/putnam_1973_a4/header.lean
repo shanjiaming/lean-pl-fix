@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat Set MeasureTheory Topology Filter
+
+-- 3
+/--
+How many zeros does the function $f(x) = 2^x - 1 - x^2$ have on the real line?
+-/

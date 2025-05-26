@@ -1,0 +1,1 @@
+lemma critical_point : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0 c :=

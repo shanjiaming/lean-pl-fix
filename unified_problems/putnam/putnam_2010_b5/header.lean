@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Set
+
+-- False
+/--
+Is there a strictly increasing function $f: \mathbb{R} \to \mathbb{R}$ such that $f'(x) = f(f(x))$ for all $x$?
+-/

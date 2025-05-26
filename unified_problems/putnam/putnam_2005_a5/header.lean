@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat Set
+
+-- Real.pi * (Real.log 2) / 8
+/--
+Evaluate $\int_0^1 \frac{\ln(x+1)}{x^2+1}\,dx$.
+-/

@@ -1,0 +1,1 @@
+theorem zeros_of_f_in_Z5 : {x : ZMod 5 | eval x f = 0} = {0, 4} :=

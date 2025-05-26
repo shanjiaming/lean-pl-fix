@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat Topology Filter
+
+/--
+Let $P(x)=c_nx^n+c_{n-1}x^{n-1}+\cdots+c_0$ be a polynomial with integer coefficients. Suppose that $r$ is a rational number such that $P(r)=0$. Show that the $n$ numbers $c_nr,\,c_nr^2+c_{n-1}r,\,c_nr^3+c_{n-1}r^2+c_{n-2}r,\dots,\,c_nr^n+c_{n-1}r^{n-1}+\cdots+c_1r$ are integers.
+-/

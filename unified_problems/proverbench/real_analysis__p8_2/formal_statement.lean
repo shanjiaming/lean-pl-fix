@@ -1,0 +1,1 @@
+theorem domain_of_f_is_reals : ∀ x : ℝ, x ∈ univ :=

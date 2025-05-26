@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Topology Filter Complex SimpleGraph.Walk
+
+/--
+Prove that, if $4E \le V^2$, there exists a graph with $E$ edges and $V$ vertices with no triangles (cycles of length $3$).
+-/

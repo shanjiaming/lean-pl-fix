@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Polynomial
+
+-- 2
+/--
+For what integer $a$ does $x^2-x+a$ divide $x^{13}+x+90$?
+-/

@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+For all real numbers x, the inequality $\frac{1-\ln (x)}{x^{2}}<0$ is satisfied if and only if x ∈ (e, ∞), where e is Euler's number.
+-/
+
+open Real
+
+-- Theorem: The inequality (1 - ln(x)) / x^2 < 0 holds if and only if x ∈ (e, ∞)

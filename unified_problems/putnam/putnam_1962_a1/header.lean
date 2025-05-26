@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open MeasureTheory
+
+/--
+Given five points in a plane, no three of which lie on a straight line, show that some four of these points form the vertices of a convex quadrilateral.
+-/

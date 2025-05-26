@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Filter Topology
+
+-- {x | x > 1 / 2}
+/--
+Determine, with proof, the set of real numbers $x$ for which
+\[
+\sum_{n=1}^\infty \left( \frac{1}{n} \csc \frac{1}{n} - 1 \right)^x
+\]
+converges.
+-/

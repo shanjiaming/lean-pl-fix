@@ -1,0 +1,1 @@
+theorem total_price_theorem : 5 * catPrice + 3 * dogPrice = 41 :=

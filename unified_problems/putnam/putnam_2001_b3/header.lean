@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Polynomial Set
+
+-- 3
+/--
+For any positive integer $n$, let $\langle n \rangle$ denote the closest integer to $\sqrt{n}$. Evaluate $\sum_{n=1}^\infty \frac{2^{\langle n \rangle}+2^{-\langle n \rangle}}{2^n}$.
+-/

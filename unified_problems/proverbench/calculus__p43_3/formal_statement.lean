@@ -1,0 +1,1 @@
+theorem averageVelocity : (heightFunction 2.5 - heightFunction 2) / (2.5 - 2) = -32 :=

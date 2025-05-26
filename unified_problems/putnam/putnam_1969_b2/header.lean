@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Matrix Filter Topology Set Nat
+
+-- False
+/--
+Show that a finite group can not be the union of two of its proper subgroups. Does the statement remain true if 'two' is replaced by 'three'?
+-/

@@ -1,0 +1,7 @@
+import Mathlib
+
+open Nat Topology Filter
+
+/--
+Let $m$ and $n$ be positive integers. Show that $\frac{(m+n)!}{(m+n)^{m+n}}<\frac{m!}{m^m}\frac{n!}{n^n}$.
+-/

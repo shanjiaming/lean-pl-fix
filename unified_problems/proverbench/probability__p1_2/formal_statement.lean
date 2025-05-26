@@ -1,0 +1,1 @@
+theorem P_X_leq_1 : poisson_pmf lambda 0 + poisson_pmf lambda 1 = 2 * exp (-(lambda : ℝ)) :=

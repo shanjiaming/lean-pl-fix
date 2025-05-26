@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Function Set
+
+/--
+Let $X=\{1,2,\dots,n\}$, and let $k \in X$. Show that there are exactly $k \cdot n^{n-1}$ functions $f:X \to X$ such that for every $x \in X$ there is a $j \geq 0$ such that $f^{(j)}(x) \leq k$. [Here $f^{(j)}$ denotes the $j$\textsuperscript{th} iterate of $f$, so that $f^{(0)}(x)=x$ and $f^{(j+1)}(x)=f(f^{(j)}(x))$.]
+-/

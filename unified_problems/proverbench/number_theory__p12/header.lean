@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Prove that there are no positive integers \(a,b,c\) for which \[\frac{a^2+b^2+c^2}{3(ab+bc+ca)}\] is an integer.
+-/
+
+variable (a b c : ℕ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)

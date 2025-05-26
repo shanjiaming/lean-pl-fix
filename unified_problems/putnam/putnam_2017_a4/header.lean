@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+A class with $2N$ students took a quiz, on which the possible scores were $0,1,\dots,10$. Each of these scores occurred at least once, and the average score was exactly $7.4$. Show that the class can be divided into two groups of $N$ students in such a way that the average score for each group was exactly $7.4$.
+-/

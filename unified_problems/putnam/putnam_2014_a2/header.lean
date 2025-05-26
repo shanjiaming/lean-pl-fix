@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Nat
+
+-- (fun n : ℕ => (-1) ^ (n - 1) / ((n - 1)! * (n)!))
+/--
+Let $A$ be the $n \times n$ matrix whose entry in the $i$-th row and $j$-th column is $\frac{1}{\min(i,j)}$ for $1 \leq i,j \leq n$. Compute $\det(A)$.
+-/

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Matrix
+
+/--
+Let $h$ and $k$ be positive integers. Prove that for every $\epsilon>0$, there are positive integers $m$ and $n$ such that $\epsilon<|h\sqrt{m}-k\sqrt{n}|<2\epsilon$.
+-/

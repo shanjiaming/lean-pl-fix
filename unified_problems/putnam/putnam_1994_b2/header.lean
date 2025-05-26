@@ -1,0 +1,8 @@
+import Mathlib
+
+open Filter Topology
+
+-- {c : ℝ | c < 243 / 8}
+/--
+For which real numbers $c$ is there a straight line that intersects the curve $x^4+9x^3+cx^2+9x+4$ in four distinct points?
+-/

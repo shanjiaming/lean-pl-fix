@@ -1,0 +1,1 @@
+theorem unique_solution : ∃! r : ℝ, given_equation r :=

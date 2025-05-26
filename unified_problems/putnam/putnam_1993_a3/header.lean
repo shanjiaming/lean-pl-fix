@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/--
+Let $\mathcal{P}_n$ be the set of subsets of $\{1,2,\dots,n\}$. Let $c(n,m)$ be the number of functions $f:\mathcal{P}_n \to \{1,2,\dots,m\}$ such that $f(A \cap B)=\min\{f(A),f(B)\}$. Prove that $c(n,m)=\sum_{j=1}^m j^n$.
+-/

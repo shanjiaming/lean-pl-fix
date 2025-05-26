@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 13725
+/--
+Compute $\log_2 \left( \prod_{a=1}^{2015}\prod_{b=1}^{2015}(1+e^{2\pi iab/2015}) \right)$. Here $i$ is the imaginary unit (that is, $i^2=-1$).
+-/

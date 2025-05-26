@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- 2301
+/--
+How many positive integers $n$ are there such that $n$ is an exact divisor of at least one of the numbers $10^{40},20^{30}$?
+-/

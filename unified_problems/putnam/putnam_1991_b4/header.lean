@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+/--
+Suppose $p$ is an odd prime. Prove that $\sum_{j=0}^p \binom{p}{j}\binom{p+j}{j} \equiv 2^p+1 \pmod{p^2}$.
+-/

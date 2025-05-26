@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/--
+Let $S$ be a set of real numbers which is closed under multiplication (that is, if $a$ and $b$ are in $S$, then so is $ab$). Let $T$ and $U$ be disjoint subsets of $S$ whose union is $S$. Given that the product of any {\em three} (not necessarily distinct) elements of $T$ is in $T$ and that the product of any three elements of $U$ is in $U$, show that at least one of the two subsets $T,U$ is closed under multiplication.
+-/

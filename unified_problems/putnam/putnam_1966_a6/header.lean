@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+/--
+Prove that $$\sqrt {1 + 2 \sqrt {1 + 3 \sqrt {1 + 4 \sqrt {1 + 5 \sqrt {\dots}}}}} = 3.$$
+-/

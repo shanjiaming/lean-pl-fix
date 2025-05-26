@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Function Filter Topology
+
+/--
+Let $a_n$ be a strictly monotonic increasing sequence of positive integers. Let $b_n$ be the least common multiple of $a_1, a_2, \dots , a_n$. Prove that $\sum_{n=1}^{\infty} 1/b_n$ converges.
+-/

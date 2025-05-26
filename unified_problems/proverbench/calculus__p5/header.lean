@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral of \(\int \frac{1}{x^2+1} \, dx\) is \(\arctan x + C\).
+-/
+
+open Real
+
+noncomputable def f (x:ℝ ):ℝ := 1 / (x^2 + 1)

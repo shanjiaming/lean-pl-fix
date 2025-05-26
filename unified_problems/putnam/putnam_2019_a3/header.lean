@@ -1,5 +1,16 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter
+
+-- 2019^(-(1:ℝ)/2019)
+/--
+Given real numbers $b_0, b_1, \dots, b_{2019}$ with $b_{2019} \neq 0$, let $z_1,z_2,\dots,z_{2019}$ be
+the roots in the complex plane of the polynomial
+\[
+P(z) = \sum_{k=0}^{2019} b_k z^k.
+\]
+Let $\mu = (|z_1| + \cdots + |z_{2019}|)/2019$ be the average of the distances from $z_1,z_2,\dots,z_{2019}$ to the origin. Determine the largest constant $M$ such that $\mu \geq M$ for all choices of $b_0,b_1,\dots, b_{2019}$ that satisfy
+\[
+1 \leq b_0 < b_1 < b_2 < \cdots < b_{2019} \leq 2019.
+\]
+-/

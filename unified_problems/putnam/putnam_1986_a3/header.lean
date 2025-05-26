@@ -1,0 +1,8 @@
+import Mathlib
+
+open  Real
+
+-- Real.pi / 2
+/--
+Evaluate $\sum_{n=0}^\infty \mathrm{Arccot}(n^2+n+1)$, where $\mathrm{Arccot}\,t$ for $t \geq 0$ denotes the number $\theta$ in the interval $0 < \theta \leq \pi/2$ with $\cot \theta = t$.
+-/

@@ -1,0 +1,1 @@
+lemma upper_bound (n : ℕ+) : general_term n ≤ comparison_series n :=

@@ -1,0 +1,1 @@
+theorem solve_equation : r = (7 : ℝ) ↔ given_equation r :=

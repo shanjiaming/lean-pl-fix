@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Polynomial Filter Topology Real Set Nat
+
+-- 8
+/--
+Find the smallest positive integer $j$ such that for every polynomial $p(x)$ with integer coefficients and for every integer $k$, the integer \[ p^{(j)}(k) = \left. \frac{d^j}{dx^j} p(x) \right|_{x=k} \] (the $j$-th derivative of $p(x)$ at $k$) is divisible by 2016.
+-/

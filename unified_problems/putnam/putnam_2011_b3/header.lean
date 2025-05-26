@@ -1,0 +1,8 @@
+import Mathlib
+
+open Topology Filter Matrix
+
+-- True
+/--
+Let $f$ and $g$ be (real-valued) functions defined on an open interval containing $0$, with $g$ nonzero and continuous at $0$. If $fg$ and $f/g$ are differentiable at $0$, must $f$ be differentiable at $0$?
+-/

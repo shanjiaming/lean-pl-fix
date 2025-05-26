@@ -1,5 +1,13 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Metric Topology
+
+-- True
+/--
+Does there exist an infinite sequence of closed discs $D_1,D_2,D_3,\dots$ in the plane, with centers $c_1,c_2,c_3,\dots$, respectively, such that
+\begin{enumerate}
+\item the $c_i$ have no limit point in the finite plane,
+\item the sum of the areas of the $D_i$ is finite, and
+\item every line in the plane intersects at least one of the $D_i$?
+\end{enumerate}
+-/

@@ -1,0 +1,1 @@
+theorem f_zero_ne_zero : eval (0 : ZMod 2) f ≠ 0 :=

@@ -1,0 +1,2 @@
+theorem putnam_2008_b1 :
+  IsGreatest {n : ℕ | ∃ (c : EuclideanSpace ℝ (Fin 2)) (r : ℝ), ¬ is_rational_point c ∧ (Set.ncard {p : EuclideanSpace ℝ (Fin 2) | p ∈ real_circle c r ∧ is_rational_point p} = n)} ((2) : ℕ ) := by

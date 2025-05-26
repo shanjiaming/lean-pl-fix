@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+There exist only injective functions \f:\mathbb{N}\rightarrow\mathbb{N}\ that satisfy:
+\a\ \f(f(m)+f(n))=f(f(m))+f(n)\, \b\ \f(1)=2, \f(2)=4\.
+-/
+
+variable {f : ℕ → ℕ} (hf_inj : Function.Injective f)

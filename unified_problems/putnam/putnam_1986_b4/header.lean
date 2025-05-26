@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open  Real Equiv Polynomial Filter Topology
+
+-- True
+/--
+For a positive real number $r$, let $G(r)$ be the minimum value of $|r - \sqrt{m^2+2n^2}|$ for all integers $m$ and $n$. Prove or disprove the assertion that $\lim_{r\to \infty}G(r)$ exists and equals $0$.
+-/

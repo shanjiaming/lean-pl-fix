@@ -1,5 +1,13 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral of \[(x^3 - 3cosx) dx\] is \[\frac{x^4}{4} - 3sinx + C\].
+-/
+
+-- Define the function f(x)
+noncomputable def f (x : ℝ) : ℝ := x^3 - 3 * Real.cos x
+
+-- Define the integral of f(x)
+noncomputable def integralf (x : ℝ) : ℝ := (x^4 / 4) - 3 * Real.sin x
+
+-- Theorem statement

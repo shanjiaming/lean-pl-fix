@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology Filter Nat Function Polynomial
+
+-- 3984
+/--
+Let $p(x)$ be a nonzero polynomial of degree less than $1992$ having no nonconstant factor in common with $x^3 - x$. Let
+\[
+\frac{d^{1992}}{dx^{1992}} \left( \frac{p(x)}{x^3 - x} \right) = \frac{f(x)}{g(x)}
+\]
+for polynomials $f(x)$ and $g(x)$. Find the smallest possible degree of $f(x)$.
+-/

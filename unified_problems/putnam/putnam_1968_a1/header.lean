@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/--
+Prove that $$\frac{22}{7} - \pi = \int_{0}^{1} \frac{x^4(1 - x)^4}{1 + x^2} dx$$.
+-/

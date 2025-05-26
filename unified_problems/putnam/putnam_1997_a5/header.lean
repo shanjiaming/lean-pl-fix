@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+-- True
+/--
+Let $N_n$ denote the number of ordered $n$-tuples of positive integers $(a_1,a_2,\ldots,a_n)$ such that $1/a_1 + 1/a_2 +\ldots + 1/a_n=1$.  Determine whether $N_{10}$ is even or odd.
+-/

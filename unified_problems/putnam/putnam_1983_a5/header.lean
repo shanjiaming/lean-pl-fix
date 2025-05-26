@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat
+
+-- True
+/--
+Prove or disprove that there exists a positive real number $\alpha$ such that $[\alpha_n] - n$ is even for all integers $n > 0$. (Here $[x]$ denotes the greatest integer less than or equal to $x$.)
+-/

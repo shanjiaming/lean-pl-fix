@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+-- {3 * m ^ 2 | m > 0}
+/--
+Determine all positive integers $N$ for which the sphere $x^2+y^2+z^2=N$ has an inscribed regular tetrahedron whose vertices have integer coordinates.
+-/

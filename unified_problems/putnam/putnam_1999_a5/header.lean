@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Metric
+
+/--
+Prove that there is a constant $C$ such that, if $p(x)$ is a polynomial of degree 1999, then \[|p(0)|\leq C \int_{-1}^1 |p(x)|\,dx.\]
+-/

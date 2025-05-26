@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology MvPolynomial Filter Set
+
+-- {n : ℤ | ∃ k ≥ 1, n = 2 ^ k - 1}
+/--
+Call a subset $S$ of $\{1, 2, \dots, n\}$ \emph{mediocre} if it has the following property: Whenever $a$ and $b$ are elements of $S$ whose average is an integer, that average is also an element of $S$. Let $A(n)$ be the number of mediocre subsets of $\{1,2,\dots,n\}$. [For instance, every subset of $\{1,2,3\}$ except $\{1,3\}$ is mediocre, so $A(3) = 7$.] Find all positive integers $n$ such that $A(n+2) - 2A(n+1) + A(n) = 1$.
+-/

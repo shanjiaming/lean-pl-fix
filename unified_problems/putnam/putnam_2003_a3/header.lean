@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set
+
+-- 2 * Real.sqrt 2 - 1
+/--
+Find the minimum value of $|\sin x+\cos x+\tan x+\cot x+\sec x+\csc x|$ for real numbers $x$.
+-/

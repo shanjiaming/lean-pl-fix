@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- Real.pi / 4
+/--
+Evaluate $\int_0^{\pi/2}\frac{dx}{1+(\tan x)^{\sqrt{2}}}$.
+-/

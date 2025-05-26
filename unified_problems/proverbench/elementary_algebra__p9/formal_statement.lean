@@ -1,0 +1,1 @@
+theorem five_pow_gt_factorial_iff_le_eleven (n : ℕ) (hn : 0 < n) : 5^n > n! ↔ n ≤ 11 :=

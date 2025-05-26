@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set MvPolynomial
+
+/--
+Show that for $\epsilon \in (0,1)$, the expression $(x + y)^n (x^2 - 2-\epsilon)xy + y^2)$ is a polynomial with positive coefficients for $n$ sufficiently large, where $n$ is an integer.
+-/

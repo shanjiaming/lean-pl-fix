@@ -1,0 +1,1 @@
+theorem det_A : det A = -32 :=

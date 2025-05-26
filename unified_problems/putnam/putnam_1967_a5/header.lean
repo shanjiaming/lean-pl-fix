@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat Topology Filter
+
+/--
+Prove that any convex region in the Euclidean plane with area greater than $\pi/4$ contains a pair of points exactly $1$ unit apart.
+-/

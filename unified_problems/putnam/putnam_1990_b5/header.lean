@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Polynomial Topology Nat
+
+-- True
+/--
+Is there an infinite sequence $a_0,a_1,a_2,\dots$ of nonzero real numbers such that for $n=1,2,3,\dots$ the polynomial $p_n(x)=a_0+a_1x+a_2x^2+\cdots+a_nx^n$ has exactly $n$ distinct real roots?
+-/

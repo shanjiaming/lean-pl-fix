@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology MvPolynomial Filter Set
+
+-- Ioc (1 / 3) 1
+/--
+A game involves jumping to the right on the real number line. If $a$ and $b$ are real numbers and $b > a$, the cost of jumping from $a$ to $b$ is $b^3-ab^2$. For what real numbers $c$ can one travel from $0$ to $1$ in a finite number of jumps with total cost exactly $c$?
+-/

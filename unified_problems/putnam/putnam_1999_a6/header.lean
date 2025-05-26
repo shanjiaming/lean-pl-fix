@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Metric
+
+/--
+The sequence $(a_n)_{n\geq 1}$ is defined by $a_1=1, a_2=2, a_3=24,$ and, for $n\geq 4$, \[a_n = \frac{6a_{n-1}^2a_{n-3} - 8a_{n-1}a_{n-2}^2}{a_{n-2}a_{n-3}}.\] Show that, for all n, $a_n$ is an integer multiple of $n$.
+-/

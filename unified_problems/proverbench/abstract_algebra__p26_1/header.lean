@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Let $F$ be a field and $f(x) \in F[x]$ be a non-constant polynomial. Then there exists an extension field $E$ of $F$ and an element $\alpha \in E$ such that $f(\alpha) = 0$.
+-/
+
+open Polynomial
+
+variable {F : Type*} [Field F]

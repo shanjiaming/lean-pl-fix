@@ -1,0 +1,7 @@
+import Mathlib
+
+open Topology Filter Nat Set Function
+
+/--
+Let $f(x)$ be a continuous function such that $f(2x^2-1)=2xf(x)$ for all $x$.  Show that $f(x)=0$ for $-1\leq x\leq 1$.
+-/

@@ -1,0 +1,1 @@
+lemma sqrt_five_times_sqrt_thirteen : sqrt 5 * sqrt 13 = sqrt 65 :=

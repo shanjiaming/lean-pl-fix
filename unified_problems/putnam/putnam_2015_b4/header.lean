@@ -1,5 +1,10 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- (17, 21)
+/--
+Let $T$ be the set of all triples $(a,b,c)$ of positive integers for which there exist triangles with side lengths $a,b,c$. Express
+\[
+\sum_{(a,b,c) \in T} \frac{2^a}{3^b 5^c}
+\]
+as a rational number in lowest terms.
+-/

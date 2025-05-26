@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Filter Topology Real Polynomial Function
+
+-- fun n ↦ ite (n = 101) 99 0
+/--
+Define polynomials $f_n(x)$ for $n \geq 0$ by $f_0(x)=1$, $f_n(0)=0$ for $n \geq 1$, and
+\[
+\frac{d}{dx} f_{n+1}(x) = (n+1)f_n(x+1)
+\]
+for $n \geq 0$. Find, with proof, the explicit factorization of $f_{100}(1)$ into powers of distinct primes.
+-/

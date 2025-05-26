@@ -1,0 +1,1 @@
+theorem inequality_solution (x : ℝ) : (1 - log x) / x^2 < 0 ↔ x > exp 1 :=

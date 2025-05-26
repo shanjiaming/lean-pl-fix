@@ -1,5 +1,12 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology Set
+
+-- 1990
+/--
+For a positive integer $n$, define $d(n)$ to be the sum of the digits of $n$ when written in binary (for example, $d(13) = 1+1+0+1=3)$. Let
+\[
+S = \sum_{k=1}^{2020} (-1)^{d(k)} k^3.
+\]
+Determine $S$ modulo 2020.
+-/

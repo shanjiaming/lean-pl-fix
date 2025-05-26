@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology MvPolynomial Filter Set
+
+-- 0
+/--
+Let $d_n$ be the determinant of the $n \times n$ matrix whose entries, from left to right and then from top to bottom, are $\cos 1, \cos 2, \dots, \cos n^2$. (For example,\[ d_3 = \left|\begin{matrix} \cos 1 & \cos 2 & \cos 3 \\ \cos 4 & \cos 5 & \cos 6 \\  \cos 7 & \cos 8 & \cos 9 \end{matrix} \right|. \]The argument of $\cos$ is always in radians, not degrees.) Evaluate $\lim_{n\to\infty} d_n$.
+-/

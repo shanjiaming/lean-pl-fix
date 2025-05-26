@@ -1,5 +1,13 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set
+
+-- (10, 10, 0, 0)
+/--
+Determine, with proof, the number of ordered triples $(A_1, A_2, A_3)$ of sets which have the property that
+\begin{enumerate}
+\item[(i)] $A_1 \cup A_2 \cup A_3 = \{1,2,3,4,5,6,7,8,9,10\}$, and
+\item[(ii)] $A_1 \cap A_2 \cap A_3 = \emptyset$.
+\end{enumerate}
+Express your answer in the form $2^a 3^b 5^c 7^d$, where $a,b,c,d$ are nonnegative integers.
+-/

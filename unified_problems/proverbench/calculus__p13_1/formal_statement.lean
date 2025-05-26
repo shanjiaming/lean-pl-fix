@@ -1,0 +1,1 @@
+lemma value_at_pi_over_3 : f (π / 3) = 4 :=

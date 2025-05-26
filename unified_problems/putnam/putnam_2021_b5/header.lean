@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+/--
+Say that an $n$-by-$n$ matrix $A=(a_{ij})_{1 \leq i,j \leq n}$ with integer entries is \emph{very odd} if, for every nonempty subset $S$ of $\{1,2,\dots,n\}$, the $|S|$-by-$|S|$ submatrix $(a_{ij})_{i,j \in S}$ has odd determinant. Prove that if $A$ is very odd, then $A^k$ is very odd for every $k \geq 1$.
+-/

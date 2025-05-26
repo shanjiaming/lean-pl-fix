@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Filter Topology
+
+-- 1 / 3
+/--
+Find the maximum value of $\int_0^y \sqrt{x^4+(y-y^2)^2}\,dx$ for $0 \leq y \leq 1$.
+-/

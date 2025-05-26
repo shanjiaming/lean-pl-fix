@@ -1,5 +1,11 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Set Real
+
+-- 7 / 4
+/--
+Find
+\[
+\sum_{i=1}^{\infty} \sum_{j=1}^{\infty} \frac{1}{i^2j + 2ij + ij^2}.
+\]
+-/

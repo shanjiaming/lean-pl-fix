@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open EuclideanGeometry Topology Filter Complex
+
+-- fun n => 2^(n - 1)
+/--
+How many orderings of the integers from $1$ to $n$ satisfy the condition that, for every integer $i$ except the first, there exists some earlier integer in the ordering which differs from $i$ by $1$?
+-/

@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+If a polynomial \(P\) with real coefficients satisfies for all \(x\) \[P(\cos x)=P(\sin x),\]
+prove that there exists a polynomial \(Q\) such that for all \(x\), \(P(x)=Q(x^4-x^2).\)
+-/
+
+variable {P : Polynomial ℝ}

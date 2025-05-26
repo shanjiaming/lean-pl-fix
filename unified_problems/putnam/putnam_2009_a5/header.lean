@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Topology MvPolynomial Filter Set
+
+-- False
+/--
+Is there a finite abelian group $G$ such that the product of the orders of all its elements is 2^{2009}?
+-/

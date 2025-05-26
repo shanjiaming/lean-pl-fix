@@ -1,5 +1,6 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+-- (fun n : ℕ => if n = 1 then 1 else -1)
+/--
+Let \( S_1, S_2, \ldots, S_{2^n-1} \) be the nonempty subsets of \( \{1, 2, \ldots, n\} \) in some order, and let \( M \) be the \( (2^n - 1) \times (2^n - 1) \) matrix whose \((i, j)\) entry is $m_{ij} = \begin{cases} 0 & \text{if } S_i \cap S_j = \emptyset; \\ 1 & \text{otherwise}. \end{cases} $ Calculate the determinant of \( M \).
+-/

@@ -1,0 +1,1 @@
+lemma rank_of_matrix : rank coeff_matrix = 2 ∧ rank aug_matrix = 2 :=

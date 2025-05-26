@@ -1,0 +1,8 @@
+theorem putnam_1986_a4
+  (f : ℕ → ℕ)
+  (hf : f = fun n ↦
+    Set.ncard {A : Matrix (Fin n) (Fin n) ℤ |
+    (∀ i j : Fin n, A i j ∈ ({-1, 0, 1} : Set ℤ)) ∧
+    ∃ S : ℤ, ∀ ϕ : Perm (Fin n), ∑ i : Fin n, A i (ϕ i) = S}) :
+  let (a1, b1, a2, b2, a3, b3, a4) := ((1, 4, 2, 3, -4, 2, 1) : ℚ × ℚ × ℚ × ℚ × ℚ × ℚ × ℚ );
+  (∀ n > 0, f n = a1 * b1 ^ n + a2 * b2 ^ n + a3 * b3 ^ n + a4) := by

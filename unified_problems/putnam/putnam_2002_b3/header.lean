@@ -1,5 +1,11 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+open Nat Set Topology Filter
+
+/--
+Show that, for all integers $n > 1$,
+\[
+\frac{1}{2ne} < \frac{1}{e} - \left( 1 - \frac{1}{n} \right)^n
+< \frac{1}{ne}.
+\]
+-/
