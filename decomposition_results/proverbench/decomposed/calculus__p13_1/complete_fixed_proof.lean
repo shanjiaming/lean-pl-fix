@@ -4,8 +4,8 @@ theorem value_at_pi_over_3 : f (π / 3) = 4:=
     norm_num
   have h_main : f (π / 3) = 4:= by
     --  rw [f]
-    rw [h_cos]
-    norm_num <;> ring_nf <;> norm_num
+    --  rw [h_cos]
+    --  norm_num <;> ring_nf <;> norm_num
     hole
   --  exact h_main
-  hole
+  linarith

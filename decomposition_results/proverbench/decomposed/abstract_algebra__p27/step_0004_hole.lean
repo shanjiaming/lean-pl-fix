@@ -1,2 +1,2 @@
-theorem h₂ (a : sorry) (b : sorry) (h : sorry) (h₀ : a = 0) : sorry := by -- simp [h]
+theorem h₂ (F : Type) (inst✝² : Field F) (D : Type) (inst✝¹ : CommRing D) (inst✝ : NoZeroDivisors D) (a b : F) (h : a * b = 0) (h₀ : ¬a = 0) : a * b = a * 0 := by simp [h]
   hole

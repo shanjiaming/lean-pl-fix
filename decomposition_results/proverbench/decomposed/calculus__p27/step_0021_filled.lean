@@ -1,0 +1,2 @@
+theorem h₅₉ (h1 : partial_t 2 π = deriv (fun τ => g 2 τ) π) (h₃ : (fun τ => g 2 τ) = fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) (h₅ :  HasDerivAt (fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) (2 ^ 2 * (2 * cos π * -sin π) + 2 ^ 3 * (3 * π ^ 2)) π) (h₅₈ : deriv (fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) π = 2 ^ 2 * (2 * cos π * -sin π) + 2 ^ 3 * (3 * π ^ 2)) : cos π = -1 := by -- norm_num [Real.cos_pi]
+  norm_num

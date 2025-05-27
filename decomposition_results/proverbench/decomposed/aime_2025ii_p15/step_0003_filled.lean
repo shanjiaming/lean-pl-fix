@@ -1,2 +1,2 @@
-theorem h2  : ∃ k, sorry := by -- sorry
+theorem h2  : ∃ k, exactly_two_minima k := by -- sorry
   hole

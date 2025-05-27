@@ -1,2 +1,0 @@
-theorem h₈ (P : Polynomial ℤ) (h_coeff : ∀ (n : ℕ), P.coeff n = 0 ∨ P.coeff n = 1) (h_factor : ∃ Q R, Q.degree > 0 ∧ R.degree > 0 ∧ P = Q * R) (h h₂ : Polynomial.eval 2 P = 0) (Q R : Polynomial ℤ) (hQ : Q.degree > 0) (hR : R.degree > 0) (hP : P = Q * R) (h₄ : 0 = Polynomial.eval 2 Q * Polynomial.eval 2 R) (h₅ : Polynomial.eval 2 Q ≠ 0) (h₆ h₇ : Polynomial.eval 2 R = 0) : Polynomial.eval 2 R = 0 := by -- simpa using h₇
-  hole

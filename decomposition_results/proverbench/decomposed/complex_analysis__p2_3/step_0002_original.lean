@@ -1,4 +1,4 @@
-theorem h1  : (1 + sorry) ^ 2 = 2 * sorry := by
+theorem h1  : (1 + I) ^ 2 = 2 * I := by
   norm_num [Complex.ext_iff, pow_two, Complex.I_mul_I, Complex.I_mul_I, Complex.I_mul_I, Complex.I_mul_I] <;>
                       ring_nf <;>
                     norm_num <;>

@@ -1,1 +1,0 @@
-theorem h₂ (a b : ℝ) (h h₁ :  a = 0 ∧ b = 0 ∨    1 ≤ |a| ∨      0 < |a| ∧        |a| < 1 ∧          (b < Real.log (1 + ((1 - √(1 - a ^ 2)) / a) ^ 2) - a * ((1 - √(1 - a ^ 2)) / a) ∨            b > Real.log (1 + ((1 + √(1 - a ^ 2)) / a) ^ 2) - a * ((1 + √(1 - a ^ 2)) / a))) : ∃! x, a * x + b = Real.log (1 + x ^ 2) := by sorry

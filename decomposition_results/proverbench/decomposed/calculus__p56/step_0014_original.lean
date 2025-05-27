@@ -1,5 +1,7 @@
-theorem h₅ (h_max : IsMaxOn (fun f => ∫ (x : ℕ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) {f | Continuous f} sorry) (h₂ : Continuous fun x => x / 2) (h₃ : ((fun f => ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) fun x => x / 2) = 1 / 16) : ((fun f => ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) fun x => x / 2) ≤
-    (fun f => ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) sorry :=
+theorem h₁₀ (f : ℝ → ℝ) (hf : Continuous f) (h_max : IsMaxOn (fun f => ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) {f | Continuous f} f) (h1₁ :  ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 =    (∫ (x : ℝ) in Set.Icc 0 1, x ^ 3 / 4) - ∫ (x : ℝ) in Set.Icc 0 1, x * (f x - x / 2) ^ 2) (x : ℝ) (h1₇ : (f x - x / 2) ^ 2 ≥ 0) (h1₈ : x ≥ 0 → x * (f x - x / 2) ^ 2 ≥ 0) (h1₉ : x ≤ 1 → x ≥ 0 → x * (f x - x / 2) ^ 2 ≥ 0) (hx : ¬x ≥ 0) (hx' : x ≤ 0) : x ∈ Set.Icc 0 1 → x * (f x - x / 2) ^ 2 ≥ 0 :=
   by
-  apply h_max.2
-  exact by exact h₂
+  intro h
+  simp only [Set.mem_Icc] at h
+  have h₁₁ : 0 ≤ x := by sorry
+  have h₁₂ : x ≤ 1 := by sorry
+  nlinarith

@@ -16,4 +16,4 @@ theorem solve_congruence1_and_2 (m : ℕ) : ∃ n : ℕ, congruence1 n ∧ congr
     --    · rfl
     hole
   --  exact h_main
-  hole
+  norm_cast

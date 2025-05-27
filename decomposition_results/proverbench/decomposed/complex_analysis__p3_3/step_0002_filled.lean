@@ -1,2 +1,2 @@
-theorem h₁ (f : ℂ → ℂ) (hf : sorry) (h : ℂ → 1 ≤ sorry) : sorry ∧ (ℂ → sorry ≤ 1) := by -- apply bounded_reciprocal_function f hf h
+theorem h₁ (f : ℂ → ℂ) (hf : Entire f) (h : ℂ → 1 ≤ sorry) : (Entire fun z => 1 / f z) ∧ (ℂ → sorry ≤ 1) := by -- apply bounded_reciprocal_function f hf h
   hole

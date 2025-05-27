@@ -29,6 +29,6 @@ theorem is_tangent_line : HasDerivAt f (8 * Real.sqrt 3) (π / 3) ∧ f (π / 3)
       --  ring_nf <;> simp [Real.sqrt_eq_iff_sq_eq] <;> ring_nf <;> norm_num
       norm_num
     --  rw [h₃, h₄]
-    hole
+    linarith
   --  refine' ⟨h₁, h₂⟩
-  hole
+  norm_cast

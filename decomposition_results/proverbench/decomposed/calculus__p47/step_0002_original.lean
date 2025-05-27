@@ -1,4 +1,4 @@
-theorem h_main  : ∃ F, ∀ (x : ℝ), deriv F x = sorry ∧ F x = 1 / 2 * Real.log (x ^ 2 + 1) + sorry :=
+theorem h_main  : ∃ F, ∀ (x : ℝ), deriv F x = integrand x ∧ F x = 1 / 2 * Real.log (x ^ 2 + 1) + sorry :=
   by
   use fun x => (1 / 2) * Real.log (x ^ 2 + 1) + C
   intro x

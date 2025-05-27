@@ -1,4 +1,4 @@
-theorem h₄₁ (h₃ h₃₈ :  ∀ x ∈ Set.Icc 0 (π / 4),    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * Real.log (4 * sin x + 3 * cos x))      ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x) (h₄₀ : IsCompact (Set.Icc 0 (π / 4))) : ContinuousOn (fun x => (3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) (Set.Icc 0 (π / 4)) :=
+theorem h₄₁ (x : ℝ) (h₃ h₃₈ :  ∀ x ∈ Set.Icc 0 (π / 4),    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * log (4 * sin x + 3 * cos x))      ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x) (h₄₀ : IsCompact (Set.Icc 0 (π / 4))) : ContinuousOn (fun x => (3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) (Set.Icc 0 (π / 4)) :=
   by
   apply ContinuousOn.div
   ·

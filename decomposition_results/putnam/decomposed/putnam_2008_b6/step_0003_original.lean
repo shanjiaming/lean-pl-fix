@@ -1,1 +1,0 @@
-theorem h₃ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) : 2 * k + 1 > 0 := by linarith

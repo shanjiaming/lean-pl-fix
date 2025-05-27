@@ -1,2 +1,0 @@
-theorem h₂ (L : List ℝ) (hL : L.length = 8 ∧ ∀ (i : Fin L.length), L[i] = 1 ∨ L[i] = -1) (pluses : ℕ) (hpluses : pluses = {i | L[i] = 1}.ncard) (S : ℕ → ℝ) (hS : S = fun n => ∑ i ∈ Finset.Icc 1 n, L[i % 8] / (↑i : ℝ)) (h₁ : L.length = 8) : pluses = {i | L[i] = 1}.ncard := by -- exact hpluses
-  hole

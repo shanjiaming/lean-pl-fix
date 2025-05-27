@@ -21,6 +21,6 @@ theorem integral_of_rational_function_with_log :
     by
     --  exfalso
     --  exact h
-    hole
+    norm_cast
   --  exact h₂
   hole

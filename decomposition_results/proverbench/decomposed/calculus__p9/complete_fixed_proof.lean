@@ -24,7 +24,7 @@ theorem integral_sin_cube_cos_six_power (x : ℝ) :
               --  convert HasDerivAt.pow 7 (Real.hasDerivAt_cos x) using 1 <;> ring_nf <;> simp [Real.sin_sq, Real.cos_sq] <;> ring_nf
               hole
             --  exact h9
-            hole
+            norm_cast
           have h10 : HasDerivAt (fun x : ℝ => -(Real.cos x ^ 7 / 7)) (Real.sin x * Real.cos x ^ 6) x:= by
             --  --  convert HasDerivAt.div_const (HasDerivAt.neg h8) 7 using 1 <;> ring_nf <;> simp [Real.sin_sq, Real.cos_sq] <;>
                       ring_nf <;>
@@ -77,7 +77,7 @@ theorem integral_sin_cube_cos_six_power (x : ℝ) :
               --  convert HasDerivAt.pow 9 (Real.hasDerivAt_cos x) using 1 <;> ring_nf <;> simp [Real.sin_sq, Real.cos_sq] <;> ring_nf
               hole
             --  exact h11
-            hole
+            norm_cast
           have h12 : HasDerivAt (fun x : ℝ => -(Real.cos x ^ 9 / 9)) (Real.sin x * Real.cos x ^ 8) x:= by
             --  --  convert HasDerivAt.div_const (HasDerivAt.neg h10) 9 using 1 <;> ring_nf <;> simp [Real.sin_sq, Real.cos_sq] <;>
                       ring_nf <;>

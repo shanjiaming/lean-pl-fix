@@ -1,7 +1,0 @@
-theorem h₁₁ (a b c k : ℤ) (hk h₁ :  (↑k : ℝ) =    √((↑(4 + 2 * max (max |a| |b|) |c|) : ℝ) ^ 3 + (↑a : ℝ) * (↑(4 + 2 * max (max |a| |b|) |c|) : ℝ) ^ 2 +          (↑b : ℝ) * (↑(4 + 2 * max (max |a| |b|) |c|) : ℝ) +        (↑c : ℝ))) (h₂ :  (↑k : ℝ) ^ 2 =    (↑(4 + 2 * max (max |a| |b|) |c|) : ℝ) ^ 3 + (↑a : ℝ) * (↑(4 + 2 * max (max |a| |b|) |c|) : ℝ) ^ 2 +        (↑b : ℝ) * (↑(4 + 2 * max (max |a| |b|) |c|) : ℝ) +      (↑c : ℝ)) (h₃ :  k ^ 2 =    (4 + 2 * max (max |a| |b|) |c|) ^ 3 + a * (4 + 2 * max (max |a| |b|) |c|) ^ 2 +        b * (4 + 2 * max (max |a| |b|) |c|) +      c) (h₅ : 4 + 2 * max (max |a| |b|) |c| ≥ 4) (h₆ : (4 + 2 * max (max |a| |b|) |c|) ^ 2 ≥ 16) (h₇ : (4 + 2 * max (max |a| |b|) |c|) ^ 3 ≥ 64) (h₈ : a * (4 + 2 * max (max |a| |b|) |c|) ^ 2 ≥ -max (max |a| |b|) |c| * (4 + 2 * max (max |a| |b|) |c|) ^ 2) (h₉ : b * (4 + 2 * max (max |a| |b|) |c|) ≥ -max (max |a| |b|) |c| * (4 + 2 * max (max |a| |b|) |c|)) (h₁₀ : c ≥ -max (max |a| |b|) |c|) : (4 + 2 * max (max |a| |b|) |c|) ^ 3 + a * (4 + 2 * max (max |a| |b|) |c|) ^ 2 + b * (4 + 2 * max (max |a| |b|) |c|) +
-      c >
-    (4 + 2 * max (max |a| |b|) |c|) ^ 2 :=
-  by
-  have h₁₂ : (max (max (abs a) (abs b)) (abs c) : ℤ) ≤ (4 + 2 * (max (max (abs a) (abs b)) (abs c)) : ℤ) / 2 := by sorry
-  --  nlinarith
-  hole

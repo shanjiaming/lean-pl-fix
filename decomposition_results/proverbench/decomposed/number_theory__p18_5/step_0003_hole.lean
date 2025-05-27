@@ -1,0 +1,2 @@
+theorem h₂ (b : ℤ) (hb : b ∈ B) (hneg : b < 0) (h₁ : b ∈ B) : b ∈ B ↔ ∃ k, b = -44 + 5 * k := by -- apply characterize_B
+  hole

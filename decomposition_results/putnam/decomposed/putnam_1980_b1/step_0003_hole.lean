@@ -1,2 +1,0 @@
-theorem h₂ (c : ℝ) (h : ∀ (x : ℝ), (rexp x + rexp (-x)) / 2 ≤ rexp (c * x ^ 2)) (h₁ : ¬c ≥ 1 / 2) : c < 1 / 2 := by -- linarith
-  hole

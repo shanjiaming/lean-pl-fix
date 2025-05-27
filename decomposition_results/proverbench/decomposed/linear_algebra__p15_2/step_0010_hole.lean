@@ -1,0 +1,6 @@
+theorem h₁₀ (E : Type) (inst✝¹ : NormedAddCommGroup E) (inst✝ : InnerProductSpace ℝ E) (v u : E) (hu : u ≠ 0) (a' b' : E) (h_decomp : v = a' + b') (h_orthogonal : isOrthogonal b' u) (l : ℝ := ⟪v, u⟫_ℝ / ‖u‖ ^ 2) (l' : ℝ) (h_a' : a' = l' • u) (h₂ : ⟪b', u⟫_ℝ = 0) (h₃ : b' = v - a') (h₄ h₅ : ⟪v - a', u⟫_ℝ = 0) (h₆ : ⟪v - l' • u, u⟫_ℝ = 0) (h₇ : ⟪v - l' • u, u⟫_ℝ = ⟪v, u⟫_ℝ - l' * ‖u‖ ^ 2) (h₈ : ⟪v, u⟫_ℝ - l' * ‖u‖ ^ 2 = 0) (h₉ : ⟪v, u⟫_ℝ = l' * ‖u‖ ^ 2) : l' = ⟪v, u⟫_ℝ / ‖u‖ ^ 2 :=
+  by
+  have h₁₁ : ‖u‖ ≠ 0 := by sorry
+  have h₁₂ : ‖u‖ ^ 2 ≠ 0 := by sorry
+  field_simp [h₁₂] at h₉ ⊢ <;> nlinarith
+  hole

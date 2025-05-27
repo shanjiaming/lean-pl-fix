@@ -1,4 +1,7 @@
-theorem h₈ (h₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₂ : sorry = 1) (h₃ : sorry = 0) (h₅ : sorry = 0) (h₆ : sorry = 1) (h₇ : sorry - 1 = 0) : sorry ≤ sorry + 1 := by
-  rw [h₇]
-  have h₉ : (0 : Polynomial ℤ).roots.toFinset.card = 0 := by simp
-  rw [h₉] <;> simp_all <;> omega
+theorem h₆₄ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) (h₃ h₅ : n = 0) (h₆₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₆₂ : eval (-1) P = 1) (h₆₃ : n = 0) : P = 1 := by
+  subst_vars
+  have h₆₅ := h₆₁ 0 (by norm_num)
+  have h₆₆ := h₆₁ 0 (by norm_num)
+  simp at h₆₅ h₆₆
+  have h₆₇ : P = 1 := by sorry
+  exact h₆₇

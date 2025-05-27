@@ -10,11 +10,11 @@ theorem unique_polynomial_with_remainders :
     have h₃ : P %ₘ (X - 1 : Polynomial ℝ) ^ 3 = -1:=
       by
       --  apply Polynomial.funext
-      intro x
-      rw [h₂ x] <;> simp
+      --  intro x
+      --  --  rw [h₂ x] <;> simp
       hole
     --  exact h₃
-    hole
+    simpa
   have h₂ : P %ₘ (X + 1 : Polynomial ℝ) ^ 3 = 1:=
     by
     have h₃ : ∀ x : ℝ, (P %ₘ (X + 1 : Polynomial ℝ) ^ 3).eval x = 1:= by -- simpa [add_comm, pow_three] using h.2
@@ -22,11 +22,11 @@ theorem unique_polynomial_with_remainders :
     have h₄ : P %ₘ (X + 1 : Polynomial ℝ) ^ 3 = 1:=
       by
       --  apply Polynomial.funext
-      intro x
-      rw [h₃ x] <;> simp
+      --  intro x
+      --  --  rw [h₃ x] <;> simp
       hole
     --  exact h₄
-    hole
+    simpa
   have h₃ : False:= by
     have h₄ : P %ₘ (X - 1 : Polynomial ℝ) ^ 3 = -1 := h₁
     have h₅ : P %ₘ (X + 1 : Polynomial ℝ) ^ 3 = 1 := h₂
@@ -178,6 +178,6 @@ theorem unique_polynomial_with_remainders :
     by
     --  exfalso
     --  exact h₃
-    hole
+    norm_cast
   --  exact h₄
-  hole
+  norm_cast

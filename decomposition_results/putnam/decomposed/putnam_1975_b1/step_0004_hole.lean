@@ -1,2 +1,0 @@
-theorem h₂ (H : Set (ℤ × ℤ)) (hH : H = {(x, y) | ∃ u v w, (x, y) = (u * 3 + v * 4 + w * 5, u * 8 + v * -1 + w * 4)}) (x y u v w : ℤ) (hx : x = u * 3 + v * 4 + w * 5) (hy : y = u * 8 + v * -1 + w * 4) (h₁ : y = 8 * u - v + 4 * w) : x = 3 * u + 4 * v + 5 * w := by -- linarith
-  hole

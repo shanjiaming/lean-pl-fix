@@ -1,4 +1,4 @@
-theorem h_main  : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt sorry 0 c ∧ c = 4 :=
+theorem h_main (x : ℝ) : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0 c ∧ c = 4 :=
   by
   use 4
   constructor

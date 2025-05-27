@@ -1,2 +1,2 @@
-theorem h₃ (h₁ : sorry = 512) (h₂ : sorry = 34) : sorry = 512 ∧ sorry = 34 := by -- exact ⟨h₁, h₂⟩
+theorem h₃ (h₁ : h 2 5 (-6) 3 = 512) (h₂ : m_comp 2 5 (-6) 3 = 34) : h 2 5 (-6) 3 = 512 ∧ m_comp 2 5 (-6) 3 = 34 := by -- exact ⟨h₁, h₂⟩
   hole

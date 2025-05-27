@@ -1,4 +1,4 @@
-theorem h₅ (x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) (h₄ : HasDerivAt (fun x => 8 * x - x ^ 2) (8 - 2 * x) x) : HasDerivAt sorry (1 / 3 * (8 * x - x ^ 2) ^ (-2 / 3) * (8 - 2 * x)) x :=
+theorem h₅ (x✝ x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) (h₄ : HasDerivAt (fun x => 8 * x - x ^ 2) (8 - 2 * x) x) : HasDerivAt f (1 / 3 * (8 * x - x ^ 2) ^ (-2 / 3) * (8 - 2 * x)) x :=
   by
   have h₅₁ : HasDerivAt (fun x : ℝ => (8 * x - x ^ 2 : ℝ)) (8 - 2 * x) x := h₄
   have h₅₂ : HasDerivAt (fun x : ℝ => (8 * x - x ^ 2 : ℝ)) (8 - 2 * x) x := h₄

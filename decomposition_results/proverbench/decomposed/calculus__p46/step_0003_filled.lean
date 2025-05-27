@@ -2,4 +2,4 @@ theorem h₂ (x : ℝ) (h₁ : False) : ∫ (x : ℝ), √(x - 5) = 2 / 3 * (x -
   by
   --  exfalso
   --  exact h₁
-  hole
+  norm_cast

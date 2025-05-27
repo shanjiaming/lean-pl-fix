@@ -1,0 +1,3 @@
+theorem h₈ (R : Type u_1) (inst✝¹ : Field R) (inst✝ : CharZero R) (P : R[X]) (n : ℕ) (hP : P.degree = ↑n) (hValues : ∀ i ∈ Finset.range (n + 2), eval (↑i + 1) P = 1 / (↑i + 1)) (h₂ : P.natDegree = n) (h₃ : ∀ i < n + 2, eval (↑i + 1) P = 1 / (↑i + 1)) (h₄ : ¬n = 0) (h₅ : n > 0) (Q : R[X] := X * P - 1) (hQ_def : Q = X * P - 1) (j : ℕ) (hj : j < n + 2) (h₇ : eval (↑j + 1) P = 1 / (↑j + 1)) : eval (↑j + 1) Q = (↑j + 1) * eval (↑j + 1) P - 1 := by
+  simp [hQ_def, Polynomial.eval_sub, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_X, Polynomial.eval_C] <;>
+    ring_nf

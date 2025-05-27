@@ -1,4 +1,4 @@
-theorem h_main (x : ℝ) (h : sorry = 0) (h_cases : x = 2 ∨ x = 4) : x = 2 ∧ sorry < 0 ∨ x = 4 ∧ sorry > 0 := by
+theorem h_main (x✝ x : ℝ) (h : f_deriv x = 0) (h_cases : x = 2 ∨ x = 4) : x = 2 ∧ f_second_deriv x < 0 ∨ x = 4 ∧ f_second_deriv x > 0 := by
   cases h_cases with
   | inl h₂ =>
     have h₃ : x = 2 := h₂

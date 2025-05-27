@@ -1,2 +1,2 @@
-theorem h₃ (h : sorry = 0) (h₁ : 3 * sorry ^ 2 - 18 * sorry + 24 = 0) : sorry ^ 2 - 6 * sorry + 8 = 0 := by -- nlinarith
+theorem h₃ (x : ℝ) (h : f_deriv x = 0) (h₁ : 3 * x ^ 2 - 18 * x + 24 = 0) : x ^ 2 - 6 * x + 8 = 0 := by -- nlinarith
   hole

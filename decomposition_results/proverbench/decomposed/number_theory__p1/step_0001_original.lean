@@ -1,4 +1,4 @@
-theorem prime_divisors_of_polynomial_congruence  : (p : ℕ) → Nat.Prime p → p ∣ sorry → sorry :=
+theorem prime_divisors_of_polynomial_congruence (n : ℕ) : ∀ (p : ℕ), Nat.Prime p → p ∣ polynomial n → is24kPlus1 p :=
   by
   intro p hp hdiv
   have h₁ : p ≠ 3 := by sorry

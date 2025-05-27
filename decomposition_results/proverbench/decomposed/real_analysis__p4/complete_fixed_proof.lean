@@ -17,7 +17,7 @@ theorem inequality_solution (x : ℝ) : (1 - log x) / x ^ 2 < 0 ↔ x > exp 1:=
           --  apply div_nonneg
           --  · norm_num
           --  · exact sq_nonneg x
-          hole
+          positivity
     --      linarith
       ·
         have h₃ : x > 0 := by sorry
@@ -28,7 +28,7 @@ theorem inequality_solution (x : ℝ) : (1 - log x) / x ^ 2 < 0 ↔ x > exp 1:=
         have h₇ : (1 - log x) / x ^ 2 ≥ 0:= by
           --  apply div_nonneg h₆
           --  exact sq_nonneg x
-          hole
+          positivity
     --      linarith
     --  · intro h
       have h₁ : x > 0:= by -- linarith [exp_pos 1]

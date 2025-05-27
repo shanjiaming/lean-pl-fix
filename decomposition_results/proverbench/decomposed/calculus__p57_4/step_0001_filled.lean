@@ -1,7 +1,6 @@
-theorem concave_up_intervals  : ∃ a b,
+theorem concave_up_intervals (x : ℝ) : ∃ a b,
     a < b ∧
-      (∀ x < a, deriv (deriv sorry) x > 0) ∧
-        (∀ x > b, deriv (deriv sorry) x > 0) ∧ a = ((↑21 : ℝ) - sorry) / 4 ∧ b = ((↑21 : ℝ) + sorry) / 4 :=
+      (∀ x < a, deriv (deriv f) x > 0) ∧ (∀ x > b, deriv (deriv f) x > 0) ∧ a = (21 - √497) / 4 ∧ b = (21 + √497) / 4 :=
   by
   have h_main :
     ∃ (a b : ℝ),
@@ -9,5 +8,5 @@ theorem concave_up_intervals  : ∃ a b,
         (∀ (x : ℝ), x < a → deriv (deriv f) x > 0) ∧
           (∀ (x : ℝ), x > b → deriv (deriv f) x > 0) ∧ a = (21 - Real.sqrt 497) / 4 ∧ b = (21 + Real.sqrt 497) / 4 := by sorry
   --  obtain ⟨a, b, h₁, h₂, h₃, h₄, h₅⟩ := h_main
-  refine' ⟨a, b, h₁, h₂, h₃, h₄, h₅⟩
-  hole
+  --  refine' ⟨a, b, h₁, h₂, h₃, h₄, h₅⟩
+  norm_cast

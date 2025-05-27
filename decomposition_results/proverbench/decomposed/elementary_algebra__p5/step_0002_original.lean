@@ -1,1 +1,1 @@
-theorem h₁  : ∑ i ∈ Finset.range 101, sorry ^ i = ∑ i ∈ Finset.range 101, sorry ^ i := by rfl
+theorem h₁ (R : Type u_1) (inst✝ : Semiring R) : ∑ i ∈ Finset.range 101, X ^ i = ∑ i ∈ Finset.range 101, X ^ i := by rfl

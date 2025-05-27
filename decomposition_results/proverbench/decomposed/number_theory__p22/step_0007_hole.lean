@@ -1,2 +1,2 @@
-theorem h₄ (p q : ℤ) (hq : ¬q = 0) (r : ℚ) (hr : cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ)) : (↑r : ℝ) = cos ((↑p : ℝ) * π / (↑q : ℝ)) := by -- rw [hr] <;> norm_cast
+theorem h₄ (p q : ℤ) (hq : ¬q = 0) (r : ℚ) (hr : cos (↑p * π / ↑q) = ↑r) : ↑r = cos (↑p * π / ↑q) := by -- rw [hr] <;> norm_cast
   hole

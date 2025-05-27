@@ -28,6 +28,6 @@ theorem aime_2024ii_p13 (ω : ℂ) (h₀ : ω = Complex.exp (2 * ↑Real.pi * Co
     by
     --  exfalso
     --  exact h₁
-    hole
+    norm_cast
   --  exact h₂
   simpa

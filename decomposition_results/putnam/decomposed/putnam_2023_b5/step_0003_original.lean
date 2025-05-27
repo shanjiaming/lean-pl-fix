@@ -1,1 +1,0 @@
-theorem h₁ (n : ℕ) (h : n ∈ {n | n = 1 ∨ n ≡ 2 [MOD 4]}) : n = 1 ∨ n ≡ 2 [MOD 4] := by simpa using h

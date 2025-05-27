@@ -1,0 +1,1 @@
+theorem h₂ (x : ℝ) (hx1 : π / 2 ≤ x) (hx2 : x ≤ 200) : f (4 * π / 3) = 4 * π / 3 + 2 * sin (4 * π / 3) := by rw [f] <;> ring_nf

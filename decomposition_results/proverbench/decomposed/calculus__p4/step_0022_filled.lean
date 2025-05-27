@@ -1,11 +1,2 @@
-theorem h₂₆ (h₀ : sorry) (h₁ : sorry) (h₂₁ : sorry) (h₂₂ : sorry) (x : ℝ) (hx h₂₅ : x ≠ 0) : x ≠ 3 → (cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) = (cos (2 * x - 6) - 1) / (x - 3) ^ 2 * (1 / x) :=
-  by
-  --  intro h₂₆
-  have h₂₇ : x ^ 3 - 6 * x ^ 2 + 9 * x = x * (x - 3) ^ 2 := by sorry
-  --  rw [h₂₇]
-  have h₂₈ : x ≠ 0 := by sorry
-  have h₂₉ : x - 3 ≠ 0 := by sorry
-  --  --  --  field_simp [h₂₈, h₂₉, sub_eq_zero, h₂₅] <;> ring_nf <;> field_simp [h₂₈, h₂₉, sub_eq_zero, h₂₅] <;> ring_nf <;>
-      field_simp [h₂₈, h₂₉, sub_eq_zero, h₂₅] <;>
-    linarith
-  hole
+theorem h₁₆ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) (h₀₉ : Tendsto (fun x => Real.sin x / x) (𝓝[≠] 0) (𝓝 1)) (h₁₃ : Continuous fun x => x - 3) : Tendsto (fun x => x - 3) (𝓝 3) (𝓝 0) := by -- norm_num [show (3 : ℝ) - 3 = 0 by -- norm_num]
+  norm_num

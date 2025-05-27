@@ -1,4 +1,4 @@
-theorem h₂ (p : ℕ) (hp : sorry) (N : ℕ := sorry) (h₁ : p = 2 → N % p = 0) : p = 3 → N % p = 4 := by
+theorem h₂ (p : ℕ) (hp : Prime p) (N : ℕ := ∏ k ∈ range (p - 1), (k ^ 2 + 1)) (h₁ : p = 2 → N % p = 0) : p = 3 → N % p = 4 := by
   intro h
   have h₃ : p = 3 := h
   have h₄ : N = 2 := by sorry

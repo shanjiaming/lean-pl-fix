@@ -1,4 +1,0 @@
-theorem h12 (f : Polynomial ℤ) (hf : ∀ (n : ℕ), f.coeff n ≥ 0) (hfnconst : ∃ n > 0, f.coeff n > 0) (n : ℤ) (hn : n > 0) (h1 : Polynomial.eval 1 f > 0) (h2 : n ≥ 1) (h3 : n ≠ 1 → Polynomial.eval n f > Polynomial.eval 1 f) (h4 : n = 1 → Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) (h_div : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) (h6 : n ≠ 1) (h7 : Polynomial.eval n f > Polynomial.eval 1 f) (h8 : Polynomial.eval n f ∣ Polynomial.eval (Polynomial.eval n f + 1) f) (h9 h10 : Polynomial.eval n f ∣ Polynomial.eval 1 f) (h11 : Polynomial.eval n f ≤ Polynomial.eval 1 f) : Polynomial.eval n f > Polynomial.eval 1 f :=
-  by
-  have h13 : (Polynomial.eval n f : ℤ) > (Polynomial.eval 1 f : ℤ) := by sorry
-  exact h13

@@ -1,4 +1,4 @@
-theorem h₁₀ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : p ∣ sorry) (h₃ : p ∣ sorry) (h₄ : p ∣ sorry) (h₅ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) (h₇ : p ∣ sorry ^ 8) (h₈ : p ∣ sorry ^ 4) (h₉ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) : p ∣ 1 := by
+theorem h₁₀ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ h₃ : p ∣ n) (h₄ : p ∣ polynomial n) (h₅ : p ∣ n ^ 8 - n ^ 4 + 1) (h₇ : p ∣ n ^ 8) (h₈ : p ∣ n ^ 4) (h₉ : p ∣ n ^ 8 - n ^ 4 + 1) : p ∣ 1 := by
   have h₁₁ : p ∣ n ^ 8 - n ^ 4 + 1 := h₅
   have h₁₂ : p ∣ n ^ 8 := h₇
   have h₁₃ : p ∣ n ^ 4 := h₈

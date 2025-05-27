@@ -1,2 +1,2 @@
-theorem h₅ (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (k : ℕ) (p : ℤ) (hk₀ : 0 < k) (hk₁ : k ≤ n) (hk₂ : |(↑k : ℝ) * α - (↑p : ℝ)| < 1 / ((↑n : ℝ) + 1)) (h₂ : (↑k : ℤ) > 0) (h₃ : (↑k : ℤ) ≤ (↑n : ℤ)) (h₄ : |(↑k : ℝ) * α - (↑p : ℝ)| < 1 / ((↑n : ℝ) + 1)) : 0 < (↑k : ℝ) := by -- exact_mod_cast hk₀
-  simpa
+theorem h₅ (α✝ : ℝ) (n✝ : ℕ) (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (k : ℕ) (p : ℤ) (hk₀ : 0 < k) (hk₁ : k ≤ n) (hk₂ : |↑k * α - ↑p| < 1 / (↑n + 1)) (h₂ : ↑k > 0) (h₃ : ↑k ≤ ↑n) (h₄ : |↑k * α - ↑p| < 1 / (↑n + 1)) : 0 < ↑k := by exact_mod_cast hk₀
+  hole

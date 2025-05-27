@@ -1,0 +1,1 @@
+theorem h₁ (x✝ x : ℝ) (h : IsLocalMax f x ∨ IsLocalMin f x) : f_deriv x = 0 := by sorry

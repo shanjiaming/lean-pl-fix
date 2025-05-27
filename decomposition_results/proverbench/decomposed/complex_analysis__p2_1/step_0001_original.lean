@@ -1,4 +1,4 @@
-theorem exponent_simplification  : rexp (sorry * (5 * π / 2)) = rexp (sorry * (π / 2)) :=
+theorem exponent_simplification  : cexp (I * (5 * ↑π / 2)) = cexp (I * (↑π / 2)) :=
   by
   have h₀ : (5 : ℂ) * (π : ℂ) / 2 = (π : ℂ) / 2 + 2 * (π : ℂ) := by sorry
   have h₁ : exp (I * (5 * π / 2)) = exp (I * (π / 2 + 2 * π)) := by sorry

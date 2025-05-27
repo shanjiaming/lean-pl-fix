@@ -9,7 +9,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₃₂ : Real.logb 2 (x / (y * z)) = (1 : ℝ) / 2 := h₀
       have h₃₃ : Real.logb 2 (x / (y * z)) = Real.log (x / (y * z)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₃₃] at h₃₂
       have h₃₄ : Real.log (x / (y * z)) / Real.log 2 = (1 : ℝ) / 2 := h₃₂
       have h₃₅ : Real.log (x / (y * z)) = (Real.log 2) / 2 * Real.log 2:= by
@@ -30,7 +30,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₃₃ : Real.logb 2 (y / (x * z)) = (1 : ℝ) / 3 := h₁
       have h₃₄ : Real.logb 2 (y / (x * z)) = Real.log (y / (x * z)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₃₄] at h₃₃
       have h₃₅ : Real.log (y / (x * z)) / Real.log 2 = (1 : ℝ) / 3 := h₃₃
       have h₃₆ : Real.log (y / (x * z)) = (Real.log 2) / 3 * Real.log 2:= by
@@ -51,7 +51,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₃₄ : Real.logb 2 (z / (x * y)) = (1 : ℝ) / 4 := h₂
       have h₃₅ : Real.logb 2 (z / (x * y)) = Real.log (z / (x * y)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₃₅] at h₃₄
       have h₃₆ : Real.log (z / (x * y)) / Real.log 2 = (1 : ℝ) / 4 := h₃₄
       have h₃₇ : Real.log (z / (x * y)) = (Real.log 2) / 4 * Real.log 2:= by
@@ -81,7 +81,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₄₂ : Real.logb 2 (x / (y * z)) = (1 : ℝ) / 2 := h₀
       have h₄₃ : Real.logb 2 (x / (y * z)) = Real.log (x / (y * z)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₄₃] at h₄₂
       have h₄₄ : Real.log (x / (y * z)) / Real.log 2 = (1 : ℝ) / 2 := h₄₂
       have h₄₅ : Real.log (x / (y * z)) = (Real.log 2) / 2 * Real.log 2:= by
@@ -102,7 +102,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₄₃ : Real.logb 2 (y / (x * z)) = (1 : ℝ) / 3 := h₁
       have h₄₄ : Real.logb 2 (y / (x * z)) = Real.log (y / (x * z)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₄₄] at h₄₃
       have h₄₅ : Real.log (y / (x * z)) / Real.log 2 = (1 : ℝ) / 3 := h₄₃
       have h₄₆ : Real.log (y / (x * z)) = (Real.log 2) / 3 * Real.log 2:= by
@@ -123,7 +123,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₄₄ : Real.logb 2 (z / (x * y)) = (1 : ℝ) / 4 := h₂
       have h₄₅ : Real.logb 2 (z / (x * y)) = Real.log (z / (x * y)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₄₅] at h₄₄
       have h₄₆ : Real.log (z / (x * y)) / Real.log 2 = (1 : ℝ) / 4 := h₄₄
       have h₄₇ : Real.log (z / (x * y)) = (Real.log 2) / 4 * Real.log 2:= by
@@ -153,7 +153,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₅₂ : Real.logb 2 (x / (y * z)) = (1 : ℝ) / 2 := h₀
       have h₅₃ : Real.logb 2 (x / (y * z)) = Real.log (x / (y * z)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₅₃] at h₅₂
       have h₅₄ : Real.log (x / (y * z)) / Real.log 2 = (1 : ℝ) / 2 := h₅₂
       have h₅₅ : Real.log (x / (Y * Z)) = Real.log x - Real.log (Y * Z):= by
@@ -184,7 +184,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₅₃ : Real.logb 2 (y / (x * z)) = (1 : ℝ) / 3 := h₁
       have h₅₄ : Real.logb 2 (y / (x * z)) = Real.log (y / (x * z)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₅₄] at h₅₃
       have h₅₅ : Real.log (y / (x * z)) / Real.log 2 = (1 : ℝ) / 3 := h₅₃
       have h₅₆ : Real.log (y / (x * z)) = Real.log y - Real.log (x * z):= by
@@ -206,7 +206,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
       by
       have h₅₄ : Real.logb 2 (z / (x * y)) = (1 : ℝ) / 4 := h₂
       have h₅₅ : Real.logb 2 (z / (x * y)) = Real.log (z / (x * y)) / Real.log 2:= by -- rw [Real.logb]
-        hole
+        norm_cast
       --  rw [h₅₅] at h₅₄
       have h₅₆ : Real.log (z / (x * y)) / Real.log 2 = (1 : ℝ) / 4 := h₅₄
       have h₅₇ : Real.log (z / (x * y)) = Real.log z - Real.log (x * y):= by
@@ -258,7 +258,7 @@ theorem aime_2024ii_p4 (ans : ℚ) (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz :
     by
     have h₇₁ : Real.logb 2 (x ^ 4 * y ^ 3 * z ^ 2) = Real.log (x ^ 4 * y ^ 3 * z ^ 2) / Real.log 2:= by
       --  rw [Real.logb] <;> ring_nf <;> field_simp <;> ring_nf <;> norm_num
-      hole
+      norm_cast
     --  rw [h₇₁]
     --  --  --  rw [h₆] <;> field_simp [Real.log_mul, Real.log_pow, Real.log_rpow, Real.log_inv, Real.log_div] <;> ring_nf at * <;>
       nlinarith [Real.log_pos (by norm_num : (1 : ℝ) < 2)]

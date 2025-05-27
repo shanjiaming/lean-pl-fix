@@ -1,4 +1,4 @@
-theorem h₃ (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (f : ℕ → ℝ := fun k => (↑k : ℝ) * α - (↑(round ((↑k : ℝ) * α)) : ℝ)) : ∃ i j, i < j ∧ j ≤ n ∧ |f j - f i| < 1 / ((↑n : ℝ) + 1) :=
+theorem h₃ (α✝ : ℝ) (n✝ : ℕ) (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (f : ℕ → ℝ := fun k => ↑k * α - ↑(round (↑k * α))) : ∃ i j, i < j ∧ j ≤ n ∧ |f j - f i| < 1 / (↑n + 1) :=
   by
   by_contra h
   push_neg at h

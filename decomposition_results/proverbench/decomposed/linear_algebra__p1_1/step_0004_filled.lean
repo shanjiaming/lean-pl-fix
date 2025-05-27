@@ -1,0 +1,2 @@
+theorem h3 (n : ℕ) (R : Type u_1) (inst✝ : CommRing R) (A A' : Matrix (Fin n) (Fin n) R) (i : Fin n) (h1 : D1 A A' i = (A.updateRow i (A i + A' i)).det) (h2 : (A.updateRow i (A i + A' i)).det = (A.updateRow i (A i)).det + (A.updateRow i (A' i)).det) : A.updateRow i (A i) = A := by apply Matrix.updateRow_eq_self
+  hole

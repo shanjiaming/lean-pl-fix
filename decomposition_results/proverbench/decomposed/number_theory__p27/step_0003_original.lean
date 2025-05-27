@@ -1,1 +1,1 @@
-theorem h₂ (x y k m n z : ℕ+) (hz : (↑x : ℕ) ^ (↑m : ℕ) + (↑y : ℕ) ^ (↑n : ℕ) = (↑z : ℕ)) (h₁ : 4 * (↑k : ℕ) * (↑x : ℕ) * (↑y : ℕ) ≥ 4) : 4 * (↑k : ℕ) * (↑x : ℕ) * (↑y : ℕ) - 1 ≥ 3 := by omega
+theorem h₂ (x y k m n z : ℕ+) (hz : ↑x ^ ↑m + ↑y ^ ↑n = ↑z) (h₁ : 4 * ↑k * ↑x * ↑y ≥ 4) : 4 * ↑k * ↑x * ↑y - 1 ≥ 3 := by omega

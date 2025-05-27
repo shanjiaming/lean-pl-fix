@@ -52,7 +52,7 @@ theorem limit_of_function_at_zero : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.
                           --  --  convert HasDerivAt.log h₁₅ (by norm_num) using 1 <;> simp
                           hole
                         --  exact h₁₆
-                        hole
+                        norm_cast
                       --  --  convert h₁₄ using 1 <;> simp
                       hole
                     --  exact h₁₂
@@ -114,56 +114,56 @@ theorem limit_of_function_at_zero : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.
                       hole
                     --  exact h₁₅
                     hole
-                  have h₁₅ : Tendsto (fun x : ℝ => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)):=
+                  have h₁₅ : Tendsto (fun x : ℝ => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) :=
                     by
-                    --  filter_upwards [h₁₂] with x hx
+                    filter_upwards [h₁₂] with x hx
                     rw [hx]
-                    hole
                   --  exact h₁₅
                   hole
                 --  exact h₁₁
-                hole
+                norm_cast
               --  exact h₁₁
-              hole
+              norm_cast
             --  exact h₈
-            hole
+            norm_cast
           --  exact h₇
-          hole
+          norm_cast
         --  exact h₆
-        hole
+        norm_cast
       --  exact h₄
-      hole
-    have h₅ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)):=
+      norm_cast
+    have h₅ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) :=
       by
-      have h₆ : ∀ᶠ (x : ℝ) in 𝓝[≠] 0, (Real.cos x : ℝ) ^ (Real.sin x : ℝ) = Real.exp (Real.log (Real.cos x) * Real.sin x):=
+      have h₆ :
+        ∀ᶠ (x : ℝ) in 𝓝[≠] 0, (Real.cos x : ℝ) ^ (Real.sin x : ℝ) = Real.exp (Real.log (Real.cos x) * Real.sin x) :=
         by
-        --  filter_upwards [h₃] with x hx
+        filter_upwards [h₃] with x hx
         have h₇ : Real.cos x > 0 := hx
-        have h₈ : (Real.cos x : ℝ) ^ (Real.sin x : ℝ) = Real.exp (Real.log (Real.cos x) * Real.sin x):= by
+        have h₈ : (Real.cos x : ℝ) ^ (Real.sin x : ℝ) = Real.exp (Real.log (Real.cos x) * Real.sin x) := by
           rw [Real.rpow_def_of_pos h₇] <;> simp [Real.exp_log h₇]
-          hole
-        --  exact h₈
-        hole
-      have h₇ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)):=
+        exact h₈
+      have h₇ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) :=
         by
-        have h₈ : Tendsto (fun x => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) := h₁
+        have h₈ : Tendsto (fun x => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) :=
+          h₁
         have h₉ :
           (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) =ᶠ[𝓝[≠] 0]
-            (fun x => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) := by sorry
-        have h₁₀ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)):= by -- apply h₈.congr' h₉
-          hole
-        --  exact h₁₀
-        hole
-      --  exact h₇
-      hole
+            (fun x => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) :=
+          by
+          filter_upwards [h₆] with x hx
+          rw [hx]
+        have h₁₀ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) := by
+          apply h₈.congr' h₉
+        exact h₁₀
+      exact h₇
     --  exact h₅
     hole
-  have h_final : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝 0) (𝓝 (1 / 2)):=
+  have h_final : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝 0) (𝓝 (1 / 2)) :=
     by
     have h₁ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) := h_main
-    have h₂ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝 0) (𝓝 (1 / 2)):=
+    have h₂ : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) (𝓝 0) (𝓝 (1 / 2)) :=
       by
-      --  apply tendsto_inf.2 ⟨?_, h₁⟩
+      apply tendsto_inf.2 ⟨?_, h₁⟩
       ·
         have h₃ :
           (fun x => (1 - (Real.cos x) ^ (Real.sin x)) / x ^ 3) =ᶠ[𝓝 0]
@@ -178,8 +178,6 @@ theorem limit_of_function_at_zero : Tendsto (fun x => (1 - (Real.cos x) ^ (Real.
             exact h₇
           exact h₅
         exact h₄
-      hole
-    --  exact h₂
-    hole
+    exact h₂
   --  exact h_final
   hole

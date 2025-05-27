@@ -1,2 +1,2 @@
-theorem h₁₁ (n : ℕ) : 3 ^ n > 0 := by -- positivity
-  norm_num
+theorem h₁₁ (n✝ n : ℕ) : 3 ^ n > 0 := by positivity
+  hole

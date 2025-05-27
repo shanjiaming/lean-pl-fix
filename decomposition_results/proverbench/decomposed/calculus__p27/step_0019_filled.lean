@@ -1,0 +1,5 @@
+theorem h₅₇ (h1 : partial_t 2 π = deriv (fun τ => g 2 τ) π) (h₃ : (fun τ => g 2 τ) = fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) (h₅₁ : HasDerivAt (fun τ => 2 ^ 2 * cos τ ^ 2) (2 ^ 2 * (2 * cos π * -sin π)) π) (h₅₂ : HasDerivAt (fun τ => 2 ^ 3 * τ ^ 3) (2 ^ 3 * (3 * π ^ 2)) π) (h₅₅ : HasDerivAt (fun τ => 2 ^ 8) 0 π) : HasDerivAt (fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) (2 ^ 2 * (2 * cos π * -sin π) + 2 ^ 3 * (3 * π ^ 2)) π :=
+  by
+  --  convert h₅₁.add h₅₂ |>.add h₅₅ using 1 <;> ring_nf <;> simp [sin_pi, cos_pi] <;>
+    linarith [Real.cos_le_one π, Real.sin_le_one π, Real.cos_le_one π, Real.sin_le_one π]
+  hole

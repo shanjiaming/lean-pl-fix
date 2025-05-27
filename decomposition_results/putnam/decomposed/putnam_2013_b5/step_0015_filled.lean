@@ -1,6 +1,0 @@
-theorem h17 (n : ℕ) (hn : n ≥ 1) (k : (↑(Set.Icc 1 n) : Type)) (fiter : ((↑(Set.Icc 1 n) : Type) → (↑(Set.Icc 1 n) : Type)) → Prop) (hfiter :  ∀ (f : (↑(Set.Icc 1 n) : Type) → (↑(Set.Icc 1 n) : Type)), fiter f ↔ ∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, f^[j] x ≤ k) (h2 : 1 ≤ 1) (h3 h4 h5 : 1 ≤ n) (h h7 :  ∀ (f : (↑(Set.Icc 1 n) : Type) → (↑(Set.Icc 1 n) : Type)), fiter f ↔ ∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, f^[j] x ≤ k) (h8 h9 : (fiter fun x => x) ↔ ∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, (fun x => x)^[j] x ≤ k) (h10 : (∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, (fun x => x)^[j] x ≤ k) → fiter fun x => x) (h11 : (fiter fun x => x) → ∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, (fun x => x)^[j] x ≤ k) (h12 : ¬∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, (fun x => x)^[j] x ≤ k) (h13 : ¬fiter fun x => x) (h16 : (fiter fun x => x) ↔ ∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, (fun x => x)^[j] x ≤ k) : ¬∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, (fun x => x)^[j] x ≤ k :=
-  by
-  --  intro h18
-  have h19 := h12 h18
-  --  aesop
-  hole

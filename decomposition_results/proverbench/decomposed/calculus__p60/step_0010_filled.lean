@@ -1,3 +1,0 @@
-theorem h₉ (h₂ : sorry) (h₅ : ∀ (x : ℝ), x ≠ 0 → (3 * x + x ^ 2) / (5 * x + 2 * x ^ 2) = (3 + x) / (5 + 2 * x)) : (fun x => (3 * x + x ^ 2) / (5 * x + 2 * x ^ 2)) =ᶠ[𝓝[≠] 0] fun x => (3 + x) / (5 + 2 * x) := by
-  --  filter_upwards [self_mem_nhdsWithin] with x hx using h₅ x hx
-  hole

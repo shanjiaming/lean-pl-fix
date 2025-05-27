@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Prove that \(\frac{x^2+1}{y^2-5}\) is not an integer for any integers \(x, y > 2\) .
+-/

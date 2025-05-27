@@ -1,4 +1,4 @@
-theorem h₁ (ω : ℂ) (h₀ : ω = Complex.exp (2 * (↑π : ℂ) * Complex.I / 13)) : False := by
+theorem h₁ (ω : ℂ) (h₀ : ω = Complex.exp (2 * ↑π * Complex.I / 13)) : False := by
   rw [h₀] at *
   norm_num [Complex.ext_iff, pow_succ, Complex.exp_re, Complex.exp_im, Complex.I_re, Complex.I_im, Complex.ext_iff,
                       pow_succ, Complex.exp_re, Complex.exp_im, Complex.I_re, Complex.I_im, Complex.ext_iff, pow_succ,

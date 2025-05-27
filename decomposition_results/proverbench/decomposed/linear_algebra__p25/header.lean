@@ -1,5 +1,22 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Let $A$ be a 3x3 matrix defined as
+  $$A = \begin{pmatrix}
+  2 & 1 & 3 \\
+  2 & 4 & 2 \\
+  1 & 4 & -5
+  \end{pmatrix}$$
+  Then, the determinant of $A$ is equal to -32, i.e., $\det(A) = -32$.
+-/
+
+open Matrix
+
+-- Define the matrix A
+def A : Matrix (Fin 3) (Fin 3) ℝ := !![
+  2, 1, 3;
+  2, 4, 2;
+  1, 4, -5
+]
+
+-- Prove the determinant of A

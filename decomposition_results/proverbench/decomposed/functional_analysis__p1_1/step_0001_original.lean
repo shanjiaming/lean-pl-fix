@@ -1,4 +1,4 @@
-theorem f_partial_condition (u v : ℝ) : deriv (fun u => sorry) u - deriv (fun v => sorry) v = 2 * (u - v) * rexp (-(u + v)) :=
+theorem f_partial_condition (u✝ v✝ x y u v : ℝ) : deriv (fun u => f u v) u - deriv (fun v => f u v) v = 2 * (u - v) * rexp (-(u + v)) :=
   by
   have h1 : deriv (fun u => f u v) u = (2 * u - (u ^ 2 + v ^ 2)) * Real.exp (-(u + v)) := by sorry
   have h2 : deriv (fun v => f u v) v = (2 * v - (u ^ 2 + v ^ 2)) * Real.exp (-(u + v)) := by sorry

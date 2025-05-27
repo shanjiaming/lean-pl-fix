@@ -27,6 +27,6 @@ theorem sec_integral (x : ℝ) :
     by
     --  exfalso
     --  exact h0
-    hole
+    norm_cast
   --  apply h1
   hole

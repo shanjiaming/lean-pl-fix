@@ -1,4 +1,4 @@
-theorem h_main_claim  : sorry ∧ sorry ∧ sorry :=
+theorem h_main_claim  : congruence1 8 ∧ congruence2 8 ∧ congruence3 8 :=
   by
   --  constructor
   --  · norm_num [congruence1, congruence2, congruence3]

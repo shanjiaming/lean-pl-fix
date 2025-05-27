@@ -1,2 +1,2 @@
-theorem h₁₃ (n : ℕ) (h₁₁ : 3 ^ n > 0) (h₁₂ : 2 / 3 > 0) : 1 + (2 / 3) ^ n > 0 := by -- positivity
+theorem h₁₃ (n✝ n : ℕ) (h₁₁ : 3 ^ n > 0) (h₁₂ : 2 / 3 > 0) : 1 + (2 / 3) ^ n > 0 := by positivity
   hole

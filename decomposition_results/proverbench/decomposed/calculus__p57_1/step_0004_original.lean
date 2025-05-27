@@ -1,4 +1,4 @@
-theorem h₂ (x : ℝ) : HasDerivAt sorry ((35 - 5 * x) / ((5 * x ^ 2 + 35) * √(5 * x ^ 2 + 35))) x :=
+theorem h₂ (x✝ x : ℝ) : HasDerivAt f ((35 - 5 * x) / ((5 * x ^ 2 + 35) * √(5 * x ^ 2 + 35))) x :=
   by
   have h₃ : HasDerivAt (fun x : ℝ => (x + 1 : ℝ)) 1 x := by sorry
   have h₄ : HasDerivAt (fun x : ℝ => Real.sqrt (5 * x ^ 2 + 35)) ((5 * x) / Real.sqrt (5 * x ^ 2 + 35)) x := by sorry

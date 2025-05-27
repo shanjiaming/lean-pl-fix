@@ -1,1 +1,1 @@
-theorem h₄₄ (x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) (h₄₃ : HasDerivAt (fun x => 8 * x) 8 x) : HasDerivAt (fun x => x ^ 2) (2 * x) x := by simpa using (hasDerivAt_pow 2 x)
+theorem h₄₄ (x✝ x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) (h₂ : x < 8) (h₃ : 8 * x - x ^ 2 > 0) (h₄₃ : HasDerivAt (fun x => 8 * x) 8 x) : HasDerivAt (fun x => x ^ 2) (2 * x) x := by simpa using (hasDerivAt_pow 2 x)

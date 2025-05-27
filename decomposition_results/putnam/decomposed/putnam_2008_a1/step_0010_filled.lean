@@ -1,2 +1,0 @@
-theorem h₄ (f : ℝ → ℝ → ℝ) (hf : ∀ (x y z : ℝ), f x y + f y z + f z x = 0) (h_f_self_zero : ∀ (x : ℝ), f x x = 0) (h_f_symmetric_zero : ∀ (x : ℝ), f x 0 + f 0 x = 0) (x y : ℝ) (h₁ h₂ : f x y + f y 0 + f 0 x = 0) (h₃ : f x 0 + f 0 x = 0) : f 0 x = -f x 0 := by -- linarith
-  linarith

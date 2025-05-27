@@ -1,4 +1,4 @@
-theorem h_main (m : ℕ) : ∃ n, sorry ∧ sorry ∧ n = 15 * m + 8 :=
+theorem h_main (m : ℕ) : ∃ n, congruence1 n ∧ congruence2 n ∧ n = 15 * m + 8 :=
   by
   --  use 15 * m + 8
   --  constructor

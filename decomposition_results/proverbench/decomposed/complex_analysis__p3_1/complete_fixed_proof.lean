@@ -25,9 +25,9 @@ theorem bounded_reciprocal_function (f : ℂ → ℂ) (hf : Entire f) (h : ∀ z
         --  · exact h₃
         hole
       --  exact h₅
-      hole
+      norm_cast
     --  exact h₂
-    hole
+    norm_cast
   have h₂ : ∀ z, abs (1 / f z) ≤ 1:= by
     --  intro z
     have h₃ : 1 ≤ abs (f z) := h z

@@ -5,4 +5,4 @@ theorem h₅ (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ), -1 ≤ x 
   have h₅₄ : ¬((4 : ℝ) ∈ S) := by sorry
   have h₅₅ : (4 : ℝ) ∈ S := by sorry
   --  exact h₅₄ h₅₅
-  hole
+  norm_cast

@@ -1,2 +1,2 @@
-theorem h₆₇ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : ¬p ∣ sorry) (h₃ : ∃ d, 0 < d ∧ sorry ^ d ≡ 1 [ZMOD (↑p : ℤ)]) (h₄ : sorry ^ 12 ≡ -1 [ZMOD (↑p : ℤ)]) (h₅ : sorry ^ 24 ≡ 1 [ZMOD (↑p : ℤ)]) (h₆₁ : sorry ^ 12 ≡ -1 [ZMOD (↑p : ℤ)]) (h₆₂ : sorry ^ 24 ≡ 1 [ZMOD (↑p : ℤ)]) (h₆₃ : p ≠ 0) (h₆₄ : sorry ^ 12 ≡ -1 [ZMOD (↑p : ℤ)]) (h₆₅ : sorry ^ 24 ≡ 1 [ZMOD (↑p : ℤ)]) (h₆₆ : p ∣ sorry ^ 8 - sorry ^ 4 + 1) : ¬p ∣ sorry := by -- simpa using h₂
-  hole
+theorem h₆₇ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ : ¬p ∣ n) (h₃ : ∃ d, 0 < d ∧ ↑n ^ d ≡ 1 [ZMOD ↑p]) (h₄ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₅ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) (h₆₁ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₆₂ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) (h₆₃ : p ≠ 0) (h₆₄ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₆₅ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) (h₆₆ : p ∣ n ^ 8 - n ^ 4 + 1) : ¬p ∣ n := by -- simpa using h₂
+  omega

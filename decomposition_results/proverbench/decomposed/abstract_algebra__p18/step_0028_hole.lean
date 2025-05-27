@@ -1,5 +1,4 @@
-theorem h₇ (h₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₂ : sorry = 1) (h₄ : sorry ≥ 1) (h₅ : sorry = 1) (h₆ : sorry = 0) : sorry = 0 := by
-  have h₇₁ : P.natDegree = n := hP
-  have h₇₂ : P.natDegree = 0 := h₆
-  linarith
+theorem h₅₇ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) (hn : ¬n = 0) (h₄ : n ≥ 1) (h₅₁ : ∀ (k : ℤ), sorry → eval k P = 1) (x : ℤ) (h₅₅ : ∀ (k : ℤ), sorry → eval k P = 1) (hx : x ∉ Finset.Icc 0 (2 * ↑n)) : x < 0 ∨ x > 2 * ↑n := by
+  --  contrapose! hx
+  simp_all [Finset.mem_Icc] <;> (try omega) <;> (try norm_num) <;> (try linarith) <;> (try omega)
   hole

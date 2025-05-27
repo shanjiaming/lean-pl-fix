@@ -1,4 +1,4 @@
-theorem h₃ (f : ℕ → ℕ) (h_inj : ∀ (x y : ℕ), f x = f y → x = y) (h_def : f 1 = 2 ∧ ∀ n ≥ 2, f n = n + 2) (hf0 : f 0 = 3) (h2 : f 2 = 4) (h1 : f 1 = 2) (m n : ℕ) : f m ≥ 2 := by
+theorem h₃ (f✝ f : ℕ → ℕ) (h_inj : ∀ (x y : ℕ), f x = f y → x = y) (h_def : f 1 = 2 ∧ ∀ n ≥ 2, f n = n + 2) (hf0 : f 0 = 3) (h2 : f 2 = 4) (h1 : f 1 = 2) (m n : ℕ) : f m ≥ 2 := by
   by_cases hm : m = 0
   · rw [hm]
     norm_num [hf0]

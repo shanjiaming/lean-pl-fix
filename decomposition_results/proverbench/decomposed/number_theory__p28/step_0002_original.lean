@@ -1,4 +1,4 @@
-theorem h_main (p : ℕ) (hp : sorry) (N : ℕ := sorry) : if p % 4 = 3 then N % p = 4 else N % p = 0 :=
+theorem h_main (p : ℕ) (hp : Prime p) (N : ℕ := ∏ k ∈ range (p - 1), (k ^ 2 + 1)) : if p % 4 = 3 then N % p = 4 else N % p = 0 :=
   by
   have h₁ : p = 2 → N % p = 0 := by sorry
   have h₂ : p = 3 → N % p = 4 := by sorry

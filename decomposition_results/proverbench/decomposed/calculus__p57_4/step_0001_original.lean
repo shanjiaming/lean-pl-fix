@@ -1,7 +1,6 @@
-theorem concave_up_intervals  : ∃ a b,
+theorem concave_up_intervals (x : ℝ) : ∃ a b,
     a < b ∧
-      (∀ x < a, deriv (deriv sorry) x > 0) ∧
-        (∀ x > b, deriv (deriv sorry) x > 0) ∧ a = ((↑21 : ℝ) - sorry) / 4 ∧ b = ((↑21 : ℝ) + sorry) / 4 :=
+      (∀ x < a, deriv (deriv f) x > 0) ∧ (∀ x > b, deriv (deriv f) x > 0) ∧ a = (21 - √497) / 4 ∧ b = (21 + √497) / 4 :=
   by
   have h_main :
     ∃ (a b : ℝ),

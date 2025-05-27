@@ -1,4 +1,4 @@
-theorem h₁ (p : ℕ) (hp : Nat.Prime p) (h : ∃ x y, x ^ 2 - (↑p : ℤ) * y ^ 2 = -1) : p = 2 ∨ p % 4 = 1 := by
+theorem h₁ (p✝ : ℕ) (hp✝ : Nat.Prime p✝) (p : ℕ) (hp : Nat.Prime p) (h : ∃ x y, x ^ 2 - ↑p * y ^ 2 = -1) : p = 2 ∨ p % 4 = 1 := by
   by_contra h₂
   have h₃ : p ≠ 2 := by sorry
   have h₄ : p % 4 ≠ 1 := by sorry

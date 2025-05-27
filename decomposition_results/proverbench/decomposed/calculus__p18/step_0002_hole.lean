@@ -1,4 +1,4 @@
-theorem h_main  : ∫ (x : ℝ) in Set.Icc 2 8, 1 / x + x ^ 2 = Real.log 4 + 168 :=
+theorem h_main  : ∫ (x : ℝ) in Set.Icc 2 8, 1 / x + x ^ 2 = log 4 + 168 :=
   by
   have h₁ :
     (∫ x in Set.Icc 2 8, (1 / x + x ^ 2 : ℝ)) = (∫ x in Set.Icc 2 8, (1 / x : ℝ)) + ∫ x in Set.Icc 2 8, (x ^ 2 : ℝ) := by sorry

@@ -1,2 +1,0 @@
-theorem h₅₂ (f : ℝ → ℝ) (hf h₃ : f = fun x => if x ≤ rexp 1 then x else x * f (Real.log x)) (h₄ : f (-1) = if -1 ≤ rexp 1 then -1 else -1 * f (Real.log (-1))) (h₅₁ : rexp 1 > 0) : -1 ≤ rexp 1 := by -- linarith [Real.add_one_le_exp (1 : ℝ)]
-  linarith

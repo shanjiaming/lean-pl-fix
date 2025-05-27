@@ -1,4 +1,4 @@
-theorem h₁ (α : ℝ) (n : ℕ) (hn : n > 0) : (↑⌊α⌋.toNat : ℝ) = (↑⌊α⌋ : ℝ) := by
+theorem h₁ (α : ℝ) (n : ℕ) (hn : n > 0) : ↑⌊α⌋.toNat = ↑⌊α⌋ := by
   --  norm_cast <;>
   --          simp [Int.toNat_of_nonneg
   --              (Int.floor_nonneg.mpr

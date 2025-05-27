@@ -15,8 +15,8 @@ theorem unique_rational_function_condition :
       have h₉ := h₂ 1 (-1)
       have h₁₀ := h₂ 2 0
       have h₁₁ := h₂ 0 2
-      --  --  --  --  norm_num [h₁] at h₄ h₅ h₆ h₇ h₈ h₉ h₁₀ h₁₁ ⊢ <;> (try norm_num at *) <;> (try linarith) <;> (try nlinarith) <;>
-      --    (try ring_nf at * <;> nlinarith)
+      --  --  --  norm_num [h₁] at h₄ h₅ h₆ h₇ h₈ h₉ h₁₀ h₁₁ ⊢ <;> (try norm_num at *) <;> (try linarith) <;> (try nlinarith) <;>
+        (try ring_nf at * <;> nlinarith)
       hole
     have h₄ : ∀ (x : ℚ), f (x + 1) = f x + 1:= by
       --  intro x
@@ -28,8 +28,8 @@ theorem unique_rational_function_condition :
       have h₁₀ := h₂ 0 (x + 1)
       have h₁₁ := h₂ (x + 1) 1
       have h₁₂ := h₂ 1 (x + 1)
-      --  --  --  norm_num [h₁, h₃] at h₅ h₆ h₇ h₈ h₉ h₁₀ h₁₁ h₁₂ ⊢ <;> (try ring_nf at * <;> nlinarith) <;> (try linarith) <;>
-      --    (try nlinarith)
+      --  --  norm_num [h₁, h₃] at h₅ h₆ h₇ h₈ h₉ h₁₀ h₁₁ h₁₂ ⊢ <;> (try ring_nf at * <;> nlinarith) <;> (try linarith) <;>
+        (try nlinarith)
       hole
     have h₅ : ∀ (n : ℤ) (x : ℚ), f (x + n) = f x + n:= by
       --  intro n x
@@ -88,8 +88,8 @@ theorem unique_rational_function_condition :
         have h₃₇ := h₅ 1 3
         have h₃₈ := h₅ 3 (-1)
         have h₃₉ := h₅ (-1) 3
-        --  --  norm_num [h₁, h₃] at * <;> (try ring_nf at * <;> nlinarith) <;> (try linarith) <;> (try nlinarith)
-        linarith
+        --  --  --  --  norm_num [h₁, h₃] at * <;> (try ring_nf at * <;> nlinarith) <;> (try linarith) <;> (try nlinarith)
+        hole
       --  exact h₇
       hole
     --  exact h₆
@@ -100,7 +100,7 @@ theorem unique_rational_function_condition :
     have h1 : f 1 = 2:= by
       have h₂ := hf 1
       --  --  norm_num at h₂ ⊢ <;> linarith
-      hole
+      linarith
     have h2 : ∀ x y : ℚ, f (x * y) = f x * f y - f (x + y) + 1:=
       by
       --  intro x y
@@ -122,4 +122,4 @@ theorem unique_rational_function_condition :
     --    exact h_backward h
     hole
   --  exact h_main
-  hole
+  simpa

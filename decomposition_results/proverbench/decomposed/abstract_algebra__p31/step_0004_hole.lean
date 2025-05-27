@@ -1,0 +1,2 @@
+theorem h₃ (n✝ : ℕ) (R✝ : Type u_1) (inst✝¹ : Field R✝) (inst✝ : Nontrivial R✝) (P Q R : R✝[X]) (hP : P = X ^ n✝ + X - 1) (hQ : Q = X ^ 2 - X + 1) (hR : R = X ^ 3 - X + 1) (n : ℕ) (h : P ∣ Q) (h₂ : X ^ n✝ + X - 1 ∣ X ^ 2 - X + 1) : sorry := by simpa using h₂
+  hole

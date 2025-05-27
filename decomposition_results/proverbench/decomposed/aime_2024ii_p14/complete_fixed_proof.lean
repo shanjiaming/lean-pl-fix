@@ -4,7 +4,7 @@ theorem aime_2024ii_p14 (b : ℕ) (h₀ : 2 ≤ b) (h₁ : (beautifulSet b).card
   have h₃ : b ≥ 211:= by
     --  by_contra h
     have h₄ : b ≤ 210:= by -- omega
-      hole
+      linarith
     have h₅ : b < 211:= by -- omega
       linarith
     have h₆ : b ∈ Finset.Ico 2 b → False:= by
@@ -43,12 +43,12 @@ theorem aime_2024ii_p14 (b : ℕ) (h₀ : 2 ≤ b) (h₁ : (beautifulSet b).card
       have h₉ : (beautifulSet 211).card ≥ 10:= by
         --  norm_num [beautifulSet, Finset.filter_eq', Finset.Ico_eq_empty_iff, Finset.card_eq_zero, Finset.card_filter,
         --      Nat.div_eq_of_lt, Nat.div_eq_of_lt] at h₁ h₂ h₇ ⊢ <;>
-        --    trivial
+          trivial
         hole
       --  exact h₉
-      hole
+      linarith
     --  omega <;> trivial <;> omega
-    hole
+    linarith
   have h₅ : b = 211:= by
     have h₅₁ : b ≥ 211 := h₃
     have h₅₂ : b ≤ 211 := h₄

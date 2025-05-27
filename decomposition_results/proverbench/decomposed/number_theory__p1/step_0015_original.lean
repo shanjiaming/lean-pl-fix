@@ -1,4 +1,4 @@
-theorem h₃ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : ¬p ∣ sorry) : ∃ d, 0 < d ∧ sorry ^ d ≡ 1 [ZMOD (↑p : ℤ)] :=
+theorem h₃ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ : ¬p ∣ n) : ∃ d, 0 < d ∧ ↑n ^ d ≡ 1 [ZMOD ↑p] :=
   by
   haveI := Fact.mk hp
   have h₄ : (n : ZMod p) ≠ 0 := by sorry

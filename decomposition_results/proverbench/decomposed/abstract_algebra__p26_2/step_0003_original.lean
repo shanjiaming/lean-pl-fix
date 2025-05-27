@@ -1,4 +1,4 @@
-theorem h_final (f : sorry[sorry]) (hf : sorry > 0) (h_main : ∃ E x i α, sorry = 0) : ∃ E x i α, sorry :=
+theorem h_final (F : Type u_1) (inst✝ : Field F) (f : F[X]) (hf : f.degree > 0) (h_main : ∃ E x i α, eval₂ i α f = 0) : ∃ E x i α, (map i f).IsRoot α :=
   by
   obtain ⟨E, _, i, α, hα⟩ := h_main
   refine' ⟨E, _, i, α, _⟩

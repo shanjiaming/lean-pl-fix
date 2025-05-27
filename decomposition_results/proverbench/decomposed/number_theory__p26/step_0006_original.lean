@@ -1,1 +1,1 @@
-theorem h₅ (α : ℝ) (n : ℕ) (hn : n > 0) (h₁ : (↑⌊α⌋.toNat : ℝ) = (↑⌊α⌋ : ℝ)) (h₃ : (↑⌊α⌋ : ℝ) ≤ α) : (↑⌊α⌋ : ℝ) > α - 1 := by linarith [Int.sub_one_lt_floor α]
+theorem h₅ (α : ℝ) (n : ℕ) (hn : n > 0) (h₁ : ↑⌊α⌋.toNat = ↑⌊α⌋) (h₃ : ↑⌊α⌋ ≤ α) : ↑⌊α⌋ > α - 1 := by linarith [Int.sub_one_lt_floor α]

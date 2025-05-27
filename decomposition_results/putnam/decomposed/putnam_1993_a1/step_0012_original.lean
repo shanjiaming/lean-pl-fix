@@ -1,1 +1,0 @@
-theorem h₃₁₅ (h₁ : 0 < 4 / 9) (h₂ : 4 / 9 < 4 * √2 / 9) (x : ℝ) (hx : x ∈ Set.Ioo 0 (√2 / 3)) (h₃₁₂ : 0 < x) (h₃₁₃ : x < √2 / 3) (h₃₁₄ : 4 / 9 - (2 * x - 3 * x ^ 3) ≤ 0) : max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0 := by rw [max_eq_right (by linarith)] <;> linarith

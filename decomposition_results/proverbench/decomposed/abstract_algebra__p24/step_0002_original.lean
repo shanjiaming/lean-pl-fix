@@ -1,1 +1,1 @@
-theorem h_charZero (hchar : sorry) : sorry := by exact CharP.charP_to_charZero R <;> assumption
+theorem h_charZero (R : Type u_1) (inst✝¹ : CommRing R) (inst✝ : IsDomain R) (hchar : CharP R 0) : CharZero R := by exact CharP.charP_to_charZero R <;> assumption

@@ -1,1 +1,1 @@
-theorem h5 (x✝ x : ℝ) (h4 : sin x ^ 2 + cos x ^ 2 = 1) : sin x ^ 3 = sin x * sin x ^ 2 := by ring
+theorem h5 (x✝ x : ℝ) (h4 : Real.sin x ^ 2 + Real.cos x ^ 2 = 1) : Real.sin x ^ 3 = Real.sin x * Real.sin x ^ 2 := by ring

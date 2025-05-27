@@ -1,3 +1,0 @@
-theorem h₁₃ (h_main :  ∀ (n : ℕ),    ∑ k ∈ Finset.Icc 1 n, 6 ^ k / ((3 ^ (k + 1) - 2 ^ (k + 1)) * (3 ^ k - 2 ^ k)) =      2 - 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1))) (h₂ : ∀ (n : ℕ), 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) = 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1))) (h₄ : ∀ n ≥ 1, 3 ^ n ≥ 2 ^ n + 1) (h₅ : ∀ n ≥ 1, 3 ^ n - 2 ^ n ≥ 1) (h₆ h₇ : ∀ n ≥ 1, 3 ^ (n + 1) - 2 ^ (n + 1) ≥ 1) (h₈ : ∀ n ≥ 1, 2 ^ (n + 1) / (3 ^ (n + 1) - 2 ^ (n + 1)) ≤ 2 ^ (n + 1)) : sorry := by
-  --  simpa [div_eq_mul_inv] using tendsto_pow_atTop_nhds_0_of_lt_1 (by norm_num) (by norm_num)
-  hole

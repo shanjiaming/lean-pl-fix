@@ -1,1 +1,1 @@
-theorem h₈ (f : ℂ → ℂ) (hf : sorry) (h : ℂ → 1 ≤ sorry) (hf_ne_zero : ∀ (z : ℂ), f z ≠ 0) (h₁ : sorry) (z : ℂ) (h₃ : 1 ≤ sorry) (h₄ : f z ≠ 0) (h₅ : sorry = 1 / sorry) (h₇ : 1 ≤ sorry) : 0 < sorry := by linarith [Complex.abs.nonneg (f z)]
+theorem h₈ (f : ℂ → ℂ) (hf : Entire f) (h : ℂ → 1 ≤ sorry) (hf_ne_zero : ∀ (z : ℂ), f z ≠ 0) (h₁ : Entire fun z => 1 / f z) (z : ℂ) (h₃ : 1 ≤ sorry) (h₄ : f z ≠ 0) (h₅ : sorry = 1 / sorry) (h₇ : 1 ≤ sorry) : 0 < sorry := by linarith [Complex.abs.nonneg (f z)]

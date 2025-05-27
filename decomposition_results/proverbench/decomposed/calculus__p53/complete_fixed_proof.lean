@@ -2,9 +2,9 @@ theorem integral_of_rational_function :
   ∫ x in a..b, (4 : ℝ) / (x ^ 2 - 7 * x + 12) = 4 * log (196 / 96) - 4 * log (197 / 97):=
   by
   have h₁ : a = 100:= by -- exact h_a
-    hole
+    linarith
   have h₂ : b = 200:= by -- exact h_b
-    hole
+    linarith
   have h₃ : ∫ x in (100 : ℝ)..(200 : ℝ), (4 : ℝ) / (x ^ 2 - 7 * x + 12) = 4 * log (196 / 96) - 4 * log (197 / 97):=
     by
     have h₄ :
@@ -21,4 +21,4 @@ theorem integral_of_rational_function :
     exact h₃
     hole
   --  apply h₄
-  hole
+  linarith

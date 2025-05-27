@@ -7,21 +7,21 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
     --  rw [h₂] at hdiv
     have h₃ : (3 : ℕ) ∣ polynomial n := hdiv
     have h₄ : (polynomial n) % 3 = 0:= by -- omega
-      hole
+      omega
     have h₅ : (polynomial n) % 3 = 1:=
       by
       have h₅₁ : (polynomial n) % 3 = 1:=
         by
         have h₅₂ : n % 3 = 0 ∨ n % 3 = 1 ∨ n % 3 = 2:= by -- omega
-          hole
+          omega
         --  --  rcases h₅₂ with (h₅₂ | h₅₂ | h₅₂) <;> simp [h₅₂, polynomial, pow_succ, Nat.mul_mod, Nat.add_mod, Nat.mod_mod] <;>
-                norm_num <;>
-              (try omega) <;>
-            (try ring_nf at * <;> norm_num at * <;> omega) <;>
-          (try omega)
+        --          norm_num <;>
+        --        (try omega) <;>
+        --      (try ring_nf at * <;> norm_num at * <;> omega) <;>
+        --    (try omega)
         hole
       --  exact h₅₁
-      hole
+      linarith
     --  omega
     hole
   have h₂ : ¬(p ∣ n):= by
@@ -29,7 +29,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
     have h₃ : p ∣ n := h₂
     have h₄ : p ∣ polynomial n := hdiv
     have h₅ : p ∣ n ^ 8 - n ^ 4 + 1:= by -- simpa [polynomial] using h₄
-      hole
+      simpa
     have h₆ : p ∣ 1:= by
       have h₇ : p ∣ n ^ 8:= by -- exact dvd_trans h₃ (dvd_pow_self n (by omega))
         hole
@@ -48,7 +48,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
         --  simpa using h₁₆
         hole
       --  exact h₁₀
-      hole
+      omega
     have h₇ : p ∣ 1 := h₆
     have h₈ : p ≤ 1 := Nat.le_of_dvd (by norm_num) h₇
     have h₉ : p ≥ 2 := Nat.Prime.two_le hp
@@ -64,7 +64,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
         simpa using h₄
         hole
       --  exact h₂ h₅
-      hole
+      omega
     have h₅ : (n : ZMod p) ^ (p - 1 : ℕ) = 1:=
       by
       --  apply ZMod.pow_card_sub_one_eq_one
@@ -84,11 +84,11 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
   have h₄ : (n ^ 12 : ℤ) ≡ -1 [ZMOD p]:=
     by
     have h₄₁ : (p : ℕ) ∣ n ^ 8 - n ^ 4 + 1:= by -- simpa [polynomial] using hdiv
-      hole
+      simpa
     have h₄₂ : (n : ℤ) ^ 8 ≡ (n : ℤ) ^ 4 - 1 [ZMOD p]:=
       by
       have h₄₃ : (p : ℤ) ∣ (n ^ 8 - n ^ 4 + 1 : ℤ):= by -- exact_mod_cast h₄₁
-        hole
+        omega
       have h₄₄ : (n : ℤ) ^ 8 - (n : ℤ) ^ 4 + 1 ≡ 0 [ZMOD p]:=
         by
         --  rw [Int.ModEq]
@@ -103,7 +103,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
         --    _ ≡ (n : ℤ) ^ 4 - 1 [ZMOD p] := by rfl
         hole
       --  exact h₄₅
-      hole
+      simpa
     have h₄₆ : (n : ℤ) ^ 12 ≡ -1 [ZMOD p]:= by
       --  calc
       --    (n : ℤ) ^ 12 = (n : ℤ) ^ 8 * (n : ℤ) ^ 4 := by ring
@@ -117,7 +117,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
       --    _ ≡ -1 [ZMOD p] := by rfl
       hole
     --  exact h₄₆
-    hole
+    simpa
   have h₅ : (n ^ 24 : ℤ) ≡ 1 [ZMOD p]:=
     by
     have h₅₁ : (n : ℤ) ^ 24 ≡ 1 [ZMOD p]:= by
@@ -128,7 +128,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
       --    _ ≡ (1 : ℤ) [ZMOD p] := by rfl
       hole
     --  simpa using h₅₁
-    hole
+    simpa
   have h₆ : p % 24 = 1:= by
     have h₆₁ := h₄
     have h₆₂ := h₅
@@ -142,9 +142,9 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
     have h₆₄ : (n : ℤ) ^ 12 ≡ -1 [ZMOD p] := h₆₁
     have h₆₅ : (n : ℤ) ^ 24 ≡ 1 [ZMOD p] := h₆₂
     have h₆₆ : (p : ℕ) ∣ n ^ 8 - n ^ 4 + 1:= by -- simpa [polynomial] using hdiv
-      hole
+      simpa
     have h₆₇ : ¬(p : ℕ) ∣ n:= by -- simpa using h₂
-      hole
+      omega
     have h₆₈ : p ≠ 3 := h₁
     have h₆₉ : p % 24 = 1:= by
       --  haveI := Fact.mk hp
@@ -156,7 +156,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
         have h₇₅ : (p : ℕ) ∣ n:= by -- simpa [ZMod.nat_cast_zmod_eq_zero_iff_dvd] using h₇₄
           hole
         --  contradiction
-        hole
+        omega
       have h₇₄ : (n : ZMod p) ^ 12 = -1 :=
         by
         have h₇₅ : (n : ℤ) ^ 12 ≡ -1 [ZMOD p] := h₆₄
@@ -178,21 +178,21 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
         have h₇₇ : p % 3 ≠ 0:= by
           --  by_contra h₇₇
           have h₇₈ : p % 3 = 0:= by -- omega
-            linarith
+            hole
           have h₇₉ : 3 ∣ p:= by -- omega
-            omega
+            hole
           have h₈₀ : p = 3:= by
             have h₈₁ := Nat.Prime.eq_one_or_self_of_dvd hp 3 h₇₉
             --  omega
-            omega
+            hole
           --  contradiction
-          omega
+          hole
         have h₇₈ : p % 8 ≠ 0:= by
           --  by_contra h₇₈
           have h₇₉ : p % 8 = 0:= by -- omega
-            linarith
+            hole
           have h₈₀ : 8 ∣ p:= by -- omega
-            omega
+            hole
           have h₈₁ : p = 2:= by
             have h₈₂ := Nat.Prime.eq_one_or_self_of_dvd hp 8 h₈₀
             --  omega
@@ -200,10 +200,10 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
           have h₈₂ : (p : ℕ) ∣ n ^ 8 - n ^ 4 + 1 := h₆₆
           have h₈₃ : (p : ℕ) ∣ n ^ 8 - n ^ 4 + 1 := h₆₆
           have h₈₄ : (2 : ℕ) ∣ n ^ 8 - n ^ 4 + 1:= by -- simpa [h₈₁] using h₈₃
-            omega
+            hole
           have h₈₅ : n ^ 8 % 2 = n ^ 4 % 2:= by
             have h₈₅₁ : n % 2 = 0 ∨ n % 2 = 1:= by -- omega
-              omega
+              hole
             --  --  rcases h₈₅₁ with (h₈₅₁ | h₈₅₁) <;> simp [h₈₅₁, pow_succ, Nat.mul_mod, Nat.add_mod, Nat.pow_mod]
             hole
           have h₈₆ : (n ^ 8 - n ^ 4 + 1 : ℕ) % 2 = 1:=
@@ -239,7 +239,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
                 have h₈₆₀ :
                   p % 24 = 1 ∨ p % 24 = 5 ∨ p % 24 = 7 ∨ p % 24 = 11 ∨ p % 24 = 13 ∨ p % 24 = 17 ∨ p % 24 = 19 ∨ p % 24 = 23 := by sorry
                 --  rcases h₈₆₀ with (h₈₆₀ | h₈₆₀ | h₈₆₀ | h₈₆₀ | h₈₆₀ | h₈₆₀ | h₈₆₀ | h₈₆₀)
-                --  · contradiction
+                · contradiction
                 ·
                   have h₈₆₁ : p % 24 = 5 := h₈₆₀
                   have h₈₆₂ : (n : ZMod p) ^ 12 = -1 := h₈₅₁
@@ -247,18 +247,18 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
                   have h₈₆₄ : p % 24 = 5 := h₈₆₁
                   have h₈₆₅ : p % 3 = 2 := by omega
                   have h₈₆₆ : p % 8 = 5 := by omega
-                --  --    norm_num [ZMod, Int.ModEq, Int.emod_eq_emod_iff_emod_sub_eq_zero] at h₈₆₂ h₈₆₃ ⊢ <;> (try omega) <;>
-                --      (try {
-                --          have h₈₆₇ := h₈₅₁
-                --          have h₈₆₈ := h₈₅₂
-                --          norm_num [ZMod, Int.ModEq, Int.emod_eq_emod_iff_emod_sub_eq_zero] at h₈₆₇ h₈₆₈ ⊢ <;> omega
-                --        })
-                --  · omega
-                --  · omega
-                --  · omega
-                --  · omega
-                --  · omega
-                --  · omega
+                  norm_num [ZMod, Int.ModEq, Int.emod_eq_emod_iff_emod_sub_eq_zero] at h₈₆₂ h₈₆₃ ⊢ <;> (try omega) <;>
+                    (try {
+                        have h₈₆₇ := h₈₅₁
+                        have h₈₆₈ := h₈₅₂
+                        norm_num [ZMod, Int.ModEq, Int.emod_eq_emod_iff_emod_sub_eq_zero] at h₈₆₇ h₈₆₈ ⊢ <;> omega
+                      })
+                · omega
+                · omega
+                · omega
+                · omega
+                · omega
+                · omega
                 · omega
                 hole
               --  exact h₈₅₈
@@ -266,9 +266,9 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
             --  exact h₈₅₈
             hole
           --  exact h₈₀
-          linarith
+          hole
         --  exact h₇₉
-        linarith
+        hole
       have h₇₄ : (n : ZMod p) ^ 12 = -1:= by
         have h₇₅ : (n : ℤ) ^ 12 ≡ -1 [ZMOD p] := h₆₄
         have h₇₆ : (n : ZMod p) ^ 12 = -1:= by
@@ -388,7 +388,7 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
       exact h₇₆
       hole
     --  exact h₆₉
-    hole
+    linarith
   have h₇ : is24kPlus1 p:= by
     have h₇₁ : p % 24 = 1 := h₆
     have h₇₂ : ∃ k : ℕ, p = 24 * k + 1:= by
@@ -410,6 +410,6 @@ theorem prime_divisors_of_polynomial_congruence : ∀ (p : ℕ), p.Prime → p �
       --  omega
       hole
     --  simpa [is24kPlus1] using h₇₂
-    hole
+    simpa
   --  exact h₇
   hole

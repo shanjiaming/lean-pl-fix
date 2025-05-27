@@ -1,1 +1,0 @@
-theorem putnam_2008_a3 ... : (∃ f, ∀ P, init P → trans P → ∃ t : ℕ, ¬cont (P t) ∧ P t = f)

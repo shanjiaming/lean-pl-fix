@@ -1,1 +1,0 @@
-theorem h₃ (p : Polynomial ℝ) (hpdeg : p.degree = 1999) (h₂ : ∫ (x : ℝ) in -1 ..1, ‖Polynomial.eval x p‖ ≥ 2 * ‖Polynomial.eval 0 p‖) : ‖Polynomial.eval 0 p‖ ≤ 1 / 2 * ∫ (x : ℝ) in -1 ..1, ‖Polynomial.eval x p‖ := by linarith

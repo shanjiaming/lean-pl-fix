@@ -888,3 +888,6 @@ better to be fixed in a more standard way(symtree)
 
 todo:
 1.注意一下repl
+
+nohup python decompose_hole_merge_pipeline.py dataset minif2f unigram > minif2f_pipeline.log 2>&1 &
+nohup python decompose_hole_merge_pipeline.py dataset proverbench unigram > proverbench_pipeline.log 2>&1 &

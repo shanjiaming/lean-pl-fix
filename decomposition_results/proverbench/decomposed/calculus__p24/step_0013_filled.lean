@@ -1,0 +1,2 @@
+theorem h₆ (h₁ : Tendsto (fun x => x + 3 * x ^ 3) atTop atTop) (h₃ : ∀ (x : ℝ), sin (2 * x + x ^ 3) / (x + 3 * x ^ 3) = sin (2 * x + x ^ 3) * (1 / (x + 3 * x ^ 3))) (h₅ : Tendsto (fun x => x + 3 * x ^ 3) atTop atTop) : Tendsto (fun x => 1 / (x + 3 * x ^ 3)) atTop (𝓝 0) := by -- apply tendsto_inv_atTop_zero.comp h₁
+  hole

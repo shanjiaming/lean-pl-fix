@@ -1,2 +1,0 @@
-theorem h₄ (n✝ n k : ℕ) (hk : k ≥ 1) : 3 ^ k > 2 ^ k := by exact pow_lt_pow_of_lt_left (by norm_num) (by norm_num) (by omega)
-  hole

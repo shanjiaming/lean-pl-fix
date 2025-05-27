@@ -1,5 +1,9 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The limit of the function \(\displaystyle \lim_{x\to0}\frac{ e^{8x}-1}{x}\) is 8.
+-/
+
+open Filter Topology
+
+variable (x : ℝ)

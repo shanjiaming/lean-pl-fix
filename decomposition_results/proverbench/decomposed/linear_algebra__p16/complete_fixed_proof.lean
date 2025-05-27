@@ -54,6 +54,6 @@ theorem norm_add_ne_add_norm : ¬∀ (x y : EuclideanSpace ℝ (Fin 2)), ‖x + 
       --  linarith
       hole
     --  exact h₅ h₄
-    hole
+    norm_cast
   --  exact h_main
-  hole
+  norm_cast

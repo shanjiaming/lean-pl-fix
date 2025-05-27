@@ -1,4 +1,4 @@
-theorem h_main  : (sorry ^ sorry) ^ 2 ≡ sorry [ZMOD sorry] :=
+theorem h_main (p k : ℕ) (hp : p = 4 * k - 1) (hp_prime : Nat.Prime p) (a : ℤ) (ha : ∃ x, x ^ 2 ≡ a [ZMOD ↑p]) : (a ^ k) ^ 2 ≡ a [ZMOD ↑p] :=
   by
   have h₁ : ∃ (x : ℤ), x ^ 2 ≡ a [ZMOD p] := ha
   obtain ⟨b, hb⟩ := h₁

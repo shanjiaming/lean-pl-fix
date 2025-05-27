@@ -1,4 +1,0 @@
-theorem h₁₂ (n : ℕ) (hn : n > 1) (won : Fin n → Fin n → Bool) (hirrefl : ∀ (i : Fin n), won i i = false) (hantisymm : ∀ (i j : Fin n), i ≠ j → (won i j = true) = ¬won j i = true) (w l : Fin n → ℤ) (hw : w = fun r => ∑ j, if won r j = true then 1 else 0) (hl : l = fun r => (↑n : ℤ) - 1 - w r) (h₁ : ∑ r, w r = ∑ r, ∑ j, if won r j = true then 1 else 0) (h₂ h₃ h₄ : (∑ r, ∑ j, if won r j = true then 1 else 0) = ∑ r, ∑ j, if won r j = true then 1 else 0) (h₅ : (∑ r, ∑ j, if won r j = true then 1 else 0) = ∑ x, if won x.1 x.2 = true then 1 else 0) (h₆ : (∑ x, if won x.1 x.2 = true then 1 else 0) = (↑{x | won x.1 x.2 = true}.card : ℤ)) (h₈ : {x | won x.1 x.2 = true}.card = {x | won x.1 x.2 = true}.card) (h₉ : ∀ (i j : Fin n), i ≠ j → won i j = true ∨ won j i = true) : ∀ (i : Fin n), won i i = false := by
-  --  intro i
-  --  exact hirrefl i
-  hole

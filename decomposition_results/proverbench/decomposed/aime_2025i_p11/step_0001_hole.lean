@@ -4,9 +4,7 @@ theorem aime_2025i_p11 (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ),
         0 < c ∧
           0 < d ∧
             a.Coprime b ∧
-              a.Coprime d ∧
-                b.Coprime d ∧
-                  Squarefree c ∧ ∑ x ∈ S, f x = ((↑a : ℝ) + (↑b : ℝ) * √(↑c : ℝ)) / (↑d : ℝ) ∧ a + b + c + d = 259 :=
+              a.Coprime d ∧ b.Coprime d ∧ Squarefree c ∧ ∑ x ∈ S, f x = (↑a + ↑b * √↑c) / ↑d ∧ a + b + c + d = 259 :=
   by
   have h₄ : (0 : ℝ) ∈ S := by sorry
   have h₅ : False := by sorry

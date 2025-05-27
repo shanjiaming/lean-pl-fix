@@ -3,7 +3,7 @@ theorem lambda_eq_1 (h : 1 - exp (-1) = 1 - exp (-(lambda : ℝ))) : lambda = 1:
   have h₁ : Real.exp (-(lambda : ℝ)) = Real.exp (-1):=
     by
     have h₂ : 1 - Real.exp (-1 : ℝ) = 1 - Real.exp (-(lambda : ℝ)):= by -- simpa using h
-      hole
+      linarith
     have h₃ : Real.exp (-(lambda : ℝ)) = Real.exp (-1 : ℝ):=
       by
       have h₄ : Real.exp (-(lambda : ℝ)) = Real.exp (-1 : ℝ):=
@@ -11,15 +11,15 @@ theorem lambda_eq_1 (h : 1 - exp (-1) = 1 - exp (-(lambda : ℝ))) : lambda = 1:
         --  apply Eq.symm
         --  apply Eq.symm
         --  linarith [Real.exp_pos (-(lambda : ℝ)), Real.exp_pos (-1 : ℝ)]
-        hole
+        linarith
       --  exact h₄
-      hole
+      linarith
     --  exact h₃
-    hole
+    linarith
   have h₂ : -(lambda : ℝ) = -1:=
     by
     have h₃ : Real.exp (-(lambda : ℝ)) = Real.exp (-1) := h₁
-    have h₄ : -(lambda : ℝ) = -1:= by -- -- -- apply_fun (fun x => Real.log x) at h₃ <;> simp [Real.log_exp] at h₃ ⊢ <;> linarith
+    have h₄ : -(lambda : ℝ) = -1:= by -- apply_fun (fun x => Real.log x) at h₃ <;> simp [Real.log_exp] at h₃ ⊢ <;> linarith
       hole
     --  exact h₄
     hole
@@ -36,9 +36,9 @@ theorem lambda_eq_1 (h : 1 - exp (-1) = 1 - exp (-(lambda : ℝ))) : lambda = 1:
     have h₅ : (lambda : ℝ) = 1 := h₃
     have h₆ : lambda = 1:= by
       --  apply NNReal.eq
-      norm_num at h₅ ⊢ <;> simp_all [NNReal.coe_eq_one] <;> linarith
+      --  --  norm_num at h₅ ⊢ <;> simp_all [NNReal.coe_eq_one] <;> linarith
       hole
     --  exact h₆
     hole
   --  exact h₄
-  hole
+  simpa

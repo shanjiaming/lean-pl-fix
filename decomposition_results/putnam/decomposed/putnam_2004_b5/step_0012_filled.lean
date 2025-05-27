@@ -1,2 +1,0 @@
-theorem h₁₅ (xprod : ℝ → ℝ) (hxprod : (x : ℕ) → x ∈ Set.Ioo 0 1 → sorry) (h₁ : ∀ᶠ (x : ℝ) in 𝓝[<] 1, x ∈ Set.Ioo 0 1) (x : ℝ) (hx h₄ : x ∈ Set.Ioo 0 1) (h₅ : sorry) (h₇ : x > 0) (h₈ : x < 1) (h₁₀ : sorry) (h₁₂ : sorry) (h₁₃ : sorry) (h₁₄ : sorry) : xprod x = 2 / rexp 1 := by -- apply tendsto_nhds_unique h₁₃ h₁₄
-  hole

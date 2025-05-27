@@ -15,117 +15,141 @@ theorem limit_of_function_at_3 :
               (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) =
                 (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) := by sorry
             --  rw [h₀₅]
-            have h₀₆ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (-2)) :=
+            have h₀₆ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (-2)):=
               by
-              have h₀₇ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
+              have h₀₇ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1):=
                 by
-                have h₀₈ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
+                have h₀₈ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1):=
                   by
-                  have h₀₉ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) :=
+                  have h₀₉ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1):=
                     by
-                    have h₁₀ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) := by
-                      simpa using (hasDerivAt_sin 0).tendsto_smallZero_nhds_one
-                    exact h₁₀
-                  have h₁₁ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) :=
+                    have h₁₀ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1):= by
+                      --  simpa using (hasDerivAt_sin 0).tendsto_smallZero_nhds_one
+                      hole
+                    --  exact h₁₀
+                    simpa
+                  have h₁₁ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0):=
                     by
-                    have h₁₂ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)) :=
+                    have h₁₂ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)):=
                       by
-                      have h₁₃ : Continuous (fun x : ℝ => x - 3) := by continuity
-                      have h₁₄ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)) :=
+                      have h₁₃ : Continuous (fun x : ℝ => x - 3):= by -- continuity
+                        hole
+                      have h₁₄ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)):=
                         by
-                        have h₁₅ : Tendsto (fun x : ℝ => x - 3) (𝓝 3) (𝓝 (0 : ℝ)) :=
+                        have h₁₅ : Tendsto (fun x : ℝ => x - 3) (𝓝 3) (𝓝 (0 : ℝ)):=
                           by
-                          have h₁₆ : Tendsto (fun x : ℝ => x - 3) (𝓝 3) (𝓝 (0 : ℝ)) := by
-                            norm_num [show (3 : ℝ) - 3 = 0 by norm_num]
-                          exact h₁₆
-                        have h₁₇ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)) :=
+                          have h₁₆ : Tendsto (fun x : ℝ => x - 3) (𝓝 3) (𝓝 (0 : ℝ)):= by -- norm_num [show (3 : ℝ) - 3 = 0 by -- norm_num]
+                            norm_num
+                          --  exact h₁₆
+                          norm_num
+                        have h₁₇ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)):=
                           by
-                          apply Tendsto.mono_left _ nhdsWithin_le_nhds
-                          exact h₁₅
-                        exact h₁₇
-                      exact h₁₄
-                    have h₁₈ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) :=
+                          --  apply Tendsto.mono_left _ nhdsWithin_le_nhds
+                          --  exact h₁₅
+                          hole
+                        --  exact h₁₇
+                        hole
+                      --  exact h₁₄
+                      hole
+                    have h₁₈ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0):=
                       by
                       have h₁₉ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)) := h₁₂
-                      have h₂₀ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) :=
+                      have h₂₀ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0):=
                         by
-                        have h₂₁ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) :=
+                        have h₂₁ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0):=
                           by
-                          apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
-                          · exact h₁₉
-                          · filter_upwards [self_mem_nhdsWithin] with x hx
+                          --  apply tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
+                          --  · exact h₁₉
+                          --  · filter_upwards [self_mem_nhdsWithin] with x hx
                             have h₂₂ : x ≠ 3 := hx
-                            have h₂₃ : x - 3 ≠ 0 := by
+                            have h₂₃ : x - 3 ≠ 0:= by
                               intro h₂₄
                               apply h₂₂
                               linarith
-                            exact h₂₃
-                        exact h₂₁
-                      exact h₂₀
-                    exact h₁₈
-                  have h₂₄ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
+                              hole
+                          --    exact h₂₃
+                          hole
+                        --  exact h₂₁
+                        hole
+                      --  exact h₂₀
+                      hole
+                    --  exact h₁₈
+                    hole
+                  have h₂₄ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1):=
                     by
-                    have h₂₅ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
+                    have h₂₅ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1):=
                       by
                       have h₂₆ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) := h₀₉
                       have h₂₇ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) := h₁₁
-                      have h₂₈ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
+                      have h₂₈ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1):=
                         by
                         have h₂₉ :
                           (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) =
-                            (fun x : ℝ => (Real.sin ((fun x : ℝ => x - 3) x)) / ((fun x : ℝ => x - 3) x)) :=
-                          by rfl
-                        rw [h₂₉]
-                        have h₃₀ :
-                          Tendsto (fun x : ℝ => (Real.sin ((fun x : ℝ => x - 3) x)) / ((fun x : ℝ => x - 3) x)) (𝓝[≠] 3) (𝓝 1) :=
+                            (fun x : ℝ => (Real.sin ((fun x : ℝ => x - 3) x)) / ((fun x : ℝ => x - 3) x)) := by sorry
+                        --  rw [h₂₉]
+                        have h₃₀ : Tendsto (fun x : ℝ => (Real.sin ((fun x : ℝ => x - 3) x)) / ((fun x : ℝ => x - 3) x)) (𝓝[≠] 3) (𝓝 1):=
                           by
                           have h₃₁ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) := h₀₉
                           have h₃₂ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) := h₁₁
-                          have h₃₃ :
-                            Tendsto (fun x : ℝ => (Real.sin ((fun x : ℝ => x - 3) x)) / ((fun x : ℝ => x - 3) x)) (𝓝[≠] 3)
-                              (𝓝 1) :=
+                          have h₃₃ : Tendsto (fun x : ℝ => (Real.sin ((fun x : ℝ => x - 3) x)) / ((fun x : ℝ => x - 3) x)) (𝓝[≠] 3) (𝓝 1):=
                             by
                             have h₃₄ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) := h₀₉
                             have h₃₅ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) := h₁₁
-                            convert h₃₄.comp h₃₅ using 1 <;> simp [Function.comp] <;> field_simp
-                          exact h₃₃
-                        exact h₃₀
-                      exact h₂₈
-                    exact h₂₅
-                  exact h₂₄
-                exact h₀₈
-              have h₀₉ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (-2)) :=
+                            --  convert h₃₄.comp h₃₅ using 1 <;> simp [Function.comp] <;> field_simp
+                            hole
+                          --  exact h₃₃
+                          hole
+                        --  exact h₃₀
+                        simpa
+                      --  exact h₂₈
+                      hole
+                    --  exact h₂₅
+                    simpa
+                  --  exact h₂₄
+                  simpa
+                --  exact h₀₈
+                simpa
+              have h₀₉ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (-2)):=
                 by
                 have h₁₀ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) := h₀₇
-                have h₁₁ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (-2)) :=
+                have h₁₁ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (-2)):=
                   by
-                  have h₁₂ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 1) :=
+                  have h₁₂ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 1):=
                     by
                     have h₁₃ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) := h₀₇
-                    have h₁₄ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 1) :=
+                    have h₁₄ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 1):=
                       by
-                      have h₁₅ : Continuous (fun y : ℝ => y ^ 2) := by continuity
-                      have h₁₆ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (1 ^ 2)) := by
+                      have h₁₅ : Continuous (fun y : ℝ => y ^ 2):= by continuity
+                        hole
+                      have h₁₆ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 (1 ^ 2)):= by
                         apply h₁₅.continuousAt.tendsto.comp h₁₃
-                      simpa using h₁₆
-                    exact h₁₄
-                  have h₁₇ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 ((-2 : ℝ) * 1)) :=
+                        hole
+                      --  simpa using h₁₆
+                      hole
+                    --  exact h₁₄
+                    simpa
+                  have h₁₇ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 ((-2 : ℝ) * 1)):=
                     by
-                    have h₁₈ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 ((-2 : ℝ) * 1)) :=
+                    have h₁₈ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 ((-2 : ℝ) * 1)):=
                       by
                       have h₁₉ : Tendsto (fun x : ℝ => ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 1) := h₁₂
-                      have h₂₀ :
-                        Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 ((-2 : ℝ) * 1)) := by
-                        convert Tendsto.const_mul (-2) h₁₉ using 1 <;> simp [mul_comm]
-                      exact h₂₀
-                    exact h₁₈
-                  simpa using h₁₇
-                exact h₁₁
-              exact h₀₉
-            exact h₀₆
+                      have h₂₀ : Tendsto (fun x : ℝ => (-2 : ℝ) * ((Real.sin (x - 3)) / (x - 3)) ^ 2) (𝓝[≠] 3) (𝓝 ((-2 : ℝ) * 1)):= by
+                        --  convert Tendsto.const_mul (-2) h₁₉ using 1 <;> simp [mul_comm]
+                        hole
+                      --  exact h₂₀
+                      hole
+                    --  exact h₁₈
+                    hole
+                  --  simpa using h₁₇
+                  hole
+                --  exact h₁₁
+                hole
+              --  exact h₀₉
+              hole
+            --  exact h₀₆
             hole
           --  exact h₀₄
-          hole
+          simpa
         have h₀₅ : Tendsto (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) (𝓝 3) (𝓝 (-2)):=
           by
           have h₀₆ : Tendsto (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) (𝓝[≠] 3) (𝓝 (-2)) := h₀₃
@@ -139,13 +163,13 @@ theorem limit_of_function_at_3 :
               simp at hx ⊢ <;> aesop
             hole
           --  exact h₀₇
-          hole
+          simpa
         --  exact h₀₅
-        hole
+        simpa
       --  exact h₀₂
-      hole
+      simpa
     --  exact h₀₁
-    hole
+    simpa
   have h₁ : Tendsto (fun x : ℝ => (1 : ℝ) / x) (𝓝 3) (𝓝 (1 / 3)):=
     by
     have h₁₁ : Tendsto (fun x : ℝ => (1 : ℝ) / x) (𝓝 3) (𝓝 (1 / 3)):=
@@ -158,11 +182,11 @@ theorem limit_of_function_at_3 :
         · norm_num
         hole
       have h₁₃ : Tendsto (fun x : ℝ => (1 : ℝ) / x) (𝓝 3) (𝓝 ((1 : ℝ) / 3)):= by -- simpa using h₁₂.tendsto
-        hole
+        norm_num
       --  simpa using h₁₃
-      hole
+      norm_num
     --  exact h₁₁
-    hole
+    norm_num
   have h₂ : Tendsto (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x)) (𝓝 3) (𝓝 (-2 / 3)):=
     by
     have h₂₁ : Tendsto (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) (𝓝 3) (𝓝 (-2)) := h₀
@@ -179,20 +203,20 @@ theorem limit_of_function_at_3 :
         have h₃₃ : ((-2 : ℝ) * (1 / 3) : ℝ) = (-2 / 3 : ℝ):= by -- norm_num
           hole
         --  rw [h₃₃] at h₂₇
-        exact h₂₇
+        --  exact h₂₇
         hole
       have h₃₄ : Tendsto (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x)) (𝓝 3) (𝓝 (-2 / 3)):=
         by
         have h₃₅ : Tendsto (fun x : ℝ => (Real.cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x)) (𝓝 3) (𝓝 (-2 / 3)):=
           by
           --  apply Tendsto.congr' h₂₃
-          --  exact h₂₆
+          exact h₂₆
           hole
         --  exact h₃₅
-        hole
+        simpa
       --  exact h₃₄
-      hole
+      simpa
     --  exact h₂₅
     hole
   --  exact h₂
-  hole
+  simpa

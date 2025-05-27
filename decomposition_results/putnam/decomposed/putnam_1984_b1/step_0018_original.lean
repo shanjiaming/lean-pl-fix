@@ -1,2 +1,0 @@
-theorem h₄₂ (f : ℕ → ℤ) (hf : ∀ n > 0, f n = ∑ i, (↑(↑i : ℕ)! : ℤ)) (n : ℕ) (hn : n ≥ 1) (h₁ : f (n + 2) = f (n + 1) + (↑(n + 2)! : ℤ)) (h₂ : f (n + 1) = f n + (↑(n + 1)! : ℤ)) (h₃ : (↑(f (n + 2)) : ℝ) = ((↑n : ℝ) + 3) * (↑(f (n + 1)) : ℝ) + (-(↑n : ℝ) - 2) * (↑(f n) : ℝ)) (h₄₁ : Polynomial.eval (↑n : ℝ) (Polynomial.X + 3) = (↑n : ℝ) + 3) : Polynomial.eval (↑n : ℝ) (-Polynomial.X - 2) = -(↑n : ℝ) - 2 := by
-  simp [Polynomial.eval_sub, Polynomial.eval_neg, Polynomial.eval_X, Polynomial.eval_C] <;> ring_nf <;> norm_num

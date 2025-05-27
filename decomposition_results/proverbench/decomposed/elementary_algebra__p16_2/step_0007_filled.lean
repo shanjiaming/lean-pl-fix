@@ -1,4 +1,4 @@
-theorem h₅ (h_exists : sorry) (y : ℝ) (h_given : sorry) (h₂ : sorry ↔ y = 7) (h₄ : sorry) : y = 7 := by
+theorem h₅ (r : ℝ) (h_exists : given_equation 7) (y : ℝ) (h_given : given_equation y) (h₂ : given_equation y ↔ y = 7) (h₄ : given_equation y) : y = 7 := by
   --  rw [h₂] at h₄
-  exact h₄
+  --  exact h₄
   hole

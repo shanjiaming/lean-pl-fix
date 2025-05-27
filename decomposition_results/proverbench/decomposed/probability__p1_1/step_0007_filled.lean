@@ -1,2 +1,2 @@
-theorem h₄ (h : 1 - rexp (-1) = 1 - rexp (-sorry)) (h₁ : rexp (-sorry) = rexp (-1)) (h₃ : rexp (-sorry) = rexp (-1)) : -sorry = -1 := by -- -- -- apply_fun (fun x => Real.log x) at h₃ <;> simp [Real.log_exp] at h₃ ⊢ <;> linarith
+theorem h₄ (lambda : NNReal) (h : 1 - rexp (-1) = 1 - rexp (-↑lambda)) (h₁ h₃ : rexp (-↑lambda) = rexp (-1)) : -↑lambda = -1 := by -- apply_fun (fun x => Real.log x) at h₃ <;> simp [Real.log_exp] at h₃ ⊢ <;> linarith
   hole

@@ -1,8 +1,8 @@
-theorem h₁  : ∀ i ≤ sorry, sorry = i % 2 :=
+theorem h₁ (P : Polynomial ℤ) (n : ℕ) (hn : P.natDegree = n) : ∀ i ≤ n, Polynomial.eval (↑i) P = ↑i % 2 :=
   by
   have h₂ := hn
   have h₃ := hn
-  have h₄ : n = 0 ∨ n ≠ 0 := by omega
+  have h₄ : n = 0 ∨ n ≠ 0 := by sorry
   cases h₄ with
   | inl h₄ =>
     have h₅ : n = 0 := h₄

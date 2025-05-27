@@ -1,4 +1,4 @@
-theorem h₆ (m : ℤ) (h : (↑m : ℝ) = 2 + 2 * √(28 * sorry ^ 2 + 1)) (k : ℤ) (hk : √(28 * sorry ^ 2 + 1) = (↑k : ℝ)) (h₁ : (↑k : ℝ) = √(28 * sorry ^ 2 + 1)) (h₂ : (↑k : ℝ) ^ 2 = 28 * sorry ^ 2 + 1) (h₃ : k ^ 2 = 28 * sorry ^ 2 + 1) (h₄ : m = 2 + 2 * k) (h₅ : k ≥ 0) : ∃ t, m = t ^ 2 := by
+theorem h₆ (n : ℕ) (m : ℤ) (h : ↑m = 2 + 2 * √(28 * ↑n ^ 2 + 1)) (k : ℤ) (hk : √(28 * ↑n ^ 2 + 1) = ↑k) (h₁ : ↑k = √(28 * ↑n ^ 2 + 1)) (h₂ : ↑k ^ 2 = 28 * ↑n ^ 2 + 1) (h₃ : k ^ 2 = 28 * ↑n ^ 2 + 1) (h₄ : m = 2 + 2 * k) (h₅ : k ≥ 0) : ∃ t, m = t ^ 2 := by
   have h₆₁ : m = 2 + 2 * k := by sorry
   have h₆₂ : (k : ℤ) ^ 2 = 28 * n ^ 2 + 1 := by sorry
   have h₆₃ : (k : ℤ) ≥ 0 := by sorry

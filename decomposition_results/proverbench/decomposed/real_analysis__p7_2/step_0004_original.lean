@@ -1,0 +1,1 @@
+theorem h₄ (x✝ x : ℝ) (h₂ : f x = (8 * x - x ^ 2) ^ (1 / 3)) (h₃ : 1 / 3 = 0) : (8 * x - x ^ 2) ^ 0 = 1 := by simp [Real.rpow_zero]

@@ -1,0 +1,2 @@
+theorem h₂ (h_main : A.mulVec solution = b) (h_unique : ∀ (y : Fin 2 → ℝ), A.mulVec y = b ∧ y = solution → y = solution) (x : Fin 2 → ℝ) (hx : A.mulVec x = b ∧ x = solution) (y : Fin 2 → ℝ) (hy : A.mulVec y = b ∧ y = solution) (h₁ : y = solution) : x = solution := by -- simpa [h₁] using hx.2
+  hole

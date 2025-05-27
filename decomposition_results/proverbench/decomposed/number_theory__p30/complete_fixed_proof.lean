@@ -27,7 +27,7 @@ theorem solutions_of_quadratic_congruence :
       --    _ ≡ (b ^ 2 : ℤ) ^ (2 * k) [ZMOD p] := by rfl
       hole
     have h₅ : (p : ℕ) = 4 * k - 1:= by -- omega
-      hole
+      linarith
     have h₆ : (4 * k : ℕ) = (p : ℕ) + 1 :=
       by
       have h₇ : (p : ℕ) = 4 * k - 1 := by omega
@@ -39,12 +39,12 @@ theorem solutions_of_quadratic_congruence :
     have h₇ : (b : ℤ) ^ (p : ℕ) ≡ (b : ℤ) [ZMOD p]:=
       by
       --  haveI : Fact p.Prime := ⟨hp_prime⟩
-      have h₈ : (b : ZMod p) ^ p = (b : ZMod p):= by apply ZMod.pow_card
+      have h₈ : (b : ZMod p) ^ p = (b : ZMod p):= by -- apply ZMod.pow_card
         hole
-      have h₉ : (b : ℤ) ^ (p : ℕ) ≡ (b : ℤ) [ZMOD p]:= by simpa [Int.ModEq, Int.emod_eq_emod_iff_emod_sub_eq_zero] using h₈
+      have h₉ : (b : ℤ) ^ (p : ℕ) ≡ (b : ℤ) [ZMOD p]:= by -- simpa [Int.ModEq, Int.emod_eq_emod_iff_emod_sub_eq_zero] using h₈
         hole
       --  exact h₉
-      hole
+      simpa
     have h₈ : (b : ℤ) ^ (p + 1 : ℕ) ≡ (b : ℤ) ^ 2 [ZMOD p]:= by
       --  calc
       --    (b : ℤ) ^ (p + 1 : ℕ) = (b : ℤ) ^ (p : ℕ) * (b : ℤ) := by
@@ -58,11 +58,11 @@ theorem solutions_of_quadratic_congruence :
       --    _ ≡ (b : ℤ) ^ 2 [ZMOD p] := by rfl
       hole
     have h₉ : (b : ℤ) ^ (2 * k : ℕ) ≡ (b : ℤ) ^ (2 * k : ℕ) [ZMOD p]:= by -- rfl
-      hole
+      norm_num
     have h₁₀ : (b : ℤ) ^ (4 * k : ℕ) ≡ (b : ℤ) ^ 2 [ZMOD p]:=
       by
       have h₁₁ : (4 * k : ℕ) = (p : ℕ) + 1:= by -- omega
-        hole
+        linarith
       --  calc
       --    (b : ℤ) ^ (4 * k : ℕ) = (b : ℤ) ^ ((p : ℕ) + 1 : ℕ) := by
       --      rw [h₁₁] <;> simp [Nat.cast_add, Nat.cast_one, pow_add, pow_one] <;> ring_nf
@@ -70,7 +70,7 @@ theorem solutions_of_quadratic_congruence :
       --    _ ≡ (b : ℤ) ^ 2 [ZMOD p] := by rfl
       hole
     have h₁₁ : (b : ℤ) ^ (2 * k : ℕ) ≡ (b : ℤ) ^ (2 * k : ℕ) [ZMOD p]:= by -- rfl
-      hole
+      norm_num
     have h₁₂ : ((a ^ k : ℤ) ^ 2 : ℤ) ≡ (a : ℤ) [ZMOD p]:= by
       --  calc
       --    ((a ^ k : ℤ) ^ 2 : ℤ) ≡ ((b ^ 2 : ℤ) ^ (2 * k)) [ZMOD p] := h₄
@@ -83,14 +83,14 @@ theorem solutions_of_quadratic_congruence :
       hole
     have h₆ : (4 * k : ℕ) = (p : ℕ) + 1:= by
       have h₇ : (p : ℕ) = 4 * k - 1:= by -- omega
-        hole
+        linarith
       have h₈ : (4 * k : ℕ) ≥ 1:= by
         have h₉ : Nat.Prime p := hp_prime
         have h₁₀ : (p : ℕ) ≥ 2 := Nat.Prime.two_le h₉
         --  omega
-        hole
+        omega
       --  omega
-      hole
+      omega
   have h_main : (a ^ k) ^ 2 ≡ a [ZMOD p] :=
     by
     have h₁ : ∃ (x : ℤ), x ^ 2 ≡ a [ZMOD p] := ha
@@ -186,7 +186,7 @@ theorem solutions_of_quadratic_congruence :
           --      exact?)
           hole
         --  exact h₁₁
-        hole
+        simpa
       --  cases h₈ with
       --  | inl h₈ =>
       --    have h₉ : (p : ℤ) ∣ (y - a ^ k : ℤ) := h₈
@@ -207,4 +207,4 @@ theorem solutions_of_quadratic_congruence :
     --  exact h₄
     hole
   --  exact ⟨h_main₂, h_main⟩
-  hole
+  norm_cast

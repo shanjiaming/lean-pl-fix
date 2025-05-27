@@ -5,6 +5,6 @@ theorem function_evaluation_example : f 7 1 = 56:=
     --    f 7 1 = (7 : ℤ) * 1 ^ 2 + 7 ^ 2 * 1 := by rw [f] <;> ring
     --    _ = 7 + 49 := by norm_num
     --    _ = 56 := by norm_num
-    hole
+    norm_cast
   --  exact h₁
-  hole
+  linarith

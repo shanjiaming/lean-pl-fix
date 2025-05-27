@@ -1,2 +1,0 @@
-theorem h₈ (S : ℕ → ℤ) (hS0 : S 0 = 1) (hSn h₁ : ∀ n ≥ 1, S n = (↑{A | (∀ (i j : Fin n), A i j = A j i) ∧ ∀ (j : Fin n), ∑ i, A i j = 1}.ncard : ℤ)) (n : ℕ) (hn h₃ : n ≥ 1) (h₄ h₅ : S n = (↑{A | (∀ (i j : Fin n), A i j = A j i) ∧ ∀ (j : Fin n), ∑ i, A i j = 1}.ncard : ℤ)) (h₆ h₇ : S (n + 1) = (↑{A | (∀ (i j : Fin (n + 1)), A i j = A j i) ∧ ∀ (j : Fin (n + 1)), ∑ i, A i j = 1}.ncard : ℤ)) : n - 1 ≥ 0 := by omega
-  hole

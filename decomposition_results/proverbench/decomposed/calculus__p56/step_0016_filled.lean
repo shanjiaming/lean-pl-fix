@@ -1,6 +1,2 @@
-theorem h3 (h_max : IsMaxOn (fun f => ∫ (x : ℕ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) {f | Continuous f} sorry) : ∫ (x : ℕ) in Set.Icc 0 1, x ^ 2 * sorry - x * sorry ^ 2 = 1 / 16 :=
-  by
-  have h3 : ∫ x in Set.Icc 0 1, (x ^ 2 * f x - x * f x ^ 2) ≤ 1 / 16 := h1
-  have h4 : ∫ x in Set.Icc 0 1, (x ^ 2 * f x - x * f x ^ 2) ≥ 1 / 16 := h2
-  --  linarith
-  hole
+theorem h₁₂ (f : ℝ → ℝ) (hf : Continuous f) (h_max : IsMaxOn (fun f => ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) {f | Continuous f} f) (h1₁ :  ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 =    (∫ (x : ℝ) in Set.Icc 0 1, x ^ 3 / 4) - ∫ (x : ℝ) in Set.Icc 0 1, x * (f x - x / 2) ^ 2) (x : ℝ) (h1₇ : (f x - x / 2) ^ 2 ≥ 0) (h1₈ : x ≥ 0 → x * (f x - x / 2) ^ 2 ≥ 0) (h1₉ : x ≤ 1 → x ≥ 0 → x * (f x - x / 2) ^ 2 ≥ 0) (hx : ¬x ≥ 0) (hx' : x ≤ 0) (h : 0 ≤ x ∧ x ≤ 1) (h₁₁ : 0 ≤ x) : x ≤ 1 := by -- linarith
+  linarith

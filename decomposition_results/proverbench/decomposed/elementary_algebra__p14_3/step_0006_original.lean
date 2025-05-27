@@ -1,1 +1,1 @@
-theorem h₂ (h₀ : sorry ^ 3 * sorry ^ 2 * sorry / (2 * sorry ^ 3) = 4 * sorry ^ 4 * sorry ^ 7 * sorry ^ 8 / (2 * sorry ^ 3)) : 4 * sorry ^ 4 * sorry ^ 7 * sorry ^ 8 / (2 * sorry ^ 3) = 2 * sorry * sorry ^ 7 * sorry ^ 8 := by apply simplify_fraction
+theorem h₂ (p q r : ℝ) (inst✝² : Fact (p ≠ 0)) (inst✝¹ : Fact (q ≠ 0)) (inst✝ : Fact (r ≠ 0)) (h₀ : q ^ 3 * r ^ 2 * square_expression p q r / (2 * p ^ 3) = 4 * p ^ 4 * q ^ 7 * r ^ 8 / (2 * p ^ 3)) : 4 * p ^ 4 * q ^ 7 * r ^ 8 / (2 * p ^ 3) = 2 * p * q ^ 7 * r ^ 8 := by apply simplify_fraction

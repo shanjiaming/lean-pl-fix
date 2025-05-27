@@ -1,4 +1,4 @@
-theorem h₄ (h_main : (sorry ^ sorry) ^ 2 ≡ sorry [ZMOD sorry]) (y : ℤ) (hy : y ^ 2 ≡ sorry [ZMOD sorry]) (h₁ : y ^ 2 ≡ sorry [ZMOD sorry]) (h₂ : (sorry ^ sorry) ^ 2 ≡ sorry [ZMOD sorry]) (h₃ : y ^ 2 ≡ (sorry ^ sorry) ^ 2 [ZMOD sorry]) : y ≡ sorry ^ sorry [ZMOD sorry] ∨ y ≡ -sorry ^ sorry [ZMOD sorry] :=
+theorem h₄ (p k : ℕ) (hp : p = 4 * k - 1) (hp_prime : Nat.Prime p) (a : ℤ) (ha : ∃ x, x ^ 2 ≡ a [ZMOD ↑p]) (h_main : (a ^ k) ^ 2 ≡ a [ZMOD ↑p]) (y : ℤ) (hy h₁ : y ^ 2 ≡ a [ZMOD ↑p]) (h₂ : (a ^ k) ^ 2 ≡ a [ZMOD ↑p]) (h₃ : y ^ 2 ≡ (a ^ k) ^ 2 [ZMOD ↑p]) : y ≡ a ^ k [ZMOD ↑p] ∨ y ≡ -a ^ k [ZMOD ↑p] :=
   by
   have h₅ : (y : ℤ) ^ 2 ≡ (a ^ k : ℤ) ^ 2 [ZMOD p] := h₃
   have h₆ : (y - a ^ k : ℤ) * (y + a ^ k : ℤ) ≡ 0 [ZMOD p] := by sorry

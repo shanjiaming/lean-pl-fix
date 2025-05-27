@@ -1,4 +1,4 @@
-theorem h₃ (p q : ℤ) (h : ∃ r, cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ)) (hq : ¬q = 0) : ∃ r ∈ {0, 1, -1, 1 / 2, -1 / 2}, cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ) :=
+theorem h₃ (p q : ℤ) (h : ∃ r, cos (↑p * π / ↑q) = ↑r) (hq : ¬q = 0) : ∃ r ∈ {0, 1, -1, 1 / 2, -1 / 2}, cos (↑p * π / ↑q) = ↑r :=
   by
   obtain ⟨r, hr⟩ := h
   refine' ⟨r, _⟩

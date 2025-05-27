@@ -1,4 +1,4 @@
-theorem h₀₅  : (fun x => (cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (sin (x - 3) / (x - 3)) ^ 2 :=
+theorem h₀₅  : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2 :=
   by
   funext x
   have h₁ : Real.cos (2 * x - 6) - 1 = -2 * Real.sin (x - 3) ^ 2 := by sorry

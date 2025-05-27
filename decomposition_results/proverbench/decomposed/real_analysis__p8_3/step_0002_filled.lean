@@ -1,4 +1,4 @@
-theorem h_main (x : ℝ) : ∃! y, y = Real.log (x ^ 2 + 1) :=
+theorem h_main (x : ℝ) : ∃! y, y = log (x ^ 2 + 1) :=
   by
   --  use Real.log (x ^ 2 + 1)
   --  constructor

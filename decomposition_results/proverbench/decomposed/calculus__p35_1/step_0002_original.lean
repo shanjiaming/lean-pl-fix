@@ -1,4 +1,4 @@
-theorem h_main  : sorry = 0 ↔ sorry = 2 ∨ sorry = 4 := by
+theorem h_main (x : ℝ) : f_deriv x = 0 ↔ x = 2 ∨ x = 4 := by
   constructor
   · intro h
     have h₁ : 3 * x ^ 2 - 18 * x + 24 = 0 := by sorry

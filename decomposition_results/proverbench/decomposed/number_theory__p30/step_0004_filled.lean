@@ -1,4 +1,4 @@
-theorem h₄ (b : ℤ) (hb : b ^ 2 ≡ sorry [ZMOD sorry]) (h₂ : b ^ 2 ≡ sorry [ZMOD sorry]) (h₃ : sorry ^ sorry ≡ (b ^ 2) ^ sorry [ZMOD sorry]) : (sorry ^ sorry) ^ 2 ≡ (b ^ 2) ^ (2 * sorry) [ZMOD sorry] := by
+theorem h₄ (p k : ℕ) (hp : p = 4 * k - 1) (hp_prime : Nat.Prime p) (a : ℤ) (ha : ∃ x, x ^ 2 ≡ a [ZMOD ↑p]) (b : ℤ) (hb h₂ : b ^ 2 ≡ a [ZMOD ↑p]) (h₃ : a ^ k ≡ (b ^ 2) ^ k [ZMOD ↑p]) : (a ^ k) ^ 2 ≡ (b ^ 2) ^ (2 * k) [ZMOD ↑p] := by
   --  calc
   --    (a ^ k : ℤ) ^ 2 = (a ^ k : ℤ) ^ 2 := by rfl
   --    _ ≡ ((b ^ 2 : ℤ) ^ k) ^ 2 [ZMOD p] :=

@@ -1,4 +1,4 @@
-theorem h_main (x y : ℝ) : y = 8 * √3 * (x - π / 3) + 4 ↔ y - sorry = 2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3) * (x - π / 3) :=
+theorem h_main (x y : ℝ) : y = 8 * √3 * (x - π / 3) + 4 ↔ y - f (π / 3) = 2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3) * (x - π / 3) :=
   by
   constructor
   · intro h

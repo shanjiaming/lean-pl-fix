@@ -1,1 +1,0 @@
-theorem h₄ (n : ℕ) (P : Polynomial ℂ) (npos : n > 0) (Px : P.degree = (↑n : WithBot ℕ) ∧ ∀ k ∈ Set.Icc 0 n, P.coeff k = 2 ^ (k * (n - k))) (h₁ : ∀ k ∈ Set.Icc 0 n, (P.coeff k).im = 0) (h₂ : P ≠ 0) (r : ℂ) (hr : r ∈ P.roots) : Polynomial.eval r P = 0 := by apply Polynomial.mem_roots h₂ |>.mp hr

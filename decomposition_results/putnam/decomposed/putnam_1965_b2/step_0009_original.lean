@@ -1,5 +1,0 @@
-theorem h₇ (n : ℕ) (hn : n > 1) (won : Fin n → Fin n → Bool) (hirrefl : ∀ (i : Fin n), won i i = false) (hantisymm : ∀ (i j : Fin n), i ≠ j → (won i j = true) = ¬won j i = true) (w l : Fin n → ℤ) (hw : w = fun r => ∑ j, if won r j = true then 1 else 0) (hl : l = fun r => (↑n : ℤ) - 1 - w r) (h₁ : ∑ r, w r = ∑ r, ∑ j, if won r j = true then 1 else 0) (h₂ h₃ h₄ : (∑ r, ∑ j, if won r j = true then 1 else 0) = ∑ r, ∑ j, if won r j = true then 1 else 0) (h₅ : (∑ r, ∑ j, if won r j = true then 1 else 0) = ∑ x, if won x.1 x.2 = true then 1 else 0) : (∑ x, if won x.1 x.2 = true then 1 else 0) = ∑ x, if won x.1 x.2 = true then 1 else 0 :=
-  by
-  congr
-  ext x
-  by_cases h : won x.1 x.2 <;> simp [h] <;> simp_all [Bool.not_eq_true] <;> aesop

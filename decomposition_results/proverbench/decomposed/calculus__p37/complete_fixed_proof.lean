@@ -26,6 +26,6 @@ theorem sin_sqrt_x_over_sqrt_x_integral (x C : ℝ) : ∫ (x : ℝ), sin (sqrt x
     by
     --  exfalso
     --  exact h1
-    hole
+    norm_cast
   --  exact h2
   linarith

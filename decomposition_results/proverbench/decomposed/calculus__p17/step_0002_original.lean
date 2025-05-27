@@ -1,4 +1,4 @@
-theorem h1 (x : ℝ) : False :=
+theorem h1 (C x : ℝ) : False :=
   by
   have h2 : ¬(∀ (P : Prop), P) := by sorry
   have h3 : (∀ (P : Prop), P) := by sorry

@@ -5,6 +5,6 @@ theorem composition_of_sine_and_quadratic (x : ℝ) : u (v x) = Real.sin (x ^ 2)
     --    u (v x) = u (x ^ 2) := by rw [v]
     --    _ = Real.sin (x ^ 2) := by rw [u]
     --    _ = Real.sin (x ^ 2) := by rfl
-    hole
+    norm_cast
   --  exact h₁
-  hole
+  linarith

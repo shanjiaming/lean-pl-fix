@@ -1,0 +1,2 @@
+theorem h₂ (p : ℤ) (hp : Prime p) (x✝ y x : ℤ) (hx : p ∣ x ^ 2 - x + 3) : (3 * x - 1) ^ 2 - (3 * x - 1) + 25 = 9 * (x ^ 2 - x + 3) := by ring
+  hole

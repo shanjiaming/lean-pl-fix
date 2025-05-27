@@ -1,2 +1,0 @@
-theorem h6 (n : ℕ) (npos : n ≥ 1) (mats01 : Set (Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ)) (hmats01 : mats01 = {A | ∀ (i j : Fin (2 * n)), A i j = 0 ∨ A i j = 1}) (h1 h3 h5 : mats01.Infinite) : mats01.ncard = 0 := by -- exact Set.Infinite.ncard h5
-  hole

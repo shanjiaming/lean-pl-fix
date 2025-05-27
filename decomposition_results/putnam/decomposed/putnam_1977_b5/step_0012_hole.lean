@@ -1,6 +1,0 @@
-theorem h₇ (n : ℕ) (hn : n > 1) (a : Fin n → ℝ) (A : ℝ) (hA : A + ∑ i, a i ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ i, a i) ^ 2) (h_pos_n : (↑n : ℝ) - 1 > 0) (i j : Fin n) (hij : i < j) (h₁ : A + ∑ k, a k ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ k, a k) ^ 2) (h₃ : (∑ k, a k) ^ 2 = ∑ k, ∑ l, a k * a l) (h₄ :  ∑ k, ∑ l, a k * a l =    ((∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) +        ∑ k, ∑ l, if (↑k : ℕ) = (↑l : ℕ) then a k * a l else 0) +      ∑ k, ∑ l, if (↑l : ℕ) < (↑k : ℕ) then a k * a l else 0) (h₅ : (∑ k, ∑ l, if (↑k : ℕ) = (↑l : ℕ) then a k * a l else 0) = ∑ k, a k ^ 2) (h₆ : (∑ k, ∑ l, if (↑l : ℕ) < (↑k : ℕ) then a k * a l else 0) = ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) : ∑ k, ∑ l, a k * a l =
-    ((∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) +
-        ∑ k, ∑ l, if (↑k : ℕ) = (↑l : ℕ) then a k * a l else 0) +
-      ∑ k, ∑ l, if (↑l : ℕ) < (↑k : ℕ) then a k * a l else 0 :=
-  --  by rw [h₄]
-  hole

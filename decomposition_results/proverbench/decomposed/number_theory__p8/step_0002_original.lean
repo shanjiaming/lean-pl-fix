@@ -1,4 +1,4 @@
-theorem h₁ (x y z : ℕ) (h : x * y = z ^ 2 + 1) : x = 1 ∧ y = z ^ 2 + 1 ∨ x = z ^ 2 + 1 ∧ y = 1 ∨ ∃ a b, (↑x : ℤ) = a ^ 2 + b ^ 2 ∧ y = 1 :=
+theorem h₁ (x y z : ℕ) (h : x * y = z ^ 2 + 1) : x = 1 ∧ y = z ^ 2 + 1 ∨ x = z ^ 2 + 1 ∧ y = 1 ∨ ∃ a b, ↑x = a ^ 2 + b ^ 2 ∧ y = 1 :=
   by
   by_cases hx : x = 1
   · refine' Or.inl ⟨hx, _⟩

@@ -1,4 +1,4 @@
-theorem h₃ (h₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₂ : sorry = 1) : sorry = 0 := by
+theorem h₃ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) : n = 0 := by
   --  by_contra hn
   have h₄ : n ≥ 1 := by sorry
   have h₅ : P = 1 := by sorry

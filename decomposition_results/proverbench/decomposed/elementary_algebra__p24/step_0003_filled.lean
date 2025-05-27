@@ -1,2 +1,2 @@
-theorem h3₁  : 45 * sorry + 75 * sorry = 15 * (3 * sorry + 5 * sorry) := by -- ring
-  hole
+theorem h3₁ (catPrice dogPrice : ℤ) (h1 : 3 * catPrice + 5 * dogPrice = 31) (h2 : 5 * catPrice + 9 * dogPrice = 53) : 45 * catPrice + 75 * dogPrice = 15 * (3 * catPrice + 5 * dogPrice) := by -- ring
+  linarith

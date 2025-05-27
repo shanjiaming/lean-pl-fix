@@ -4,9 +4,7 @@ theorem h₆ (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ), -1 ≤ x 
         0 < c ∧
           0 < d ∧
             a.Coprime b ∧
-              a.Coprime d ∧
-                b.Coprime d ∧
-                  Squarefree c ∧ ∑ x ∈ S, f x = ((↑a : ℝ) + (↑b : ℝ) * √(↑c : ℝ)) / (↑d : ℝ) ∧ a + b + c + d = 259 :=
+              a.Coprime d ∧ b.Coprime d ∧ Squarefree c ∧ ∑ x ∈ S, f x = (↑a + ↑b * √↑c) / ↑d ∧ a + b + c + d = 259 :=
   by
   --  exfalso
   --  exact h₅

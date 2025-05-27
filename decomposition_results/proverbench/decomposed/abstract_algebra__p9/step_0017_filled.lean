@@ -1,0 +1,2 @@
+theorem h₈₈ (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x + y + z = x * y * z) (h₁ : 0 < x * y) (h₂ : 0 < y * z) (h₃ : 0 < z * x) (h₄ : 0 < x * y * z) (h₅ : 0 < x * y * z * x) (h₆ : 0 < x * y * z * y) (h₇ : 0 < x * y * z * z) (h₈₁ : x + y + z = x * y * z) (h₈₂ : 0 < x) (h₈₃ : 0 < y) (h₈₄ : 0 < z) (h₈₅ : 0 < x * y) (h₈₆ : 0 < y * z) (h₈₇ : 0 < z * x) : 0 < x * y * z := by -- positivity
+  linarith

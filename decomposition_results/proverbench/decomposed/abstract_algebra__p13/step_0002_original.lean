@@ -1,1 +1,1 @@
-theorem h₁ (a : ℝ) : (∃ f, ∀ (x : ℚ), (↑(Polynomial.eval (x * x) f) : ℝ) = (↑(Polynomial.eval x f) : ℝ) ^ 2 - a) → a = 0 ∨ a = 2 := by sorry
+theorem h₁ (a : ℝ) : (∃ f, ∀ (x : ℚ), ↑(eval (x * x) f) = ↑(eval x f) ^ 2 - a) → a = 0 ∨ a = 2 := by sorry

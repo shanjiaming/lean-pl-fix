@@ -3,4 +3,4 @@ theorem h₇ (x : ℝ) (h₃ : HasDerivAt (fun x => x ^ 2 + 1) (2 * x) x) (h₄ 
   have h₈ : HasDerivAt (fun x : ℝ => Real.log (x ^ 2 + 1)) ((2 * x) / (x ^ 2 + 1)) x := h₄
   have h₉ : HasDerivAt (fun x : ℝ => (1 / 2 : ℝ) * Real.log (x ^ 2 + 1)) ((1 / 2 : ℝ) * ((2 * x) / (x ^ 2 + 1))) x := by sorry
   --  exact h₉
-  hole
+  norm_cast

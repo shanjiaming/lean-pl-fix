@@ -1,1 +1,1 @@
-theorem h₁₄ (u v : ℝ) (h : sorry = 0) (h₁ : (u ^ 2 + v ^ 2) * rexp (-(u + v)) = 0) (h₃ : rexp (-(u + v)) > 0) (h₁₀ : u ^ 2 + v ^ 2 ≤ 0) (h₁₁ : u ^ 2 ≥ 0) (h₁₂ : v ^ 2 ≥ 0) (h₁₃ : u ^ 2 + v ^ 2 = 0) : u = 0 := by nlinarith
+theorem h₁₄ (u✝ v✝ x y u v : ℝ) (h : f u v = 0) (h₁ : (u ^ 2 + v ^ 2) * rexp (-(u + v)) = 0) (h₃ : rexp (-(u + v)) > 0) (h₅ : ¬u ^ 2 + v ^ 2 = 0) (h₉ : ¬u ^ 2 + v ^ 2 > 0) (h₁₀ : u ^ 2 + v ^ 2 ≤ 0) (h₁₁ : u ^ 2 ≥ 0) (h₁₂ : v ^ 2 ≥ 0) (h₁₃ : u ^ 2 + v ^ 2 = 0) : u = 0 := by nlinarith

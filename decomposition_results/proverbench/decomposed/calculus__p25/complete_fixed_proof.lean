@@ -15,13 +15,13 @@ theorem cosine_derivative_formula (x : ℝ) : deriv (fun x => cos (3 * x + x ^ 2
             --  convert HasDerivAt.cos h4 using 1 <;> ring_nf
             hole
           --  exact h6
-          hole
+          norm_cast
         --  exact h5
-        hole
+        norm_cast
       --  exact h3
-      hole
+      norm_cast
     --  exact h2
-    hole
+    norm_cast
   have h2 : deriv (fun x : ℝ => cos (3 * x + x ^ 2)) x = -sin (3 * x + x ^ 2) * (3 + 2 * x):=
     by
     --  apply HasDerivAt.deriv

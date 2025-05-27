@@ -23,11 +23,11 @@ theorem integral_of_one_over_cos_sq (x : ℝ) : ∫ (x : ℝ), 1 / (Real.cos x ^
       --  exact h4 h5
       hole
     --  exact h2 h3
-    hole
+    norm_cast
   have h2 : ∫ (x : ℝ), 1 / (Real.cos x ^ 2) = Real.tan x + C:=
     by
     --  exfalso
     --  exact h1
-    hole
+    norm_cast
   --  exact h2
-  hole
+  linarith

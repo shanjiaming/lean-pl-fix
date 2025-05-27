@@ -1,1 +1,0 @@
-theorem h₅₄ (c : ℝ) (h : ∀ (x : ℝ), (rexp x + rexp (-x)) / 2 ≤ rexp (c * x ^ 2)) (h₁ : ¬c ≥ 1 / 2) (h₂ : c < 1 / 2) (h₄ : 0 < 1 / 2 - c) : HasDerivAt (fun x => rexp x) (rexp 0) 0 := by simpa using (Real.hasDerivAt_exp 0)

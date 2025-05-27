@@ -1,4 +1,4 @@
-theorem h_forward  : sorry → sorry = 7 := by
+theorem h_forward (r : ℝ) : given_equation r → r = 7 := by
   --  intro h
   have h₁ : (2 : ℝ) = (-12 : ℝ) + 2 * (r : ℝ) := h
   have h₂ : (14 : ℝ) = 2 * (r : ℝ) := by sorry

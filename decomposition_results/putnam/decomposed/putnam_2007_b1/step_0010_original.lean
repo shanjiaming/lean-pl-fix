@@ -1,1 +1,0 @@
-theorem h11 (f : Polynomial ℤ) (hf : ∀ (n : ℕ), f.coeff n ≥ 0) (n : ℤ) (hn : n > 0) (m : ℕ) (hm : m > 0) (hm' : f.coeff m > 0) (h2 h9 : ∑ i ∈ f.support, f.coeff i ≥ f.coeff m) (h10 : Polynomial.eval 1 f = ∑ i ∈ f.support, f.coeff i) : f.coeff m > 0 := by exact_mod_cast hm'

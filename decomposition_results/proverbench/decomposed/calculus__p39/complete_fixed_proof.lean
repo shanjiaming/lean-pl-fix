@@ -13,6 +13,6 @@ theorem integral_sin_pow_ten_cos (x C : ℝ) : ∫ x, (sin x) ^ 10 * cos x = (si
     by
     --  exfalso
     --  exact h1
-    hole
+    norm_cast
   --  exact h2
   linarith

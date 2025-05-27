@@ -1,4 +1,4 @@
-theorem dirichlet_theorem' (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) : ∃ p q, 0 < q ∧ q ≤ (↑n : ℤ) ∧ |α - (↑p : ℝ) / (↑q : ℝ)| < 1 / (((↑n : ℝ) + 1) * (↑q : ℝ)) :=
+theorem dirichlet_theorem' (α✝ : ℝ) (n✝ : ℕ) (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) : ∃ p q, 0 < q ∧ q ≤ ↑n ∧ |α - ↑p / ↑q| < 1 / ((↑n + 1) * ↑q) :=
   by
   have h_main : ∃ (k : ℕ) (p : ℤ), 0 < k ∧ k ≤ n ∧ |(k : ℝ) * α - p| < 1 / (n + 1 : ℝ) := by sorry
   obtain ⟨k, p, hk₀, hk₁, hk₂⟩ := h_main

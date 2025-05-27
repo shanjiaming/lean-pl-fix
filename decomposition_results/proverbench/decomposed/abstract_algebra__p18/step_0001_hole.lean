@@ -1,4 +1,4 @@
-theorem polynomial_roots_bound  : (∀ k ≤ 2 * sorry, sorry = 1) → sorry = 1 → sorry ≤ sorry + 1 :=
+theorem polynomial_roots_bound (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) : (∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) → eval (-1) P = 1 → (P - 1).roots.toFinset.card ≤ n + 1 :=
   by
   --  intro h₁ h₂
   have h₃ : n = 0 := by sorry

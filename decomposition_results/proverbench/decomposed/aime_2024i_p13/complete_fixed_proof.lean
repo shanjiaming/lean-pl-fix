@@ -8,20 +8,20 @@ theorem aime_2024i_p13 (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬
     have h₃ : p ≤ 17:= by
       --  by_contra h
       have h₄ : p ≥ 18:= by -- linarith
-        hole
+        linarith
       have h₅ : 17 < p:= by -- linarith
-        hole
+        linarith
       have h₆ : ¬(∃ (n : ℕ), isSolution 17 n) := h₁ 17 (by linarith)
       have h₇ : ∃ (n : ℕ), isSolution 17 n:= by
         --  use 110
         --  constructor
-        · norm_num [Nat.Prime]
-        constructor
-        · norm_num
-        · norm_num [Nat.pow_succ, Nat.pow_zero, Nat.mul_assoc] <;> decide
+        --  · norm_num [Nat.Prime]
+        --  constructor
+        --  · norm_num
+        --  · norm_num [Nat.pow_succ, Nat.pow_zero, Nat.mul_assoc] <;> decide
         hole
-      exact h₆ h₇
-      hole
+      --  exact h₆ h₇
+      norm_cast
     have h₄ : p ≥ 2 := Nat.Prime.two_le h₀'
     --  --  --  interval_cases p <;> norm_num [Nat.Prime, isSolution] at h₀' h₀''' h₁ h₃ h₄ ⊢ <;> (try omega) <;>
     --            (try {
@@ -86,23 +86,23 @@ theorem aime_2024i_p13 (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬
     have h₁₁ : isSolution p 110:= by
       --  rw [h_p_eq_17] at *
       --  constructor
-      · norm_num [Nat.Prime]
-      constructor
-      · norm_num
-      · norm_num [Nat.pow_succ, Nat.pow_zero, Nat.mul_assoc] at * <;> decide
+      --  · norm_num [Nat.Prime]
+      --  constructor
+      --  · norm_num
+      --  · norm_num [Nat.pow_succ, Nat.pow_zero, Nat.mul_assoc] at * <;> decide
       hole
     have h₁₂ : 110 < m:= by -- omega
-      hole
+      linarith
     have h₁₃ : isSolution p 110 := h₁₁
     have h₁₄ : ¬isSolution p 110 := h₂ 110 (by omega)
     --  exact h₁₄ h₁₃
-    hole
+    norm_cast
   have h_m_ge_110 : m ≥ 110:= by
-    by_contra h
+    --  by_contra h
     have h₁₀ : m ≤ 109:= by -- omega
       hole
     have h₁₁ : m > 0 := h₀.2.1
-    interval_cases m <;> norm_num [isSolution, h_p_eq_17, Nat.Prime, Nat.div_eq_of_lt] at h₀ h₂ ⊢ <;> (try omega) <;>
+    --  --  interval_cases m <;> norm_num [isSolution, h_p_eq_17, Nat.Prime, Nat.div_eq_of_lt] at h₀ h₂ ⊢ <;> (try omega) <;>
             (try {
                 have h₁₂ := h₂ 1
                 have h₁₃ := h₂ 2
@@ -146,6 +146,6 @@ theorem aime_2024i_p13 (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬
     have h₁₁ : m ≤ 110 := h_m_le_110
     have h₁₂ : m ≥ 110 := h_m_ge_110
     --  linarith
-    hole
+    linarith
   --  exact h_main
-  hole
+  linarith

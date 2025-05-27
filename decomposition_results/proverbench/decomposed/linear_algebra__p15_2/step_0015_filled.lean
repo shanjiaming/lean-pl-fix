@@ -1,0 +1,2 @@
+theorem h₃ (E : Type) (inst✝¹ : NormedAddCommGroup E) (inst✝ : InnerProductSpace ℝ E) (v u : E) (hu : u ≠ 0) (a' b' : E) (h_decomp : v = a' + b') (h_parallel : isParallel a' u) (h_orthogonal : isOrthogonal b' u) (l : ℝ := ⟪v, u⟫_ℝ / ‖u‖ ^ 2) (h₁ : a' = l • u) (h₂ : b' = v - l • u) : a' = l • u ∧ b' = v - l • u := by exact ⟨h₁, h₂⟩
+  hole

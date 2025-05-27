@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral of \(x^p\) with respect to \(x\) where \(p\) is a real number different from -1, is given by \(\frac{x^{p+1}}{p+1} + C\).
+-/

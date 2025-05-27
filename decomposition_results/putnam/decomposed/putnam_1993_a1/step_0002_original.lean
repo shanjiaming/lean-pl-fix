@@ -1,1 +1,0 @@
-theorem h₁  : 0 < 4 / 9 := by norm_num

@@ -1,1 +1,1 @@
-theorem h5₂ (h3 : 45 * sorry + 75 * sorry = 465) (h4 : 40 * sorry + 72 * sorry = 424) : 45 * sorry + 75 * sorry - (40 * sorry + 72 * sorry) = 465 - 424 := by omega
+theorem h5₂ (catPrice dogPrice : ℤ) (h1 : 3 * catPrice + 5 * dogPrice = 31) (h2 : 5 * catPrice + 9 * dogPrice = 53) (h3 : 45 * catPrice + 75 * dogPrice = 465) (h4 : 40 * catPrice + 72 * dogPrice = 424) : 45 * catPrice + 75 * dogPrice - (40 * catPrice + 72 * dogPrice) = 465 - 424 := by omega

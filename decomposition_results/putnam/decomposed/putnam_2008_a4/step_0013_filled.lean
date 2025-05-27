@@ -1,2 +1,0 @@
-theorem h₆₁ (f : ℝ → ℝ) (hf : f = fun x => if x ≤ rexp 1 then x else x * f (Real.log x)) (h₂ : f (-1) = -1) (h₄ : f = fun x => if x ≤ rexp 1 then x else x * f (Real.log x)) (h₅ : f (-1) = -1 * f (Real.log (-1))) : Real.log (-1) = 0 := by -- norm_num [Real.log_neg_eq_log]
-  norm_num

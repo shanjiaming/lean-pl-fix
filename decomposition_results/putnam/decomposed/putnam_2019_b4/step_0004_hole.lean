@@ -1,2 +1,0 @@
-theorem h₂ (f : (Fin 2 → ℝ) → ℝ) (vec : ℝ → ℝ → Fin 2 → ℝ) (fdiff : ContDiff ℝ 2 f) (hvec : ∀ (x y : ℝ), vec x y 0 = x ∧ vec x y 1 = y) (feq1 :  ∀ x ≥ 1,    ∀ y ≥ 1, x * deriv (fun x' => f (vec x' y)) x + y * deriv (fun y' => f (vec x y')) y = x * y * Real.log (x * y)) (feq2 :  ∀ x ≥ 1,    ∀ y ≥ 1,      x ^ 2 * iteratedDeriv 2 (fun x' => f (vec x' y)) x + y ^ 2 * iteratedDeriv 2 (fun y' => f (vec x y')) y = x * y) : 1 ≥ 1 := by -- norm_num
-  hole

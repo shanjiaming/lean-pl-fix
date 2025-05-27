@@ -1,2 +1,2 @@
-theorem h3 (h1 : sorry * sorry = 1) (h2 : sorry * sorry = 1) : sorry * sorry = 1 ∧ sorry * sorry = 1 := by -- exact ⟨h1, h2⟩
+theorem h3 (h1 : A * A_inv = 1) (h2 : A_inv * A = 1) : A * A_inv = 1 ∧ A_inv * A = 1 := by -- exact ⟨h1, h2⟩
   hole

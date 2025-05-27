@@ -1,2 +1,2 @@
-theorem h₅ (f : ℕ → ℕ) (h_inj : ∀ (x y : ℕ), f x = f y → x = y) (h_def : f 1 = 2 ∧ ∀ n ≥ 2, f n = n + 2) (hf0 : f 0 = 3) (h2 : f 2 = 4) (h1 : f 1 = 2) (m n : ℕ) (hm : ¬m = 0) (hm₁ : ¬m = 1) (hm₂ : m ≥ 2) (h₄ : f m = m + 2) : f m ≥ 2 := by -- linarith
-  linarith
+theorem h₅ (f✝ f : ℕ → ℕ) (h_inj : ∀ (x y : ℕ), f x = f y → x = y) (h_def : f 1 = 2 ∧ ∀ n ≥ 2, f n = n + 2) (hf0 : f 0 = 3) (h2 : f 2 = 4) (h1 : f 1 = 2) (m n : ℕ) (hm : ¬m = 0) (hm₁ : ¬m = 1) (hm₂ : m ≥ 2) (h₄ : f m = m + 2) : f m ≥ 2 := by linarith
+  hole

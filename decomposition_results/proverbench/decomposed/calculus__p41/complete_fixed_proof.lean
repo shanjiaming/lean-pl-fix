@@ -32,15 +32,16 @@ theorem limit_of_function : Tendsto (fun x => (Real.exp (8 * x) - 1) / x) (𝓝[
       --  rw [h₅]
       have h₆ : Tendsto (fun y : ℝ => (Real.exp y - 1) / y) (𝓝 0) (𝓝 1) := h₁
       have h₇ : Tendsto (fun x : ℝ => 8 * x) (𝓝[Set.Ioi 0] 0) (𝓝 0) := h₂
-      have h₈ : Tendsto ((fun y : ℝ => (Real.exp y - 1) / y) ∘ fun x : ℝ => 8 * x) (𝓝[Set.Ioi 0] 0) (𝓝 1) :=
+      have h₈ : Tendsto ((fun y : ℝ => (Real.exp y - 1) / y) ∘ fun x : ℝ => 8 * x) (𝓝[Set.Ioi 0] 0) (𝓝 1):=
         by
         have h₉ : Tendsto (fun y : ℝ => (Real.exp y - 1) / y) (𝓝 0) (𝓝 1) := h₁
         have h₁₀ : Tendsto (fun x : ℝ => 8 * x) (𝓝[Set.Ioi 0] 0) (𝓝 0) := h₂
-        exact Tendsto.comp h₉ h₁₀
-      exact h₈
+        --  exact Tendsto.comp h₉ h₁₀
+        hole
+      --  exact h₈
       hole
     --  exact h₄
-    hole
+    simpa
   have h₄ : Tendsto (fun x : ℝ => 8 * ((Real.exp (8 * x) - 1) / (8 * x))) (𝓝[Set.Ioi 0] 0) (𝓝 8):=
     by
     have h₅ : Tendsto (fun x : ℝ => (8 : ℝ) * ((Real.exp (8 * x) - 1) / (8 * x))) (𝓝[Set.Ioi 0] 0) (𝓝 (8 * 1)):=
@@ -69,6 +70,6 @@ theorem limit_of_function : Tendsto (fun x => (Real.exp (8 * x) - 1) / x) (𝓝[
     have h₇ : Tendsto (fun x : ℝ => (Real.exp (8 * x) - 1) / x) (𝓝[Set.Ioi 0] 0) (𝓝 8):= by -- apply Tendsto.congr' h₅ h₄
       hole
     --  exact h₇
-    hole
+    simpa
   --  exact h₆
-  hole
+  simpa

@@ -1,4 +1,4 @@
-theorem h_denominator_ne_zero  : 2 * sorry ^ 3 ≠ 0 :=
+theorem h_denominator_ne_zero (p q r : ℝ) (inst✝² : Fact (p ≠ 0)) (inst✝¹ : Fact (q ≠ 0)) (inst✝ : Fact (r ≠ 0)) : 2 * p ^ 3 ≠ 0 :=
   by
   have h : p ≠ 0 := Fact.out (p := p ≠ 0)
   have h₁ : p ^ 3 ≠ 0 := by sorry

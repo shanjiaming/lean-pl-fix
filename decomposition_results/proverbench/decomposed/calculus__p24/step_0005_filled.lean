@@ -1,3 +1,2 @@
-theorem h₃ (h₂ : sorry) : sorry := by
-  --  simpa using Tendsto.const_mul_atTop (by norm_num) h₂
+theorem h₃ (x : ℝ) : x ≤ x ^ 3 := by -- nlinarith [sq_nonneg (x - 1), sq_nonneg (x + 1)]
   hole

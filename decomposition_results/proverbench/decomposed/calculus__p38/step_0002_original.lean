@@ -1,4 +1,4 @@
-theorem h₃ (h₁ : sorry ^ 2 + sorry ^ 2 = 1) (h₂ : sorry * sorry ≤ 1 / 2 ∧ (sorry = 1 / sorry ∧ sorry = 1 / sorry ∨ sorry ∧ sorry)) : sorry * sorry = 1 / 2 :=
+theorem h₃ (x y : ℝ) (h₁ : x ^ 2 + y ^ 2 = 1) (h₂ : x * y ≤ 1 / 2 ∧ (x = 1 / √2 ∧ y = 1 / √2 ∨ x = -1 / √2 ∧ y = -1 / √2)) : x * y = 1 / 2 :=
   by
   have h₄ : (x = 1 / Real.sqrt 2 ∧ y = 1 / Real.sqrt 2) ∨ (x = -1 / Real.sqrt 2 ∧ y = -1 / Real.sqrt 2) := by sorry
   cases h₄ with

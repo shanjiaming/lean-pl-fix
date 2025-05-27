@@ -1,2 +1,2 @@
-theorem h₃ (A : Matrix (Fin 2) (Fin 4) ℝ) (j : Fin 4) (h : sorry) (h₀ : j = 3 ∨ j ≠ 3) (hj : j = 3) : sorry := by -- simpa [hj] using h
+theorem h₃ (A✝ A : Matrix (Fin 2) (Fin 4) ℝ) (j : Fin 4) (h : isPivotColumn A j) (h₀ : j = 3 ∨ j ≠ 3) (hj : j = 3) : isPivotColumn A 3 := by simpa [hj] using h
   hole

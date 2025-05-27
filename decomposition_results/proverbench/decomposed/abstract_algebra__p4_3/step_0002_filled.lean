@@ -1,0 +1,2 @@
+theorem h1  : f + g = C 2 * X ^ 2 - C 3 := by -- rw [sum_polynomials] <;> rfl
+  hole

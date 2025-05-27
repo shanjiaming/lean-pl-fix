@@ -1,0 +1,2 @@
+theorem h₉₅ (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x + y + z = x * y * z) (h₁ : 0 < x * y) (h₂ : 0 < y * z) (h₃ : 0 < z * x) (h₄ : 0 < x * y * z) (h₅ : 0 < x * y * z * x) (h₆ : 0 < x * y * z * y) (h₇ : 0 < x * y * z * z) (h₈ : 1 / x * (1 / y) + 1 / y * (1 / z) + 1 / z * (1 / x) = 1) (h₉₁ : 0 < x) (h₉₂ : 0 < y) (h₉₃ : 0 < x * y) (h₉₄ : 0 < 1 + x * y) : 0 < 1 + 1 / x * (1 / y) := by -- positivity
+  positivity

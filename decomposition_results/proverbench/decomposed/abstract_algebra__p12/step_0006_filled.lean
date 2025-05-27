@@ -1,2 +1,2 @@
-theorem h₃ (h :  (∀ (x : ℤ), Polynomial.eval x (sorry %ₘ (sorry - 1) ^ 3) = -1) ∧    ∀ (x : ℕ), Polynomial.eval x (sorry %ₘ (sorry + 1) ^ 3) = 1) (h₁ : sorry %ₘ (sorry - 1) ^ 3 = -1) : ∀ (x : ℝ), Polynomial.eval x (sorry %ₘ (sorry + 1) ^ 3) = 1 := by -- simpa [add_comm, pow_three] using h.2
+theorem h₃ (P : ℝ[X]) (hDegree : P.degree ≤ 5) (h : (∀ (x : ℝ), eval x (P %ₘ (X - 1) ^ 3) = -1) ∧ ∀ (x : ℝ), eval x (P %ₘ (X + 1) ^ 3) = 1) (h₁ : P %ₘ (X - 1) ^ 3 = -1) : ∀ (x : ℝ), eval x (P %ₘ (X + 1) ^ 3) = 1 := by -- simpa [add_comm, pow_three] using h.2
   hole

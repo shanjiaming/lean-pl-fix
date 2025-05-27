@@ -12,14 +12,14 @@ theorem critical_point : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0 c:=
         have h₃ : HasDerivAt f ((1 / 3 : ℝ) * (8 * (4 : ℝ) - (4 : ℝ) ^ 2) ^ (-2 / 3 : ℝ) * (8 - 2 * (4 : ℝ))) (4 : ℝ):=
           by
           --  apply derivative_f
-          --  exact ⟨by norm_num, by norm_num⟩
+          exact ⟨by norm_num, by norm_num⟩
           hole
         have h₄ : (1 / 3 : ℝ) * (8 * (4 : ℝ) - (4 : ℝ) ^ 2) ^ (-2 / 3 : ℝ) * (8 - 2 * (4 : ℝ)) = 0:= by -- norm_num
           hole
-        have h₅ : HasDerivAt f 0 (4 : ℝ):= by -- -- convert h₃ using 1 <;> rw [h₄] <;> norm_num
+        have h₅ : HasDerivAt f 0 (4 : ℝ):= by -- convert h₃ using 1 <;> rw [h₄] <;> norm_num
           hole
         --  exact h₅
-        hole
+        simpa
     --    exact ⟨h₁, h₂⟩
     --  · rintro c ⟨h₁, h₂⟩
       have h₃ : c ∈ Set.Ioo 0 8 := h₁
@@ -29,7 +29,7 @@ theorem critical_point : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0 c:=
         have h₆ : HasDerivAt f ((1 / 3 : ℝ) * (8 * c - c ^ 2) ^ (-2 / 3 : ℝ) * (8 - 2 * c)) c:=
           by
           --  apply derivative_f
-          --  exact ⟨h₃.1, h₃.2⟩
+          exact ⟨h₃.1, h₃.2⟩
           hole
         have h₇ : (1 / 3 : ℝ) * (8 * c - c ^ 2) ^ (-2 / 3 : ℝ) * (8 - 2 * c) = 0:=
           by
@@ -81,7 +81,7 @@ theorem critical_point : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0 c:=
                     --  apply mul_left_cancel₀ (show (1 / 3 : ℝ) * (8 * c - c ^ 2) ^ (-2 / 3 : ℝ) ≠ 0 by positivity)
                     --  linarith
                     hole
-                  contradiction
+                  --  contradiction
                   hole
                 --  exact h₃₅
                 hole
@@ -89,13 +89,13 @@ theorem critical_point : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0 c:=
               hole
             --  contradiction
             hole
-          linarith
+          --  linarith
           hole
         have h₂₀ : c = 4:= by -- linarith
           hole
         --  exact h₂₀
-        hole
+        linarith
     --    rw [h₅]
     hole
   --  exact h_main
-  hole
+  simpa

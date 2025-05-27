@@ -1,3 +1,3 @@
-theorem h₂ (h : (sorry + 1) ^ 3 - sorry ^ 3 = sorry ^ 2) (h₁ : sorry = 0) : False := by
+theorem h₂ (n : ℕ) (h : (n + 1) ^ 3 - n ^ 3 = n ^ 2) (h₁ : n = 0) : False := by
   rw [h₁] at h
   norm_num at h <;> contradiction

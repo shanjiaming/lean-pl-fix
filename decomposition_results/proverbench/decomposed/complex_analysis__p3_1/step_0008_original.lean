@@ -1,4 +1,4 @@
-theorem h₂ (f : ℂ → ℂ) (hf : sorry) (h : ℂ → 1 ≤ sorry) (hf_ne_zero : ∀ (z : ℂ), f z ≠ 0) (h₁ : sorry) : ℂ → sorry ≤ 1 := by
+theorem h₂ (f : ℂ → ℂ) (hf : Entire f) (h : ℂ → 1 ≤ sorry) (hf_ne_zero : ∀ (z : ℂ), f z ≠ 0) (h₁ : Entire fun z => 1 / f z) : ℂ → sorry ≤ 1 := by
   intro z
   have h₃ : 1 ≤ abs (f z) := h z
   have h₄ : f z ≠ 0 := hf_ne_zero z

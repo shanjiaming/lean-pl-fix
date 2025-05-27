@@ -1,4 +1,4 @@
-theorem h₅ (h : sorry = 2 ∧ (ℚ → ℚ → sorry = sorry * sorry - sorry + 1)) (h₁ : sorry = 2) (h₂ : ℚ → ℚ → sorry = sorry * sorry - sorry + 1) (h₃ : sorry = 1) (h₄ : ℚ → sorry = sorry + 1) : ∀ (n : ℤ), ℚ → sorry = sorry + n := by
+theorem h₅ (f : ℚ → ℚ) (h : f 1 = 2 ∧ ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1) (h₁ : f 1 = 2) (h₂ : ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1) (h₃ : f 0 = 1) (h₄ : ∀ (x : ℚ), f (x + 1) = f x + 1) : ∀ (n : ℤ) (x : ℚ), f (x + ↑n) = f x + ↑n := by
   intro n x
   induction n with
   | ofNat n =>

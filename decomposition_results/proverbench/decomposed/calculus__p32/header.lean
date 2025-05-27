@@ -1,5 +1,8 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The integral of 1 over cos^2x dx is equal to tan x + C.
+-/
+
+open intervalIntegral
+open Real

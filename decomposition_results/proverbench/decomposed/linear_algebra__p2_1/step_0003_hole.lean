@@ -1,7 +1,7 @@
-theorem h2 (h1 : sorry * sorry = 1) : sorry * sorry = 1 := by
+theorem h2 (h1 : A * A_inv = 1) : A_inv * A = 1 := by
   --  ext i j
-  fin_cases i <;> fin_cases j <;>
-        simp [A, A_inv, Matrix.mul_apply, Fin.sum_univ_succ, Fin.val_zero, Fin.val_one, Fin.val_zero, Fin.val_one] <;>
-      norm_num <;>
+  --  --  fin_cases i <;> fin_cases j <;>
+  --        simp [A, A_inv, Matrix.mul_apply, Fin.sum_univ_succ, Fin.val_zero, Fin.val_one, Fin.val_zero, Fin.val_one] <;>
+  --      norm_num <;>
     rfl
   hole

@@ -1,0 +1,2 @@
+theorem h (h1 : f + g = C 2 * X ^ 2 - C 3) : ↑(-3) = 5 := by -- -- norm_num [ZMod.nat_cast_self] <;> rfl
+  hole

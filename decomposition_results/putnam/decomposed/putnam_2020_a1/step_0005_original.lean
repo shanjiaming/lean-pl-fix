@@ -1,1 +1,0 @@
-theorem h₅ (x : ℕ) (hx : x ∈ {x | 2020 ∣ x ∧ Nat.log 10 x + 1 ≤ 2020 ∧ ∃ k l, k ≥ l ∧ x = ∑ i ∈ Finset.range (k - l + 1), 10 ^ (i + l)}) (h₁ : 2020 ∣ x) (h₂ : Nat.log 10 x + 1 ≤ 2020) (h₃ : ∃ k l, k ≥ l ∧ x = ∑ i ∈ Finset.range (k - l + 1), 10 ^ (i + l)) : x = 0 := by omega

@@ -1,4 +1,4 @@
-theorem power_and_factorial_range  : ∀ n > 0, 5 ^ n > n ! ↔ n ≤ 11 :=
+theorem power_and_factorial_range  : ∀ n > 0, 5 ^ n > n.factorial ↔ n ≤ 11 :=
   by
   have h_main : ∀ (n : ℕ), n ≥ 12 → 5 ^ n ≤ n.factorial := by sorry
   have h_forward : ∀ (n : ℕ), n > 0 → 5 ^ n > n.factorial → n ≤ 11 := by sorry

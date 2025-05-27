@@ -1,4 +1,4 @@
-theorem h_main  : ¬∀ (x y : EuclideanSpace ℝ (Fin 2)), ‖x + y‖ = ‖x‖ + ‖y‖ :=
+theorem h_main (k : ℕ) (x y : EuclideanSpace ℝ (Fin k)) : ¬∀ (x y : EuclideanSpace ℝ (Fin 2)), ‖x + y‖ = ‖x‖ + ‖y‖ :=
   by
   --  intro h
   have h₁ :

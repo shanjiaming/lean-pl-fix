@@ -1,2 +1,0 @@
-theorem h₀  : π / 2 > 0 := by -- linarith [Real.pi_pos, Real.pi_gt_three]
-  field_simp

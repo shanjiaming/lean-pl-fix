@@ -17,7 +17,7 @@ theorem aime_2025i_p11 (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ),
       have h₄₂ := h₃ 0
       have h₄₃ := h₄₂ 0
       --  exact h₄₃
-      hole
+      norm_cast
     have h₄₂ : (0 : ℝ) = 34 * (f (0 : ℝ)) ^ 2:=
       by
       have h₄₃ : (-1 : ℝ) ≤ (0 : ℝ) ∧ (0 : ℝ) < 1:= by -- -- constructor <;> norm_num
@@ -103,7 +103,7 @@ theorem aime_2025i_p11 (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ),
       --  exact h₅₅₁
       simpa
     --  exact h₅₄ h₅₅
-    hole
+    norm_cast
   have h₆ :
     ∃ (a b c d : ℕ),
       0 < a ∧

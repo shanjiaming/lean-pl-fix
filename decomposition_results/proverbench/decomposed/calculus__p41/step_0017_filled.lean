@@ -1,2 +1,2 @@
-theorem h₅₂ (h₁ : sorry) (h₂ : sorry) (h₃ : sorry) (h₄ : sorry) (x : ℝ) (hx : x ∈ Set.Ioi 0) (h₅₁ : 0 < x) : x ≠ 0 := by -- linarith
-  linarith
+theorem h₅₁ (x✝ : ℝ) (h₁ : Tendsto (fun y => (Real.exp y - 1) / y) (𝓝 0) (𝓝 1)) (h₂ : Tendsto (fun x => 8 * x) (𝓝[>] 0) (𝓝 0)) (h₃ : Tendsto (fun x => (Real.exp (8 * x) - 1) / (8 * x)) (𝓝[>] 0) (𝓝 1)) (h₄ : Tendsto (fun x => 8 * ((Real.exp (8 * x) - 1) / (8 * x))) (𝓝[>] 0) (𝓝 8)) (x : ℝ) (hx : x ∈ Set.Ioi 0) : 0 < x := by simpa using hx
+  hole

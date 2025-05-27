@@ -1,4 +1,4 @@
-theorem h₁ (a : ℕ) (d : optParam ℤ ((↑a : ℤ) ^ 2 - 1)) (x y : ℤ) (m : optParam ℤ (x ^ 2 - d * y ^ 2)) (h₀ : |m| < 2 * (↑a : ℤ) + 2) : a = 0 ∨ a ≥ 1 := by
+theorem h₁ (a : ℕ) (d : optParam ℤ (↑a ^ 2 - 1)) (x y : ℤ) (m : optParam ℤ (x ^ 2 - d * y ^ 2)) (h₀ : |m| < 2 * ↑a + 2) : a = 0 ∨ a ≥ 1 := by
   --  by_cases h : a = 0
   --  · exact Or.inl h
   ·

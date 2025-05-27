@@ -1,4 +1,4 @@
-theorem h₁₂ (ha : 0 < sorry) (h₁ : (fun x => √(sorry ^ 2 - x ^ 2)) = fun x => √(sorry ^ 2 - x ^ 2)) (h₄ : ∫ (x : ℝ) in 0 ..sorry, √(sorry ^ 2 - x ^ 2) = ∫ (x : ℝ) in 0 ..sorry, √(sorry ^ 2 - x ^ 2)) (h₈ : sorry > 0) : ∫ (x : ℝ) in 0 ..sorry, √(sorry ^ 2 - x ^ 2) = sorry ^ 2 * π / 4 :=
+theorem h₁₂ (a : ℝ) (ha✝ ha : 0 < a) (h₁ : (fun x => √(a ^ 2 - x ^ 2)) = fun x => √(a ^ 2 - x ^ 2)) (h₄ : ∫ (x : ℝ) in 0 ..a, √(a ^ 2 - x ^ 2) = ∫ (x : ℝ) in 0 ..a, √(a ^ 2 - x ^ 2)) (h₈ : a > 0) : ∫ (x : ℝ) in 0 ..a, √(a ^ 2 - x ^ 2) = a ^ 2 * π / 4 :=
   by
   have h₁₃ : ∫ x in (0)..a, Real.sqrt (a ^ 2 - x ^ 2) = a ^ 2 * Real.pi / 4 := by sorry
   exact h₁₃

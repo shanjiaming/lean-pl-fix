@@ -1,2 +1,0 @@
-theorem h₃ (n : ℕ) (hn : 0 < n) (h : 5 ^ n > sorry) (k✝ k : ℕ) (hk : Nat.le 12 k) (IH : 5 ^ k ≤ k !) : 5 ≤ k := by omega
-  hole

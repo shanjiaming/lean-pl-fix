@@ -13,5 +13,5 @@ theorem coefficient_of_X4_in_polynomial_expansion : coeff ((∑ i in Finset.rang
         norm_num <;>
       rfl
     hole
-  --  exact h₂
+  exact h₂
   hole

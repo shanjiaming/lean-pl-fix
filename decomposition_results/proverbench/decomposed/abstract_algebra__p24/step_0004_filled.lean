@@ -1,2 +1,2 @@
-theorem h_infinite (hchar : sorry) (h_charZero : sorry) (h_injective : Function.Injective sorry) : Infinite sorry := by -- exact Infinite.of_injective _ h_injective
+theorem h_infinite (R : Type u_1) (inst✝¹ : CommRing R) (inst✝ : IsDomain R) (hchar : CharP R 0) (h_charZero : CharZero R) (h_injective : Function.Injective Int.cast) : Infinite R := by exact Infinite.of_injective _ h_injective
   hole

@@ -1,2 +1,2 @@
-theorem h₁ (h_main : sorry % 3 = 2) (h : 3 ∣ sorry) : sorry % 3 = 0 := by -- omega
-  hole
+theorem h₁ (h_main : countPoints 2012 % 3 = 2) (h : 3 ∣ countPoints 2012) : countPoints 2012 % 3 = 0 := by -- omega
+  omega

@@ -1,4 +1,4 @@
-theorem h2 (x : ℝ) : ∫ (x : ℝ), sin x ^ 3 * cos x ^ 6 = ∫ (x : ℝ), sin x * cos x ^ 6 - sin x * cos x ^ 8 :=
+theorem h2 (x : ℝ) : ∫ (x : ℝ), Real.sin x ^ 3 * Real.cos x ^ 6 = ∫ (x : ℝ), Real.sin x * Real.cos x ^ 6 - Real.sin x * Real.cos x ^ 8 :=
   by
   --  congr
   --  funext x

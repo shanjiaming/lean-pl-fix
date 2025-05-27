@@ -1,4 +1,4 @@
-theorem h₄ (h₁ : HasDerivAt sorry (8 * √3) (π / 3)) (h₃ : sorry = 4) : 8 * √3 * (π / 3 - π / 3) + 4 = 4 :=
+theorem h₄ (h₁ : HasDerivAt f (8 * √3) (π / 3)) (h₃ : f (π / 3) = 4) : 8 * √3 * (π / 3 - π / 3) + 4 = 4 :=
   by
   have h₅ : π / 3 - π / 3 = 0 := by sorry
   --  rw [h₅]

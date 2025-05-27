@@ -1,2 +1,0 @@
-theorem h₄ (α : ℝ) (ha : cos (π * α) = 1 / 3) (p q : ℤ) (hq : q > 0) (hα : α = (↑p : ℝ) / (↑q : ℝ)) (h₁ : cos ((↑p : ℝ) * π / (↑q : ℝ)) = 1 / 3) (h₂ : cos (π * α) = cos ((↑p : ℝ) * π / (↑q : ℝ))) (h₃ : cos ((↑p : ℝ) * π / (↑q : ℝ)) = 1 / 3) : q > 0 := by -- exact_mod_cast hq
-  linarith

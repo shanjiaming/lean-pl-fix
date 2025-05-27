@@ -1,4 +1,4 @@
-theorem h₁  : sorry = 512 :=
+theorem h₁  : h 2 5 (-6) 3 = 512 :=
   by
   have h₂ : h 2 5 (-6) 3 = (2 : ℝ) ^ (5 * 3 + (-6)) := by sorry
   --  rw [h₂]

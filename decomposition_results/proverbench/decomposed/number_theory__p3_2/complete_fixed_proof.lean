@@ -22,4 +22,4 @@ theorem solve_congruence3 (p : ℕ) : ∃ m : ℕ, (15 * m + 8) % 7 = 1 ∧ m = 
     --  · rfl
     hole
   --  exact h_main
-  hole
+  norm_cast

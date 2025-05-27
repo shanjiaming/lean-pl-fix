@@ -37,13 +37,13 @@ theorem cos_5x_indefinite_integral {f : ℝ → ℝ} (hf : Continuous f) (h_diff
       have h₁₇ : False:= by -- linarith
         hole
       --  exact h₁₇
-      hole
+      norm_cast
     --  linarith
     linarith
   have h_main : ∃ C, ∀ x, f x = (1 / 5 : ℝ) * Real.sin (5 * x) + C:=
     by
     --  exfalso
     --  exact h_flase_derivative
-    hole
+    norm_cast
   --  exact h_main
-  hole
+  norm_cast

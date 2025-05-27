@@ -1,2 +1,0 @@
-theorem h₁₁ (S : Set ℚ) (hSadd : ∀ a ∈ S, ∀ b ∈ S, a + b ∈ S) (hSprod : ∀ a ∈ S, ∀ b ∈ S, a * b ∈ S) (hScond : ∀ (r : ℚ), (r ∈ S ∨ -r ∈ S ∨ r = 0) ∧ ¬(r ∈ S ∧ -r ∈ S) ∧ ¬(r ∈ S ∧ r = 0) ∧ ¬(-r ∈ S ∧ r = 0)) (h₁ : 1 ∈ S ∨ -1 ∈ S ∨ 1 = 0) (h₂ : ¬(1 ∈ S ∧ -1 ∈ S)) (h₃ : ¬(1 ∈ S ∧ 1 = 0)) (h₄ : ¬(-1 ∈ S ∧ 1 = 0)) (h₅ : 1 ≠ 0) (h₇ h₈ : -1 ∈ S) (h₉ : -1 * -1 ∈ S) (h₁₀ : 1 ∈ S) : 1 ∈ S ∧ -1 ∈ S := by -- exact ⟨h₁₀, h₈⟩
-  hole

@@ -1,0 +1,2 @@
+theorem h1₆ (f : ℝ → ℝ) (hf : Continuous f) (h_max : IsMaxOn (fun f => ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2) {f | Continuous f} f) (h1₁ :  ∫ (x : ℝ) in Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 =    (∫ (x : ℝ) in Set.Icc 0 1, x ^ 3 / 4) - ∫ (x : ℝ) in Set.Icc 0 1, x * (f x - x / 2) ^ 2) (h1₅ : (fun x => x * (f x - x / 2) ^ 2) ≥ 0) : ∫ (x : ℝ) in Set.Icc 0 1, x * (f x - x / 2) ^ 2 ≥ 0 := by -- apply? <;> aesop
+  hole

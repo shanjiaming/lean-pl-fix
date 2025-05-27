@@ -1,0 +1,2 @@
+theorem h₆ (b : ℤ) (hb : b ∈ B) (hneg : b < 0) (h_main : ∃ k, b = -44 + 5 * k) (h_k_le_8 : ∀ (k : ℤ), b = -44 + 5 * k → k ≤ 8) (k : ℤ) (hk : b = -44 + 5 * k) (h₂ : k ≤ 8) (h₃ : b = -44 + 5 * k) (h₅ : k ≤ 8) : 5 * k ≤ 40 := by -- linarith
+  hole

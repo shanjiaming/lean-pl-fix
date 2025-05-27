@@ -1,2 +1,0 @@
-theorem h₅₄ (y : ℝ → ℝ) (ycontdiff : ContDiff ℝ 1 y) (limy : sorry) (h_y_tendsto : sorry) (h₂ : sorry) (ε : ℝ) (hε : 0 < ε) (h₅₁ : sorry) (h₅₃ : sorry) : ∀ᶠ (x : ℝ) in sorry, |deriv y x ^ 2 + y x ^ 3| < ε := by -- exact Metric.tendsto_nhds.mp h₅₃ ε hε
-  hole

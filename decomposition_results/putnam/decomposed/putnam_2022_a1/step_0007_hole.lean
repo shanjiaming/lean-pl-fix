@@ -1,2 +1,0 @@
-theorem h₇ (a b : ℝ) (h h₁ : ∃! x, a * x + b = Real.log (1 + x ^ 2)) (h₂ : a = 0) (x₀ : ℝ) (hx₀ : 0 * x₀ + b = Real.log (1 + x₀ ^ 2)) (hu : ∀ (y : ℝ), (fun x => 0 * x + b = Real.log (1 + x ^ 2)) y → y = x₀) (h₆ : b = Real.log (1 + x₀ ^ 2)) : ∀ (x : ℝ), 0 * x + b = Real.log (1 + x ^ 2) → x = x₀ := by -- simpa [h₂] using hu
-  hole

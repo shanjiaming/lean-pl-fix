@@ -1,1 +1,1 @@
-theorem h₇₆ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : ¬p ∣ sorry) (h₃ : ∃ d, 0 < d ∧ sorry ^ d ≡ 1 [ZMOD (↑p : ℤ)]) (h₄ : sorry ^ 12 ≡ -1 [ZMOD (↑p : ℤ)]) (h₅ : sorry ^ 24 ≡ 1 [ZMOD (↑p : ℤ)]) (h₆ h₇₁ h₇₃ : p % 24 = 1) (h₇₅ : p ≥ 2) : p ≥ 1 := by omega
+theorem h₇₆ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ : ¬p ∣ n) (h₃ : ∃ d, 0 < d ∧ ↑n ^ d ≡ 1 [ZMOD ↑p]) (h₄ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₅ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) (h₆ h₇₁ h₇₃ : p % 24 = 1) (h₇₅ : p ≥ 2) : p ≥ 1 := by omega

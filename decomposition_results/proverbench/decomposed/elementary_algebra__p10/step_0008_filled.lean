@@ -1,2 +1,2 @@
-theorem hn₂ (f : ℕ → ℕ) (h_inj : ∀ (x y : ℕ), f x = f y → x = y) (h_def : f 1 = 2 ∧ ∀ n ≥ 2, f n = n + 2) (hf0 : f 0 = 3) (h2 : f 2 = 4) (h1 : f 1 = 2) (m n : ℕ) (h₃ : f m ≥ 2) (hn : ¬n = 0) (hn₁ : ¬n = 1) : n ≥ 2 := by -- omega
-  omega
+theorem hn₂ (f✝ f : ℕ → ℕ) (h_inj : ∀ (x y : ℕ), f x = f y → x = y) (h_def : f 1 = 2 ∧ ∀ n ≥ 2, f n = n + 2) (hf0 : f 0 = 3) (h2 : f 2 = 4) (h1 : f 1 = 2) (m n : ℕ) (h₃ : f m ≥ 2) (hn : ¬n = 0) (hn₁ : ¬n = 1) : n ≥ 2 := by omega
+  hole

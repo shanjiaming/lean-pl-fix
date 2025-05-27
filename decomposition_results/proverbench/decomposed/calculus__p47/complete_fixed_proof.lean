@@ -30,7 +30,7 @@ theorem integral_of_integrand2 :
               --  convert HasDerivAt.const_mul (1 / 2 : ℝ) h₈ using 1 <;> ring
               hole
             --  exact h₉
-            hole
+            norm_cast
           have h₁₀ :
             HasDerivAt (fun x : ℝ => (1 / 2 : ℝ) * Real.log (x ^ 2 + 1) + C) ((1 / 2 : ℝ) * ((2 * x) / (x ^ 2 + 1)) + 0) x := by sorry
           have h₁₃ : (1 / 2 : ℝ) * ((2 * x) / (x ^ 2 + 1)) + 0 = (x : ℝ) / (x ^ 2 + 1):= by

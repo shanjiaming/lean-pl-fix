@@ -1,4 +1,4 @@
-theorem h₂ (u : ℝ) (h₁ : sorry = (u ^ 2 + 0 ^ 2) * rexp (-(u + 0))) : sorry = u ^ 2 * rexp (-u) := by
+theorem h₂ (u✝ v x y u : ℝ) (h₁ : f u 0 = (u ^ 2 + 0 ^ 2) * rexp (-(u + 0))) : f u 0 = u ^ 2 * rexp (-u) := by
   calc
     f u 0 = (u ^ 2 + 0 ^ 2 : ℝ) * Real.exp (-(u + 0)) := h₁
     _ = (u ^ 2 + 0 : ℝ) * Real.exp (-(u + 0)) := by norm_num

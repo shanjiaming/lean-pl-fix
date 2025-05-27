@@ -1,4 +1,4 @@
-theorem h₁  : sorry = 0 :=
+theorem h₁ (u v x y : ℝ) : f 0 0 = 0 :=
   by
   have h₂ : f 0 0 = 0 ↔ (0 : ℝ) = 0 ∧ (0 : ℝ) = 0 := by sorry
   have h₃ : (0 : ℝ) = 0 ∧ (0 : ℝ) = 0 := by sorry

@@ -1,4 +1,4 @@
-theorem h3 (h1 :  ∫ (x : ℝ) in Set.Icc (-√7) √7,      ∫ (y : ℝ) in Set.Icc (-√(7 - x ^ 2)) √(7 - x ^ 2), x ^ 2 + y ^ 2 + 2 * (7 - x ^ 2 - y ^ 2) =    147 / 2 * π) (h2 : (957 * √29 - 47) / 20 * π ≠ 147 / 2 * π) : False :=
+theorem h3 (G : Set (ℝ × ℝ × ℝ)) (hG : G = {p | p.2.2 = 7 - p.1 ^ 2 - p.2.1 ^ 2 ∧ p.2.2 ≥ 0}) (h1 :  ∫ (x : ℝ) in Set.Icc (-√7) √7,      ∫ (y : ℝ) in Set.Icc (-√(7 - x ^ 2)) √(7 - x ^ 2), x ^ 2 + y ^ 2 + 2 * (7 - x ^ 2 - y ^ 2) =    147 / 2 * Real.pi) (h2 : (957 * √29 - 47) / 20 * Real.pi ≠ 147 / 2 * Real.pi) : False :=
   by
   have h4 :
     ∫ (x : ℝ) in Set.Icc (-Real.sqrt 7) (Real.sqrt 7),

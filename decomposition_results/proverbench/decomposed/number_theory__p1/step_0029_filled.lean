@@ -1,4 +1,4 @@
-theorem h₆ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : ¬p ∣ sorry) (h₃ : ∃ d, 0 < d ∧ sorry ^ d ≡ 1 [ZMOD (↑p : ℤ)]) (h₄ : sorry ^ 12 ≡ -1 [ZMOD (↑p : ℤ)]) (h₅ : sorry ^ 24 ≡ 1 [ZMOD (↑p : ℤ)]) : p % 24 = 1 := by
+theorem h₆ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ : ¬p ∣ n) (h₃ : ∃ d, 0 < d ∧ ↑n ^ d ≡ 1 [ZMOD ↑p]) (h₄ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₅ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) : p % 24 = 1 := by
   have h₆₁ := h₄
   have h₆₂ := h₅
   have h₆₃ : p ≠ 0 := by sorry
@@ -9,4 +9,4 @@ theorem h₆ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) 
   have h₆₈ : p ≠ 3 := h₁
   have h₆₉ : p % 24 = 1 := by sorry
   --  exact h₆₉
-  hole
+  linarith

@@ -1,4 +1,4 @@
-theorem complex_power_example  : (1 + sorry) ^ 10 = 32 * sorry :=
+theorem complex_power_example  : (1 + I) ^ 10 = 32 * I :=
   by
   have h1 : (1 + I) ^ 2 = 2 * I := by sorry
   have h2 : (1 + I) ^ 4 = -4 := by sorry

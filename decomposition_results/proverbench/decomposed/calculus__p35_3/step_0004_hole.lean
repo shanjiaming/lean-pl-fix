@@ -1,0 +1,2 @@
+theorem h₄ (x✝ x : ℝ) (hx : |x - 2| < 1) (h₁ : f x = x ^ 3 - 9 * x ^ 2 + 24 * x) (h₂ : f 2 = 20) (h₃ : |x - 2| < 1) : -1 < x - 2 := by linarith [abs_lt.mp h₃]
+  hole

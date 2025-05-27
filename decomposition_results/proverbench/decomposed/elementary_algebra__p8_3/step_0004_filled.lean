@@ -1,2 +1,2 @@
-theorem h3 (h1 : (2 - 5 * sorry) * sorry = 2 * sorry - 5 * sorry * sorry) (h2 : 2 * sorry - 5 * sorry * sorry = 2 * sorry - 5 * sorry) : 2 * sorry - 5 * sorry = 2 * sorry - 5 * sorry := by -- rfl
-  hole
+theorem h2₂ (h1 : (2 - 5 * √5) * √13 = 2 * √13 - 5 * √5 * √13) (h2₁ : √5 * √13 = √65) : 5 * √5 * √13 = 5 * (√5 * √13) := by -- ring
+  linarith

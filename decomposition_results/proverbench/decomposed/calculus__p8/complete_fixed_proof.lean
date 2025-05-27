@@ -31,7 +31,7 @@ theorem paraboloid_integral_value :
           ∫ (y : ℝ) in Set.Icc (-Real.sqrt (7 - x ^ 2)) (Real.sqrt (7 - x ^ 2)), (x ^ 2 + y ^ 2 + 2 * (7 - x ^ 2 - y ^ 2)) =
         (147 : ℝ) / 2 * Real.pi := by sorry
     have h5 : (957 * Real.sqrt 29 - 47) / 20 * Real.pi ≠ (147 : ℝ) / 2 * Real.pi:= by -- apply h2
-      hole
+      norm_cast
     have h6 :
       ∫ (x : ℝ) in Set.Icc (-Real.sqrt 7) (Real.sqrt 7),
           ∫ (y : ℝ) in Set.Icc (-Real.sqrt (7 - x ^ 2)) (Real.sqrt (7 - x ^ 2)), (x ^ 2 + y ^ 2 + 2 * (7 - x ^ 2 - y ^ 2)) =
@@ -39,9 +39,9 @@ theorem paraboloid_integral_value :
     have h7 : (957 * Real.sqrt 29 - 47) / 20 * Real.pi = (147 : ℝ) / 2 * Real.pi:= by -- linarith
       linarith
     have h8 : (957 * Real.sqrt 29 - 47) / 20 * Real.pi ≠ (147 : ℝ) / 2 * Real.pi:= by -- apply h2
-      hole
+      norm_cast
     --  exact h8 h7
-    hole
+    norm_cast
   --  exfalso
   --  apply h3
-  hole
+  norm_cast

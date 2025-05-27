@@ -10,7 +10,7 @@ theorem smallest_positive_integer :
     --  · constructor
     --    · norm_num [congruence1, congruence2, congruence3]
     --    · norm_num [congruence1, congruence2, congruence3]
-    hole
+    norm_cast
   have h_minimality : ∀ n : ℕ+, congruence1 n ∧ congruence2 n ∧ congruence3 n → n ≥ 8:=
     by
     --  intro n hn

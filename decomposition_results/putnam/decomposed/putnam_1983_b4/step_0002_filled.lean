@@ -1,2 +1,0 @@
-theorem hf_pos (f : ℕ → ℤ) (a : ℕ → ℕ) (hf : f = fun n => (↑n : ℤ) + ⌊√(↑n : ℝ)⌋) (ha0 : a 0 > 0) (han : ∀ (n : ℕ), (↑(a (n + 1)) : ℤ) = f (a n)) : ∀ (n : ℕ), (↑n : ℤ) + ⌊√(↑n : ℝ)⌋ ≥ (↑n : ℤ) := by -- sorry
-  hole

@@ -1,4 +1,4 @@
-theorem h₂  : ∫ (x : ℝ) in 0 ..π / 2, x * sin x = 1 :=
+theorem h₂ (f : ℝ → ℝ) : ∫ (x : ℝ) in 0 ..π / 2, x * sin x = 1 :=
   by
   rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
       (fun x _ =>

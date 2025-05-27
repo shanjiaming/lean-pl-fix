@@ -1,4 +1,4 @@
-theorem h1 (x : ℝ) : ∫ (x : ℝ), sin x ^ 3 * cos x ^ 6 = -(cos x ^ 7 / 7) + cos x ^ 9 / 9 + sorry :=
+theorem h1 (x : ℝ) : ∫ (x : ℝ), Real.sin x ^ 3 * Real.cos x ^ 6 = -(Real.cos x ^ 7 / 7) + Real.cos x ^ 9 / 9 + sorry :=
   by
   have h2 :
     (∫ (x : ℝ), Real.sin x ^ 3 * Real.cos x ^ 6 : ℝ) =

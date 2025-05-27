@@ -13,11 +13,11 @@ theorem consecutive_cubes_difference_implies_square : ((n + 1) ^ 3 - n ^ 3 = n ^
     hole
   have h₂ : False:= by
     --  rw [h₁] at h
-    norm_num at h <;> contradiction
+    --  norm_num at h <;> contradiction
     hole
   have h₃ : ∃ k : ℕ, k ^ 2 = 2 * n - 1:= by
     --  exfalso
     --  exact h₂
-    hole
+    norm_cast
   --  exact h₃
-  hole
+  norm_cast

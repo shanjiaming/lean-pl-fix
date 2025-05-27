@@ -8,7 +8,7 @@ theorem function_composition_example : f_at (g_at_7.eval (5 : ℤ)) (h_at_5.eval
   have h₃ : f_at (g_at_7.eval (5 : ℤ)) (h_at_5.eval (4 : ℤ)) = 125:=
     by
     --  rw [h₁, h₂]
-    simp [f_at] <;> norm_num <;> rfl
+    --  simp [f_at] <;> norm_num <;> rfl
     hole
   --  rw [h₃] <;> rfl
-  hole
+  linarith

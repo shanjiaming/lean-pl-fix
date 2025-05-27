@@ -1,4 +1,4 @@
-theorem specific_example  : sorry = 512 ∧ sorry = 34 :=
+theorem specific_example  : h 2 5 (-6) 3 = 512 ∧ m_comp 2 5 (-6) 3 = 34 :=
   by
   have h₁ : h 2 5 (-6) 3 = 512 := by sorry
   have h₂ : m_comp 2 5 (-6) 3 = 34 := by sorry

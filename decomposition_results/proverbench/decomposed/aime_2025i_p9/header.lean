@@ -1,5 +1,8 @@
 import Mathlib
 import Aesop
+
 set_option maxHeartbeats 0
-set_option pp.coercions.types true
+
 open BigOperators Real Nat Topology Rat
+
+/-- The parabola with equation $y = x^2 - 4$ is rotated $60^\circ$ counterclockwise around the origin. The unique point in the fourth quadrant where the original parabola and its image intersect has $y$-coordinate $\frac{a - \sqrt{b}}{c}$, where $a$, $b$, and $c$ are positive integers, and $a$ and $c$ are relatively prime. Find $a + b + c$. Show that it is 62.-/

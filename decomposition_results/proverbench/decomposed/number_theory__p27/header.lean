@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Prove that \(4kxy-1\) does not divide the number \(x^m+y^n\) for any positive integers \(x,y,k,m,n\).
+-/

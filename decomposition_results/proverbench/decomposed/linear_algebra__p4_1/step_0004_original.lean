@@ -1,0 +1,1 @@
+theorem h₇ (A✝ A : Matrix (Fin 2) (Fin 4) ℝ) (i : Fin 2) (hi₁ : A i 3 ≠ 0) (hi₂ : ∀ (k : Fin 4), k ≠ 3 → A i k = 0) (x : Fin 4 → ℝ) (hx : A *ᵥ x = fun i => A i 3) (h₄ : (A *ᵥ x) i = (fun i => A i 3) i) (h₅ : (A *ᵥ x) i = ∑ j, A i j * x j) (h₆ : (fun i => A i 3) i = A i 3) : ∑ j, A i j * x j = A i 3 := by simpa [h₅, h₆] using h₄

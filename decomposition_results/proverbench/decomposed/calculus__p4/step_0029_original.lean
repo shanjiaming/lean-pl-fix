@@ -1,7 +1,6 @@
-theorem h₂₆ (h₀ : sorry) (h₁ : sorry) (h₂₁ : sorry) (h₂₂ : sorry) (h₂₃ :  (fun x => (cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x)) =ᶠ[𝓝 3] fun x =>    (cos (2 * x - 6) - 1) / (x - 3) ^ 2 * (1 / x)) : sorry :=
+theorem h₂₅ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) (h₀₉ : Tendsto (fun x => Real.sin x / x) (𝓝[≠] 0) (𝓝 1)) (h₁₁ : Tendsto (fun x => x - 3) (𝓝[≠] 3) (𝓝[≠] 0)) : Tendsto (fun x => Real.sin (x - 3) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
   by
-  have h₂₇ :
-    Tendsto (fun x : ℝ => ((Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) * ((1 : ℝ) / x)) (𝓝 3) (𝓝 ((-2 : ℝ) * (1 / 3))) := by sorry
-  have h₃₃ : ((-2 : ℝ) * (1 / 3) : ℝ) = (-2 / 3 : ℝ) := by sorry
-  rw [h₃₃] at h₂₇
-  exact h₂₇
+  have h₂₆ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) := h₀₉
+  have h₂₇ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝[≠] 0) := h₁₁
+  have h₂₈ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) := by sorry
+  exact h₂₈

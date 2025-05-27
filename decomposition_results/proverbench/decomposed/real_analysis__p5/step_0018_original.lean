@@ -1,1 +1,1 @@
-theorem h₆ (h₁ : sorry = 0) (h₂ : sorry = 0) (h₃ : sorry = 0) (h₅ : sorry ^ 2 / 4 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 + (sorry - sorry / 2) ^ 2 = 0) : (sorry - sorry / 2) ^ 2 = 0 := by nlinarith [sq_nonneg (a / 2), sq_nonneg (b - a / 2), sq_nonneg (c - a / 2)]
+theorem h₆ (a b c d : ℝ) (h : a ^ 2 + b ^ 2 + c ^ 2 + d ^ 2 = a * (b + c + d)) (h₁ : a = 0) (h₂ : b = 0) (h₃ : c = 0) (h₅ : a ^ 2 / 4 + (b - a / 2) ^ 2 + (c - a / 2) ^ 2 + (d - a / 2) ^ 2 = 0) : (d - a / 2) ^ 2 = 0 := by nlinarith [sq_nonneg (a / 2), sq_nonneg (b - a / 2), sq_nonneg (c - a / 2)]

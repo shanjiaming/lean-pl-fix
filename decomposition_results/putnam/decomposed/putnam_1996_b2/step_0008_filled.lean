@@ -1,2 +1,0 @@
-theorem h5 (n✝ : ℕ) (prododd : ℝ) (npos : n✝ > 0) (hprododd : prododd = ∏ i ∈ Finset.range (2 * n✝), if Odd i then (↑i : ℝ) else 1) (h1 : (∏ i ∈ Finset.range (2 * n✝), if Odd i then (↑i : ℝ) else 1) = ∏ k ∈ Finset.range n✝, (2 * (↑k : ℝ) + 1)) (h3 : n✝ > 0) (n : ℕ) (hn : n > 0) : n ≥ 1 := by linarith
-  hole

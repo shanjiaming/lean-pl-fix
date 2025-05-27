@@ -1,4 +1,4 @@
-theorem h₃ (b : ℕ) (h₀ : 2 ≤ b) (h₁ : sorry ≥ 10) (h₂ : ∀ c ∈ Finset.Ico 2 b, sorry < 10) : b ≥ 211 := by
+theorem h₃ (b : ℕ) (h₀ : 2 ≤ b) (h₁ : (beautifulSet b).card ≥ 10) (h₂ : ∀ c ∈ Finset.Ico 2 b, (beautifulSet c).card < 10) : b ≥ 211 := by
   --  by_contra h
   have h₄ : b ≤ 210 := by sorry
   have h₅ : b < 211 := by sorry

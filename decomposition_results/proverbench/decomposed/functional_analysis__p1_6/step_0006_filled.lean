@@ -1,0 +1,2 @@
+theorem h₅ (u v x y : ℝ) (p : ℝ × ℝ) (h₁ : f p.1 p.2 = (p.1 ^ 2 + p.2 ^ 2) * rexp (-(p.1 + p.2))) (h₂ : f 0 0 = 0) (h₃ : p.1 ^ 2 + p.2 ^ 2 ≥ 0) (h₄ : rexp (-(p.1 + p.2)) > 0) : (p.1 ^ 2 + p.2 ^ 2) * rexp (-(p.1 + p.2)) ≥ 0 := by -- positivity
+  nlinarith

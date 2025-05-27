@@ -1,0 +1,1 @@
+theorem h₅₂ (D : Type u_1) (f : D → ℝ) (X : Set D) (h₁ : BddAbove (f '' X)) (M : ℝ) (hM_pos : M > 0) (hM : ∀ x ∈ X, |f x| ≤ M) (x : D) (hx : x ∈ X) (h₃ : |f x| ≤ M) (h₅ : -M ≤ -|f x|) : -|f x| ≤ f x := by cases' abs_cases (f x) with h₅₂ h₅₂ <;> linarith

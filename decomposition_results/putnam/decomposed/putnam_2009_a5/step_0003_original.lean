@@ -1,1 +1,0 @@
-theorem h2 (G : Type u_2) (w✝¹ : CommGroup G) (w✝ : Fintype G) (hG h1 : ∏ g, orderOf g = 2 ^ 2009) : ∏ g, orderOf g = 2 ^ 2009 := by simpa using h1

@@ -1,4 +1,4 @@
-theorem h₂ (x y z : ℕ) (h : x * y = z ^ 2 + 1) (h₁ : x = 1 ∧ y = z ^ 2 + 1 ∨ x = z ^ 2 + 1 ∧ y = 1 ∨ ∃ a b, (↑x : ℤ) = a ^ 2 + b ^ 2 ∧ y = 1) : ∃ a b c d, (↑x : ℤ) = a ^ 2 + b ^ 2 ∧ (↑y : ℤ) = c ^ 2 + d ^ 2 ∧ (↑z : ℤ) = a * c + b * d := by
+theorem h₂ (x y z : ℕ) (h : x * y = z ^ 2 + 1) (h₁ : x = 1 ∧ y = z ^ 2 + 1 ∨ x = z ^ 2 + 1 ∧ y = 1 ∨ ∃ a b, ↑x = a ^ 2 + b ^ 2 ∧ y = 1) : ∃ a b c d, ↑x = a ^ 2 + b ^ 2 ∧ ↑y = c ^ 2 + d ^ 2 ∧ ↑z = a * c + b * d := by
   cases h₁ with
   | inl h₁ =>
     have h₃ : x = 1 := h₁.1

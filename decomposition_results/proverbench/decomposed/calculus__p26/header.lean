@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The derivative of \(f(x)=e^x\) at \(x=e\) is \(e^e\).
+-/
+
+open Real

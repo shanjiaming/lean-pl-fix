@@ -1,2 +1,2 @@
-theorem h₃ (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (k : ℕ) (p : ℤ) (hk₀ : 0 < k) (hk₁ : k ≤ n) (hk₂ : |(↑k : ℝ) * α - (↑p : ℝ)| < 1 / ((↑n : ℝ) + 1)) (h₂ : (↑k : ℤ) > 0) : (↑k : ℤ) ≤ (↑n : ℤ) := by -- exact_mod_cast hk₁
-  linarith
+theorem h₃ (α✝ : ℝ) (n✝ : ℕ) (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) (k : ℕ) (p : ℤ) (hk₀ : 0 < k) (hk₁ : k ≤ n) (hk₂ : |↑k * α - ↑p| < 1 / (↑n + 1)) (h₂ : ↑k > 0) : ↑k ≤ ↑n := by exact_mod_cast hk₁
+  hole

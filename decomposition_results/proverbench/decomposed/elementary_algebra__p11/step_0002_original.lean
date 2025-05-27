@@ -1,4 +1,4 @@
-theorem h_main  : ∀ n ≥ 12, 5 ^ n ≤ n ! :=
+theorem h_main  : ∀ n ≥ 12, 5 ^ n ≤ n.factorial :=
   by
   intro n hn
   induction' hn with n hn IH

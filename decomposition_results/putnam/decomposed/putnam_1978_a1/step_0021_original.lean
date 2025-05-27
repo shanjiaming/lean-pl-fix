@@ -1,4 +1,0 @@
-theorem h₅₉ (S T : Set ℤ) (hS : S = {k | ∃ j, 0 ≤ j ∧ j ≤ 33 ∧ k = 3 * j + 1}) (hT : T ⊆ S ∧ T.ncard = 20) (h : ∀ m ∈ T, ∀ n ∈ T, m ≠ n → m + n ≠ 104) (h₁ : T ⊆ S) (h₂ : T.ncard = 20) (h₃ : ∀ m ∈ T, ∀ n ∈ T, m ≠ n → m + n ≠ 104) (h₄ h₅₁ : T ⊆ ({1, 52} ∪ ⋃ j, ⋃ (_ : 1 ≤ j ∧ j ≤ 16), {3 * j + 1}) ∪ ⋃ j, ⋃ (_ : 1 ≤ j ∧ j ≤ 16), {103 - 3 * j}) (h₅₂ :  T.ncard ≤ (({1, 52} ∪ ⋃ j, ⋃ (_ : 1 ≤ j ∧ j ≤ 16), {3 * j + 1}) ∪ ⋃ j, ⋃ (_ : 1 ≤ j ∧ j ≤ 16), {103 - 3 * j}).ncard) (x : ℤ) (h✝ : ∃ (_ : 1 ≤ Int.ofNat 0 ∧ Int.ofNat 0 ≤ 16), x = 103 - 3 * Int.ofNat 0) (h₅₅ : 1 ≤ sorry) (h₅₆ : sorry ≤ 16) (h₅₇ : x = 3 * sorry + 1) (h₅₈ : 1 ≤ 3 * sorry + 1) : 3 * sorry + 1 ≤ 103 :=
-  by
-  have h₅₁₀ : (j : ℤ) ≤ 16 := by sorry
-  linarith

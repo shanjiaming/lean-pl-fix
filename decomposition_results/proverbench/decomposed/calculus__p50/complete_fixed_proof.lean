@@ -25,7 +25,7 @@ theorem integral_x_sin_x_pi_over_2 : ∫ x in Icc 0 (π / 2), x * sin x = 1:=
       simp [intervalIntegral.integral_of_le (by linarith [Real.pi_pos, Real.pi_gt_three] : (0 : ℝ) ≤ π / 2)]
       hole
     --  rw [h₃]
-    rw [h₂]
-    hole
+    --  rw [h₂]
+    linarith
   --  exact h₁
-  hole
+  linarith

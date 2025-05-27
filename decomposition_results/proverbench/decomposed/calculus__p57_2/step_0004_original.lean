@@ -1,1 +1,1 @@
-theorem h₃ (x : ℝ) (h₁ : deriv (deriv sorry) x = (50 * x ^ 2 - 525 * x - 175) / (5 * x ^ 2 + 35) ^ 2) (h₂ : (5 * x ^ 2 + 35) ^ (5 / 2) = (5 * x ^ 2 + 35) ^ 2) : deriv (deriv sorry) x = (50 * x ^ 2 - 525 * x - 175) / (5 * x ^ 2 + 35) ^ (5 / 2) := by sorry
+theorem h₃ (x✝ x : ℝ) (h₁ : deriv (deriv f) x = (50 * x ^ 2 - 525 * x - 175) / (5 * x ^ 2 + 35) ^ 2) (h₂ : (5 * x ^ 2 + 35) ^ (5 / 2) = (5 * x ^ 2 + 35) ^ 2) : deriv (deriv f) x = (50 * x ^ 2 - 525 * x - 175) / (5 * x ^ 2 + 35) ^ (5 / 2) := by sorry

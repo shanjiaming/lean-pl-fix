@@ -1,5 +1,5 @@
-theorem h2 (x : ℝ) (h1 : False) : ∫ (x : ℝ), 1 / cos x ^ 2 = tan x + sorry :=
+theorem h2 (C x : ℝ) (h1 : False) : ∫ (x : ℝ), 1 / Real.cos x ^ 2 = Real.tan x + C :=
   by
   --  exfalso
   --  exact h1
-  hole
+  norm_cast

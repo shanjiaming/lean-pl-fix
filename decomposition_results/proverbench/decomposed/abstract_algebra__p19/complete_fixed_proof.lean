@@ -10,8 +10,8 @@ theorem polynomial_decomposition : ∃ (A B : Polynomial ℝ), P = A ^ 2 + Polyn
     hole
   have h_main : ∃ (A B : Polynomial ℝ), P = A ^ 2 + Polynomial.X * B ^ 2:=
     by
-    exfalso
-    exact h_false
-    hole
-  exact h_main
-  hole
+    --  exfalso
+    --  exact h_false
+    norm_cast
+  --  exact h_main
+  simpa

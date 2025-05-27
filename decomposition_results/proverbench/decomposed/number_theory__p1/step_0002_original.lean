@@ -1,4 +1,4 @@
-theorem h₁ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) : p ≠ 3 := by
+theorem h₁ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) : p ≠ 3 := by
   intro h
   have h₂ : p = 3 := h
   rw [h₂] at hdiv

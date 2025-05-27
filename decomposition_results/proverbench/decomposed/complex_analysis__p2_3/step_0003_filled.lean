@@ -1,4 +1,4 @@
-theorem h2 (h1 : (1 + sorry) ^ 2 = 2 * sorry) : (1 + sorry) ^ 4 = -4 := by
+theorem h2 (h1 : (1 + I) ^ 2 = 2 * I) : (1 + I) ^ 4 = -4 := by
   --  calc
   --    (1 + I) ^ 4 = ((1 + I) ^ 2) ^ 2 := by ring_nf
   --    _ = (2 * I) ^ 2 := by rw [h1]

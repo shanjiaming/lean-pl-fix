@@ -1,4 +1,0 @@
-theorem h12 (h1 : False → ∀ n ≥ 1, ∀ (A B : Matrix (Fin n) (Fin n) ℝ), A * B * A * B = 0 → B * A * B * A = 0) (h h3 : ∀ n ≥ 1, ∀ (A B : Matrix (Fin n) (Fin n) ℝ), A * B * A * B = 0 → B * A * B * A = 0) (h4 h6 : ∀ (A B : Matrix (Fin 4) (Fin 4) ℝ), A * B * A * B = 0 → B * A * B * A = 0) (A : Matrix (Fin 4) (Fin 4) ℝ := !![0, 1, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0; 0, 0, 0, 0]) (B : Matrix (Fin 4) (Fin 4) ℝ := !![0, 0, 0, 0; 0, 0, 0, 0; 1, 0, 0, 0; 0, 1, 0, 0]) (h7 : A * B * A * B = 0) (h9 : B * A * B * A = 0) (h10 : (B * A * B * A) 0 0 = 0 0 0) (h11 : (B * A * B * A) 0 0 = 0) : (B * A * B * A) 0 0 = 1 := by
-  calc
-    (B * A * B * A) 0 0 = (B * A * B * A) 0 0 := rfl
-    _ = 1 := by simp [Matrix.mul_apply, Fin.sum_univ_succ, A, B] <;> norm_num <;> rfl

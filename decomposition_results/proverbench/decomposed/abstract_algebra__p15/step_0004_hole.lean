@@ -1,0 +1,2 @@
+theorem h₂ (R : Type u_1) (inst✝ : CommRing R) (c : ZMod 3) (h : IsField ((ZMod 3)[X] ⧸ span {X ^ 3 + X ^ 2 + C c})) (h₁ : ¬c = 2) : c = 0 ∨ c = 1 := by fin_cases c <;> (try contradiction) <;> (try simp_all (config := { decide := true }))
+  hole

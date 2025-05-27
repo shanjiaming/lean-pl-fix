@@ -1,4 +1,4 @@
-theorem h₃ (h₂ : ∀ (x : ℝ), x ≠ 0 → cos x > 0 → cos x ^ sin x = rexp (Real.log (cos x) * sin x)) : ∀ᶠ (x : ℝ) in 𝓝[≠] 0, cos x > 0 :=
+theorem h₃ (h₂ : ∀ (x : ℝ), x ≠ 0 → Real.cos x > 0 → Real.cos x ^ Real.sin x = Real.exp (Real.log (Real.cos x) * Real.sin x)) : ∀ᶠ (x : ℝ) in 𝓝[≠] 0, Real.cos x > 0 :=
   by
   --  filter_upwards [isOpen_Ioo.mem_nhdsSet.mpr (by norm_num : (0 : ℝ) ∈ Set.Ioo (-(Real.pi / 2)) (Real.pi / 2)),
   --    (hasDerivAt_cos 0).eventually_ne (by norm_num : (Real.cos 0 : ℝ) ≠ 0)] with x hx hx'

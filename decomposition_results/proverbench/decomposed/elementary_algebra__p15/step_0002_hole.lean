@@ -1,4 +1,4 @@
-theorem h₁ (h : (sorry + 1) ^ 3 - sorry ^ 3 = sorry ^ 2) : sorry = 0 := by
+theorem h₁ (n : ℕ) (h : (n + 1) ^ 3 - n ^ 3 = n ^ 2) : n = 0 := by
   --  match n with
   --  | 0 => rfl
   --  | n + 1 =>

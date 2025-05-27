@@ -1,4 +1,4 @@
-theorem h₁  : sorry :=
+theorem h₁  : Tendsto (fun x => (1 - Real.exp (Real.log (Real.cos x) * Real.sin x)) / x ^ 3) (𝓝[≠] 0) (𝓝 (1 / 2)) :=
   by
   have h₂ :
     ∀ x : ℝ,

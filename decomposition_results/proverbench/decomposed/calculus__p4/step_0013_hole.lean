@@ -1,9 +1,5 @@
-theorem h₀₇ (h₀₃ : sorry) (h₀₆ : sorry) : sorry :=
+theorem h₀₇ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) : Tendsto (fun x => Real.sin (x - 3) / (x - 3)) (𝓝[≠] 3) (𝓝 1) :=
   by
-  --  apply tendsto_nhds_of_eq_on_compl_singleton _ _ _ h₀₆
-  ·
-    have h₀₈ : (3 : ℝ) ∉ ({ 3 }ᶜ : Set ℝ) := by simp
-    aesop
-  · intro x hx
-    simp at hx ⊢ <;> aesop
+  have h₀₈ : Tendsto (fun x : ℝ => (Real.sin (x - 3)) / (x - 3)) (𝓝[≠] 3) (𝓝 1) := by sorry
+  --  exact h₀₈
   hole

@@ -1,4 +1,4 @@
-theorem h₇ (x : ℝ) (h₃ : HasDerivAt (fun x => x + 1) 1 x) (h₄ : HasDerivAt (fun x => √(5 * x ^ 2 + 35)) (5 * x / √(5 * x ^ 2 + 35)) x) : HasDerivAt sorry ((1 * √(5 * x ^ 2 + 35) - (x + 1) * (5 * x / √(5 * x ^ 2 + 35))) / √(5 * x ^ 2 + 35) ^ 2) x :=
+theorem h₇ (x✝ x : ℝ) (h₃ : HasDerivAt (fun x => x + 1) 1 x) (h₄ : HasDerivAt (fun x => √(5 * x ^ 2 + 35)) (5 * x / √(5 * x ^ 2 + 35)) x) : HasDerivAt f ((1 * √(5 * x ^ 2 + 35) - (x + 1) * (5 * x / √(5 * x ^ 2 + 35))) / √(5 * x ^ 2 + 35) ^ 2) x :=
   by
   have h₈ : HasDerivAt (fun x : ℝ => (x + 1 : ℝ)) 1 x := h₃
   have h₉ : HasDerivAt (fun x : ℝ => Real.sqrt (5 * x ^ 2 + 35)) ((5 * x) / Real.sqrt (5 * x ^ 2 + 35)) x := h₄

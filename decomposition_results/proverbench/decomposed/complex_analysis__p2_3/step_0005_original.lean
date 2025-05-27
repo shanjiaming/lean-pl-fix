@@ -1,4 +1,4 @@
-theorem h4 (h1 : (1 + sorry) ^ 2 = 2 * sorry) (h2 : (1 + sorry) ^ 4 = -4) (h3 : (1 + sorry) ^ 8 = 16) : (1 + sorry) ^ 10 = 32 * sorry := by
+theorem h4 (h1 : (1 + I) ^ 2 = 2 * I) (h2 : (1 + I) ^ 4 = -4) (h3 : (1 + I) ^ 8 = 16) : (1 + I) ^ 10 = 32 * I := by
   calc
     (1 + I) ^ 10 = (1 + I) ^ 8 * (1 + I) ^ 2 :=
       by

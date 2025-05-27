@@ -1,2 +1,0 @@
-theorem h₁ (a b : ℝ) (f g : ℝ → ℝ) (I : ℕ → ℝ) (altb : a < b) (fgcont : ContinuousOn f (Set.Icc a b) ∧ ContinuousOn g (Set.Icc a b)) (fgimg : f '' Set.Icc a b ⊆ Set.Ioi 0 ∧ g '' Set.Icc a b ⊆ Set.Ioi 0) (fgint : ∫ (x : ℝ) in Set.Ioo a b, f x = ∫ (x : ℝ) in Set.Ioo a b, g x) (fneg : ∃ x, f (↑x : ℝ) ≠ g (↑x : ℝ)) (hI : ∀ n > 0, I n = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1) / g x ^ n) (n : ℕ) (hn : n > 0) : I (n + 1) = ∫ (x : ℝ) in Set.Ioo a b, f x ^ (n + 1 + 1) / g x ^ (n + 1) := by
-  rw [hI (n + 1) (by linarith)] <;> ring_nf

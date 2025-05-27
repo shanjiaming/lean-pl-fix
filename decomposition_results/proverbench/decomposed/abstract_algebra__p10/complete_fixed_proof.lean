@@ -5,7 +5,7 @@ theorem product_of_positive_reals_bound (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) 
   have h₁ : a * b * c ≤ 1 / (2 * Real.sqrt 2):=
     by
     have h₁₁ : 0 < a * b * c:= by -- positivity
-      hole
+      positivity
     have h₁₂ : 0 < a * b:= by -- positivity
       nlinarith
     have h₁₃ : 0 < a * c:= by -- positivity
@@ -33,36 +33,30 @@ theorem product_of_positive_reals_bound (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) 
       have h₁₈₁ : 0 < Real.sqrt 2 := Real.sqrt_pos.mpr (by norm_num)
       have h₁₈₂ : (a * b * c) ^ 2 ≤ 1 / 8:= by -- nlinarith [sq_nonneg (a * b * c), h₁₇]
         linarith
-      have h₁₈₃ : a * b * c ≤ 1 / (2 * Real.sqrt 2):=
+      have h₁₈₃ : a * b * c ≤ 1 / (2 * Real.sqrt 2) :=
         by
-        have h₁₈₄ : 0 < 2 * Real.sqrt 2:= by -- positivity
-          norm_num
-        have h₁₈₅ : 0 < 1 / (2 * Real.sqrt 2):= by -- positivity
-          norm_num
-        have h₁₈₆ : (a * b * c) ^ 2 ≤ (1 / (2 * Real.sqrt 2)) ^ 2:= by
-          --  calc
-          --    (a * b * c) ^ 2 ≤ 1 / 8 := h₁₈₂
-          --    _ = (1 / (2 * Real.sqrt 2)) ^ 2 := by
-          --      field_simp [Real.sqrt_eq_iff_sq_eq, pow_two, mul_assoc] <;> ring_nf <;> field_simp <;> ring_nf <;> norm_num <;>
-          --        linarith [Real.sq_sqrt (show 0 ≤ 2 by norm_num)]
-          --    _ = (1 / (2 * Real.sqrt 2)) ^ 2 := by rfl
-          hole
-        --  nlinarith [sq_nonneg (a * b * c - 1 / (2 * Real.sqrt 2))]
-        nlinarith
+        have h₁₈₄ : 0 < 2 * Real.sqrt 2 := by positivity
+        have h₁₈₅ : 0 < 1 / (2 * Real.sqrt 2) := by positivity
+        have h₁₈₆ : (a * b * c) ^ 2 ≤ (1 / (2 * Real.sqrt 2)) ^ 2 := by
+          calc
+            (a * b * c) ^ 2 ≤ 1 / 8 := h₁₈₂
+            _ = (1 / (2 * Real.sqrt 2)) ^ 2 := by
+              field_simp [Real.sqrt_eq_iff_sq_eq, pow_two, mul_assoc] <;> ring_nf <;> field_simp <;> ring_nf <;>
+                  norm_num <;>
+                linarith [Real.sq_sqrt (show 0 ≤ 2 by norm_num)]
+            _ = (1 / (2 * Real.sqrt 2)) ^ 2 := by rfl
+        nlinarith [sq_nonneg (a * b * c - 1 / (2 * Real.sqrt 2))]
       --  exact h₁₈₃
-      linarith
+      hole
     --  exact h₁₈
     linarith
-  have h₂ : 0 ≤ a * b * c:= by
-    have h₃ : 0 < a * b * c:= by -- positivity
-      hole
-    --  linarith
+  have h₂ : 0 ≤ a * b * c := by
+    have h₃ : 0 < a * b * c := by positivity
     linarith
-  have h₃ : abs (a * b * c) ≤ 1 / (2 * Real.sqrt 2):=
+  have h₃ : abs (a * b * c) ≤ 1 / (2 * Real.sqrt 2) :=
     by
     have h₄ : a * b * c ≤ 1 / (2 * Real.sqrt 2) := h₁
     have h₅ : 0 ≤ a * b * c := h₂
-    --  --  rw [abs_of_nonneg h₅] <;> linarith
-    hole
+    rw [abs_of_nonneg h₅] <;> linarith
   --  exact h₃
   linarith

@@ -1,4 +1,4 @@
-theorem h₂ (x : ℝ) (h₁ : deriv sorry x = (35 - 5 * x) / ((5 * x ^ 2 + 35) * √(5 * x ^ 2 + 35))) : deriv sorry x ≠ (35 - 5 * x ^ 2) / ((5 * x ^ 2 + 35) * √(5 * x ^ 2 + 35)) :=
+theorem h₂ (x✝ x : ℝ) (h₁ : deriv f x = (35 - 5 * x) / ((5 * x ^ 2 + 35) * √(5 * x ^ 2 + 35))) : deriv f x ≠ (35 - 5 * x ^ 2) / ((5 * x ^ 2 + 35) * √(5 * x ^ 2 + 35)) :=
   by
   intro h₃
   have h₄ : deriv f x = (35 - 5 * x) / ((5 * x ^ 2 + 35) * Real.sqrt (5 * x ^ 2 + 35)) := h₁

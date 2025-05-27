@@ -1,1 +1,0 @@
-theorem h₂ (h₀ : True) : False := by trivial

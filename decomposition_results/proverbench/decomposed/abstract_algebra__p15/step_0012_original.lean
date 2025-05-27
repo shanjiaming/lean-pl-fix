@@ -1,0 +1,2 @@
+theorem h₃ (R : Type u_1) (inst✝ : CommRing R) (c : ZMod 3) (h : c = 2) (h₁ : Irreducible (X ^ 3 + X ^ 2 + C 2)) (h₂ : (span {X ^ 3 + X ^ 2 + C 2}).IsMaximal) : IsField ((ZMod 3)[X] ⧸ span {X ^ 3 + X ^ 2 + C 2}) := by
+  exact (Ideal.Quotient.field (span {X ^ 3 + X ^ 2 + C (2 : ZMod 3)}))

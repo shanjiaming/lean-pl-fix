@@ -1,2 +1,0 @@
-theorem h₄₅ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) (h₃ : 2 * k + 1 > 0) (h : n ≤ k + 1) (h₄ h₅ : n ≤ k + 1) (h₆ : Equiv.Perm (Fin n) → sorry) (h₃₁ : {s | sorry} = Set.univ) (h₃₂ : {s | sorry}.ncard = Set.univ.ncard) (h₃₃ : {s | sorry}.ncard = n !) (h₃₅ : n ≤ k + 1) (h₃₆ : n > 0) (h₃₇ : k > 0) (h₃₈ : n ≤ k + 1) (h₃₉ : n > 0) (h₄₀ : k > 0) (h₄₁ : n ≡ 0 [MOD 2 * k + 1] ∨ n ≡ 1 [MOD 2 * k + 1] → n = 1) (h₄₃ h₄₄ : n = 1) : n ≡ 1 [MOD 2 * k + 1] := by -- rw [h₄₄] <;> simp [Nat.ModEq, Nat.add_mod, Nat.mul_mod, Nat.mod_mod] <;> omega
-  hole

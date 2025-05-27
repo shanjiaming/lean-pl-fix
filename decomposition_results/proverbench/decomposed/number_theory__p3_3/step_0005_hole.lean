@@ -1,2 +1,2 @@
-theorem h₂ (h_main_claim : sorry ∧ sorry ∧ sorry) (n : ℕ+) (hn : sorry ∧ sorry ∧ sorry) : (↑n : ℕ) ≤ 7 := by -- omega
+theorem h₂ (h_main_claim : congruence1 8 ∧ congruence2 8 ∧ congruence3 8) (n : ℕ+) (hn : congruence1 ↑n ∧ congruence2 ↑n ∧ congruence3 ↑n) (h : ¬↑n ≥ 8) : ↑n ≤ 7 := by -- omega
   hole

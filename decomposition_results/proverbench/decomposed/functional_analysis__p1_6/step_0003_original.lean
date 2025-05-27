@@ -1,0 +1,2 @@
+theorem h₁ (u v x y : ℝ) (p : ℝ × ℝ) : f p.1 p.2 = (p.1 ^ 2 + p.2 ^ 2) * rexp (-(p.1 + p.2)) := by
+  simp [f, Real.exp_neg, add_comm] <;> ring_nf <;> field_simp [Real.exp_add, Real.exp_neg, add_comm] <;> ring_nf

@@ -1,0 +1,1 @@
+theorem h₇ (h₂ : equation 0 = 1) : equation 0 = 2 * Real.cos (2 * 0 + Real.pi / 3) - √2 := by rw [simplified_equation]

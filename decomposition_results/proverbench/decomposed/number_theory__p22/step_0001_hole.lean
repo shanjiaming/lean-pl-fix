@@ -1,4 +1,4 @@
-theorem cos_pi_rational_values (p q : ℤ) (h : ∃ r, cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ)) : ∃ r ∈ {0, 1, -1, 1 / 2, -1 / 2}, cos ((↑p : ℝ) * π / (↑q : ℝ)) = (↑r : ℝ) :=
+theorem cos_pi_rational_values (p q : ℤ) (h : ∃ r, cos (↑p * π / ↑q) = ↑r) : ∃ r ∈ {0, 1, -1, 1 / 2, -1 / 2}, cos (↑p * π / ↑q) = ↑r :=
   by
   by_cases hq : q = 0
   ·

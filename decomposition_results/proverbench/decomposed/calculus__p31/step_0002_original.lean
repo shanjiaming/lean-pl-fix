@@ -1,1 +1,1 @@
-theorem h₁ (ha : 0 < sorry) : (fun x => √(sorry ^ 2 - x ^ 2)) = fun x => √(sorry ^ 2 - x ^ 2) := by rfl
+theorem h₁ (a : ℝ) (ha✝ ha : 0 < a) : (fun x => √(a ^ 2 - x ^ 2)) = fun x => √(a ^ 2 - x ^ 2) := by rfl

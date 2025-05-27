@@ -1,4 +1,4 @@
-theorem h2 (h_forward : sorry = 2 ∧ (ℚ → ℚ → sorry = sorry * sorry - sorry + 1) → ∀ (x : ℚ), sorry = x + 1) (hf : ∀ (x : ℚ), sorry = x + 1) (h1 : sorry = 2) : ℚ → ℚ → sorry = sorry * sorry - sorry + 1 :=
+theorem h2 (f : ℚ → ℚ) (h_forward : (f 1 = 2 ∧ ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1) → ∀ (x : ℚ), f x = x + 1) (hf : ∀ (x : ℚ), f x = x + 1) (h1 : f 1 = 2) : ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1 :=
   by
   intro x y
   have h₃ := hf (x * y)

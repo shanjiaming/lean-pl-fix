@@ -1,1 +1,0 @@
-theorem h₃ (h₂ : Denumerable ℚ) : Denumerable ℕ+ := by infer_instance

@@ -1,2 +1,2 @@
-theorem h₅ (h : sorry = 0) (h₁ : 3 * sorry ^ 2 - 18 * sorry + 24 = 0) (h₃ : sorry ^ 2 - 6 * sorry + 8 = 0) (h₄ : (sorry - 2) * (sorry - 4) = 0) : sorry - 2 = 0 ∨ sorry - 4 = 0 := by -- apply eq_zero_or_eq_zero_of_mul_eq_zero h₄
+theorem h₅ (x : ℝ) (h : f_deriv x = 0) (h₁ : 3 * x ^ 2 - 18 * x + 24 = 0) (h₃ : x ^ 2 - 6 * x + 8 = 0) (h₄ : (x - 2) * (x - 4) = 0) : x - 2 = 0 ∨ x - 4 = 0 := by -- apply eq_zero_or_eq_zero_of_mul_eq_zero h₄
   hole

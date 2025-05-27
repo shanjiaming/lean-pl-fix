@@ -1,3 +1,0 @@
-theorem h₉ (p : ℕ → ℝ) (hpos : ∀ (n : ℕ), p n > 0) (r : ℝ) (h_tendsto : sorry) (h₁ : ∀ n ≥ 1, 0 < p n) (h₂ : ∀ n ≥ 1, 0 < ∑ i ∈ Finset.Icc 1 n, p i) (m : ℕ) (h₆ : ¬m = 0) (h₇ : m ≥ 1) (h₈ : ∑ n ∈ Finset.Icc 1 m, p n * (↑n : ℝ) ^ 2 / (∑ i ∈ Finset.Icc 1 n, p i) ^ 2 ≥ 0) : ∑ n ∈ Finset.Icc 1 0, p n * (↑n : ℝ) ^ 2 / (∑ i ∈ Finset.Icc 1 n, p i) ^ 2 = 0 := by
-  --  simp [Finset.sum_Icc_succ_top] <;> norm_num <;> linarith [hpos 0]
-  hole

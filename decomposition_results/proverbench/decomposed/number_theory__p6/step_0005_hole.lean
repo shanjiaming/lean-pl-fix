@@ -1,2 +1,2 @@
-theorem h₂ (d : ℤ) (t : ℚ) (h_main : (↑d : ℚ) * t ^ 2 - 1 = 0 ∨ (↑d : ℚ) * t ^ 2 - 1 ≠ 0) (h : (↑d : ℚ) * t ^ 2 - 1 = 0) : 0 ≠ 1 := by -- norm_num
+theorem h₂ (d✝ d : ℤ) (t : ℚ) (h_main : ↑d * t ^ 2 - 1 = 0 ∨ ↑d * t ^ 2 - 1 ≠ 0) (h : ↑d * t ^ 2 - 1 = 0) : 0 ≠ 1 := by norm_num
   hole

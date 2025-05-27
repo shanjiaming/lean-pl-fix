@@ -1,0 +1,2 @@
+theorem h₇ (n a b c d e f : ℕ) (h_product : a * b * c * d * e * f = n ^ 5) (h_consecutive : a + 1 = b ∧ b + 1 = c ∧ c + 1 = d ∧ d + 1 = e ∧ e + 1 = f) (h₂ : a + 1 = b) (h₃ : b + 1 = c) (h₄ : c + 1 = d) (h₅ : d + 1 = e) (h₆ : e + 1 = f) : f = a + 5 := by -- omega
+  hole

@@ -1,7 +1,0 @@
-theorem h₂₂ (f : ℝ → ℝ) (c : ℕ → ℝ) (hc : ∀ (n : ℕ), c n = 0 ∨ c n = 1) (hf : ∀ (x : ℝ), f x = ∑' (n : ℕ), c n * x ^ n) (h₁ : f (2 / 3) = 3 / 2) (h_sum : Summable fun n => c n * (2 / 3) ^ n) (N : ℕ) (h₃ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (hN : ∀ n ≥ N, c n = 0) (h₅ : ∑' (n : ℕ), c n * (2 / 3) ^ n = ∑' (n : ℕ), c n * (2 / 3) ^ n) (h₆ : ∑' (n : ℕ), c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₇ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (h₈ h₉ h₁₀ h₁₁ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₁₂ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (h₁₃ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₁₄ : ∀ n ∈ Finset.range N, c n = 0 ∨ c n = 1) (k : ℕ) (h₁₆ h₁₇ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = (↑k : ℝ) / 3 ^ (N - 1)) (h₁₈ h₁₉ : (↑k : ℝ) / 3 ^ (N - 1) = 3 / 2) (h₂₀ h₂₁ : k = 3 * 3 ^ (N - 1) / 2) : 3 * 3 ^ (N - 1) % 2 = 1 :=
-  by
-  have h₂₃ : (3 : ℕ) % 2 = 1 := by sorry
-  have h₂₄ : (3 : ℕ) ^ (N - 1) % 2 = 1 := by sorry
-  have h₂₈ : (3 : ℕ) * (3 : ℕ) ^ (N - 1) % 2 = 1 := by sorry
-  --  exact h₂₈
-  hole

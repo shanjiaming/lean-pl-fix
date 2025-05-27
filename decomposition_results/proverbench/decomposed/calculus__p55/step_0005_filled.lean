@@ -1,2 +1,2 @@
-theorem h₃ (h₁ : sorry = 512) : sorry = 5 * 2 ^ 3 + -6 := by -- rfl
+theorem h₃ (h₁ : h 2 5 (-6) 3 = 512) : m_comp 2 5 (-6) 3 = 5 * 2 ^ 3 + -6 := by -- rfl
   hole

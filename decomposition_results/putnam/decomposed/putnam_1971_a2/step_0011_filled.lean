@@ -1,2 +1,0 @@
-theorem h₁₂ (P : Polynomial ℝ) (h : Polynomial.eval 0 P = 0 ∧ ∀ (x : ℝ), Polynomial.eval (x ^ 2 + 1) P = Polynomial.eval x P ^ 2 + 1) (h₁ : Polynomial.eval 0 P = 0) (h₂ : ∀ (x : ℝ), Polynomial.eval (x ^ 2 + 1) P = Polynomial.eval x P ^ 2 + 1) (h₄ : ∀ (n : ℕ), Polynomial.eval (Nat.recOn n 0 fun x a => a ^ 2 + 1) P = Nat.recOn n 0 fun x a => a ^ 2 + 1) (x : ℝ) (h₇ : ¬Polynomial.eval x P = x) (h₈ : P - Polynomial.X ≠ 0) (h₁₀ : Polynomial.eval x (P - Polynomial.X) = 0) : Polynomial.eval x (P - Polynomial.X) = 0 := by -- simpa using h₁₀
-  linarith

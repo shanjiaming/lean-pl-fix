@@ -1,0 +1,2 @@
+theorem h₅₃ (h1 : partial_t 2 π = deriv (fun τ => g 2 τ) π) (h₃ : (fun τ => g 2 τ) = fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) (h₅₁ : HasDerivAt (fun τ => 2 ^ 2 * cos τ ^ 2) (2 ^ 2 * (2 * cos π * -sin π)) π) : HasDerivAt (fun τ => τ ^ 3) (3 * π ^ 2) π := by -- simpa using (hasDerivAt_pow 3 (π : ℝ))
+  hole

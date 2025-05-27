@@ -228,4 +228,4 @@ theorem formal_statement (x y : ℤ) (hx : 2 < x) (hy : 2 < y) : ¬(∃ z : ℤ,
     --      exact h₁₆
     hole
   --  exact h₄
-  hole
+  norm_cast

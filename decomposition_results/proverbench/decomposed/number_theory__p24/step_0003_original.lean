@@ -1,4 +1,4 @@
-theorem h₂ (a : ℕ) (d : optParam ℤ ((↑a : ℤ) ^ 2 - 1)) (x y : ℤ) (m : optParam ℤ (x ^ 2 - d * y ^ 2)) (h₀ : |m| < 2 * (↑a : ℤ) + 2) (h₁ : a = 0 ∨ a ≥ 1) : a = 0 → ∃ k, k ^ 2 = |m| := by
+theorem h₂ (a : ℕ) (d : optParam ℤ (↑a ^ 2 - 1)) (x y : ℤ) (m : optParam ℤ (x ^ 2 - d * y ^ 2)) (h₀ : |m| < 2 * ↑a + 2) (h₁ : a = 0 ∨ a ≥ 1) : a = 0 → ∃ k, k ^ 2 = |m| := by
   intro h₂
   have h₃ : |m| < 2 * a + 2 := h₀
   have h₄ : a = 0 := h₂

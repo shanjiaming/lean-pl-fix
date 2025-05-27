@@ -1,4 +1,4 @@
-theorem h₅₉₄ (h₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₂ : sorry = 1) (h₄ : sorry ≥ 1) (k : ℤ) (hk : k ∈ Finset.Icc 0 (2 * sorry)) (h₅₂ : k ∈ Finset.Icc 0 (2 * sorry)) (h₅₃ : k ≥ 0) (h₅₄ : k ≤ 2 * sorry) (m : ℕ) (hm : (↑m : ℤ) = k) (h₅₆ : k = (↑m : ℤ)) (h₅₇ : m ≤ 2 * sorry) (h₅₈₁ : sorry = 1) (h₅₉₀ h₅₉₁ : m % 2 = 0) (h₅₉₂ : (↑m : ℤ) = 2 * ((↑m : ℤ) / 2)) (h₅₉₃ : sorry = 1) : sorry = 1 := by
+theorem h₅₉₄ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) (hn : ¬n = 0) (h₄ : n ≥ 1) (k : ℤ) (hk : sorry) (h₅₂ : sorry) (h₅₃ : k ≥ 0) (h₅₄ : k ≤ 2 * ↑n) (m : ℕ) (hm : ↑m = k) (h₅₆ : k = ↑m) (h₅₇ : m ≤ 2 * n) (h₅₈₁ : eval (2 * Int.ofNat (m / 2)) P = 1) (h₅₉₀ h₅₉₁ : m % 2 = 0) (h₅₉₂ : ↑m = 2 * (↑m / 2)) (h₅₉₃ : eval (2 * Int.ofNat (m / 2)) P = 1) : eval k P = 1 := by
   --  rw [h₅₆] at *
   --  simp_all [Int.ofNat_eq_coe, mul_comm] <;> ring_nf at * <;> norm_cast <;> simp_all [h₅₉₁, h₅₉₂] <;> omega
   hole

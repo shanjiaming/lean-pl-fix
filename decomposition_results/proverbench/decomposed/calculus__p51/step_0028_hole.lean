@@ -1,5 +1,5 @@
-theorem h₃₃ (h₃ :  ∀ x ∈ Set.Icc 0 (π / 4),    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * Real.log (4 * sin x + 3 * cos x))      ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x) : ∫ (x : ℝ) in Set.Icc 0 (π / 4), (3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x) =
-    1 / 50 * Real.log 2 - 1 / 25 * Real.log (7 / 3) + 9 * π / 50 :=
+theorem h₃₃ (x : ℝ) (h₃ :  ∀ x ∈ Set.Icc 0 (π / 4),    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * log (4 * sin x + 3 * cos x))      ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x) : ∫ (x : ℝ) in Set.Icc 0 (π / 4), (3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x) =
+    1 / 50 * log 2 - 1 / 25 * log (7 / 3) + 9 * π / 50 :=
   by
   have h₃₄ :
     (∫ x in Set.Icc 0 (π / 4), (3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) =

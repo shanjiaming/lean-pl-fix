@@ -1,4 +1,4 @@
-theorem h₄ (h :  (∀ (x : ℤ), Polynomial.eval x (sorry %ₘ (sorry - 1) ^ 3) = -1) ∧    ∀ (x : ℕ), Polynomial.eval x (sorry %ₘ (sorry + 1) ^ 3) = 1) (h₁ : sorry %ₘ (sorry - 1) ^ 3 = -1) (h₂ : sorry %ₘ (sorry + 1) ^ 3 = 1) (h₃ : False) : sorry = -sorry * sorry ^ 5 + sorry * sorry ^ 3 - sorry * sorry :=
+theorem h₄ (P : ℝ[X]) (hDegree : P.degree ≤ 5) (h : (∀ (x : ℝ), eval x (P %ₘ (X - 1) ^ 3) = -1) ∧ ∀ (x : ℝ), eval x (P %ₘ (X + 1) ^ 3) = 1) (h₁ : P %ₘ (X - 1) ^ 3 = -1) (h₂ : P %ₘ (X + 1) ^ 3 = 1) (h₃ : False) : P = -C (3 / 8) * X ^ 5 + C (5 / 4) * X ^ 3 - C (15 / 8) * X :=
   by
   exfalso
   exact h₃

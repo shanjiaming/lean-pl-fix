@@ -1,2 +1,3 @@
-theorem h₁  : sorry = 0 ∧ sorry = 0 ∧ sorry = 0 ∧ sorry = 0 :=
+theorem h₁  : eval (-3.5 + √(16 + √151) / 2) f = 0 ∧
+    eval (-3.5 - √(16 + √151) / 2) f = 0 ∧ eval (-3.5 + √(16 - √151) / 2) f = 0 ∧ eval (-3.5 - √(16 - √151) / 2) f = 0 :=
   by sorry

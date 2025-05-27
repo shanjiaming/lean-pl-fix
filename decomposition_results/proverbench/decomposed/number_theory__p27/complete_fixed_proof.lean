@@ -11,25 +11,25 @@ theorem no_division {x y k m n : PNat} (h : ∃ z : PNat, (x : ℕ) ^ (m : ℕ) 
     --    _ = 4 := by norm_num
     hole
   have h₂ : (4 * k * x * y - 1 : ℕ) ≥ 3:= by -- omega
-    omega
+    hole
   have h₃ : (z : ℕ) = (x : ℕ) ^ (m : ℕ) + (y : ℕ) ^ (n : ℕ):= by -- exact_mod_cast hz
-    linarith
+    hole
   have h₄ : (z : ℕ) ≥ 2:= by
     --  rw [h₃]
     have h₅ : (x : ℕ) ≥ 1 := x.2
     have h₆ : (y : ℕ) ≥ 1 := y.2
     have h₇ : (m : ℕ) ≥ 1 := m.2
     have h₈ : (n : ℕ) ≥ 1 := n.2
-    have h₉ : (x : ℕ) ^ (m : ℕ) ≥ 1:= by -- -- apply Nat.one_le_pow <;> simp_all [PNat]
+    have h₉ : (x : ℕ) ^ (m : ℕ) ≥ 1:= by -- apply Nat.one_le_pow <;> simp_all [PNat]
       hole
-    have h₁₀ : (y : ℕ) ^ (n : ℕ) ≥ 1:= by -- -- apply Nat.one_le_pow <;> simp_all [PNat]
+    have h₁₀ : (y : ℕ) ^ (n : ℕ) ≥ 1:= by -- apply Nat.one_le_pow <;> simp_all [PNat]
       hole
     --  omega
-    linarith
-  --  by_contra h₅
+    hole
+  by_contra h₅
   have h₆ : (4 * k * x * y - 1 : ℕ) ∣ (z : ℕ):= by -- assumption_mod_cast
     hole
   have h₇ : False:= by -- sorry
     hole
-  --  contradiction
+  contradiction
   hole

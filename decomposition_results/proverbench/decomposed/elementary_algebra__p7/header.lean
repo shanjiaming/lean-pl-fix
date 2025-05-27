@@ -1,5 +1,13 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+If \(f(x,y)=3x-2y\), \(g(x,y)=4x+5y\), and \(h(x,y)=x\cdot y\), \[f\left( g(5,7), h(4,5)\right).\] is 125
+-/
+
+open Polynomial
+
+noncomputable def g_at_7 : Polynomial ℤ := 4 * X + 5 * C (7 : ℤ)
+
+noncomputable def h_at_5 : Polynomial ℤ := X * C (5 : ℤ)
+
+noncomputable def f_at (x y : ℤ) : ℤ := 3 * x - 2 * y

@@ -1,2 +1,2 @@
-theorem h_main  : sorry % 3 = 2 := by -- rfl
+theorem h_main  : countPoints 2012 % 3 = 2 := by -- rfl
   hole

@@ -1,0 +1,3 @@
+theorem h6 (f✝ : ℝ → ℝ → ℝ) (R✝ : Set (ℝ × ℝ)) (f : ℝ → ℝ → ℝ := fun x y => 11 - 2 * x - 3 * y ^ 2) (R : Set (ℝ × ℝ) := Icc 1 3 ×ˢ Icc (-2) 5) (x : ℝ) (hx : x ∈ Icc 1 3) (h3 : ∫ (y : ℝ) in Icc (-2) 5, f x y = ∫ (y : ℝ) in Icc (-2) 5, 11 - 2 * x - 3 * y ^ 2) (h5 : ∫ (y : ℝ) in Icc (-2) 5, 11 - 2 * x - 3 * y ^ 2 = ∫ (y : ℝ) in -2 ..5, 11 - 2 * x - 3 * y ^ 2) : ∫ (y : ℝ) in -2 ..5, 11 - 2 * x - 3 * y ^ 2 = -14 * x - 56 := by
+  norm_num [intervalIntegral.integral_comp_sub_left, mul_comm] <;> ring_nf <;> norm_num <;> linarith
+  hole

@@ -1,4 +1,4 @@
-theorem h₁ (x : ℝ) (hx : x > 0) : Real.log x ≤ 0 ↔ x ≤ 1 := by
+theorem h₁ (x : ℝ) (hx : x > 0) : log x ≤ 0 ↔ x ≤ 1 := by
   --  constructor
   --  · intro h
   --    by_contra h₂

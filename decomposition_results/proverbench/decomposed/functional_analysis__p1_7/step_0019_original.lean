@@ -1,1 +1,1 @@
-theorem h₆ (u v : ℝ) (h : sorry = 0) (h₁ : (u ^ 2 + v ^ 2) * rexp (-(u + v)) = 0) (h₂ : u ^ 2 + v ^ 2 = 0) (h₃ : u = 0) (h₅ : u ^ 2 + v ^ 2 = 0) : v = 0 := by nlinarith [sq_nonneg u, sq_nonneg v]
+theorem h₆ (u✝ v✝ x y u v : ℝ) (h : f u v = 0) (h₁ : (u ^ 2 + v ^ 2) * rexp (-(u + v)) = 0) (h₂ : u ^ 2 + v ^ 2 = 0) (h₃ : u = 0) (h₅ : u ^ 2 + v ^ 2 = 0) : v = 0 := by nlinarith [sq_nonneg u, sq_nonneg v]

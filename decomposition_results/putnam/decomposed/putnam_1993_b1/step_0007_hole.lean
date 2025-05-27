@@ -1,2 +1,0 @@
-theorem h₅ (m : ℤ) (hm : m ∈ Set.Ioo 0 1993) (h₁ : m > 0) (h₂ h₃ : m < 1993) : (↑m : ℝ) < 1993 := by -- exact_mod_cast h₂
-  hole

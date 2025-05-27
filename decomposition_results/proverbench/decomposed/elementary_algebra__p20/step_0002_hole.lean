@@ -1,4 +1,4 @@
-theorem h_forward  : sorry = 2 ∧ (ℚ → ℚ → sorry = sorry * sorry - sorry + 1) → ∀ (x : ℚ), sorry = x + 1 :=
+theorem h_forward (f : ℚ → ℚ) : (f 1 = 2 ∧ ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1) → ∀ (x : ℚ), f x = x + 1 :=
   by
   --  intro h
   have h₁ : f 1 = 2 := h.1

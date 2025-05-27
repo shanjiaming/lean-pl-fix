@@ -1,0 +1,1 @@
+theorem h₄ (b : ℤ) (hb : b ∈ B) (hneg : b < 0) (h_main : ∃ k, b = -44 + 5 * k) (k : ℤ) (hk h₁ : b = -44 + 5 * k) (h₂ : b < 0) (h₃ : -44 + 5 * k < 0) : 5 * k < 44 := by linarith

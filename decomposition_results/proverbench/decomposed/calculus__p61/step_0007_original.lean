@@ -1,2 +1,2 @@
-theorem h₄ (h₀ : HasDerivAt (fun x => 3 ^ x) (Real.log 3) 0) (h₂ : sorry) : sorry := by
+theorem h₄ (h₀ : HasDerivAt (fun x => 3 ^ x) (Real.log 3) 0) (h₂ : Tendsto (fun x => (3 ^ x - 3 ^ 0) / (x - 0)) (𝓝[≠] 0) (𝓝 (Real.log 3))) : Tendsto (fun x => (3 ^ x - 1) / x) (𝓝[≠] 0) (𝓝 (Real.log 3)) := by
   convert h₂ using 1 <;> simp [sub_ne_zero] <;> field_simp [sub_ne_zero] <;> ring_nf <;> norm_num

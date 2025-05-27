@@ -1,4 +1,4 @@
-theorem specificElementSumDifference  : sorry + sorry + sorry - sorry - sorry - sorry = 119 :=
+theorem specificElementSumDifference (L : (Fin 3 → ℝ) →ₗ[ℝ] Fin 2 → ℝ) (K : (Fin 2 → ℝ) →ₗ[ℝ] Fin 4 → ℝ) : matrixM 0 0 + matrixM 1 1 + matrixM 2 2 - matrixM 3 0 - matrixM 3 1 - matrixM 3 2 = 119 :=
   by
   have h₀ : matrixM 0 0 = (37 : ℝ) := by sorry
   have h₁ : matrixM 1 1 = (1 : ℝ) := by sorry

@@ -6,7 +6,7 @@ theorem cos_pi_rational_values (p q : ℤ) (h : ∃ r : ℚ, cos (p * π / q) = 
     have h₁ : cos (p * π / q) = (1 : ℝ):=
       by
       have h₂ : (q : ℝ) = 0:= by -- exact_mod_cast hq
-        simpa
+        linarith
       have h₃ : (p * π / q : ℝ) = 0:= by
         --  rw [div_eq_mul_inv]
         --  simp [h₂, mul_zero] <;> ring_nf <;> field_simp [h₂] <;> ring_nf

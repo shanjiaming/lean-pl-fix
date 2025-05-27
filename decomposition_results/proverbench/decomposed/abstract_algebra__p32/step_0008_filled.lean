@@ -1,0 +1,2 @@
+theorem h3 (R : Type ?u.1622) (inst✝¹ : Ring R) (inst✝ : CharZero R) (e g f : R) (he : IsIdempotentElem e) (hg : IsIdempotentElem g) (hf : IsIdempotentElem f) (hsum : e + g + f = 0) (hf_eq h1 : f = -e - g) (h2 : e + g + f = 0) : f * f = f := by apply hf
+  hole

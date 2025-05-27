@@ -1,2 +1,0 @@
-theorem h₃₁₂ (h₁ : 0 < 4 / 9) (h₂ : 4 / 9 < 4 * √2 / 9) (x : ℝ) (hx : x ∈ Set.Ioo 0 (√2 / 3)) : 0 < x := by -- exact hx.1
-  omega

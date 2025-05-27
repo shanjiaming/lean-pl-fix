@@ -9,9 +9,9 @@ theorem f_min_value : f 0 0 = 0:=
       have h₃ : (0 : ℝ) = 0 ∧ (0 : ℝ) = 0:= by -- -- constructor <;> rfl
         norm_num
       --  rw [h₂]
-      exact h₃
+      --  exact h₃
       hole
     --  exact h₁
-    hole
+    linarith
   --  exact h
-  hole
+  linarith

@@ -1,5 +1,7 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+Prove that if \(\cos\frac pq\pi=a\) is a rational number for some \(p,q\in\mathbb{Z}\), then \(a\in\{0,\pm\frac12,\pm1\}\).
+-/
+
+open Real Rat Int

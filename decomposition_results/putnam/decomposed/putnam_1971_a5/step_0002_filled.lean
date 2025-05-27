@@ -1,2 +1,0 @@
-theorem h₁ (a b : ℤ) (hab : a > 0 ∧ b > 0 ∧ a > b) (pab : ℤ → ℤ → Prop) (hpab :  ∀ (x y : ℤ),    pab x y ↔ {s | ¬∃ m n, (↑m : ℤ) * x + (↑n : ℤ) * y = (↑s : ℤ)}.ncard = 35 ∧ ¬∃ m n, (↑m : ℤ) * x + (↑n : ℤ) * y = 58) : pab a b ↔ a = 11 ∧ b = 8 := by -- sorry
-  hole

@@ -1,8 +1,0 @@
-theorem h₁₂ (n : ℕ) (hn : n > 1) (a : Fin n → ℝ) (A : ℝ) (hA : A + ∑ i, a i ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ i, a i) ^ 2) (h_pos_n : (↑n : ℝ) - 1 > 0) (i j : Fin n) (hij : i < j) (h₁ : A + ∑ k, a k ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ k, a k) ^ 2) (h₂ : (∑ k, a k) ^ 2 = ∑ k, a k ^ 2 + 2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) (h₃ : A + ∑ k, a k ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ k, a k ^ 2 + 2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0)) (h₄ : (↑n : ℝ) - 1 > 0) (h₅ : A + ∑ k, a k ^ 2 < 1 / ((↑n : ℝ) - 1) * (∑ k, a k ^ 2 + 2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0)) (h₆ : (↑n : ℝ) - 1 > 0) (h₇ : (↑n : ℝ) > 1) (h₈ :  A <    1 / ((↑n : ℝ) - 1) * (2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) -      ((↑n : ℝ) - 2) / ((↑n : ℝ) - 1) * ∑ k, a k ^ 2) (h₉ :  1 / ((↑n : ℝ) - 1) * (∑ k, a k ^ 2 + 2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) - ∑ k, a k ^ 2 =    1 / ((↑n : ℝ) - 1) * (2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) -      ((↑n : ℝ) - 2) / ((↑n : ℝ) - 1) * ∑ k, a k ^ 2) (h₁₀ :  A <    1 / ((↑n : ℝ) - 1) * (2 * ∑ k, ∑ l, if (↑k : ℕ) < (↑l : ℕ) then a k * a l else 0) -      ((↑n : ℝ) - 2) / ((↑n : ℝ) - 1) * ∑ k, a k ^ 2) (h₁₁ : ∑ k, a k ^ 2 ≥ 0) : ((↑n : ℝ) - 2) / ((↑n : ℝ) - 1) * ∑ k, a k ^ 2 ≥ 0 :=
-  by
-  have h₁₂₁ : (n : ℝ) ≥ 2 := by sorry
-  have h₁₂₂ : ((n : ℝ) - 2) ≥ 0 := by sorry
-  have h₁₂₃ : ((n : ℝ) - 1) > 0 := by sorry
-  have h₁₂₄ : ((n : ℝ) - 2) / ((n : ℝ) - 1) ≥ 0 := by sorry
-  have h₁₂₅ : ((n : ℝ) - 2) / ((n : ℝ) - 1) * (∑ k : Fin n, (a k) ^ 2) ≥ 0 := by sorry
-  exact h₁₂₅

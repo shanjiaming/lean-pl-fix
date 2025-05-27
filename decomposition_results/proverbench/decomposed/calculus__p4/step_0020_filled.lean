@@ -1,18 +1,6 @@
-theorem h₂₄ (h₀ : sorry) (h₁ : sorry) (h₂₁ : sorry) (h₂₂ : sorry) : ∀ᶠ (x : ℝ) in 𝓝 3, (cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) = (cos (2 * x - 6) - 1) / (x - 3) ^ 2 * (1 / x) :=
+theorem h₁₄ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) (h₀₉ : Tendsto (fun x => Real.sin x / x) (𝓝[≠] 0) (𝓝 1)) (h₁₃ : Continuous fun x => x - 3) : Tendsto (fun x => x - 3) (𝓝[≠] 3) (𝓝 0) :=
   by
-  --  filter_upwards [isOpen_ne.mem_nhds (by norm_num : (3 : ℝ) ≠ 0)] with x hx
-  have h₂₅ : x ≠ 0 := by sorry
-  have h₂₆ :
-    x ≠ 3 →
-      (Real.cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) =
-        ((Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) * ((1 : ℝ) / x) := by sorry
-  --  by_cases h₂₇ : x = 3
-  --  --  · simp_all <;> norm_num
-  ·
-    have h₂₈ : x ≠ 3 := h₂₇
-    have h₂₉ : x ≠ 0 := by sorry
-    have h₃₀ :
-      (Real.cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) =
-        ((Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) * ((1 : ℝ) / x) := by sorry
-  --    exact h₃₀
+  have h₁₅ : Tendsto (fun x : ℝ => x - 3) (𝓝 3) (𝓝 (0 : ℝ)) := by sorry
+  have h₁₇ : Tendsto (fun x : ℝ => x - 3) (𝓝[≠] 3) (𝓝 (0 : ℝ)) := by sorry
+  --  exact h₁₇
   hole

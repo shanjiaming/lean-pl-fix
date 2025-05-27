@@ -1,5 +1,0 @@
-theorem h₇ (x : ℕ) (hx : x ∈ {x | 2020 ∣ x ∧ Nat.log 10 x + 1 ≤ 2020 ∧ ∃ k l, k ≥ l ∧ x = ∑ i ∈ Finset.range (k - l + 1), 10 ^ (i + l)}) (h₁ : 2020 ∣ x) (h₂ : Nat.log 10 x + 1 ≤ 2020) (h₃ : ∃ k l, k ≥ l ∧ x = ∑ i ∈ Finset.range (k - l + 1), 10 ^ (i + l)) (h₄ : x ≥ 1) (h₆ : x > 10 ^ 2019) : Nat.log 10 x ≥ 2019 := by
-  have h₈ : x ≥ 10 ^ 2019 := by sorry
-  have h₉ : Nat.log 10 x ≥ 2019 := by sorry
-  --  exact h₉
-  linarith

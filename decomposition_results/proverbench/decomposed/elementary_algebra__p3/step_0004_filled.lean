@@ -1,0 +1,6 @@
+theorem h₅ (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h1 :  a ^ 2 * (s a b c - a) + b ^ 2 * (s a b c - b) + c ^ 2 * (s a b c - c) =    (a ^ 2 * (b + c - a) + b ^ 2 * (a + c - b) + c ^ 2 * (a + b - c)) / 2) (h₂ : a > 0) (h₃ : b > 0) (h₄ : c > 0) : a ^ 3 + b ^ 3 + c ^ 3 + 3 * a * b * c ≥ a ^ 2 * b + a * b ^ 2 + a ^ 2 * c + a * c ^ 2 + b ^ 2 * c + b * c ^ 2 := by
+  --  nlinarith [sq_nonneg (a + b - c), sq_nonneg (b + c - a), sq_nonneg (c + a - b), mul_nonneg ha.le hb.le,
+  --    mul_nonneg ha.le hc.le, mul_nonneg hb.le hc.le, sq_nonneg (a - b), sq_nonneg (b - c), sq_nonneg (c - a),
+  --    mul_nonneg (sq_nonneg (a - b)) ha.le, mul_nonneg (sq_nonneg (b - c)) hb.le, mul_nonneg (sq_nonneg (c - a)) hc.le,
+  --    mul_nonneg (sq_nonneg (a - b)) hb.le, mul_nonneg (sq_nonneg (b - c)) hc.le, mul_nonneg (sq_nonneg (c - a)) ha.le]
+  hole

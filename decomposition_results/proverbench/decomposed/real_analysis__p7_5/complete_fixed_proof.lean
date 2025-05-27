@@ -20,4 +20,4 @@ theorem rolle_theorem_application : ∃! c, c ∈ Set.Ioo 0 8 ∧ HasDerivAt f 0
     --    simp_all <;> aesop
     hole
   --  exact h_main
-  hole
+  simpa

@@ -1,4 +1,4 @@
-theorem h₁  : Polynomial.eval 1 sorry = 0 :=
+theorem h₁  : eval 1 f = 0 :=
   by
   have h₁₁ : f = Polynomial.X ^ 2 + Polynomial.C 1 := rfl
   rw [h₁₁]

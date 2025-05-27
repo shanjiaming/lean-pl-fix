@@ -1,0 +1,2 @@
+theorem h3 (n : Type) (inst✝¹ : Fintype n) (inst✝ : DecidableEq n) (A B : Matrix n n ℂ) (u : n → ℂ) (hu : u ≠ 0) (hAB : A * B = B * A) (lambda : ℂ) (hB : IsEigenvector B u lambda) (h1 : B *ᵥ A *ᵥ u = (B * A) *ᵥ u) (h2 : (B * A) *ᵥ u = (A * B) *ᵥ u) : (A * B) *ᵥ u = A *ᵥ B *ᵥ u := by rw [Matrix.mulVec_mulVec] <;> simp [Matrix.mul_assoc]
+  hole

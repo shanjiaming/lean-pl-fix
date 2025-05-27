@@ -1,2 +1,0 @@
-theorem h₁₃ (g : ℝ → ℝ) (hg : (x : ℕ) → x > 0 → sorry) (h₁ : sorry) (x : ℝ) (hx : x > 0) (h₃ : sorry) (h₅ : sorry) (h₇ : sorry) (h₁₁ : sorry) (h₁₂ : sorry) : g x = (x + 1) ^ (x + 1) / x ^ x := by -- apply tendsto_nhds_unique h₁₁ h₁₂
-  hole

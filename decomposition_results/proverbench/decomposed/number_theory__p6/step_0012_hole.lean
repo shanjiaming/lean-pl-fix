@@ -1,3 +1,3 @@
-theorem h₅ (d : ℤ) (t : ℚ) (h_main : (↑d : ℚ) * t ^ 2 - 1 = 0 ∨ (↑d : ℚ) * t ^ 2 - 1 ≠ 0) (h : (↑d : ℚ) * t ^ 2 - 1 = 0) (h₂ : 0 ≠ 1) (h₃ : ((↑d : ℚ) * t ^ 2 + 1) / ((↑d : ℚ) * t ^ 2 - 1) = 0) (h₄ : 2 * t / ((↑d : ℚ) * t ^ 2 - 1) = 0) : (((↑d : ℚ) * t ^ 2 + 1) / ((↑d : ℚ) * t ^ 2 - 1)) ^ 2 - (↑d : ℚ) * (2 * t / ((↑d : ℚ) * t ^ 2 - 1)) ^ 2 = 0 :=
-  --  --  by rw [h₃, h₄] <;> norm_num <;> simp_all [div_eq_mul_inv] <;> ring_nf at * <;> norm_num at * <;> linarith
+theorem h₅ (d✝ d : ℤ) (t : ℚ) (h_main : ↑d * t ^ 2 - 1 = 0 ∨ ↑d * t ^ 2 - 1 ≠ 0) (h : ↑d * t ^ 2 - 1 = 0) (h₂ : 0 ≠ 1) (h₃ : (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1) = 0) (h₄ : 2 * t / (↑d * t ^ 2 - 1) = 0) : ((↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1)) ^ 2 - ↑d * (2 * t / (↑d * t ^ 2 - 1)) ^ 2 = 0 :=
+  by rw [h₃, h₄] <;> norm_num <;> simp_all [div_eq_mul_inv] <;> ring_nf at * <;> norm_num at * <;> linarith
   hole

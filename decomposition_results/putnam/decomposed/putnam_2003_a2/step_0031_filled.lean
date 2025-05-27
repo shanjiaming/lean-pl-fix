@@ -1,4 +1,0 @@
-theorem h₁₄ (n : ℕ) (hn : 0 < n) (a b : Fin n → ℝ) (abnneg : ∀ (i : Fin n), a i ≥ 0 ∧ b i ≥ 0) (h₁ : ¬∏ i, a i = 0) (h₂ : ¬∏ i, b i = 0) (h₃ : ∀ (i : Fin n), a i > 0) (h₄ : ∀ (i : Fin n), b i > 0) (h₅ : ∀ (i : Fin n), a i + b i > 0) (h₆ : ∏ i, a i > 0) (h₇ : ∏ i, b i > 0) (h₈ : ∏ i, (a i + b i) > 0) (h₁₀ : ∏ i, a i > 0) (h₁₁ : ∏ i, b i > 0) (h₁₂ : ∏ i, (a i + b i) > 0) (h₁₃ : (∏ i, a i) ^ (1 / (↑n : ℝ)) = ∏ i, a i ^ (1 / (↑n : ℝ))) : (∏ i, b i) ^ (1 / (↑n : ℝ)) = ∏ i, b i ^ (1 / (↑n : ℝ)) := by
-  --  rw [show (∏ i : Fin n, b i : ℝ) ^ ((1 : ℝ) / n) = ∏ i : Fin n, ((b i : ℝ) ^ ((1 : ℝ) / n)) by
-  --      rw [← Finset.prod_rpow] <;> simp [h₁₁.le, h₇.le, Real.rpow_nonneg, (abnneg _).2] <;> positivity]
-  hole

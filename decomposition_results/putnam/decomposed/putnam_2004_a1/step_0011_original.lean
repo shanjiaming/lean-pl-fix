@@ -1,5 +1,0 @@
-theorem h₇₃ (S : (ℕ → Fin 2) → ℕ → ℝ) (hS : ∀ (attempts : ℕ → Fin 2), ∀ N ≥ 1, S attempts N = (↑(∑ i, (↑(attempts (↑i : ℕ)) : ℕ)) : ℝ) / (↑N : ℝ)) (attempts : ℕ → Fin 2) (a b : ℕ) (h : 1 ≤ a ∧ a < b ∧ S attempts a < 0.8 ∧ S attempts b > 0.8) (h₁ : 1 ≤ a) (h₂ : a < b) (h₅ : S attempts a = (∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ)) / (↑a : ℝ)) (h₆ : S attempts b = (∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ)) / (↑b : ℝ)) (h₃ : (∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ)) / (↑a : ℝ) < 4 / 5) (h₄ : 4 / 5 < (∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ)) / (↑b : ℝ)) (h₇₂ : ∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ) ≥ 4 / 5 * (↑a : ℝ)) : (∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ)) / (↑a : ℝ) ≥ 4 / 5 :=
-  by
-  have h₇₄ : 0 < (a : ℝ) := by sorry
-  have h₇₅ : ((∑ i : Fin a, (attempts i).1 : ℝ) : ℝ) / a ≥ (4 : ℝ) / 5 := by sorry
-  exact h₇₅

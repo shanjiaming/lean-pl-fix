@@ -1,4 +1,4 @@
-theorem h₈ (b : ℤ) (hb : b ^ 2 ≡ sorry [ZMOD sorry]) (h₂ : b ^ 2 ≡ sorry [ZMOD sorry]) (h₃ : sorry ^ sorry ≡ (b ^ 2) ^ sorry [ZMOD sorry]) (h₄ : (sorry ^ sorry) ^ 2 ≡ (b ^ 2) ^ (2 * sorry) [ZMOD sorry]) (h₅ : sorry = 4 * sorry - 1) (h₆ : 4 * sorry = sorry + 1) (h₇ : b ^ sorry ≡ b [ZMOD sorry]) : b ^ (sorry + 1) ≡ b ^ 2 [ZMOD sorry] := by
+theorem h₈ (p k : ℕ) (hp : p = 4 * k - 1) (hp_prime : Nat.Prime p) (a : ℤ) (ha : ∃ x, x ^ 2 ≡ a [ZMOD ↑p]) (b : ℤ) (hb h₂ : b ^ 2 ≡ a [ZMOD ↑p]) (h₃ : a ^ k ≡ (b ^ 2) ^ k [ZMOD ↑p]) (h₄ : (a ^ k) ^ 2 ≡ (b ^ 2) ^ (2 * k) [ZMOD ↑p]) (h₅ : p = 4 * k - 1) (h₆ : 4 * k = p + 1) (h₇ : b ^ p ≡ b [ZMOD ↑p]) : b ^ (p + 1) ≡ b ^ 2 [ZMOD ↑p] := by
   calc
     (b : ℤ) ^ (p + 1 : ℕ) = (b : ℤ) ^ (p : ℕ) * (b : ℤ) := by
       ring_nf <;> simp [Nat.cast_add, Nat.cast_one, pow_add, pow_one] <;> ring_nf

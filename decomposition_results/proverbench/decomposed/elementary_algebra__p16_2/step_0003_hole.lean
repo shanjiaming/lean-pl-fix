@@ -1,2 +1,2 @@
-theorem h  : 7 = 7 := by -- rfl
+theorem h (r : ℝ) : 7 = 7 := by -- rfl
   hole

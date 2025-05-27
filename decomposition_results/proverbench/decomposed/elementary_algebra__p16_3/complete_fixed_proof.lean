@@ -5,4 +5,4 @@ theorem solve_equation : r = (7 : ℝ) ↔ given_equation r:=
     --  exact isolate_r r
     hole
   --  exact h_main
-  hole
+  simpa

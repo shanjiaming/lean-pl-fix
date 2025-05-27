@@ -1,4 +1,4 @@
-theorem h₁ (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) : ∃ k p, 0 < k ∧ k ≤ n ∧ |(↑k : ℝ) * α - (↑p : ℝ)| < 1 / ((↑n : ℝ) + 1) :=
+theorem h₁ (α✝ : ℝ) (n✝ : ℕ) (α : ℝ) (hα : Irrational α) (n : ℕ) (hn : 0 < n) : ∃ k p, 0 < k ∧ k ≤ n ∧ |↑k * α - ↑p| < 1 / (↑n + 1) :=
   by
   have h₂ :
     ∃ (i j : ℕ),

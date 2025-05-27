@@ -1,2 +1,0 @@
-theorem h2 (S : Type u_1) (inst✝ : CommSemigroup S) (a b c : S) (hS : ∀ (x y : S), ∃ z, x * z = y) (habc : a * c = b * c) (e : S) (he : ∀ (x : S), x * e = x) (z : S) (hz : c * z = e) : a * e = a := by apply he
-  hole

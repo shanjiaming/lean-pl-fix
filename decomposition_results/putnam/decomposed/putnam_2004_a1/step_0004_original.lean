@@ -1,4 +1,0 @@
-theorem h₅₁ (S : (ℕ → Fin 2) → ℕ → ℝ) (hS : ∀ (attempts : ℕ → Fin 2), ∀ N ≥ 1, S attempts N = (↑(∑ i, (↑(attempts (↑i : ℕ)) : ℕ)) : ℝ) / (↑N : ℝ)) (attempts : ℕ → Fin 2) (a b : ℕ) (h : 1 ≤ a ∧ a < b ∧ S attempts a < 0.8 ∧ S attempts b > 0.8) (h₁ : 1 ≤ a) (h₂ : a < b) (h₃ : S attempts a < 0.8) (h₄ : S attempts b > 0.8) : ∀ N ≥ 1, S attempts N = (∑ i, (↑(↑(attempts (↑i : ℕ)) : ℕ) : ℝ)) / (↑N : ℝ) :=
-  by
-  intro N hN
-  exact hS attempts N hN

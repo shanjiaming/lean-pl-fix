@@ -1,4 +1,4 @@
-theorem h₂ (f : ℂ → ℂ) (hf : sorry) (h : ℂ → 1 ≤ sorry) (h₁ : sorry ∧ (ℂ → sorry ≤ 1)) : ∃ C, ℂ → sorry ≤ C :=
+theorem h₂ (f : ℂ → ℂ) (hf : Entire f) (h : ℂ → 1 ≤ sorry) (h₁ : (Entire fun z => 1 / f z) ∧ (ℂ → sorry ≤ 1)) : ∃ C, ℂ → sorry ≤ C :=
   by
   refine' ⟨1, _⟩
   intro z

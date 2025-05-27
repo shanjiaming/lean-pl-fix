@@ -1,2 +1,2 @@
-theorem h₂  : sorry = 2 ^ (5 * 3 + -6) := by -- rfl
+theorem h₂  : h 2 5 (-6) 3 = 2 ^ (5 * 3 + -6) := by -- rfl
   hole

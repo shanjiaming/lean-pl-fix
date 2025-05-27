@@ -1,2 +1,0 @@
-theorem h₃ (n : ℕ) (hn : n ≥ 2) (A : Finset ℝ → Set ℝ) (hA : A = fun S => {x | ∃ a ∈ S, ∃ b ∈ S, a ≠ b ∧ (a + b) / 2 = x}) : (Finset.image (fun i => (↑i : ℝ)) (Finset.range n)).card = n := by
-  simp [Finset.card_image_of_injective, Function.Injective] <;> simp_all [Finset.card_range] <;> norm_num

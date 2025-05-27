@@ -1,0 +1,3 @@
+theorem h₈ (P : Polynomial ℤ) (m : ℤ) (h_div : ∀ (x : ℤ), m ∣ Polynomial.eval x P) (hP : ¬P = 0) (h₂ : ∀ (x : ℤ), m ∣ Polynomial.eval x P) (h₃ : P ≠ 0) (i : ℕ) (hi : i ∈ Finset.range (P.natDegree + 1)) (h₇ : m ∣ Polynomial.eval (↑i) P) : m ∣ (-1) ^ (P.natDegree - i) * ↑(P.natDegree.choose i) * Polynomial.eval (↑i) P := by
+  --  exact dvd_mul_of_dvd_right h₇ _
+  hole

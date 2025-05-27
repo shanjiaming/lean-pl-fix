@@ -1,2 +1,2 @@
-theorem h₅₈₃ (h₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₂ : sorry = 1) (h₄ : sorry ≥ 1) (k : ℤ) (hk : k ∈ Finset.Icc 0 (2 * sorry)) (h₅₂ : k ∈ Finset.Icc 0 (2 * sorry)) (h₅₃ : k ≥ 0) (h₅₄ : k ≤ 2 * sorry) (m : ℕ) (hm : (↑m : ℤ) = k) (h₅₆ : k = (↑m : ℤ)) (h₅₇ : m ≤ 2 * sorry) : m ≤ 2 * sorry := by -- exact h₅₇
+theorem h₅₈₃ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) (hn : ¬n = 0) (h₄ : n ≥ 1) (k : ℤ) (hk : sorry) (h₅₂ : sorry) (h₅₃ : k ≥ 0) (h₅₄ : k ≤ 2 * ↑n) (m : ℕ) (hm : ↑m = k) (h₅₆ : k = ↑m) (h₅₇ : m ≤ 2 * n) : m ≤ 2 * n := by -- exact h₅₇
   hole

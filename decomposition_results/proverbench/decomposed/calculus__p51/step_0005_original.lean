@@ -1,5 +1,5 @@
-theorem h₃  : ∀ x ∈ Set.Icc 0 (π / 4),
-    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * Real.log (4 * sin x + 3 * cos x))
+theorem h₃ (x : ℝ) : ∀ x ∈ Set.Icc 0 (π / 4),
+    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * log (4 * sin x + 3 * cos x))
       ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x :=
   by
   intro x hx

@@ -1,2 +1,2 @@
-theorem h₅ (b : ℤ) (hb : b ^ 2 ≡ sorry [ZMOD sorry]) (h₂ : b ^ 2 ≡ sorry [ZMOD sorry]) (h₃ : sorry ^ sorry ≡ (b ^ 2) ^ sorry [ZMOD sorry]) (h₄ : (sorry ^ sorry) ^ 2 ≡ (b ^ 2) ^ (2 * sorry) [ZMOD sorry]) : sorry = 4 * sorry - 1 := by -- omega
-  hole
+theorem h₅ (p k : ℕ) (hp : p = 4 * k - 1) (hp_prime : Nat.Prime p) (a : ℤ) (ha : ∃ x, x ^ 2 ≡ a [ZMOD ↑p]) (b : ℤ) (hb h₂ : b ^ 2 ≡ a [ZMOD ↑p]) (h₃ : a ^ k ≡ (b ^ 2) ^ k [ZMOD ↑p]) (h₄ : (a ^ k) ^ 2 ≡ (b ^ 2) ^ (2 * k) [ZMOD ↑p]) : p = 4 * k - 1 := by -- omega
+  linarith

@@ -1,2 +1,0 @@
-theorem h₂ (assmption : ∀ (p : ℕ), Nat.Prime p ∧ p > 2 → ((∃ m n, (↑p : ℤ) = m ^ 2 + n ^ 2) ↔ p ≡ 1 [MOD 4])) (p : ℕ) (h : p ∈ ({p | Nat.Prime p ∧ p ≡ 1 [MOD 8]}, {p | Nat.Prime p ∧ p ≡ 5 [MOD 8]}).1) : Nat.Prime p ∧ p ≡ 1 [MOD 8] := by -- simpa [Set.mem_setOf_eq, Prod.fst] using h
-  hole

@@ -1,2 +1,0 @@
-theorem h3 (n : ℕ) (hn : n ≥ 1) (k : (↑(Set.Icc 1 n) : Type)) (fiter : ((↑(Set.Icc 1 n) : Type) → (↑(Set.Icc 1 n) : Type)) → Prop) (hfiter :  ∀ (f : (↑(Set.Icc 1 n) : Type) → (↑(Set.Icc 1 n) : Type)), fiter f ↔ ∀ (x : (↑(Set.Icc 1 n) : Type)), ∃ j, f^[j] x ≤ k) (h2 : 1 ≤ 1) : 1 ≤ n := by -- linarith
-  linarith

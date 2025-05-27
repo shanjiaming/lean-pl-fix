@@ -1,1 +1,1 @@
-theorem h₂ (p : ℕ) (hp : Nat.Prime p) (h_main : p = 2 ∨ p ≠ 2) (h_p_eq_2 : p = 2) (h₁ : 1 ^ 2 + 0 ^ 2 + 1 = 2) : (1 ^ 2 + 0 ^ 2 + 1) % (↑p : ℤ) = 0 := by rw [h_p_eq_2] <;> norm_num
+theorem h₂ (p : ℕ) (hp : Nat.Prime p) (h_main : p = 2 ∨ p ≠ 2) (h_p_eq_2 : p = 2) (h₁ : 1 ^ 2 + 0 ^ 2 + 1 = 2) : (1 ^ 2 + 0 ^ 2 + 1) % ↑p = 0 := by rw [h_p_eq_2] <;> norm_num

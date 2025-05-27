@@ -1,4 +1,4 @@
-theorem h_false  : False := by
+theorem h_false (P : Polynomial ℝ) (hP : ∀ x ≥ 0, Polynomial.eval x P ≥ 0) : False := by
   classical
   exfalso
   have h₁ : False := by

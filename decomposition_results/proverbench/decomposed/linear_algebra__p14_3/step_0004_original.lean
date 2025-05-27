@@ -1,0 +1,1 @@
+theorem h₃ (n : Type u) (inst✝² : Fintype n) (inst✝¹ : DecidableEq n) (K : Type u_1) (inst✝ : Field K) (A B P : Matrix n n K) (hP_unit : IsUnit P.det) (hP h₁ : B = P⁻¹ * A * P) (h₂ : B.det = (P⁻¹ * A * P).det) : (P⁻¹ * A * P).det = (P⁻¹ * (A * P)).det := by rw [← Matrix.mul_assoc] <;> simp [Matrix.mul_assoc]

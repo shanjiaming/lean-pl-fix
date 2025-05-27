@@ -1,0 +1,1 @@
+theorem h₈ (x✝ x : ℕ → ℝ) (L : ℝ) (hL h₃ : Tendsto x atTop (𝓝 L)) (h₄ h₆ : Tendsto (fun n => x n - L) atTop (𝓝 0)) : 1 > 0 := by norm_num

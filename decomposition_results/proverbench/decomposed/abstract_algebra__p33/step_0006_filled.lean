@@ -1,0 +1,3 @@
+theorem h₄ (n : ℕ) (x : ℝ) (h₁ : eval (x ^ 2) (16 * (X /ₘ 4) ^ n) = 16 * eval (x ^ 2) ((X /ₘ 4) ^ n)) (h₂ : eval (2 * x) (16 * (X /ₘ 4) ^ n) = 16 * eval (2 * x) ((X /ₘ 4) ^ n)) : eval (x ^ 2) ((X /ₘ 4) ^ n) = eval (x ^ 2) (X /ₘ 4) ^ n :=
+  --  by simp [eval_pow]
+  hole

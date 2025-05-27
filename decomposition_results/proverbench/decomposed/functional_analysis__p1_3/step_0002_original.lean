@@ -1,4 +1,4 @@
-theorem h1 (x y : ℝ) : sorry = fun x y => (x ^ 2 + (y - x) ^ 2) * rexp (-y) :=
+theorem h1 (u v x✝ y✝ x y : ℝ) : g = fun x y => (x ^ 2 + (y - x) ^ 2) * rexp (-y) :=
   by
   funext x y
   calc

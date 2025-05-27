@@ -1,0 +1,2 @@
+theorem h₆ (h₁ : √65 = √5 * √13) (h₂ : RHS = (2 * √13 - 5 * (√5 * √13)) / 52) (h₃ : RHS = (2 - 5 * √5) * √13 / 52) (h₄ : LHS = (2 - 5 * √5) / (4 * √13)) (h₅ : LHS = (2 - 5 * √5) * √13 / 52) : LHS = RHS := by -- rw [h₅, h₃] <;> ring_nf <;> field_simp <;> ring_nf
+  linarith

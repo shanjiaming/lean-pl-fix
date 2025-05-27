@@ -3,4 +3,4 @@ theorem h₄₁ (f : ℝ → ℝ) (S : Finset ℝ) (h₀ : ∀ (x : ℝ), -1 ≤
   have h₄₂ := h₃ 0
   have h₄₃ := h₄₂ 0
   --  exact h₄₃
-  hole
+  norm_cast

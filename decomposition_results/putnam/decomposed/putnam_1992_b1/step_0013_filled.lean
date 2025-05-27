@@ -1,2 +1,0 @@
-theorem h₃ (n : ℕ) (hn : n ≥ 2) (A : Finset ℝ → Set ℝ) (hA : A = fun S => {x | ∃ a ∈ S, ∃ b ∈ S, a ≠ b ∧ (a + b) / 2 = x}) (h₁ : (fun n => 2 * (↑n : ℤ) - 3) n ∈ {k | ∃ S, S.card = n ∧ k = (↑(A S).ncard : ℤ)}) (k : ℤ) (hk : k ∈ {k | ∃ S, S.card = n ∧ k = (↑(A S).ncard : ℤ)}) : ∃ S, S.card = n ∧ k = (↑(A S).ncard : ℤ) := by -- simpa using hk
-  simpa

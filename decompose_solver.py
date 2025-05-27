@@ -1,8 +1,10 @@
-from lean_interact import TempRequireProject, LeanREPLConfig, LeanServer, AutoLeanServer, Command
+from lean_interact import LocalProject, TempRequireProject, LeanREPLConfig, LeanServer, AutoLeanServer, Command
 import re
 from typing import Dict, Optional
 from unified_problem_manager import Problem, problem_manager
 import concurrent.futures
+
+localprojectdir = "../matheye/benchmarks/"
 
 # def throw_head(input_str: str) -> str:
 #     """
@@ -755,10 +757,6 @@ def fix_complete_proof(root_node, fix_single_proof_func: callable):
     return reconstructed_proof
 
 
-config = LeanREPLConfig(verbose=True, project=TempRequireProject("mathlib"))
-
-server = LeanServer(config)
-
 def remove_lean_comments(lean_code: str) -> str:
     """
     Removes comments from a Lean code string.
@@ -967,7 +965,7 @@ class UnifiedLeanEnvironment:
     """
     
     def __init__(self):
-        self.config = LeanREPLConfig(verbose=True, project=TempRequireProject("mathlib"))
+        self.config = LeanREPLConfig(verbose=True, project=LocalProject(localprojectdir))
         self.server = LeanServer(self.config)
         self._header_envs: Dict[str, str] = {}  # header_content -> env_id
     
@@ -1022,12 +1020,12 @@ class UnifiedLeanEnvironment:
                 # If we got here due to exception, don't wait
                 executor.shutdown(wait=False)
         
-        if env > 100:
+        if env > 15:
             self.reset()
         return ret
     
     def reset(self):
-        self.server = LeanServer(self.config) 
+        self.server.restart()
         self._header_envs.clear()
 
 # Global unified environment instance

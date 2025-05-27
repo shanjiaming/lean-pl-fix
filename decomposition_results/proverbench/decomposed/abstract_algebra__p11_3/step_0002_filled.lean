@@ -1,4 +1,4 @@
-theorem h₁  : sorry := by
+theorem h₁  : f.IsRoot 1 := by
   --  rw [IsRoot]
-  exact f_one_eq_zero
+  --  exact f_one_eq_zero
   hole

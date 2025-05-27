@@ -1,2 +1,0 @@
-theorem h13 (f : Polynomial ℤ) (hf : ∀ (n : ℕ), f.coeff n ≥ 0) (n : ℤ) (hn : n > 0) (m : ℕ) (hm : m > 0) (hm' : f.coeff m > 0) (h2 h9 : ∑ i ∈ f.support, f.coeff i ≥ f.coeff m) (h10 : Polynomial.eval 1 f = ∑ i ∈ f.support, f.coeff i) (h11 : f.coeff m > 0) (h12 : Polynomial.eval 1 f ≥ f.coeff m) : Polynomial.eval 1 f > 0 := by -- linarith
-  linarith

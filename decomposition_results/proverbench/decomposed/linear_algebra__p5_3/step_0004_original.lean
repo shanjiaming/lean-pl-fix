@@ -1,1 +1,1 @@
-theorem h₃ (R : Type u_1) (inst✝ : CommRing R) (A : Matrix sorry sorry R) (i : sorry) (j : sorry) (h : i ≠ j) (h₁ : sorry = -sorry) (h₂ : sorry = -sorry) : sorry = -sorry ∧ sorry = -sorry := by exact ⟨h₁, h₂⟩
+theorem h₃ (n : Type u_1) (inst✝² : Fintype n) (inst✝¹ : DecidableEq n) (R : Type u_2) (inst✝ : CommRing R) (A : Matrix n n R) (i j : n) (h : i ≠ j) (h₁ : (swapRows A i j).det = -A.det) (h₂ : (swapColumns A i j).det = -A.det) : (swapRows A i j).det = -A.det ∧ (swapColumns A i j).det = -A.det := by exact ⟨h₁, h₂⟩

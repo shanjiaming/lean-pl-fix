@@ -1,8 +1,1 @@
-theorem h₂₃ (h₀ : sorry) (h₁ : sorry) (h₂₁ : sorry) (h₂₂ : sorry) : (fun x => (cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x)) =ᶠ[𝓝 3] fun x =>
-    (cos (2 * x - 6) - 1) / (x - 3) ^ 2 * (1 / x) :=
-  by
-  have h₂₄ :
-    ∀ᶠ (x : ℝ) in 𝓝 3,
-      (Real.cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) =
-        ((Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) * ((1 : ℝ) / x) := by sorry
-  exact h₂₄
+theorem h₁₃ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) (h₀₉ : Tendsto (fun x => Real.sin x / x) (𝓝[≠] 0) (𝓝 1)) : Continuous fun x => x - 3 := by continuity

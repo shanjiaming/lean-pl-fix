@@ -8,4 +8,4 @@ theorem matrix_invertibility : ∃ (inv : Matrix (Fin 2) (Fin 2) ℝ), A * inv =
     --  exact ⟨h₁, h₂, rfl⟩
     hole
   --  exact h_main
-  hole
+  norm_cast

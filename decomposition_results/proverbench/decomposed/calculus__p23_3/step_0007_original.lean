@@ -1,0 +1,2 @@
+theorem h₅₂ (n : ℕ) (h₁ : a_n = fun n => (1 + (2 / 3) ^ n) / (3 * (1 - (2 / 3) ^ (n + 1)))) (h₂ : Tendsto (fun n => (2 / 3) ^ n) Filter.atTop (nhds 0)) (h₄ : (fun n => (2 / 3) ^ (n + 1)) = fun n => 2 / 3 * (2 / 3) ^ n) (h₅₁ : Tendsto (fun n => (2 / 3) ^ n) Filter.atTop (nhds 0)) : Tendsto (fun n => 2 / 3 * (2 / 3) ^ n) Filter.atTop (nhds (2 / 3 * 0)) := by
+  convert Filter.Tendsto.const_mul (2 / 3 : ℝ) h₅₁ using 1 <;> simp [mul_comm]

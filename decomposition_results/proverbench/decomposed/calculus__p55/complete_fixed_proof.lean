@@ -12,9 +12,9 @@ theorem specific_example : h 2 5 (-6) 3 = 512 ∧ m_comp 2 5 (-6) 3 = 34:=
     have h₃ : m_comp 2 5 (-6) 3 = 5 * (2 : ℝ) ^ 3 + (-6 : ℝ):= by -- rfl
       hole
     --  rw [h₃]
-    norm_num [Real.rpow_nat_cast, pow_succ] <;> norm_num <;> rfl
-    hole
+    --  norm_num [Real.rpow_nat_cast, pow_succ] <;> norm_num <;> rfl
+    linarith
   have h₃ : h 2 5 (-6) 3 = 512 ∧ m_comp 2 5 (-6) 3 = 34:= by -- exact ⟨h₁, h₂⟩
     hole
   --  exact h₃
-  hole
+  simpa

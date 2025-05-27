@@ -1,0 +1,1 @@
+theorem h₄ (h₁ : √65 = √5 * √13) (h₂ : RHS = (2 * √13 - 5 * (√5 * √13)) / 52) (h₃ : RHS = (2 - 5 * √5) * √13 / 52) : LHS = (2 - 5 * √5) / (4 * √13) := by rw [LHS] <;> ring_nf <;> field_simp <;> ring_nf

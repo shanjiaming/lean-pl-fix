@@ -1,4 +1,4 @@
-theorem verify_inverse  : sorry * sorry = 1 ∧ sorry * sorry = 1 :=
+theorem verify_inverse  : A * A_inv = 1 ∧ A_inv * A = 1 :=
   by
   have h1 : A * A_inv = 1 := by sorry
   have h2 : A_inv * A = 1 := by sorry

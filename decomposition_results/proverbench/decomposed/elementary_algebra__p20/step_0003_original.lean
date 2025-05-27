@@ -1,4 +1,4 @@
-theorem h₃ (h : sorry = 2 ∧ (ℚ → ℚ → sorry = sorry * sorry - sorry + 1)) (h₁ : sorry = 2) (h₂ : ℚ → ℚ → sorry = sorry * sorry - sorry + 1) : sorry = 1 := by
+theorem h₃ (f : ℚ → ℚ) (h : f 1 = 2 ∧ ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1) (h₁ : f 1 = 2) (h₂ : ∀ (x y : ℚ), f (x * y) = f x * f y - f (x + y) + 1) : f 0 = 1 := by
   have h₄ := h₂ 0 0
   have h₅ := h₂ 1 0
   have h₆ := h₂ 0 1

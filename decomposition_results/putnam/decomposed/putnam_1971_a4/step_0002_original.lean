@@ -1,1 +1,0 @@
-theorem h₁ (ε : ℝ) (hε : 0 < ε ∧ ε < 1) (P : ℕ → ℝ → MvPolynomial (Fin 2) ℝ) (hP :  P = fun n δ =>    (MvPolynomial.X 0 + MvPolynomial.X 1) ^ n *      (MvPolynomial.X 0 ^ 2 -          (MvPolynomial.C : ℝ → MvPolynomial (Fin 2) ℝ) (2 - δ) * MvPolynomial.X 0 * MvPolynomial.X 1 +        MvPolynomial.X 1 ^ 2)) : False := by sorry

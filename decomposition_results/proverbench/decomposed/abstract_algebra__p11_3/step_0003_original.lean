@@ -1,4 +1,4 @@
-theorem h₂ (h₁ : sorry) : ∀ (y : sorry), sorry → y = sorry := by
+theorem h₂ (h₁ : f.IsRoot 1) : ∀ (y : Z2), f.IsRoot y → y = 1 := by
   intro y h_y
   have h₃ : y = 0 ∨ y = 1 := by sorry
   cases h₃ with

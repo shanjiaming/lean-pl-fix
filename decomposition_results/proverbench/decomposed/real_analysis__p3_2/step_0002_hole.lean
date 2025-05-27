@@ -1,0 +1,2 @@
+theorem h_cont (f : ℝ → ℝ) (m : ℝ) (hf : ContinuousOn f open_unit_interval) (h_zero : f 0 = 0) (h_diff : DifferentiableAt ℝ f 0) : ContinuousAt f 0 := by -- exact h_diff.continuousAt
+  hole

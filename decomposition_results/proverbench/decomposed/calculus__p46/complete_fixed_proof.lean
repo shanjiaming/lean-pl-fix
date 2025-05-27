@@ -8,7 +8,7 @@ theorem integral_sqrt_x_minus_5 (x : ℝ) : ∫ (x : ℝ), Real.sqrt (x - 5) = (
     by
     --  exfalso
     --  exact h₁
-    hole
+    norm_cast
   have h₁ : False:= by
     have h₂ : (∫ (x : ℝ), Real.sqrt (x - 5)) = (∫ (x : ℝ), Real.sqrt (x - 5)) := rfl
     --  sorry

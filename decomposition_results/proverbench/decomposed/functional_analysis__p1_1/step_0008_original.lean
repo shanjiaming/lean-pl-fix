@@ -1,0 +1,3 @@
+theorem h7 (u✝ v✝ x y u v : ℝ) (h1 : deriv (fun u => f u v) u = deriv (fun u => (u ^ 2 + v ^ 2) * rexp (-(u + v))) u) (h3 : HasDerivAt (fun u => u ^ 2 + v ^ 2) (2 * u) u) (h4 : HasDerivAt (fun u => rexp (-(u + v))) (-rexp (-(u + v))) u) : HasDerivAt (fun u => (u ^ 2 + v ^ 2) * rexp (-(u + v))) (2 * u * rexp (-(u + v)) + (u ^ 2 + v ^ 2) * -rexp (-(u + v)))
+    u :=
+  by convert h3.mul h4 using 1 <;> ring

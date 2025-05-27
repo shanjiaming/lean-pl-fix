@@ -1,7 +1,4 @@
-theorem h₆₄ (h₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₂ : sorry = 1) (h₃ : sorry = 0) (h₅ : sorry = 0) (h₆₁ : ∀ k ≤ 2 * sorry, sorry = 1) (h₆₂ : sorry = 1) (h₆₃ : sorry = 0) : sorry = 1 := by
-  subst_vars
-  have h₆₅ := h₆₁ 0 (by norm_num)
-  have h₆₆ := h₆₁ 0 (by norm_num)
-  simp at h₆₅ h₆₆
-  have h₆₇ : P = 1 := by sorry
-  exact h₆₇
+theorem h₇ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) (hn : ¬n = 0) (h₄ : n ≥ 1) (h₅ : P = 1) (h₆ : P.natDegree = 0) : n = 0 := by
+  have h₇₁ : P.natDegree = n := hP
+  have h₇₂ : P.natDegree = 0 := h₆
+  linarith

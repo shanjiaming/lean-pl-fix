@@ -1,2 +1,0 @@
-theorem h₁ (u v m : ℝ) (hu : 0 < u) (hv : 0 < v) (hm : 1 < m) (h_main_forward :  (∃ x > 0, ∃ y > 0, u * x + v * y = 1 ∧ x ^ m + y ^ m = 1 ∧ u = x ^ (m - 1) ∧ v = y ^ (m - 1)) →    ∃ n, u ^ n + v ^ n = 1 ∧ m⁻¹ + n⁻¹ = 1) (n : ℝ) (hn1 : u ^ n + v ^ n = 1) (hn2 : m⁻¹ + n⁻¹ = 1) : 0 < m - 1 := by -- linarith
-  linarith

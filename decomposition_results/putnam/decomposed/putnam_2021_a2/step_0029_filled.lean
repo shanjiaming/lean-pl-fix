@@ -1,4 +1,0 @@
-theorem h₁₆ (g : ℝ → ℝ) (hg : (x : ℕ) → x > 0 → sorry) (h₁ : sorry) (x : ℝ) (hx : x > 0) (h₃ : sorry) (h₄ h₆ : g x = (x + 1) ^ (x + 1) / x ^ x) (h₈ h₉ : 0 < x) (h₁₁ : (x + 1) ^ (x + 1) / x ^ x / x = (x + 1) ^ (x + 1) / x ^ x / x) (h₁₂ : (x + 1) ^ (x + 1) / x ^ x = (x + 1) ^ (x + 1) / x ^ x) (h₁₃ : (x + 1) ^ (x + 1) / x ^ x / x = (x + 1) ^ (x + 1) / (x ^ x * x)) : x ^ x * x = x ^ (x + 1) := by
-  --  rw [show (x : ℝ) ^ (x + 1) = (x : ℝ) ^ x * x by
-  --      rw [Real.rpow_add (by positivity : (x : ℝ) > 0), Real.rpow_one] <;> ring]
-  hole

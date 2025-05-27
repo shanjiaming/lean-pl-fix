@@ -1,1 +1,0 @@
-theorem h4 (S : Type u_1) (inst✝ : CommSemigroup S) (a b c : S) (hS : ∀ (x y : S), ∃ z, x * z = y) (habc : a * c = b * c) (e : S) (he : a * e = a) (x z : S) (hz : a * z = x) (h1 : x * e = a * z * e) (h2 : a * z * e = a * (z * e)) (h3 : a * (z * e) = a * (e * z)) : a * (e * z) = a * e * z := by rw [mul_assoc]

@@ -1,1 +1,0 @@
-theorem h₄ (abcvals : ℤ → ℤ → ℤ → Prop) (habcvals : ∀ (a b c : ℤ), abcvals a b c ↔ (a = 0 ∧ b = 0 ∧ c = 0) ∧ |a| < 1000000 ∧ |b| < 1000000 ∧ |c| < 1000000) (a b c : ℤ) (h₁ : abcvals a b c) (h₂ : |(↑a : ℝ) + (↑b : ℝ) * √2 + (↑c : ℝ) * √3| < 10 ^ (-11)) : (a = 0 ∧ b = 0 ∧ c = 0) ∧ |a| < 1000000 ∧ |b| < 1000000 ∧ |c| < 1000000 := by simpa [habcvals] using h₁

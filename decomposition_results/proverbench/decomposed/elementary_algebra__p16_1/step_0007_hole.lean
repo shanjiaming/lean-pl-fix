@@ -1,4 +1,4 @@
-theorem h₂ (h_forward : sorry → sorry = 7) (h : sorry = 7) (h₁ : sorry = 7) : 2 = -12 + 2 * sorry := by
+theorem h₂ (r : ℝ) (h_forward : given_equation r → r = 7) (h h₁ : r = 7) : 2 = -12 + 2 * r := by
   --  rw [h₁]
-  norm_num
+  --  norm_num
   hole

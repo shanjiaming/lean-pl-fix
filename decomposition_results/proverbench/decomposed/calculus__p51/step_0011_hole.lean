@@ -1,4 +1,4 @@
-theorem h₁₀ (x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ h₉ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) : 4 * sin x + 3 * cos x ≠ 0 := by
+theorem h₁₀ (x✝ x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ h₉ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) : 4 * sin x + 3 * cos x ≠ 0 := by
   have h₁₁ : x ∈ Set.Icc 0 (π / 4) := hx
   have h₁₂ : 0 ≤ x := by sorry
   have h₁₃ : x ≤ π / 4 := by sorry

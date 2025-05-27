@@ -1,5 +1,5 @@
 import Mathlib
-import Aesop
-set_option maxHeartbeats 0
-set_option pp.coercions.types true
-open BigOperators Real Nat Topology Rat
+
+/-
+The positive integers \(n\) for which \(5^n >  n!\) belong to the set \(\{1,2,\dots, 11\}\).
+-/

@@ -1,5 +1,0 @@
-theorem h₉ (n : ℕ) (hn : n ≥ 2) (A : Finset ℝ → Set ℝ) (hA : A = fun S => {x | ∃ a ∈ S, ∃ b ∈ S, a ≠ b ∧ (a + b) / 2 = x}) (h₃ : (Finset.image (fun i => (↑i : ℝ)) (Finset.range n)).card = n) (h₅ : (Set.Icc 0 ((↑n : ℝ) - 1)).ncard = n) (h₇ h₈ : n ≥ 2) : {x |
-      ∃ a ∈ Finset.image (fun i => (↑i : ℝ)) (Finset.range n),
-        ∃ b ∈ Finset.image (fun i => (↑i : ℝ)) (Finset.range n), a ≠ b ∧ (a + b) / 2 = x} =
-    (Set.range fun k => (↑k : ℝ) / 2) ∩ {x | 1 / 2 ≤ x ∧ x ≤ (2 * (↑n : ℝ) - 3) / 2} :=
-  by sorry

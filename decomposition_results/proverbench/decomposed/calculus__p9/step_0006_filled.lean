@@ -1,2 +1,2 @@
-theorem h6 (x✝ x : ℝ) (h4 : sin x ^ 2 + cos x ^ 2 = 1) (h5 : sin x ^ 3 = sin x * sin x ^ 2) : sin x ^ 2 = 1 - cos x ^ 2 := by linarith
+theorem h6 (x✝ x : ℝ) (h4 : Real.sin x ^ 2 + Real.cos x ^ 2 = 1) (h5 : Real.sin x ^ 3 = Real.sin x * Real.sin x ^ 2) : Real.sin x ^ 2 = 1 - Real.cos x ^ 2 := by linarith
   hole

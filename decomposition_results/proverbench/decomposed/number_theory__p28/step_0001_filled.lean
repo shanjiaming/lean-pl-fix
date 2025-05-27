@@ -1,4 +1,4 @@
-theorem prime_remainder_theorem (p : ℕ) (hp : sorry) : let N := sorry;
+theorem prime_remainder_theorem (p : ℕ) (hp : Prime p) : let N := ∏ k ∈ range (p - 1), (k ^ 2 + 1);
   if p % 4 = 3 then N % p = 4 else N % p = 0 := (range (p - 1)).prod (λ k => k ^ 2 + 1);
   if p % 4 = 3 then N % p = 4 else N % p = 0 :=
   by

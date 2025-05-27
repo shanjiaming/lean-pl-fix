@@ -6,4 +6,4 @@ theorem general_solution (k : Int) : ∃ m n : Int, m = -110 + 12 * k ∧ n = 66
     --  ring_nf <;> norm_num <;> linarith
     hole
   --  exact h_main
-  hole
+  norm_cast

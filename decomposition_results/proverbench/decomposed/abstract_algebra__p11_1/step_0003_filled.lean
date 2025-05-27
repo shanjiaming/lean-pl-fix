@@ -1,4 +1,4 @@
-theorem h₂ (h₁ : Polynomial.eval 1 sorry = 0) : sorry.IsRoot 1 := by
+theorem h₂ (h₁ : eval 1 f = 0) : f.IsRoot 1 := by
   --  rw [Polynomial.IsRoot]
-  exact h₁
-  hole
+  --  exact h₁
+  simpa

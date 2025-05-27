@@ -1,2 +1,2 @@
-theorem h₅ (p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ sorry) (h₁ : p ≠ 3) (h₂ : p ∣ sorry) (h₃ : p ∣ sorry) (h₄ : p ∣ sorry) : p ∣ sorry ^ 8 - sorry ^ 4 + 1 := by -- simpa [polynomial] using h₄
-  hole
+theorem h₅ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ h₃ : p ∣ n) (h₄ : p ∣ polynomial n) : p ∣ n ^ 8 - n ^ 4 + 1 := by -- simpa [polynomial] using h₄
+  simpa

@@ -1,2 +1,0 @@
-theorem hP₅ (h₅_mem : sorry) (a' : ℤ) (P : Polynomial ℤ) (hP₁ : P.degree = 2) (z₁ z₂ : (↑(Set.Ioo 0 1) : Type)) (hz₁₂ : z₁ ≠ z₂) (hz₁ : sorry = 0) (hz₂ : sorry = 0) (hP₂ : P.coeff 2 = a') (hP₃ : a' > 0) (hP₄ : P.degree = 2) : P.coeff 2 = a' := by -- simpa using hP₂
-  hole

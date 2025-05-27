@@ -17,17 +17,17 @@ theorem cosX3_derivative : deriv (fun x => Real.cos (x ^ 3)) x = -Real.sin (x ^ 
             --  convert HasDerivAt.cos (h7) using 1 <;> ring
             hole
           --  exact h8
-          hole
+          norm_cast
         --  exact h6
-        hole
+        norm_cast
       --  exact h4
-      hole
+      norm_cast
     --  exact h2
-    hole
+    norm_cast
   have h2 : deriv (fun x : ℝ => Real.cos (x ^ 3)) x = -Real.sin (x ^ 3) * (3 * x ^ 2):=
     by
     --  apply HasDerivAt.deriv
     --  exact h1
-    hole
+    norm_num
   --  apply h2
-  hole
+  norm_num

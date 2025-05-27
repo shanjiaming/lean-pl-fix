@@ -1,5 +1,5 @@
-theorem h_main  : (∃ x y, x ^ 2 - sorry * y ^ 2 = 2) ∨
-    (∃ x y, x ^ 2 - sorry * y ^ 2 = -2) ∧ ¬((∃ x y, x ^ 2 - sorry * y ^ 2 = 2) ∧ ∃ x y, x ^ 2 - sorry * y ^ 2 = -2) :=
+theorem h_main (p : ℤ) (hp : Prime p) (hpForm : p % 4 = 3) : (∃ x y, x ^ 2 - p * y ^ 2 = 2) ∨
+    (∃ x y, x ^ 2 - p * y ^ 2 = -2) ∧ ¬((∃ x y, x ^ 2 - p * y ^ 2 = 2) ∧ ∃ x y, x ^ 2 - p * y ^ 2 = -2) :=
   by
   by_cases h : ∃ (x y : ℤ), x ^ 2 - p * y ^ 2 = 2
   · exact Or.inl h

@@ -1,0 +1,1 @@
+theorem h₃ (m n p : ℕ) (A : Matrix (Fin m) (Fin n) ℝ) (B : Matrix (Fin n) (Fin p) ℝ) (hAB : A * B = 0) (hA : A ≠ 0) (hB : B ≠ 0) (h₁ : ¬LinearIndependent ℝ fun i => A i) (h₂ : ¬LinearIndependent ℝ fun i => Bᵀ i) : (¬LinearIndependent ℝ fun i => A i) ∧ ¬LinearIndependent ℝ fun i => Bᵀ i := by exact ⟨h₁, h₂⟩

@@ -1,4 +1,4 @@
-theorem h_main  : ∫ (t : ℝ) in Set.Icc 0 1, sorry = ∫ (t : ℝ) in Set.Icc 0 1, √(1 + (4 + 4 * π ^ 2) * t ^ 2) :=
+theorem h_main  : ∫ (t : ℝ) in Set.Icc 0 1, integrand t = ∫ (t : ℝ) in Set.Icc 0 1, √(1 + (4 + 4 * Real.pi ^ 2) * t ^ 2) :=
   by
   apply congr_arg
   ext t

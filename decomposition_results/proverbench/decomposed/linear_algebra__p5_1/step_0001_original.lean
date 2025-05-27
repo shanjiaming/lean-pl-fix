@@ -1,4 +1,4 @@
-theorem det_row_interchange (R : Type u_1) (inst✝ : CommRing R) (A : Matrix sorry sorry R) (i : sorry) (j : sorry) (h : i ≠ j) : sorry = -sorry := by
+theorem det_row_interchange (n : Type u_1) (inst✝² : Fintype n) (inst✝¹ : DecidableEq n) (R : Type u_2) (inst✝ : CommRing R) (A : Matrix n n R) (i j : n) (h : i ≠ j) : (swapRows A i j).det = -A.det := by
   have h₁ : False := by sorry
   have h₂ : det (swapRows A i j) = -det A := by sorry
   sorry

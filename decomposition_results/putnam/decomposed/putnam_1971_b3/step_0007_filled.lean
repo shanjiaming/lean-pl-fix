@@ -1,2 +1,0 @@
-theorem h₅₃ (T : ℝ) (hT : 0 < T) (h : ¬False) (h₁ h₂ : T > 0) (h₄ : 2 * T ≥ T) (h₅₁ : (↑⌊T⌋₊ : ℝ) ≤ T) (h₅₂ : T < (↑⌊T⌋₊ : ℝ) + 1) : 2 * (↑⌊T⌋₊ : ℝ) ≤ 2 * T := by -- linarith
-  linarith

@@ -1,2 +1,0 @@
-theorem h_trivial (H : Set (ℤ × ℤ)) (hH : H = {(x, y) | ∃ u v w, (x, y) = (u * 3 + v * 4 + w * 5, u * 8 + v * -1 + w * 4)}) (h_main : ∃ b, H = {(x, y) | ∃ u v, (x, y) = (u, u * b + v * 7)}) : 7 > 0 := by -- norm_num
-  hole

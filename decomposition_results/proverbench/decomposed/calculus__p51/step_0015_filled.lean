@@ -1,2 +1,2 @@
-theorem h₁₇ (x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ h₉ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) (h₁₁ : x ∈ Set.Icc 0 (π / 4)) (h₁₂ : 0 ≤ x) (h₁₃ : x ≤ π / 4) (h₁₄ h₁₅ : 0 < √2) : 0 ≤ x := by -- linarith [h₁₁.1]
-  linarith
+theorem h₁₇ (x✝ x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ h₉ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) (h₁₁ : x ∈ Set.Icc 0 (π / 4)) (h₁₂ : 0 ≤ x) (h₁₃ : x ≤ π / 4) (h₁₄ h₁₅ : 0 < √2) : 0 ≤ x := by linarith [h₁₁.1]
+  hole

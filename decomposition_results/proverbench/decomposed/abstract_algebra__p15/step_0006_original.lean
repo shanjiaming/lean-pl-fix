@@ -1,0 +1,2 @@
+theorem h₄ (R : Type u_1) (inst✝ : CommRing R) (h : IsField ((ZMod 3)[X] ⧸ span {X ^ 3 + X ^ 2 + C 0})) (h₁ : ¬0 = 2) : X ^ 3 + X ^ 2 + C 0 = X ^ 2 * (X + 1) := by
+  ring_nf <;> norm_num [C_0, C_1, C_add, C_mul] <;> rfl

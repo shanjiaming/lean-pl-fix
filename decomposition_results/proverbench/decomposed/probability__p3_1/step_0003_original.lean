@@ -1,0 +1,1 @@
+theorem h₂ (α : Type) (inst✝ : MeasurableSpace α) (μ : Measure α) (A B : Set α) (hIndep : IndepSet A B μ) (hA : μ A = ↑p_A) (hB : μ B = ↑p_B) (h₁ : (μ A).toNNReal = p_A) : (μ B).toNNReal = p_B := by rw [hB] <;> simp [p_B, ENNReal.toNNReal_eq_toReal] <;> norm_num <;> rfl

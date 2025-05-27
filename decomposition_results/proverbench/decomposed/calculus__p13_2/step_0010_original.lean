@@ -1,0 +1,2 @@
+theorem h₄ (x : ℝ) (h₀ : f = fun x => (1 / cos x) ^ 2) (h : cos x = 0) (h₂ : HasDerivAt (fun x => (1 / cos x) ^ 2) 0 x) (h₃ : 2 * (1 / cos x) ^ 2 * tan x = 0) : HasDerivAt (fun x => (1 / cos x) ^ 2) (2 * (1 / cos x) ^ 2 * tan x) x := by
+  convert h₂ using 1 <;> simp_all

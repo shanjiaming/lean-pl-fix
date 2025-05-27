@@ -7,10 +7,10 @@ theorem averageVelocity : (heightFunction 2.5 - heightFunction 2) / (2.5 - 2) = 
     by
     have h₁ : heightFunction 2.5 = 0 := heightAtTwoPointFive
     have h₂ : heightFunction 2 = 16 := heightAtTwo
-    --  rw [h₁, h₂] <;> norm_num <;> linarith
-    hole
+    --  --  rw [h₁, h₂] <;> norm_num <;> linarith
+    linarith
   have h_final : (heightFunction 2.5 - heightFunction 2) / (2.5 - 2) = -32:= by
     --  rw [h_numerator, h_denominator] <;> norm_num <;> linarith
     hole
   --  apply h_final
-  hole
+  linarith

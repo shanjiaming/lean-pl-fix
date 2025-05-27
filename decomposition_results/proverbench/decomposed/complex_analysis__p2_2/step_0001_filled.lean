@@ -1,4 +1,4 @@
-theorem final_simplification  : rexp (sorry * (π / 2)) = sorry :=
+theorem final_simplification  : cexp (I * (↑π / 2)) = I :=
   by
   have h1 : exp (I * (π / 2)) = cos (π / 2) + I * sin (π / 2) := by sorry
   have h2 : cos (π / 2) = 0 := by sorry

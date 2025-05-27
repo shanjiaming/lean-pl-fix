@@ -1,3 +1,0 @@
-theorem h₈ (p : Fin 4 → EuclideanSpace ℝ (Fin 2)) (h : ∀ (i j : Fin 4), i ≠ j → ∃ n, Dist.dist (p i) (p j) = (↑n : ℝ) ∧ Odd n) (n₁ : ℤ) (hn₁ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨1, ⋯⟩) = (↑n₁ : ℝ)) (hn₁_odd : Odd n₁) (n₂ : ℤ) (hn₂ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨2, ⋯⟩) = (↑n₂ : ℝ)) (hn₂_odd : Odd n₂) (n₃ : ℤ) (hn₃ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₃ : ℝ)) (hn₃_odd : Odd n₃) (n₄ : ℤ) (hn₄ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨2, ⋯⟩) = (↑n₄ : ℝ)) (hn₄_odd : Odd n₄) (n₅ : ℤ) (hn₅ : Dist.dist (p ⟨1, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₅ : ℝ)) (hn₅_odd : Odd n₅) (n₆ : ℤ) (hn₆ : Dist.dist (p ⟨2, ⋯⟩) (p ⟨3, ⋯⟩) = (↑n₆ : ℝ)) (hn₆_odd : Odd n₆) (h₇ : Dist.dist (p ⟨0, ⋯⟩) (p ⟨1, ⋯⟩) = (↑n₁ : ℝ)) : 0 < 4 := by
-  --  rw [hn₂] <;> simp [Int.cast_id]
-  hole

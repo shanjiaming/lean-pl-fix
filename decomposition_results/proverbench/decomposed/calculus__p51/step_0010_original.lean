@@ -1,4 +1,4 @@
-theorem h₈ (x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) : HasDerivAt (fun x => Real.log (4 * sin x + 3 * cos x)) ((4 * cos x - 3 * sin x) / (4 * sin x + 3 * cos x)) x :=
+theorem h₈ (x✝ x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) : HasDerivAt (fun x => log (4 * sin x + 3 * cos x)) ((4 * cos x - 3 * sin x) / (4 * sin x + 3 * cos x)) x :=
   by
   have h₉ : HasDerivAt (fun x : ℝ => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x := h₇
   have h₁₀ : 4 * sin x + 3 * cos x ≠ 0 :=

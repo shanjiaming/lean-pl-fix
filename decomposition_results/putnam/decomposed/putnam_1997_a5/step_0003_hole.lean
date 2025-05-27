@@ -1,2 +1,0 @@
-theorem h₃ (N : (n : ℕ+) → Set (Fin (↑n : ℕ) → ℕ+)) (hN h₁ : N = fun n => {t | (∀ (i j : Fin (↑n : ℕ)), i < j → t i ≤ t j) ∧ ∑ i, 1 / (↑(↑(t i) : ℕ) : ℝ) = 1}) (h₂ : N 10 = {fun x => 10}) : Odd (N 10).ncard ↔ True := by -- sorry
-  hole

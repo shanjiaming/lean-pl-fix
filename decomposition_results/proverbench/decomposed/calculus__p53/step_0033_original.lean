@@ -1,5 +1,4 @@
-theorem h₅ (h₁ : sorry = 100) (h₂ : sorry = 200) (h₄ :  ∫ (x : ℝ) in 100 ..200, 4 / (x ^ 2 - 7 * x + 12) =    4 * (Real.log (200 - 4) - Real.log (200 - 3)) - 4 * (Real.log (100 - 4) - Real.log (100 - 3))) : 4 * (Real.log (200 - 4) - Real.log (200 - 3)) - 4 * (Real.log (100 - 4) - Real.log (100 - 3)) =
-    (↑4 : ℝ) * sorry - (↑4 : ℝ) * sorry :=
+theorem h₅ (a b : ℝ) (h_a : a = 100) (h_b : b = 200) (h₁ : a = 100) (h₂ : b = 200) (h₄ :  ∫ (x : ℝ) in 100 ..200, 4 / (x ^ 2 - 7 * x + 12) =    4 * (log (200 - 4) - log (200 - 3)) - 4 * (log (100 - 4) - log (100 - 3))) : 4 * (log (200 - 4) - log (200 - 3)) - 4 * (log (100 - 4) - log (100 - 3)) = 4 * log (196 / 96) - 4 * log (197 / 97) :=
   by
   have h₅₁ : Real.log (200 - 4) = Real.log 196 := by sorry
   have h₅₂ : Real.log (200 - 3) = Real.log 197 := by sorry

@@ -1,1 +1,0 @@
-theorem h₇ (z : ℂ) (hzrat : ∃ q1 q2, z.re = (↑q1 : ℝ) ∧ z.im = (↑q2 : ℝ)) (hznorm : ‖z‖ = 1) (n : ℤ) (h₁ : ‖z ^ (2 * n) - 1‖ = ‖z ^ n - star z ^ n‖) (q1 q2 : ℚ) (hq1 : z.re = (↑q1 : ℝ)) (hq2 : z.im = (↑q2 : ℝ)) (h₄ : z.re = (↑q1 : ℝ)) (h₅ : z.im = (↑q2 : ℝ)) (h₆ : ‖z‖ = 1) : z.re = (↑q1 : ℝ) := by exact_mod_cast hq1

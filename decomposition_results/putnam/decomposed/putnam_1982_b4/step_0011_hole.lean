@@ -1,2 +1,0 @@
-theorem h₁₀ (P : Finset ℤ → Prop) (P_def : ∀ (n : Finset ℤ), P n ↔ n.Nonempty ∧ ∀ (k : ℤ), ∏ i ∈ n, i ∣ ∏ i ∈ n, (i + k)) (n : Finset ℤ) (hP : P n) (h₁ : n.Nonempty) (h₂ : ∀ (k : ℤ), ∏ i ∈ n, i ∣ ∏ i ∈ n, (i + k)) (h : 1 ∉ n ∧ -1 ∉ n) (h₅ : ∏ i ∈ n, i ∣ ∏ i ∈ n, (i + -Classical.choose h₁)) (h₆ : ∏ i ∈ n, (i + -Classical.choose h₁) = 0) (h₉ : ∏ i ∈ n, i ∣ 0) : ∏ i ∈ n, i = 0 := by -- simpa [dvd_zero, zero_dvd] using h₉
-  hole

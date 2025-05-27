@@ -106,6 +106,6 @@ theorem general_solution_quadratic_equation (x y : ℤ) (u : ℤ) (n : ℕ) :
     by
     --  exfalso
     --  exact h₁
-    hole
+    norm_cast
   --  exact h₂
-  hole
+  norm_cast

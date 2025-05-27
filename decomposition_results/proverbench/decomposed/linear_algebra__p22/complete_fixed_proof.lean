@@ -2,13 +2,13 @@ theorem specificElementSumDifference :
   matrixM 0 0 + matrixM 1 1 + matrixM 2 2 - matrixM 3 0 - matrixM 3 1 - matrixM 3 2 = 119:=
   by
   have h₀ : matrixM 0 0 = (37 : ℝ):= by
-    --  --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
-    hole
+    --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
+    norm_cast
   have h₁ : matrixM 1 1 = (1 : ℝ):= by
-    --  --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
-    hole
+    --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
+    norm_cast
   have h₂ : matrixM 2 2 = (-24 : ℝ):= by
-    --  --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
+    --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
     hole
   have h₃ : matrixM 3 0 = (-62 : ℝ):= by
     --  --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
@@ -20,7 +20,7 @@ theorem specificElementSumDifference :
     --  --  norm_num [matrixM, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two] <;> rfl
     hole
   have h₆ : matrixM 0 0 + matrixM 1 1 + matrixM 2 2 - matrixM 3 0 - matrixM 3 1 - matrixM 3 2 = 119:= by
-    --  rw [h₀, h₁, h₂, h₃, h₄, h₅] <;> norm_num <;> rfl
-    hole
+    --  --  rw [h₀, h₁, h₂, h₃, h₄, h₅] <;> norm_num <;> rfl
+    linarith
   --  exact h₆
-  hole
+  linarith

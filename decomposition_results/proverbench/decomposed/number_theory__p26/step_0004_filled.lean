@@ -1,4 +1,4 @@
-theorem h₂ (α : ℝ) (n : ℕ) (hn : n > 0) (h₁ : (↑⌊α⌋.toNat : ℝ) = (↑⌊α⌋ : ℝ)) : |α - (↑⌊α⌋.toNat : ℝ) / 1| < 1 / 1 ^ 2 :=
+theorem h₂ (α : ℝ) (n : ℕ) (hn : n > 0) (h₁ : ↑⌊α⌋.toNat = ↑⌊α⌋) : |α - ↑⌊α⌋.toNat / 1| < 1 / 1 ^ 2 :=
   by
   --  rw [h₁]
   have h₃ : (⌊α⌋ : ℝ) ≤ α := Int.floor_le α

@@ -13,10 +13,11 @@ theorem aime_2025ii_p15 :
     --  obtain ⟨k, hk⟩ := h2
     --  obtain ⟨a, b, ha, hb, hab, hfab, hmin⟩ := hk
     have h3 := hmin a ha
-    have h4 : f k a > f k a ∨ a = b := by simpa using h3
-    cases h4 with
-    | inl h4 => linarith
-    | inr h4 => contradiction
+    have h4 : f k a > f k a ∨ a = b:= by -- simpa using h3
+      norm_cast
+    --  cases h4 with
+    --  | inl h4 => linarith
+    --  | inr h4 => contradiction
     hole
   have h2 :
     ∃ (k₁ k₂ k₃ : ℝ),
@@ -27,4 +28,4 @@ theorem aime_2025ii_p15 :
               k₁ ≠ k₃ ∧
                 k₂ ≠ k₃ ∧ exactly_two_minima k₁ ∧ exactly_two_minima k₂ ∧ exactly_two_minima k₃ ∧ k₁ + k₂ + k₃ = 240 := by sorry
   --  exact h2
-  hole
+  norm_cast

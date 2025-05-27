@@ -1,1 +1,0 @@
-theorem h₃ (f : ℝ → ℝ) (hf h₁ : f = fun x => 2 ^ x - 1 - x ^ 2) (h₂ : {x | f x = 0} = {0, 1, 4}) : {x | f x = 0}.ncard = 3 := by sorry

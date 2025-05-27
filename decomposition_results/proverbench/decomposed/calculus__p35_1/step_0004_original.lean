@@ -1,4 +1,4 @@
-theorem h₂ (h : sorry = 0) (h₁ : 3 * sorry ^ 2 - 18 * sorry + 24 = 0) : sorry = 2 ∨ sorry = 4 := by
+theorem h₂ (x : ℝ) (h : f_deriv x = 0) (h₁ : 3 * x ^ 2 - 18 * x + 24 = 0) : x = 2 ∨ x = 4 := by
   have h₃ : x ^ 2 - 6 * x + 8 = 0 := by sorry
   have h₄ : (x - 2) * (x - 4) = 0 := by sorry
   have h₅ : x - 2 = 0 ∨ x - 4 = 0 := by sorry

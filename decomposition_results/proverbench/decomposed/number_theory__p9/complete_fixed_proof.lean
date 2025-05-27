@@ -4,11 +4,11 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
   have h_main : ∃ (t : ℤ), m = t ^ 2:= by
     --  obtain ⟨k, hk⟩ := h_int
     have h₁ : (k : ℝ) = Real.sqrt (28 * (n : ℝ) ^ 2 + 1):= by
-      --  --  --  --  norm_num [hk] at hk ⊢ <;> simp_all [Real.sqrt_eq_iff_sq_eq] <;> ring_nf at * <;> nlinarith
-      hole
+      --  norm_num [hk] at hk ⊢ <;> simp_all [Real.sqrt_eq_iff_sq_eq] <;> ring_nf at * <;> nlinarith
+      linarith
     have h₂ : (k : ℝ) ^ 2 = (28 * (n : ℝ) ^ 2 + 1 : ℝ):= by
       --  rw [h₁]
-      --  --  --  rw [Real.sq_sqrt (by positivity)] <;> ring_nf <;> nlinarith
+      rw [Real.sq_sqrt (by positivity)] <;> ring_nf <;> nlinarith
       hole
     have h₃ : (k : ℤ) ^ 2 = 28 * n ^ 2 + 1:=
       by
@@ -19,10 +19,10 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
     have h₄ : m = 2 + 2 * k:=
       by
       have h₄₁ : (m : ℝ) = 2 + 2 * Real.sqrt (28 * (n : ℝ) ^ 2 + 1):= by
-        --  --  --  --  norm_num [h] <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq] <;> nlinarith
+        --  norm_num [h] <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq] <;> nlinarith
         hole
       have h₄₂ : (m : ℝ) = 2 + 2 * (k : ℝ):= by
-        --  --  --  --  rw [h₄₁, h₁] <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq] <;> nlinarith
+        --  rw [h₄₁, h₁] <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq] <;> nlinarith
         hole
       have h₄₃ : m = 2 + 2 * k:= by
         --  norm_cast at h₄₂ ⊢ <;> ring_nf at h₄₂ ⊢ <;> simp_all [Complex.ext_iff, pow_two] <;> nlinarith
@@ -34,7 +34,7 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
       have h₅₂ : k < 0:= by -- linarith
         hole
       have h₅₃ : (k : ℝ) < 0:= by -- exact_mod_cast h₅₂
-        simpa
+        hole
       have h₅₄ : Real.sqrt (28 * (n : ℝ) ^ 2 + 1) > 0:= by -- positivity
         hole
       have h₅₅ : (k : ℝ) < Real.sqrt (28 * (n : ℝ) ^ 2 + 1):= by
@@ -47,17 +47,17 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
         hole
       have h₅₈ : False:= by
         --  simp_all [hk, h₁, h₂, h₃, h₄] <;>
-        --    nlinarith [Real.sqrt_nonneg (28 * (n : ℝ) ^ 2 + 1), Real.sq_sqrt (by positivity : (0 : ℝ) ≤ 28 * (n : ℝ) ^ 2 + 1)]
+          nlinarith [Real.sqrt_nonneg (28 * (n : ℝ) ^ 2 + 1), Real.sq_sqrt (by positivity : (0 : ℝ) ≤ 28 * (n : ℝ) ^ 2 + 1)]
         hole
       --  exact h₅₈
       hole
     have h₆ : ∃ (t : ℤ), m = t ^ 2:= by
       have h₆₁ : m = 2 + 2 * k:= by -- exact h₄
-        linarith
+        hole
       have h₆₂ : (k : ℤ) ^ 2 = 28 * n ^ 2 + 1:= by -- exact h₃
         hole
       have h₆₃ : (k : ℤ) ≥ 0:= by -- exact_mod_cast h₅
-        linarith
+        hole
       have h₆₄ : ∃ (a b : ℤ), (k - 1) / 2 = 7 * a ^ 2 ∧ (k + 1) / 2 = b ^ 2:=
         by
         have h₆₄₁ : (k - 1 : ℤ) % 2 = 0:=
@@ -69,7 +69,7 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
             have h₆₄₅ : (k : ℤ) ^ 2 % 4 = 0:=
               by
               have h₆₄₆ : (k : ℤ) % 4 = 0 ∨ (k : ℤ) % 4 = 2:= by -- omega
-                omega
+                hole
               --  --  rcases h₆₄₆ with (h₆₄₆ | h₆₄₆) <;> simp [h₆₄₆, pow_two, Int.mul_emod, Int.add_emod]
               hole
             have h₆₄₆ : (28 * n ^ 2 + 1 : ℤ) % 4 = 1:=
@@ -77,7 +77,7 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
               have h₆₄₇ : (n : ℤ) ^ 2 % 4 = 0 ∨ (n : ℤ) ^ 2 % 4 = 1:=
                 by
                 have h₆₄₈ : (n : ℤ) % 4 = 0 ∨ (n : ℤ) % 4 = 1 ∨ (n : ℤ) % 4 = 2 ∨ (n : ℤ) % 4 = 3:= by -- omega
-                  omega
+                  hole
                 --  --  rcases h₆₄₈ with (h₆₄₈ | h₆₄₈ | h₆₄₈ | h₆₄₈) <;> simp [h₆₄₈, pow_two, Int.mul_emod, Int.add_emod]
                 hole
               --  --  rcases h₆₄₇ with (h₆₄₇ | h₆₄₇) <;> simp [h₆₄₇, Int.add_emod, Int.mul_emod, pow_two]
@@ -85,7 +85,7 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
             --  omega
             hole
           --  omega
-          omega
+          hole
         have h₆₄₂ : (k + 1 : ℤ) % 2 = 0:=
           by
           have h₆₄₃ : (k : ℤ) % 2 = 1:= by
@@ -95,15 +95,15 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
             have h₆₄₆ : (k : ℤ) ^ 2 % 4 = 0:=
               by
               have h₆₄₇ : (k : ℤ) % 4 = 0 ∨ (k : ℤ) % 4 = 2:= by -- omega
-                omega
+                hole
               --  --  rcases h₆₄₇ with (h₆₄₇ | h₆₄₇) <;> simp [h₆₄₇, pow_two, Int.mul_emod, Int.add_emod]
-              omega
+              hole
             have h₆₄₇ : (28 * n ^ 2 + 1 : ℤ) % 4 = 1:=
               by
               have h₆₄₈ : (n : ℤ) ^ 2 % 4 = 0 ∨ (n : ℤ) ^ 2 % 4 = 1:=
                 by
                 have h₆₄₉ : (n : ℤ) % 4 = 0 ∨ (n : ℤ) % 4 = 1 ∨ (n : ℤ) % 4 = 2 ∨ (n : ℤ) % 4 = 3:= by -- omega
-                  omega
+                  hole
                 --  --  rcases h₆₄₉ with (h₆₄₉ | h₆₄₉ | h₆₄₉ | h₆₄₉) <;> simp [h₆₄₉, pow_two, Int.mul_emod, Int.add_emod]
                 hole
               --  --  rcases h₆₄₈ with (h₆₄₈ | h₆₄₈) <;> simp [h₆₄₈, Int.add_emod, Int.mul_emod, pow_two]
@@ -111,19 +111,19 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
             --  omega
             hole
           --  omega
-          omega
+          hole
         have h₆₄₃ : ∃ (a b : ℤ), (k - 1) / 2 = 7 * a ^ 2 ∧ (k + 1) / 2 = b ^ 2:=
           by
           have h₆₄₄ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
             by
             have h₆₄₅ : (k - 1 : ℤ) / 2 * 2 = (k - 1 : ℤ):= by -- omega
-              omega
+              hole
             have h₆₄₆ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
               by
               have h₆₄₇ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
                 by
                 have h₆₄₈ : (k - 1 : ℤ) / 2 * 2 = (k - 1 : ℤ):= by -- omega
-                  linarith
+                  hole
                 have h₆₄₉ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
                   by
                   have h₆₄₁₀ : (k - 1 : ℤ) * (k + 1 : ℤ) = 4 * 7 * (n : ℤ) ^ 2:=
@@ -137,17 +137,17 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
                     have h₆₄₁₃ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
                       by
                       have h₆₄₁₄ : (k - 1 : ℤ) % 2 = 0:= by -- omega
-                        linarith
+                        hole
                       have h₆₄₁₅ : (k + 1 : ℤ) % 2 = 0:= by -- omega
-                        linarith
+                        hole
                       have h₆₄₁₆ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
                         by
                         have h₆₄₁₇ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
                           by
                           have h₆₄₁₈ : (k - 1 : ℤ) / 2 * 2 = (k - 1 : ℤ):= by -- omega
-                            linarith
+                            hole
                           have h₆₄₁₉ : (k + 1 : ℤ) / 2 * 2 = (k + 1 : ℤ):= by -- omega
-                            omega
+                            hole
                           have h₆₄₂₀ : (k - 1 : ℤ) * (k + 1 : ℤ) = 4 * 7 * (n : ℤ) ^ 2:=
                             by
                             have h₆₄₂₁ : (k : ℤ) ^ 2 = 28 * (n : ℤ) ^ 2 + 1:= by -- exact h₃
@@ -157,9 +157,9 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
                           have h₆₄₂₂ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2:=
                             by
                             have h₆₄₂₃ : (k - 1 : ℤ) / 2 * 2 = (k - 1 : ℤ):= by -- omega
-                              linarith
+                              hole
                             have h₆₄₂₄ : (k + 1 : ℤ) / 2 * 2 = (k + 1 : ℤ):= by -- omega
-                              linarith
+                              hole
                             have h₆₄₂₅ : (k - 1 : ℤ) * (k + 1 : ℤ) = 4 * 7 * (n : ℤ) ^ 2:=
                               by
                               have h₆₄₂₆ : (k : ℤ) ^ 2 = 28 * (n : ℤ) ^ 2 + 1:= by -- exact h₃
@@ -191,9 +191,9 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
               have h₆₄₈ : (k - 1 : ℤ) / 2 < 0:= by -- linarith
                 hole
               have h₆₄₉ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) < 0:= by -- nlinarith
-                omega
+                hole
               have h₆₅₀ : 7 * (n : ℤ) ^ 2 ≥ 0:= by -- positivity
-                norm_num
+                hole
               --  nlinarith
               hole
             have h₆₅₁ : (k + 1 : ℤ) / 2 ≥ 0:= by
@@ -201,20 +201,20 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
               have h₆₅₃ : (k + 1 : ℤ) / 2 < 0:= by -- linarith
                 hole
               have h₆₅₄ : (k + 1 : ℤ) / 2 ≤ 0:= by -- linarith
-                linarith
+                hole
               have h₆₅₅ : (k + 1 : ℤ) ≤ 0:= by
                 have h₆₅₆ : (k + 1 : ℤ) / 2 * 2 ≤ 0:= by -- nlinarith
-                  linarith
+                  hole
                 --  omega
-                omega
+                hole
               have h₆₅₆ : (k : ℤ) ≤ -1:= by -- linarith
-                linarith
+                hole
               have h₆₅₇ : (k : ℤ) ^ 2 ≥ 1:= by -- nlinarith
-                linarith
+                hole
               have h₆₅₈ : 28 * (n : ℤ) ^ 2 + 1 ≥ 1:= by -- nlinarith
-                norm_num
+                hole
               have h₆₅₉ : (k : ℤ) ^ 2 = 28 * (n : ℤ) ^ 2 + 1:= by -- exact h₃
-                linarith
+                hole
               --  nlinarith
               hole
             have h₆₅₂ : ∃ (a b : ℤ), (k - 1) / 2 = 7 * a ^ 2 ∧ (k + 1) / 2 = b ^ 2:=
@@ -225,26 +225,26 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
                 by
                 have h₆₅₅ : ∃ (a : ℤ), (k - 1) / 2 = 7 * a ^ 2:=
                   by
-                  have h₆₅₆ : 7 ∣ (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1):= by -- -- use (n : ℤ) ^ 2 <;> linarith
-                    omega
+                  have h₆₅₆ : 7 ∣ (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1):= by -- use (n : ℤ) ^ 2 <;> linarith
+                    hole
                   have h₆₅₇ : 7 ∣ (k - 1 : ℤ) / 2 ∨ 7 ∣ ((k - 1 : ℤ) / 2 + 1):=
                     by
                     have h₆₅₈ : 7 ∣ (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1):= by -- exact h₆₅₆
-                      omega
+                      hole
                     have h₆₅₉ : 7 ∣ (k - 1 : ℤ) / 2 ∨ 7 ∣ ((k - 1 : ℤ) / 2 + 1):=
                       by
                       have h₆₅₁₀ : 7 ∣ (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1):= by -- exact h₆₅₈
-                        omega
+                        hole
                       have h₆₅₁₁ : 7 ∣ (k - 1 : ℤ) / 2 ∨ 7 ∣ ((k - 1 : ℤ) / 2 + 1):=
                         by
                         have h₆₅₁₂ : 7 ∣ (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1):= by -- exact h₆₅₈
-                          omega
+                          hole
                         --  exact (Int.prime_iff_natAbs_prime.mpr (by decide)).dvd_mul.mp h₆₅₁₂
                         hole
                       --  exact h₆₅₁₁
-                      omega
+                      hole
                     --  exact h₆₅₉
-                    omega
+                    hole
                   --  cases h₆₅₇ with
                   --  | inl h₆₅₇ =>
                   --    obtain ⟨a, ha⟩ := h₆₅₇
@@ -265,13 +265,12 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
                   --    use a <;> (try omega) <;> (try nlinarith) <;> (try ring_nf at ha ⊢ <;> nlinarith)
                   hole
                 --  obtain ⟨a, ha⟩ := h₆₅₅
-                have h₆₅₆ : ∃ (b : ℤ), (k + 1) / 2 = b ^ 2:=
+                have h₆₅₆ : ∃ (b : ℤ), (k + 1) / 2 = b ^ 2 :=
                   by
-                  have h₆₅₇ : (k + 1 : ℤ) / 2 = ((k + 1 : ℤ) / 2):= by -- rfl
-                    norm_num
-                  have h₆₅₈ : ∃ (b : ℤ), (k + 1) / 2 = b ^ 2:= by
-                    --  by_contra h₆₅₉
-                    --  push_neg at h₆₅₉
+                  have h₆₅₇ : (k + 1 : ℤ) / 2 = ((k + 1 : ℤ) / 2) := by rfl
+                  have h₆₅₈ : ∃ (b : ℤ), (k + 1) / 2 = b ^ 2 := by
+                    by_contra h₆₅₉
+                    push_neg at h₆₅₉
                     have h₆₅₁₀ : (k - 1 : ℤ) / 2 = 7 * a ^ 2 := by omega
                     have h₆₅₁₁ : (k + 1 : ℤ) / 2 = ((k + 1 : ℤ) / 2) := by rfl
                     have h₆₅₁₂ : (k - 1 : ℤ) / 2 * ((k - 1 : ℤ) / 2 + 1) = 7 * (n : ℤ) ^ 2 := by omega
@@ -305,10 +304,8 @@ theorem perfect_square_condition {m : ℤ} (h : m = 2 + 2 * Real.sqrt (28 * n ^ 
                         have h₆₅₃₇ : (k + 1 : ℤ) / 2 ≠ (-1) ^ 2 := by omega
                         omega
                       exact h₆₅₂₉
-                    --  exact h₆₅₂₆
-                    hole
-                  --  exact h₆₅₈
-                  simpa
+                    exact h₆₅₂₆
+                  exact h₆₅₈
                 --  obtain ⟨b, hb⟩ := h₆₅₆
                 --  --  refine' ⟨a, b, _⟩ <;> simp_all [ha, hb] <;> ring_nf at * <;> omega
                 hole

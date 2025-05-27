@@ -1,4 +1,4 @@
-theorem h_m_ge_110 (p m : ℕ) (h₀ : sorry) (h₁ : ∀ q < p, ¬∃ n, sorry) (h₂ : ∀ k < m, ¬sorry) (h_p_eq_17 : p = 17) (h_m_le_110 : m ≤ 110) : m ≥ 110 := by
+theorem h_m_ge_110 (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬∃ n, isSolution q n) (h₂ : ∀ k < m, ¬isSolution p k) (h_p_eq_17 : p = 17) (h_m_le_110 : m ≤ 110) : m ≥ 110 := by
   by_contra h
   have h₁₀ : m ≤ 109 := by sorry
   have h₁₁ : m > 0 := h₀.2.1

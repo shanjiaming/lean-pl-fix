@@ -1,3 +1,3 @@
-theorem h₂₃ (x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₆ :  HasDerivAt (fun x => 1 / 25 * Real.log (4 * sin x + 3 * cos x))    (1 / 25 * (4 * cos x - 3 * sin x) / (4 * sin x + 3 * cos x)) x) : HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * Real.log (4 * sin x + 3 * cos x))
+theorem h₂₃ (x✝ x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₆ :  HasDerivAt (fun x => 1 / 25 * log (4 * sin x + 3 * cos x))    (1 / 25 * (4 * cos x - 3 * sin x) / (4 * sin x + 3 * cos x)) x) : HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * log (4 * sin x + 3 * cos x))
     (18 / 25 - 1 / 25 * (4 * cos x - 3 * sin x) / (4 * sin x + 3 * cos x)) x :=
   by convert h₅.sub h₆ using 1 <;> ring

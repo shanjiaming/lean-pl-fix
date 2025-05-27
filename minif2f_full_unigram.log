@@ -1,0 +1,4160 @@
+nohup: ignoring input
+Build completed successfully.
+Build completed successfully.
+Pipeline started with args: ['decompose_hole_merge_pipeline.py', 'dataset', 'minif2f', 'unigram']
+Pipeline initialized with output directory: decomposition_results
+Executing command: dataset
+Processing dataset: minif2f, limit: None, method: unigram
+Processing 201 problems from minif2f
+Using hole filling method: try_unigram_tactics
+
+--- Processing 1/201: aime_1983_p1 ---
+Step 0: Verifying original problem aime_1983_p1...
+Original problem verification: PASS (154 lines)
+Step 1: Decomposing problem aime_1983_p1...
+Decomposing problem: minif2f/aime_1983_p1
+Starting solve_theorem_unified...
+Using clean header: import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+
+--- Generated Command String ---
+example := by
+  have aime_1983_p1 (x y z w : ℕ) (ht : 1 < x ∧ 1 < y ∧ 1 < z) (hw : 0 ≤ w)
+      (h0 : Real.log w / Real.log x = 24) (h1 : Real.log w / Real.log y = 40)
+      (h2 : Real.log w / Real.log (x * y * z) = 12) : Real.log w / Real.log z = 60 := by
+    have hx : (x : ℝ) > 1 := by
+      norm_cast
+      <;> linarith [ht.1, ht.2.1, ht.2.2]
+  
+    have hy : (y : ℝ) > 1 := by
+      norm_cast
+      <;> linarith [ht.1, ht.2.1, ht.2.2]
+  
+    have hz : (z : ℝ) > 1 := by
+      norm_cast
+      <;> linarith [ht.1, ht.2.1, ht.2.2]
+  
+    have hxyz : (x : ℝ) * y * z > 1 := by
+      have h₁ : (x : ℝ) > 1 := hx
+      have h₂ : (y : ℝ) > 1 := hy
+      have h₃ : (z : ℝ) > 1 := hz
+      have h₄ : (x : ℝ) * y > 1 := by
+        nlinarith
+      nlinarith
+  
+    have hlogx : Real.log (x : ℝ) > 0 := by
+      apply Real.log_pos
+      <;> simpa using hx
+  
+    have hlogy : Real.log (y : ℝ) > 0 := by
+      apply Real.log_pos
+      <;> simpa using hy
+  
+    have hlogz : Real.log (z : ℝ) > 0 := by
+      apply Real.log_pos
+      <;> simpa using hz
+  
+    have hlogxyz : Real.log ((x : ℝ) * y * z) > 0 := by
+      have h₁ : Real.log ((x : ℝ) * y * z) = Real.log ((x : ℝ) * y) + Real.log (z : ℝ) := by
+        have h₂ : (x : ℝ) * y > 0 := by positivity
+        have h₃ : (z : ℝ) > 0 := by positivity
+        have h₄ : Real.log ((x : ℝ) * y * z) = Real.log ((x : ℝ) * y) + Real.log (z : ℝ) := by
+          rw [Real.log_mul (by positivity) (by positivity)]
+          <;> rw [Real.log_mul (by positivity) (by positivity)]
+          <;> ring
+        rw [h₄]
+      rw [h₁]
+      have h₂ : Real.log ((x : ℝ) * y) = Real.log (x : ℝ) + Real.log (y : ℝ) := by
+        have h₃ : 0 < (x : ℝ) := by positivity
+        have h₄ : 0 < (y : ℝ) := by positivity
+        rw [Real.log_mul (by positivity) (by positivity)]
+      rw [h₂]
+      have h₃ : Real.log (x : ℝ) > 0 := hlogx
+      have h₄ : Real.log (y : ℝ) > 0 := hlogy
+      have h₅ : Real.log (z : ℝ) > 0 := hlogz
+      nlinarith
+  
+    have hlogw_pos : Real.log (w : ℝ) > 0 := by
+      have h₃ : Real.log (w : ℝ) / Real.log (x : ℝ) = 24 := by simpa using h0
+      have h₄ : Real.log (x : ℝ) > 0 := hlogx
+      have h₅ : Real.log (w : ℝ) > 0 := by
+        by_contra h
+        have h₆ : Real.log (w : ℝ) ≤ 0 := by linarith
+        have h₇ : Real.log (w : ℝ) / Real.log (x : ℝ) ≤ 0 := by
+          exact div_nonpos_of_nonpos_of_nonneg h₆ (by linarith)
+        linarith
+      exact h₅
+  
+    have hlogw_eq : Real.log (w : ℝ) = 24 * Real.log (x : ℝ) := by
+      have h₃ : Real.log (w : ℝ) / Real.log (x : ℝ) = 24 := by simpa using h0
+      have h₄ : Real.log (x : ℝ) ≠ 0 := by linarith
+      have h₅ : Real.log (w : ℝ) = 24 * Real.log (x : ℝ) := by
+        field_simp [h₄] at h₃ ⊢
+        <;> linarith
+      exact h₅
+  
+    have hlogw_eq' : Real.log (w : ℝ) = 40 * Real.log (y : ℝ) := by
+      have h₃ : Real.log (w : ℝ) / Real.log (y : ℝ) = 40 := by simpa using h1
+      have h₄ : Real.log (y : ℝ) ≠ 0 := by linarith
+      have h₅ : Real.log (w : ℝ) = 40 * Real.log (y : ℝ) := by
+        field_simp [h₄] at h₃ ⊢
+        <;> linarith
+      exact h₅
+  
+    have hlogxy : 3 * Real.log (x : ℝ) = 5 * Real.log (y : ℝ) := by
+      have h₁ : Real.log (w : ℝ) = 24 * Real.log (x : ℝ) := hlogw_eq
+      have h₂ : Real.log (w : ℝ) = 40 * Real.log (y : ℝ) := hlogw_eq'
+      have h₃ : 24 * Real.log (x : ℝ) = 40 * Real.log (y : ℝ) := by linarith
+      have h₄ : 3 * Real.log (x : ℝ) = 5 * Real.log (y : ℝ) := by
+        ring_nf at h₃ ⊢
+        <;> linarith
+      exact h₄
+  
+    have hlogxyz_eq : Real.log (w : ℝ) = 12 * (Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ)) := by
+      have h₃ : Real.log (w : ℝ) / Real.log ((x : ℝ) * y * z) = 12 := by simpa using h2
+      have h₄ : Real.log ((x : ℝ) * y * z) = Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ) := by
+        have h₅ : Real.log ((x : ℝ) * y * z) = Real.log ((x : ℝ) * y) + Real.log (z : ℝ) := by
+          have h₆ : 0 < (x : ℝ) * y := by positivity
+          have h₇ : 0 < (z : ℝ) := by positivity
+          have h₈ : Real.log ((x : ℝ) * y * z) = Real.log ((x : ℝ) * y) + Real.log (z : ℝ) := by
+            rw [Real.log_mul (by positivity) (by positivity)]
+          rw [h₈]
+        rw [h₅]
+        have h₉ : Real.log ((x : ℝ) * y) = Real.log (x : ℝ) + Real.log (y : ℝ) := by
+          have h₁₀ : 0 < (x : ℝ) := by positivity
+          have h₁₁ : 0 < (y : ℝ) := by positivity
+          have h₁₂ : Real.log ((x : ℝ) * y) = Real.log (x : ℝ) + Real.log (y : ℝ) := by
+            rw [Real.log_mul (by positivity) (by positivity)]
+          rw [h₁₂]
+        rw [h₉]
+        <;> ring
+      rw [h₄] at h₃
+      have h₅ : Real.log (w : ℝ) / (Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ)) = 12 := by simpa using h₃
+      have h₆ : Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ) ≠ 0 := by
+        by_contra h
+        rw [h] at h₅
+        norm_num at h₅
+        <;> linarith [hlogx, hlogy, hlogz]
+      field_simp [h₆] at h₅ ⊢
+      <;> nlinarith [hlogx, hlogy, hlogz, hlogw_pos, hlogw_eq, hlogw_eq', hlogxy]
+  
+    have hlogx_rel : Real.log (x : ℝ) = Real.log (y : ℝ) + Real.log (z : ℝ) := by
+      have h₃ : Real.log (w : ℝ) = 24 * Real.log (x : ℝ) := hlogw_eq
+      have h₄ : Real.log (w : ℝ) = 12 * (Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ)) := hlogxyz_eq
+      have h₅ : 24 * Real.log (x : ℝ) = 12 * (Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ)) := by linarith
+      have h₆ : 2 * Real.log (x : ℝ) = Real.log (x : ℝ) + Real.log (y : ℝ) + Real.log (z : ℝ) := by linarith
+      have h₇ : Real.log (x : ℝ) = Real.log (y : ℝ) + Real.log (z : ℝ) := by linarith
+      exact h₇
+  
+    have hlogz_rel : Real.log (z : ℝ) = (2 : ℝ) / 5 * Real.log (x : ℝ) := by
+      have h₃ : 3 * Real.log (x : ℝ) = 5 * Real.log (y : ℝ) := hlogxy
+      have h₄ : Real.log (x : ℝ) = Real.log (y : ℝ) + Real.log (z : ℝ) := hlogx_rel
+      have h₅ : Real.log (y : ℝ) = (3 : ℝ) / 5 * Real.log (x : ℝ) := by
+        have h₅₁ : 3 * Real.log (x : ℝ) = 5 * Real.log (y : ℝ) := hlogxy
+        have h₅₂ : Real.log (y : ℝ) = (3 : ℝ) / 5 * Real.log (x : ℝ) := by
+          apply mul_left_cancel₀ (show (5 : ℝ) ≠ 0 by norm_num)
+          nlinarith
+        exact h₅₂
+      have h₆ : Real.log (z : ℝ) = (2 : ℝ) / 5 * Real.log (x : ℝ) := by
+        have h₆₁ : Real.log (x : ℝ) = Real.log (y : ℝ) + Real.log (z : ℝ) := hlogx_rel
+        rw [h₅] at h₆₁
+        ring_nf at h₆₁ ⊢
+        <;> nlinarith
+      exact h₆
+  
+    have hgoal : Real.log (w : ℝ) / Real.log (z : ℝ) = 60 := by
+      have h₃ : Real.log (w : ℝ) = 24 * Real.log (x : ℝ) := hlogw_eq
+      have h₄ : Real.log (z : ℝ) = (2 : ℝ) / 5 * Real.log (x : ℝ) := hlogz_rel
+      rw [h₃, h₄]
+      have h₅ : Real.log (x : ℝ) ≠ 0 := by linarith [hlogx]
+      field_simp [h₅]
+      <;> ring_nf
+      <;> field_simp [h₅]
+      <;> nlinarith [hlogx, hlogy, hlogz]
+  
+    simpa using hgoal
+------------------------------
+Error in decompose_problem: Failed to decompose problem minif2f/aime_1983_p1: Traceback (most recent call last):
+  File "/home/matheye/lean-pl-fix/decompose_hole_merge_pipeline.py", line 116, in decompose_problem
+    complete_fixed_proof = solve_theorem_unified(problem, step_decomposer)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/matheye/lean-pl-fix/decompose_solver.py", line 940, in solve_theorem_unified
+    return solve_theorem(problem_content, fix_single_proof_func, clean_header, unified_env)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/matheye/lean-pl-fix/decompose_solver.py", line 892, in solve_theorem
+    result = lean_env.run_with_header(header_content, cmd_str, all_tactics=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/matheye/lean-pl-fix/decompose_solver.py", line 1005, in run_with_header
+    env = self.get_or_create_header_env(header_content)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/matheye/lean-pl-fix/decompose_solver.py", line 983, in get_or_create_header_env
+    result = future.result(timeout=60)  # 60 seconds timeout
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/matheye/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 458, in result
+    raise TimeoutError()
+TimeoutError
+
+✗ Decomposition failed for problem aime_1983_p1 - no steps generated
+Skipping to next problem...
+Result saved to decomposition_results/minif2f_pipeline_results.json (total: 1 problems)
+Failure logged to decomposition_results/minif2f_detailed_failures.json
+
+--- Processing 2/201: aime_1983_p2 ---
+Step 0: Verifying original problem aime_1983_p2...
+Original problem verification: PASS (49 lines)
+Step 1: Decomposing problem aime_1983_p2...
+Decomposing problem: minif2f/aime_1983_p2
+Starting solve_theorem_unified...
+Using clean header: import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+
+--- Generated Command String ---
+example := by
+  have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+      (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x := by
+    have h₃ : x - p ≥ 0 := by
+      have h₃₁ : p ≤ x := h₁.1
+      linarith
+    
+    have h₄ : x - 15 ≤ 0 := by
+      have h₄₁ : x ≤ 15 := h₁.2
+      linarith
+    
+    have h₅ : x - p - 15 ≤ 0 := by
+      have h₅₁ : x ≤ 15 := h₁.2
+      have h₅₂ : p > 0 := h₀.1
+      linarith
+    
+    have h₆ : abs (x - p) = x - p := by
+      rw [abs_of_nonneg h₃]
+      <;>
+      linarith
+    
+    have h₇ : abs (x - 15) = 15 - x := by
+      have h₇₁ : x - 15 ≤ 0 := h₄
+      have h₇₂ : abs (x - 15) = -(x - 15) := by
+        rw [abs_of_nonpos h₇₁]
+        <;> linarith
+      rw [h₇₂]
+      <;> ring_nf at *
+      <;> linarith
+    
+    have h₈ : abs (x - p - 15) = p + 15 - x := by
+      have h₈₁ : x - p - 15 ≤ 0 := h₅
+      have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by
+        rw [abs_of_nonpos h₈₁]
+        <;> linarith
+      rw [h₈₂]
+      <;> ring_nf at *
+      <;> linarith
+    
+    have h₉ : f x = 30 - x := by
+      rw [h₂, h₆, h₇, h₈]
+      <;> ring_nf at *
+      <;> linarith
+    
+    have h₁₀ : 15 ≤ f x := by
+      rw [h₉]
+      have h₁₀₁ : x ≤ 15 := h₁.2
+      linarith
+    
+    exact h₁₀
+------------------------------
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by
+    have h₄₁ : x ≤ 15 := h₁.2
+    linarith
+  have h₅ : x - p - 15 ≤ 0 := by
+    have h₅₁ : x ≤ 15 := h₁.2
+    have h₅₂ : p > 0 := h₀.1
+    linarith
+  have h₆ : abs (x - p) = x - p := by rw [abs_of_nonneg h₃] <;> linarith
+  have h₇ : abs (x - 15) = 15 - x := by
+    have h₇₁ : x - 15 ≤ 0 := h₄
+    have h₇₂ : abs (x - 15) = -(x - 15) := by rw [abs_of_nonpos h₇₁] <;> linarith
+    rw [h₇₂] <;> ring_nf at * <;> linarith
+  have h₈ : abs (x - p - 15) = p + 15 - x := by
+    have h₈₁ : x - p - 15 ≤ 0 := h₅
+    have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by rw [abs_of_nonpos h₈₁] <;> linarith
+    rw [h₈₂] <;> ring_nf at * <;> linarith
+  have h₉ : f x = 30 - x := by rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by
+    have h₅₁ : x ≤ 15 := h₁.2
+    have h₅₂ : p > 0 := h₀.1
+    linarith
+  have h₆ : abs (x - p) = x - p := by rw [abs_of_nonneg h₃] <;> linarith
+  have h₇ : abs (x - 15) = 15 - x := by
+    have h₇₁ : x - 15 ≤ 0 := h₄
+    have h₇₂ : abs (x - 15) = -(x - 15) := by rw [abs_of_nonpos h₇₁] <;> linarith
+    rw [h₇₂] <;> ring_nf at * <;> linarith
+  have h₈ : abs (x - p - 15) = p + 15 - x := by
+    have h₈₁ : x - p - 15 ≤ 0 := h₅
+    have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by rw [abs_of_nonpos h₈₁] <;> linarith
+    rw [h₈₂] <;> ring_nf at * <;> linarith
+  have h₉ : f x = 30 - x := by rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by sorry
+  have h₆ : abs (x - p) = x - p := by rw [abs_of_nonneg h₃] <;> linarith
+  have h₇ : abs (x - 15) = 15 - x := by
+    have h₇₁ : x - 15 ≤ 0 := h₄
+    have h₇₂ : abs (x - 15) = -(x - 15) := by rw [abs_of_nonpos h₇₁] <;> linarith
+    rw [h₇₂] <;> ring_nf at * <;> linarith
+  have h₈ : abs (x - p - 15) = p + 15 - x := by
+    have h₈₁ : x - p - 15 ≤ 0 := h₅
+    have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by rw [abs_of_nonpos h₈₁] <;> linarith
+    rw [h₈₂] <;> ring_nf at * <;> linarith
+  have h₉ : f x = 30 - x := by rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by sorry
+  have h₆ : abs (x - p) = x - p := by sorry
+  have h₇ : abs (x - 15) = 15 - x := by
+    have h₇₁ : x - 15 ≤ 0 := h₄
+    have h₇₂ : abs (x - 15) = -(x - 15) := by rw [abs_of_nonpos h₇₁] <;> linarith
+    rw [h₇₂] <;> ring_nf at * <;> linarith
+  have h₈ : abs (x - p - 15) = p + 15 - x := by
+    have h₈₁ : x - p - 15 ≤ 0 := h₅
+    have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by rw [abs_of_nonpos h₈₁] <;> linarith
+    rw [h₈₂] <;> ring_nf at * <;> linarith
+  have h₉ : f x = 30 - x := by rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by sorry
+  have h₆ : abs (x - p) = x - p := by sorry
+  have h₇ : abs (x - 15) = 15 - x := by sorry
+  have h₈ : abs (x - p - 15) = p + 15 - x := by
+    have h₈₁ : x - p - 15 ≤ 0 := h₅
+    have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by rw [abs_of_nonpos h₈₁] <;> linarith
+    rw [h₈₂] <;> ring_nf at * <;> linarith
+  have h₉ : f x = 30 - x := by rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by sorry
+  have h₆ : abs (x - p) = x - p := by sorry
+  have h₇ : abs (x - 15) = 15 - x := by sorry
+  have h₈ : abs (x - p - 15) = p + 15 - x := by sorry
+  have h₉ : f x = 30 - x := by rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by sorry
+  have h₆ : abs (x - p) = x - p := by sorry
+  have h₇ : abs (x - 15) = 15 - x := by sorry
+  have h₈ : abs (x - p - 15) = p + 15 - x := by sorry
+  have h₉ : f x = 30 - x := by sorry
+  have h₁₀ : 15 ≤ f x := by
+    rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    linarith
+  exact h₁₀
+Reconstructed framework:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x :=
+  by
+  have h₃ : x - p ≥ 0 := by sorry
+  have h₄ : x - 15 ≤ 0 := by sorry
+  have h₅ : x - p - 15 ≤ 0 := by sorry
+  have h₆ : abs (x - p) = x - p := by sorry
+  have h₇ : abs (x - 15) = 15 - x := by sorry
+  have h₈ : abs (x - p - 15) = p + 15 - x := by sorry
+  have h₉ : f x = 30 - x := by sorry
+  have h₁₀ : 15 ≤ f x := by sorry
+  exact h₁₀
+  Processing step step_0001...
+  Proof framework length: 487 chars
+  Verifying hole content for step step_0001...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0001...
+    Filled verification: PASS
+Created decomposition step: step_0001
+  Processing step step_0002...
+  Proof framework length: 179 chars
+  Verifying hole content for step step_0002...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0002...
+    Filled verification: PASS
+Created decomposition step: step_0002
+Reconstructed proof for h₃:
+have h₃ : x - p ≥ 0:= by
+  have h₃₁ : p ≤ x := h₁.1
+  --  linarith
+  linarith
+  Processing step step_0003...
+  Proof framework length: 198 chars
+  Verifying hole content for step step_0003...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0003...
+    Filled verification: PASS
+Created decomposition step: step_0003
+Reconstructed proof for h₄:
+have h₄ : x - 15 ≤ 0:= by
+  have h₄₁ : x ≤ 15 := h₁.2
+  --  linarith
+  linarith
+  Processing step step_0004...
+  Proof framework length: 247 chars
+  Verifying hole content for step step_0004...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0004...
+    Filled verification: PASS
+Created decomposition step: step_0004
+Reconstructed proof for h₅:
+have h₅ : x - p - 15 ≤ 0:= by
+  have h₅₁ : x ≤ 15 := h₁.2
+  have h₅₂ : p > 0 := h₀.1
+  --  linarith
+  linarith
+  Processing step step_0005...
+  Proof framework length: 239 chars
+  Verifying hole content for step step_0005...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0005...
+    Filled verification: FAIL
+Created decomposition step: step_0005
+Reconstructed proof for h₆:
+have h₆ : abs (x - p) = x - p:= by -- rw [abs_of_nonneg h₃] <;> linarith
+  hole
+Reconstructed framework:
+have h₇ : abs (x - 15) = 15 - x := by
+  have h₇₁ : x - 15 ≤ 0 := h₄
+  have h₇₂ : abs (x - 15) = -(x - 15) := by sorry
+  rw [h₇₂] <;> ring_nf at * <;> linarith
+  Processing step step_0006...
+  Proof framework length: 350 chars
+  Verifying hole content for step step_0006...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0006...
+    Filled verification: PASS
+Created decomposition step: step_0006
+  Processing step step_0007...
+  Proof framework length: 288 chars
+  Verifying hole content for step step_0007...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0007...
+    Filled verification: FAIL
+Created decomposition step: step_0007
+Reconstructed proof for h₇₂:
+have h₇₂ : abs (x - 15) = -(x - 15):= by -- rw [abs_of_nonpos h₇₁] <;> linarith
+  hole
+Reconstructed proof for h₇:
+have h₇ : abs (x - 15) = 15 - x:= by
+  have h₇₁ : x - 15 ≤ 0 := h₄
+  have h₇₂ : abs (x - 15) = -(x - 15):= by -- rw [abs_of_nonpos h₇₁] <;> linarith
+    hole
+  --  --  rw [h₇₂] <;> ring_nf at * <;> linarith
+  linarith
+Reconstructed framework:
+have h₈ : abs (x - p - 15) = p + 15 - x := by
+  have h₈₁ : x - p - 15 ≤ 0 := h₅
+  have h₈₂ : abs (x - p - 15) = -(x - p - 15) := by sorry
+  rw [h₈₂] <;> ring_nf at * <;> linarith
+  Processing step step_0008...
+  Proof framework length: 395 chars
+  Verifying hole content for step step_0008...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0008...
+    Filled verification: PASS
+Created decomposition step: step_0008
+  Processing step step_0009...
+  Proof framework length: 325 chars
+  Verifying hole content for step step_0009...
+    Hole verification: PASS
+Verification exception: 
+Verification exception: 
+Verification exception: 
+Verification exception: 
+Verification exception: 
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0009...
+    Filled verification: FAIL
+Created decomposition step: step_0009
+Reconstructed proof for h₈₂:
+have h₈₂ : abs (x - p - 15) = -(x - p - 15):= by -- rw [abs_of_nonpos h₈₁] <;> linarith
+  hole
+Reconstructed proof for h₈:
+have h₈ : abs (x - p - 15) = p + 15 - x:= by
+  have h₈₁ : x - p - 15 ≤ 0 := h₅
+  have h₈₂ : abs (x - p - 15) = -(x - p - 15):= by -- rw [abs_of_nonpos h₈₁] <;> linarith
+    hole
+  --  --  rw [h₈₂] <;> ring_nf at * <;> linarith
+  linarith
+  Processing step step_0010...
+  Proof framework length: 332 chars
+  Verifying hole content for step step_0010...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0010...
+    Filled verification: PASS
+Created decomposition step: step_0010
+Reconstructed proof for h₉:
+have h₉ : f x = 30 - x:= by -- -- rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+  linarith
+  Processing step step_0011...
+  Proof framework length: 349 chars
+  Verifying hole content for step step_0011...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0011...
+    Filled verification: PASS
+Created decomposition step: step_0011
+Reconstructed proof for h₁₀:
+have h₁₀ : 15 ≤ f x:= by
+  --  rw [h₉]
+  have h₁₀₁ : x ≤ 15 := h₁.2
+  --  linarith
+  linarith
+Reconstructed proof for aime_1983_p2:
+have aime_1983_p2 (x p : ℝ) (f : ℝ → ℝ) (h₀ : 0 < p ∧ p < 15) (h₁ : p ≤ x ∧ x ≤ 15)
+  (h₂ : f x = abs (x - p) + abs (x - 15) + abs (x - p - 15)) : 15 ≤ f x:=
+  by
+  have h₃ : x - p ≥ 0:= by
+    have h₃₁ : p ≤ x := h₁.1
+    --  linarith
+    linarith
+  have h₄ : x - 15 ≤ 0:= by
+    have h₄₁ : x ≤ 15 := h₁.2
+    --  linarith
+    linarith
+  have h₅ : x - p - 15 ≤ 0:= by
+    have h₅₁ : x ≤ 15 := h₁.2
+    have h₅₂ : p > 0 := h₀.1
+    --  linarith
+    linarith
+  have h₆ : abs (x - p) = x - p:= by -- rw [abs_of_nonneg h₃] <;> linarith
+    hole
+  have h₇ : abs (x - 15) = 15 - x:= by
+    have h₇₁ : x - 15 ≤ 0 := h₄
+    have h₇₂ : abs (x - 15) = -(x - 15):= by -- rw [abs_of_nonpos h₇₁] <;> linarith
+      hole
+    --  --  rw [h₇₂] <;> ring_nf at * <;> linarith
+    linarith
+  have h₈ : abs (x - p - 15) = p + 15 - x:= by
+    have h₈₁ : x - p - 15 ≤ 0 := h₅
+    have h₈₂ : abs (x - p - 15) = -(x - p - 15):= by -- rw [abs_of_nonpos h₈₁] <;> linarith
+      hole
+    --  --  rw [h₈₂] <;> ring_nf at * <;> linarith
+    linarith
+  have h₉ : f x = 30 - x:= by -- -- rw [h₂, h₆, h₇, h₈] <;> ring_nf at * <;> linarith
+    linarith
+  have h₁₀ : 15 ≤ f x:= by
+    --  rw [h₉]
+    have h₁₀₁ : x ≤ 15 := h₁.2
+    --  linarith
+    linarith
+  --  exact h₁₀
+  linarith
+solve_theorem_unified completed. Generated 11 steps.
+Complete fixed proof length: 1254 chars
+Decomposition successful: 11 steps generated
+Complete fixed proof: 1254 chars
+Step 2: Saving decomposition...
+Saved 11 decomposition steps to decomposition_results/minif2f/decomposed/aime_1983_p2
+Also saved header.lean and problem.lean for self-contained information
+Decomposition saved to: decomposition_results/minif2f/decomposed/aime_1983_p2
+Step 3: Saving complete fixed proof...
+Complete fixed proof saved to: decomposition_results/minif2f/decomposed/aime_1983_p2/complete_fixed_proof.lean
+Step 4: Verifying synthesized proof...
+Synthesized proof verification: FAIL
+Step 4.5: Updating metadata with synthesized verification result...
+Metadata updated with synthesized verification result
+Verifying step step_0001...
+  Hole verification (cached): PASS
+Verifying step step_0002...
+  Hole verification (cached): PASS
+Verifying step step_0003...
+  Hole verification (cached): PASS
+Verifying step step_0004...
+  Hole verification (cached): PASS
+Verifying step step_0005...
+  Hole verification (cached): PASS
+Verifying step step_0006...
+  Hole verification (cached): PASS
+Verifying step step_0007...
+  Hole verification (cached): PASS
+Verifying step step_0008...
+  Hole verification (cached): PASS
+Verifying step step_0009...
+  Hole verification (cached): PASS
+Verifying step step_0010...
+  Hole verification (cached): PASS
+Verifying step step_0011...
+  Hole verification (cached): PASS
+✓ Successfully processed aime_1983_p2 in 1243.3s
+Result saved to decomposition_results/minif2f_pipeline_results.json (total: 2 problems)
+
+--- Processing 3/201: aime_1984_p1 ---
+Step 0: Verifying original problem aime_1984_p1...
+Original problem verification: PASS (81 lines)
+Step 1: Decomposing problem aime_1984_p1...
+Decomposing problem: minif2f/aime_1984_p1
+Starting solve_theorem_unified...
+Using clean header: import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+
+--- Generated Command String ---
+example := by
+  have aime_1984_p1 (u : ℕ → ℚ) (h₀ : ∀ n, u (n + 1) = u n + 1)
+      (h₁ : (∑ k in Finset.range 98, u k.succ) = 137) :
+      (∑ k in Finset.range 49, u (2 * k.succ)) = 93 := by
+    have h₂ : ∀ n : ℕ, u n = u 0 + n := by
+      intro n
+      induction n with
+      | zero =>
+        norm_num
+      | succ n ih =>
+        have h₃ := h₀ n
+        have h₄ := h₀ (n + 1)
+        simp [ih, Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] at h₃ h₄ ⊢
+        <;> linarith
+    
+    have h₃ : u 0 = (-2357 : ℚ) / 49 := by
+      have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+      have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [h₂]
+        <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc]
+        <;> ring_nf
+        <;> norm_num
+        <;> field_simp
+        <;> ring_nf
+      rw [h₅] at h₄
+      have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+        calc
+          _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+          _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+          _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+          _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+          _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+          _ = ∑ k in Finset.range 98, (u 0 : ℚ) + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+            rw [Finset.sum_add_distrib]
+          _ = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+            simp [Finset.sum_const, Finset.card_range]
+            <;> ring
+            <;> field_simp
+            <;> ring
+      rw [h₆] at h₄
+      have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by
+        norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ]
+        <;> rfl
+      rw [h₇] at h₄
+      have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by
+        linarith
+      have h₉ : u 0 = (-2357 : ℚ) / 49 := by
+        linarith
+      exact h₉
+    
+    have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 := by
+      have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [h₂]
+        <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ, add_assoc]
+        <;> ring_nf
+        <;> field_simp
+        <;> ring_nf
+        <;> norm_num
+      rw [h₅]
+      have h₆ : ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+        calc
+          _ = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) := rfl
+          _ = ∑ k in Finset.range 49, (u 0 : ℚ) + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+            rw [Finset.sum_add_distrib]
+          _ = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+            simp [Finset.sum_const, Finset.card_range]
+            <;> ring
+      rw [h₆]
+      have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by
+        norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ]
+        <;> rfl
+      rw [h₇]
+      have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by
+        rw [h₃]
+        norm_num
+      linarith
+    
+    exact h₄
+------------------------------
+Reconstructed framework:
+have aime_1984_p1 (u : ℕ → ℚ) (h₀ : ∀ n, u (n + 1) = u n + 1) (h₁ : (∑ k in Finset.range 98, u k.succ) = 137) :
+  (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₂ : ∀ n : ℕ, u n = u 0 + n := by sorry
+  have h₃ : u 0 = (-2357 : ℚ) / 49 :=
+    by
+    have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+    have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) :=
+      by
+      apply Finset.sum_congr rfl
+      intro k _
+      rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] <;> ring_nf <;> norm_num <;>
+          field_simp <;>
+        ring_nf
+    rw [h₅] at h₄
+    have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+      calc
+        _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+        _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+        _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+        _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+        _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+        _ = ∑ k in Finset.range 98, (u 0 : ℚ) + ∑ k in Finset.range 98, (k + 1 : ℚ) := by rw [Finset.sum_add_distrib]
+        _ = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+          simp [Finset.sum_const, Finset.card_range] <;> ring <;> field_simp <;> ring
+    rw [h₆] at h₄
+    have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by
+      norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+    rw [h₇] at h₄
+    have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by linarith
+    have h₉ : u 0 = (-2357 : ℚ) / 49 := by linarith
+    exact h₉
+  have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+    by
+    have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) :=
+      by
+      apply Finset.sum_congr rfl
+      intro k _
+      rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ, add_assoc] <;>
+              ring_nf <;>
+            field_simp <;>
+          ring_nf <;>
+        norm_num
+    rw [h₅]
+    have h₆ :
+      ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+      calc
+        _ = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) := rfl
+        _ = ∑ k in Finset.range 49, (u 0 : ℚ) + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+          rw [Finset.sum_add_distrib]
+        _ = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+          simp [Finset.sum_const, Finset.card_range] <;> ring
+    rw [h₆]
+    have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by
+      norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+    rw [h₇]
+    have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by
+      rw [h₃]
+      norm_num
+    linarith
+  exact h₄
+Reconstructed framework:
+have aime_1984_p1 (u : ℕ → ℚ) (h₀ : ∀ n, u (n + 1) = u n + 1) (h₁ : (∑ k in Finset.range 98, u k.succ) = 137) :
+  (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₂ : ∀ n : ℕ, u n = u 0 + n := by sorry
+  have h₃ : u 0 = (-2357 : ℚ) / 49 := by sorry
+  have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+    by
+    have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) :=
+      by
+      apply Finset.sum_congr rfl
+      intro k _
+      rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ, add_assoc] <;>
+              ring_nf <;>
+            field_simp <;>
+          ring_nf <;>
+        norm_num
+    rw [h₅]
+    have h₆ :
+      ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+      calc
+        _ = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) := rfl
+        _ = ∑ k in Finset.range 49, (u 0 : ℚ) + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+          rw [Finset.sum_add_distrib]
+        _ = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+          simp [Finset.sum_const, Finset.card_range] <;> ring
+    rw [h₆]
+    have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by
+      norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+    rw [h₇]
+    have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by
+      rw [h₃]
+      norm_num
+    linarith
+  exact h₄
+Reconstructed framework:
+have aime_1984_p1 (u : ℕ → ℚ) (h₀ : ∀ n, u (n + 1) = u n + 1) (h₁ : (∑ k in Finset.range 98, u k.succ) = 137) :
+  (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₂ : ∀ n : ℕ, u n = u 0 + n := by sorry
+  have h₃ : u 0 = (-2357 : ℚ) / 49 := by sorry
+  have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 := by sorry
+  exact h₄
+  Processing step step_0001...
+  Proof framework length: 343 chars
+  Verifying hole content for step step_0001...
+Verification exception: 
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0001...
+    Filled verification: PASS
+Created decomposition step: step_0001
+  Processing step step_0002...
+  Proof framework length: 344 chars
+  Verifying hole content for step step_0002...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0002...
+    Filled verification: FAIL
+Created decomposition step: step_0002
+Reconstructed proof for h₂:
+have h₂ : ∀ n : ℕ, u n = u 0 + n:= by
+  --  intro n
+  --  induction n with
+  --  | zero => norm_num
+  --  | succ n ih =>
+  --    have h₃ := h₀ n
+  --    have h₄ := h₀ (n + 1)
+  --    simp [ih, Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] at h₃ h₄ ⊢ <;> linarith
+  hole
+Reconstructed framework:
+have h₃ : u 0 = (-2357 : ℚ) / 49 :=
+  by
+  have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+  have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := by sorry
+  rw [h₅] at h₄
+  have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+    calc
+      _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      _ = ∑ k in Finset.range 98, (u 0 : ℚ) + ∑ k in Finset.range 98, (k + 1 : ℚ) := by rw [Finset.sum_add_distrib]
+      _ = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+        simp [Finset.sum_const, Finset.card_range] <;> ring <;> field_simp <;> ring
+  rw [h₆] at h₄
+  have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by
+    norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+  rw [h₇] at h₄
+  have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by linarith
+  have h₉ : u 0 = (-2357 : ℚ) / 49 := by linarith
+  exact h₉
+Reconstructed framework:
+have h₃ : u 0 = (-2357 : ℚ) / 49 :=
+  by
+  have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+  have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := by sorry
+  rw [h₅] at h₄
+  have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by sorry
+  rw [h₆] at h₄
+  have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by
+    norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+  rw [h₇] at h₄
+  have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by linarith
+  have h₉ : u 0 = (-2357 : ℚ) / 49 := by linarith
+  exact h₉
+Reconstructed framework:
+have h₃ : u 0 = (-2357 : ℚ) / 49 :=
+  by
+  have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+  have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := by sorry
+  rw [h₅] at h₄
+  have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by sorry
+  rw [h₆] at h₄
+  have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by sorry
+  rw [h₇] at h₄
+  have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by linarith
+  have h₉ : u 0 = (-2357 : ℚ) / 49 := by linarith
+  exact h₉
+Reconstructed framework:
+have h₃ : u 0 = (-2357 : ℚ) / 49 :=
+  by
+  have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+  have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := by sorry
+  rw [h₅] at h₄
+  have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by sorry
+  rw [h₆] at h₄
+  have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by sorry
+  rw [h₇] at h₄
+  have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by sorry
+  have h₉ : u 0 = (-2357 : ℚ) / 49 := by linarith
+  exact h₉
+Reconstructed framework:
+have h₃ : u 0 = (-2357 : ℚ) / 49 :=
+  by
+  have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+  have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := by sorry
+  rw [h₅] at h₄
+  have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by sorry
+  rw [h₆] at h₄
+  have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ) := by sorry
+  rw [h₇] at h₄
+  have h₈ : (98 : ℚ) * u 0 + 4851 = 137 := by sorry
+  have h₉ : u 0 = (-2357 : ℚ) / 49 := by sorry
+  exact h₉
+  Processing step step_0003...
+  Proof framework length: 677 chars
+  Verifying hole content for step step_0003...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0003...
+    Filled verification: PASS
+Created decomposition step: step_0003
+  Processing step step_0004...
+  Proof framework length: 438 chars
+  Verifying hole content for step step_0004...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0004...
+    Filled verification: FAIL
+Created decomposition step: step_0004
+Reconstructed proof for h₅:
+have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)):=
+  by
+  --  apply Finset.sum_congr rfl
+  --  intro k _
+  --  --  rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] <;> ring_nf <;> norm_num <;> field_simp <;>
+    ring_nf
+  hole
+  Processing step step_0005...
+  Proof framework length: 924 chars
+  Verifying hole content for step step_0005...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0005...
+    Filled verification: FAIL
+Created decomposition step: step_0005
+Reconstructed proof for h₆:
+have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ):= by
+  --  calc
+  --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+  --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+  --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+  --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+  --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+  --    _ = ∑ k in Finset.range 98, (u 0 : ℚ) + ∑ k in Finset.range 98, (k + 1 : ℚ) := by rw [Finset.sum_add_distrib]
+  --    _ = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+  --      simp [Finset.sum_const, Finset.card_range] <;> ring <;> field_simp <;> ring
+  hole
+  Processing step step_0006...
+  Proof framework length: 503 chars
+  Verifying hole content for step step_0006...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0006...
+    Filled verification: FAIL
+Created decomposition step: step_0006
+Reconstructed proof for h₇:
+have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ):= by
+  --  norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+  hole
+  Processing step step_0007...
+  Proof framework length: 425 chars
+  Verifying hole content for step step_0007...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0007...
+    Filled verification: FAIL
+Created decomposition step: step_0007
+Reconstructed proof for h₈:
+have h₈ : (98 : ℚ) * u 0 + 4851 = 137:= by -- linarith
+  hole
+  Processing step step_0008...
+  Proof framework length: 449 chars
+  Verifying hole content for step step_0008...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0008...
+    Filled verification: FAIL
+Created decomposition step: step_0008
+Reconstructed proof for h₉:
+have h₉ : u 0 = (-2357 : ℚ) / 49:= by -- linarith
+  hole
+Reconstructed proof for h₃:
+have h₃ : u 0 = (-2357 : ℚ) / 49:=
+  by
+  have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+  have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)):=
+    by
+    --  apply Finset.sum_congr rfl
+    --  intro k _
+    --  --  rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] <;> ring_nf <;> norm_num <;> field_simp <;>
+      ring_nf
+    hole
+  --  rw [h₅] at h₄
+  have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ):= by
+    --  calc
+    --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+    --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+    --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+    --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+    --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+    --    _ = ∑ k in Finset.range 98, (u 0 : ℚ) + ∑ k in Finset.range 98, (k + 1 : ℚ) := by rw [Finset.sum_add_distrib]
+    --    _ = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+    --      simp [Finset.sum_const, Finset.card_range] <;> ring <;> field_simp <;> ring
+    hole
+  --  rw [h₆] at h₄
+  have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ):= by
+    --  norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+    hole
+  --  rw [h₇] at h₄
+  have h₈ : (98 : ℚ) * u 0 + 4851 = 137:= by -- linarith
+    hole
+  have h₉ : u 0 = (-2357 : ℚ) / 49:= by -- linarith
+    hole
+  --  exact h₉
+  linarith
+Reconstructed framework:
+have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) := by sorry
+  rw [h₅]
+  have h₆ :
+    ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+    calc
+      _ = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) := rfl
+      _ = ∑ k in Finset.range 49, (u 0 : ℚ) + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by
+        rw [Finset.sum_add_distrib]
+      _ = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by simp [Finset.sum_const, Finset.card_range] <;> ring
+  rw [h₆]
+  have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by
+    norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+  rw [h₇]
+  have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by
+    rw [h₃]
+    norm_num
+  linarith
+Reconstructed framework:
+have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) := by sorry
+  rw [h₅]
+  have h₆ :
+    ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by sorry
+  rw [h₆]
+  have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by
+    norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+  rw [h₇]
+  have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by
+    rw [h₃]
+    norm_num
+  linarith
+Reconstructed framework:
+have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) := by sorry
+  rw [h₅]
+  have h₆ :
+    ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by sorry
+  rw [h₆]
+  have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by sorry
+  rw [h₇]
+  have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by
+    rw [h₃]
+    norm_num
+  linarith
+Reconstructed framework:
+have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93 :=
+  by
+  have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)) := by sorry
+  rw [h₅]
+  have h₆ :
+    ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by sorry
+  rw [h₆]
+  have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ) := by sorry
+  rw [h₇]
+  have h₈ : (49 : ℚ) * u 0 + 2450 = 93 := by sorry
+  linarith
+  Processing step step_0009...
+  Proof framework length: 644 chars
+  Verifying hole content for step step_0009...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0009...
+    Filled verification: PASS
+Created decomposition step: step_0009
+  Processing step step_0010...
+  Proof framework length: 470 chars
+  Verifying hole content for step step_0010...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0010...
+    Filled verification: FAIL
+Created decomposition step: step_0010
+Reconstructed proof for h₅:
+have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)):=
+  by
+  --  apply Finset.sum_congr rfl
+  --  intro k _
+  --  --  rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ, add_assoc] <;> ring_nf <;>
+        field_simp <;>
+      ring_nf <;>
+    norm_num
+  hole
+  Processing step step_0011...
+  Proof framework length: 669 chars
+  Verifying hole content for step step_0011...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0011...
+    Filled verification: FAIL
+Created decomposition step: step_0011
+Reconstructed proof for h₆:
+have h₆ :
+  ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)):= by
+  --  calc
+  --    _ = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) := rfl
+  --    _ = ∑ k in Finset.range 49, (u 0 : ℚ) + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by rw [Finset.sum_add_distrib]
+  --    _ = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by simp [Finset.sum_const, Finset.card_range] <;> ring
+  hole
+  Processing step step_0012...
+  Proof framework length: 493 chars
+  Verifying hole content for step step_0012...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0012...
+    Filled verification: FAIL
+Created decomposition step: step_0012
+Reconstructed proof for h₇:
+have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ):= by
+  --  norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+  hole
+  Processing step step_0013...
+  Proof framework length: 453 chars
+  Verifying hole content for step step_0013...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0013...
+    Filled verification: FAIL
+Created decomposition step: step_0013
+Reconstructed proof for h₈:
+have h₈ : (49 : ℚ) * u 0 + 2450 = 93:= by
+  --  rw [h₃]
+  --  norm_num
+  hole
+Reconstructed proof for h₄:
+have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93:=
+  by
+  have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)):=
+    by
+    --  apply Finset.sum_congr rfl
+    --  intro k _
+    --  --  rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ, add_assoc] <;> ring_nf <;>
+          field_simp <;>
+        ring_nf <;>
+      norm_num
+    hole
+  --  rw [h₅]
+  have h₆ :
+    ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by sorry
+  --  rw [h₆]
+  have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ):= by
+    --  norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+    hole
+  --  rw [h₇]
+  have h₈ : (49 : ℚ) * u 0 + 2450 = 93:= by
+    --  rw [h₃]
+    --  norm_num
+    hole
+  --  linarith
+  linarith
+Reconstructed proof for aime_1984_p1:
+have aime_1984_p1 (u : ℕ → ℚ) (h₀ : ∀ n, u (n + 1) = u n + 1) (h₁ : (∑ k in Finset.range 98, u k.succ) = 137) :
+  (∑ k in Finset.range 49, u (2 * k.succ)) = 93:=
+  by
+  have h₂ : ∀ n : ℕ, u n = u 0 + n:= by
+    --  intro n
+    --  induction n with
+    --  | zero => norm_num
+    --  | succ n ih =>
+    --    have h₃ := h₀ n
+    --    have h₄ := h₀ (n + 1)
+    --    simp [ih, Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] at h₃ h₄ ⊢ <;> linarith
+    hole
+  have h₃ : u 0 = (-2357 : ℚ) / 49:=
+    by
+    have h₄ : (∑ k in Finset.range 98, u k.succ) = 137 := h₁
+    have h₅ : (∑ k in Finset.range 98, u k.succ) = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)):=
+      by
+      --  apply Finset.sum_congr rfl
+      --  intro k _
+      --  --  rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc] <;> ring_nf <;> norm_num <;> field_simp <;>
+        ring_nf
+      hole
+    --  rw [h₅] at h₄
+    have h₆ : ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ):= by
+      --  calc
+      --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      --    _ = ∑ k in Finset.range 98, (u 0 + (k + 1 : ℚ)) := rfl
+      --    _ = ∑ k in Finset.range 98, (u 0 : ℚ) + ∑ k in Finset.range 98, (k + 1 : ℚ) := by rw [Finset.sum_add_distrib]
+      --    _ = 98 * u 0 + ∑ k in Finset.range 98, (k + 1 : ℚ) := by
+      --      simp [Finset.sum_const, Finset.card_range] <;> ring <;> field_simp <;> ring
+      hole
+    --  rw [h₆] at h₄
+    have h₇ : ∑ k in Finset.range 98, (k + 1 : ℚ) = (4851 : ℚ):= by
+      --  norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+      hole
+    --  rw [h₇] at h₄
+    have h₈ : (98 : ℚ) * u 0 + 4851 = 137:= by -- linarith
+      hole
+    have h₉ : u 0 = (-2357 : ℚ) / 49:= by -- linarith
+      hole
+    --  exact h₉
+    linarith
+  have h₄ : (∑ k in Finset.range 49, u (2 * k.succ)) = 93:=
+    by
+    have h₅ : (∑ k in Finset.range 49, u (2 * k.succ)) = ∑ k in Finset.range 49, (u 0 + (2 * (k + 1) : ℚ)):=
+      by
+      --  apply Finset.sum_congr rfl
+      --  intro k _
+      --  --  rw [h₂] <;> simp [Nat.cast_add, Nat.cast_one, Nat.cast_mul, Nat.cast_zero, Nat.cast_succ, add_assoc] <;> ring_nf <;>
+            field_simp <;>
+          ring_nf <;>
+        norm_num
+      hole
+    --  rw [h₅]
+    have h₆ :
+      ∑ k in Finset.range 49, (u 0 + (2 * (k + 1 : ℚ)) : ℚ) = 49 * u 0 + ∑ k in Finset.range 49, (2 * (k + 1 : ℚ)) := by sorry
+    --  rw [h₆]
+    have h₇ : ∑ k in Finset.range 49, (2 * (k + 1 : ℚ) : ℚ) = (2450 : ℚ):= by
+      --  norm_num [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ] <;> rfl
+      hole
+    --  rw [h₇]
+    have h₈ : (49 : ℚ) * u 0 + 2450 = 93:= by
+      --  rw [h₃]
+      --  norm_num
+      hole
+    --  linarith
+    linarith
+  --  exact h₄
+  linarith
+solve_theorem_unified completed. Generated 13 steps.
+Complete fixed proof length: 3026 chars
+Decomposition successful: 13 steps generated
+Complete fixed proof: 3026 chars
+Step 2: Saving decomposition...
+Saved 13 decomposition steps to decomposition_results/minif2f/decomposed/aime_1984_p1
+Also saved header.lean and problem.lean for self-contained information
+Decomposition saved to: decomposition_results/minif2f/decomposed/aime_1984_p1
+Step 3: Saving complete fixed proof...
+Complete fixed proof saved to: decomposition_results/minif2f/decomposed/aime_1984_p1/complete_fixed_proof.lean
+Step 4: Verifying synthesized proof...
+Synthesized proof verification: FAIL
+Step 4.5: Updating metadata with synthesized verification result...
+Metadata updated with synthesized verification result
+Verifying step step_0001...
+  Hole verification (cached): FAIL
+Verifying step step_0002...
+  Hole verification (cached): PASS
+Verifying step step_0003...
+  Hole verification (cached): PASS
+Verifying step step_0004...
+  Hole verification (cached): FAIL
+Verifying step step_0005...
+  Hole verification (cached): FAIL
+Verifying step step_0006...
+  Hole verification (cached): FAIL
+Verifying step step_0007...
+  Hole verification (cached): FAIL
+Verifying step step_0008...
+  Hole verification (cached): FAIL
+Verifying step step_0009...
+  Hole verification (cached): PASS
+Verifying step step_0010...
+  Hole verification (cached): FAIL
+Verifying step step_0011...
+  Hole verification (cached): FAIL
+Verifying step step_0012...
+  Hole verification (cached): FAIL
+Verifying step step_0013...
+  Hole verification (cached): FAIL
+✓ Successfully processed aime_1984_p1 in 132.9s
+Result saved to decomposition_results/minif2f_pipeline_results.json (total: 3 problems)
+
+--- Processing 4/201: aime_1984_p7 ---
+Step 0: Verifying original problem aime_1984_p7...
+✗ Problem aime_1984_p7 skipped: code too long (2107 lines > 400 lines limit)
+Skipping to next problem...
+Result saved to decomposition_results/minif2f_pipeline_results.json (total: 4 problems)
+Failure logged to decomposition_results/minif2f_detailed_failures.json
+
+--- Processing 5/201: aime_1987_p5 ---
+Step 0: Verifying original problem aime_1987_p5...
+Original problem verification: PASS (191 lines)
+Step 1: Decomposing problem aime_1987_p5...
+Decomposing problem: minif2f/aime_1987_p5
+Starting solve_theorem_unified...
+Using clean header: import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+
+--- Generated Command String ---
+example := by
+  have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) :
+      3 * (x ^ 2 * y ^ 2) = 588 := by
+    have h₁ : x ≠ 0 := by
+      by_contra h
+      have h₂ : x = 0 := by simpa using h
+      rw [h₂] at h₀
+      have h₃ : y ^ 2 = 517 := by
+        ring_nf at h₀ ⊢
+        <;> nlinarith
+      have h₄ : y ^ 2 = 517 := by simpa using h₃
+      have h₅ : y ≤ 23 := by
+        nlinarith
+      have h₆ : y ≥ -23 := by
+        nlinarith
+      have h₇ : y ≤ 23 := by simpa using h₅
+      have h₈ : y ≥ -23 := by simpa using h₆
+      interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+    
+    have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by
+      have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := by
+        use y ^ 2
+        have h₂₁₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+        have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517 := by
+          ring_nf at h₂₁₁ ⊢
+          <;> linarith
+        linarith
+      have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by
+        have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+        have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by
+          have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507 := by ring
+          rw [h₂₂₃] at h₂₂₁
+          simpa [dvd_add_right] using h₂₂₁
+        exact h₂₂₂
+      exact h₂₂
+    
+    have h₃ : x ^ 2 = 4 := by
+      have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+      have h₃₂ : x ^ 2 ≥ 1 := by
+        by_contra h₃₂
+        have h₃₃ : x ^ 2 ≤ 0 := by linarith
+        have h₃₄ : x = 0 := by
+          nlinarith
+        contradiction
+      
+      
+      
+      have h₃₅ : 3 * x ^ 2 + 1 = 13 := by
+        
+        have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+          
+          have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+          have h₃₅₃ : 3 * x ^ 2 + 1 = 1 ∨ 3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by
+            
+            have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+            have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by
+              
+              have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+              have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+              linarith
+            
+            have h₃₅₈ : 3 * x ^ 2 + 1 = 1 ∨ 3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by
+              
+              have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+              have h₃₅₁₀ : 3 * x ^ 2 + 1 = 1 ∨ 3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by
+                
+                have h₃₅₁₁ : 3 * x ^ 2 + 1 = 1 ∨ 3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by
+                  
+                  have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                  have h₃₅₁₃ : 3 * x ^ 2 + 1 = 1 ∨ 3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by
+                    
+                    have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                    have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 := by
+                      
+                      have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                      have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+                      linarith
+                    have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                    
+                    have h₃₅₁₉ : 3 * x ^ 2 + 1 = 1 ∨ 3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by
+                      
+                      have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                      have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+                      have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                      
+                      interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;>
+                        (try omega) <;>
+                        (try
+                          {
+                            have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                            have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                            have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                            have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                            interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                          }) <;>
+                        (try
+                          {
+                            have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                            have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                            have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                            have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                            interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                          })
+                    exact h₃₅₁₉
+                  exact h₃₅₁₃
+                exact h₃₅₁₁
+              exact h₃₅₁₀
+            exact h₃₅₈
+          
+          rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+          · 
+            exfalso
+            have h₃₅₄ : x ^ 2 = 0 := by
+              nlinarith
+            have h₃₅₅ : x = 0 := by
+              nlinarith
+            contradiction
+          · 
+            exfalso
+            have h₃₅₄ : x ^ 2 = 2 / 3 := by
+              norm_num at h₃₅₃ ⊢
+              <;> linarith
+            have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+            norm_num at h₃₅₄
+            <;> omega
+          · 
+            exact h₃₅₃
+          · 
+            exfalso
+            have h₃₅₄ : x ^ 2 = 38 / 3 := by
+              norm_num at h₃₅₃ ⊢
+              <;> linarith
+            have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+            norm_num at h₃₅₄
+            <;> omega
+          · 
+            exfalso
+            have h₃₅₄ : x ^ 2 = 56 := by
+              norm_num at h₃₅₃ ⊢
+              <;> linarith
+            have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+            have h₃₅₆ : x ≤ 7 := by nlinarith
+            have h₃₅₇ : x ≥ -7 := by nlinarith
+            interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+          · 
+            exfalso
+            have h₃₅₄ : x ^ 2 = 506 / 3 := by
+              norm_num at h₃₅₃ ⊢
+              <;> linarith
+            have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+            norm_num at h₃₅₄
+            <;> omega
+        exact h₃₅₁
+      
+      have h₃₆ : x ^ 2 = 4 := by
+        have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+        have h₃₆₂ : x ^ 2 = 4 := by
+          nlinarith
+        exact h₃₆₂
+      exact h₃₆
+    
+    have h₄ : y ^ 2 = 49 := by
+      have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+      have h₄₂ : x ^ 2 = 4 := h₃
+      have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by
+        rw [h₄₂] at h₄₁
+        exact h₄₁
+      have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by
+        exact h₄₃
+      have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by
+        ring_nf at h₄₄ ⊢
+        <;> linarith
+      have h₄₆ : 13 * y ^ 2 = 637 := by
+        ring_nf at h₄₅ ⊢
+        <;> linarith
+      have h₄₇ : y ^ 2 = 49 := by
+        ring_nf at h₄₆ ⊢
+        <;> omega
+      exact h₄₇
+    
+    have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+      have h₅₁ : x ^ 2 = 4 := h₃
+      have h₅₂ : y ^ 2 = 49 := h₄
+      have h₅₃ : (x ^ 2 : ℤ) = 4 := by exact_mod_cast h₅₁
+      have h₅₄ : (y ^ 2 : ℤ) = 49 := by exact_mod_cast h₅₂
+      calc
+        3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by
+          rw [h₅₃, h₅₄]
+          <;> ring
+        _ = 588 := by norm_num
+    
+    exact h₅
+------------------------------
+Reconstructed framework:
+have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) : 3 * (x ^ 2 * y ^ 2) = 588 :=
+  by
+  have h₁ : x ≠ 0 := by sorry
+  have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+    by
+    have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := by
+      use y ^ 2
+      have h₂₁₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+      have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517 := by ring_nf at h₂₁₁ ⊢ <;> linarith
+      linarith
+    have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+      by
+      have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+      have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+        by
+        have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507 := by ring
+        rw [h₂₂₃] at h₂₂₁
+        simpa [dvd_add_right] using h₂₂₁
+      exact h₂₂₂
+    exact h₂₂
+  have h₃ : x ^ 2 = 4 := by
+    have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+    have h₃₂ : x ^ 2 ≥ 1 := by
+      by_contra h₃₂
+      have h₃₃ : x ^ 2 ≤ 0 := by linarith
+      have h₃₄ : x = 0 := by nlinarith
+      contradiction
+    have h₃₅ : 3 * x ^ 2 + 1 = 13 :=
+      by
+      have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+        have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+        have h₃₅₃ :
+          3 * x ^ 2 + 1 = 1 ∨
+            3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+          by
+          have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+          have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by
+            have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+            linarith
+          have h₃₅₈ :
+            3 * x ^ 2 + 1 = 1 ∨
+              3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+            by
+            have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₁₀ :
+              3 * x ^ 2 + 1 = 1 ∨
+                3 * x ^ 2 + 1 = 3 ∨
+                  3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+              by
+              have h₃₅₁₁ :
+                3 * x ^ 2 + 1 = 1 ∨
+                  3 * x ^ 2 + 1 = 3 ∨
+                    3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                by
+                have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                have h₃₅₁₃ :
+                  3 * x ^ 2 + 1 = 1 ∨
+                    3 * x ^ 2 + 1 = 3 ∨
+                      3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                  by
+                  have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                  have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 :=
+                    by
+                    have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                    have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+                    linarith
+                  have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                  have h₃₅₁₉ :
+                    3 * x ^ 2 + 1 = 1 ∨
+                      3 * x ^ 2 + 1 = 3 ∨
+                        3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                    by
+                    have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                    have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+                    have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                    interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+                        (try {
+                            have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                            have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                            have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                            have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                            interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                          }) <;>
+                      (try {
+                          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                        })
+                  exact h₃₅₁₉
+                exact h₃₅₁₃
+              exact h₃₅₁₁
+            exact h₃₅₁₀
+          exact h₃₅₈
+        rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 0 := by nlinarith
+          have h₃₅₅ : x = 0 := by nlinarith
+          contradiction
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 2 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          norm_num at h₃₅₄ <;> omega
+        · exact h₃₅₃
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          norm_num at h₃₅₄ <;> omega
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₆ : x ≤ 7 := by nlinarith
+          have h₃₅₇ : x ≥ -7 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          norm_num at h₃₅₄ <;> omega
+      exact h₃₅₁
+    have h₃₆ : x ^ 2 = 4 := by
+      have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+      have h₃₆₂ : x ^ 2 = 4 := by nlinarith
+      exact h₃₆₂
+    exact h₃₆
+  have h₄ : y ^ 2 = 49 := by
+    have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+    have h₄₂ : x ^ 2 = 4 := h₃
+    have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 :=
+      by
+      rw [h₄₂] at h₄₁
+      exact h₄₁
+    have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by exact h₄₃
+    have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by ring_nf at h₄₄ ⊢ <;> linarith
+    have h₄₆ : 13 * y ^ 2 = 637 := by ring_nf at h₄₅ ⊢ <;> linarith
+    have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+    exact h₄₇
+  have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+    have h₅₁ : x ^ 2 = 4 := h₃
+    have h₅₂ : y ^ 2 = 49 := h₄
+    have h₅₃ : (x ^ 2 : ℤ) = 4 := by exact_mod_cast h₅₁
+    have h₅₄ : (y ^ 2 : ℤ) = 49 := by exact_mod_cast h₅₂
+    calc
+      3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+      _ = 588 := by norm_num
+  exact h₅
+Reconstructed framework:
+have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) : 3 * (x ^ 2 * y ^ 2) = 588 :=
+  by
+  have h₁ : x ≠ 0 := by sorry
+  have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by sorry
+  have h₃ : x ^ 2 = 4 := by
+    have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+    have h₃₂ : x ^ 2 ≥ 1 := by
+      by_contra h₃₂
+      have h₃₃ : x ^ 2 ≤ 0 := by linarith
+      have h₃₄ : x = 0 := by nlinarith
+      contradiction
+    have h₃₅ : 3 * x ^ 2 + 1 = 13 :=
+      by
+      have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+        have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+        have h₃₅₃ :
+          3 * x ^ 2 + 1 = 1 ∨
+            3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+          by
+          have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+          have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by
+            have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+            linarith
+          have h₃₅₈ :
+            3 * x ^ 2 + 1 = 1 ∨
+              3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+            by
+            have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₁₀ :
+              3 * x ^ 2 + 1 = 1 ∨
+                3 * x ^ 2 + 1 = 3 ∨
+                  3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+              by
+              have h₃₅₁₁ :
+                3 * x ^ 2 + 1 = 1 ∨
+                  3 * x ^ 2 + 1 = 3 ∨
+                    3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                by
+                have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                have h₃₅₁₃ :
+                  3 * x ^ 2 + 1 = 1 ∨
+                    3 * x ^ 2 + 1 = 3 ∨
+                      3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                  by
+                  have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                  have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 :=
+                    by
+                    have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                    have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+                    linarith
+                  have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                  have h₃₅₁₉ :
+                    3 * x ^ 2 + 1 = 1 ∨
+                      3 * x ^ 2 + 1 = 3 ∨
+                        3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                    by
+                    have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                    have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+                    have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                    interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+                        (try {
+                            have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                            have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                            have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                            have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                            interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                          }) <;>
+                      (try {
+                          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                        })
+                  exact h₃₅₁₉
+                exact h₃₅₁₃
+              exact h₃₅₁₁
+            exact h₃₅₁₀
+          exact h₃₅₈
+        rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 0 := by nlinarith
+          have h₃₅₅ : x = 0 := by nlinarith
+          contradiction
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 2 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          norm_num at h₃₅₄ <;> omega
+        · exact h₃₅₃
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          norm_num at h₃₅₄ <;> omega
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₆ : x ≤ 7 := by nlinarith
+          have h₃₅₇ : x ≥ -7 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+        · exfalso
+          have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+          have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+          norm_num at h₃₅₄ <;> omega
+      exact h₃₅₁
+    have h₃₆ : x ^ 2 = 4 := by
+      have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+      have h₃₆₂ : x ^ 2 = 4 := by nlinarith
+      exact h₃₆₂
+    exact h₃₆
+  have h₄ : y ^ 2 = 49 := by
+    have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+    have h₄₂ : x ^ 2 = 4 := h₃
+    have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 :=
+      by
+      rw [h₄₂] at h₄₁
+      exact h₄₁
+    have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by exact h₄₃
+    have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by ring_nf at h₄₄ ⊢ <;> linarith
+    have h₄₆ : 13 * y ^ 2 = 637 := by ring_nf at h₄₅ ⊢ <;> linarith
+    have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+    exact h₄₇
+  have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+    have h₅₁ : x ^ 2 = 4 := h₃
+    have h₅₂ : y ^ 2 = 49 := h₄
+    have h₅₃ : (x ^ 2 : ℤ) = 4 := by exact_mod_cast h₅₁
+    have h₅₄ : (y ^ 2 : ℤ) = 49 := by exact_mod_cast h₅₂
+    calc
+      3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+      _ = 588 := by norm_num
+  exact h₅
+Reconstructed framework:
+have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) : 3 * (x ^ 2 * y ^ 2) = 588 :=
+  by
+  have h₁ : x ≠ 0 := by sorry
+  have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by sorry
+  have h₃ : x ^ 2 = 4 := by sorry
+  have h₄ : y ^ 2 = 49 := by
+    have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+    have h₄₂ : x ^ 2 = 4 := h₃
+    have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 :=
+      by
+      rw [h₄₂] at h₄₁
+      exact h₄₁
+    have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by exact h₄₃
+    have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by ring_nf at h₄₄ ⊢ <;> linarith
+    have h₄₆ : 13 * y ^ 2 = 637 := by ring_nf at h₄₅ ⊢ <;> linarith
+    have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+    exact h₄₇
+  have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+    have h₅₁ : x ^ 2 = 4 := h₃
+    have h₅₂ : y ^ 2 = 49 := h₄
+    have h₅₃ : (x ^ 2 : ℤ) = 4 := by exact_mod_cast h₅₁
+    have h₅₄ : (y ^ 2 : ℤ) = 49 := by exact_mod_cast h₅₂
+    calc
+      3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+      _ = 588 := by norm_num
+  exact h₅
+Reconstructed framework:
+have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) : 3 * (x ^ 2 * y ^ 2) = 588 :=
+  by
+  have h₁ : x ≠ 0 := by sorry
+  have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by sorry
+  have h₃ : x ^ 2 = 4 := by sorry
+  have h₄ : y ^ 2 = 49 := by sorry
+  have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+    have h₅₁ : x ^ 2 = 4 := h₃
+    have h₅₂ : y ^ 2 = 49 := h₄
+    have h₅₃ : (x ^ 2 : ℤ) = 4 := by exact_mod_cast h₅₁
+    have h₅₄ : (y ^ 2 : ℤ) = 49 := by exact_mod_cast h₅₂
+    calc
+      3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+      _ = 588 := by norm_num
+  exact h₅
+Reconstructed framework:
+have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) : 3 * (x ^ 2 * y ^ 2) = 588 :=
+  by
+  have h₁ : x ≠ 0 := by sorry
+  have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by sorry
+  have h₃ : x ^ 2 = 4 := by sorry
+  have h₄ : y ^ 2 = 49 := by sorry
+  have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by sorry
+  exact h₅
+  Processing step step_0001...
+  Proof framework length: 330 chars
+  Verifying hole content for step step_0001...
+Verification exception: The Lean server closed unexpectedly. Possible reasons (not exhaustive):
+- An uncaught exception in the Lean REPL (for example, an inexistent file has been requested)
+- Not enough memory and/or compute available
+- The cached Lean REPL is corrupted. In this case, clear the cache using the `clear-lean-cache` command.
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0001...
+    Filled verification: PASS
+Created decomposition step: step_0001
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by ring_nf at h₀ ⊢ <;> nlinarith
+  have h₄ : y ^ 2 = 517 := by simpa using h₃
+  have h₅ : y ≤ 23 := by nlinarith
+  have h₆ : y ≥ -23 := by nlinarith
+  have h₇ : y ≤ 23 := by simpa using h₅
+  have h₈ : y ≥ -23 := by simpa using h₆
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by sorry
+  have h₄ : y ^ 2 = 517 := by simpa using h₃
+  have h₅ : y ≤ 23 := by nlinarith
+  have h₆ : y ≥ -23 := by nlinarith
+  have h₇ : y ≤ 23 := by simpa using h₅
+  have h₈ : y ≥ -23 := by simpa using h₆
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by sorry
+  have h₄ : y ^ 2 = 517 := by sorry
+  have h₅ : y ≤ 23 := by nlinarith
+  have h₆ : y ≥ -23 := by nlinarith
+  have h₇ : y ≤ 23 := by simpa using h₅
+  have h₈ : y ≥ -23 := by simpa using h₆
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by sorry
+  have h₄ : y ^ 2 = 517 := by sorry
+  have h₅ : y ≤ 23 := by sorry
+  have h₆ : y ≥ -23 := by nlinarith
+  have h₇ : y ≤ 23 := by simpa using h₅
+  have h₈ : y ≥ -23 := by simpa using h₆
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by sorry
+  have h₄ : y ^ 2 = 517 := by sorry
+  have h₅ : y ≤ 23 := by sorry
+  have h₆ : y ≥ -23 := by sorry
+  have h₇ : y ≤ 23 := by simpa using h₅
+  have h₈ : y ≥ -23 := by simpa using h₆
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by sorry
+  have h₄ : y ^ 2 = 517 := by sorry
+  have h₅ : y ≤ 23 := by sorry
+  have h₆ : y ≥ -23 := by sorry
+  have h₇ : y ≤ 23 := by sorry
+  have h₈ : y ≥ -23 := by simpa using h₆
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+Reconstructed framework:
+have h₁ : x ≠ 0 := by
+  by_contra h
+  have h₂ : x = 0 := by sorry
+  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517 := by sorry
+  have h₄ : y ^ 2 = 517 := by sorry
+  have h₅ : y ≤ 23 := by sorry
+  have h₆ : y ≥ -23 := by sorry
+  have h₇ : y ≤ 23 := by sorry
+  have h₈ : y ≥ -23 := by sorry
+  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+  Processing step step_0002...
+  Proof framework length: 396 chars
+  Verifying hole content for step step_0002...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0002...
+    Filled verification: FAIL
+Created decomposition step: step_0002
+  Processing step step_0003...
+  Proof framework length: 114 chars
+  Verifying hole content for step step_0003...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0003...
+    Filled verification: PASS
+Created decomposition step: step_0003
+Reconstructed proof for h₂:
+have h₂ : x = 0:= by -- simpa using h
+  linarith
+  Processing step step_0004...
+  Proof framework length: 139 chars
+  Verifying hole content for step step_0004...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0004...
+    Filled verification: PASS
+Created decomposition step: step_0004
+Reconstructed proof for h₃:
+have h₃ : y ^ 2 = 517:= by -- -- ring_nf at h₀ ⊢ <;> nlinarith
+  linarith
+  Processing step step_0005...
+  Proof framework length: 143 chars
+  Verifying hole content for step step_0005...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0005...
+    Filled verification: PASS
+Created decomposition step: step_0005
+Reconstructed proof for h₄:
+have h₄ : y ^ 2 = 517:= by -- simpa using h₃
+  linarith
+  Processing step step_0006...
+  Proof framework length: 136 chars
+  Verifying hole content for step step_0006...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0006...
+    Filled verification: PASS
+Created decomposition step: step_0006
+Reconstructed proof for h₅:
+have h₅ : y ≤ 23:= by -- nlinarith
+  nlinarith
+  Processing step step_0007...
+  Proof framework length: 151 chars
+  Verifying hole content for step step_0007...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0007...
+    Filled verification: PASS
+Created decomposition step: step_0007
+Reconstructed proof for h₆:
+have h₆ : y ≥ -23:= by -- nlinarith
+  nlinarith
+  Processing step step_0008...
+  Proof framework length: 170 chars
+  Verifying hole content for step step_0008...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0008...
+    Filled verification: PASS
+Created decomposition step: step_0008
+Reconstructed proof for h₇:
+have h₇ : y ≤ 23:= by -- simpa using h₅
+  linarith
+  Processing step step_0009...
+  Proof framework length: 185 chars
+  Verifying hole content for step step_0009...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0009...
+    Filled verification: PASS
+Created decomposition step: step_0009
+Reconstructed proof for h₈:
+have h₈ : y ≥ -23:= by -- simpa using h₆
+  linarith
+Reconstructed proof for h₁:
+have h₁ : x ≠ 0:= by
+  --  by_contra h
+  have h₂ : x = 0:= by -- simpa using h
+    linarith
+  --  rw [h₂] at h₀
+  have h₃ : y ^ 2 = 517:= by -- -- ring_nf at h₀ ⊢ <;> nlinarith
+    linarith
+  have h₄ : y ^ 2 = 517:= by -- simpa using h₃
+    linarith
+  have h₅ : y ≤ 23:= by -- nlinarith
+    nlinarith
+  have h₆ : y ≥ -23:= by -- nlinarith
+    nlinarith
+  have h₇ : y ≤ 23:= by -- simpa using h₅
+    linarith
+  have h₈ : y ≥ -23:= by -- simpa using h₆
+    linarith
+  --  --  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+  hole
+Reconstructed framework:
+have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+  by
+  have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := by sorry
+  have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+    by
+    have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+    have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+      by
+      have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507 := by ring
+      rw [h₂₂₃] at h₂₂₁
+      simpa [dvd_add_right] using h₂₂₁
+    exact h₂₂₂
+  exact h₂₂
+Reconstructed framework:
+have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+  by
+  have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := by sorry
+  have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by sorry
+  exact h₂₂
+  Processing step step_0010...
+  Proof framework length: 244 chars
+  Verifying hole content for step step_0010...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0010...
+    Filled verification: PASS
+Created decomposition step: step_0010
+Reconstructed framework:
+have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := by
+  use y ^ 2
+  have h₂₁₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517 := by sorry
+  linarith
+  Processing step step_0011...
+  Proof framework length: 288 chars
+  Verifying hole content for step step_0011...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0011...
+    Filled verification: FAIL
+Created decomposition step: step_0011
+  Processing step step_0012...
+  Proof framework length: 227 chars
+  Verifying hole content for step step_0012...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0012...
+    Filled verification: PASS
+Created decomposition step: step_0012
+Reconstructed proof for h₂₁₂:
+have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517:= by -- -- ring_nf at h₂₁₁ ⊢ <;> linarith
+  linarith
+Reconstructed proof for h₂₁:
+have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517:= by
+  --  use y ^ 2
+  have h₂₁₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517:= by -- -- ring_nf at h₂₁₁ ⊢ <;> linarith
+    linarith
+  --  linarith
+  hole
+Reconstructed framework:
+have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+  by
+  have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+  have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := by sorry
+  exact h₂₂₂
+  Processing step step_0013...
+  Proof framework length: 284 chars
+  Verifying hole content for step step_0013...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0013...
+    Filled verification: PASS
+Created decomposition step: step_0013
+Reconstructed framework:
+have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 :=
+  by
+  have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507 := by sorry
+  rw [h₂₂₃] at h₂₂₁
+  simpa [dvd_add_right] using h₂₂₁
+  Processing step step_0014...
+  Proof framework length: 298 chars
+  Verifying hole content for step step_0014...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0014...
+    Filled verification: FAIL
+Created decomposition step: step_0014
+  Processing step step_0015...
+  Proof framework length: 194 chars
+  Verifying hole content for step step_0015...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0015...
+    Filled verification: PASS
+Created decomposition step: step_0015
+Reconstructed proof for h₂₂₃:
+have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507:= by -- ring
+  linarith
+Reconstructed proof for h₂₂₂:
+have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+  by
+  have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507:= by -- ring
+    linarith
+  --  rw [h₂₂₃] at h₂₂₁
+  --  simpa [dvd_add_right] using h₂₂₁
+  hole
+Reconstructed proof for h₂₂:
+have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+  by
+  have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+  have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+    by
+    have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507:= by -- ring
+      linarith
+    --  rw [h₂₂₃] at h₂₂₁
+    --  simpa [dvd_add_right] using h₂₂₁
+    hole
+  --  exact h₂₂₂
+  omega
+Reconstructed proof for h₂:
+have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+  by
+  have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517:= by
+    --  use y ^ 2
+    have h₂₁₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+    have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517:= by -- -- ring_nf at h₂₁₁ ⊢ <;> linarith
+      linarith
+    --  linarith
+    hole
+  have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+    by
+    have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+    have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+      by
+      have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507:= by -- ring
+        linarith
+      --  rw [h₂₂₃] at h₂₂₁
+      --  simpa [dvd_add_right] using h₂₂₁
+      hole
+    --  exact h₂₂₂
+    omega
+  --  exact h₂₂
+  omega
+Reconstructed framework:
+have h₃ : x ^ 2 = 4 := by
+  have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+  have h₃₂ : x ^ 2 ≥ 1 := by sorry
+  have h₃₅ : 3 * x ^ 2 + 1 = 13 :=
+    by
+    have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+      have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+      have h₃₅₃ :
+        3 * x ^ 2 + 1 = 1 ∨
+          3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+        by
+        have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+        have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by
+          have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+          have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+          linarith
+        have h₃₅₈ :
+          3 * x ^ 2 + 1 = 1 ∨
+            3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+          by
+          have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+          have h₃₅₁₀ :
+            3 * x ^ 2 + 1 = 1 ∨
+              3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+            by
+            have h₃₅₁₁ :
+              3 * x ^ 2 + 1 = 1 ∨
+                3 * x ^ 2 + 1 = 3 ∨
+                  3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+              by
+              have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+              have h₃₅₁₃ :
+                3 * x ^ 2 + 1 = 1 ∨
+                  3 * x ^ 2 + 1 = 3 ∨
+                    3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                by
+                have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 :=
+                  by
+                  have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                  have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+                  linarith
+                have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                have h₃₅₁₉ :
+                  3 * x ^ 2 + 1 = 1 ∨
+                    3 * x ^ 2 + 1 = 3 ∨
+                      3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+                  by
+                  have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+                  have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+                  have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+                  interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+                      (try {
+                          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                        }) <;>
+                    (try {
+                        have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                        have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                        have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                        have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                        interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                      })
+                exact h₃₅₁₉
+              exact h₃₅₁₃
+            exact h₃₅₁₁
+          exact h₃₅₁₀
+        exact h₃₅₈
+      rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+      · exfalso
+        have h₃₅₄ : x ^ 2 = 0 := by nlinarith
+        have h₃₅₅ : x = 0 := by nlinarith
+        contradiction
+      · exfalso
+        have h₃₅₄ : x ^ 2 = 2 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+        have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+        norm_num at h₃₅₄ <;> omega
+      · exact h₃₅₃
+      · exfalso
+        have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+        have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+        norm_num at h₃₅₄ <;> omega
+      · exfalso
+        have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+        have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+        have h₃₅₆ : x ≤ 7 := by nlinarith
+        have h₃₅₇ : x ≥ -7 := by nlinarith
+        interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+      · exfalso
+        have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+        have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+        norm_num at h₃₅₄ <;> omega
+    exact h₃₅₁
+  have h₃₆ : x ^ 2 = 4 := by
+    have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+    have h₃₆₂ : x ^ 2 = 4 := by nlinarith
+    exact h₃₆₂
+  exact h₃₆
+Reconstructed framework:
+have h₃ : x ^ 2 = 4 := by
+  have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+  have h₃₂ : x ^ 2 ≥ 1 := by sorry
+  have h₃₅ : 3 * x ^ 2 + 1 = 13 := by sorry
+  have h₃₆ : x ^ 2 = 4 := by
+    have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+    have h₃₆₂ : x ^ 2 = 4 := by nlinarith
+    exact h₃₆₂
+  exact h₃₆
+Reconstructed framework:
+have h₃ : x ^ 2 = 4 := by
+  have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+  have h₃₂ : x ^ 2 ≥ 1 := by sorry
+  have h₃₅ : 3 * x ^ 2 + 1 = 13 := by sorry
+  have h₃₆ : x ^ 2 = 4 := by sorry
+  exact h₃₆
+  Processing step step_0016...
+  Proof framework length: 303 chars
+  Verifying hole content for step step_0016...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0016...
+    Filled verification: PASS
+Created decomposition step: step_0016
+Reconstructed framework:
+have h₃₂ : x ^ 2 ≥ 1 := by
+  by_contra h₃₂
+  have h₃₃ : x ^ 2 ≤ 0 := by sorry
+  have h₃₄ : x = 0 := by nlinarith
+  contradiction
+Reconstructed framework:
+have h₃₂ : x ^ 2 ≥ 1 := by
+  by_contra h₃₂
+  have h₃₃ : x ^ 2 ≤ 0 := by sorry
+  have h₃₄ : x = 0 := by sorry
+  contradiction
+  Processing step step_0017...
+  Proof framework length: 235 chars
+  Verifying hole content for step step_0017...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0017...
+    Filled verification: PASS
+Created decomposition step: step_0017
+  Processing step step_0018...
+  Proof framework length: 165 chars
+  Verifying hole content for step step_0018...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0018...
+    Filled verification: PASS
+Created decomposition step: step_0018
+Reconstructed proof for h₃₃:
+have h₃₃ : x ^ 2 ≤ 0:= by -- linarith
+  linarith
+  Processing step step_0019...
+  Proof framework length: 180 chars
+  Verifying hole content for step step_0019...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0019...
+    Filled verification: PASS
+Created decomposition step: step_0019
+Reconstructed proof for h₃₄:
+have h₃₄ : x = 0:= by -- nlinarith
+  nlinarith
+Reconstructed proof for h₃₂:
+have h₃₂ : x ^ 2 ≥ 1:= by
+  --  by_contra h₃₂
+  have h₃₃ : x ^ 2 ≤ 0:= by -- linarith
+    linarith
+  have h₃₄ : x = 0:= by -- nlinarith
+    nlinarith
+  --  contradiction
+  omega
+Reconstructed framework:
+have h₃₅ : 3 * x ^ 2 + 1 = 13 :=
+  by
+  have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by sorry
+  exact h₃₅₁
+  Processing step step_0020...
+  Proof framework length: 224 chars
+  Verifying hole content for step step_0020...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0020...
+    Filled verification: PASS
+Created decomposition step: step_0020
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by nlinarith
+    have h₃₅₅ : x = 0 := by nlinarith
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by nlinarith
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    have h₃₅₆ : x ≤ 7 := by nlinarith
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    have h₃₅₆ : x ≤ 7 := by sorry
+    have h₃₅₇ : x ≥ -7 := by nlinarith
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    have h₃₅₆ : x ≤ 7 := by sorry
+    have h₃₅₇ : x ≥ -7 := by sorry
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by norm_num at h₃₅₃ ⊢ <;> linarith
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    have h₃₅₆ : x ≤ 7 := by sorry
+    have h₃₅₇ : x ≥ -7 := by sorry
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by nlinarith
+    norm_num at h₃₅₄ <;> omega
+Reconstructed framework:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13 := by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 0 := by sorry
+    have h₃₅₅ : x = 0 := by sorry
+    contradiction
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exact h₃₅₃
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    have h₃₅₆ : x ≤ 7 := by sorry
+    have h₃₅₇ : x ≥ -7 := by sorry
+    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    norm_num at h₃₅₄ <;> omega
+  Processing step step_0021...
+  Proof framework length: 1128 chars
+  Verifying hole content for step step_0021...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0021...
+    Filled verification: FAIL
+Created decomposition step: step_0021
+Reconstructed framework:
+have h₃₅₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by sorry
+  have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by
+    have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+    linarith
+  have h₃₅₈ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+    by
+    have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₁₀ :
+      3 * x ^ 2 + 1 = 1 ∨
+        3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+      by
+      have h₃₅₁₁ :
+        3 * x ^ 2 + 1 = 1 ∨
+          3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+        by
+        have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+        have h₃₅₁₃ :
+          3 * x ^ 2 + 1 = 1 ∨
+            3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+          by
+          have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+          have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 :=
+            by
+            have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+            linarith
+          have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+          have h₃₅₁₉ :
+            3 * x ^ 2 + 1 = 1 ∨
+              3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+            by
+            have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+            have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+            interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+                (try {
+                    have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                    have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                    have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                    have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                    interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                  }) <;>
+              (try {
+                  have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                  have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                  have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                  have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                  interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                })
+          exact h₃₅₁₉
+        exact h₃₅₁₃
+      exact h₃₅₁₁
+    exact h₃₅₁₀
+  exact h₃₅₈
+Reconstructed framework:
+have h₃₅₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by sorry
+  have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₈ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+    by
+    have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₁₀ :
+      3 * x ^ 2 + 1 = 1 ∨
+        3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+      by
+      have h₃₅₁₁ :
+        3 * x ^ 2 + 1 = 1 ∨
+          3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+        by
+        have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+        have h₃₅₁₃ :
+          3 * x ^ 2 + 1 = 1 ∨
+            3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+          by
+          have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+          have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 :=
+            by
+            have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+            linarith
+          have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+          have h₃₅₁₉ :
+            3 * x ^ 2 + 1 = 1 ∨
+              3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+            by
+            have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+            have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+            have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+            interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+                (try {
+                    have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                    have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                    have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                    have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                    interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                  }) <;>
+              (try {
+                  have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+                  have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+                  have h₃₅₂₅ : x ≤ 13 := by nlinarith
+                  have h₃₅₂₆ : x ≥ -13 := by nlinarith
+                  interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+                })
+          exact h₃₅₁₉
+        exact h₃₅₁₃
+      exact h₃₅₁₁
+    exact h₃₅₁₀
+  exact h₃₅₈
+Reconstructed framework:
+have h₃₅₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₄ : 3 * x ^ 2 + 1 > 0 := by sorry
+  have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₈ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  exact h₃₅₈
+  Processing step step_0022...
+  Proof framework length: 568 chars
+  Verifying hole content for step step_0022...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0022...
+    Filled verification: PASS
+Created decomposition step: step_0022
+  Processing step step_0023...
+  Proof framework length: 203 chars
+  Verifying hole content for step step_0023...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0023...
+    Filled verification: PASS
+Created decomposition step: step_0023
+Reconstructed proof for h₃₅₄:
+have h₃₅₄ : 3 * x ^ 2 + 1 > 0:= by -- nlinarith
+  linarith
+  Processing step step_0024...
+  Proof framework length: 345 chars
+  Verifying hole content for step step_0024...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0024...
+    Filled verification: PASS
+Created decomposition step: step_0024
+Reconstructed proof for h₃₅₅:
+have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507:= by
+  have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+  --  linarith
+  linarith
+Reconstructed framework:
+have h₃₅₈ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₀ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  exact h₃₅₁₀
+  Processing step step_0025...
+  Proof framework length: 578 chars
+  Verifying hole content for step step_0025...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0025...
+    Filled verification: PASS
+Created decomposition step: step_0025
+Reconstructed framework:
+have h₃₅₁₀ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₁₁ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  exact h₃₅₁₁
+  Processing step step_0026...
+  Proof framework length: 566 chars
+  Verifying hole content for step step_0026...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0026...
+    Filled verification: PASS
+Created decomposition step: step_0026
+Reconstructed framework:
+have h₃₅₁₁ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  exact h₃₅₁₃
+  Processing step step_0027...
+  Proof framework length: 609 chars
+  Verifying hole content for step step_0027...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0027...
+    Filled verification: PASS
+Created decomposition step: step_0027
+Reconstructed framework:
+have h₃₅₁₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+  have h₃₅₁₉ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+    by
+    have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+    have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+    interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+        (try {
+            have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+            have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+            have h₃₅₂₅ : x ≤ 13 := by nlinarith
+            have h₃₅₂₆ : x ≥ -13 := by nlinarith
+            interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+          }) <;>
+      (try {
+          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+        })
+  exact h₃₅₁₉
+Reconstructed framework:
+have h₃₅₁₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by sorry
+  have h₃₅₁₉ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+    by
+    have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by linarith
+    have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+    interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+        (try {
+            have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+            have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+            have h₃₅₂₅ : x ≤ 13 := by nlinarith
+            have h₃₅₂₆ : x ≥ -13 := by nlinarith
+            interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+          }) <;>
+      (try {
+          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+        })
+  exact h₃₅₁₉
+Reconstructed framework:
+have h₃₅₁₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0 := by sorry
+  have h₃₅₁₉ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  exact h₃₅₁₉
+  Processing step step_0028...
+  Proof framework length: 707 chars
+  Verifying hole content for step step_0028...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0028...
+    Filled verification: PASS
+Created decomposition step: step_0028
+  Processing step step_0029...
+  Proof framework length: 419 chars
+  Verifying hole content for step step_0029...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0029...
+    Filled verification: PASS
+Created decomposition step: step_0029
+Reconstructed proof for h₃₅₁₅:
+have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507:= by
+  have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+  --  linarith
+  linarith
+  Processing step step_0030...
+  Proof framework length: 331 chars
+  Verifying hole content for step step_0030...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0030...
+    Filled verification: PASS
+Created decomposition step: step_0030
+Reconstructed proof for h₃₅₁₈:
+have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0:= by -- nlinarith
+  linarith
+Reconstructed framework:
+have h₃₅₁₉ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by nlinarith
+  interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+      (try {
+          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+        }) <;>
+    (try {
+        have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+        have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+        have h₃₅₂₅ : x ≤ 13 := by nlinarith
+        have h₃₅₂₆ : x ≥ -13 := by nlinarith
+        interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+      })
+Reconstructed framework:
+have h₃₅₁₉ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 :=
+  by
+  have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507 := by sorry
+  have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0 := by sorry
+  interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+      (try {
+          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+        }) <;>
+    (try {
+        have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+        have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+        have h₃₅₂₅ : x ≤ 13 := by nlinarith
+        have h₃₅₂₆ : x ≥ -13 := by nlinarith
+        interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+      })
+  Processing step step_0031...
+  Proof framework length: 1217 chars
+  Verifying hole content for step step_0031...
+    Hole verification: FAIL
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0031...
+    Filled verification: FAIL
+Created decomposition step: step_0031
+  Processing step step_0032...
+  Proof framework length: 390 chars
+  Verifying hole content for step step_0032...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0032...
+    Filled verification: PASS
+Created decomposition step: step_0032
+Reconstructed proof for h₃₅₂₁:
+have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507:= by -- linarith
+  linarith
+  Processing step step_0033...
+  Proof framework length: 419 chars
+  Verifying hole content for step step_0033...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0033...
+    Filled verification: PASS
+Created decomposition step: step_0033
+Reconstructed proof for h₃₅₂₂:
+have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0:= by -- nlinarith
+  linarith
+Reconstructed proof for h₃₅₁₉:
+have h₃₅₁₉ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507:=
+  by
+  have h₃₅₂₀ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₂₁ : 3 * x ^ 2 + 1 ≤ 507:= by -- linarith
+    linarith
+  have h₃₅₂₂ : 3 * x ^ 2 + 1 > 0:= by -- nlinarith
+    linarith
+  --  --  interval_cases 3 * x ^ 2 + 1 <;> norm_num at h₃₅₂₀ ⊢ <;> (try omega) <;>
+      (try {
+          have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+          have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+          have h₃₅₂₅ : x ≤ 13 := by nlinarith
+          have h₃₅₂₆ : x ≥ -13 := by nlinarith
+          interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+        }) <;>
+    (try {
+        have h₃₅₂₃ : x ^ 2 ≥ 1 := by nlinarith
+        have h₃₅₂₄ : x ^ 2 ≤ 169 := by nlinarith
+        have h₃₅₂₅ : x ≤ 13 := by nlinarith
+        have h₃₅₂₆ : x ≥ -13 := by nlinarith
+        interval_cases x <;> norm_num at h₃₅₂₀ ⊢ <;> omega
+      })
+  hole
+Reconstructed proof for h₃₅₁₃:
+have h₃₅₁₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507:=
+  by
+  have h₃₅₁₄ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₅ : 3 * x ^ 2 + 1 ≤ 507:= by
+    have h₃₅₁₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₁₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₁₆
+    --  linarith
+    linarith
+  have h₃₅₁₈ : 3 * x ^ 2 + 1 > 0:= by -- nlinarith
+    linarith
+  have h₃₅₁₉ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  --  exact h₃₅₁₉
+  omega
+Reconstructed proof for h₃₅₁₁:
+have h₃₅₁₁ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507:=
+  by
+  have h₃₅₁₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  --  exact h₃₅₁₃
+  omega
+Reconstructed proof for h₃₅₁₀:
+have h₃₅₁₀ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507:=
+  by
+  have h₃₅₁₁ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  --  exact h₃₅₁₁
+  omega
+Reconstructed proof for h₃₅₈:
+have h₃₅₈ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507:=
+  by
+  have h₃₅₉ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+  have h₃₅₁₀ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  --  exact h₃₅₁₀
+  omega
+Reconstructed proof for h₃₅₃:
+have h₃₅₃ :
+  3 * x ^ 2 + 1 = 1 ∨
+    3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507:=
+  by
+  have h₃₅₄ : 3 * x ^ 2 + 1 > 0:= by -- nlinarith
+    linarith
+  have h₃₅₅ : 3 * x ^ 2 + 1 ≤ 507:= by
+    have h₃₅₆ : 3 * x ^ 2 + 1 ∣ 507 := h₃₅₂
+    have h₃₅₇ : 3 * x ^ 2 + 1 ≤ 507 := Int.le_of_dvd (by norm_num) h₃₅₆
+    --  linarith
+    linarith
+  have h₃₅₈ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  --  exact h₃₅₈
+  omega
+  Processing step step_0034...
+  Proof framework length: 222 chars
+  Verifying hole content for step step_0034...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0034...
+    Filled verification: PASS
+Created decomposition step: step_0034
+Reconstructed proof for h₃₅₄:
+have h₃₅₄ : x ^ 2 = 0:= by -- nlinarith
+  linarith
+  Processing step step_0035...
+  Proof framework length: 237 chars
+  Verifying hole content for step step_0035...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0035...
+    Filled verification: PASS
+Created decomposition step: step_0035
+Reconstructed proof for h₃₅₅:
+have h₃₅₅ : x = 0:= by -- nlinarith
+  linarith
+  Processing step step_0036...
+  Proof framework length: 259 chars
+  Verifying hole content for step step_0036...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0036...
+    Filled verification: PASS
+Created decomposition step: step_0036
+Reconstructed proof for h₃₅₆:
+have h₃₅₆ : x ≤ 7:= by -- nlinarith
+  nlinarith
+  Processing step step_0037...
+  Proof framework length: 275 chars
+  Verifying hole content for step step_0037...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0037...
+    Filled verification: PASS
+Created decomposition step: step_0037
+Reconstructed proof for h₃₅₇:
+have h₃₅₇ : x ≥ -7:= by -- nlinarith
+  nlinarith
+Reconstructed proof for h₃₅₁:
+have h₃₅₁ : 3 * x ^ 2 + 1 = 13:= by
+  have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+  have h₃₅₃ :
+    3 * x ^ 2 + 1 = 1 ∨
+      3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+  --  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+  --  · exfalso
+    have h₃₅₄ : x ^ 2 = 0:= by -- nlinarith
+      linarith
+    have h₃₅₅ : x = 0:= by -- nlinarith
+      linarith
+  --    contradiction
+  --  · exfalso
+    have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+  --  --    norm_num at h₃₅₄ <;> omega
+  --  · exact h₃₅₃
+  --  · exfalso
+    have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+  --  --    norm_num at h₃₅₄ <;> omega
+  --  · exfalso
+    have h₃₅₄ : x ^ 2 = 56 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    have h₃₅₆ : x ≤ 7:= by -- nlinarith
+      nlinarith
+    have h₃₅₇ : x ≥ -7:= by -- nlinarith
+      nlinarith
+  --  --    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+  --  · exfalso
+    have h₃₅₄ : x ^ 2 = 506 / 3 := by sorry
+    have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+  --  --    norm_num at h₃₅₄ <;> omega
+  hole
+Reconstructed proof for h₃₅:
+have h₃₅ : 3 * x ^ 2 + 1 = 13:=
+  by
+  have h₃₅₁ : 3 * x ^ 2 + 1 = 13:= by
+    have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+    have h₃₅₃ :
+      3 * x ^ 2 + 1 = 1 ∨
+        3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+    --  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+    --  · exfalso
+      have h₃₅₄ : x ^ 2 = 0:= by -- nlinarith
+        linarith
+      have h₃₅₅ : x = 0:= by -- nlinarith
+        linarith
+    --    contradiction
+    --  · exfalso
+      have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+      have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    --  --    norm_num at h₃₅₄ <;> omega
+    --  · exact h₃₅₃
+    --  · exfalso
+      have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+      have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    --  --    norm_num at h₃₅₄ <;> omega
+    --  · exfalso
+      have h₃₅₄ : x ^ 2 = 56 := by sorry
+      have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+      have h₃₅₆ : x ≤ 7:= by -- nlinarith
+        nlinarith
+      have h₃₅₇ : x ≥ -7:= by -- nlinarith
+        nlinarith
+    --  --    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+    --  · exfalso
+      have h₃₅₄ : x ^ 2 = 506 / 3 := by sorry
+      have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+    --  --    norm_num at h₃₅₄ <;> omega
+    hole
+  --  exact h₃₅₁
+  linarith
+Reconstructed framework:
+have h₃₆ : x ^ 2 = 4 := by
+  have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+  have h₃₆₂ : x ^ 2 = 4 := by sorry
+  exact h₃₆₂
+  Processing step step_0038...
+  Proof framework length: 271 chars
+  Verifying hole content for step step_0038...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0038...
+    Filled verification: PASS
+Created decomposition step: step_0038
+  Processing step step_0039...
+  Proof framework length: 198 chars
+  Verifying hole content for step step_0039...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0039...
+    Filled verification: PASS
+Created decomposition step: step_0039
+Reconstructed proof for h₃₆₂:
+have h₃₆₂ : x ^ 2 = 4:= by -- nlinarith
+  linarith
+Reconstructed proof for h₃₆:
+have h₃₆ : x ^ 2 = 4:= by
+  have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+  have h₃₆₂ : x ^ 2 = 4:= by -- nlinarith
+    linarith
+  --  exact h₃₆₂
+  linarith
+Reconstructed proof for h₃:
+have h₃ : x ^ 2 = 4:= by
+  have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+  have h₃₂ : x ^ 2 ≥ 1:= by
+    --  by_contra h₃₂
+    have h₃₃ : x ^ 2 ≤ 0:= by -- linarith
+      linarith
+    have h₃₄ : x = 0:= by -- nlinarith
+      nlinarith
+    --  contradiction
+    omega
+  have h₃₅ : 3 * x ^ 2 + 1 = 13:=
+    by
+    have h₃₅₁ : 3 * x ^ 2 + 1 = 13:= by
+      have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+      have h₃₅₃ :
+        3 * x ^ 2 + 1 = 1 ∨
+          3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+      --  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+      --  · exfalso
+        have h₃₅₄ : x ^ 2 = 0:= by -- nlinarith
+          linarith
+        have h₃₅₅ : x = 0:= by -- nlinarith
+          linarith
+      --    contradiction
+      --  · exfalso
+        have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+        have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+      --  --    norm_num at h₃₅₄ <;> omega
+      --  · exact h₃₅₃
+      --  · exfalso
+        have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+        have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+      --  --    norm_num at h₃₅₄ <;> omega
+      --  · exfalso
+        have h₃₅₄ : x ^ 2 = 56 := by sorry
+        have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+        have h₃₅₆ : x ≤ 7:= by -- nlinarith
+          nlinarith
+        have h₃₅₇ : x ≥ -7:= by -- nlinarith
+          nlinarith
+      --  --    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+      --  · exfalso
+        have h₃₅₄ : x ^ 2 = 506 / 3 := by sorry
+        have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+      --  --    norm_num at h₃₅₄ <;> omega
+      hole
+    --  exact h₃₅₁
+    linarith
+  have h₃₆ : x ^ 2 = 4:= by
+    have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+    have h₃₆₂ : x ^ 2 = 4:= by -- nlinarith
+      linarith
+    --  exact h₃₆₂
+    linarith
+  --  exact h₃₆
+  linarith
+Reconstructed framework:
+have h₄ : y ^ 2 = 49 := by
+  have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₄₂ : x ^ 2 = 4 := h₃
+  have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by exact h₄₃
+  have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by ring_nf at h₄₄ ⊢ <;> linarith
+  have h₄₆ : 13 * y ^ 2 = 637 := by ring_nf at h₄₅ ⊢ <;> linarith
+  have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+  exact h₄₇
+Reconstructed framework:
+have h₄ : y ^ 2 = 49 := by
+  have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₄₂ : x ^ 2 = 4 := h₃
+  have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by ring_nf at h₄₄ ⊢ <;> linarith
+  have h₄₆ : 13 * y ^ 2 = 637 := by ring_nf at h₄₅ ⊢ <;> linarith
+  have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+  exact h₄₇
+Reconstructed framework:
+have h₄ : y ^ 2 = 49 := by
+  have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₄₂ : x ^ 2 = 4 := h₃
+  have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by sorry
+  have h₄₆ : 13 * y ^ 2 = 637 := by ring_nf at h₄₅ ⊢ <;> linarith
+  have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+  exact h₄₇
+Reconstructed framework:
+have h₄ : y ^ 2 = 49 := by
+  have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₄₂ : x ^ 2 = 4 := h₃
+  have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by sorry
+  have h₄₆ : 13 * y ^ 2 = 637 := by sorry
+  have h₄₇ : y ^ 2 = 49 := by ring_nf at h₄₆ ⊢ <;> omega
+  exact h₄₇
+Reconstructed framework:
+have h₄ : y ^ 2 = 49 := by
+  have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₄₂ : x ^ 2 = 4 := h₃
+  have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517 := by sorry
+  have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517 := by sorry
+  have h₄₆ : 13 * y ^ 2 = 637 := by sorry
+  have h₄₇ : y ^ 2 = 49 := by sorry
+  exact h₄₇
+  Processing step step_0040...
+  Proof framework length: 519 chars
+  Verifying hole content for step step_0040...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0040...
+    Filled verification: PASS
+Created decomposition step: step_0040
+  Processing step step_0041...
+  Proof framework length: 284 chars
+  Verifying hole content for step step_0041...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0041...
+    Filled verification: PASS
+Created decomposition step: step_0041
+Reconstructed proof for h₄₃:
+have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517:=
+  by
+  --  rw [h₄₂] at h₄₁
+  --  exact h₄₁
+  nlinarith
+  Processing step step_0042...
+  Proof framework length: 309 chars
+  Verifying hole content for step step_0042...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0042...
+    Filled verification: PASS
+Created decomposition step: step_0042
+Reconstructed proof for h₄₄:
+have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517:= by -- exact h₄₃
+  linarith
+  Processing step step_0043...
+  Proof framework length: 325 chars
+  Verifying hole content for step step_0043...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0043...
+    Filled verification: PASS
+Created decomposition step: step_0043
+Reconstructed proof for h₄₅:
+have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517:= by -- -- ring_nf at h₄₄ ⊢ <;> linarith
+  linarith
+  Processing step step_0044...
+  Proof framework length: 350 chars
+  Verifying hole content for step step_0044...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0044...
+    Filled verification: PASS
+Created decomposition step: step_0044
+Reconstructed proof for h₄₆:
+have h₄₆ : 13 * y ^ 2 = 637:= by -- -- ring_nf at h₄₅ ⊢ <;> linarith
+  linarith
+  Processing step step_0045...
+  Proof framework length: 366 chars
+  Verifying hole content for step step_0045...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0045...
+    Filled verification: PASS
+Created decomposition step: step_0045
+Reconstructed proof for h₄₇:
+have h₄₇ : y ^ 2 = 49:= by -- -- ring_nf at h₄₆ ⊢ <;> omega
+  linarith
+Reconstructed proof for h₄:
+have h₄ : y ^ 2 = 49:= by
+  have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+  have h₄₂ : x ^ 2 = 4 := h₃
+  have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517:=
+    by
+    --  rw [h₄₂] at h₄₁
+    --  exact h₄₁
+    nlinarith
+  have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517:= by -- exact h₄₃
+    linarith
+  have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517:= by -- -- ring_nf at h₄₄ ⊢ <;> linarith
+    linarith
+  have h₄₆ : 13 * y ^ 2 = 637:= by -- -- ring_nf at h₄₅ ⊢ <;> linarith
+    linarith
+  have h₄₇ : y ^ 2 = 49:= by -- -- ring_nf at h₄₆ ⊢ <;> omega
+    linarith
+  --  exact h₄₇
+  linarith
+Reconstructed framework:
+have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+  have h₅₁ : x ^ 2 = 4 := h₃
+  have h₅₂ : y ^ 2 = 49 := h₄
+  have h₅₃ : (x ^ 2 : ℤ) = 4 := by sorry
+  have h₅₄ : (y ^ 2 : ℤ) = 49 := by exact_mod_cast h₅₂
+  calc
+    3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+    _ = 588 := by norm_num
+Reconstructed framework:
+have h₅ : 3 * (x ^ 2 * y ^ 2) = 588 := by
+  have h₅₁ : x ^ 2 = 4 := h₃
+  have h₅₂ : y ^ 2 = 49 := h₄
+  have h₅₃ : (x ^ 2 : ℤ) = 4 := by sorry
+  have h₅₄ : (y ^ 2 : ℤ) = 49 := by sorry
+  calc
+    3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+    _ = 588 := by norm_num
+  Processing step step_0046...
+  Proof framework length: 431 chars
+  Verifying hole content for step step_0046...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0046...
+    Filled verification: PASS
+Created decomposition step: step_0046
+  Processing step step_0047...
+  Proof framework length: 224 chars
+  Verifying hole content for step step_0047...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0047...
+    Filled verification: PASS
+Created decomposition step: step_0047
+Reconstructed proof for h₅₃:
+have h₅₃ : (x ^ 2 : ℤ) = 4:= by -- exact_mod_cast h₅₁
+  linarith
+  Processing step step_0048...
+  Proof framework length: 243 chars
+  Verifying hole content for step step_0048...
+    Hole verification: PASS
+    Using filling method: unigram_tactics
+  Verifying filled content for step step_0048...
+    Filled verification: PASS
+Created decomposition step: step_0048
+Reconstructed proof for h₅₄:
+have h₅₄ : (y ^ 2 : ℤ) = 49:= by -- exact_mod_cast h₅₂
+  linarith
+Reconstructed proof for h₅:
+have h₅ : 3 * (x ^ 2 * y ^ 2) = 588:= by
+  have h₅₁ : x ^ 2 = 4 := h₃
+  have h₅₂ : y ^ 2 = 49 := h₄
+  have h₅₃ : (x ^ 2 : ℤ) = 4:= by -- exact_mod_cast h₅₁
+    linarith
+  have h₅₄ : (y ^ 2 : ℤ) = 49:= by -- exact_mod_cast h₅₂
+    linarith
+  --  calc
+  --    3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+  --    _ = 588 := by norm_num
+  linarith
+Reconstructed proof for aime_1987_p5:
+have aime_1987_p5 (x y : ℤ) (h₀ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517) : 3 * (x ^ 2 * y ^ 2) = 588:=
+  by
+  have h₁ : x ≠ 0:= by
+    --  by_contra h
+    have h₂ : x = 0:= by -- simpa using h
+      linarith
+    --  rw [h₂] at h₀
+    have h₃ : y ^ 2 = 517:= by -- -- ring_nf at h₀ ⊢ <;> nlinarith
+      linarith
+    have h₄ : y ^ 2 = 517:= by -- simpa using h₃
+      linarith
+    have h₅ : y ≤ 23:= by -- nlinarith
+      nlinarith
+    have h₆ : y ≥ -23:= by -- nlinarith
+      nlinarith
+    have h₇ : y ≤ 23:= by -- simpa using h₅
+      linarith
+    have h₈ : y ≥ -23:= by -- simpa using h₆
+      linarith
+    --  --  interval_cases y <;> norm_num at h₄ ⊢ <;> omega
+    hole
+  have h₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+    by
+    have h₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517:= by
+      --  use y ^ 2
+      have h₂₁₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+      have h₂₁₂ : y ^ 2 * (3 * x ^ 2 + 1) = 30 * x ^ 2 + 517:= by -- -- ring_nf at h₂₁₁ ⊢ <;> linarith
+        linarith
+      --  linarith
+      hole
+    have h₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+      by
+      have h₂₂₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 30 * x ^ 2 + 517 := h₂₁
+      have h₂₂₂ : (3 * x ^ 2 + 1 : ℤ) ∣ 507:=
+        by
+        have h₂₂₃ : (30 * x ^ 2 + 517 : ℤ) = 10 * (3 * x ^ 2 + 1) + 507:= by -- ring
+          linarith
+        --  rw [h₂₂₃] at h₂₂₁
+        --  simpa [dvd_add_right] using h₂₂₁
+        hole
+      --  exact h₂₂₂
+      omega
+    --  exact h₂₂
+    omega
+  have h₃ : x ^ 2 = 4:= by
+    have h₃₁ : (3 * x ^ 2 + 1 : ℤ) ∣ 507 := h₂
+    have h₃₂ : x ^ 2 ≥ 1:= by
+      --  by_contra h₃₂
+      have h₃₃ : x ^ 2 ≤ 0:= by -- linarith
+        linarith
+      have h₃₄ : x = 0:= by -- nlinarith
+        nlinarith
+      --  contradiction
+      omega
+    have h₃₅ : 3 * x ^ 2 + 1 = 13:=
+      by
+      have h₃₅₁ : 3 * x ^ 2 + 1 = 13:= by
+        have h₃₅₂ : 3 * x ^ 2 + 1 ∣ 507 := h₃₁
+        have h₃₅₃ :
+          3 * x ^ 2 + 1 = 1 ∨
+            3 * x ^ 2 + 1 = 3 ∨ 3 * x ^ 2 + 1 = 13 ∨ 3 * x ^ 2 + 1 = 39 ∨ 3 * x ^ 2 + 1 = 169 ∨ 3 * x ^ 2 + 1 = 507 := by sorry
+        --  rcases h₃₅₃ with (h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃ | h₃₅₃)
+        --  · exfalso
+          have h₃₅₄ : x ^ 2 = 0:= by -- nlinarith
+            linarith
+          have h₃₅₅ : x = 0:= by -- nlinarith
+            linarith
+        --    contradiction
+        --  · exfalso
+          have h₃₅₄ : x ^ 2 = 2 / 3 := by sorry
+          have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+        --  --    norm_num at h₃₅₄ <;> omega
+        --  · exact h₃₅₃
+        --  · exfalso
+          have h₃₅₄ : x ^ 2 = 38 / 3 := by sorry
+          have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+        --  --    norm_num at h₃₅₄ <;> omega
+        --  · exfalso
+          have h₃₅₄ : x ^ 2 = 56 := by sorry
+          have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+          have h₃₅₆ : x ≤ 7:= by -- nlinarith
+            nlinarith
+          have h₃₅₇ : x ≥ -7:= by -- nlinarith
+            nlinarith
+        --  --    interval_cases x <;> norm_num at h₃₅₄ ⊢ <;> omega
+        --  · exfalso
+          have h₃₅₄ : x ^ 2 = 506 / 3 := by sorry
+          have h₃₅₅ : x ^ 2 ≥ 1 := by sorry
+        --  --    norm_num at h₃₅₄ <;> omega
+        hole
+      --  exact h₃₅₁
+      linarith
+    have h₃₆ : x ^ 2 = 4:= by
+      have h₃₆₁ : 3 * x ^ 2 + 1 = 13 := h₃₅
+      have h₃₆₂ : x ^ 2 = 4:= by -- nlinarith
+        linarith
+      --  exact h₃₆₂
+      linarith
+    --  exact h₃₆
+    linarith
+  have h₄ : y ^ 2 = 49:= by
+    have h₄₁ : y ^ 2 + 3 * (x ^ 2 * y ^ 2) = 30 * x ^ 2 + 517 := h₀
+    have h₄₂ : x ^ 2 = 4 := h₃
+    have h₄₃ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517:=
+      by
+      --  rw [h₄₂] at h₄₁
+      --  exact h₄₁
+      nlinarith
+    have h₄₄ : y ^ 2 + 3 * (4 * y ^ 2) = 30 * 4 + 517:= by -- exact h₄₃
+      linarith
+    have h₄₅ : y ^ 2 + 12 * y ^ 2 = 120 + 517:= by -- -- ring_nf at h₄₄ ⊢ <;> linarith
+      linarith
+    have h₄₆ : 13 * y ^ 2 = 637:= by -- -- ring_nf at h₄₅ ⊢ <;> linarith
+      linarith
+    have h₄₇ : y ^ 2 = 49:= by -- -- ring_nf at h₄₆ ⊢ <;> omega
+      linarith
+    --  exact h₄₇
+    linarith
+  have h₅ : 3 * (x ^ 2 * y ^ 2) = 588:= by
+    have h₅₁ : x ^ 2 = 4 := h₃
+    have h₅₂ : y ^ 2 = 49 := h₄
+    have h₅₃ : (x ^ 2 : ℤ) = 4:= by -- exact_mod_cast h₅₁
+      linarith
+    have h₅₄ : (y ^ 2 : ℤ) = 49:= by -- exact_mod_cast h₅₂
+      linarith
+    --  calc
+    --    3 * (x ^ 2 * y ^ 2) = 3 * (4 * 49 : ℤ) := by rw [h₅₃, h₅₄] <;> ring
+    --    _ = 588 := by norm_num
+    linarith
+  --  exact h₅
+  linarith
+solve_theorem_unified completed. Generated 48 steps.
+Complete fixed proof length: 4445 chars
+Decomposition successful: 48 steps generated
+Complete fixed proof: 4445 chars
+Step 2: Saving decomposition...
+Saved 48 decomposition steps to decomposition_results/minif2f/decomposed/aime_1987_p5
+Also saved header.lean and problem.lean for self-contained information
+Decomposition saved to: decomposition_results/minif2f/decomposed/aime_1987_p5
+Step 3: Saving complete fixed proof...
+Complete fixed proof saved to: decomposition_results/minif2f/decomposed/aime_1987_p5/complete_fixed_proof.lean
+Step 4: Verifying synthesized proof...
+Synthesized proof verification: FAIL
+Step 4.5: Updating metadata with synthesized verification result...
+Metadata updated with synthesized verification result
+Verifying step step_0001...
+  Hole verification (cached): FAIL
+Verifying step step_0002...
+  Hole verification (cached): PASS
+Verifying step step_0003...
+  Hole verification (cached): PASS
+Verifying step step_0004...
+  Hole verification (cached): PASS
+Verifying step step_0005...
+  Hole verification (cached): PASS
+Verifying step step_0006...
+  Hole verification (cached): PASS
+Verifying step step_0007...
+  Hole verification (cached): PASS
+Verifying step step_0008...
+  Hole verification (cached): PASS
+Verifying step step_0009...
+  Hole verification (cached): PASS
+Verifying step step_0010...
+  Hole verification (cached): PASS
+Verifying step step_0011...
+  Hole verification (cached): PASS
+Verifying step step_0012...
+  Hole verification (cached): PASS
+Verifying step step_0013...
+  Hole verification (cached): PASS
+Verifying step step_0014...
+  Hole verification (cached): PASS
+Verifying step step_0015...
+  Hole verification (cached): PASS
+Verifying step step_0016...
+  Hole verification (cached): PASS
+Verifying step step_0017...
+  Hole verification (cached): PASS
+Verifying step step_0018...
+  Hole verification (cached): PASS
+Verifying step step_0019...
+  Hole verification (cached): PASS
+Verifying step step_0020...
+  Hole verification (cached): PASS
+Verifying step step_0021...
+  Hole verification (cached): FAIL
+Verifying step step_0022...
+  Hole verification (cached): PASS
+Verifying step step_0023...
+  Hole verification (cached): PASS
+Verifying step step_0024...
+  Hole verification (cached): PASS
+Verifying step step_0025...
+  Hole verification (cached): PASS
+Verifying step step_0026...
+  Hole verification (cached): PASS
+Verifying step step_0027...
+  Hole verification (cached): PASS
+Verifying step step_0028...
+  Hole verification (cached): PASS
+Verifying step step_0029...
+  Hole verification (cached): PASS
+Verifying step step_0030...
+  Hole verification (cached): PASS
+Verifying step step_0031...
+  Hole verification (cached): FAIL
+Verifying step step_0032...
+  Hole verification (cached): PASS
+Verifying step step_0033...
+  Hole verification (cached): PASS
+Verifying step step_0034...
+  Hole verification (cached): PASS
+Verifying step step_0035...
+  Hole verification (cached): PASS
+Verifying step step_0036...
+  Hole verification (cached): PASS
+Verifying step step_0037...
+  Hole verification (cached): PASS
+Verifying step step_0038...
+  Hole verification (cached): PASS
+Verifying step step_0039...
+  Hole verification (cached): PASS
+Verifying step step_0040...
+  Hole verification (cached): PASS
+Verifying step step_0041...
+  Hole verification (cached): PASS
+Verifying step step_0042...
+  Hole verification (cached): PASS
+Verifying step step_0043...
+  Hole verification (cached): PASS
+Verifying step step_0044...
+  Hole verification (cached): PASS
+Verifying step step_0045...
+  Hole verification (cached): PASS
+Verifying step step_0046...
+  Hole verification (cached): PASS
+Verifying step step_0047...
+  Hole verification (cached): PASS
+Verifying step step_0048...
+  Hole verification (cached): PASS
+✓ Successfully processed aime_1987_p5 in 258.1s
+Result saved to decomposition_results/minif2f_pipeline_results.json (total: 5 problems)
+
+--- Processing 6/201: aime_1988_p8 ---
+Step 0: Verifying original problem aime_1988_p8...
+Verification exception: 
+Original problem verification: FAIL (171 lines)
+Step 1: Decomposing problem aime_1988_p8...
+Decomposing problem: minif2f/aime_1988_p8
+Starting solve_theorem_unified...
+Using clean header: import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
+
+--- Generated Command String ---
+example := by
+  have aime_1988_p8 (f : ℕ → ℕ → ℝ) (h₀ : ∀ x, 0 < x → f x x = x)
+      (h₁ : ∀ x y, 0 < x ∧ 0 < y → f x y = f y x)
+      (h₂ : ∀ x y, 0 < x ∧ 0 < y → (↑x + ↑y) * f x y = y * f x (x + y)) : f 14 52 = 364 := by
+    have h₃ : f 2 2 = 2 := by
+      have h₃₁ : f 2 2 = 2 := by
+        have h₃₂ : f 2 2 = (2 : ℝ) := by
+          have h₃₃ : (0 : ℕ) < 2 := by decide
+          have h₃₄ : f 2 2 = (2 : ℝ) := by
+            simpa using h₀ 2 (by decide)
+          exact h₃₄
+        exact_mod_cast h₃₂
+      exact h₃₁
+    
+    have h₄ : f 2 4 = 4 := by
+      have h₄₁ : (↑2 + ↑2 : ℝ) * f 2 2 = (2 : ℝ) * f 2 4 := by
+        have h₄₂ : 0 < (2 : ℕ) ∧ 0 < (2 : ℕ) := by norm_num
+        have h₄₃ := h₂ 2 2 h₄₂
+        norm_num at h₄₃ ⊢
+        <;> linarith
+      have h₄₂ : (↑2 + ↑2 : ℝ) * f 2 2 = (2 : ℝ) * f 2 4 := by
+        exact h₄₁
+      have h₄₃ : f 2 2 = (2 : ℝ) := by exact_mod_cast h₃
+      have h₄₄ : (↑2 + ↑2 : ℝ) * f 2 2 = (2 : ℝ) * f 2 4 := by exact h₄₂
+      have h₄₅ : f 2 4 = 4 := by
+        rw [h₄₃] at h₄₄
+        ring_nf at h₄₄ ⊢
+        <;> linarith
+      exact_mod_cast h₄₅
+    
+    have h₅ : f 4 2 = 4 := by
+      have h₅₁ : f 4 2 = f 2 4 := by
+        apply h₁ 4 2
+        <;> norm_num
+      rw [h₅₁]
+      exact_mod_cast h₄
+    
+    have h₆ : f 4 6 = 12 := by
+      have h₆₁ : (↑4 + ↑2 : ℝ) * f 4 2 = (↑2 : ℝ) * f 4 6 := by
+        have h₆₂ : 0 < (4 : ℕ) ∧ 0 < (2 : ℕ) := by norm_num
+        have h₆₃ := h₂ 4 2 h₆₂
+        norm_num at h₆₃ ⊢ <;> ring_nf at h₆₃ ⊢ <;>
+          (try norm_num at h₆₃ ⊢) <;>
+          (try linarith) <;>
+          (try ring_nf at h₆₃ ⊢ <;> norm_num at h₆₃ ⊢ <;> linarith)
+        <;>
+        (try linarith)
+      have h₆₄ : (↑4 + ↑2 : ℝ) * f 4 2 = (↑2 : ℝ) * f 4 6 := by
+        exact h₆₁
+      have h₆₅ : f 4 2 = (4 : ℝ) := by exact_mod_cast h₅
+      have h₆₆ : (↑4 + ↑2 : ℝ) * f 4 2 = (↑2 : ℝ) * f 4 6 := by exact h₆₁
+      have h₆₇ : f 4 6 = 12 := by
+        rw [h₆₅] at h₆₆
+        ring_nf at h₆₆ ⊢
+        <;> linarith
+      exact_mod_cast h₆₇
+    
+    have h₇ : f 4 10 = 20 := by
+      have h₇₁ : (↑4 + ↑6 : ℝ) * f 4 6 = (↑6 : ℝ) * f 4 10 := by
+        have h₇₂ : 0 < (4 : ℕ) ∧ 0 < (6 : ℕ) := by norm_num
+        have h₇₃ := h₂ 4 6 h₇₂
+        norm_num at h₇₃ ⊢ <;> ring_nf at h₇₃ ⊢ <;>
+          (try norm_num at h₇₃ ⊢) <;>
+          (try linarith) <;>
+          (try ring_nf at h₇₃ ⊢ <;> norm_num at h₇₃ ⊢ <;> linarith)
+        <;>
+        (try linarith)
+      have h₇₄ : (↑4 + ↑6 : ℝ) * f 4 6 = (↑6 : ℝ) * f 4 10 := by
+        exact h₇₁
+      have h₇₅ : f 4 6 = (12 : ℝ) := by exact_mod_cast h₆
+      have h₇₆ : (↑4 + ↑6 : ℝ) * f 4 6 = (↑6 : ℝ) * f 4 10 := by exact h₇₁
+      have h₇₇ : f 4 10 = 20 := by
+        rw [h₇₅] at h₇₆
+        ring_nf at h₇₆ ⊢
+        <;> linarith
+      exact_mod_cast h₇₇
+    
+    have h₈ : f 10 4 = 20 := by
+      have h₈₁ : f 10 4 = f 4 10 := by
+        apply h₁
+        <;> norm_num
+      rw [h₈₁]
+      exact_mod_cast h₇
+    
+    have h₉ : f 10 14 = 70 := by
+      have h₉₁ : (↑10 + ↑4 : ℝ) * f 10 4 = (↑4 : ℝ) * f 10 14 := by
+        have h₉₂ : 0 < (10 : ℕ) ∧ 0 < (4 : ℕ) := by norm_num
+        have h₉₃ := h₂ 10 4 h₉₂
+        norm_num at h₉₃ ⊢ <;> ring_nf at h₉₃ ⊢ <;>
+          (try norm_num at h₉₃ ⊢) <;>
+          (try linarith) <;>
+          (try ring_nf at h₉₃ ⊢ <;> norm_num at h₉₃ ⊢ <;> linarith)
+        <;>
+        (try linarith)
+      have h₉₄ : (↑10 + ↑4 : ℝ) * f 10 4 = (↑4 : ℝ) * f 10 14 := by
+        exact h₉₁
+      have h₉₅ : f 10 4 = (20 : ℝ) := by exact_mod_cast h₈
+      have h₉₆ : (↑10 + ↑4 : ℝ) * f 10 4 = (↑4 : ℝ) * f 10 14 := by exact h₉₁
+      have h₉₇ : f 10 14 = 70 := by
+        rw [h₉₅] at h₉₆
+        ring_nf at h₉₆ ⊢
+        <;> linarith
+      exact_mod_cast h₉₇
+    
+    have h₁₀ : f 14 10 = 70 := by
+      have h₁₀₁ : f 14 10 = f 10 14 := by
+        apply h₁
+        <;> norm_num
+      rw [h₁₀₁]
+      exact_mod_cast h₉
+    
+    have h₁₁ : f 14 24 = 168 := by
+      have h₁₁₁ : (↑14 + ↑10 : ℝ) * f 14 10 = (↑10 : ℝ) * f 14 24 := by
+        have h₁₁₂ : 0 < (14 : ℕ) ∧ 0 < (10 : ℕ) := by norm_num
+        have h₁₁₃ := h₂ 14 10 h₁₁₂
+        norm_num at h₁₁₃ ⊢ <;> ring_nf at h₁₁₃ ⊢ <;>
+          (try norm_num at h₁₁₃ ⊢) <;>
+          (try linarith) <;>
+          (try ring_nf at h₁₁₃ ⊢ <;> norm_num at h₁₁₃ ⊢ <;> linarith)
+        <;>
+        (try linarith)
+      have h₁₁₄ : (↑14 + ↑10 : ℝ) * f 14 10 = (↑10 : ℝ) * f 14 24 := by
+        exact h₁₁₁
+      have h₁₁₅ : f 14 10 = (70 : ℝ) := by exact_mod_cast h₁₀
+      have h₁₁₆ : (↑14 + ↑10 : ℝ) * f 14 10 = (↑10 : ℝ) * f 14 24 := by exact h₁₁₁
+      have h₁₁₇ : f 14 24 = 168 := by
+        rw [h₁₁₅] at h₁₁₆
+        ring_nf at h₁₁₆ ⊢
+        <;> linarith
+      exact_mod_cast h₁₁₇
+    
+    have h₁₂ : f 14 38 = 266 := by
+      have h₁₂₁ : (↑14 + ↑24 : ℝ) * f 14 24 = (↑24 : ℝ) * f 14 38 := by
+        have h₁₂₂ : 0 < (14 : ℕ) ∧ 0 < (24 : ℕ) := by norm_num
+        have h₁₂₃ := h₂ 14 24 h₁₂₂
+        norm_num at h₁₂₃ ⊢ <;> ring_nf at h₁₂₃ ⊢ <;>
+          (try norm_num at h₁₂₃ ⊢) <;>
+          (try linarith) <;>
+          (try ring_nf at h₁₂₃ ⊢ <;> norm_num at h₁₂₃ ⊢ <;> linarith)
+        <;>
+        (try linarith)
+      have h₁₂₄ : (↑14 + ↑24 : ℝ) * f 14 24 = (↑24 : ℝ) * f 14 38 := by
+        exact h₁₂₁
+      have h₁₂₅ : f 14 24 = (168 : ℝ) := by exact_mod_cast h₁₁
+      have h₁₂₆ : (↑14 + ↑24 : ℝ) * f 14 24 = (↑24 : ℝ) * f 14 38 := by exact h₁₂₁
+      have h₁₂₇ : f 14 38 = 266 := by
+        rw [h₁₂₅] at h₁₂₆
+        ring_nf at h₁₂₆ ⊢
+        <;> linarith
+      exact_mod_cast h₁₂₇
+    
+    have h₁₃ : f 14 52 = 364 := by
+      have h₁₃₁ : (↑14 + ↑38 : ℝ) * f 14 38 = (↑38 : ℝ) * f 14 52 := by
+        have h₁₃₂ : 0 < (14 : ℕ) ∧ 0 < (38 : ℕ) := by norm_num
+        have h₁₃₃ := h₂ 14 38 h₁₃₂
+        norm_num at h₁₃₃ ⊢ <;> ring_nf at h₁₃₃ ⊢ <;>
+          (try norm_num at h₁₃₃ ⊢) <;>
+          (try linarith) <;>
+          (try ring_nf at h₁₃₃ ⊢ <;> norm_num at h₁₃₃ ⊢ <;> linarith)
+        <;>
+        (try linarith)
+      have h₁₃₄ : (↑14 + ↑38 : ℝ) * f 14 38 = (↑38 : ℝ) * f 14 52 := by
+        exact h₁₃₁
+      have h₁₃₅ : f 14 38 = (266 : ℝ) := by exact_mod_cast h₁₂
+      have h₁₃₆ : (↑14 + ↑38 : ℝ) * f 14 38 = (↑38 : ℝ) * f 14 52 := by exact h₁₃₁
+      have h₁₃₇ : f 14 52 = 364 := by
+        rw [h₁₃₅] at h₁₃₆
+        ring_nf at h₁₃₆ ⊢
+        <;> linarith
+      exact_mod_cast h₁₃₇
+    
+    exact h₁₃

@@ -1,4 +1,4 @@
-theorem h_backward (h_main : ∀ n ≥ 12, 5 ^ n ≤ n !) (h_forward : ∀ n > 0, 5 ^ n > n ! → n ≤ 11) : ∀ n > 0, n ≤ 11 → 5 ^ n > n ! :=
+theorem h_backward (h_main : ∀ n ≥ 12, 5 ^ n ≤ n.factorial) (h_forward : ∀ n > 0, 5 ^ n > n.factorial → n ≤ 11) : ∀ n > 0, n ≤ 11 → 5 ^ n > n.factorial :=
   by
   intro n hn h_le_11
   have h₁ : n ≤ 11 := h_le_11

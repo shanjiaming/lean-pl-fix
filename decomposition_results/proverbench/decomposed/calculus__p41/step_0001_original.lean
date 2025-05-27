@@ -1,4 +1,4 @@
-theorem limit_of_function  : sorry :=
+theorem limit_of_function (x : ℝ) : Tendsto (fun x => (Real.exp (8 * x) - 1) / x) (𝓝[>] 0) (𝓝 8) :=
   by
   have h₁ : Tendsto (fun y : ℝ => (Real.exp y - 1) / y) (𝓝 0) (𝓝 1) := by sorry
   have h₂ : Tendsto (fun x : ℝ => 8 * x) (𝓝[Set.Ioi 0] 0) (𝓝 0) := by sorry

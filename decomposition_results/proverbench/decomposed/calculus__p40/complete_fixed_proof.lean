@@ -28,4 +28,4 @@ theorem derivative_of_exponential_function : deriv (fun x => exp (-x ^ 2 / 2)) =
     --      exact h₂]
     hole
   --  exact h₀
-  hole
+  norm_cast

@@ -1,4 +1,4 @@
-theorem h_main (x : ℝ) : (1 - Real.log x) / x ^ 2 < 0 ↔ x > rexp 1 := by
+theorem h_main (x : ℝ) : (1 - log x) / x ^ 2 < 0 ↔ x > rexp 1 := by
   --  constructor
   --  · intro h
   --    by_contra h₁

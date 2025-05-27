@@ -2,4 +2,4 @@ theorem h2 (x C : ℝ) (h1 : False) : ∫ (x : ℝ), sin x ^ 10 * cos x = sin x 
   by
   --  exfalso
   --  exact h1
-  hole
+  norm_cast

@@ -1,2 +1,2 @@
-theorem h_injective (hchar : sorry) (h_charZero : sorry) : Function.Injective sorry := by -- exact Int.cast_injective
+theorem h_injective (R : Type u_1) (inst✝¹ : CommRing R) (inst✝ : IsDomain R) (hchar : CharP R 0) (h_charZero : CharZero R) : Function.Injective Int.cast := by exact Int.cast_injective
   hole

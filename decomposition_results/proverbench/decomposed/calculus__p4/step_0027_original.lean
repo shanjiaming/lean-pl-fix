@@ -1,4 +1,4 @@
-theorem h₃₀ (h₀ : sorry) (h₁ : sorry) (h₂₁ : sorry) (h₂₂ : sorry) (x : ℝ) (hx h₂₅ : x ≠ 0) (h₂₆ : x ≠ 3 → (cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) = (cos (2 * x - 6) - 1) / (x - 3) ^ 2 * (1 / x)) (h₂₇ : ¬x = 3) (h₂₈ : x ≠ 3) (h₂₉ : x ≠ 0) : (cos (2 * x - 6) - 1) / (x ^ 3 - 6 * x ^ 2 + 9 * x) = (cos (2 * x - 6) - 1) / (x - 3) ^ 2 * (1 / x) :=
-  by
-  apply h₂₆
-  exact h₂₈
+theorem h₂₃ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) (h₀₉ : Tendsto (fun x => Real.sin x / x) (𝓝[≠] 0) (𝓝 1)) (h₁₂ h₁₉ : Tendsto (fun x => x - 3) (𝓝[≠] 3) (𝓝 0)) (x : ℝ) (hx : x ∈ {3}ᶜ) (h₂₂ : x ≠ 3) : x - 3 ≠ 0 := by
+  intro h₂₄
+  apply h₂₂
+  linarith

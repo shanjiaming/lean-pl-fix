@@ -1,4 +1,4 @@
-theorem h₁ (h_main_claim : sorry ∧ sorry ∧ sorry) (n : ℕ+) (hn : sorry ∧ sorry ∧ sorry) : (↑n : ℕ) ≥ 8 := by
+theorem h₁ (h_main_claim : congruence1 8 ∧ congruence2 8 ∧ congruence3 8) (n : ℕ+) (hn : congruence1 ↑n ∧ congruence2 ↑n ∧ congruence3 ↑n) : ↑n ≥ 8 := by
   by_contra h
   have h₂ : (n : ℕ) ≤ 7 := by sorry
   have h₃ : congruence1 n := hn.1

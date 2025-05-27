@@ -1,4 +1,4 @@
-theorem h_p_eq_17 (p m : ℕ) (h₀ : sorry) (h₁ : ∀ q < p, ¬∃ n, sorry) (h₂ : ∀ k < m, ¬sorry) : p = 17 := by
+theorem h_p_eq_17 (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬∃ n, isSolution q n) (h₂ : ∀ k < m, ¬isSolution p k) : p = 17 := by
   have h₀' : p.Prime := h₀.1
   have h₀'' : 0 < m := h₀.2.1
   have h₀''' : p ^ 2 ∣ m ^ 4 + 1 := h₀.2.2

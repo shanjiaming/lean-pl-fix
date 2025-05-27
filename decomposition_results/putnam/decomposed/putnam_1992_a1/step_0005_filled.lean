@@ -1,2 +1,0 @@
-theorem h₄₃ (f : ℤ → ℤ) (h_imp : (f = fun n => 1 - n) → (∀ (n : ℤ), f (f n) = n) ∧ (∀ (n : ℤ), f (f (n + 2) + 2) = n) ∧ f 0 = 1) (h : (∀ (n : ℤ), f (f n) = n) ∧ (∀ (n : ℤ), f (f (n + 2) + 2) = n) ∧ f 0 = 1) (h₁ : ∀ (n : ℤ), f (f n) = n) (h₂ : ∀ (n : ℤ), f (f (n + 2) + 2) = n) (h₃ : f 0 = 1) (h₄₁ : f 1 = 0) (h₄₂ : f 0 = 1) : f 1 = 0 := by -- linarith
-  linarith

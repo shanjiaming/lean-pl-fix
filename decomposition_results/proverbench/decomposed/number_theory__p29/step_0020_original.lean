@@ -1,0 +1,2 @@
+theorem h₆ (d : ℤ) (x y : ℚ) (h : x ≠ 1) (h_main : x ^ 2 - ↑d * y ^ 2 = 1 → ∃ t, x = (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1) ∧ y = 2 * t / (↑d * t ^ 2 - 1)) (t : ℚ) (ht1 : x = (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1)) (ht2 : y = 2 * t / (↑d * t ^ 2 - 1)) (h₁ : x = (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1)) (h₂ : y = 2 * t / (↑d * t ^ 2 - 1)) (h₃ h₄ : ↑d * t ^ 2 - 1 = 0) (h₅ : ↑d * t ^ 2 = 1) : (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1) = 0 := by
+  rw [h₄] <;> simp [div_eq_mul_inv] <;> ring_nf <;> norm_num

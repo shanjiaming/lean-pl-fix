@@ -1,0 +1,3 @@
+theorem h6 (u✝ v✝ x y u v : ℝ) (h1 : deriv (fun u => f u v) u = deriv (fun u => (u ^ 2 + v ^ 2) * rexp (-(u + v))) u) (h3 : HasDerivAt (fun u => u ^ 2 + v ^ 2) (2 * u) u) (h5 : HasDerivAt (fun u => -(u + v)) (-1) u) : HasDerivAt (fun u => rexp (-(u + v))) (rexp (-(u + v)) * -1) u := by
+  simpa using HasDerivAt.exp (h5)
+  hole

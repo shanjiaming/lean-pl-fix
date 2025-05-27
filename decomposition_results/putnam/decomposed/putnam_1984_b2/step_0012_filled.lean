@@ -1,2 +1,0 @@
-theorem h₆ (f : ℝ → ℝ → ℝ) (hf : ∀ (u v : ℝ), f u v = (u - v) ^ 2 + (√(2 - u ^ 2) - 9 / v) ^ 2) (h₀ : 8 ∈ {y | ∃ u, ∃ v > 0, f (↑u : ℝ) v = y}) (y : ℝ) (u : (↑(Set.Ioo 0 √2) : Type)) (v : ℝ) (hv : v > 0) (hf' : f (↑u : ℝ) v = y) (h₂ : ((↑u : ℝ) - v) ^ 2 + (√(2 - (↑u : ℝ) ^ 2) - 9 / v) ^ 2 = y) (h₃ : f (↑u : ℝ) v = ((↑u : ℝ) - v) ^ 2 + (√(2 - (↑u : ℝ) ^ 2) - 9 / v) ^ 2) (h₅ : 0 < v) : 0 < v := by -- positivity
-  linarith

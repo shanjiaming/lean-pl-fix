@@ -1,0 +1,2 @@
+theorem h₁ (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (h_main : a ^ 3 + b ^ 3 - (a ^ 2 * b + a * b ^ 2) = (a - b) ^ 2 * (a + b)) (h_sum_pos : 0 < a + b) (h_sq_nonneg : 0 ≤ (a - b) ^ 2) : 0 ≤ (a - b) ^ 2 * (a + b) := by -- exact mul_nonneg h_sq_nonneg (le_of_lt h_sum_pos)
+  hole

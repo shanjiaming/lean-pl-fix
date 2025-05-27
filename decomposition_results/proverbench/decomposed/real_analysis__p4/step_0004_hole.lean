@@ -1,2 +1,2 @@
-theorem h₃ (x : ℝ) (h : (1 - Real.log x) / x ^ 2 < 0) (h₁ : ¬x > rexp 1) (h₂ : x ≤ rexp 1) (hx : x ≤ 0) : Real.log x = 0 := by -- exact log_eq_zero_of_nonpos (by linarith)
+theorem h₃ (x : ℝ) (h : (1 - log x) / x ^ 2 < 0) (h₁ : ¬x > rexp 1) (h₂ : x ≤ rexp 1) (hx : x ≤ 0) : log x = 0 := by -- exact log_eq_zero_of_nonpos (by linarith)
   hole

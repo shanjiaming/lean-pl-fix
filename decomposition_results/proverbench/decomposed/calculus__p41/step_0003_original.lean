@@ -1,1 +1,1 @@
-theorem h₂  : sorry := by simpa using Real.tendsto_exp_sub_one_div_at_zero
+theorem h₂ (x : ℝ) : Tendsto (fun y => (Real.exp y - 1) / y) (𝓝 0) (𝓝 1) := by simpa using Real.tendsto_exp_sub_one_div_at_zero

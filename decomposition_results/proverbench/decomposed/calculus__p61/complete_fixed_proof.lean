@@ -27,9 +27,9 @@ theorem limit_of_function_as_x_approaches_zero : Tendsto (fun x => (3 ^ x - 1) /
       --  exact h₃
       hole
     have h₄ : Tendsto (fun x => (3 ^ x - 1) / x) (𝓝[≠] 0) (𝓝 (Real.log 3)):= by
-      --  convert h₂ using 1 <;> simp [sub_ne_zero] <;> field_simp [sub_ne_zero] <;> ring_nf <;> norm_num
+      --  --  --  convert h₂ using 1 <;> simp [sub_ne_zero] <;> field_simp [sub_ne_zero] <;> ring_nf <;> norm_num
       hole
     --  exact h₄
     hole
   --  exact h₁
-  hole
+  simpa

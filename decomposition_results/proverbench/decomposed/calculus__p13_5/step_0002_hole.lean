@@ -1,4 +1,4 @@
-theorem h₁  : HasDerivAt sorry (8 * √3) (π / 3) :=
+theorem h₁  : HasDerivAt f (8 * √3) (π / 3) :=
   by
   have h₂ : HasDerivAt f (2 * (1 / Real.cos (π / 3)) ^ 2 * Real.tan (π / 3)) (π / 3) := by sorry
   have h₃ : (2 * (1 / Real.cos (π / 3)) ^ 2 * Real.tan (π / 3)) = 8 * Real.sqrt 3 := by

@@ -1,5 +1,4 @@
-theorem h₁₁ (h₀ : sorry) : sorry :=
+theorem h₀₉ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) : Tendsto (fun x => Real.sin x / x) (𝓝[≠] 0) (𝓝 1) :=
   by
-  have h₁₂ : ContinuousAt (fun x : ℝ => (1 : ℝ) / x) 3 := by sorry
-  have h₁₃ : Tendsto (fun x : ℝ => (1 : ℝ) / x) (𝓝 3) (𝓝 ((1 : ℝ) / 3)) := by sorry
-  simpa using h₁₃
+  have h₁₀ : Tendsto (fun x : ℝ => (Real.sin x) / x) (𝓝[≠] 0) (𝓝 1) := by sorry
+  exact h₁₀

@@ -1,4 +1,4 @@
-theorem h_main (α : ℝ) : ∃ p q, ∃ (_ : q > 0), ∀ n > 0, ∃ p_n q_n, ∃ (_ : q_n > 0), |α - (↑p_n : ℝ) / (↑q_n : ℝ)| < 1 / (↑q_n : ℝ) ^ 2 :=
+theorem h_main (α : ℝ) : ∃ p q, ∃ (_ : q > 0), ∀ n > 0, ∃ p_n q_n, ∃ (_ : q_n > 0), |α - ↑p_n / ↑q_n| < 1 / ↑q_n ^ 2 :=
   by
   --  use 0, 1, by norm_num
   --  intro n hn
