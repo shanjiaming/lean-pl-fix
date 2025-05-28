@@ -19,6 +19,7 @@ class DecompositionStep:
     original_content: str
     hole_content: str
     filled_content: Optional[str] = None
+    original_verification_pass: Optional[bool] = None
     hole_verification_pass: Optional[bool] = None
     filled_verification_pass: Optional[bool] = None
     additional_info: Optional[Dict] = None
@@ -80,6 +81,11 @@ class DecomposeHoleMergePipeline:
                 print(f"  Error generating hole: {e}")
                 hole_content = proof_framework + "\n  -- TODO: Complete this step\n  hole"
             
+            # Perform verification for original content (before hole transformation)
+            print(f"  Verifying original content for step {step_id}...")
+            original_verification_pass = self.verify_lean_code(header_content, proof_framework, with_macro=False)
+            print(f"    Original verification: {'PASS' if original_verification_pass else 'FAIL'}")
+            
             # Perform verification for hole content
             print(f"  Verifying hole content for step {step_id}...")
             hole_verification_pass = self.verify_lean_code(header_content, hole_content, with_macro=True)
@@ -100,6 +106,7 @@ class DecomposeHoleMergePipeline:
                 original_content=proof_framework,
                 hole_content=hole_content,
                 filled_content=filled_content,
+                original_verification_pass=original_verification_pass,
                 hole_verification_pass=hole_verification_pass,
                 filled_verification_pass=filled_verification_pass,
                 additional_info=additional_info
@@ -203,6 +210,7 @@ class DecomposeHoleMergePipeline:
             "steps": [
                 {
                     "step_id": step.step_id,
+                    "original_verification_pass": step.original_verification_pass,
                     "hole_verification_pass": step.hole_verification_pass,
                     "filled_verification_pass": step.filled_verification_pass,
                     "additional_info": step.additional_info
@@ -267,6 +275,7 @@ class DecomposeHoleMergePipeline:
                 hole_content=hole_content,
                 filled_content=filled_content,
                 # Load verification results if available in metadata
+                original_verification_pass=step_info.get("original_verification_pass"),
                 hole_verification_pass=step_info.get("hole_verification_pass"),
                 filled_verification_pass=step_info.get("filled_verification_pass"),
                 additional_info=step_info.get("additional_info")
@@ -614,6 +623,7 @@ class DecomposeHoleMergePipeline:
                         "original_content": step.original_content,
                         "hole_content": step.hole_content,
                         "filled_content": step.filled_content,
+                        "original_verification_pass": step.original_verification_pass,
                         "hole_verification_pass": hole_verification_pass,
                         "filled_verification_pass": step.filled_verification_pass,
                         "additional_info": step.additional_info
@@ -629,6 +639,7 @@ class DecomposeHoleMergePipeline:
                     # Update metadata with verification results
                     for i, step in enumerate(final_steps):
                         if i < len(metadata["steps"]):
+                            metadata["steps"][i]["original_verification_pass"] = step.original_verification_pass
                             metadata["steps"][i]["hole_verification_pass"] = step.hole_verification_pass
                             metadata["steps"][i]["filled_verification_pass"] = step.filled_verification_pass
                     

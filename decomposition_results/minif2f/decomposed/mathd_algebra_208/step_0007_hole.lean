@@ -1,0 +1,2 @@
+theorem h₄ (h_sqrt : √1000000 = 1000) (h₂ : Real.log (1000000 ^ (1 / 3)) = 1 / 3 * Real.log 1000000) (h₃ : Real.log 1000000 = Real.log (100 ^ 3)) : Real.log (100 ^ 3) = 3 * Real.log 100 := by -- -- rw [Real.log_pow] <;> norm_num
+  hole

@@ -1,0 +1,2 @@
+theorem h₆ (x y : ℕ) (h₀ : x + y = 17402) (h₁ : 10 ∣ x) (h₂ : x / 10 = y) (h₃ : x = 10 * y) (h₄ : y = 1582) (h₅ : x = 15820) : ↑x - ↑y = 14238 := by -- rw [h₅, h₄] <;> norm_num <;> rfl
+  hole

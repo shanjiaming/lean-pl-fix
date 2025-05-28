@@ -1,0 +1,2 @@
+theorem h₁₂₄ (x : ℝ) (a b c : ℕ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c ∧ 0 ≤ x) (h₁ : 2 * x ^ 2 = 4 * x + 9) (h₂ : x = (↑a + √↑b) / ↑c) (h₃ : c = 2) (h₄ : x = (↑a + √↑b) / 2) (h₅ : 2 * x ^ 2 = 4 * x + 9) (h₆ : ↑a > 0) (h₇ : ↑b > 0) (h₈ : 2 > 0) (h₁₁ h₁₂₁ : a = 2) (h₁₂₂ : ↑a = 2) (h₉ : 4 + ↑b + 4 * √↑b = 8 + 4 * √↑b + 18) (h₁₀ : 0 = (22 - ↑b) ^ 2) (h₁₂₃ : ↑b = 22) : b = 22 := by -- norm_cast at h₁₂₃ ⊢ <;> (try omega) <;> (try nlinarith)
+  hole

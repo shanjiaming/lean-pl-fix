@@ -1,0 +1,1 @@
+theorem h₄ (x y z w : ℕ) (ht : 1 < x ∧ 1 < y ∧ 1 < z) (hw : 0 ≤ w) (h0 : Real.log ↑w / Real.log ↑x = 24) (h1 : Real.log ↑w / Real.log ↑y = 40) (h2 : Real.log ↑w / Real.log (↑x * ↑y * ↑z) = 12) (hx : ↑x > 1) (hy : ↑y > 1) (hz : ↑z > 1) (h₁ : ↑x > 1) (h₂ : ↑y > 1) (h₃ : ↑z > 1) : ↑x * ↑y > 1 := by nlinarith

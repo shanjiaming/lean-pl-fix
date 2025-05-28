@@ -1,0 +1,27 @@
+theorem mathd_algebra_513 (a b : ℝ) (h₀ : 3 * a + 2 * b = 5) (h₁ : a + b = 2) : a = 1 ∧ b = 1:=
+  by
+  have h₂ : a = 1:=
+    by
+    have h₂₁ : a = 1:= by
+      have h₂₂ : a + b = 2 := h₁
+      have h₂₃ : 3 * a + 2 * b = 5 := h₀
+      have h₂₄ : b = 2 - a:= by -- linarith
+        linarith
+      --  rw [h₂₄] at h₂₃
+      --  linarith
+      linarith
+    --  exact h₂₁
+    linarith
+  have h₃ : b = 1:=
+    by
+    have h₃₁ : b = 1:= by
+      have h₃₂ : a + b = 2 := h₁
+      --  rw [h₂] at h₃₂
+      --  linarith
+      linarith
+    --  exact h₃₁
+    linarith
+  have h₄ : a = 1 ∧ b = 1:= by -- exact ⟨h₂, h₃⟩
+    norm_cast
+  --  exact h₄
+  simpa

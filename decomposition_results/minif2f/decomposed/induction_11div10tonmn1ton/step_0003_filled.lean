@@ -1,0 +1,2 @@
+theorem h₁ (n : ℕ) : 10 ≡ -1 [ZMOD 11] := by -- norm_num [Int.ModEq]
+  norm_cast

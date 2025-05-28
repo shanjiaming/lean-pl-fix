@@ -1,0 +1,3 @@
+theorem h₇₁ (a : ℕ) (h₀ : Even a) (h₁ : ↑(∑ k ∈ Finset.range 8, 2 * k + 1) - ↑(∑ k ∈ Finset.range 5, a + 2 * sorry) = 4) (h₂ : ∑ k ∈ Finset.range 8, (2 * k + 1) = 64) (h₃ : ∑ k ∈ Finset.range 5, (a + 2 * k) = 5 * a + 20) (h₅ : ∑ k ∈ Finset.range 8, 2 * k + 1 = 64) (h₆ : ∑ k ∈ Finset.range 5, a + 2 * sorry = 5 * a + 20) : ↑(∑ k ∈ Finset.range 8, 2 * k + 1) = 64 := by
+  --  norm_cast <;> simp_all [Finset.sum_range_succ, Nat.even_iff] <;> ring_nf at * <;> norm_num at * <;> omega
+  hole

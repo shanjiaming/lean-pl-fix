@@ -1,0 +1,2 @@
+theorem h₂ (h₁ : 11 * 17 = 187) : 194 = 11 * 17 + 7 := by -- norm_num [h₁] <;> rfl
+  norm_num

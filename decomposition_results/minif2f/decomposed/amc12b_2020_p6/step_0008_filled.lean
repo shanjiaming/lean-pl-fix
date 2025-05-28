@@ -1,0 +1,2 @@
+theorem h₅ (n : ℕ) (h₀ : 9 ≤ n) (h₂ : (n + 2)! = (n + 2) * (n + 1) * n !) (h₃ : (n + 1)! = (n + 1) * n !) (h₄ : ↑(n + 2)! = ↑(n + 2) * ↑(n + 1) * ↑n !) : ↑(n + 1)! = ↑(n + 1) * ↑n ! := by -- norm_cast <;> simp [h₃] <;> ring_nf
+  linarith

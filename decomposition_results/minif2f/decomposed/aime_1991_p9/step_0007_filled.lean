@@ -1,0 +1,2 @@
+theorem h₂ (x : ℝ) (m : ℚ) (h₀ : 1 / cos x + tan x = 22 / 7) (h₁ : 1 / sin x + 1 / tan x = ↑m) (h_cos_ne_zero : cos x ≠ 0) (h : sin x = 0) : sin x = 0 := by -- simpa using h
+  linarith

@@ -1,0 +1,2 @@
+theorem h₇ (n : ℕ) (h₀ h₃ : 3 * n % 11 = 2) (h₆ : 3 * (n % 11) = 3 * n % 33) : 3 * n % 33 % 11 = 3 * n % 11 := by -- omega
+  norm_num

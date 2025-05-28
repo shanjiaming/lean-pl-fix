@@ -1,0 +1,2 @@
+theorem h₉₄ (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (h₁ : t < k) (h₂ : ↑k ^ 2 - ↑m * ↑k + ↑n = 0) (h₃ : ↑t ^ 2 - ↑m * ↑t + ↑n = 0) (h₄ : ↑m = ↑k + ↑t) (h₅ : m = k + t) (h₆ : n = t * k) (h₇ : t = 1) (h₈ : k = n) (h₉₁ : m = k + t) (h₉₂ : k = n) (h₉₃ : t = 1) : m = n + 1 := by -- -- subst_vars <;> ring_nf at * <;> omega
+  hole

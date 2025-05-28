@@ -1,0 +1,1 @@
+theorem h₅₁ (a b : NNReal) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ^ 2 = 6 * b) (h₂ : a ^ 2 = 54 / b) (h₃ : ↑b = 3) (h₄ : ↑a ^ 2 = 18) : 0 < ↑a := by exact_mod_cast h₀.1

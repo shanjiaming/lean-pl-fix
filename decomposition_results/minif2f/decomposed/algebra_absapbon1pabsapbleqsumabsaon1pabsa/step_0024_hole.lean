@@ -1,0 +1,2 @@
+theorem h₇ (a b : ℝ) (h₁ : |a + b| ≤ |a| + |b|) (h₂ : ∀ (x y : ℝ), 0 ≤ x → x ≤ y → x / (1 + x) ≤ y / (1 + y)) (h₃ : |a + b| / (1 + |a + b|) ≤ (|a| + |b|) / (1 + (|a| + |b|))) (h₅ : 0 ≤ |a|) (h₆ : 0 ≤ |b|) : 0 ≤ |a| + |b| := by -- positivity
+  hole

@@ -1,0 +1,2 @@
+theorem h₈ (x : ℝ) (a b c : ℕ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c ∧ 0 ≤ x) (h₁ : 2 * x ^ 2 = 4 * x + 9) (h₂ : x = (↑a + √↑b) / ↑c) (h₃ : c = 2) (h₄ : x = (↑a + √↑b) / 2) (h₅ : 2 * x ^ 2 = 4 * x + 9) (h₆ : ↑a > 0) (h₇ : ↑b > 0) : 2 > 0 := by -- norm_num
+  norm_num

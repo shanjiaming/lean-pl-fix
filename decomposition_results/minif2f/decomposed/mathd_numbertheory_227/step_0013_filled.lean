@@ -1,0 +1,2 @@
+theorem h₁₀ (x y n : ℕ+) (h₀ : ↑↑x / 4 + ↑↑y / 6 = (↑↑x + ↑↑y) / ↑↑n) (h₂ : ↑↑n * (3 * ↑↑x + 2 * ↑↑y) = 12 * (↑↑x + ↑↑y)) (h₆ : ↑n * (3 * ↑x + 2 * ↑y) = 12 * (↑x + ↑y)) (h₈ : ↑n > 0) (h₉ : ↑x > 0) : ↑y > 0 := by -- exact y.property
+  hole

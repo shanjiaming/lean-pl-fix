@@ -1,0 +1,2 @@
+theorem h₅₂ (a b : NNReal) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ^ 2 = 6 * b) (h₂ : a ^ 2 = 54 / b) (h₃ : ↑b = 3) (h₄ : ↑a ^ 2 = 18) (h₅₁ : 0 < ↑a) : 0 < √2 := by -- exact Real.sqrt_pos.mpr (by norm_num)
+  hole

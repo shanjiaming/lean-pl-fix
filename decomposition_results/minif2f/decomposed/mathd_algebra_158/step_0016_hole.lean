@@ -1,0 +1,2 @@
+theorem h₈₂ (a : ℕ) (h₀ : Even a) (h₁ : ↑(∑ k ∈ Finset.range 8, 2 * k + 1) - ↑(∑ k ∈ Finset.range 5, a + 2 * sorry) = 4) (h₂ : ∑ k ∈ Finset.range 8, (2 * k + 1) = 64) (h₃ : ∑ k ∈ Finset.range 5, (a + 2 * k) = 5 * a + 20) (h₅ : ∑ k ∈ Finset.range 8, 2 * k + 1 = 64) (h₆ : ∑ k ∈ Finset.range 5, a + 2 * sorry = 5 * a + 20) (h₇ : 64 - (5 * ↑a + 20) = 4) (h₈₁ : ↑a = 8) : a = 8 := by -- norm_cast at h₈₁ <;> omega
+  hole
