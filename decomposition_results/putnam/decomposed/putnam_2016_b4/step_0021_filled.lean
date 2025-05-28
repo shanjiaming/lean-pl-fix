@@ -1,0 +1,5 @@
+theorem h17 (n : ℕ) (npos : n ≥ 1) (mats01 : Set (Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ)) (hmats01 : mats01 = {A | ∀ (i j : Fin (2 * n)), A i j = 0 ∨ A i j = 1}) (h1 : mats01.Infinite) (h2 : mats01.ncard = 0) (A : ↑mats01) (h5 h6 h7 : 2 * n > 0) (h8 : (fun n => ↑(2 * n)! / (4 ^ n * ↑n !)) n = ↑(2 * n)! / (4 ^ n * sorry)) (h9 h10 h11 : 2 * n > 0) (h12 : (2 * n)! < 4 ^ n * n !) (h13 : 2 * n > 0) (h15 : (2 * n)! < 4 ^ n * n !) (h16 : (2 * n)! / (4 ^ n * n !) = 0) : ↑(2 * n)! / (4 ^ n * sorry) = 0 := by
+  --  --  --  norm_cast at h16 ⊢ <;> simp_all [Nat.cast_eq_zero] <;> field_simp [Nat.cast_eq_zero] at * <;> norm_cast at * <;>
+      simp_all [Nat.div_eq_of_lt] <;>
+    linarith
+  hole

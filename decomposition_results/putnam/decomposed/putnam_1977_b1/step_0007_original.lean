@@ -1,0 +1,1 @@
+theorem h₄ (N : ℤ) (hN : N ≥ 2) (n : ℤ) (hn : n ≥ 2) (h₁ : ↑n ^ 3 - 1 = (↑n - 1) * (↑n ^ 2 + ↑n + 1)) (h₂ : ↑n ^ 3 + 1 = (↑n + 1) * (↑n ^ 2 - ↑n + 1)) (h₃ : ↑n ≠ -1) : ↑n ^ 2 - ↑n + 1 ≠ 0 := by nlinarith [sq_nonneg ((n : ℝ) - 1)]

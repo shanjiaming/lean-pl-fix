@@ -1,0 +1,2 @@
+theorem h₅₉ (y : ℝ → ℝ) (ycontdiff : ContDiff ℝ 1 y) (limy : Tendsto (fun x => deriv y x ^ 2 + y x ^ 3) atTop (𝓝 0)) (h_y_tendsto : Tendsto y atTop (𝓝 0)) (h₂ : Tendsto (fun x => deriv y x ^ 2 + y x ^ 3) atTop (𝓝 0)) (ε : ℝ) (hε : 0 < ε) (h₅ : ∀ᶠ (x : ℝ) in atTop, |deriv y x ^ 2 + y x ^ 3| < ε) (x : ℝ) (hx h₅₆ : |deriv y x ^ 2 + y x ^ 3| < ε) (h₅₇ : deriv y x ^ 2 + y x ^ 3 < ε) (h₅₈ : -ε < deriv y x ^ 2 + y x ^ 3) : y x ^ 3 < ε := by -- nlinarith [sq_nonneg (deriv y x)]
+  nlinarith

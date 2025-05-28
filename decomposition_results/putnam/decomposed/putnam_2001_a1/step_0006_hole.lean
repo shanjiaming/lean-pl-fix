@@ -1,0 +1,2 @@
+theorem h5 (S : Type u_1) (inst✝ : Mul S) (hS : ∀ (a b : S), a * b * a = b) (a b : S) (h2 : a * b * a = b) (h3 : a * b * a * (a * b) = b * (a * b)) (h4 : a * b * a * (a * b) = a) : b * (a * b) = a := by rw [← h4] <;> simp [h3]
+  hole

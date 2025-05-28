@@ -1,0 +1,1 @@
+theorem h4 (S : Type u_1) (inst✝ : Mul S) (hself : ∀ (x : S), x * x = x) (h2 : ∀ (x y z : S), x * y * z = y * z * x) (h_comm : ∀ (x y : S), x * y = y * x) (x y z : S) (h3 : x * y * z = y * z * x) : y * z * x = x * (y * z) := by rw [h_comm (y * z) x]

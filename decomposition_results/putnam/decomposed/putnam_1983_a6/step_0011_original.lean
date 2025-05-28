@@ -1,0 +1,1 @@
+theorem h₅₅ (F : ℝ → ℝ) (hF : F = fun a => a ^ 4 / rexp (a ^ 3) * ∫ (x : ℝ) in 0 ..a, ∫ (y : ℝ) in 0 ..a - x, rexp (x ^ 3 + y ^ 3)) (a : ℝ) (h₃ : 0 < a) (h₄ : a > 0) (h₅₂ : 0 < a) (h₅₃ : 0 < a ^ 3) (h₅₄ : 0 < rexp (a ^ 3)) : 0 < rexp (a ^ 3) := by positivity

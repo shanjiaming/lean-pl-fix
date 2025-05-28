@@ -1,0 +1,2 @@
+theorem h₅ (P : ℝ × ℝ → Prop) (hP :  P = fun x =>    match x with    | (x, y) => x ^ 2 + y ^ 2 = 1) (B : Set (ℝ × ℝ)) (hB_sub : B ⊆ setOf P) (hB_closed : IsClosed B) (hB_xor : ∀ (x y : ℝ), P (x, y) → Xor' ((x, y) ∈ B) ((-x, -y) ∈ B)) (h₁ : (1, 0) ∈ setOf P) (h₂ : ¬∃ p, p ∈ B) (h₃ : B = ∅) (h₄ : P (1, 0) → Xor' ((1, 0) ∈ B) ((-1, -0) ∈ B)) : P (1, 0) := by -- simp [hP] <;> norm_num
+  simpa

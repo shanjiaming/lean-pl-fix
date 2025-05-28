@@ -1,0 +1,2 @@
+theorem h₂ (n : ℕ) (hn : n ≥ 2) (S : Set ℝ[X]) (hS : S = {P | P.natDegree = n}) (negs : ℝ[X] → ℕ) (hnegs : ∀ (P : ℝ[X]), negs P = ∑ i ∈ Finset.range (P.natDegree + 1), if P.coeff i < 0 then 1 else 0) (h₁ : sSup {x | ∃ P ∈ S, negs (P ^ 2) = x} = 2 * n - 2) : (fun n => 2 * n - 2) n = 2 * n - 2 := by -- sorry
+  norm_num

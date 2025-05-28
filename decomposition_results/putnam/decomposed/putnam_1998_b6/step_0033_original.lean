@@ -1,0 +1,1 @@
+theorem h₂ (a b c n : ℤ) (hn : n > 0) (hn' : ¬∃ k, ↑k = √(↑n ^ 3 + ↑a * ↑n ^ 2 + ↑b * ↑n + ↑c)) (k : ℤ) (hk h₁ : ↑k = √(↑n ^ 3 + ↑a * ↑n ^ 2 + ↑b * ↑n + ↑c)) : ¬∃ k, ↑k = √(↑n ^ 3 + ↑a * ↑n ^ 2 + ↑b * ↑n + ↑c) := by exact hn'

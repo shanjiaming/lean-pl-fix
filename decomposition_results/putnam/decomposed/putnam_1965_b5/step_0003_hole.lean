@@ -1,0 +1,2 @@
+theorem h₂ (K : Type u_1) (inst✝ : Fintype K) (V E : ℕ) (hV : V = Nat.card K) (hE : 4 * E ≤ V ^ 2) (h : E = 0) (a : K) (w : ⊥.Walk a a) : w.length = 0 := by cases w <;> simp_all [SimpleGraph.Walk.length, SimpleGraph.Walk.nil] <;> aesop
+  hole

@@ -1,0 +1,2 @@
+theorem h14 (fact h2 h3 h4 h5 h7 h8 h11 : ∫ (x : ℝ) in univ, rexp (-x ^ 2) = √π) (h12 : √π > 0) : ∫ (x : ℝ) in univ, rexp (-x ^ 2) > √π := by
+  norm_num [h11, Real.sqrt_eq_iff_sq_eq, Real.pi_pos.le] at h11 ⊢ <;> linarith [Real.pi_gt_three]

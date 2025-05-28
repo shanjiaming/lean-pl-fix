@@ -1,0 +1,2 @@
+theorem h₅₇ (f : ℝ → ℝ) (hfdiff : Differentiable ℝ f) (hfderiv : ∀ x > 0, deriv f x = -3 * f x + 6 * f (2 * x)) (hdecay : ∀ x ≥ 0, |f x| ≤ Real.exp (-√x)) (μ : ℕ → ℝ) (μ_def : ∀ (n : ℕ), μ n = ∫ (x : ℝ) in Set.Ioi 0, x ^ n * f x) (h₂ : |f 0| ≤ Real.exp (-√0)) (h₃ : |f 1| ≤ Real.exp (-√1)) (h₄ : |f 2| ≤ Real.exp (-√2)) (h₅ : f 0 = 0) (h₅₅ : deriv f 1 = -3 * f 1 + 6 * f (2 * 1)) (h₅₆ : deriv f 2 = -3 * f 2 + 6 * f (2 * 2)) : deriv f 1 = -3 * f 1 + 6 * f (2 * 1) := by -- simpa using hfderiv 1 (by norm_num)
+  hole

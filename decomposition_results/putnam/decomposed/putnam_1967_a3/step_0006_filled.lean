@@ -1,0 +1,2 @@
+theorem h₂ (h₅_mem : sorry) (a' : ℤ) (P : ℤ[X]) (hP₁ : P.degree = 2) (z₁ z₂ : ↑(Set.Ioo 0 1)) (hz₁₂ : z₁ ≠ z₂) (hz₁ : (aeval ↑z₁) P = 0) (hz₂ : (aeval ↑z₂) P = 0) (hP₂ : P.coeff 2 = a') (hP₃ : a' > 0) (hP₄ : P.degree = 2) (hP₅ : P.coeff 2 = a') (hP₆ : a' > 0) : a' ≤ 4 := by -- omega
+  hole

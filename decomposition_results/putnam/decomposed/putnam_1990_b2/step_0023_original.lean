@@ -1,0 +1,3 @@
+theorem h₆ (x z : ℝ) (P : ℕ → ℝ) (xlt1 : |x| < 1) (zgt1 : |z| > 1) (hP h₁ : ∀ n ≥ 1, P n = (∏ i, (1 - z * x ^ ↑i)) / ∏ i, (z - x ^ ↑i)) (n : ℕ) (hn : n ≥ 1) (h₃ : P n = (∏ i, (1 - z * x ^ ↑i)) / ∏ i, (z - x ^ ↑i)) (h₄ : ∏ i, (1 - z * x ^ ↑i) = 0) (h₅ : ∏ i, (z - x ^ ↑i) ≠ 0) : P n = 0 := by
+  rw [h₃]
+  simp [h₄, h₅]

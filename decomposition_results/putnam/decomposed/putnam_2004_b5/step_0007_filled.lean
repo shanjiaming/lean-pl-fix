@@ -1,0 +1,2 @@
+theorem h₇ (xprod : ℝ → ℝ) (hxprod :  ∀ x ∈ Set.Ioo 0 1,    Tendsto (fun N => ∏ n ∈ Finset.range N, ((1 + x ^ (n + 1)) / (1 + x ^ n)) ^ x ^ n) atTop (𝓝 (xprod x))) (h₁ : ∀ᶠ (x : ℝ) in 𝓝[<] 1, x ∈ Set.Ioo 0 1) (x : ℝ) (hx h₄ : x ∈ Set.Ioo 0 1) (h₅ : Tendsto (fun N => ∏ n ∈ Finset.range N, ((1 + x ^ (n + 1)) / (1 + x ^ n)) ^ x ^ n) atTop (𝓝 (xprod x))) : x > 0 := by -- linarith [h₄.1]
+  hole

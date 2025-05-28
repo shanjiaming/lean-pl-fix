@@ -1,0 +1,14 @@
+import Mathlib
+
+open Topology MvPolynomial Filter Set
+
+-- False
+/--
+Let $S$ be a set of rational numbers such that
+\begin{enumerate}
+\item[(a)] $0 \in S$;
+\item[(b)] If $x \in S$ then $x+1\in S$ and $x-1\in S$; and
+\item[(c)] If $x\in S$ and $x\not\in\{0,1\}$, then $\frac{1}{x(x-1)}\in S$.
+\end{enumerate}
+Must $S$ contain all rational numbers?
+-/

@@ -1,0 +1,7 @@
+theorem h_superset (IsValidGame : List ℕ → Prop) (IsValidGame_def : ∀ (g : List ℕ), IsValidGame g ↔ g.Nodup ∧ ∀ i ∈ g, i ∈ Icc 1 g.length) (parityOf : List ℕ → ZMod 2) (parityOf_def : ∀ (g : List ℕ), parityOf g = ↑(#({i ∈ range g.length | g[i]! = i + 1}))) (ConformsToStrategy : List ℕ → (List ℕ → ℕ) → Prop) (ConformsToStrategy_def :  ∀ (g : List ℕ) (s : List ℕ → ℕ),    ConformsToStrategy g s ↔ ∀ (i : ℕ) (h : i < g.length), Odd i → g[i] = s (List.take i g)) (IsWinningFor : ℕ → (List ℕ → ℕ) → Prop) (IsWinningFor_def :  ∀ (n : ℕ) (s : List ℕ → ℕ),    IsWinningFor n s ↔ ∃ p, ∀ (g : List ℕ), g.length = n → IsValidGame g → ConformsToStrategy g s → parityOf g = p) (h_subset : {n | 0 < n ∧ ∃ s, IsWinningFor n s} ⊆ {n | 0 < n}) : {n | 0 < n} ⊆ {n | 0 < n ∧ ∃ s, IsWinningFor n s} :=
+  by
+  --  intro n hn
+  have hn' : 0 < n := by sorry
+  have h₁ : ∃ s, IsWinningFor n s := by sorry
+  --  exact ⟨hn', h₁⟩
+  hole

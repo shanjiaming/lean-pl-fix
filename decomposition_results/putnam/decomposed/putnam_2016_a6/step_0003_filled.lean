@@ -1,0 +1,2 @@
+theorem h₁ (p : ℝ → Prop) (hp :  ∀ (c : ℝ),    p c ↔      ∀ (P : ℝ[X]),        P.degree = 3 →          (∃ x ∈ Icc 0 1, eval x P = 0) → ∫ (x : ℝ) in 0 ..1, |eval x P| ≤ c * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x P|}) (P : ℝ[X]) (h_deg : P.degree = 3) (h_root : ∃ x ∈ Icc 0 1, eval x P = 0) : ∫ (x : ℝ) in 0 ..1, |eval x P| ≤ 5 / 6 * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x P|} := by sorry
+  hole

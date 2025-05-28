@@ -1,0 +1,2 @@
+theorem h₆ (a b : ℕ → ℕ) (ha : StrictMono a ∧ ∀ (n : ℕ), a n > 0) (hb : b 0 = a 0 ∧ ∀ (n : ℕ), b (n + 1) = lcm (b n) (a (n + 1))) (h_b_pos : ∀ (n : ℕ), b n > 0) (n : ℕ) (h₁ : b (n + 1) = lcm (b n) (a (n + 1))) (h₂ : b n ∣ lcm (b n) (a (n + 1))) (h₄ : 0 < b n) (h₅ : 0 < a (n + 1)) : 0 < lcm (b n) (a (n + 1)) := by -- apply Nat.lcm_pos (h_b_pos n) (ha.2 (n + 1))
+  hole

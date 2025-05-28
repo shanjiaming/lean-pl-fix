@@ -1,0 +1,10 @@
+theorem h₂₀ (IsQualifying : Set ℤ → Prop) (IsQualifying_def :  ∀ (S : Set ℤ), IsQualifying S ↔ (∀ n ∈ S, 0 < n) ∧ 2 ∈ S ∧ (∀ n > 0, n ^ 2 ∈ S → n ∈ S) ∧ ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (S : Set ℤ) (hS : IsLeast IsQualifying S) (h₁ : 1 ∉ S) (x : ℤ) (hx_pos : x > 0) (hx_div : 5 ∣ x) (hx_in_S : x ∈ S) (h₂ : IsQualifying S) (h₃ : ∀ n ∈ S, 0 < n) (h₄ : 2 ∈ S) (h₅ : ∀ n > 0, n ^ 2 ∈ S → n ∈ S) (h₆ : ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (h₇ : x ∈ S) (h₈ : 0 < x) (h₉ : 5 ∣ x) (n : ℤ) (hn_in_S : n ∈ S) (hn_pos : 0 < n) (hn_div : 5 ∣ n) (h₁₁ : (n + 5) ^ 2 ∈ S) (h₁₂ : 0 < (n + 5) ^ 2) (h₁₃ : 5 ∣ (n + 5) ^ 2) (h₁₇ : (n + 5) ^ 2 ∈ S) (h₁₈ : 0 < (n + 5) ^ 2) (h₁₉ : 5 ∣ (n + 5) ^ 2) : False :=
+  by
+  have h₂₁ : IsQualifying (S \ {x | 5 ∣ x}) := by sorry
+  have h₃₅ : S \ {x | 5 ∣ x} ⊆ S := by sorry
+  have h₃₆ : IsQualifying (S \ {x | 5 ∣ x}) := h₂₁
+  have h₃₇ : S ⊆ S \ {x | 5 ∣ x} := by sorry
+  have h₃₈ : n ∈ S \ {x | 5 ∣ x} := h₃₇ hn_in_S
+  have h₃₉ : ¬5 ∣ n := h₃₈.2
+  have h₄₀ : 5 ∣ n := hn_div
+  exact h₃₉ h₄₀

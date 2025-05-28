@@ -1,0 +1,2 @@
+theorem h₇ (abcvals : ℤ → ℤ → ℤ → Prop) (habcvals : ∀ (a b c : ℤ), abcvals a b c ↔ (a = 0 ∧ b = 0 ∧ c = 0) ∧ |a| < 1000000 ∧ |b| < 1000000 ∧ |c| < 1000000) (a b c : ℤ) (h₁ : abcvals a b c) (h₂ : |↑a + ↑b * √2 + ↑c * √3| < 10 ^ (-11)) (h₃ : a = 0 ∧ b = 0 ∧ c = 0) (h₅ : ↑a = 0) (h₆ : ↑b = 0) : ↑c = 0 := by -- exact_mod_cast h₃.2.2
+  hole

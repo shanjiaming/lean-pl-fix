@@ -1,0 +1,3 @@
+theorem h₅ (S : ℕ → Set ℤ) (hSfin : ∀ (n : ℕ), (S n).Finite) (hSpos : ∀ (n : ℕ), ∀ s ∈ S n, s > 0) (hSdef : ∀ (n : ℕ) (a : ℤ), a ∈ S (n + 1) ↔ Xor' (a - 1 ∈ S n) (a ∈ S n)) (h₁ : S 0 = ∅) (h₂ : ∀ (n : ℕ), S n = ∅) (n : ℕ) (h₃ : S n = ∅) (h₄ : S 0 = ∅) : S n = S 0 ∪ {M | M - ↑n ∈ S 0} := by
+  --  --  rw [h₃, h₄] <;> simp [Set.ext_iff] <;> (try omega) <;> (try aesop) <;> (try simp_all [Set.ext_iff]) <;> (try omega)
+  hole

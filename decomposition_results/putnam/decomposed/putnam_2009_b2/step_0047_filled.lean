@@ -1,0 +1,2 @@
+theorem h₁ (h_subset₁ :  {c | ∃ s, s 0 = 0 ∧ StrictMono s ∧ ∃ n, s n = 1 ∧ ∑ i ∈ Finset.range n, (s (i + 1) ^ 3 - s i * s (i + 1) ^ 2) = c} ⊆    Ioc (1 / 3) 1) (c : ℝ) (hc : c ∈ Ioc (1 / 3) 1) : c > 1 / 3 := by -- exact hc.1
+  hole

@@ -1,0 +1,7 @@
+theorem h₃ (S : Set ℝ) (hS : ∀ a ∈ S, ∀ b ∈ S, a * b ∈ S) (T U : Set ℝ) (hsub : T ⊆ S ∧ U ⊆ S) (hunion : T ∪ U = S) (hdisj : T ∩ U = ∅) (hT3 : ∀ a ∈ T, ∀ b ∈ T, ∀ c ∈ T, a * b * c ∈ T) (hU3 : ∀ a ∈ U, ∀ b ∈ U, ∀ c ∈ U, a * b * c ∈ U) (h₀ : ¬∀ a ∈ T, ∀ b ∈ T, a * b ∈ T) (u : ℝ) (hu : u ∈ U) (v : ℝ) (hv : v ∈ U) (h : u * v ∉ U) (h₂ : u * v ∈ T) : ∃ a ∈ T, ∃ b ∈ T, a * b ∈ U :=
+  by
+  --  by_contra h₄
+  --  push_neg at h₄
+  have h₅ : ∀ (a : ℝ), a ∈ T → ∀ (b : ℝ), b ∈ T → a * b ∈ T := by sorry
+  --  exact h₀ h₅
+  norm_cast

@@ -1,0 +1,7 @@
+theorem putnam_2005_a2 (n : ℕ) (npos : n > 0) (S : Set (ℤ × ℤ)) (unit : ℤ × ℤ → ℤ × ℤ → Prop) (rooktour : (ℕ → ℤ × ℤ) → Prop) (hS : S = (Icc 1 ↑n).prod (Icc 1 3)) (hunit :  unit = fun x x_1 =>    match x with    | (a, b) =>      match x_1 with      | (c, d) => a = c ∧ |d - b| = 1 ∨ b = d ∧ |c - a| = 1) (hrooktour :  rooktour = fun p =>    (∀ P ∈ S, ∃! i, i ∈ Icc 1 (3 * n) ∧ p i = P) ∧      (∀ i ∈ Icc 1 (3 * n - 1), unit (p i) (p (i + 1))) ∧ p 0 = 0 ∧ ∀ i > 3 * n, p i = 0) : {p | rooktour p ∧ p 1 = (1, 1) ∧ p (3 * n) = (↑n, 1)}.encard = ↑((fun n => if n = 1 then 0 else 2 ^ (n - 2)) n) :=
+  by
+  have h₁ :
+    ({p : ℕ → ℤ × ℤ | rooktour p ∧ p 1 = (1, 1) ∧ p (3 * n) = ((n : ℤ), 1)}.encard =
+      ((fun n ↦ if n = 1 then 0 else 2 ^ (n - 2)) : ℕ → ℕ) n) := by sorry
+  --  exact h₁
+  norm_cast

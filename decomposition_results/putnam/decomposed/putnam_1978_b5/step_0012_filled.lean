@@ -1,0 +1,2 @@
+theorem h₆ (S : Set ℝ[X]) (hS : S = {p | p.degree = 4 ∧ ∀ x ∈ Icc (-1) 1, eval x p ∈ Icc 0 1}) (h_main₁ : 4 * X ^ 4 - 4 * X ^ 2 + 1 ∈ S) (p : ℝ[X]) (hp : p ∈ {p | p.degree = 4 ∧ ∀ x ∈ Icc (-1) 1, eval x p ∈ Icc 0 1}) (h₁ : p.degree = 4) (h₂ : ∀ x ∈ Icc (-1) 1, eval x p ∈ Icc 0 1) (h₄ : p.coeff 4 > 4) (h₅ : p.degree = 4) : p.coeff 4 > 4 := by -- simpa using h₄
+  linarith

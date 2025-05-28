@@ -1,0 +1,6 @@
+theorem h₇ (pa : (ℕ → ℝ) → Prop) (hpa : ∀ (a : ℕ → ℝ), pa a ↔ (∀ (n : ℕ), a n > 0) ∧ ∃ L, Tendsto (fun N => ∑ n ∈ Finset.range N, 1 / a n) atTop (𝓝 L)) (a : ℕ → ℝ) (ha : pa a) (h₁ : (∀ (n : ℕ), a n > 0) ∧ ∃ L, Tendsto (fun N => ∑ n ∈ Finset.range N, 1 / a n) atTop (𝓝 L)) (h₂ : ∀ (n : ℕ), a n > 0) (h₃ : ∃ L, Tendsto (fun N => ∑ n ∈ Finset.range N, 1 / a n) atTop (𝓝 L)) (h₄ : Summable fun n => 1 / a n) (h₅ : ∑' (n : ℕ), 1 / a n > 0) (h₆ : Summable fun n => (↑n + 1) / ∑ i ∈ Finset.range (n + 1), a i) : ∑' (n : ℕ), (↑n + 1) / ∑ i ∈ Finset.range (n + 1), a i ≤ 4 * ∑' (n : ℕ), 1 / a n := by
+  --  calc
+  --    (∑' n : ℕ, (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i)) ≤ ∑' n : ℕ, ((4 : ℝ) * (∑' k : ℕ, (1 : ℝ) / a k)) := by
+  --      exact tsum_le_tsum (fun n ↦ by exact h₆₁ n) h₆ (by simpa using h₄.mul_left _)
+  --    _ = (4 : ℝ) * ∑' n : ℕ, 1 / a n := by simp [tsum_mul_left]
+  hole

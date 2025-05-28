@@ -1,0 +1,1 @@
+theorem h₃ (N : ℕ) (score : Fin (2 * N) → Fin 11) (hsurj : ∀ (k : Fin 11), ∃ i, score i = k) (havg : (∑ i, ↑↑(score i)) / (2 * ↑N) = 7.4) (hN_pos : N > 0) (h₂ : (∑ i, ↑↑(score i)) / (2 * ↑N) = 7.4) : 2 * ↑N ≠ 0 := by norm_cast <;> omega

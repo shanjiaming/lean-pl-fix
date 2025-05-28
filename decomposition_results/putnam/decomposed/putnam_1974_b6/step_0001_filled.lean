@@ -1,0 +1,37 @@
+theorem putnam_1974_b6 (n : ℤ) (hn : n = 1000) (count0 count1 count2 : ℕ) (hcount0 : count0 = {S | S ⊆ Finset.Icc 1 n ∧ S.card ≡ 0 [MOD 3]}.ncard) (hcount1 : count1 = {S | S ⊆ Finset.Icc 1 n ∧ S.card ≡ 1 [MOD 3]}.ncard) (hcount2 : count2 = {S | S ⊆ Finset.Icc 1 n ∧ S.card ≡ 2 [MOD 3]}.ncard) : (count0, count1, count2) = ((2 ^ 1000 - 1) / 3, (2 ^ 1000 - 1) / 3, 1 + (2 ^ 1000 - 1) / 3) :=
+  by
+  have h₀ : n = (1000 : ℤ) := by sorry
+  have h₁ : count0 = (2 ^ 1000 - 1) / 3 := by sorry
+  have h₂ : count1 = (2 ^ 1000 - 1) / 3 := by sorry
+  have h₃ : count2 = 1 + (2 ^ 1000 - 1) / 3 := by sorry
+  have h₄ :
+    (count0, count1, count2) = (((2 ^ 1000 - 1) / 3, (2 ^ 1000 - 1) / 3, 1 + (2 ^ 1000 - 1) / 3) : (ℕ × ℕ × ℕ)) := by
+    rw [h₁, h₂, h₃] <;> simp [Prod.ext_iff] <;> norm_num <;>
+          try {decide <;> norm_num <;> rfl
+          } <;>
+        try {norm_num <;> decide
+        } <;>
+      try {decide <;> norm_num <;> rfl
+      }
+  have h₄ : (count0, count1, count2) = (((2 ^ 1000 - 1) / 3, (2 ^ 1000 - 1) / 3, 1 + (2 ^ 1000 - 1) / 3) : (ℕ × ℕ × ℕ)) := by sorry
+have putnam_1974_b6 (n : ℤ) (hn : n = 1000) (count0 count1 count2 : ℕ)
+  (hcount0 : count0 = {S | S ⊆ Finset.Icc 1 n ∧ S.card ≡ 0 [MOD 3]}.ncard)
+  (hcount1 : count1 = {S | S ⊆ Finset.Icc 1 n ∧ S.card ≡ 1 [MOD 3]}.ncard)
+  (hcount2 : count2 = {S | S ⊆ Finset.Icc 1 n ∧ S.card ≡ 2 [MOD 3]}.ncard) :
+  (count0, count1, count2) = (((2 ^ 1000 - 1) / 3, (2 ^ 1000 - 1) / 3, 1 + (2 ^ 1000 - 1) / 3) : (ℕ × ℕ × ℕ)) :=
+  by
+  have h₀ : n = (1000 : ℤ) := by sorry
+  have h₁ : count0 = (2 ^ 1000 - 1) / 3 := by sorry
+  have h₂ : count1 = (2 ^ 1000 - 1) / 3 := by sorry
+  have h₃ : count2 = 1 + (2 ^ 1000 - 1) / 3 := by sorry
+  have h₄ :
+    (count0, count1, count2) = (((2 ^ 1000 - 1) / 3, (2 ^ 1000 - 1) / 3, 1 + (2 ^ 1000 - 1) / 3) : (ℕ × ℕ × ℕ)) := by
+    rw [h₁, h₂, h₃] <;> simp [Prod.ext_iff] <;> norm_num <;>
+          try {decide <;> norm_num <;> rfl
+          } <;>
+        try {norm_num <;> decide
+        } <;>
+      try {decide <;> norm_num <;> rfl
+      }
+  rw [h₄] <;> simp_all (config := { decide := true }) <;> norm_num <;> decide
+  hole

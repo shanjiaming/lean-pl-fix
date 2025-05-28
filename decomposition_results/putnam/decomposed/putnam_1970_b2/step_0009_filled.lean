@@ -1,0 +1,3 @@
+theorem h₅₁ (T : ℝ) (H : Polynomial ℝ) (hT : T > 0) (hH : H.degree ≤ 3) (h₁ :  (Polynomial.eval (-T / √3) H + Polynomial.eval (T / √3) H) / 2 =    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)) (h₃ : ∫ (t : ℝ) in Icc (-T) T, Polynomial.eval t H = ∫ (t : ℝ) in -T..T, Polynomial.eval t H) (h₄ :  ∫ (t : ℝ) in -T..T, Polynomial.eval t H =    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)) : sorry = (ENNReal.ofReal (2 * T)).toReal := by
+  --  --  --  simp [Real.volume_Icc, hT.le] <;> ring_nf <;> field_simp <;> linarith
+  hole

@@ -1,0 +1,1 @@
+theorem h₁ (recolor : (ℝ → Prop) → ℝ → Prop) (hrecolor : ∀ (isred : ℝ → Prop) (d : ℝ), recolor isred d ↔ ∃ p q, p > 0 ∧ q > 0 ∧ p < q ∧ isred p = isred q ∧ q - p = d) (isred : ℝ → Prop) (p : ℝ) (hp : p > 0) : recolor^[1] isred p = recolor isred p := by simp [Function.iterate_succ_apply']

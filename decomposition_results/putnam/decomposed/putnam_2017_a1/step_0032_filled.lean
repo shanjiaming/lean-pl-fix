@@ -1,0 +1,2 @@
+theorem h₆ (IsQualifying : Set ℤ → Prop) (IsQualifying_def :  ∀ (S : Set ℤ), IsQualifying S ↔ (∀ n ∈ S, 0 < n) ∧ 2 ∈ S ∧ (∀ n > 0, n ^ 2 ∈ S → n ∈ S) ∧ ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (S : Set ℤ) (hS : IsLeast IsQualifying S) (h₁ : 1 ∉ S) (h₂ : ∀ x > 0, 5 ∣ x → x ∉ S) (x : ℤ) (hx : x ∉ S ∧ 0 < x) (h₄ : x ∉ S) (h₅ : 0 < x) : x > 0 := by -- linarith
+  linarith

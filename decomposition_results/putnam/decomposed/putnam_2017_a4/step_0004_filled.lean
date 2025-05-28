@@ -1,0 +1,2 @@
+theorem h₂ (N : ℕ) (score : Fin (2 * N) → Fin 11) (hsurj : ∀ (k : Fin 11), ∃ i, score i = k) (havg : (∑ i, ↑↑(score i)) / (2 * ↑N) = 7.4) (h : N ≤ 0) (h₁ : N = 0) : 2 * N = 0 := by -- simp [h₁]
+  hole

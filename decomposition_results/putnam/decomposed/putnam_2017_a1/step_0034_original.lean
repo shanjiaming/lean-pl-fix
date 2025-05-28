@@ -1,0 +1,8 @@
+theorem h₁₁ (IsQualifying : Set ℤ → Prop) (IsQualifying_def :  ∀ (S : Set ℤ), IsQualifying S ↔ (∀ n ∈ S, 0 < n) ∧ 2 ∈ S ∧ (∀ n > 0, n ^ 2 ∈ S → n ∈ S) ∧ ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (S : Set ℤ) (hS : IsLeast IsQualifying S) (h₁ : 1 ∉ S) (h₂ : ∀ x > 0, 5 ∣ x → x ∉ S) (x : ℤ) (hx : x ∉ S ∧ 0 < x) (h₄ : x ∉ S) (h₅ : 0 < x) (h₆ : x > 0) (h₈ : ¬x = 1) (h₉ : x ≠ 1) (h₁₀ : ¬5 ∣ x) : x ∈ S := by
+  by_contra h₁₂
+  have h₁₃ : x ∉ S := h₁₂
+  have h₁₄ : x > 0 := h₅
+  have h₁₅ : x ≠ 1 := h₉
+  have h₁₆ : ¬5 ∣ x := h₁₀
+  have h₁₇ : x ∈ S := by sorry
+  exact h₁₇

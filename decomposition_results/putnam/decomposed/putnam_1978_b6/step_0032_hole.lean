@@ -1,0 +1,7 @@
+theorem h₅₂ (a : ℕ → ℕ → ℝ) (ha : ∀ (i j : ℕ), a i j ∈ Icc 0 1) (m n : ℕ) (mnpos : m > 0 ∧ n > 0) (h₁ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j ≤ ↑m * ↑i) (h₂ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≤ ↑m) (h₃ : ∑ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≤ ↑m * ↑n) (h₄ : (∑ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i) ^ 2 ≤ (↑m * ↑n) ^ 2) (h₅₁ : ↑m ≥ 1) : ↑n ≥ 1 := by
+  have h₅₃ : (n : ℕ) > 0 := by sorry
+  have h₅₄ : (n : ℝ) > 0 := by sorry
+  have h₅₅ : (n : ℕ) ≥ 1 := by sorry
+  have h₅₆ : (n : ℝ) ≥ 1 := by sorry
+  --  exact h₅₆
+  hole

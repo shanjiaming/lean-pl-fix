@@ -1,0 +1,7 @@
+import Mathlib
+
+open Filter Topology Set
+-- 3
+/--
+Given that $A$, $B$, and $C$ are noncollinear points in the plane with integer coordinates such that the distances $AB$, $AC$, and $BC$ are integers, what is the smallest possible value of $AB$?
+-/

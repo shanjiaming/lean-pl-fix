@@ -1,0 +1,7 @@
+theorem h₆ (a : ℕ → ℕ → ℝ) (ha : ∀ (i j : ℕ), a i j ∈ Icc 0 1) (m n : ℕ) (mnpos : m > 0 ∧ n > 0) (h₁ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j ≤ ↑m * ↑i) (i : ℕ) (hi : i ∈ Finset.Icc 1 n) (h₃ : ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i = (∑ j ∈ Finset.Icc 1 (m * i), a i j) / ↑i) (h₄ : ∑ j ∈ Finset.Icc 1 (m * i), a i j ≤ ↑m * ↑i) (h₅ : ↑i ≥ 1) : (∑ j ∈ Finset.Icc 1 (m * i), a i j) / ↑i ≤ ↑m :=
+  by
+  have h₇ : (∑ j in Finset.Icc 1 (m * i), a i j : ℝ) ≤ m * i := by sorry
+  have h₈ : 0 < (i : ℝ) := by sorry
+  have h₉ : (∑ j in Finset.Icc 1 (m * i), a i j : ℝ) / i ≤ m := by sorry
+  --  exact h₉
+  hole

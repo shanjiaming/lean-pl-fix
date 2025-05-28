@@ -1,0 +1,2 @@
+theorem h₅₁ (S : Type u_3) (x✝ : Mul S) (h : ∀ (x y : S), x * (x * y) = y ∧ y * x * x = y) (x y : S) (h₂ : x * y * x = y) (h₃ : y * x * x = y) (h₄ : x * y * x = y * x * x) : x * y * x * x = y * x * x * x := by rw [h₄]
+  hole

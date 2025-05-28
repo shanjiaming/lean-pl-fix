@@ -1,0 +1,4 @@
+theorem h₁₈ (f : ↑(Ioi 1) → ↑(Ioi 1)) (c : ℝ) (hc : c > 0) (hf : ∀ (x : ↑(Ioi 1)), ↑(f x) = ↑x ^ c) (x y : ↑(Ioi 1)) (hxy : ↑x ^ 2 ≤ ↑y ∧ ↑y ≤ ↑x ^ 3) (h₁ : ↑(f x) = ↑x ^ c) (h₂ : ↑(f y) = ↑y ^ c) (h₃ : ↑x ^ 2 ≤ ↑y) (h₄ : ↑y ≤ ↑x ^ 3) (h₅ : 1 < ↑x) (h₆ : 1 < ↑y) (h₈ : 0 < c) (h₉ : 0 < ↑x) (h₁₀ : 0 < ↑y) (h₁₁ : 0 < ↑x ^ c) (h₁₂ : 0 < ↑y ^ c) (h₁₃ : ↑x ^ 2 ≤ ↑y) (h₁₄ : 0 < ↑x ^ 2) (h₁₅ : 0 < ↑y) (h₁₆ : (↑x ^ 2) ^ c ≤ ↑y ^ c) (h₁₇ : (↑x ^ 2) ^ c = ↑x ^ (2 * c)) : ↑x ^ (2 * c) = (↑x ^ c) ^ 2 :=
+  by
+  have h₁₉ : (x : ℝ) ^ (2 * c) = ((x : ℝ) ^ c) ^ 2 := by sorry
+  exact h₁₉

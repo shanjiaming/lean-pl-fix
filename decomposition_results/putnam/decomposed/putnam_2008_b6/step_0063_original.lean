@@ -1,0 +1,28 @@
+theorem h₅₀ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) (h₃ : 2 * k + 1 > 0) (h : n ≤ k + 1) (h₄ h₅ : n ≤ k + 1) (h₆ : ∀ (s : Equiv.Perm (Fin n)), klimited k n s) (h₃₁ : {s | klimited k n s} = univ) (h₃₂ : {s | klimited k n s}.ncard = univ.ncard) (h₃₃ : {s | klimited k n s}.ncard = n !) (h₃₅ : n ≤ k + 1) (h₃₆ : n > 0) (h₃₇ : k > 0) (h₃₈ : n ≤ k + 1) (h₃₉ : n > 0) (h₄₀ : k > 0) (h₄₁ : n ≡ 0 [MOD 2 * k + 1] ∨ n ≡ 1 [MOD 2 * k + 1] → n = 1) (h₄₂ : n = 1 → (Odd n ! ↔ n ≡ 0 [MOD 2 * k + 1] ∨ n ≡ 1 [MOD 2 * k + 1])) (h₄₃ : n ≠ 1 → ¬Odd n !) (h₄₅ h₄₆ : n ≠ 1) (h₄₇ : n > 1) (h₄₈ : n < 2 * k + 1) (h₄₉ : n ≠ 0) : ¬(n ≡ 0 [MOD 2 * k + 1] ∨ n ≡ 1 [MOD 2 * k + 1]) :=
+  by
+  intro h₅₁
+  cases h₅₁ with
+  | inl h₅₁ =>
+    have h₅₂ : n ≡ 0 [MOD 2 * k + 1] := h₅₁
+    have h₅₃ : n % (2 * k + 1) = 0 := by
+      rw [Nat.ModEq] at h₅₂
+      omega
+    have h₅₄ : n < 2 * k + 1 := h₄₈
+    have h₅₅ : n = 0 := by
+      have h₅₆ : n % (2 * k + 1) = 0 := h₅₃
+      have h₅₇ : n < 2 * k + 1 := h₅₄
+      have h₅₈ : n = 0 := by omega
+      exact h₅₈
+    omega
+  | inr h₅₁ =>
+    have h₅₂ : n ≡ 1 [MOD 2 * k + 1] := h₅₁
+    have h₅₃ : n % (2 * k + 1) = 1 := by
+      rw [Nat.ModEq] at h₅₂
+      omega
+    have h₅₄ : n < 2 * k + 1 := h₄₈
+    have h₅₅ : n = 1 := by
+      have h₅₆ : n % (2 * k + 1) = 1 := h₅₃
+      have h₅₇ : n < 2 * k + 1 := h₅₄
+      have h₅₈ : n = 1 := by omega
+      exact h₅₈
+    omega

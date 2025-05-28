@@ -1,0 +1,2 @@
+theorem h₇ (G : ℝ → ℝ) (hGeq : ∀ (r : ℝ), ∃ m n, G r = |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (hGlb : ∀ (r : ℝ) (m n : ℤ), G r ≤ |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (r : ℝ) (m n : ℤ) (h₄ : G r = |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (h₅ : G r ≤ |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (h₆ : G r = |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) : G r ≤ G r := by -- linarith
+  norm_num

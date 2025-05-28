@@ -1,0 +1,4 @@
+theorem h₆₁ (v : Polynomial ℂ → Prop) (hv :  v = fun b =>    b.degree = 2019 ∧      1 ≤ (b.coeff 0).re ∧        (b.coeff 2019).re ≤ 2019 ∧          (∀ (i : Fin 2020), (b.coeff ↑i).im = 0) ∧ ∀ (i : Fin 2019), (b.coeff ↑i).re < (b.coeff (↑i + 1)).re) (μ : Polynomial ℂ → ℝ) (hμ : μ = fun b => (Multiset.map (fun ω => ‖ω‖) b.roots).sum / 2019) (b : Polynomial ℂ) (hb :  b.degree = 2019 ∧    1 ≤ (b.coeff 0).re ∧      (b.coeff 2019).re ≤ 2019 ∧        (∀ (i : Fin 2020), (b.coeff ↑i).im = 0) ∧ ∀ (i : Fin 2019), (b.coeff ↑i).re < (b.coeff (↑i + 1)).re) (h₁ : b.degree = 2019) (h₂ : 1 ≤ (b.coeff 0).re) (h₃ : (b.coeff 2019).re ≤ 2019) (h₄ : ∀ (i : Fin 2020), (b.coeff ↑i).im = 0) (h₅ : ∀ (i : Fin 2019), (b.coeff ↑i).re < (b.coeff (↑i + 1)).re) : (b.coeff 0).re < (b.coeff 1).re :=
+  by
+  have h₆₂ := h₅ ⟨0, by norm_num⟩
+  simpa using h₆₂

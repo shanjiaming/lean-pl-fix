@@ -1,0 +1,1 @@
+theorem h₅ (F : ℕ → ℕ) (hF : ∀ (n : ℕ), F (n + 2) = F (n + 1) + F n) (F01 : F 0 = 0 ∧ F 1 = 1) (h₁ : F 2 = 1) (h₂ : ∀ n ≥ 1, F n ≥ 1) (m : ℕ) (hm : m > 2) (h₄ : ∀ n ≥ 3, F n ≥ 2) : m ≥ 3 := by omega

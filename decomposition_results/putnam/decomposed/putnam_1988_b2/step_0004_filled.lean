@@ -1,0 +1,2 @@
+theorem h₅ (x y : ℝ) (h : y ≥ 0 ∧ y * (y + 1) ≤ (x + 1) ^ 2) (h₁ : y ≥ 0) (h₂ : y * (y + 1) ≤ (x + 1) ^ 2) (h₃ : y ≤ 1) (h₄ : y * (y - 1) ≤ 0) : y * (y - 1) ≤ x ^ 2 := by -- nlinarith [sq_nonneg x]
+  nlinarith

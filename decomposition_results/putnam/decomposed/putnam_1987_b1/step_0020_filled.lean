@@ -1,0 +1,2 @@
+theorem h₁₇ (h₆ : ∀ x ∈ Set.Icc 2 4, Real.log (9 - x) > 0) (h₇ : ∀ x ∈ Set.Icc 2 4, Real.log (x + 3) > 0) (h₁₁ : ∫ (x : ℝ) in 2 ..4, 1 = 2) (x : ℝ) (hx : x ∈ Set.uIcc 2 4) (h₁₅ : √(Real.log (9 - x)) > 0) (h₁₆ : √(Real.log (x + 3)) > 0) : √(Real.log (9 - x)) + √(Real.log (x + 3)) > 0 := by linarith
+  hole

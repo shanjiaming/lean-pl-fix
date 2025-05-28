@@ -1,0 +1,6 @@
+theorem h₂ (n : ℕ) (hn : n > 0) (fourAP : ℤ → ℤ → ℤ → ℤ → Prop) (hfourAP : ∀ (n1 n2 n3 n4 : ℤ), fourAP n1 n2 n3 n4 ↔ n4 - n3 = n3 - n2 ∧ n3 - n2 = n2 - n1) (r : ℕ) (hr : r > 0) (hrn : r + 3 ≤ n) (h : fourAP ↑(n.choose r) ↑(n.choose (r + 1)) ↑(n.choose (r + 2)) ↑(n.choose (r + 3))) : ↑(n.choose (r + 3)) - ↑(n.choose (r + 2)) = ↑(n.choose (r + 2)) - ↑(n.choose (r + 1)) ∧
+    ↑(n.choose (r + 2)) - ↑(n.choose (r + 1)) = ↑(n.choose (r + 1)) - ↑(n.choose r) :=
+  by
+  --  rw [hfourAP] at h
+  --  exact h
+  hole

@@ -1,0 +1,2 @@
+theorem h₁₂ (σ : ℕ → ℤ) (hσ : σ = fun N => ∑ d ∈ N.divisors, ↑d) (quasiperfect : ℕ → Prop) (quasiperfect_def : ∀ (N : ℕ), quasiperfect N ↔ σ N = 2 * ↑N + 1) (N : ℕ) (h_quasiperfect : quasiperfect N) (h₂ : ∑ d ∈ N.divisors, ↑d = 2 * ↑N + 1) (h₃ : σ N = ∑ d ∈ N.divisors, ↑d) (h₄ : ∑ d ∈ N.divisors, ↑d = 2 * ↑N + 1) (h₅ : N ≥ 2) (h₆ : ∑ d ∈ N.divisors, ↑d ≥ ↑N + 1) (h₇ : 2 * ↑N + 1 ≥ ↑N + 1) (h₉ : ∑ d ∈ N.divisors, ↑d ≥ ↑N + 1) (h₁₀ : ↑N ≥ 2) : ∑ d ∈ N.divisors, ↑d ≤ 2 * ↑N + 1 := by -- linarith
+  linarith

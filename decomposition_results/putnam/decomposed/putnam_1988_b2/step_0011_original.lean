@@ -1,0 +1,2 @@
+theorem h₁₄ (x y : ℝ) (h : y ≥ 0 ∧ y * (y + 1) ≤ (x + 1) ^ 2) (h₁ : y ≥ 0) (h₂ : y * (y + 1) ≤ (x + 1) ^ 2) (h₃ : ¬y ≤ 1) (h₄ : y > 1) (h₅ h₇ : (x + 1) ^ 2 ≥ y * (y + 1)) (h₉ : √(y * (y + 1)) ≥ 0) (h₁₀ : (x + 1) ^ 2 ≥ √(y * (y + 1)) ^ 2) (h₁₂ : ¬x + 1 ≥ √(y * (y + 1))) (h₁₃ : x + 1 < √(y * (y + 1))) : x + 1 ≤ -√(y * (y + 1)) := by
+  nlinarith [Real.sqrt_nonneg (y * (y + 1)), Real.sq_sqrt (show 0 ≤ y * (y + 1) by nlinarith)]

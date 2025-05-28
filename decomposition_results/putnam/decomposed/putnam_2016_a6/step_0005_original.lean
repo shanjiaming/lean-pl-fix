@@ -1,0 +1,1 @@
+theorem h₂ (p : ℝ → Prop) (hp :  ∀ (c : ℝ),    p c ↔      ∀ (P : ℝ[X]),        P.degree = 3 →          (∃ x ∈ Icc 0 1, eval x P = 0) → ∫ (x : ℝ) in 0 ..1, |eval x P| ≤ c * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x P|}) (h₀ : p (5 / 6)) (c : ℝ) (hc : p c) (h : ¬5 / 6 ≤ c) : c < 5 / 6 := by linarith

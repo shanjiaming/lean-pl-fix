@@ -1,0 +1,2 @@
+theorem h₄ (α : ℝ) (ha : Real.cos (Real.pi * α) = 1 / 3) (p q : ℤ) (hq : q > 0) (hα : α = ↑p / ↑q) (h₁ : Real.cos (↑p * Real.pi / ↑q) = 1 / 3) (h₂ : Real.cos (Real.pi * α) = Real.cos (↑p * Real.pi / ↑q)) (h₃ : Real.cos (↑p * Real.pi / ↑q) = 1 / 3) : q > 0 := by -- exact_mod_cast hq
+  hole

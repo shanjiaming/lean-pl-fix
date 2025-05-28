@@ -1,0 +1,2 @@
+theorem h₃ (α : ℝ) (ha : Real.cos (Real.pi * α) = 1 / 3) (p q : ℤ) (hq : q > 0) (hα : α = ↑p / ↑q) (h₁ : Real.cos (↑p * Real.pi / ↑q) = 1 / 3) (h₂ : Real.cos (Real.pi * α) = Real.cos (↑p * Real.pi / ↑q)) : Real.cos (↑p * Real.pi / ↑q) = 1 / 3 := by -- linarith
+  hole

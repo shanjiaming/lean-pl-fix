@@ -1,0 +1,2 @@
+theorem h_inj (p : (Fin 5 → ℤ) → ℝ[X]) (hp : p = fun m => ∏ i, (X - ↑(m i))) (numnzcoeff : ℝ[X] → ℕ) (hnumnzcoeff : numnzcoeff = fun p => {j ∈ Finset.range (p.natDegree + 1) | p.coeff j ≠ 0}.card) : Injective fun i => ↑↑i - 2 := by -- sorry
+  hole

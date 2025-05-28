@@ -1,0 +1,5 @@
+import Mathlib
+
+/--
+Show there do not exist four points in the Euclidean plane such that the pairwise distances between the points are all odd integers.
+-/

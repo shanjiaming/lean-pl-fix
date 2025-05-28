@@ -1,0 +1,10 @@
+theorem h₃₀ (f : (Fin 2 → ℝ) → Fin 2 → ℝ) (h₁ : ContDiff ℝ 1 f) (h₂ : ∀ (x : Fin 2 → ℝ) (i j : Fin 2), 0 < (fderiv ℝ f x) (Pi.single i 1) j) (h₃ :  ∀ (x : Fin 2 → ℝ),    0 <      (fderiv ℝ f x) ![1, 0] 0 * (fderiv ℝ f x) ![0, 1] 1 -        1 / 4 * ((fderiv ℝ f x) ![1, 0] 1 + (fderiv ℝ f x) ![0, 1] 0) ^ 2) (h_det_pos :  ∀ (x : Fin 2 → ℝ),    (fderiv ℝ f x) ![1, 0] 0 * (fderiv ℝ f x) ![0, 1] 1 - (fderiv ℝ f x) ![1, 0] 1 * (fderiv ℝ f x) ![0, 1] 0 > 0) (x : Fin 2 → ℝ) (h₄ : (fderiv ℝ f x) ![1, 0] 0 * (fderiv ℝ f x) ![0, 1] 1 - (fderiv ℝ f x) ![1, 0] 1 * (fderiv ℝ f x) ![0, 1] 0 > 0) (h₅ : 0 < (fderiv ℝ f x) ![1, 0] 0) (h₆ : 0 < (fderiv ℝ f x) ![1, 0] 1) (h₇ : 0 < (fderiv ℝ f x) ![0, 1] 0) (h₈ : 0 < (fderiv ℝ f x) ![0, 1] 1) (v : Fin 2 → ℝ) (hv h₁₁ : (fderiv ℝ f x) v = 0) (h₁₂ : (fderiv ℝ f x) v = (fderiv ℝ f x) v) (h₁₃ : (fderiv ℝ f x) v = 0) (h₁₄ : v 0 = 0) (h₂₅ : (fderiv ℝ f x) v 1 = 0) (h₂₆ : (fderiv ℝ f x) v 1 = (fderiv ℝ f x) ![1, 0] 1 * v 0 + (fderiv ℝ f x) ![0, 1] 1 * v 1) (h₂₇ : (fderiv ℝ f x) ![1, 0] 1 * v 0 + (fderiv ℝ f x) ![0, 1] 1 * v 1 = 0) (h₂₉ : (fderiv ℝ f x) v 0 = 0) : (fderiv ℝ f x) v 0 = (fderiv ℝ f x) ![1, 0] 0 * v 0 + (fderiv ℝ f x) ![0, 1] 0 * v 1 :=
+  by
+  have h₃₁ : v = v 0 • ![1, 0] + v 1 • ![0, 1] := by sorry
+  --  rw [h₃₁]
+  --  simp [ContinuousLinearMap.map_add, ContinuousLinearMap.map_smul, fderiv_apply] <;>
+  --          simp_all [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Fin.sum_univ_succ] <;>
+        ring_nf <;>
+      simp_all [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Fin.sum_univ_succ] <;>
+    linarith
+  hole

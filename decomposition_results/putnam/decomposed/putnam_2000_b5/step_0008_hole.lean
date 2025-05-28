@@ -1,0 +1,2 @@
+theorem h₁₄ (S : ℕ → Set ℤ) (hSfin : ∀ (n : ℕ), (S n).Finite) (hSpos : ∀ (n : ℕ), ∀ s ∈ S n, s > 0) (hSdef : ∀ (n : ℕ) (a : ℤ), a ∈ S (n + 1) ↔ Xor' (a - 1 ∈ S n) (a ∈ S n)) (h : ¬S 0 = ∅) (s : ℤ) (hs : s ∈ S 0) (h₃ : s > 0) (h₅ : (S 0).Finite) (h₆ : ∀ s ∈ S 0, s > 0) (h₈ : ¬s ≤ 0) (h₉ : s > 0) (h₁₀ : s ∈ S 0) (h₁₁ : s > 0) (h₁₃ : s ∈ S (0 + 1) ↔ Xor' (s - 1 ∈ S 0) (s ∈ S 0)) : s ∈ S (0 + 1) ↔ Xor' (s - 1 ∈ S 0) (s ∈ S 0) := by -- simpa using h₁₃
+  hole

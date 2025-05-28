@@ -1,0 +1,3 @@
+theorem h17 (n : ℕ) (hn : n ≥ 1) (k : ↑(Icc 1 n)) (fiter : (↑(Icc 1 n) → ↑(Icc 1 n)) → Prop) (hfiter : ∀ (f : ↑(Icc 1 n) → ↑(Icc 1 n)), fiter f ↔ ∀ (x : ↑(Icc 1 n)), ∃ j, f^[j] x ≤ k) (h2 : 1 ≤ 1) (h3 h4 h5 : 1 ≤ n) (h h7 : ∀ (f : ↑(Icc 1 n) → ↑(Icc 1 n)), fiter f ↔ ∀ (x : ↑(Icc 1 n)), ∃ j, f^[j] x ≤ k) (h8 h9 : (fiter fun x => x) ↔ ∀ (x : ↑(Icc 1 n)), ∃ j, (fun x => x)^[j] x ≤ k) (h10 : (∀ (x : ↑(Icc 1 n)), ∃ j, (fun x => x)^[j] x ≤ k) → fiter fun x => x) (h11 : (fiter fun x => x) → ∀ (x : ↑(Icc 1 n)), ∃ j, (fun x => x)^[j] x ≤ k) (h13 h14 : ∀ (x : ↑(Icc 1 n)), ∃ j, (fun x => x)^[j] x ≤ k) (j : ℕ) (hj h16 : (fun x => x)^[j] ⟨1, ⋯⟩ ≤ k) : 1 ≤ 1 := by
+  --  --  induction j <;> simp_all [Function.iterate_succ_apply'] <;> aesop
+  hole

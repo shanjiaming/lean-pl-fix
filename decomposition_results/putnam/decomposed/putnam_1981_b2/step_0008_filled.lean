@@ -1,0 +1,2 @@
+theorem h₄ (P : ℝ × ℝ × ℝ → Prop) (hP :  P = fun x =>    match x with    | (r, s, t) => 1 ≤ r ∧ r ≤ s ∧ s ≤ t ∧ t ≤ 4) (f : ℝ × ℝ × ℝ → ℝ) (hf :  f = fun x =>    match x with    | (r, s, t) => (r - 1) ^ 2 + (s / r - 1) ^ 2 + (t / s - 1) ^ 2 + (4 / t - 1) ^ 2) : 2 ≤ 2 * √2 := by -- nlinarith [Real.sqrt_nonneg 2, Real.sq_sqrt (show 0 ≤ 2 by -- norm_num)]
+  norm_num

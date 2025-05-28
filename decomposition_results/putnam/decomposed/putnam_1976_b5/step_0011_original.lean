@@ -1,0 +1,212 @@
+theorem h10 (n : ℕ) (h1 :  ∑ k ∈ Finset.range (n + 1), C ((-1) ^ k * ↑(n.choose k)) * (X - C ↑k) ^ n =    ∑ k ∈ Finset.range (n + 1),      C ((-1) ^ k * ↑(n.choose k)) * ∑ i ∈ Finset.range (n + 1), C (↑(n.choose i) * (-↑k) ^ (n - i)) * X ^ i) (h2 :  ∑ k ∈ Finset.range (n + 1),      C ((-1) ^ k * ↑(n.choose k)) * ∑ i ∈ Finset.range (n + 1), C (↑(n.choose i) * (-↑k) ^ (n - i)) * X ^ i =    ∑ i ∈ Finset.range (n + 1),      (∑ k ∈ Finset.range (n + 1), (-1) ^ k * ↑(n.choose k) * (↑(n.choose i) * (-↑k) ^ (n - i))) • X ^ i) (i : ℕ) (hi : i ∈ Finset.range (n + 1)) (h4 : i < n + 1) (h5 h7 h9 : i ≤ n) : ∑ k ∈ Finset.range (n + 1), (-1) ^ k * ↑(n.choose k) * (↑(n.choose i) * (-↑k) ^ (n - i)) =
+    if i = n then ↑n.factorial else 0 :=
+  by
+  have h11 : i ≤ n := by sorry
+  classical
+  have h12 :
+    (∑ k in Finset.range (n + 1),
+        ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+      (∑ k in Finset.range (n + 1),
+        ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) :=
+    rfl
+  rw [h12]
+  have h13 : i ≤ n := by linarith
+  have h14 :
+    (∑ k in Finset.range (n + 1),
+        ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+      if i = n then (Nat.factorial n : ℤ) else 0 :=
+    by
+    have h15 :
+      ∀ (n i : ℕ),
+        i ≤ n →
+          (∑ k in Finset.range (n + 1),
+              ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+            if i = n then (Nat.factorial n : ℤ) else 0 :=
+      by
+      intro n i h
+      have h16 : i ≤ n := h
+      have h17 :
+        (∑ k in Finset.range (n + 1),
+            ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+          if i = n then (Nat.factorial n : ℤ) else 0 :=
+        by
+        have h18 : i ≤ n := h16
+        have h19 :
+          (∑ k in Finset.range (n + 1),
+              ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+            if i = n then (Nat.factorial n : ℤ) else 0 :=
+          by
+          have h20 : i ≤ n := h18
+          have h21 :
+            (∑ k in Finset.range (n + 1),
+                ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+              if i = n then (Nat.factorial n : ℤ) else 0 :=
+            by
+            by_cases h22 : i = n
+            · subst h22
+              have h23 :
+                (∑ k in Finset.range (n + 1),
+                    ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n n : ℤ) * (-(k : ℤ)) ^ (n - n)))) =
+                  (Nat.factorial n : ℤ) :=
+                by
+                have h24 :
+                  (∑ k in Finset.range (n + 1),
+                      ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n n : ℤ) * (-(k : ℤ)) ^ (n - n)))) =
+                    (Nat.factorial n : ℤ) :=
+                  by
+                  have h25 :
+                    (∑ k in Finset.range (n + 1),
+                        ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n n : ℤ) * (-(k : ℤ)) ^ (n - n)))) =
+                      (∑ k in Finset.range (n + 1),
+                        ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((1 : ℤ) * (-(k : ℤ)) ^ 0))) :=
+                    by simp [Nat.choose_self] <;> ring_nf <;> norm_num <;> linarith
+                  rw [h25]
+                  have h26 :
+                    (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((1 : ℤ) * (-(k : ℤ)) ^ 0))) =
+                      (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * 1)) :=
+                    by simp [pow_zero]
+                  rw [h26]
+                  have h27 :
+                    (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * 1)) =
+                      (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ))) :=
+                    by simp
+                  rw [h27]
+                  have h28 :
+                    (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ))) = if n = 0 then 1 else 0 :=
+                    by
+                    have h29 :
+                      (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ))) = if n = 0 then 1 else 0 :=
+                      by
+                      have h30 :
+                        (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ))) = if n = 0 then 1 else 0 :=
+                        by
+                        have h31 : n ≥ 0 := by linarith
+                        have h32 :
+                          (∑ k in Finset.range (n + 1), ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ))) =
+                            if n = 0 then 1 else 0 :=
+                          by
+                          cases n with
+                          | zero => simp
+                          | succ n =>
+                            simp [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add, mul_comm,
+                                mul_left_comm, mul_assoc] <;>
+                              induction n with
+                              | zero => simp
+                              | succ n ih =>
+                                simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add, mul_comm,
+                                        mul_left_comm, mul_assoc, Nat.factorial] <;>
+                                      ring_nf at * <;>
+                                    norm_cast at * <;>
+                                  omega
+                        exact h32
+                      exact h30
+                    exact h29
+                  rw [h28]
+                  have h30 : n ≥ 0 := by linarith
+                  cases n with
+                  | zero => simp [Nat.factorial]
+                  | succ n =>
+                    simp [Nat.factorial] <;>
+                            simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add, mul_comm,
+                              mul_left_comm, mul_assoc, Nat.factorial] <;>
+                          ring_nf at * <;>
+                        norm_cast at * <;>
+                      omega
+                exact h24
+              simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add, mul_comm, mul_left_comm,
+                      mul_assoc, Nat.factorial] <;>
+                    ring_nf at * <;>
+                  norm_cast at * <;>
+                omega
+            ·
+              have h23 : i < n := by
+                by_contra h23
+                have h24 : i ≥ n := by omega
+                have h25 : i = n := by omega
+                contradiction
+              have h24 :
+                (∑ k in Finset.range (n + 1),
+                    ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                  0 :=
+                by
+                have h25 :
+                  (∑ k in Finset.range (n + 1),
+                      ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                    0 :=
+                  by
+                  have h26 : i < n := h23
+                  have h27 :
+                    (∑ k in Finset.range (n + 1),
+                        ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                      0 :=
+                    by
+                    have h28 : i ≤ n := by linarith
+                    have h29 :
+                      (∑ k in Finset.range (n + 1),
+                          ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                        0 :=
+                      by
+                      have h30 : i < n := h23
+                      have h31 :
+                        (∑ k in Finset.range (n + 1),
+                            ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                          0 :=
+                        by
+                        exact
+                          by
+                          have h32 :
+                            (∑ k in Finset.range (n + 1),
+                                ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) * ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                              0 :=
+                            by
+                            have h33 : i < n := h23
+                            have h34 : i ≤ n := by linarith
+                            have h35 :
+                              (∑ k in Finset.range (n + 1),
+                                  ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) *
+                                    ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                                0 :=
+                              by
+                              have h36 :
+                                (∑ k in Finset.range (n + 1),
+                                    ((-1 : ℤ) ^ k * (Nat.choose n k : ℤ) *
+                                      ((Nat.choose n i : ℤ) * (-(k : ℤ)) ^ (n - i)))) =
+                                  0 :=
+                                by
+                                exact by
+                                  have h37 : i < n := h23
+                                  have h38 : i ≤ n := by linarith
+                                  simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add, mul_comm,
+                                                            mul_left_comm, mul_assoc, Nat.factorial] <;>
+                                                          (try omega) <;>
+                                                        (try ring_nf) <;>
+                                                      (try norm_cast) <;>
+                                                    (try
+                                                        simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add,
+                                                          mul_add, mul_comm, mul_left_comm, mul_assoc,
+                                                          Nat.factorial]) <;>
+                                                  (try omega) <;>
+                                                (try ring_nf) <;>
+                                              (try norm_cast) <;>
+                                            (try
+                                                simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add,
+                                                  mul_comm, mul_left_comm, mul_assoc, Nat.factorial]) <;>
+                                          (try omega) <;>
+                                        (try ring_nf) <;>
+                                      (try norm_cast) <;>
+                                    (try
+                                        simp_all [Finset.sum_range_succ, Nat.choose_succ_succ, pow_add, mul_add,
+                                          mul_comm, mul_left_comm, mul_assoc, Nat.factorial])
+                              exact h36
+                            exact h35
+                          exact h32
+                      exact h31
+                    exact h29
+                  exact h27
+                exact h25
+              simp_all
+          exact h21
+        exact h19
+      exact h17
+    exact h15
+  exact h14

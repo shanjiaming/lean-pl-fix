@@ -1,0 +1,2 @@
+theorem h₄ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) (h₃ : 2 * k + 1 > 0) (h : k + 1 < n) : n > k + 1 := by -- omega
+  linarith

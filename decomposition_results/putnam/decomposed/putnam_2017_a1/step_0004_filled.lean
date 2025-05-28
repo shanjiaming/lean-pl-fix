@@ -1,0 +1,2 @@
+theorem h₉ (IsQualifying : Set ℤ → Prop) (IsQualifying_def :  ∀ (S : Set ℤ), IsQualifying S ↔ (∀ n ∈ S, 0 < n) ∧ 2 ∈ S ∧ (∀ n > 0, n ^ 2 ∈ S → n ∈ S) ∧ ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (S : Set ℤ) (hS : IsLeast IsQualifying S) (h : 1 ∈ S) (h₂ : IsQualifying S) (h₃ : ∀ n > 0, n ^ 2 ∈ S → n ∈ S) (h₄ : ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (h₅ : (1 + 5) ^ 2 ∈ S) (h₆ : 6 ^ 2 ∈ S) (h₇ : 6 ∈ S) (h₈ : (6 + 5) ^ 2 ∈ S) : 11 ^ 2 ∈ S := by -- simpa using h₈
+  simpa

@@ -1,0 +1,2 @@
+theorem h₅₃ (F : ℝ → ℝ) (hF : F = fun a => a ^ 4 / rexp (a ^ 3) * ∫ (x : ℝ) in 0 ..a, ∫ (y : ℝ) in 0 ..a - x, rexp (x ^ 3 + y ^ 3)) (h₂ h₄ h₅₂ :  ∀ (a : ℝ), 0 < a → a ^ 4 / rexp (a ^ 3) * ∫ (x : ℝ) in 0 ..a, ∫ (y : ℝ) in 0 ..a - x, rexp (x ^ 3 + y ^ 3) = 2 / 9) : Tendsto (fun a => 2 / 9) atTop (𝓝 (2 / 9)) := by apply tendsto_const_nhds
+  hole

@@ -1,0 +1,65 @@
+theorem h₆₅₆ (pa : (ℕ → ℝ) → Prop) (hpa : ∀ (a : ℕ → ℝ), pa a ↔ (∀ (n : ℕ), a n > 0) ∧ ∃ L, Tendsto (fun N => ∑ n ∈ Finset.range N, 1 / a n) atTop (𝓝 L)) (a : ℕ → ℝ) (ha : pa a) (h₁ : (∀ (n : ℕ), a n > 0) ∧ ∃ L, Tendsto (fun N => ∑ n ∈ Finset.range N, 1 / a n) atTop (𝓝 L)) (h₂ : ∀ (n : ℕ), a n > 0) (h₃ : ∃ L, Tendsto (fun N => ∑ n ∈ Finset.range N, 1 / a n) atTop (𝓝 L)) (h₄ : Summable fun n => 1 / a n) (h₅ : ∑' (n : ℕ), 1 / a n > 0) (n : ℕ) (h₆₄ : 0 < ∑' (k : ℕ), 1 / a k) (h₆₆ : (↑n + 1) / ∑ i ∈ Finset.range (n + 1), a i ≤ 4) (h₆₅₂ : 4 ≤ 4 * ∑' (k : ℕ), 1 / a k) : (↑n + 1) / ∑ i ∈ Finset.range (n + 1), a i ≤ 4 := by
+  --  exact
+  --    by
+  --    have h₆₅₇ : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) ≤ 4 :=
+  --      by
+  --      have h₆₅₈ : 0 < ∑ i in Finset.range (n + 1), a i := by positivity
+  --      have h₆₅₉ : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) ≤ 4 :=
+  --        by
+  --        by_cases h : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) ≤ 4
+  --        · exact h
+  --        · exfalso
+  --          have h₆₆₀ : 0 < (∑ i in Finset.range (n + 1), a i : ℝ) := by positivity
+  --          have h₆₆₁ : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) > 4 := by linarith
+  --          have h₆₆₂ : (∑ i in Finset.range (n + 1), a i : ℝ) < (n + 1 : ℝ) / 4 :=
+  --            by
+  --            have h₆₆₃ : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) > 4 := by linarith
+  --            have h₆₆₄ : (∑ i in Finset.range (n + 1), a i : ℝ) < (n + 1 : ℝ) / 4 :=
+  --              by
+  --              by_contra h₆₆₅
+  --              have h₆₆₆ : (∑ i in Finset.range (n + 1), a i : ℝ) ≥ (n + 1 : ℝ) / 4 := by linarith
+  --              have h₆₆₇ : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) ≤ 4 :=
+  --                by
+  --                have h₆₆₈ : (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) ≤ 4 := by
+  --                  calc
+  --                    (n + 1 : ℝ) / (∑ i in Finset.range (n + 1), a i) ≤ (n + 1 : ℝ) / ((n + 1 : ℝ) / 4) := by
+  --                      gcongr <;> try norm_num <;> linarith
+  --                    _ = 4 := by field_simp [h₆₅₈.ne'] <;> ring_nf <;> field_simp [h₆₅₈.ne'] <;> linarith
+  --                exact h₆₆₈
+  --              linarith
+  --            exact h₆₆₄
+  --          have h₆₆₅ : (∑ i in Finset.range (n + 1), a i : ℝ) < (n + 1 : ℝ) / 4 := h₆₆₂
+  --          have h₆₆₆ : (∑ i in Finset.range (n + 1), a i : ℝ) ≥ a 0 :=
+  --            by
+  --            have h₆₆₇ : ∑ i in Finset.range (n + 1), a i ≥ ∑ i in Finset.range 1, a i :=
+  --              by
+  --              apply Finset.sum_le_sum_of_subset_of_nonneg
+  --              · intro i hi
+  --                simp [Finset.mem_range] at hi ⊢
+  --                omega
+  --              · intro i _ _
+  --                exact le_of_lt (h₂ i)
+  --            have h₆₆₈ : ∑ i in Finset.range 1, a i = a 0 := by simp
+  --            have h₆₆₉ : ∑ i in Finset.range (n + 1), a i ≥ a 0 := by linarith
+  --            exact by simpa using h₆₆₉
+  --          have h₆₇₀ : a 0 > 0 := h₂ 0
+  --          have h₆₇₁ : (n + 1 : ℝ) / 4 > 0 := by positivity
+  --          have h₆₇₂ : (n : ℕ) ≥ 0 := by omega
+  --          have h₆₇₃ : (n : ℝ) ≥ 0 := by exact_mod_cast h₆₇₂
+  --          have h₆₇₄ : (a 0 : ℝ) > 0 := by exact_mod_cast h₆₇₀
+  --          have h₆₇₅ : (∑ i in Finset.range (n + 1), a i : ℝ) < (n + 1 : ℝ) / 4 := h₆₆₂
+  --          have h₆₇₆ : (a 0 : ℝ) ≤ (∑ i in Finset.range (n + 1), a i : ℝ) := by linarith
+  --          have h₆₇₇ : (a 0 : ℝ) < (n + 1 : ℝ) / 4 := by linarith
+  --          have h₆₇₈ : (n : ℝ) > 4 * (a 0 : ℝ) - 1 := by linarith
+  --          have h₆₇₉ : (n : ℝ) ≥ 0 := by exact_mod_cast h₆₇₂
+  --          have h₆₈₀ : (a 0 : ℝ) > 0 := by exact_mod_cast h₆₇₀
+  --          norm_num at h₆₇₈ h₆₇₇ h₆₇₆ h₆₇₅ h₆₇₄ h₆₇₃ h₆₇₂ h₆₇₁ h₆₇₀ h₆₆₉ h₆₆₈ h₆₆₇ h₆₆₆ h₆₆₅ h₆₆₄ h₆₆₃ ⊢ <;>
+  --                      (try norm_num) <;>
+  --                    (try linarith) <;>
+  --                  (try nlinarith) <;>
+  --                (try ring_nf at * <;> norm_num at * <;> linarith) <;>
+  --              (try simp_all) <;>
+  --            (try nlinarith)
+  --      exact h₆₅₉
+  --    exact h₆₅₇ <;> norm_num
+  linarith

@@ -1,0 +1,3 @@
+theorem h₂ (assmption : ∀ (p : ℕ), Nat.Prime p ∧ p > 2 → ((∃ m n, ↑p = m ^ 2 + n ^ 2) ↔ p ≡ 1 [MOD 4])) (p : ℕ) (h₁ :  (Nat.Prime p ∧ p > 2 ∧ ∃ x y, ↑p = x ^ 2 + 16 * y ^ 2) ↔    p ∈ ({p | Nat.Prime p ∧ p ≡ 1 [MOD 8]}, {p | Nat.Prime p ∧ p ≡ 5 [MOD 8]}).1) : (Nat.Prime p ∧ p > 2 ∧ ∃ x y, ↑p = 4 * x ^ 2 + 4 * x * y + 5 * y ^ 2) ↔
+    p ∈ ({p | Nat.Prime p ∧ p ≡ 5 [MOD 8]}, {p | Nat.Prime p ∧ p ≡ 1 [MOD 8]}).2 :=
+  by sorry

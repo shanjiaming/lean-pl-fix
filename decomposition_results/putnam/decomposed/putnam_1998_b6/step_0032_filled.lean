@@ -1,0 +1,2 @@
+theorem h₁ (a b c n : ℤ) (hn : n > 0) (hn' : ¬∃ k, ↑k = √(↑n ^ 3 + ↑a * ↑n ^ 2 + ↑b * ↑n + ↑c)) (k : ℤ) (hk : ↑k = √(↑n ^ 3 + ↑a * ↑n ^ 2 + ↑b * ↑n + ↑c)) : ↑k = √(↑n ^ 3 + ↑a * ↑n ^ 2 + ↑b * ↑n + ↑c) := by -- simpa using hk
+  linarith

@@ -1,0 +1,5 @@
+theorem h₅₁₆ (h_main : (MvPolynomial.X 1 - 2 * MvPolynomial.X 0) * (MvPolynomial.X 1 - 2 * MvPolynomial.X 0 - 1) ≠ 0) (a : ℝ) (h₁ :  (MvPolynomial.eval fun n => if n = 0 then ↑⌊a⌋ else ↑⌊2 * a⌋)      ((MvPolynomial.X 1 - 2 * MvPolynomial.X 0) * (MvPolynomial.X 1 - 2 * MvPolynomial.X 0 - 1)) =    (↑⌊2 * a⌋ - 2 * ↑⌊a⌋) * (↑⌊2 * a⌋ - 2 * ↑⌊a⌋ - 1)) (h₃ : ↑⌊2 * a⌋ - 2 * ↑⌊a⌋ = ↑⌊2 * a⌋ - 2 * ↑⌊a⌋) (h₅₂ : a - 1 < ↑⌊a⌋) (h₅₃ : ↑⌊a⌋ ≤ a) (h₅₄ : 2 * a < 2 * ↑⌊a⌋ + 2) (h₅₅ h₅₇ : 2 * ↑⌊a⌋ ≤ 2 * a) (h₅₈ : 2 * a < 2 * ↑⌊a⌋ + 2) (h₅₁₀ : 2 * ↑⌊a⌋ ≤ 2 * a) (h₅₁₁ : 2 * a < 2 * ↑⌊a⌋ + 2) (h₅₁₅ : 2 * ↑⌊a⌋ ≤ 2 * a) : ⌊2 * a⌋ ≥ 2 * ⌊a⌋ := by
+  --  norm_cast at h₅₁₅ ⊢ <;>
+  --    linarith [Int.floor_le ((2 : ℝ) * a), Int.floor_le (a : ℝ), Int.lt_floor_add_one ((2 : ℝ) * a),
+  --      Int.lt_floor_add_one (a : ℝ)]
+  hole

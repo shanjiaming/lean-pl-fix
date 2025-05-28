@@ -1,0 +1,1 @@
+theorem h₂ (f : ℝ → ℝ) (hf h₁ : f = fun x => 2 ^ x - 1 - x ^ 2) : {x | f x = 0} = {0, 1, 4} := by sorry

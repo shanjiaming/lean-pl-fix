@@ -1,0 +1,2 @@
+theorem h₂ (P : ℕ → Prop) (hP : ∀ (n : ℕ), P n ↔ ∀ (p : ℕ), Nat.Prime p ∧ p ∣ n ^ 2 + 3 → ∃ k, ↑p ∣ ↑k ^ 2 + 3 ∧ k ^ 2 < n) (n p : ℕ) (hp : Nat.Prime p ∧ p ∣ (3 * (n + 1)) ^ 2 + 3) : p ∣ (3 * (n + 1)) ^ 2 + 3 := by -- simpa [sq, mul_add, add_mul, mul_one, mul_assoc] using hp.2
+  omega

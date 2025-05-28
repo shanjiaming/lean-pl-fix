@@ -1,0 +1,4 @@
+theorem h₉₃ (α : ℝ) (f : ℝ → ℝ) (hf :  f ∈    {f |      (∀ x ∈ Icc 0 1, f x > 0) ∧        ContinuousOn f (Icc 0 1) ∧          ∫ (x : ℝ) in 0 ..1, f x = 1 ∧ ∫ (x : ℝ) in 0 ..1, x * f x = α ∧ ∫ (x : ℝ) in 0 ..1, x ^ 2 * f x = α ^ 2}) (h₁ : ∀ x ∈ Icc 0 1, f x > 0) (h₂ : ContinuousOn f (Icc 0 1)) (h₃ : ∫ (x : ℝ) in 0 ..1, f x = 1) (h₄ : ∫ (x : ℝ) in 0 ..1, x * f x = α) (h₅ : ∫ (x : ℝ) in 0 ..1, x ^ 2 * f x = α ^ 2) (h₆ : ∫ (x : ℝ) in 0 ..1, (x - α) ^ 2 * f x = 0) (h₇ : ∀ x ∈ Icc 0 1, (x - α) ^ 2 * f x = 0) (h₈ : ∀ x ∈ Icc 0 1, x = α) (h₉₁ : 0 ∈ Icc 0 1) (h₉₂ : 1 ∈ Icc 0 1) : 0 = α := by
+  have h₉₄ := h₈ 0 h₉₁
+  linarith
+  hole

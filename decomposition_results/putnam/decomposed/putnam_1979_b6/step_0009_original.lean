@@ -1,0 +1,2 @@
+theorem h₇ (n : ℕ) (z : Fin n → ℂ) (h : ¬∑ i, z i ^ 2 = 0) (h₁ : ∑ i, z i ^ 2 ≠ 0) (h₂ : (∑ i, z i ^ 2) ^ (1 / 2) = (∑ i, z i ^ 2) ^ (1 / 2)) (h₃ : |((∑ i, z i ^ 2) ^ (1 / 2)).re| ≤ ((∑ i, z i ^ 2) ^ (1 / 2)).abs) (h₄ : ((∑ i, z i ^ 2) ^ (1 / 2)).abs = √(∑ i, z i ^ 2).abs) : (∑ i, z i ^ 2).abs ≤ ∑ i, (z i ^ 2).abs := by
+  exact Complex.abs.sum_le (Finset.univ : Finset (Fin n)) (fun i => (z i) ^ 2)

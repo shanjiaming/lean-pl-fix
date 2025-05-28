@@ -1,0 +1,2 @@
+theorem putnam_2001_b3  : (∑' (n : ℕ), if n ≥ 1 then (2 ^ round √↑n + 2 ^ (-round √↑n)) / 2 ^ n else 0) = 3 :=
+  by sorry

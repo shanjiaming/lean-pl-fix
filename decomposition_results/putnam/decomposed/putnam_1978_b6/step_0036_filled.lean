@@ -1,0 +1,2 @@
+theorem h₅₆ (a : ℕ → ℕ → ℝ) (ha : ∀ (i j : ℕ), a i j ∈ Icc 0 1) (m n : ℕ) (mnpos : m > 0 ∧ n > 0) (h₁ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j ≤ ↑m * ↑i) (h₂ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≤ ↑m) (h₃ : ∑ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≤ ↑m * ↑n) (h₄ : (∑ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i) ^ 2 ≤ (↑m * ↑n) ^ 2) (h₅₁ : ↑m ≥ 1) (h₅₃ : n > 0) (h₅₄ : ↑n > 0) (h₅₅ : n ≥ 1) : ↑n ≥ 1 := by -- exact_mod_cast h₅₅
+  linarith

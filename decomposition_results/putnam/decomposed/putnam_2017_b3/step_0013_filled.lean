@@ -1,0 +1,3 @@
+theorem h₁₀ (f : ℝ → ℝ) (c : ℕ → ℝ) (hc : ∀ (n : ℕ), c n = 0 ∨ c n = 1) (hf : ∀ (x : ℝ), f x = ∑' (n : ℕ), c n * x ^ n) (h₁ : f (2 / 3) = 3 / 2) (h_sum : Summable fun n => c n * (2 / 3) ^ n) (N : ℕ) (h₃ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (hN : ∀ n ≥ N, c n = 0) (h₅ : ∑' (n : ℕ), c n * (2 / 3) ^ n = ∑' (n : ℕ), c n * (2 / 3) ^ n) (h₆ : ∑' (n : ℕ), c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₇ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (h₈ h₉ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n :=
+  --  by norm_num
+  hole

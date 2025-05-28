@@ -1,0 +1,3 @@
+theorem h₇ (p : Fin 4 → EuclideanSpace ℝ (Fin 2)) (h : ∀ (i j : Fin 4), i ≠ j → ∃ n, dist (p i) (p j) = ↑n ∧ Odd n) (n₁ : ℤ) (hn₁ : dist (p ⟨0, ⋯⟩) (p ⟨1, ⋯⟩) = ↑n₁) (hn₁_odd : Odd n₁) (n₂ : ℤ) (hn₂ : dist (p ⟨0, ⋯⟩) (p ⟨2, ⋯⟩) = ↑n₂) (hn₂_odd : Odd n₂) (n₃ : ℤ) (hn₃ : dist (p ⟨0, ⋯⟩) (p ⟨3, ⋯⟩) = ↑n₃) (hn₃_odd : Odd n₃) (n₄ : ℤ) (hn₄ : dist (p ⟨1, ⋯⟩) (p ⟨2, ⋯⟩) = ↑n₄) (hn₄_odd : Odd n₄) (n₅ : ℤ) (hn₅ : dist (p ⟨1, ⋯⟩) (p ⟨3, ⋯⟩) = ↑n₅) (hn₅_odd : Odd n₅) (n₆ : ℤ) (hn₆ : dist (p ⟨2, ⋯⟩) (p ⟨3, ⋯⟩) = ↑n₆) (hn₆_odd : Odd n₆) : 0 < 4 := by
+  --  rw [hn₁] <;> simp [Int.cast_id]
+  hole

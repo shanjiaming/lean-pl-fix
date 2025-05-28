@@ -1,0 +1,1 @@
+theorem h₇ (N : ℕ) (score : Fin (2 * N) → Fin 11) (hsurj : ∀ (k : Fin 11), ∃ i, score i = k) (havg : (∑ i, ↑↑(score i)) / (2 * ↑N) = 7.4) (hN_pos : N > 0) (h₁ : ∑ i, ↑↑(score i) = 2 * ↑N * 7.4) (h₂ h₄ : ∑ i, ↑↑(score i) = 2 * ↑N * 74 / 10) : ∀ (i : Fin (2 * N)), ↑↑(score i) % 10 = ↑↑(score i) % 10 := by simp

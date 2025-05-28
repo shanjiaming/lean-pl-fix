@@ -1,0 +1,1 @@
+theorem h₁ (a : ℤ) (ha : a ≥ 2) (b : ℤ) (hb : b ≥ 2) : 1 > 0 := by norm_num

@@ -1,0 +1,2 @@
+theorem h₃ (n : ℕ) (hn : n > 0) (h_base : 1 / 2 = ∑ i ∈ Finset.range 1, ↑((1 + i - 1).choose i) * 2 ^ (-1 - ↑i)) (k : ℕ) (hk : k > 0) (hk_sum : 1 / 2 = ∑ i ∈ Finset.range k, ↑((k + i - 1).choose i) * 2 ^ (-↑k - ↑i)) : k ≥ 0 := by -- linarith
+  hole

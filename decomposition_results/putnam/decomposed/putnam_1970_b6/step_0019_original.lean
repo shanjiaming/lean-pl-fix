@@ -1,0 +1,7 @@
+theorem h_vol_pos (L : ZMod 4 → EuclideanSpace ℝ (Fin 2)) (S : Set (EuclideanSpace ℝ (Fin 2))) (S_def : S = {x | ∃ i, L i = x}) (hSquad : S.ncard = 4 ∧ ∀ s ⊆ S, s.ncard = 3 → ¬Collinear ℝ s) (hlens : dist (L 0) (L 1) > 0 ∧ dist (L 1) (L 2) > 0 ∧ dist (L 2) (L 3) > 0 ∧ dist (L 3) (L 0) > 0) (horder : ∀ (i : ZMod 4), segment ℝ (L i) (L (i + 1)) ∩ interior ((convexHull ℝ) S) = ∅) (hcircum : ∃ O r, O ∈ (convexHull ℝ) S ∧ r > 0 ∧ ∀ (i : ZMod 4), ∃! I, Collinear ℝ {I, L i, L (i + 1)} ∧ dist O I = r) (harea :  (MeasureTheory.volume ((convexHull ℝ) S)).toReal =    √(dist (L 0) (L 1) * dist (L 1) (L 2) * dist (L 2) (L 3) * dist (L 3) (L 0))) (h_injective : Function.Injective L) (h_no_collinear : ∀ (i j k : ZMod 4), i ≠ j → i ≠ k → j ≠ k → ¬Collinear ℝ {L i, L j, L k}) : (MeasureTheory.volume ((convexHull ℝ) S)).toReal > 0 :=
+  by
+  have h₁ :
+    (MeasureTheory.volume (convexHull ℝ S)).toReal =
+      Real.sqrt (dist (L 0) (L 1) * dist (L 1) (L 2) * dist (L 2) (L 3) * dist (L 3) (L 0)) := by sorry
+  have h₂ : Real.sqrt (dist (L 0) (L 1) * dist (L 1) (L 2) * dist (L 2) (L 3) * dist (L 3) (L 0)) > 0 := by sorry
+  linarith

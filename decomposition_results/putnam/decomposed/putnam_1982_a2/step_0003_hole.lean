@@ -1,0 +1,2 @@
+theorem h₂ (B : ℕ → ℝ → ℝ) (hB : B = fun n x => ∑ k ∈ Finset.Icc 1 n, ↑k ^ x) (f : ℕ → ℝ) (hf : f = fun n => B n (logb (↑n) 2) / (↑n * logb 2 ↑n) ^ 2) : Tendsto (fun N => ∑ j ∈ Finset.Icc 2 N, f j) atTop (𝓝 (∑' (j : ℕ), if j ≥ 2 then f j else 0)) := by -- sorry
+  hole
