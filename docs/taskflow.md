@@ -891,3 +891,14 @@ todo:
 
 nohup python decompose_hole_merge_pipeline.py dataset minif2f unigram > minif2f_pipeline.log 2>&1 &
 nohup python decompose_hole_merge_pipeline.py dataset proverbench unigram > proverbench_pipeline.log 2>&1 &
+
+
+
+todo:
+
+AutoLeanServer: An experimental subclass of LeanServer automatically recovering from some crashes and timeouts. It also monitors memory usage to limit out of memory issues in multiprocessing contexts. Use the add_to_session_cache attribute available in the run method to prevent selected environment/proof states to be cleared.
+
+proofnetsharp:
+https://huggingface.co/datasets/PAug/ProofNetSharp
+
+tacticwise optimization:
