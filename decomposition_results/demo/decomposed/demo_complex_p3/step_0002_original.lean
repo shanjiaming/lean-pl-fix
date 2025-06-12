@@ -1,0 +1,1 @@
+-- Original: hole_2 := cases' h_contra with ha hb

@@ -1,0 +1,1 @@
+-- Original: hole_1 := by_contra h_contra

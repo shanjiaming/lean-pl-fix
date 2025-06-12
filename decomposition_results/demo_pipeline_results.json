@@ -1,0 +1,327 @@
+[
+  {
+    "problem_id": "demo_complex_p4",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p4",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p4/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y:=\n  by\n  --  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  --  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y:= by\n      have h3 : x \u2264 y := h_le\n      have h4 : y \u2264 x:= by\n        --  rw [\u2190 h]\n        --  omega\n        admit\n      --  omega\n      admit\n  --    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  admit",
+    "original_verification_pass": false,
+    "synthesized_verification_pass": false,
+    "num_steps": 3,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y :=\n  by\n  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y := by sorry\n    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n    exact h2",
+        "hole_content": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y :=\n  by\n  --  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  --  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  hole",
+        "filled_content": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y :=\n  by\n  --  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  --  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": false,
+        "filled_verification_pass": false,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "theorem h2 (x y : \u2115) (h : x = y) (h_le : x \u2264 y) : x = y := by\n  have h3 : x \u2264 y := h_le\n  have h4 : y \u2264 x := by sorry\n  omega",
+        "hole_content": "theorem h2 (x y : \u2115) (h : x = y) (h_le : x \u2264 y) : x = y := by\n  have h3 : x \u2264 y := h_le\n  have h4 : y \u2264 x := by sorry\n  --  omega\n  hole",
+        "filled_content": "theorem h2 (x y : \u2115) (h : x = y) (h_le : x \u2264 y) : x = y := by\n  have h3 : x \u2264 y := h_le\n  have h4 : y \u2264 x := by sorry\n  --  omega\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0003",
+        "original_content": "theorem h4 (x y : \u2115) (h : x = y) (h_le h3 : x \u2264 y) : y \u2264 x := by\n  rw [\u2190 h]\n  omega",
+        "hole_content": "theorem h4 (x y : \u2115) (h : x = y) (h_le h3 : x \u2264 y) : y \u2264 x := by\n  --  rw [\u2190 h]\n  --  omega\n  hole",
+        "filled_content": "theorem h4 (x y : \u2115) (h : x = y) (h_le h3 : x \u2264 y) : y \u2264 x := by\n  --  rw [\u2190 h]\n  --  omega\n  admit",
+        "original_verification_pass": false,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      }
+    ],
+    "processing_time_seconds": 0.364618,
+    "status": "success",
+    "timestamp": "2025-06-12T14:07:45.808291"
+  },
+  {
+    "problem_id": "demo_complex_p5",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p5",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p5/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c:=\n  by\n  --  by_cases h : a = c\n  --  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c:=\n      by\n      have h3 : a \u2264 c:= by\n        have h4 : a \u2264 b := h1\n        have h5 : b \u2264 c := h2\n        have h6 : a \u2264 c := le_trans h4 h5\n        --  exact h6\n        admit\n      have h7 : a \u2260 c := h\n      have h8 : a < c:= by\n        have h9 : a \u2264 c := h3\n        have h10 : a \u2260 c := h7\n        --  exact Nat.lt_of_le_of_ne h9 h10\n        admit\n      --  exact h8\n      admit\n    have h_final : a \u2264 c:= by\n      have h11 : a < c := h_main\n      have h12 : a \u2264 c := le_of_lt h11\n      --  exact h12\n      admit\n  --    exact h_final\n  admit",
+    "original_verification_pass": true,
+    "synthesized_verification_pass": false,
+    "num_steps": 5,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c :=\n  by\n  by_cases h : a = c\n  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c := by sorry\n    have h_final : a \u2264 c := by sorry\n    exact h_final",
+        "hole_content": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c :=\n  by\n  --  by_cases h : a = c\n  --  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c := by sorry\n    have h_final : a \u2264 c := by sorry\n  --    exact h_final\n  hole",
+        "filled_content": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c :=\n  by\n  --  by_cases h : a = c\n  --  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c := by sorry\n    have h_final : a \u2264 c := by sorry\n  --    exact h_final\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": false,
+        "filled_verification_pass": false,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "theorem h_main (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a < c :=\n  by\n  have h3 : a \u2264 c := by sorry\n  have h7 : a \u2260 c := h\n  have h8 : a < c := by sorry\n  exact h8",
+        "hole_content": "theorem h_main (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a < c :=\n  by\n  have h3 : a \u2264 c := by sorry\n  have h7 : a \u2260 c := h\n  have h8 : a < c := by sorry\n  --  exact h8\n  hole",
+        "filled_content": "theorem h_main (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a < c :=\n  by\n  have h3 : a \u2264 c := by sorry\n  have h7 : a \u2260 c := h\n  have h8 : a < c := by sorry\n  --  exact h8\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0003",
+        "original_content": "theorem h3 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a \u2264 c := by\n  have h4 : a \u2264 b := h1\n  have h5 : b \u2264 c := h2\n  have h6 : a \u2264 c := le_trans h4 h5\n  exact h6",
+        "hole_content": "theorem h3 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a \u2264 c := by\n  have h4 : a \u2264 b := h1\n  have h5 : b \u2264 c := h2\n  have h6 : a \u2264 c := le_trans h4 h5\n  --  exact h6\n  hole",
+        "filled_content": "theorem h3 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a \u2264 c := by\n  have h4 : a \u2264 b := h1\n  have h5 : b \u2264 c := h2\n  have h6 : a \u2264 c := le_trans h4 h5\n  --  exact h6\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0004",
+        "original_content": "theorem h8 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h3 : a \u2264 c) (h7 : a \u2260 c) : a < c := by\n  have h9 : a \u2264 c := h3\n  have h10 : a \u2260 c := h7\n  exact Nat.lt_of_le_of_ne h9 h10",
+        "hole_content": "theorem h8 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h3 : a \u2264 c) (h7 : a \u2260 c) : a < c := by\n  have h9 : a \u2264 c := h3\n  have h10 : a \u2260 c := h7\n  --  exact Nat.lt_of_le_of_ne h9 h10\n  hole",
+        "filled_content": "theorem h8 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h3 : a \u2264 c) (h7 : a \u2260 c) : a < c := by\n  have h9 : a \u2264 c := h3\n  have h10 : a \u2260 c := h7\n  --  exact Nat.lt_of_le_of_ne h9 h10\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0005",
+        "original_content": "theorem h_final (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h_main : a < c) : a \u2264 c := by\n  have h11 : a < c := h_main\n  have h12 : a \u2264 c := le_of_lt h11\n  exact h12",
+        "hole_content": "theorem h_final (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h_main : a < c) : a \u2264 c := by\n  have h11 : a < c := h_main\n  have h12 : a \u2264 c := le_of_lt h11\n  --  exact h12\n  hole",
+        "filled_content": "theorem h_final (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h_main : a < c) : a \u2264 c := by\n  have h11 : a < c := h_main\n  have h12 : a \u2264 c := le_of_lt h11\n  --  exact h12\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      }
+    ],
+    "processing_time_seconds": 0.586675,
+    "status": "success",
+    "timestamp": "2025-06-12T14:07:46.395316"
+  },
+  {
+    "problem_id": "demo_complex_p6",
+    "dataset": "demo",
+    "original_verification_pass": false,
+    "synthesized_verification_pass": null,
+    "status": "error",
+    "error": "Decomposition failed for problem demo_complex_p6 - no steps generated",
+    "processing_time_seconds": 0.262131,
+    "timestamp": "2025-06-12T14:07:46.658034"
+  },
+  {
+    "problem_id": "demo_complex_p2",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p2",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p2/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0:=\n  by\n  --  cases' n with k\n  --  \u00b7 left\n    have h1 : 0 = 0 := rfl\n  --    exact h1\n  --  \u00b7 right\n    have h1 : k + 1 > 0:= by -- omega\n      admit\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n  --    exact h3\n  admit",
+    "original_verification_pass": true,
+    "synthesized_verification_pass": false,
+    "num_steps": 2,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 :=\n  by\n  cases' n with k\n  \u00b7 left\n    have h1 : 0 = 0 := rfl\n    exact h1\n  \u00b7 right\n    have h1 : k + 1 > 0 := by sorry\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n    exact h3",
+        "hole_content": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 :=\n  by\n  --  cases' n with k\n  --  \u00b7 left\n    have h1 : 0 = 0 := rfl\n  --    exact h1\n  --  \u00b7 right\n    have h1 : k + 1 > 0 := by sorry\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n  --    exact h3\n  hole",
+        "filled_content": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 :=\n  by\n  --  cases' n with k\n  --  \u00b7 left\n    have h1 : 0 = 0 := rfl\n  --    exact h1\n  --  \u00b7 right\n    have h1 : k + 1 > 0 := by sorry\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n  --    exact h3\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": false,
+        "filled_verification_pass": false,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "theorem h1 (k : \u2115) : k + 1 > 0 := by omega",
+        "hole_content": "theorem h1 (k : \u2115) : k + 1 > 0 := by -- omega\n  hole",
+        "filled_content": "theorem h1 (k : \u2115) : k + 1 > 0 := by -- omega\n  admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace"
+        }
+      }
+    ],
+    "processing_time_seconds": 0.266565,
+    "status": "success",
+    "timestamp": "2025-06-12T14:07:46.925220"
+  },
+  {
+    "problem_id": "demo_complex_p1",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p1",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p1/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem complex_have_chain (n : \u2115) (h : n > 0) : n + n \u2265 n := by\n  have h1 : n \u2265 1 := by\n    admit\n  have h2 : n + n \u2265 n + 1 := by\n    have h3 : n \u2265 1 := h1\n    have h4 : n + n = n + n := rfl\n    have h5 : n + 1 \u2264 n + n := by\n      admit\n    exact h5\n  have h6 : n + 1 \u2265 n := by\n    admit\n  admit",
+    "original_verification_pass": true,
+    "synthesized_verification_pass": true,
+    "num_steps": 6,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "-- Original: hole_1 := have h1 : n \u2265 1 := by omega",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_1",
+          "original_proof": "have h1 : n \u2265 1 := by omega",
+          "replacement": "admit"
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "-- Original: hole_2 := omega",
+        "hole_content": "-- Hole: hole_2",
+        "filled_content": "-- Filled: hole_2 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_2",
+          "original_proof": "omega",
+          "replacement": "admit"
+        }
+      },
+      {
+        "step_id": "step_0003",
+        "original_content": "-- Original: hole_3 := have h3 : n \u2265 1 := h1",
+        "hole_content": "-- Hole: hole_3",
+        "filled_content": "-- Filled: hole_3 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_3",
+          "original_proof": "have h3 : n \u2265 1 := h1",
+          "replacement": "admit"
+        }
+      },
+      {
+        "step_id": "step_0004",
+        "original_content": "-- Original: hole_4 := omega",
+        "hole_content": "-- Hole: hole_4",
+        "filled_content": "-- Filled: hole_4 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_4",
+          "original_proof": "omega",
+          "replacement": "admit"
+        }
+      },
+      {
+        "step_id": "step_0005",
+        "original_content": "-- Original: hole_5 := omega",
+        "hole_content": "-- Hole: hole_5",
+        "filled_content": "-- Filled: hole_5 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_5",
+          "original_proof": "omega",
+          "replacement": "admit"
+        }
+      },
+      {
+        "step_id": "step_0006",
+        "original_content": "-- Original: hole_6 := omega",
+        "hole_content": "-- Hole: hole_6",
+        "filled_content": "-- Filled: hole_6 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_6",
+          "original_proof": "omega",
+          "replacement": "admit"
+        }
+      }
+    ],
+    "processing_time_seconds": 3.870498,
+    "status": "success",
+    "timestamp": "2025-06-12T14:54:23.897648"
+  },
+  {
+    "problem_id": "demo_complex_p3",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p3",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p3/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem contradiction_with_have (a b : \u2115) (h : a + b = 0) : a = 0 \u2227 b = 0 := by\n  by_contra h_contra\n  simp at h_contra\n  admit\n  \u00b7 -- case a \u2260 0\n    have h1 : a > 0 := Nat.pos_of_ne_zero ha\n    have h2 : a + b \u2265 a := by omega\n    have h3 : a + b \u2265 1 := by\n      have h4 : a \u2265 1 := h1\n      omega\n    have h4 : a + b = 0 := h\n    have h5 : (0 : \u2115) < 1 := by norm_num\n    omega\n  \u00b7 -- case b \u2260 0\n    have h1 : b > 0 := Nat.pos_of_ne_zero hb\n    have h2 : a + b \u2265 b := by omega\n    have h3 : a + b \u2265 1 := by\n      have h4 : b \u2265 1 := h1\n      omega\n    have h4 : a + b = 0 := h\n    omega",
+    "original_verification_pass": false,
+    "synthesized_verification_pass": false,
+    "num_steps": 2,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "-- Original: hole_1 := by_contra h_contra",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_1",
+          "original_proof": "by_contra h_contra",
+          "replacement": "admit"
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "-- Original: hole_2 := cases' h_contra with ha hb",
+        "hole_content": "-- Hole: hole_2",
+        "filled_content": "-- Filled: hole_2 := admit",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "simple_replace",
+          "hole_id": "hole_2",
+          "original_proof": "cases' h_contra with ha hb",
+          "replacement": "admit"
+        }
+      }
+    ],
+    "processing_time_seconds": 0.12744,
+    "status": "success",
+    "timestamp": "2025-06-12T14:54:24.025629"
+  }
+]
