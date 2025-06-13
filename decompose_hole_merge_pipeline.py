@@ -103,10 +103,10 @@ class DecomposeHoleMergePipeline:
                 # Look for what replaced "hole" in the filled content
                 if additional_info.get("best_tactic"):
                     replacement = additional_info["best_tactic"]
-                elif "admit" in step_filled_content:
-                    replacement = "admit"
                 else:
-                    replacement = original_proof  # Keep original if no better replacement
+                    # If no successful unigram tactic found, use admit as fallback
+                    # Do NOT use original proof as it may not be a unigram tactic
+                    replacement = "admit"
                 
                 # Replace the hole in the main content
                 filled_content = filled_content.replace(hole_id, replacement)
@@ -217,7 +217,7 @@ class DecomposeHoleMergePipeline:
         with open(os.path.join(problem_dir, "problem.lean"), "w") as f:
             f.write(problem_content)
         
-        # Save metadata
+        # Save comprehensive metadata with all hole information
         metadata = {
             "problem_id": problem.problem_id,
             "dataset": problem.dataset,
@@ -226,9 +226,12 @@ class DecomposeHoleMergePipeline:
             "problem_file": "problem.lean",
             "original_verification_pass": original_verification_pass,
             "synthesized_verification_pass": synthesized_verification_pass,
-            "steps": [
+            "holes": [
                 {
-                    "step_id": step.step_id,
+                    "hole_id": step.step_id,
+                    "original_content": step.original_content,
+                    "hole_content": step.hole_content,
+                    "filled_content": step.filled_content,
                     "original_verification_pass": step.original_verification_pass,
                     "hole_verification_pass": step.hole_verification_pass,
                     "filled_verification_pass": step.filled_verification_pass,
@@ -238,34 +241,45 @@ class DecomposeHoleMergePipeline:
             ]
         }
         
-        with open(os.path.join(problem_dir, "metadata.json"), "w") as f:
+        with open(os.path.join(problem_dir, "decomposition.json"), "w") as f:
             json.dump(metadata, f, indent=2)
-        
-        # Save individual steps
-        for step in steps:
-            # Original step
-            with open(os.path.join(problem_dir, f"{step.step_id}_original.lean"), "w") as f:
-                f.write(step.original_content)
-            
-            # Hole version
-            with open(os.path.join(problem_dir, f"{step.step_id}_hole.lean"), "w") as f:
-                f.write(step.hole_content)
-            
-            # Filled version (if available)
-            if step.filled_content is not None:
-                with open(os.path.join(problem_dir, f"{step.step_id}_filled.lean"), "w") as f:
-                    f.write(step.filled_content)
         
         print(f"Saved {len(steps)} decomposition steps to {problem_dir}")
         print(f"Also saved header.lean and problem.lean for self-contained information")
         return problem_dir
     
     def load_decomposition(self, problem_dir: str) -> List[DecompositionStep]:
-        """Load decomposition steps from files"""
-        metadata_path = os.path.join(problem_dir, "metadata.json")
-        if not os.path.exists(metadata_path):
-            raise ValueError(f"No metadata found in {problem_dir}")
+        """Load decomposition steps from comprehensive JSON file"""
+        decomposition_path = os.path.join(problem_dir, "decomposition.json")
+        if not os.path.exists(decomposition_path):
+            # Fallback to old format
+            metadata_path = os.path.join(problem_dir, "metadata.json")
+            if not os.path.exists(metadata_path):
+                raise ValueError(f"No decomposition metadata found in {problem_dir}")
+            return self._load_decomposition_old_format(problem_dir)
         
+        with open(decomposition_path, "r") as f:
+            metadata = json.load(f)
+        
+        steps = []
+        for hole_info in metadata["holes"]:
+            step = DecompositionStep(
+                step_id=hole_info["hole_id"],
+                original_content=hole_info["original_content"],
+                hole_content=hole_info["hole_content"],
+                filled_content=hole_info["filled_content"],
+                original_verification_pass=hole_info["original_verification_pass"],
+                hole_verification_pass=hole_info["hole_verification_pass"],
+                filled_verification_pass=hole_info["filled_verification_pass"],
+                additional_info=hole_info["additional_info"]
+            )
+            steps.append(step)
+        
+        return steps
+    
+    def _load_decomposition_old_format(self, problem_dir: str) -> List[DecompositionStep]:
+        """Load decomposition steps from old file-based format"""
+        metadata_path = os.path.join(problem_dir, "metadata.json")
         with open(metadata_path, "r") as f:
             metadata = json.load(f)
         
@@ -481,15 +495,28 @@ class DecomposeHoleMergePipeline:
             holes_to_create = []
             hole_counter = 1
             
-            # Process each have node in the tree
-            for node in self._traverse_tactic_tree(top_level_nodes):
-                if node.is_have() and node.subhaves:
-                    # This is a have statement with sub-tactics (i.e., a by-block)
-                    hole_info = self._analyze_have_node_for_holes(node, hole_counter)
-                    if hole_info:
-                        holes_to_create.append(hole_info)
-                        hole_counter += 1
-                        print(f"  Found by-block hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
+            # Process by-blocks more carefully - we want to handle specific patterns:
+            # 1. Simple have statements with single tactics (like "have h1 := by omega")
+            # 2. Complex have statements with "after last have" content
+            # But avoid processing nested by-blocks that are inside other by-blocks we're already processing
+            
+            def process_nodes_for_holes(nodes):
+                nonlocal hole_counter
+                
+                for node in nodes:
+                    if node.subhaves:
+                        # Check if this node should create a hole
+                        hole_info = self._analyze_have_node_for_holes(node, hole_counter)
+                        if hole_info:
+                            holes_to_create.append(hole_info)
+                            hole_counter += 1
+                            print(f"  Found by-block hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
+                        
+                        # Always process children - we want to find all relevant by-blocks
+                        # The replacement logic will handle avoiding conflicts
+                        process_nodes_for_holes(node.subhaves)
+            
+            process_nodes_for_holes(top_level_nodes)
             
             # Use tree-guided replacement to create holes
             return self._create_holes_from_tree_analysis(content, holes_to_create)
@@ -498,6 +525,18 @@ class DecomposeHoleMergePipeline:
             print(f"Error using lean_interact for hole generation: {e}")
             print("Falling back to simple line processing...")
             return self._simple_line_processing(content)
+    
+    def _is_descendant_of(self, node, ancestor):
+        """Check if node is a descendant of ancestor in the tactic tree"""
+        def traverse_ancestor(current):
+            if current == node:
+                return True
+            for child in current.subhaves:
+                if traverse_ancestor(child):
+                    return True
+            return False
+        
+        return traverse_ancestor(ancestor)
     
     def _traverse_tactic_tree(self, nodes):
         """Traverse tactic tree in depth-first order"""
@@ -522,9 +561,30 @@ class DecomposeHoleMergePipeline:
                 last_have_index = i
         
         if last_have_index == -1:
-            # No have statements in this by-block, the whole block could be a hole
-            # But for now, we don't handle this case
-            return None
+            # No have statements in this by-block - check if the block contains only tactics that should become holes
+            # For simple by-blocks with just tactics (like "by omega"), make the whole content a hole
+            if len(node.subhaves) == 1 and not node.subhaves[0].subhaves:
+                # Single non-have tactic - make it a hole only if it's a meaningful by-block
+                # Check if this is a simple by-block (direct child of a have statement)
+                parent_is_have = node.tactic.tactic.strip().startswith('have ')
+                
+                # Additional check: avoid creating holes for deeply nested single tactics that are part of larger structures
+                # Only create holes for direct have children or top-level blocks
+                if parent_is_have:
+                    hole_content = node.subhaves[0].tactic.tactic.strip()
+                    return {
+                        'hole_id': f"hole_{hole_counter}",
+                        'content': hole_content,
+                        'original_proof': hole_content,
+                        'parent_have_tactic': node.tactic.tactic,
+                        'start_pos': node.subhaves[0].tactic.start_pos,
+                        'end_pos': node.subhaves[0].tactic.end_pos
+                    }
+                else:
+                    return None
+            else:
+                # Multiple tactics or complex structure - don't handle for now
+                return None
             
         # Check if there are tactics after the last have
         tactics_after_last_have = node.subhaves[last_have_index + 1:]
