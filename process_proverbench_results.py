@@ -20,7 +20,7 @@ def process_proverbench_results(json_file_path):
             row = {
                 'benchmark': problem_id,
                 'step': 'N/A',
-                'sanity': 0,
+                'hole_verified': 0,
                 'unigram_solved': -2,  # Technical skip
                 'overall_success': overall_success
             }
@@ -33,18 +33,18 @@ def process_proverbench_results(json_file_path):
         for step in problem['detailed_steps']:
             step_id = step['step_id']
             
-            # Extract sanity check pass - check if additional_info exists and has sanity_check_pass
-            additional_info = step.get('additional_info', {})
-            sanity_pass = additional_info.get('sanity_check_pass', False)
-            sanity = 1 if sanity_pass else 0
+            # Use hole_verification_pass as the primary check
+            hole_verified_pass = step.get('hole_verification_pass', False)
+            hole_verified = 1 if hole_verified_pass else 0
             
-            # Check if step was skipped due to sanity check failure
+            # Check if step was skipped (this logic might be obsolete now but we keep it for safety)
+            additional_info = step.get('additional_info', {})
             skip_reason = additional_info.get('skip_reason', '')
-            was_skipped = skip_reason == 'sanity_check_failed'
+            was_skipped = skip_reason == 'hole_verification_failed' # Hypothetical future skip reason
             
             # Determine unigram solved status
-            if was_skipped or not sanity_pass:
-                unigram_solved = -1  # Sanity check failed
+            if was_skipped or not hole_verified_pass:
+                unigram_solved = -1  # Hole verification failed
             else:
                 # Check if any tactic was successful
                 successful_tactics = additional_info.get('successful_tactics', [])
@@ -57,7 +57,7 @@ def process_proverbench_results(json_file_path):
             row = {
                 'benchmark': problem_id,
                 'step': step_id,
-                'sanity': sanity,
+                'hole_verified': hole_verified,
                 'unigram_solved': unigram_solved,
                 'overall_success': overall_success
             }
@@ -68,8 +68,8 @@ def process_proverbench_results(json_file_path):
             failed_tactics = additional_info.get('failed_tactics', [])
             
             for tactic in tactics:
-                if was_skipped or not sanity_pass:
-                    row[tactic] = -1  # Sanity check failed
+                if was_skipped or not hole_verified_pass:
+                    row[tactic] = -1  # Hole verification failed
                 elif tactic in successful_tactics:
                     row[tactic] = 1  # Tactic succeeded
                 elif tactic in failed_tactics:
@@ -85,7 +85,7 @@ def process_proverbench_results(json_file_path):
     df = pd.DataFrame(rows)
     
     # Reorder columns
-    column_order = ['benchmark', 'step', 'sanity', 'unigram_solved', 'overall_success'] + tactics
+    column_order = ['benchmark', 'step', 'hole_verified', 'unigram_solved', 'overall_success'] + tactics
     df = df[column_order]
     
     return df
@@ -103,29 +103,29 @@ def calculate_statistics(df):
     # Overall problem success rate
     problem_success_rate = df.groupby('benchmark')['overall_success'].first().mean()
     
-    # Sanity check pass rate
-    sanity_pass_rate = (df['sanity'] == 1).mean()
+    # Hole verification pass rate
+    hole_verified_rate = (df['hole_verified'] == 1).mean()
     
-    # Unigram solved rate (only counting cases where sanity passed or failed, not technical skips)
+    # Unigram solved rate (only counting cases where hole verification passed or failed)
     valid_unigram = df[df['unigram_solved'].isin([0, 1, -1])]
     unigram_success_rate = (valid_unigram['unigram_solved'] == 1).mean() if len(valid_unigram) > 0 else 0
     
     # Overall tactic success rates
     tactic_stats = {}
     for tactic in tactics:
-        # Count all attempted cases (success=1, failure=0, don't count -1 sanity fails or -2 not tried)
+        # Count all attempted cases (success=1, failure=0, don't count -1 hole verification fails or -2 not tried)
         attempted = df[df[tactic].isin([0, 1])]
         if len(attempted) > 0:
             tactic_stats[tactic] = (attempted[tactic] == 1).mean()
         else:
             tactic_stats[tactic] = 0
     
-    # Calculate "good sketch only" statistics (only sanity check passed steps)
-    good_sketch_df = df[df['sanity'] == 1]
+    # Calculate "good sketch only" statistics (only hole_verified passed steps)
+    good_sketch_df = df[df['hole_verified'] == 1]
     
     if len(good_sketch_df) > 0:
-        # Sanity rate for good sketches (always 1.0)
-        good_sanity_rate = 1.0
+        # Hole verified rate for good sketches (always 1.0)
+        good_hole_verified_rate = 1.0
         
         # Unigram solved rate for good sketches
         good_unigram_rate = (good_sketch_df['unigram_solved'] == 1).mean()
@@ -139,20 +139,20 @@ def calculate_statistics(df):
             else:
                 good_tactic_stats[tactic] = 0
     else:
-        good_sanity_rate = 0
+        good_hole_verified_rate = 0
         good_unigram_rate = 0
         good_tactic_stats = {tactic: 0 for tactic in tactics}
     
     return {
         'overall': {
             'problem_success': problem_success_rate,
-            'sanity': sanity_pass_rate,
+            'hole_verified': hole_verified_rate,
             'unigram_solved': unigram_success_rate,
             'tactics': tactic_stats
         },
         'good_sketch': {
             'problem_success': problem_success_rate,  # Same as overall
-            'sanity': good_sanity_rate,
+            'hole_verified': good_hole_verified_rate,
             'unigram_solved': good_unigram_rate,
             'tactics': good_tactic_stats
         }
@@ -169,7 +169,7 @@ def add_statistics_rows(df):
     percentage_row = {
         'benchmark': 'percentage',
         'step': '',
-        'sanity': f"{stats['overall']['sanity']:.4f}",
+        'hole_verified': f"{stats['overall']['hole_verified']:.4f}",
         'unigram_solved': f"{stats['overall']['unigram_solved']:.4f}",
         'overall_success': f"{stats['overall']['problem_success']:.4f}"
     }
@@ -181,7 +181,7 @@ def add_statistics_rows(df):
     good_sketch_row = {
         'benchmark': 'percentage (good sketch only)',
         'step': '',
-        'sanity': f"{stats['good_sketch']['sanity']:.4f}",
+        'hole_verified': f"{stats['good_sketch']['hole_verified']:.4f}",
         'unigram_solved': f"{stats['good_sketch']['unigram_solved']:.4f}",
         'overall_success': f"{stats['good_sketch']['problem_success']:.4f}"
     }
@@ -214,10 +214,10 @@ def main():
     print("=" * 100)
     print()
     print("Legend:")
-    print("  sanity: 1=pass, 0=fail")
-    print("  unigram_solved: 1=solved, 0=not solved, -1=sanity check failed, -2=technical skip")
+    print("  hole_verified: 1=pass, 0=fail")
+    print("  unigram_solved: 1=solved, 0=not solved, -1=hole verification failed, -2=technical skip")
     print("  overall_success: 1=problem solved, 0=problem failed")
-    print("  tactics: 1=succeeded, 0=failed, -1=sanity check failed, -2=not tried")
+    print("  tactics: 1=succeeded, 0=failed, -1=hole verification failed, -2=not tried")
     print()
     
     # Print with better formatting
@@ -237,7 +237,7 @@ def main():
     print(f"Total problems: {df['benchmark'].nunique()}")
     print(f"Total steps: {len(df)}")
     print(f"Problem success rate: {stats['overall']['problem_success']:.2%}")
-    print(f"Step sanity check pass rate: {stats['overall']['sanity']:.2%}")
+    print(f"Step hole verification pass rate: {stats['overall']['hole_verified']:.2%}")
     print(f"Unigram solving rate: {stats['overall']['unigram_solved']:.2%}")
     print(f"Unigram solving rate (good sketches only): {stats['good_sketch']['unigram_solved']:.2%}")
 

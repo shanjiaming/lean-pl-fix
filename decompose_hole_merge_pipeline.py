@@ -186,7 +186,7 @@ class DecomposeHoleMergePipeline:
     
     def save_decomposition(self, problem_dir: str, problem: Problem, steps: List[DecompositionStep], 
                           original_verification_pass: Optional[bool] = None, 
-                          synthesized_verification_pass: Optional[bool] = None) -> str:
+                          filled_verification_pass: Optional[bool] = None) -> str:
         """Save decomposition steps to files"""
         # Ensure the directory exists
         os.makedirs(problem_dir, exist_ok=True)
@@ -209,22 +209,56 @@ class DecomposeHoleMergePipeline:
             "header_file": "header.lean",
             "problem_file": "problem.lean",
             "original_verification_pass": original_verification_pass,
-            "synthesized_verification_pass": synthesized_verification_pass,
-            "holes": [
-                {
-                    "hole_id": step.step_id,
-                    "original_content": step.original_content,
-                    "hole_content": step.hole_content,
-                    "filled_content": step.filled_content,
+            "filled_verification_pass": filled_verification_pass,
+            "hole_verification_pass": False,
+            "holes": []
+        }
+        
+        all_holes_verified = True
+        for step in steps:
+            if not step.hole_verification_pass:
+                all_holes_verified = False
+
+            # The user wants a cleaner, more direct JSON structure.
+            # We will flatten the structure and clean up the content.
+            if step.additional_info:
+                # Use the meaningful hole_id from additional_info
+                hole_id = step.additional_info.get("hole_id", step.step_id)
+                
+                # Use the clean original_proof from additional_info
+                original_proof = step.additional_info.get("original_proof", step.original_content)
+
+                hole_data = {
+                    "hole_id": hole_id,
+                    "original_proof": original_proof,
+                    "best_tactic": step.additional_info.get("best_tactic"),
+                    "method": step.additional_info.get("method"),
                     "original_verification_pass": step.original_verification_pass,
                     "hole_verification_pass": step.hole_verification_pass,
                     "filled_verification_pass": step.filled_verification_pass,
-                    "additional_info": step.additional_info
+                    "tactics_tried": step.additional_info.get("tactics_tried"),
+                    "successful_tactics": step.additional_info.get("successful_tactics"),
+                    "failed_tactics": step.additional_info.get("failed_tactics"),
                 }
-                for step in steps
-            ]
-        }
+            else:
+                # Fallback for steps without additional_info
+                hole_data = {
+                    "hole_id": step.step_id,
+                    "original_proof": step.original_content,
+                    "best_tactic": None,
+                    "method": None,
+                    "original_verification_pass": step.original_verification_pass,
+                    "hole_verification_pass": step.hole_verification_pass,
+                    "filled_verification_pass": step.filled_verification_pass,
+                    "tactics_tried": [],
+                    "successful_tactics": [],
+                    "failed_tactics": [],
+                }
+            metadata["holes"].append(hole_data)
         
+        # Set the global hole_verification_pass status
+        metadata["hole_verification_pass"] = all_holes_verified
+
         with open(os.path.join(problem_dir, "decomposition.json"), "w") as f:
             json.dump(metadata, f, indent=2)
         
@@ -247,16 +281,48 @@ class DecomposeHoleMergePipeline:
         
         steps = []
         for hole_info in metadata["holes"]:
-            step = DecompositionStep(
-                step_id=hole_info["hole_id"],
-                original_content=hole_info["original_content"],
-                hole_content=hole_info["hole_content"],
-                filled_content=hole_info["filled_content"],
-                original_verification_pass=hole_info["original_verification_pass"],
-                hole_verification_pass=hole_info["hole_verification_pass"],
-                filled_verification_pass=hole_info["filled_verification_pass"],
-                additional_info=hole_info["additional_info"]
-            )
+            # This part needs to be robust to both old and new formats.
+            # For simplicity, we'll assume the new format might not have all old keys.
+            # We reconstruct a شبه-additional_info for compatibility if needed.
+
+            is_new_format = "original_proof" in hole_info
+
+            if is_new_format:
+                 # Re-construct a dictionary that resembles the old additional_info
+                 # to maintain compatibility with DecompositionStep structure.
+                 additional_info_compat = {
+                     "hole_id": hole_info.get("hole_id"),
+                     "original_proof": hole_info.get("original_proof"),
+                     "best_tactic": hole_info.get("best_tactic"),
+                     "method": hole_info.get("method"),
+                     "tactics_tried": hole_info.get("tactics_tried"),
+                     "successful_tactics": hole_info.get("successful_tactics"),
+                     "failed_tactics": hole_info.get("failed_tactics"),
+                 }
+                 step = DecompositionStep(
+                    step_id=hole_info["hole_id"],
+                    original_content=hole_info["original_proof"],
+                    # The new format doesn't have these, provide defaults.
+                    hole_content=f"-- Hole: {hole_info['hole_id']}",
+                    filled_content=f"-- Filled: {hole_info['hole_id']} := {hole_info.get('best_tactic', '...')}",
+                    original_verification_pass=hole_info.get("original_verification_pass"),
+                    hole_verification_pass=hole_info.get("hole_verification_pass"),
+                    filled_verification_pass=hole_info.get("filled_verification_pass"),
+                    additional_info=additional_info_compat
+                )
+            else:
+                # Old format loading logic
+                step = DecompositionStep(
+                    step_id=hole_info["hole_id"],
+                    original_content=hole_info["original_content"],
+                    hole_content=hole_info["hole_content"],
+                    filled_content=hole_info["filled_content"],
+                    # Load verification results if available in metadata
+                    original_verification_pass=hole_info["original_verification_pass"],
+                    hole_verification_pass=hole_info["hole_verification_pass"],
+                    filled_verification_pass=hole_info["filled_verification_pass"],
+                    additional_info=hole_info["additional_info"]
+                )
             steps.append(step)
         
         return steps
@@ -374,17 +440,6 @@ class DecomposeHoleMergePipeline:
         
         # First check if hole version passes (sanity check)
         sanity_check = self.verify_lean_code(header_content, hole_content_with_macros, with_macro=False)
-        additional_info["sanity_check_pass"] = sanity_check
-        
-        # Debug: save the content that failed sanity check
-        if not sanity_check:
-            additional_info["failed_content_preview"] = hole_content_with_macros[:200] + "..." if len(hole_content_with_macros) > 200 else hole_content_with_macros
-            print(f"DEBUG: Sanity check failed for content: {additional_info['failed_content_preview']}")
-        
-        if not sanity_check:
-            # If hole version doesn't pass, skip tactic testing
-            additional_info["skip_reason"] = "sanity_check_failed"
-            return hole_content, additional_info
         
         # Find the hole placeholder to replace (can be "hole" or "hole_N")
         import re
@@ -997,7 +1052,7 @@ class DecomposeHoleMergePipeline:
                         "problem_id": problem.problem_id,
                         "dataset": problem.dataset,
                         "original_verification_pass": None,  # Not verified due to length
-                        "synthesized_verification_pass": None,  # Not reached
+                        "filled_verification_pass": None,  # Not reached
                         "status": "skipped_too_long",
                         "error": error_msg,
                         "code_lines": original_lines,
@@ -1041,7 +1096,7 @@ class DecomposeHoleMergePipeline:
                         "problem_id": problem.problem_id,
                         "dataset": problem.dataset,
                         "original_verification_pass": original_verification_pass,
-                        "synthesized_verification_pass": None,  # Not reached
+                        "filled_verification_pass": None,  # Not reached
                         "status": "error",
                         "error": error_msg,
                         "processing_time_seconds": processing_time,
@@ -1124,15 +1179,15 @@ class DecomposeHoleMergePipeline:
                 # Step 4: Verify synthesized proof
                 current_step = "verifying_synthesized_proof"
                 print(f"Step 4: Verifying synthesized proof...")
-                synthesized_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
-                print(f"Synthesized proof verification: {'PASS' if synthesized_verification_pass else 'FAIL'}")
+                filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
+                print(f"Synthesized proof verification: {'PASS' if filled_verification_pass else 'FAIL'}")
                 
                 # Step 4.5: Update metadata with synthesized verification result
                 print(f"Step 4.5: Updating metadata with synthesized verification result...")
                 metadata_path = os.path.join(problem_dir, "decomposition.json")
                 with open(metadata_path, "r") as f:
                     metadata = json.load(f)
-                metadata["synthesized_verification_pass"] = synthesized_verification_pass
+                metadata["filled_verification_pass"] = filled_verification_pass
                 with open(metadata_path, "w") as f:
                     json.dump(metadata, f, indent=2)
                 print(f"Metadata updated with synthesized verification result")
@@ -1199,7 +1254,7 @@ class DecomposeHoleMergePipeline:
                     "complete_proof_path": complete_proof_path,
                     "complete_fixed_proof": complete_fixed_proof,
                     "original_verification_pass": original_verification_pass,
-                    "synthesized_verification_pass": synthesized_verification_pass,
+                    "filled_verification_pass": filled_verification_pass,
                     "num_steps": len(steps),
                     "detailed_steps": detailed_steps,
                     "processing_time_seconds": processing_time,
@@ -1234,7 +1289,7 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": original_verification_pass,
-                    "synthesized_verification_pass": None,  # Not reached
+                    "filled_verification_pass": None,  # Not reached
                     "status": "error",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,
@@ -1304,7 +1359,7 @@ class DecomposeHoleMergePipeline:
             "problem_id": metadata.get("problem_id"),
             "dataset": metadata.get("dataset"),
             "original_verification_pass": metadata.get("original_verification_pass"),
-            "synthesized_verification_pass": metadata.get("synthesized_verification_pass"),
+            "filled_verification_pass": metadata.get("filled_verification_pass"),
             "timestamp": metadata.get("timestamp"),
             "num_steps": len(metadata.get("holes", []))
         }
