@@ -1,5 +1,0 @@
-theorem h₂₄ (n : ℕ) (h₀ : 0 < n) (h₁ : Nat.Prime (2 ^ n - 1)) (h₂ : n ≥ 2) (h h₄ : ¬Nat.Prime n) (m : ℕ) (hm₁ : m ∣ n) (hm₂ : m ≠ 1) (hm₃ : m ≠ n) (h₆ : m ∣ n) (h₇ : m ≠ 1) (h₈ : m ≠ n) (h₉ : m ≥ 2) (h₁₀ : m < n) (h₁₁ : 2 ^ m - 1 ∣ 2 ^ n - 1) (h₁₂ : 2 ^ m - 1 > 1) (h₁₃ : 2 ^ m - 1 < 2 ^ n - 1) (h₁₄ : 2 ^ m - 1 ≠ 1) (h₁₅ : 2 ^ m - 1 ≠ 2 ^ n - 1) (h₁₆ : Nat.Prime (2 ^ n - 1)) (h₁₇ : 2 ^ n - 1 ≠ 1) (h₁₈ : 2 ^ n - 1 ≠ 0) (h₁₉ : 2 ^ m - 1 ∣ 2 ^ n - 1) (h₂₀ : 2 ^ m - 1 ≠ 1) (h₂₁ : 2 ^ m - 1 ≠ 2 ^ n - 1) (h₂₂ : 2 ^ m - 1 < 2 ^ n - 1) (h₂₃ : 2 ^ m - 1 > 1) : ¬Nat.Prime (2 ^ n - 1) := by
-  --  intro h₂₄
-  have h₂₅ := Nat.Prime.eq_one_or_self_of_dvd h₂₄ (2 ^ m - 1) h₁₁
-  --  omega
-  hole

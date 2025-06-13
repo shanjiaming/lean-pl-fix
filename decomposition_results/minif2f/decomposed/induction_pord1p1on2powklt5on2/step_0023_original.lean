@@ -1,1 +1,0 @@
-theorem h₅ (n : ℕ) (h₀ : 0 < n) (h₁ : ∏ k ∈ Finset.Icc 1 n, 1 = 1) (h₂ : 1 / 2 ^ sorry ≤ 1) (h₃ : ∏ k ∈ Finset.Icc 1 n, 1 = 1) (h₄ : 1 + 1 / 2 ^ sorry ≤ 2) : 1 + 1 / 2 ^ sorry < 5 / 2 := by norm_num at h₄ ⊢ <;> (try linarith) <;> (try nlinarith)

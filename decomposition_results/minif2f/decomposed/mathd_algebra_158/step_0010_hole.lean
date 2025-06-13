@@ -1,3 +1,0 @@
-theorem h₇₃ (a : ℕ) (h₀ : Even a) (h₁ : ↑(∑ k ∈ Finset.range 8, 2 * k + 1) - ↑(∑ k ∈ Finset.range 5, a + 2 * sorry) = 4) (h₂ : ∑ k ∈ Finset.range 8, (2 * k + 1) = 64) (h₃ : ∑ k ∈ Finset.range 5, (a + 2 * k) = 5 * a + 20) (h₅ : ∑ k ∈ Finset.range 8, 2 * k + 1 = 64) (h₆ : ∑ k ∈ Finset.range 5, a + 2 * sorry = 5 * a + 20) (h₇₁ : ↑(∑ k ∈ Finset.range 8, 2 * k + 1) = 64) (h₇₂ : ↑(∑ k ∈ Finset.range 5, a + 2 * sorry) = 5 * ↑a + 20) : ↑(∑ k ∈ Finset.range 8, 2 * k + 1) - ↑(∑ k ∈ Finset.range 5, a + 2 * sorry) = 4 := by
-  --  simpa using h₁
-  hole

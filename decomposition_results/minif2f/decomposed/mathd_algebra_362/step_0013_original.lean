@@ -1,6 +1,0 @@
-theorem h₄ (a b : ℝ) (h₀ : a ^ 2 * b ^ 3 = 32 / 27) (h₁ : a / b ^ 3 = 27 / 4) (hb3 : b ≠ 0) (a_eq : a = 27 / 4 * b ^ 3) (b9_eq h₂ : b ^ 9 = (2 / 3) ^ 9) : b > 0 ∨ b < 0 := by
-  by_cases h₅ : b > 0
-  · exact Or.inl h₅
-  ·
-    have h₆ : b < 0 := by sorry
-    exact Or.inr h₆

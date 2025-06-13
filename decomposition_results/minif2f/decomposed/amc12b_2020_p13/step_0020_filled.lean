@@ -1,4 +1,0 @@
-theorem h₃₆₃ (h₁ : Real.log 6 / Real.log 2 + Real.log 6 / Real.log 3 = Real.log 3 / Real.log 2 + Real.log 2 / Real.log 3 + 2) (h₂ : √(Real.log 6 / Real.log 2 + Real.log 6 / Real.log 3) = √(Real.log 3 / Real.log 2 + Real.log 2 / Real.log 3 + 2)) (h₃₁ : Real.log 3 / Real.log 2 > 0) (h₃₂ : Real.log 2 / Real.log 3 > 0) (h₃₃ : Real.log 3 / Real.log 2 > 0) (h₃₄ : Real.log 2 / Real.log 3 > 0) (h₃₅ : Real.log 3 / Real.log 2 * (Real.log 2 / Real.log 3) = 1) (h₃₆₁ :  Real.log 3 / Real.log 2 + Real.log 2 / Real.log 3 + 2 = (√(Real.log 3 / Real.log 2) + √(Real.log 2 / Real.log 3)) ^ 2) (h₃₆₂ :  √(Real.log 3 / Real.log 2 + Real.log 2 / Real.log 3 + 2) =    √((√(Real.log 3 / Real.log 2) + √(Real.log 2 / Real.log 3)) ^ 2)) : √((√(Real.log 3 / Real.log 2) + √(Real.log 2 / Real.log 3)) ^ 2) =
-    √(Real.log 3 / Real.log 2) + √(Real.log 2 / Real.log 3) :=
-  --  by rw [Real.sqrt_sq (by positivity)]
-  hole

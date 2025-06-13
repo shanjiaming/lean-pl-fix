@@ -1,2 +1,0 @@
-theorem h₁₂ (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (h₁ : t < k) (h₂ : ↑k ^ 2 - ↑m * ↑k + ↑n = 0) (h₃ : ↑t ^ 2 - ↑m * ↑t + ↑n = 0) (h₄ : ↑m = ↑k + ↑t) (h₅ : m = k + t) (h₆ : n = t * k) (h₇ : t = 1) (h₈ : k = n) (h₉ : n = 2) (h₁₀ : m = 3) (h₁₁ : k = 2) : t = 1 := by -- exact h₇
-  linarith

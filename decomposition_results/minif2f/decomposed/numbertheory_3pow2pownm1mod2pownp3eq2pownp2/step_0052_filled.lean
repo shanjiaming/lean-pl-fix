@@ -1,2 +1,0 @@
-theorem h₄ (n : ℕ) (h₀ : 0 < n) (k : ℕ) (hk : 3 ^ 2 ^ n = 1 + 2 ^ (n + 2) + k * 2 ^ (n + 3)) (h₁ : 3 ^ 2 ^ n - 1 = 2 ^ (n + 2) + k * 2 ^ (n + 3)) (h₂ : (2 ^ (n + 2) + k * 2 ^ (n + 3)) % 2 ^ (n + 3) = 2 ^ (n + 2) % 2 ^ (n + 3)) : 2 ^ (n + 2) < 2 ^ (n + 3) := by -- apply Nat.pow_lt_pow_of_lt_right <;> omega
-  hole

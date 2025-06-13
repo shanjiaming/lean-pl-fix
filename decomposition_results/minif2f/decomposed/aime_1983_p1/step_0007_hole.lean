@@ -1,2 +1,0 @@
-theorem hlogx (x y z w : ℕ) (ht : 1 < x ∧ 1 < y ∧ 1 < z) (hw : 0 ≤ w) (h0 : Real.log ↑w / Real.log ↑x = 24) (h1 : Real.log ↑w / Real.log ↑y = 40) (h2 : Real.log ↑w / Real.log (↑x * ↑y * ↑z) = 12) (hx : ↑x > 1) (hy : ↑y > 1) (hz : ↑z > 1) (hxyz : ↑x * ↑y * ↑z > 1) : Real.log ↑x > 0 := by -- -- apply Real.log_pos <;> simpa using hx
-  hole

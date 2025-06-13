@@ -1,1 +1,0 @@
-theorem h₂₁ (n : ℕ) (h₀ : 0 < n) (h₁ : ∏ k ∈ Finset.Icc 1 n, 1 = 1) : 1 ≤ 2 := by norm_num

@@ -1,2 +1,0 @@
-theorem h₅ (n✝¹ : ℕ) (h₀ : 0 < n✝¹) (n✝ n : ℕ) (hn : (succ 0).le n) (k : ℕ) (hk : 3 ^ 2 ^ n = 1 + 2 ^ (n + 2) + k * 2 ^ (n + 3)) (h₂ : 3 ^ 2 ^ (n + 1) = (3 ^ 2 ^ n) ^ 2) (h₄ : n ≥ 0) : 2 * n + 4 ≥ n + 4 := by omega
-  hole

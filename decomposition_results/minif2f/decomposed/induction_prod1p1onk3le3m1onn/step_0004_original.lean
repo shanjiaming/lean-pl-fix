@@ -1,1 +1,0 @@
-theorem h_final (n : ℕ) (h₀ : 0 < n) (h_main : ∀ (m : ℕ), 0 < m → ∏ k ∈ Finset.Icc 1 m, (1 + 1 / ↑k ^ 3) ≤ 3 - 1 / ↑m) : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / ↑k ^ 3) ≤ 3 - 1 / ↑n := by apply h_main n h₀

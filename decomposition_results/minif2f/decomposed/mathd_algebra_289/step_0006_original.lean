@@ -1,1 +1,0 @@
-theorem h₄₄ (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (h₁ : t < k) (h₂ : ↑k ^ 2 - ↑m * ↑k + ↑n = 0) (h₃ : ↑t ^ 2 - ↑m * ↑t + ↑n = 0) (h₄₂ : ↑k ^ 2 - ↑m * ↑k + ↑n = 0) (h₄₃ : ↑t ^ 2 - ↑m * ↑t + ↑n = 0) : ↑k ^ 2 - ↑m * ↑k + ↑n - (↑t ^ 2 - ↑m * ↑t + ↑n) = 0 := by linarith

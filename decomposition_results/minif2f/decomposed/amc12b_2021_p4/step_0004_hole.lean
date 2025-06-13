@@ -1,2 +1,0 @@
-theorem h₂₃ (m a : ℕ) (h₀ : 0 < m ∧ 0 < a) (h₁ h₂₁ : ↑m / ↑a = 3 / 4) (h₂₂ : ↑a ≠ 0) : 4 * ↑m = 3 * ↑a := by -- field_simp at h₂₁ <;> ring_nf at h₂₁ ⊢ <;> nlinarith
-  hole

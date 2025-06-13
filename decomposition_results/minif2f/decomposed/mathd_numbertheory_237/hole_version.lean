@@ -1,10 +1,14 @@
+macro "hole_2" : tactic => `(tactic| admit)
+macro "hole_3" : tactic => `(tactic| admit)
+macro "hole_1" : tactic => `(tactic| admit)
+
 theorem mathd_numbertheory_237 : (∑ k in Finset.range 101, k) % 6 = 4 := by
   have h : (∑ k in Finset.range 101, k) = 5050 := by
-    norm_num
+    hole_2
   
   have h₁ : (∑ k in Finset.range 101, k) % 6 = 4 := by
-    norm_num
+    hole_3
     <;> norm_num
     <;> rfl
   
-  norm_num
+  hole_1

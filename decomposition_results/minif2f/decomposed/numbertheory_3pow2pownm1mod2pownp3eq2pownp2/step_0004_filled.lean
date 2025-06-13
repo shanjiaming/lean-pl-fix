@@ -1,3 +1,0 @@
-theorem h₂ (n✝¹ : ℕ) (h₀ : 0 < n✝¹) (n✝ n : ℕ) (hn : (succ 0).le n) (k : ℕ) (hk : 3 ^ 2 ^ n = 1 + 2 ^ (n + 2) + k * 2 ^ (n + 3)) : 3 ^ 2 ^ (n + 1) = (3 ^ 2 ^ n) ^ 2 := by
-  simp [pow_succ, pow_mul, pow_two] <;> ring_nf <;> simp [pow_add, pow_mul, pow_two] <;> ring_nf
-  hole

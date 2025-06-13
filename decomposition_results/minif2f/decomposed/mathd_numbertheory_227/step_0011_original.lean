@@ -1,1 +1,0 @@
-theorem h₈ (x y n : ℕ+) (h₀ : ↑↑x / 4 + ↑↑y / 6 = (↑↑x + ↑↑y) / ↑↑n) (h₂ : ↑↑n * (3 * ↑↑x + 2 * ↑↑y) = 12 * (↑↑x + ↑↑y)) (h₆ : ↑n * (3 * ↑x + 2 * ↑y) = 12 * (↑x + ↑y)) : ↑n > 0 := by exact n.property

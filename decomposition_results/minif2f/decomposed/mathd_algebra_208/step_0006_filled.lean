@@ -1,2 +1,0 @@
-theorem h₃ (h_sqrt : √1000000 = 1000) (h₂ : Real.log (1000000 ^ (1 / 3)) = 1 / 3 * Real.log 1000000) : Real.log 1000000 = Real.log (100 ^ 3) := by -- norm_num
-  norm_num

@@ -1,2 +1,0 @@
-theorem h₄ (x : ℝ) (n : ℕ) (h₀ : -1 < x) (h₁ : 0 < n) (h_base : 1 + 1 * x ≤ (1 + x) ^ 1) (k : ℕ) (hk_pos : 0 < k) (hk_ineq : 1 + ↑k * x ≤ (1 + x) ^ k) (h₁_pos : 0 < 1 + x) (h₂ : (1 + x) ^ (k + 1) = (1 + x) ^ k * (1 + x)) (h₃ : (1 + ↑k * x) * (1 + x) = 1 + ↑(k + 1) * x + ↑k * x ^ 2) : 1 + ↑k * x ≤ (1 + x) ^ k := by -- exact hk_ineq
-  linarith

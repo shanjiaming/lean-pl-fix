@@ -80,6 +80,8 @@ class DecomposeHoleMergePipeline:
         decomposition_steps = []
         filled_content = hole_content
         
+        import re
+
         for hole_info in hole_list:
             step_id = self.get_next_step_id()
             hole_id = hole_info['hole_id']
@@ -93,7 +95,8 @@ class DecomposeHoleMergePipeline:
             
             # Create proper hole content for filling function
             # We need to create a context where the hole can be tested
-            hole_test_content = filled_content.replace(hole_id, "hole")
+            # Use regex with word boundaries to avoid replacing parts of other hole IDs
+            hole_test_content = re.sub(r'\b' + re.escape(hole_id) + r'\b', "hole", filled_content, 1)
             
             # Use hole filling function to get replacement
             step_filled_content, additional_info = hole_filling_function(hole_test_content, header_content)
@@ -108,7 +111,8 @@ class DecomposeHoleMergePipeline:
                 replacement = "admit"
             
             # Replace the hole in the main content
-            filled_content = filled_content.replace(hole_id, replacement)
+            # Use regex with word boundaries to avoid replacing parts of other hole IDs
+            filled_content = re.sub(r'\b' + re.escape(hole_id) + r'\b', replacement, filled_content, 1)
             
             # Verify the step (we'll verify the full content later)
             step_verification = True  # Simplified for new approach
@@ -1087,6 +1091,7 @@ class DecomposeHoleMergePipeline:
                         "problem_id": problem.problem_id,
                         "dataset": problem.dataset,
                         "error_message": error_msg,
+                        "failure_reason": "decomposition_failed",
                         "processing_time_seconds": processing_time,
                         "timestamp": datetime.now().isoformat()
                     }
@@ -1170,6 +1175,12 @@ class DecomposeHoleMergePipeline:
                 print(f"Hole version saved to: {hole_version_path}")
                 print(f"Pure hole version with {len(hole_macros)} holes (all kept as hole_N)")
                 
+                # Step 3.5: Verify hole version
+                current_step = "verifying_hole_version"
+                print(f"Step 3.5: Verifying hole version...")
+                hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
+                print(f"Hole version verification: {'PASS' if hole_verification_pass else 'FAIL'}")
+                
                 # Save complete fixed proof  
                 complete_proof_path = os.path.join(problem_dir, "complete_fixed_proof.lean")
                 with open(complete_proof_path, "w") as f:
@@ -1188,6 +1199,7 @@ class DecomposeHoleMergePipeline:
                 with open(metadata_path, "r") as f:
                     metadata = json.load(f)
                 metadata["filled_verification_pass"] = filled_verification_pass
+                metadata["hole_verification_pass"] = hole_verification_pass
                 with open(metadata_path, "w") as f:
                     json.dump(metadata, f, indent=2)
                 print(f"Metadata updated with synthesized verification result")
@@ -1252,11 +1264,10 @@ class DecomposeHoleMergePipeline:
                     "dataset": problem.dataset,
                     "problem_dir": problem_dir,
                     "complete_proof_path": complete_proof_path,
-                    "complete_fixed_proof": complete_fixed_proof,
                     "original_verification_pass": original_verification_pass,
+                    "hole_verification_pass": hole_verification_pass,
                     "filled_verification_pass": filled_verification_pass,
                     "num_steps": len(steps),
-                    "detailed_steps": detailed_steps,
                     "processing_time_seconds": processing_time,
                     "status": "success",
                     "timestamp": datetime.now().isoformat()
@@ -1270,16 +1281,29 @@ class DecomposeHoleMergePipeline:
             except Exception as e:
                 import traceback
                 
-                error_msg = str(e)
+                error_msg_full = str(e)
+                traceback_str = traceback.format_exc()
+                error_type = type(e).__name__
+
+                # If the error message is empty, use the traceback as the message for the detailed log
+                if not error_msg_full:
+                    error_msg_full = traceback_str
+                
+                # Create a concise error summary for the main results file
+                error_summary = f"{error_type}: {str(e)}" if str(e) else error_type
+
                 processing_time = (datetime.now() - problem_start_time).total_seconds()
                 
-                print(f"✗ FAILURE for {problem.problem_id}: {error_msg}")
+                print(f"✗ FAILURE for {problem.problem_id}: {error_msg_full}")
+                print(f"  Exception Type: {error_type}")
                 
                 # Record this as a failure
                 failure_record = {
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
-                    "error_message": error_msg,
+                    "error_message": error_msg_full,
+                    "error_type": error_type,
+                    "traceback": traceback_str,
                     "processing_time_seconds": processing_time,
                     "timestamp": datetime.now().isoformat()
                 }
@@ -1288,10 +1312,11 @@ class DecomposeHoleMergePipeline:
                 results.append({
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
-                    "original_verification_pass": original_verification_pass,
+                    "original_verification_pass": original_verification_pass if 'original_verification_pass' in locals() else None,
+                    "hole_verification_pass": hole_verification_pass if 'hole_verification_pass' in locals() else None,
                     "filled_verification_pass": None,  # Not reached
                     "status": "error",
-                    "error": error_msg,
+                    "error": error_summary,
                     "processing_time_seconds": processing_time,
                     "timestamp": datetime.now().isoformat()
                 })
@@ -1300,6 +1325,7 @@ class DecomposeHoleMergePipeline:
         
                 # Append failure to file immediately
                 self._append_failure_to_file(dataset_name, failure_record)
+                self._append_result_to_file(dataset_name, results[-1])
         
         # Since results are saved incrementally, read final statistics from files
         results_path = os.path.join(self.output_base_dir, f"{dataset_name}_pipeline_results.json")

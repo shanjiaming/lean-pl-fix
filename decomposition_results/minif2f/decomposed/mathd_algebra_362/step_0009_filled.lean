@@ -1,2 +1,0 @@
-theorem h₃ (a b : ℝ) (h₀ : (27 / 4 * b ^ 3) ^ 2 * b ^ 3 = 32 / 27) (h₁ : a / b ^ 3 = 27 / 4) (hb3 : b ≠ 0) (a_eq h₂ : a = 27 / 4 * b ^ 3) : (27 / 4 * b ^ 3) ^ 2 * b ^ 3 = 32 / 27 := by -- linarith
-  linarith

@@ -1,2 +1,0 @@
-theorem h₃₂ (n : ℕ) (h₀ : Even n) (h₁ : (↑n - 2) ^ 2 + ↑n ^ 2 + (↑n + 2) ^ 2 = 12296) (h₂ : ↑n ^ 2 = 4096) (h : ¬n ≤ 64) : n ≥ 65 := by -- omega
-  hole

@@ -1,2 +1,0 @@
-theorem h₄₂ (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (h₁ : t < k) (h₂ : ↑k ^ 2 - ↑m * ↑k + ↑n = 0) (h₃ : ↑t ^ 2 - ↑m * ↑t + ↑n = 0) : ↑k ^ 2 - ↑m * ↑k + ↑n = 0 := by -- exact_mod_cast h₂
-  hole

@@ -1,2 +1,0 @@
-theorem h₄ (x y z w : ℕ) (ht : 1 < x ∧ 1 < y ∧ 1 < z) (hw : 0 ≤ w) (h0 : Real.log ↑w / Real.log ↑x = 24) (h1 : Real.log ↑w / Real.log ↑y = 40) (h2 : Real.log ↑w / Real.log (↑x * ↑y * ↑z) = 12) (hx : ↑x > 1) (hy : ↑y > 1) (hz : ↑z > 1) (hxyz : ↑x * ↑y * ↑z > 1) (hlogx : Real.log ↑x > 0) (hlogy : Real.log ↑y > 0) (hlogz : Real.log ↑z > 0) (h₂ : ↑x * ↑y > 0) (h₃ : ↑z > 0) : Real.log (↑x * ↑y * ↑z) = Real.log (↑x * ↑y) + Real.log ↑z := by
-  rw [Real.log_mul (by positivity) (by positivity)] <;> rw [Real.log_mul (by positivity) (by positivity)] <;> ring

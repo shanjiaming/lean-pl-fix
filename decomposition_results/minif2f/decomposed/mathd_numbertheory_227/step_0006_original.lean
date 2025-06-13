@@ -1,1 +1,0 @@
-theorem h₅ (x y n : ℕ+) (h₀ h₃ : ↑↑x / 4 + ↑↑y / 6 = (↑↑x + ↑↑y) / ↑↑n) (h₄ : ↑↑n * (↑↑x / 4 + ↑↑y / 6) = ↑↑x + ↑↑y) : ↑↑n * (3 * ↑↑x + 2 * ↑↑y) = 12 * (↑↑x + ↑↑y) := by ring_nf at h₄ ⊢ <;> nlinarith

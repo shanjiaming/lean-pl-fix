@@ -1,2 +1,0 @@
-theorem h₁ (n : ℕ) (h₀ : 0 < n) : ∏ k ∈ Finset.Icc 1 n, 1 = 1 := by -- -- rw [Finset.prod_const] <;> simp [h₀] <;> norm_num <;> aesop
-  hole

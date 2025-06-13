@@ -1,5 +1,0 @@
-theorem h₃₅ (h₁ : Real.log 6 / Real.log 2 + Real.log 6 / Real.log 3 = Real.log 3 / Real.log 2 + Real.log 2 / Real.log 3 + 2) (h₂ : √(Real.log 6 / Real.log 2 + Real.log 6 / Real.log 3) = √(Real.log 3 / Real.log 2 + Real.log 2 / Real.log 3 + 2)) (h₃₁ : Real.log 3 / Real.log 2 > 0) (h₃₂ : Real.log 2 / Real.log 3 > 0) (h₃₃ : Real.log 3 / Real.log 2 > 0) (h₃₄ : Real.log 2 / Real.log 3 > 0) : Real.log 3 / Real.log 2 * (Real.log 2 / Real.log 3) = 1 :=
-  by
-  have h₃₅₁ : (Real.log 3 / Real.log 2) * (Real.log 2 / Real.log 3) = 1 := by sorry
-  --  exact h₃₅₁
-  norm_num
