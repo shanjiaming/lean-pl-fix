@@ -1,8 +1,5 @@
 import Mathlib
-
-/-
-Prove that if the difference of two consecutive cubes is \(n^2\), \(n\in\mathbb{N}\),
-then \(2n-1\) is a square.
--/
-
-variable (n : ℕ)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

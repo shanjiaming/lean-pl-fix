@@ -1,9 +1,5 @@
 import Mathlib
-
-/-
-In a ring R of characteristic 0, if e, g, and f are idempotent elements of R (where an element a is idempotent if a^2=a), and if e+g+f=0, then it follows that e=f=g=0.
--/
-
-variable {R : Type _} [Ring R] [CharZero R]
-
-variable (e g f : R) (he : IsIdempotentElem e) (hg : IsIdempotentElem g) (hf : IsIdempotentElem f) (hsum : e + g + f = 0)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

@@ -1,1 +1,0 @@
--- Original: hole_3 := have h3 : n ≥ 1 := h1

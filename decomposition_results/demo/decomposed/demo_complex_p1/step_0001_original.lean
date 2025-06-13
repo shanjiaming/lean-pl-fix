@@ -1,1 +1,0 @@
--- Original: hole_1 := have h1 : n ≥ 1 := by omega

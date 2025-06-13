@@ -1,9 +1,5 @@
 import Mathlib
-
-/-
-The integral \[ \int_{0}^{\frac{\pi}{2}} \ln{(\sin{x})} \,dx \] is equal to -\frac{\pi}{2} \ln{2}.
--/
-
-open Real
-
-variable (x : ℝ)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

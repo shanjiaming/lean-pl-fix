@@ -1,5 +1,5 @@
 import Mathlib
-
-/-
-All odd divisors of the number \(5x^2+1\) are congruent to \(1,3,7\) or \(9\) modulo \(20\), indicating they have an even tens digit.
--/
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

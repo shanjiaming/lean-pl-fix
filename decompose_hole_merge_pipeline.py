@@ -67,92 +67,82 @@ class DecomposeHoleMergePipeline:
         # Get header for verification
         header_content = problem_manager.get_header_content(problem)
         
-        try:
-            print("Using NEW in-place hole replacement approach...")
-            
-            # Step 1: Generate hole version using new approach
-            hole_content, hole_list = self.generate_in_place_holes(problem)
-            
-            if not hole_list:
-                print("No holes generated - problem may not contain have statements")
-                return [], ""
-            
-            # Step 2: Create decomposition steps for each hole
-            decomposition_steps = []
-            filled_content = hole_content
-            
-            for hole_info in hole_list:
-                step_id = self.get_next_step_id()
-                hole_id = hole_info['hole_id']
-                original_proof = hole_info['original_proof']
-                
-                print(f"  Processing {step_id} for {hole_id}: {original_proof}")
-                
-                # Create a simple step representation
-                step_original_content = f"-- Original: {hole_id} := {original_proof}"
-                step_hole_content = f"-- Hole: {hole_id}"
-                
-                # Create proper hole content for filling function
-                # We need to create a context where the hole can be tested
-                hole_test_content = filled_content.replace(hole_id, "hole")
-                
-                # Use hole filling function to get replacement
-                step_filled_content, additional_info = hole_filling_function(hole_test_content, header_content)
-                
-                # Extract the actual replacement from filled content
-                # Look for what replaced "hole" in the filled content
-                if additional_info.get("best_tactic"):
-                    replacement = additional_info["best_tactic"]
-                else:
-                    # If no successful unigram tactic found, use admit as fallback
-                    # Do NOT use original proof as it may not be a unigram tactic
-                    replacement = "admit"
-                
-                # Replace the hole in the main content
-                filled_content = filled_content.replace(hole_id, replacement)
-                
-                # Verify the step (we'll verify the full content later)
-                step_verification = True  # Simplified for new approach
-                
-                # Create decomposition step
-                step = DecompositionStep(
-                    step_id=step_id,
-                    original_content=step_original_content,
-                    hole_content=step_hole_content,
-                    filled_content=f"-- Filled: {hole_id} := {replacement}",
-                    original_verification_pass=step_verification,
-                    hole_verification_pass=step_verification, 
-                    filled_verification_pass=step_verification,
-                    additional_info={
-                        "method": "in_place_hole_replacement",
-                        "hole_id": hole_id,
-                        "original_proof": original_proof,
-                        "replacement": replacement,
-                        **additional_info
-                    }
-                )
-                
-                decomposition_steps.append(step)
-                print(f"Created decomposition step: {step_id} ({hole_id} -> {replacement})")
-            
-            # Step 3: Verify final filled content
-            print(f"Verifying final filled proof...")
-            final_verification = self.verify_lean_code(header_content, filled_content, with_macro=False)
-            print(f"Final verification: {'PASS' if final_verification else 'FAIL'}")
-            
-            print(f"In-place decomposition completed. Generated {len(decomposition_steps)} steps.")
-            print(f"Final filled proof length: {len(filled_content)} chars")
-            
-            return decomposition_steps, filled_content
-            
-        except Exception as e:
-            error_msg = f"Failed to decompose problem {problem.dataset}/{problem.problem_id}: {str(e)}"
-            print(f"Error in decompose_problem: {error_msg}")
-            import traceback
-            traceback.print_exc()
-            
-            # Return empty list and empty string to indicate failure
+        print("Using NEW in-place hole replacement approach...")
+        
+        # Step 1: Generate hole version using new approach
+        hole_content, hole_list = self.generate_in_place_holes(problem)
+        
+        if not hole_list:
+            print("No holes generated - problem may not contain have statements")
             return [], ""
+        
+        # Step 2: Create decomposition steps for each hole
+        decomposition_steps = []
+        filled_content = hole_content
+        
+        for hole_info in hole_list:
+            step_id = self.get_next_step_id()
+            hole_id = hole_info['hole_id']
+            original_proof = hole_info['original_proof']
+            
+            print(f"  Processing {step_id} for {hole_id}: {original_proof}")
+            
+            # Create a simple step representation
+            step_original_content = f"-- Original: {hole_id} := {original_proof}"
+            step_hole_content = f"-- Hole: {hole_id}"
+            
+            # Create proper hole content for filling function
+            # We need to create a context where the hole can be tested
+            hole_test_content = filled_content.replace(hole_id, "hole")
+            
+            # Use hole filling function to get replacement
+            step_filled_content, additional_info = hole_filling_function(hole_test_content, header_content)
+            
+            # Extract the actual replacement from filled content
+            # Look for what replaced "hole" in the filled content
+            if additional_info.get("best_tactic"):
+                replacement = additional_info["best_tactic"]
+            else:
+                # If no successful unigram tactic found, use admit as fallback
+                # Do NOT use original proof as it may not be a unigram tactic
+                replacement = "admit"
+            
+            # Replace the hole in the main content
+            filled_content = filled_content.replace(hole_id, replacement)
+            
+            # Verify the step (we'll verify the full content later)
+            step_verification = True  # Simplified for new approach
+            
+            # Create decomposition step
+            step = DecompositionStep(
+                step_id=step_id,
+                original_content=step_original_content,
+                hole_content=step_hole_content,
+                filled_content=f"-- Filled: {hole_id} := {replacement}",
+                original_verification_pass=step_verification,
+                hole_verification_pass=step_verification, 
+                filled_verification_pass=step_verification,
+                additional_info={
+                    "method": "in_place_hole_replacement",
+                    "hole_id": hole_id,
+                    "original_proof": original_proof,
+                    "replacement": replacement,
+                    **additional_info
+                }
+            )
+            
+            decomposition_steps.append(step)
+            print(f"Created decomposition step: {step_id} ({hole_id} -> {replacement})")
+        
+        # Step 3: Verify final filled content
+        print(f"Verifying final filled proof...")
+        final_verification = self.verify_lean_code(header_content, filled_content, with_macro=False)
+        print(f"Final verification: {'PASS' if final_verification else 'FAIL'}")
+        
+        print(f"In-place decomposition completed. Generated {len(decomposition_steps)} steps.")
+        print(f"Final filled proof length: {len(filled_content)} chars")
+        
+        return decomposition_steps, filled_content
     
     def _generate_hole_for_step(self, problem: Problem, proof_framework: str) -> str:
         """Generate hole version for a single proof step"""
@@ -160,45 +150,39 @@ class DecomposeHoleMergePipeline:
         header_content = problem_manager.get_header_content(problem)
         
         # Run with header to get tactics
-        try:
-            run_result = unified_env.run_with_header(header_content, proof_framework, all_tactics=True)
+        run_result = unified_env.run_with_header(header_content, proof_framework, all_tactics=True)
+        
+        # Process similar to substep_saver_hole but for individual step
+        content = proof_framework
+        remove_tactic_pos = []
+        current_location = None
+        
+        for tactic in run_result.tactics:
+            tactictxt = tactic.tactic
+            tacticname = tactictxt.strip().split()[0] if tactictxt.strip() else ""
             
-            # Process similar to substep_saver_hole but for individual step
-            content = proof_framework
-            remove_tactic_pos = []
-            current_location = None
+            if current_location is not None and current_location >= tactic.start_pos:
+                continue
+            current_location = tactic.end_pos
             
-            for tactic in run_result.tactics:
-                tactictxt = tactic.tactic
-                tacticname = tactictxt.strip().split()[0] if tactictxt.strip() else ""
-                
-                if current_location is not None and current_location >= tactic.start_pos:
-                    continue
-                current_location = tactic.end_pos
-                
-                if tacticname != "have":
-                    remove_tactic_pos.append((tactic.start_pos, tactic.end_pos))
-            
-            # Comment out non-have tactics
-            for reverse_remove in reversed(remove_tactic_pos):
-                contentlines = content.split("\n")
-                for i in range(reverse_remove[0].line-1, reverse_remove[1].line):
-                    if i == 0:
-                        contentlines[i] = contentlines[i].replace(":=by ", ":=by -- ")
-                        contentlines[i] = contentlines[i].replace(" by ", " by -- ")
-                    if i != 0:
-                        contentlines[i] = "  --" + contentlines[i]
-                content = "\n".join(contentlines)
-            
-            # Only add hole placeholder - NO macro definition (will be added during verification)
-            hole_content = content + "\n  hole"
-            
-            return hole_content
-            
-        except Exception as e:
-            print(f"Error generating hole for step: {e}")
-            # Fallback: use hole without macro
-            return proof_framework + "\n  hole"
+            if tacticname != "have":
+                remove_tactic_pos.append((tactic.start_pos, tactic.end_pos))
+        
+        # Comment out non-have tactics
+        for reverse_remove in reversed(remove_tactic_pos):
+            contentlines = content.split("\n")
+            for i in range(reverse_remove[0].line-1, reverse_remove[1].line):
+                if i == 0:
+                    contentlines[i] = contentlines[i].replace(":=by ", ":=by -- ")
+                    contentlines[i] = contentlines[i].replace(" by ", " by -- ")
+                if i != 0:
+                    contentlines[i] = "  --" + contentlines[i]
+            content = "\n".join(contentlines)
+        
+        # Only add hole placeholder - NO macro definition (will be added during verification)
+        hole_content = content + "\n  hole"
+        
+        return hole_content
     
     def save_decomposition(self, problem_dir: str, problem: Problem, steps: List[DecompositionStep], 
                           original_verification_pass: Optional[bool] = None, 
@@ -326,13 +310,8 @@ class DecomposeHoleMergePipeline:
         """
         if with_macro:
             header = header + "\nmacro \"hole\" : tactic => `(tactic| admit)"
-        try:
-            result = self.lean_verifier.run_with_header(header, content)
-            return not result.has_errors()
-        except Exception as e:
-            # If verification fails due to server issues, return False
-            print(f"Verification exception: {e}")
-            return False
+        result = self.lean_verifier.run_with_header(header, content)
+        return not result.has_errors()
 
     def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
@@ -381,6 +360,7 @@ class DecomposeHoleMergePipeline:
         all_holes = re.findall(r'\bhole(?:_\d+)?\b', hole_content)
         hole_macros = []
         for hole in set(all_holes):  # Remove duplicates
+            # Use proper macro syntax without shell-problematic backticks
             hole_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
         
         # Create content with macros for sanity check
@@ -395,6 +375,11 @@ class DecomposeHoleMergePipeline:
         # First check if hole version passes (sanity check)
         sanity_check = self.verify_lean_code(header_content, hole_content_with_macros, with_macro=False)
         additional_info["sanity_check_pass"] = sanity_check
+        
+        # Debug: save the content that failed sanity check
+        if not sanity_check:
+            additional_info["failed_content_preview"] = hole_content_with_macros[:200] + "..." if len(hole_content_with_macros) > 200 else hole_content_with_macros
+            print(f"DEBUG: Sanity check failed for content: {additional_info['failed_content_preview']}")
         
         if not sanity_check:
             # If hole version doesn't pass, skip tactic testing
@@ -412,7 +397,9 @@ class DecomposeHoleMergePipeline:
         
         # Try each unigram tactic
         for tactic in unigrams:
-            candidate_content = hole_content.replace(hole_placeholder, tactic)
+            # Use word boundary replacement to avoid replacing parts of other hole names
+            import re
+            candidate_content = re.sub(r'\b' + re.escape(hole_placeholder) + r'\b', tactic, hole_content)
             
             # Create macros for remaining holes in candidate content
             remaining_holes = re.findall(r'\bhole(?:_\d+)?\b', candidate_content)
@@ -438,17 +425,22 @@ class DecomposeHoleMergePipeline:
         
         # Return best solution or keep hole as fallback
         if additional_info["best_tactic"]:
-            best_content = hole_content.replace(hole_placeholder, additional_info["best_tactic"])
+            # Use word boundary replacement to avoid replacing parts of other hole names
+            import re
+            best_content = re.sub(r'\b' + re.escape(hole_placeholder) + r'\b', additional_info["best_tactic"], hole_content)
             return best_content, additional_info
         else:
             # No tactic worked, keep original hole placeholder
             return hole_content, additional_info
 
-    def generate_in_place_holes_from_content(self, content: str) -> Tuple[str, List[str]]:
+    def generate_in_place_holes_from_content(self, content: str, header_content: Optional[str] = None) -> Tuple[str, List[str]]:
         """Generate holes from raw content for testing"""
-        return self._process_content_for_holes(content)
+        if header_content is None:
+            print("Warning: No header provided for testing. Using minimal header.")
+            header_content = "import Mathlib\n"
+        return self._process_content_for_holes(content, header_content)
     
-    def _process_content_for_holes(self, content: str) -> Tuple[str, List[str]]:
+    def _process_content_for_holes(self, content: str, header_content: str) -> Tuple[str, List[str]]:
         """
         Process content using lean_interact to get proper tactic tree structure,
         then create holes based on the actual tactic hierarchy rather than line-by-line parsing.
@@ -456,76 +448,116 @@ class DecomposeHoleMergePipeline:
         import re
         from decompose_solver import convert_theorem_to_example_cmd, remove_lean_comments, _process_tactics_to_tree
         
-        # Get header for this content (assuming it's from a problem)
-        # For now, use a minimal header - in production this should come from problem context
-        header_content = "import Mathlib\n"
+        # Process the content to get tactics using lean_interact
+        processed_content = remove_lean_comments(content)
+        # Remove imports since we provide them in header
+        lines = processed_content.split('\n')
+        filtered_lines = [line for line in lines if not line.strip().startswith('import')]
+        processed_content = '\n'.join(filtered_lines)
+        cmd_str = convert_theorem_to_example_cmd(processed_content)
         
-        try:
-            # Process the content to get tactics using lean_interact
-            processed_content = remove_lean_comments(content)
-            # Remove imports since we provide them in header
-            lines = processed_content.split('\n')
-            filtered_lines = [line for line in lines if not line.strip().startswith('import')]
-            processed_content = '\n'.join(filtered_lines)
-            cmd_str = convert_theorem_to_example_cmd(processed_content)
+        print("Getting tactic tree structure using lean_interact...")
+        
+        # Use lean_verifier to get tactics
+        result = self.lean_verifier.run_with_header(header_content, cmd_str, all_tactics=True)
+        
+        # Log any real errors for information, but do not change control flow.
+        # The tactic tree construction should be robust enough to handle malformed parts.
+        if result.has_errors():
+            real_errors = [e for e in result.get_errors() if 'unsolved goals' not in e.data]
+            if real_errors:
+                print(f"INFO: Real Lean errors were detected in the source. Tactic tree generation will proceed and attempt to recover.")
+                # Optionally print detailed errors for debugging
+                # for error in real_errors:
+                #      print(f"  - Error: {error.data.get('text', 'Unknown error')}")
+
+        # Build tactic tree using the mature logic from decompose_solver.py
+        from decompose_solver import _process_tactics_to_tree
+        top_level_nodes = _process_tactics_to_tree(result.tactics)
+        
+        print(f"Built tactic tree with {len(top_level_nodes)} top-level nodes")
+        
+        # Process tactic tree to identify ALL have statements with by-blocks
+        holes_to_create = []
+        hole_counter = 1
+        
+        # Use the filtered content (without imports) for hole creation
+        content_without_imports = '\n'.join(filtered_lines)
+        
+        def process_nodes_for_holes(nodes):
+            nonlocal hole_counter
             
-            print("Getting tactic tree structure using lean_interact...")
-            
-            # Use lean_verifier to get tactics
-            result = self.lean_verifier.run_with_header(header_content, cmd_str, all_tactics=True)
-            
-            # Check if errors are only unsolved goals (which is expected when extracting tactics)
-            has_real_errors = False
-            if result.has_errors():
-                for error in result.get_errors():
-                    if 'unsolved goals' not in error.data:
-                        has_real_errors = True
-                        break
-            
-            if has_real_errors:
-                print(f"Warning: Lean errors detected, falling back to simple line processing")
-                return self._simple_line_processing(content)
-            
-            # Build tactic tree
-            top_level_nodes = _process_tactics_to_tree(result.tactics)
-            
-            print(f"Built tactic tree with {len(top_level_nodes)} top-level nodes")
-            
-            # Process tactic tree to identify by-blocks and their "after last have" content
-            holes_to_create = []
-            hole_counter = 1
-            
-            # Process by-blocks more carefully - we want to handle specific patterns:
-            # 1. Simple have statements with single tactics (like "have h1 := by omega")
-            # 2. Complex have statements with "after last have" content
-            # But avoid processing nested by-blocks that are inside other by-blocks we're already processing
-            
-            def process_nodes_for_holes(nodes):
-                nonlocal hole_counter
+            for node in nodes:
+                # Check if this is a have statement with by-block
+                if node.is_have():
+                    # Process this have statement for holes
+                    hole_info = self._analyze_have_node_for_holes_comprehensive(node, hole_counter)
+                    if hole_info:
+                        # If a hole can be analyzed from the tree, we create it.
+                        # The tree's structure is our "safe zone". No need for line number checks.
+                        holes_to_create.append(hole_info)
+                        hole_counter += 1
+                        print(f"  Found have-by hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
                 
-                for node in nodes:
-                    if node.subhaves:
-                        # Check if this node should create a hole
-                        hole_info = self._analyze_have_node_for_holes(node, hole_counter)
-                        if hole_info:
-                            holes_to_create.append(hole_info)
-                            hole_counter += 1
-                            print(f"  Found by-block hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
-                        
-                        # Always process children - we want to find all relevant by-blocks
-                        # The replacement logic will handle avoiding conflicts
-                        process_nodes_for_holes(node.subhaves)
-            
-            process_nodes_for_holes(top_level_nodes)
-            
-            # Use tree-guided replacement to create holes
-            return self._create_holes_from_tree_analysis(content, holes_to_create)
-            
-        except Exception as e:
-            print(f"Error using lean_interact for hole generation: {e}")
-            print("Falling back to simple line processing...")
-            return self._simple_line_processing(content)
+                # Recursively process children to handle nested structures
+                if node.subhaves:
+                    process_nodes_for_holes(node.subhaves)
+        
+        process_nodes_for_holes(top_level_nodes)
+        
+        # Use tree-guided replacement to create holes on filtered content
+        hole_content_result, hole_list = self._create_holes_from_tree_analysis(cmd_str, holes_to_create)
+
+        # Unwrap the modified cmd_str to get back the theorem format
+        unwrapped_content = self._unwrap_example_cmd(hole_content_result)
+
+        return unwrapped_content, hole_list
     
+    def _unwrap_example_cmd(self, cmd_str: str) -> str:
+        """
+        Inverse of `convert_theorem_to_example_cmd`.
+        Converts an 'example' proof back into a 'theorem'.
+        """
+        from decompose_solver import convert_have_to_theorem
+
+        lines = cmd_str.split('\n')
+        
+        # Find the 'example := by' line
+        example_line_idx = -1
+        for i, line in enumerate(lines):
+            if "example := by" in line:
+                example_line_idx = i
+                break
+                
+        if example_line_idx == -1:
+            # Not a converted command, return as is
+            print("Warning: could not find 'example := by' to unwrap.")
+            return cmd_str
+            
+        # The lines before the example wrapper
+        preamble = lines[:example_line_idx]
+        
+        # The next line contains the top-level 'have' which was the original 'theorem'
+        if example_line_idx + 1 >= len(lines):
+            print("Warning: Malformed example command, cannot unwrap.")
+            return cmd_str
+            
+        have_line_str = lines[example_line_idx + 1]
+        
+        # This line has an indent we need to remove before converting
+        deindented_have = have_line_str.lstrip()
+        theorem_line_str = convert_have_to_theorem(deindented_have)
+        
+        # The rest of the proof body
+        body_lines = lines[example_line_idx + 2:]
+        
+        # De-indent body lines (assuming a 2-space indent)
+        deindented_body = [line[2:] if line.startswith("  ") else line for line in body_lines]
+        
+        # Combine everything
+        final_lines = preamble + [theorem_line_str] + deindented_body
+        return '\n'.join(final_lines)
+
     def _is_descendant_of(self, node, ancestor):
         """Check if node is a descendant of ancestor in the tactic tree"""
         def traverse_ancestor(current):
@@ -544,58 +576,48 @@ class DecomposeHoleMergePipeline:
             yield node
             yield from self._traverse_tactic_tree(node.subhaves)
     
-    def _analyze_have_node_for_holes(self, node, hole_counter):
+    def _analyze_have_node_for_holes_comprehensive(self, node, hole_counter):
         """
-        Analyze a have node (with by-block) to find content after the last have that should become a hole.
+        Unified analysis of have nodes to create holes using the consistent rule:
+        
+        **In every by-block, find the last have statement, then convert everything after that 
+        last have to the end of the by-block into a single hole.**
+        
+        For cases like "have h5 := by norm_num":
+        - The by-block contains no internal have statements (last_have_index = -1)
+        - So everything from the start of the by-block becomes a hole (i.e., "norm_num")
+        
         Returns hole info dict or None if no hole should be created.
         """
-        if not node.subhaves:
+        if not node.is_have():
             return None
             
+        if not node.subhaves:
+            # This shouldn't happen for valid have statements with by-blocks
+            print(f"Warning: Have statement has no sub-tactics: {node.tactic.tactic.strip()}")
+            return None
+        
         # Find the last have statement among direct children
-        # Note: we need to check for any have statement, not just those with "by"
         last_have_index = -1
         for i, child in enumerate(node.subhaves):
-            child_tactic = child.tactic.tactic.strip()
-            if child_tactic.startswith('have '):
+            if child.tactic.tactic.strip().startswith("have"):
                 last_have_index = i
         
+        # Determine what content comes after the last have (or from beginning if no have)
         if last_have_index == -1:
-            # No have statements in this by-block - check if the block contains only tactics that should become holes
-            # For simple by-blocks with just tactics (like "by omega"), make the whole content a hole
-            if len(node.subhaves) == 1 and not node.subhaves[0].subhaves:
-                # Single non-have tactic - make it a hole only if it's a meaningful by-block
-                # Check if this is a simple by-block (direct child of a have statement)
-                parent_is_have = node.tactic.tactic.strip().startswith('have ')
-                
-                # Additional check: avoid creating holes for deeply nested single tactics that are part of larger structures
-                # Only create holes for direct have children or top-level blocks
-                if parent_is_have:
-                    hole_content = node.subhaves[0].tactic.tactic.strip()
-                    return {
-                        'hole_id': f"hole_{hole_counter}",
-                        'content': hole_content,
-                        'original_proof': hole_content,
-                        'parent_have_tactic': node.tactic.tactic,
-                        'start_pos': node.subhaves[0].tactic.start_pos,
-                        'end_pos': node.subhaves[0].tactic.end_pos
-                    }
-                else:
-                    return None
-            else:
-                # Multiple tactics or complex structure - don't handle for now
-                return None
-            
-        # Check if there are tactics after the last have
-        tactics_after_last_have = node.subhaves[last_have_index + 1:]
+            # No nested have statements - all content in this by-block becomes a hole
+            tactics_to_hole = node.subhaves
+        else:
+            # There are nested have statements - only content after the last one becomes a hole
+            tactics_to_hole = node.subhaves[last_have_index + 1:]
         
-        if not tactics_after_last_have:
-            # No content after last have
+        if not tactics_to_hole:
+            # No content to create a hole from
             return None
             
-        # Collect all content after the last have
+        # Collect all content that should become a hole
         hole_content_parts = []
-        for tactic_node in tactics_after_last_have:
+        for tactic_node in tactics_to_hole:
             hole_content_parts.append(tactic_node.tactic.tactic.strip())
         
         hole_content = '\n'.join(hole_content_parts)
@@ -603,87 +625,108 @@ class DecomposeHoleMergePipeline:
         return {
             'hole_id': f"hole_{hole_counter}",
             'content': hole_content,
+            'original_proof': hole_content,
             'parent_have_tactic': node.tactic.tactic.strip(),
-            'start_position': tactics_after_last_have[0].start_pos if tactics_after_last_have else None,
-            'end_position': tactics_after_last_have[-1].end_pos if tactics_after_last_have else None
+            'start_pos': tactics_to_hole[0].tactic.start_pos,
+            'end_pos': tactics_to_hole[-1].tactic.end_pos,
+            'hole_type': 'after_last_have' if last_have_index >= 0 else 'entire_by_block'
         }
     
-    def _create_holes_from_tree_analysis(self, content, holes_to_create):
+    def _create_holes_from_tree_analysis(self, content: str, holes_to_create: List[Dict]) -> Tuple[str, List[Dict]]:
         """
-        Create holes in content based on tree analysis.
-        This is more complex than simple line replacement since we need to handle
-        multi-line by-blocks correctly.
+        Create holes in content based on tree analysis using precise position information.
+        This new version uses line and column data to perform targeted replacements,
+        avoiding the ambiguity of text-based search.
         """
         if not holes_to_create:
             return content, []
-            
-        lines = content.split('\n')
-        hole_list = []
+
+        # Sort holes by position (start_pos) in reverse order to avoid position shifts
+        # during replacement.
+        holes_sorted = sorted(holes_to_create, key=lambda h: (h['start_pos'].line, h['start_pos'].column), reverse=True)
         
-        # For now, use a simplified approach: try to match the hole content in the lines
-        # This is not perfect but works for most cases
-        for hole_info in holes_to_create:
-            hole_content = hole_info['content']
+        hole_list_for_decomposition = []
+        content_lines = content.split('\n')
+        
+        for hole_info in holes_sorted:
             hole_id = hole_info['hole_id']
+            start_pos = hole_info['start_pos']
+            end_pos = hole_info['end_pos']
             
-            # Try to find and replace this content in the lines
-            # Look for the content as consecutive lines (allowing for indentation differences)
-            content_lines = [line.strip() for line in hole_content.split('\n') if line.strip()]
+            start_line_idx = start_pos.line - 1
+            end_line_idx = end_pos.line - 1
             
-            if len(content_lines) == 1:
-                # Single line replacement
-                target_line = content_lines[0]
-                for i, line in enumerate(lines):
-                    if line.strip() == target_line:
-                        # Replace with hole, preserving indentation
-                        indent = line[:len(line) - len(line.lstrip())]
-                        lines[i] = f"{indent}{hole_id}"
-                        
-                        hole_list.append({
-                            'hole_id': hole_id,
-                            'original_proof': target_line,
-                            'have_statement': hole_info.get('parent_have_tactic', ''),
-                            'position': len(hole_list)
-                        })
-                        break
+            # --- BEGIN LOGGING FOR DEBUGGING ---
+            print("-" * 50)
+            print(f"Preparing to create hole: {hole_id}")
+            print(f"  Coordinates: Start({start_pos.line}, {start_pos.column}) -> End({end_pos.line}, {end_pos.column})")
+            
+            original_text_to_replace = ""
+            if start_line_idx == end_line_idx:
+                original_text_to_replace = content_lines[start_line_idx][start_pos.column:end_pos.column]
             else:
-                # Multi-line replacement - more complex
-                # For now, we'll implement a simple version
-                # Find the first line and replace subsequent lines
-                if content_lines:
-                    first_line = content_lines[0]
-                    for i, line in enumerate(lines):
-                        if line.strip() == first_line:
-                            # Check if following lines match
-                            match_found = True
-                            for j, expected_line in enumerate(content_lines[1:], 1):
-                                if i + j >= len(lines) or lines[i + j].strip() != expected_line:
-                                    match_found = False
-                                    break
-                            
-                            if match_found:
-                                # Replace the matched lines with just the hole
-                                indent = lines[i][:len(lines[i]) - len(lines[i].lstrip())]
-                                
-                                # Remove the matched lines
-                                for _ in range(len(content_lines)):
-                                    if i < len(lines):
-                                        lines.pop(i)
-                                
-                                # Insert the hole
-                                lines.insert(i, f"{indent}{hole_id}")
-                                
-                                hole_list.append({
-                                    'hole_id': hole_id,
-                                    'original_proof': hole_content,
-                                    'have_statement': hole_info.get('parent_have_tactic', ''),
-                                    'position': len(hole_list)
-                                })
-                                break
+                lines_to_replace = []
+                # First line: from start column to end of line
+                lines_to_replace.append(content_lines[start_line_idx][start_pos.column:])
+                # Middle lines: entire lines
+                lines_to_replace.extend(content_lines[start_line_idx + 1:end_line_idx])
+                # Last line: from beginning to end column
+                lines_to_replace.append(content_lines[end_line_idx][:end_pos.column])
+                original_text_to_replace = "\n".join(lines_to_replace)
+
+            print(f"  Text to be replaced:\n---\n{original_text_to_replace}\n---")
+            # --- END LOGGING FOR DEBUGGING ---
+            
+            # The indentation should be based on the column of the content being replaced.
+            indent = ' ' * start_pos.column
+
+            if start_line_idx == end_line_idx:
+                # Single-line replacement
+                line = content_lines[start_line_idx]
+                new_line = line[:start_pos.column] + hole_id + line[end_pos.column:]
+                content_lines[start_line_idx] = new_line
+            else:
+                # Multi-line replacement
+                # The block of lines to be replaced is from start_line_idx to end_line_idx.
+                
+                # First, modify the first and last lines of the block.
+                first_line = content_lines[start_line_idx]
+                last_line = content_lines[end_line_idx]
+                
+                # The content to keep from the first line is everything before the hole.
+                # The content to keep from the last line is everything after the hole.
+                modified_first_line = first_line[:start_pos.column]
+                modified_last_line = last_line[end_pos.column:]
+
+                # The hole itself is inserted with the correct indentation.
+                # If the modified first and last lines are just whitespace, we can combine them.
+                if not modified_first_line.strip() and not modified_last_line.strip():
+                    replacement_block = [f"{indent}{hole_id}"]
+                else:
+                    # This case is more complex and might indicate a problem with hole boundaries.
+                    # For now, we will assume holes span full lines in multi-line cases,
+                    # which is a reasonable simplification for by-blocks.
+                    # The most robust way is to replace the whole block with a single hole line.
+                    replacement_block = [f"{indent}{hole_id}"]
+
+                # Replace the entire block of original lines with the new block.
+                content_lines = content_lines[:start_line_idx] + replacement_block + content_lines[end_line_idx + 1:]
+
+            # Add hole info to the list that will be returned for decomposition steps.
+            # We use a new list to ensure it matches the number of actual replacements.
+            hole_list_for_decomposition.append({
+                'hole_id': hole_id,
+                'original_proof': hole_info['original_proof'],
+                'have_statement': hole_info.get('parent_have_tactic', ''),
+                'position': len(hole_list_for_decomposition)
+            })
+
+        # Reverse hole_list to maintain original order since we processed in reverse
+        hole_list_for_decomposition.reverse()
         
-        hole_content_result = '\n'.join(lines)
-        print(f"Generated hole content with {len(hole_list)} holes using tree-guided analysis")
-        return hole_content_result, hole_list
+        hole_content_result = '\n'.join(content_lines)
+        print(f"Generated hole content with {len(hole_list_for_decomposition)} holes using tree-guided analysis")
+        return hole_content_result, hole_list_for_decomposition
     
     def _replace_tactic_with_hole(self, lines, node, hole_id):
         """Replace a tactic in the lines with the hole_id, maintaining proper indentation"""
@@ -824,20 +867,15 @@ class DecomposeHoleMergePipeline:
 
     def generate_in_place_holes(self, problem: Problem) -> Tuple[str, List[str]]:
         """
-        NEW APPROACH: Generate holes by replacing have proof parts in-place
-        Handle "by" blocks as single units by parsing line structure
+        Generate holes using current working approach with tactic tree analysis.
+        TODO: Future integration with decompose_solver for even better accuracy.
         Returns (hole_version_content, list_of_hole_positions)
         """
-        import re
+        print(f"Generating holes for problem: {problem.dataset}/{problem.problem_id}")
         
-        # Get problem content
         problem_content = problem_manager.get_problem_content(problem)
         header_content = problem_manager.get_header_content(problem)
-        
-        print(f"Generating in-place holes for problem content:")
-        print(f"Original content length: {len(problem_content)} chars")
-        
-        return self._process_content_for_holes(problem_content)
+        return self._process_content_for_holes(problem_content, header_content)
 
     def _append_result_to_file(self, dataset_name: str, result_record: dict):
         """
@@ -849,14 +887,10 @@ class DecomposeHoleMergePipeline:
         # Read existing results if file exists
         existing_results = []
         if os.path.exists(results_path):
-            try:
-                with open(results_path, "r") as f:
-                    existing_results = json.load(f)
-                    if not isinstance(existing_results, list):
-                        existing_results = []
-            except (json.JSONDecodeError, FileNotFoundError):
-                # If file is corrupted or doesn't exist, start with empty list
-                existing_results = []
+            with open(results_path, "r") as f:
+                content = f.read()
+                if content:
+                    existing_results = json.loads(content)
         
         # Check if this problem_id already exists to avoid duplicates
         problem_id = result_record.get("problem_id")
@@ -882,14 +916,10 @@ class DecomposeHoleMergePipeline:
         # Read existing failures if file exists
         existing_failures = []
         if os.path.exists(failures_path):
-            try:
-                with open(failures_path, "r") as f:
-                    existing_failures = json.load(f)
-                    if not isinstance(existing_failures, list):
-                        existing_failures = []
-            except (json.JSONDecodeError, FileNotFoundError):
-                # If file is corrupted or doesn't exist, start with empty list
-                existing_failures = []
+            with open(failures_path, "r") as f:
+                content = f.read()
+                if content:
+                    existing_failures = json.loads(content)
         
         # Append new failure
         existing_failures.append(failure_record)
@@ -1058,38 +1088,18 @@ class DecomposeHoleMergePipeline:
                     if hole_id and best_tactic:
                         hole_replacements[hole_id] = best_tactic
                 
-                # Generate hole_version.lean with successful tactics replaced and unsuccessful ones as hole_N
+                # Generate hole_version.lean: pure hole version with ALL holes kept as hole_N
                 hole_version_content = hole_content
                 hole_macros = []
                 
                 if hole_list:
-                    # Find max hole number for macro generation
-                    max_hole_num = 0
+                    # Create macros for ALL holes (both successful and unsuccessful)
                     for info in hole_list:
                         hole_id = info['hole_id']
-                        try:
-                            num = int(hole_id.split('_')[-1])
-                            if num > max_hole_num:
-                                max_hole_num = num
-                        except (ValueError, IndexError):
-                            continue
+                        hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
+                        print(f"Created macro for {hole_id} in hole_version.lean")
                     
-                    # Replace successful holes with actual tactics, keep unsuccessful as hole_N
-                    for info in hole_list:
-                        hole_id = info['hole_id']
-                        if hole_id in hole_replacements:
-                            # Replace with successful tactic
-                            successful_tactic = hole_replacements[hole_id]
-                            hole_version_content = hole_version_content.replace(hole_id, successful_tactic)
-                            print(f"Replaced {hole_id} with successful tactic: {successful_tactic}")
-                        else:
-                            # Keep as hole_N and create macro for it
-                            try:
-                                num = int(hole_id.split('_')[-1])
-                                hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
-                                print(f"Kept {hole_id} as hole (no successful tactic found)")
-                            except (ValueError, IndexError):
-                                continue
+                    # hole_version_content keeps all hole_N as-is, no replacement with tactics
 
                 # Combine macros with hole content
                 if hole_macros:
@@ -1103,7 +1113,7 @@ class DecomposeHoleMergePipeline:
                 with open(hole_version_path, "w") as f:
                     f.write(hole_with_macros)
                 print(f"Hole version saved to: {hole_version_path}")
-                print(f"Successful tactics applied: {len(hole_replacements)}, Remaining holes: {len(hole_macros)}")
+                print(f"Pure hole version with {len(hole_macros)} holes (all kept as hole_N)")
                 
                 # Save complete fixed proof  
                 complete_proof_path = os.path.join(problem_dir, "complete_fixed_proof.lean")
@@ -1119,7 +1129,7 @@ class DecomposeHoleMergePipeline:
                 
                 # Step 4.5: Update metadata with synthesized verification result
                 print(f"Step 4.5: Updating metadata with synthesized verification result...")
-                metadata_path = os.path.join(problem_dir, "metadata.json")
+                metadata_path = os.path.join(problem_dir, "decomposition.json")
                 with open(metadata_path, "r") as f:
                     metadata = json.load(f)
                 metadata["synthesized_verification_pass"] = synthesized_verification_pass
@@ -1163,21 +1173,21 @@ class DecomposeHoleMergePipeline:
                 
                 # Save updated verification results back to metadata if any verification was performed
                 if verification_updated:
-                    metadata_path = os.path.join(problem_dir, "metadata.json")
+                    metadata_path = os.path.join(problem_dir, "decomposition.json")
                     with open(metadata_path, "r") as f:
                         metadata = json.load(f)
                     
                     # Update metadata with verification results
                     for i, step in enumerate(final_steps):
-                        if i < len(metadata["steps"]):
-                            metadata["steps"][i]["original_verification_pass"] = step.original_verification_pass
-                            metadata["steps"][i]["hole_verification_pass"] = step.hole_verification_pass
-                            metadata["steps"][i]["filled_verification_pass"] = step.filled_verification_pass
+                        if i < len(metadata["holes"]):
+                            metadata["holes"][i]["original_verification_pass"] = step.original_verification_pass
+                            metadata["holes"][i]["hole_verification_pass"] = step.hole_verification_pass
+                            metadata["holes"][i]["filled_verification_pass"] = step.filled_verification_pass
                     
                     # Save updated metadata
                     with open(metadata_path, "w") as f:
                         json.dump(metadata, f, indent=2)
-                    print(f"Updated verification results saved to metadata.json")
+                    print(f"Updated verification results saved to decomposition.json")
                 
                 successful_count += 1
                 processing_time = (datetime.now() - problem_start_time).total_seconds()
@@ -1283,7 +1293,7 @@ class DecomposeHoleMergePipeline:
 
     def load_overall_results(self, problem_dir: str) -> Dict:
         """Load overall verification results from metadata"""
-        metadata_path = os.path.join(problem_dir, "metadata.json")
+        metadata_path = os.path.join(problem_dir, "decomposition.json")
         if not os.path.exists(metadata_path):
             raise ValueError(f"No metadata found in {problem_dir}")
         
@@ -1296,7 +1306,7 @@ class DecomposeHoleMergePipeline:
             "original_verification_pass": metadata.get("original_verification_pass"),
             "synthesized_verification_pass": metadata.get("synthesized_verification_pass"),
             "timestamp": metadata.get("timestamp"),
-            "num_steps": len(metadata.get("steps", []))
+            "num_steps": len(metadata.get("holes", []))
         }
 
 
@@ -1355,11 +1365,11 @@ def main():
         
         print(f"Processing single problem: {dataset_name}/{problem_id}")
         
-        import unified_problem_manager as problem_manager
-        problem = problem_manager.Problem(
-            dataset=dataset_name,
-            problem_id=problem_id
-        )
+        # Get the problem using problem_manager
+        problem = problem_manager.get_problem(dataset_name, problem_id)
+        if not problem:
+            print(f"Error: Problem {dataset_name}/{problem_id} not found")
+            return
         
         # Test hole generation
         hole_content, hole_list = pipeline.generate_in_place_holes(problem)

@@ -1,9 +1,5 @@
 import Mathlib
-
-/-
-The integral of \(\int_0^a \sqrt{a^2-x^2} \,dx\) is \(\frac{a^2 \pi}{4}\).
--/
-
-open Real
-
-variable {a : ℝ} (ha : 0 < a)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

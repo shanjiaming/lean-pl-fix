@@ -1,1 +1,0 @@
--- Filled: hole_6 := admit

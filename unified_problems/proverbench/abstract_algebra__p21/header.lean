@@ -1,8 +1,5 @@
 import Mathlib
-
-/-
-In a ring \((R,+,\cdot)\), for which every element \(a\in R\) satisfies \(a^3=a\),
-the ring \(R\) is commutative, meaning \(a\cdot b=b\cdot a\) for all \(a,b\in R\).
--/
-
-variable {R : Type} [Ring R]
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

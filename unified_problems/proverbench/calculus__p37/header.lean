@@ -1,7 +1,5 @@
 import Mathlib
-
-/-
-The indefinite integral \(\int \frac{\sin\sqrt{x}}{\sqrt{x}}\,dx\) is equal to \(-2 \cos (\sqrt{x}) + C\).
--/
-
-open Real
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

@@ -2,10 +2,11 @@
 
 This document records the testing results of decompose_hole_merge_pipeline.py on the demo dataset.
 
-## Overview
+## Overview (Updated with NEW In-Place Approach)
 - **Total problems**: 6
-- **Successful**: 4 (66.7%)
-- **Failed**: 2 (33.3%)
+- **Pipeline success**: 6 (100.0%) - All problems can be decomposed
+- **Full verification success**: 3 (50.0%) - Original + Synthesized both pass
+- **Partial success**: 3 (50.0%) - Decomposition works but verification challenges remain
 
 ## ✅ Successful Cases
 

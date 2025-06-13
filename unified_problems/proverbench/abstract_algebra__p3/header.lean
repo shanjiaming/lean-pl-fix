@@ -1,6 +1,5 @@
 import Mathlib
-
-/-
-S₃ is a non-commutative group of order 6. Therefore, there does exist a non-commutative group
-of 6 elements
--/
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

@@ -1,11 +1,5 @@
 import Mathlib
-
-/-
-The real values of \(a\) for which there exists a rational function \(f(x)\) that satisfies
-\(f(x^2) = f(x)^2 - a\) are \(0\) and \(2\).
--/
-
-open Polynomial
-
-/-- The polynomial X² -/
-noncomputable def square_poly : Polynomial ℚ := X * X
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

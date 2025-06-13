@@ -1,8 +1,5 @@
 import Mathlib
-
-/-
-The integral \[\int_{-1}^1 \frac{x^2}{1+x^2}\,dx\] is equal to \[2-\frac{\pi}2.\]
--/
-
-open Real
-open MeasureTheory
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

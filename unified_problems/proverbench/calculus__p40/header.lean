@@ -1,7 +1,5 @@
 import Mathlib
-
-/-
-The derivative of the function \(f(x)=e^{-\frac{x^2}2}\) is \(f^{\prime}(x)=-xe^{-\frac{x^2}2}\).
--/
-
-open Real
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

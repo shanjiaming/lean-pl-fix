@@ -1,9 +1,5 @@
 import Mathlib
-
-/-
-The integral \[\int_0^{\frac{\pi}2} x\sin x\,dx.\] is equal to 1.
--/
-
-open Real Set Filter
-
-variable {f : ℝ → ℝ}
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

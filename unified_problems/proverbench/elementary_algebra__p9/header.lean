@@ -1,5 +1,5 @@
 import Mathlib
-
-/-
-The set of all positive integers \(n\) such that \(5^n > n!\) is \( n \in \{1, 2, \dots, 11\} \).
--/
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

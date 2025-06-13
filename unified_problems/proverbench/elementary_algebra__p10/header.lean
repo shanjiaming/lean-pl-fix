@@ -1,7 +1,5 @@
 import Mathlib
-
-/-
-The injective function \(f(1)=2\) and \(f(n)=n+2\), for \(n\geq 2\) satisfies \[(a)\ f(f(m)+f(n))=f(f(m))+f(n), \quad (b)\ f(1)=2,\ f(2)=4.\]
--/
-
-variable (f : ℕ → ℕ)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

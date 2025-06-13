@@ -1,7 +1,5 @@
 import Mathlib
-
-/-
-Prove that if `m=2+2√(28n^2+1)` is an integer for some `n∈ℕ`, then `m` is a perfect square.
--/
-
-variable {n : ℕ}
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

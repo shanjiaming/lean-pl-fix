@@ -1,5 +1,5 @@
 import Mathlib
-
-/-
-For any real number \(\alpha\), there exist infinitely many pairs of positive integers \((p, q)\) such that \(\left|\alpha - \frac{p}{q}\right| < \frac{1}{q^2}\)
--/
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

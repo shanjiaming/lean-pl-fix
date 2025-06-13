@@ -1,7 +1,5 @@
 import Mathlib
-
-/-
-The limit of the function \[\lim_{x\to 0}\frac{1-(\cos x)^{\sin x}}{x^3}\] is 1/2.
--/
-
-open Filter Topology
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

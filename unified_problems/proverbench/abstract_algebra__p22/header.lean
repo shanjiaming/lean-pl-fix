@@ -1,10 +1,5 @@
 import Mathlib
-
-/-
-For all sequences \(x_1, \dots, x_n \in [-\pi/6,\pi/6]\), the inequality \(\cos(2x_1-x_2)+\cos(2x_2-x_3)+\cdots + \cos(2x_n-x_1)\leq \cos x_1+\cdots + \cos x_n\) is satisfied.
--/
-
-open Real
-open BigOperators
-
-variable (n : ℕ) (x : Fin (n + 1) → ℝ) (hx : ∀ i, -π/6 ≤ x i ∧ x i ≤ π/6)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

@@ -1,11 +1,5 @@
 import Mathlib
-
-/-
-Dirichlet’s theorem: Let \(\alpha\) be an irrational number and \(n\) be a positive
-integer. There exist \(p\in\mathbb{Z}\) and \(q\in\{1,2,\dots,n\}\) such that \(\left|\alpha-\frac pq\right| < \frac1{(n+1)q}\).
--/
-
-variable {α : ℝ} {n : ℕ}
-
-def dirichlet_approximation : Set (ℤ × ℕ) :=
-  {p | p.2 ∈ Finset.range n ∧ p.2 ≠ 0 ∧ |α - (p.1:ℝ)/p.2| < 1/((n + 1) * p.2)}
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

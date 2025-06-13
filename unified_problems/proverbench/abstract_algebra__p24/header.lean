@@ -1,5 +1,5 @@
 import Mathlib
-/-
-Let $R$ be an integral domain. If the characteristic of $R$ is 0, then $R$ is infinite.
--/
-variable {R : Type*} [CommRing R] [IsDomain R]
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

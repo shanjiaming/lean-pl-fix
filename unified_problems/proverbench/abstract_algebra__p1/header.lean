@@ -1,8 +1,5 @@
 import Mathlib
-
-/-
-A polynomial \(P(x)\in\mathbb{Z}[x]\) that takes values \(\pm1\) at three different integer points
-can not have any integer zeros.
--/
-
-variable {P : Polynomial ℤ}
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

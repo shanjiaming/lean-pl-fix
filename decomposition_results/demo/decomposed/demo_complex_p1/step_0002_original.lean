@@ -1,1 +1,0 @@
--- Original: hole_2 := omega

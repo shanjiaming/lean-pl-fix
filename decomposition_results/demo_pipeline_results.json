@@ -1,327 +1,925 @@
 [
   {
-    "problem_id": "demo_complex_p4",
-    "dataset": "demo",
-    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p4",
-    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p4/complete_fixed_proof.lean",
-    "complete_fixed_proof": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y:=\n  by\n  --  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  --  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y:= by\n      have h3 : x \u2264 y := h_le\n      have h4 : y \u2264 x:= by\n        --  rw [\u2190 h]\n        --  omega\n        admit\n      --  omega\n      admit\n  --    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  admit",
-    "original_verification_pass": false,
-    "synthesized_verification_pass": false,
-    "num_steps": 3,
-    "detailed_steps": [
-      {
-        "step_id": "step_0001",
-        "original_content": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y :=\n  by\n  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y := by sorry\n    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n    exact h2",
-        "hole_content": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y :=\n  by\n  --  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  --  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  hole",
-        "filled_content": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y :=\n  by\n  --  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  --  cases' h1 with h_le h_ge\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  \u00b7\n    have h2 : x = y := by sorry\n  --    exact h2\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": false,
-        "filled_verification_pass": false,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0002",
-        "original_content": "theorem h2 (x y : \u2115) (h : x = y) (h_le : x \u2264 y) : x = y := by\n  have h3 : x \u2264 y := h_le\n  have h4 : y \u2264 x := by sorry\n  omega",
-        "hole_content": "theorem h2 (x y : \u2115) (h : x = y) (h_le : x \u2264 y) : x = y := by\n  have h3 : x \u2264 y := h_le\n  have h4 : y \u2264 x := by sorry\n  --  omega\n  hole",
-        "filled_content": "theorem h2 (x y : \u2115) (h : x = y) (h_le : x \u2264 y) : x = y := by\n  have h3 : x \u2264 y := h_le\n  have h4 : y \u2264 x := by sorry\n  --  omega\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0003",
-        "original_content": "theorem h4 (x y : \u2115) (h : x = y) (h_le h3 : x \u2264 y) : y \u2264 x := by\n  rw [\u2190 h]\n  omega",
-        "hole_content": "theorem h4 (x y : \u2115) (h : x = y) (h_le h3 : x \u2264 y) : y \u2264 x := by\n  --  rw [\u2190 h]\n  --  omega\n  hole",
-        "filled_content": "theorem h4 (x y : \u2115) (h : x = y) (h_le h3 : x \u2264 y) : y \u2264 x := by\n  --  rw [\u2190 h]\n  --  omega\n  admit",
-        "original_verification_pass": false,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      }
-    ],
-    "processing_time_seconds": 0.364618,
-    "status": "success",
-    "timestamp": "2025-06-12T14:07:45.808291"
-  },
-  {
-    "problem_id": "demo_complex_p5",
-    "dataset": "demo",
-    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p5",
-    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p5/complete_fixed_proof.lean",
-    "complete_fixed_proof": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c:=\n  by\n  --  by_cases h : a = c\n  --  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c:=\n      by\n      have h3 : a \u2264 c:= by\n        have h4 : a \u2264 b := h1\n        have h5 : b \u2264 c := h2\n        have h6 : a \u2264 c := le_trans h4 h5\n        --  exact h6\n        admit\n      have h7 : a \u2260 c := h\n      have h8 : a < c:= by\n        have h9 : a \u2264 c := h3\n        have h10 : a \u2260 c := h7\n        --  exact Nat.lt_of_le_of_ne h9 h10\n        admit\n      --  exact h8\n      admit\n    have h_final : a \u2264 c:= by\n      have h11 : a < c := h_main\n      have h12 : a \u2264 c := le_of_lt h11\n      --  exact h12\n      admit\n  --    exact h_final\n  admit",
-    "original_verification_pass": true,
-    "synthesized_verification_pass": false,
-    "num_steps": 5,
-    "detailed_steps": [
-      {
-        "step_id": "step_0001",
-        "original_content": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c :=\n  by\n  by_cases h : a = c\n  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c := by sorry\n    have h_final : a \u2264 c := by sorry\n    exact h_final",
-        "hole_content": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c :=\n  by\n  --  by_cases h : a = c\n  --  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c := by sorry\n    have h_final : a \u2264 c := by sorry\n  --    exact h_final\n  hole",
-        "filled_content": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c :=\n  by\n  --  by_cases h : a = c\n  --  \u00b7 simp [h]\n  \u00b7\n    have h_main : a < c := by sorry\n    have h_final : a \u2264 c := by sorry\n  --    exact h_final\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": false,
-        "filled_verification_pass": false,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0002",
-        "original_content": "theorem h_main (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a < c :=\n  by\n  have h3 : a \u2264 c := by sorry\n  have h7 : a \u2260 c := h\n  have h8 : a < c := by sorry\n  exact h8",
-        "hole_content": "theorem h_main (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a < c :=\n  by\n  have h3 : a \u2264 c := by sorry\n  have h7 : a \u2260 c := h\n  have h8 : a < c := by sorry\n  --  exact h8\n  hole",
-        "filled_content": "theorem h_main (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a < c :=\n  by\n  have h3 : a \u2264 c := by sorry\n  have h7 : a \u2260 c := h\n  have h8 : a < c := by sorry\n  --  exact h8\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0003",
-        "original_content": "theorem h3 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a \u2264 c := by\n  have h4 : a \u2264 b := h1\n  have h5 : b \u2264 c := h2\n  have h6 : a \u2264 c := le_trans h4 h5\n  exact h6",
-        "hole_content": "theorem h3 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a \u2264 c := by\n  have h4 : a \u2264 b := h1\n  have h5 : b \u2264 c := h2\n  have h6 : a \u2264 c := le_trans h4 h5\n  --  exact h6\n  hole",
-        "filled_content": "theorem h3 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) : a \u2264 c := by\n  have h4 : a \u2264 b := h1\n  have h5 : b \u2264 c := h2\n  have h6 : a \u2264 c := le_trans h4 h5\n  --  exact h6\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0004",
-        "original_content": "theorem h8 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h3 : a \u2264 c) (h7 : a \u2260 c) : a < c := by\n  have h9 : a \u2264 c := h3\n  have h10 : a \u2260 c := h7\n  exact Nat.lt_of_le_of_ne h9 h10",
-        "hole_content": "theorem h8 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h3 : a \u2264 c) (h7 : a \u2260 c) : a < c := by\n  have h9 : a \u2264 c := h3\n  have h10 : a \u2260 c := h7\n  --  exact Nat.lt_of_le_of_ne h9 h10\n  hole",
-        "filled_content": "theorem h8 (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h3 : a \u2264 c) (h7 : a \u2260 c) : a < c := by\n  have h9 : a \u2264 c := h3\n  have h10 : a \u2260 c := h7\n  --  exact Nat.lt_of_le_of_ne h9 h10\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0005",
-        "original_content": "theorem h_final (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h_main : a < c) : a \u2264 c := by\n  have h11 : a < c := h_main\n  have h12 : a \u2264 c := le_of_lt h11\n  exact h12",
-        "hole_content": "theorem h_final (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h_main : a < c) : a \u2264 c := by\n  have h11 : a < c := h_main\n  have h12 : a \u2264 c := le_of_lt h11\n  --  exact h12\n  hole",
-        "filled_content": "theorem h_final (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) (h : \u00aca = c) (h_main : a < c) : a \u2264 c := by\n  have h11 : a < c := h_main\n  have h12 : a \u2264 c := le_of_lt h11\n  --  exact h12\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      }
-    ],
-    "processing_time_seconds": 0.586675,
-    "status": "success",
-    "timestamp": "2025-06-12T14:07:46.395316"
-  },
-  {
     "problem_id": "demo_complex_p6",
     "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p6",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p6/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem induction_with_have (n : \u2115) : n * (n + 1) / 2 + (n + 1) = (n + 1) * (n + 2) / 2 := by\n  induction' n with k ih\n  \u00b7 -- base case n = 0\n    simp\n    have h1 : (0 : \u2115) * 1 / 2 = 0 := by norm_num\n    have h2 : h1.trans rfl = (0 + 1) := by simp\n    norm_num\n  \u00b7 -- inductive step\n    simp [Nat.succ_eq_add_one]\n    have h1 : k * (k + 1) / 2 + (k + 1) = (k + 1) * (k + 2) / 2 := by\n      exact ih\n    have h2 : (k + 1) * (k + 2) / 2 + (k + 2) = (k + 2) * (k + 3) / 2 := by\n      have h3 : (k + 1) * (k + 2) = k * (k + 1) + 2 * (k + 1) := by ring\n      have h4 : (k + 2) * (k + 3) = (k + 1) * (k + 2) + 2 * (k + 2) := by ring\n      have h5 : 2 * (k + 2) = (k + 2) + (k + 2) := by ring\n      admit\n    exact h2",
     "original_verification_pass": false,
-    "synthesized_verification_pass": null,
-    "status": "error",
-    "error": "Decomposition failed for problem demo_complex_p6 - no steps generated",
-    "processing_time_seconds": 0.262131,
-    "timestamp": "2025-06-12T14:07:46.658034"
-  },
-  {
-    "problem_id": "demo_complex_p2",
-    "dataset": "demo",
-    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p2",
-    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p2/complete_fixed_proof.lean",
-    "complete_fixed_proof": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0:=\n  by\n  --  cases' n with k\n  --  \u00b7 left\n    have h1 : 0 = 0 := rfl\n  --    exact h1\n  --  \u00b7 right\n    have h1 : k + 1 > 0:= by -- omega\n      admit\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n  --    exact h3\n  admit",
-    "original_verification_pass": true,
     "synthesized_verification_pass": false,
-    "num_steps": 2,
+    "num_steps": 1,
     "detailed_steps": [
       {
         "step_id": "step_0001",
-        "original_content": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 :=\n  by\n  cases' n with k\n  \u00b7 left\n    have h1 : 0 = 0 := rfl\n    exact h1\n  \u00b7 right\n    have h1 : k + 1 > 0 := by sorry\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n    exact h3",
-        "hole_content": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 :=\n  by\n  --  cases' n with k\n  --  \u00b7 left\n    have h1 : 0 = 0 := rfl\n  --    exact h1\n  --  \u00b7 right\n    have h1 : k + 1 > 0 := by sorry\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n  --    exact h3\n  hole",
-        "filled_content": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 :=\n  by\n  --  cases' n with k\n  --  \u00b7 left\n    have h1 : 0 = 0 := rfl\n  --    exact h1\n  --  \u00b7 right\n    have h1 : k + 1 > 0 := by sorry\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n  --    exact h3\n  admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": false,
-        "filled_verification_pass": false,
-        "additional_info": {
-          "method": "simple_replace"
-        }
-      },
-      {
-        "step_id": "step_0002",
-        "original_content": "theorem h1 (k : \u2115) : k + 1 > 0 := by omega",
-        "hole_content": "theorem h1 (k : \u2115) : k + 1 > 0 := by -- omega\n  hole",
-        "filled_content": "theorem h1 (k : \u2115) : k + 1 > 0 := by -- omega\n  admit",
+        "original_content": "-- Original: hole_1 := ring",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := admit",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace"
+          "method": "unigram_tactics",
+          "hole_id": "hole_1",
+          "original_proof": "ring",
+          "replacement": "admit",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [],
+          "failed_tactics": [],
+          "best_tactic": null,
+          "sanity_check_pass": false,
+          "failed_content_preview": "macro \"hole\" : tactic => `(tactic| sorry)\n\ntheorem induction_with_have (n : \u2115) : n * (n + 1) / 2 + (n + 1) = (n + 1) * (n + 2) / 2 := by\n  induction' n with k ih\n  \u00b7 -- base case n = 0\n    simp\n    ha...",
+          "skip_reason": "sanity_check_failed"
         }
       }
     ],
-    "processing_time_seconds": 0.266565,
+    "processing_time_seconds": 0.632429,
     "status": "success",
-    "timestamp": "2025-06-12T14:07:46.925220"
+    "timestamp": "2025-06-13T18:34:02.570640"
   },
   {
     "problem_id": "demo_complex_p1",
     "dataset": "demo",
     "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p1",
     "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p1/complete_fixed_proof.lean",
-    "complete_fixed_proof": "theorem complex_have_chain (n : \u2115) (h : n > 0) : n + n \u2265 n := by\n  have h1 : n \u2265 1 := by\n    admit\n  have h2 : n + n \u2265 n + 1 := by\n    have h3 : n \u2265 1 := h1\n    have h4 : n + n = n + n := rfl\n    have h5 : n + 1 \u2264 n + n := by\n      admit\n    exact h5\n  have h6 : n + 1 \u2265 n := by\n    admit\n  admit",
+    "complete_fixed_proof": "theorem complex_have_chain (n : \u2115) (h : n > 0) : n + n \u2265 n := by\n  have h1 : n \u2265 1 := by\n    linarith\n  have h2 : n + n \u2265 n + 1 := by\n    have h3 : n \u2265 1 := h1\n    have h4 : n + n = n + n := rfl\n    have h5 : n + 1 \u2264 n + n := by\n      linarith\n    linarith\n  have h6 : n + 1 \u2265 n := by\n    norm_num\n  norm_num",
     "original_verification_pass": true,
     "synthesized_verification_pass": true,
-    "num_steps": 6,
+    "num_steps": 5,
     "detailed_steps": [
       {
         "step_id": "step_0001",
-        "original_content": "-- Original: hole_1 := have h1 : n \u2265 1 := by omega",
-        "hole_content": "-- Hole: hole_1",
-        "filled_content": "-- Filled: hole_1 := admit",
+        "original_content": "-- Original: hole_2 := omega",
+        "hole_content": "-- Hole: hole_2",
+        "filled_content": "-- Filled: hole_2 := linarith",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
-          "hole_id": "hole_1",
-          "original_proof": "have h1 : n \u2265 1 := by omega",
-          "replacement": "admit"
+          "method": "unigram_tactics",
+          "hole_id": "hole_2",
+          "original_proof": "omega",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
         }
       },
       {
         "step_id": "step_0002",
-        "original_content": "-- Original: hole_2 := omega",
-        "hole_content": "-- Hole: hole_2",
-        "filled_content": "-- Filled: hole_2 := admit",
+        "original_content": "-- Original: hole_4 := omega",
+        "hole_content": "-- Hole: hole_4",
+        "filled_content": "-- Filled: hole_4 := linarith",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
-          "hole_id": "hole_2",
+          "method": "unigram_tactics",
+          "hole_id": "hole_4",
           "original_proof": "omega",
-          "replacement": "admit"
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
         }
       },
       {
         "step_id": "step_0003",
-        "original_content": "-- Original: hole_3 := have h3 : n \u2265 1 := h1",
+        "original_content": "-- Original: hole_3 := exact h5",
         "hole_content": "-- Hole: hole_3",
-        "filled_content": "-- Filled: hole_3 := admit",
+        "filled_content": "-- Filled: hole_3 := linarith",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
+          "method": "unigram_tactics",
           "hole_id": "hole_3",
-          "original_proof": "have h3 : n \u2265 1 := h1",
-          "replacement": "admit"
+          "original_proof": "exact h5",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
         }
       },
       {
         "step_id": "step_0004",
-        "original_content": "-- Original: hole_4 := omega",
-        "hole_content": "-- Hole: hole_4",
-        "filled_content": "-- Filled: hole_4 := admit",
+        "original_content": "-- Original: hole_5 := omega",
+        "hole_content": "-- Hole: hole_5",
+        "filled_content": "-- Filled: hole_5 := norm_num",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
-          "hole_id": "hole_4",
+          "method": "unigram_tactics",
+          "hole_id": "hole_5",
           "original_proof": "omega",
-          "replacement": "admit"
+          "replacement": "norm_num",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simp",
+            "simpa",
+            "field_simp"
+          ],
+          "failed_tactics": [
+            "ring",
+            "ring_nf",
+            "positivity",
+            "norm_cast"
+          ],
+          "best_tactic": "norm_num",
+          "sanity_check_pass": true
         }
       },
       {
         "step_id": "step_0005",
-        "original_content": "-- Original: hole_5 := omega",
-        "hole_content": "-- Hole: hole_5",
-        "filled_content": "-- Filled: hole_5 := admit",
+        "original_content": "-- Original: hole_1 := omega",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := norm_num",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
-          "hole_id": "hole_5",
+          "method": "unigram_tactics",
+          "hole_id": "hole_1",
           "original_proof": "omega",
-          "replacement": "admit"
-        }
-      },
-      {
-        "step_id": "step_0006",
-        "original_content": "-- Original: hole_6 := omega",
-        "hole_content": "-- Hole: hole_6",
-        "filled_content": "-- Filled: hole_6 := admit",
-        "original_verification_pass": true,
-        "hole_verification_pass": true,
-        "filled_verification_pass": true,
-        "additional_info": {
-          "method": "simple_replace",
-          "hole_id": "hole_6",
-          "original_proof": "omega",
-          "replacement": "admit"
+          "replacement": "norm_num",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simp",
+            "simpa",
+            "field_simp"
+          ],
+          "failed_tactics": [
+            "ring",
+            "ring_nf",
+            "positivity",
+            "norm_cast"
+          ],
+          "best_tactic": "norm_num",
+          "sanity_check_pass": true
         }
       }
     ],
-    "processing_time_seconds": 3.870498,
+    "processing_time_seconds": 21.659406,
     "status": "success",
-    "timestamp": "2025-06-12T14:54:23.897648"
+    "timestamp": "2025-06-13T18:55:33.279250"
   },
   {
     "problem_id": "demo_complex_p3",
     "dataset": "demo",
     "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p3",
     "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p3/complete_fixed_proof.lean",
-    "complete_fixed_proof": "theorem contradiction_with_have (a b : \u2115) (h : a + b = 0) : a = 0 \u2227 b = 0 := by\n  by_contra h_contra\n  simp at h_contra\n  admit\n  \u00b7 -- case a \u2260 0\n    have h1 : a > 0 := Nat.pos_of_ne_zero ha\n    have h2 : a + b \u2265 a := by omega\n    have h3 : a + b \u2265 1 := by\n      have h4 : a \u2265 1 := h1\n      omega\n    have h4 : a + b = 0 := h\n    have h5 : (0 : \u2115) < 1 := by norm_num\n    omega\n  \u00b7 -- case b \u2260 0\n    have h1 : b > 0 := Nat.pos_of_ne_zero hb\n    have h2 : a + b \u2265 b := by omega\n    have h3 : a + b \u2265 1 := by\n      have h4 : b \u2265 1 := h1\n      omega\n    have h4 : a + b = 0 := h\n    omega",
+    "complete_fixed_proof": "theorem contradiction_with_have (a b : \u2115) (h : a + b = 0) : a = 0 \u2227 b = 0 := by\n  admit\n  \u00b7 \n    have h1 : a > 0 := Nat.pos_of_ne_zero ha\n    have h2 : a + b \u2265 a := by omega\n    have h3 : a + b \u2265 1 := by\n      have h4 : a \u2265 1 := h1\n      omega\n    have h4 : a + b = 0 := h\n    have h5 : (0 : \u2115) < 1 := by norm_num\n    omega\n  \u00b7 \n    have h1 : b > 0 := Nat.pos_of_ne_zero hb\n    have h2 : a + b \u2265 b := by omega\n    have h3 : a + b \u2265 1 := by\n      have h4 : b \u2265 1 := h1\n      omega\n    have h4 : a + b = 0 := h\n    omega",
     "original_verification_pass": false,
     "synthesized_verification_pass": false,
-    "num_steps": 2,
+    "num_steps": 1,
     "detailed_steps": [
       {
         "step_id": "step_0001",
-        "original_content": "-- Original: hole_1 := by_contra h_contra",
+        "original_content": "-- Original: hole_1 := by_contra h_contra\nsimp at h_contra\ncases' h_contra with ha hb",
         "hole_content": "-- Hole: hole_1",
         "filled_content": "-- Filled: hole_1 := admit",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
+          "method": "unigram_tactics",
           "hole_id": "hole_1",
-          "original_proof": "by_contra h_contra",
-          "replacement": "admit"
+          "original_proof": "by_contra h_contra\nsimp at h_contra\ncases' h_contra with ha hb",
+          "replacement": "admit",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [],
+          "failed_tactics": [],
+          "best_tactic": null,
+          "sanity_check_pass": false,
+          "failed_content_preview": "macro \"hole\" : tactic => `(tactic| sorry)\n\ntheorem contradiction_with_have (a b : \u2115) (h : a + b = 0) : a = 0 \u2227 b = 0 := by\n  hole\n  \u00b7 \n    have h1 : a > 0 := Nat.pos_of_ne_zero ha\n    have h2 : a + b ...",
+          "skip_reason": "sanity_check_failed"
         }
-      },
+      }
+    ],
+    "processing_time_seconds": 0.218312,
+    "status": "success",
+    "timestamp": "2025-06-13T18:55:33.498312"
+  },
+  {
+    "problem_id": "demo_complex_p4",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p4",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p4/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem simp_then_have_chain (x y : \u2115) (h : x + 0 = y + 0) : x = y := by\n  simp at h\n  have h1 : x \u2264 y \u2228 y \u2264 x := le_total x y\n  cases' h1 with h_le h_ge\n  \u00b7 \n    have h2 : x = y := by\n      have h3 : x \u2264 y := h_le\n      have h4 : y \u2264 x := by\n        linarith\n      linarith\n    exact h2\n  \u00b7 \n    have h2 : x = y := by\n      have h3 : y \u2264 x := h_ge\n      have h4 : x \u2264 y := by\n        linarith\n      linarith\n    linarith",
+    "original_verification_pass": false,
+    "synthesized_verification_pass": true,
+    "num_steps": 5,
+    "detailed_steps": [
       {
-        "step_id": "step_0002",
-        "original_content": "-- Original: hole_2 := cases' h_contra with ha hb",
-        "hole_content": "-- Hole: hole_2",
-        "filled_content": "-- Filled: hole_2 := admit",
+        "step_id": "step_0001",
+        "original_content": "-- Original: hole_3 := rw [\u2190 h]\nomega",
+        "hole_content": "-- Hole: hole_3",
+        "filled_content": "-- Filled: hole_3 := linarith",
         "original_verification_pass": true,
         "hole_verification_pass": true,
         "filled_verification_pass": true,
         "additional_info": {
-          "method": "simple_replace",
+          "method": "unigram_tactics",
+          "hole_id": "hole_3",
+          "original_proof": "rw [\u2190 h]\nomega",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "-- Original: hole_2 := omega",
+        "hole_content": "-- Hole: hole_2",
+        "filled_content": "-- Filled: hole_2 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
           "hole_id": "hole_2",
-          "original_proof": "cases' h_contra with ha hb",
-          "replacement": "admit"
+          "original_proof": "omega",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0003",
+        "original_content": "-- Original: hole_5 := rw [h]\nomega",
+        "hole_content": "-- Hole: hole_5",
+        "filled_content": "-- Filled: hole_5 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_5",
+          "original_proof": "rw [h]\nomega",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0004",
+        "original_content": "-- Original: hole_4 := omega",
+        "hole_content": "-- Hole: hole_4",
+        "filled_content": "-- Filled: hole_4 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_4",
+          "original_proof": "omega",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0005",
+        "original_content": "-- Original: hole_1 := exact h2",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_1",
+          "original_proof": "exact h2",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
         }
       }
     ],
-    "processing_time_seconds": 0.12744,
+    "processing_time_seconds": 23.342975,
     "status": "success",
-    "timestamp": "2025-06-12T14:54:24.025629"
+    "timestamp": "2025-06-13T18:55:56.842035"
+  },
+  {
+    "problem_id": "demo_complex_p5",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p5",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p5/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem multi_level_decomposition (a b c : \u2115) (h1 : a \u2264 b) (h2 : b \u2264 c) : a \u2264 c := by\n  by_cases h : a = c\n  \u00b7 \n    simp [h]\n  \u00b7 \n    have h_main : a < c := by\n      have h3 : a \u2264 c := by\n        have h4 : a \u2264 b := h1\n        have h5 : b \u2264 c := h2\n        have h6 : a \u2264 c := le_trans h4 h5\n        linarith\n      have h7 : a \u2260 c := h\n      have h8 : a < c := by\n        have h9 : a \u2264 c := h3\n        have h10 : a \u2260 c := h7\n        omega\n      linarith\n    have h_final : a \u2264 c := by\n      have h11 : a < c := h_main\n      have h12 : a \u2264 c := le_of_lt h11\n      linarith\n    linarith",
+    "original_verification_pass": true,
+    "synthesized_verification_pass": true,
+    "num_steps": 5,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "-- Original: hole_3 := exact h6",
+        "hole_content": "-- Hole: hole_3",
+        "filled_content": "-- Filled: hole_3 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_3",
+          "original_proof": "exact h6",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "-- Original: hole_4 := exact Nat.lt_of_le_of_ne h9 h10",
+        "hole_content": "-- Hole: hole_4",
+        "filled_content": "-- Filled: hole_4 := omega",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_4",
+          "original_proof": "exact Nat.lt_of_le_of_ne h9 h10",
+          "replacement": "omega",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "omega"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "best_tactic": "omega",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0003",
+        "original_content": "-- Original: hole_2 := exact h8",
+        "hole_content": "-- Hole: hole_2",
+        "filled_content": "-- Filled: hole_2 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_2",
+          "original_proof": "exact h8",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0004",
+        "original_content": "-- Original: hole_5 := exact h12",
+        "hole_content": "-- Hole: hole_5",
+        "filled_content": "-- Filled: hole_5 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_5",
+          "original_proof": "exact h12",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0005",
+        "original_content": "-- Original: hole_1 := exact h_final",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := linarith",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_1",
+          "original_proof": "exact h_final",
+          "replacement": "linarith",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simpa",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "norm_num",
+            "ring",
+            "ring_nf",
+            "simp",
+            "field_simp",
+            "positivity"
+          ],
+          "best_tactic": "linarith",
+          "sanity_check_pass": true
+        }
+      }
+    ],
+    "processing_time_seconds": 18.976157,
+    "status": "success",
+    "timestamp": "2025-06-13T18:56:15.819116"
+  },
+  {
+    "problem_id": "demo_complex_p2",
+    "dataset": "demo",
+    "problem_dir": "decomposition_results/demo/decomposed/demo_complex_p2",
+    "complete_proof_path": "decomposition_results/demo/decomposed/demo_complex_p2/complete_fixed_proof.lean",
+    "complete_fixed_proof": "theorem case_analysis_simple (n : \u2115) : n = 0 \u2228 n > 0 := by\n  cases' n with k\n  \u00b7 \n    left\n    have h1 : 0 = 0 := rfl\n    exact h1\n  \u00b7 \n    right\n    have h1 : k + 1 > 0 := by norm_num\n    have h2 : Nat.succ k = k + 1 := rfl\n    have h3 : k + 1 > 0 := h1\n    norm_num",
+    "original_verification_pass": true,
+    "synthesized_verification_pass": true,
+    "num_steps": 2,
+    "detailed_steps": [
+      {
+        "step_id": "step_0001",
+        "original_content": "-- Original: hole_2 := omega",
+        "hole_content": "-- Hole: hole_2",
+        "filled_content": "-- Filled: hole_2 := norm_num",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_2",
+          "original_proof": "omega",
+          "replacement": "norm_num",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity"
+          ],
+          "failed_tactics": [
+            "ring",
+            "ring_nf",
+            "norm_cast"
+          ],
+          "best_tactic": "norm_num",
+          "sanity_check_pass": true
+        }
+      },
+      {
+        "step_id": "step_0002",
+        "original_content": "-- Original: hole_1 := exact h3",
+        "hole_content": "-- Hole: hole_1",
+        "filled_content": "-- Filled: hole_1 := norm_num",
+        "original_verification_pass": true,
+        "hole_verification_pass": true,
+        "filled_verification_pass": true,
+        "additional_info": {
+          "method": "unigram_tactics",
+          "hole_id": "hole_1",
+          "original_proof": "exact h3",
+          "replacement": "norm_num",
+          "tactics_tried": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "ring",
+            "ring_nf",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "successful_tactics": [
+            "norm_num",
+            "linarith",
+            "nlinarith",
+            "omega",
+            "simp",
+            "simpa",
+            "field_simp",
+            "positivity",
+            "norm_cast"
+          ],
+          "failed_tactics": [
+            "ring",
+            "ring_nf"
+          ],
+          "best_tactic": "norm_num",
+          "sanity_check_pass": true
+        }
+      }
+    ],
+    "processing_time_seconds": 3.303082,
+    "status": "success",
+    "timestamp": "2025-06-13T18:56:19.361926"
   }
 ]

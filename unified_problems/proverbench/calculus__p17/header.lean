@@ -1,10 +1,5 @@
 import Mathlib
-
-/-
-The integral \(\int \frac{1}{\cos^2 x} \, dx\) equals to \(\tan x + C\).
--/
-
--- Define the constant C for the integration constant
-variable (C : ℝ)
-
--- Theorem: The indefinite integral of 1/cos^2(x) with respect to x is tan(x) + C.
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

@@ -1,5 +1,5 @@
 import Mathlib
-
-/-
-The indefinite integral of cos(5x) with respect to x is 1/5 sin(5x) + C.
--/
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

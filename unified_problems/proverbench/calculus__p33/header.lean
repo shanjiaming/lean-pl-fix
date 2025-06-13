@@ -1,13 +1,5 @@
 import Mathlib
-
-/-
-The composition of the functions \(u(x)=\sin x\) and \(v(x)=x^2\) is \(u(v(x))=\sin(x^2)\).
--/
-
--- Define the sine function
-noncomputable def u (x : ℝ) : ℝ := Real.sin x
-
--- Define the quadratic function
-def v (x : ℝ) : ℝ := x ^ 2
-
--- Theorem statement for the composition of u and v
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat

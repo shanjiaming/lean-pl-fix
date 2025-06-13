@@ -1,9 +1,5 @@
 import Mathlib
-
-/-
-The derivative of the function \(f(x)=\cos(x^3)\) is \(f'(x)= -\sin(x^3)\cdot 3x^2\).
--/
-
-open scoped Topology Filter
-
-variable (x : ℝ)
+import Aesop
+set_option maxHeartbeats 0
+set_option pp.coercions.types true
+open BigOperators Real Nat Topology Rat
