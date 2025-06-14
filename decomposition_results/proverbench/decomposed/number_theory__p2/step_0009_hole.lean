@@ -1,2 +1,0 @@
-theorem h₁₄ (x y u : ℤ) (n : ℕ) (h₀ : x ^ 2 + y ^ 2 - 1 = 4 * x * y) (h₂ : x = 0 ∧ y = 1 ∧ u = 0 ∧ n = 0 → False) (h₈ : ¬(x = 0 ∧ y = 1 ∧ u = 0 ∧ n = 0)) (h₁₀ : -1 + x ^ 2 + y ^ 2 = x * y * 4) (h₁₁ : x ^ 2 + y ^ 2 - 1 = 4 * x * y) (h₁₂ : x ≤ y * 2) (h₁₃ : x ≥ y * 2) : x = y * 2 := by -- linarith
-  hole

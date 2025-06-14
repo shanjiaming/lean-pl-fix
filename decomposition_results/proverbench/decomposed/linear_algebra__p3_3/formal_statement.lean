@@ -1,1 +1,0 @@
-theorem det_inv (A : Matrix n n ℝ) [Invertible A] : det A⁻¹ = (det A)⁻¹ :=

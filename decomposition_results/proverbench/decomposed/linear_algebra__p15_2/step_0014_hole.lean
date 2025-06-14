@@ -1,2 +1,0 @@
-theorem h₅ (E : Type) (inst✝¹ : NormedAddCommGroup E) (inst✝ : InnerProductSpace ℝ E) (v u : E) (hu : u ≠ 0) (a' b' : E) (h_decomp : v = a' + b') (h_parallel : isParallel a' u) (h_orthogonal : isOrthogonal b' u) (l : ℝ := ⟪v, u⟫_ℝ / ‖u‖ ^ 2) (h₁ : a' = l • u) (h₃ : v = l • u + b') (h₄ : a' = l • u) : b' = v - l • u := by rw [eq_sub_iff_add_eq.mpr h₃] <;> abel
-  hole

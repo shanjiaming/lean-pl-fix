@@ -1,1 +1,0 @@
-theorem cubic_inequality (ha : 0 < a) (hb : 0 < b): a^3 + b^3 ≥ a^2 * b + a * b^2 :=

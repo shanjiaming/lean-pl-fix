@@ -1,1 +1,0 @@
-theorem h₆ (h_main_claim : congruence1 8 ∧ congruence2 8 ∧ congruence3 8) (n : ℕ+) (hn : congruence1 ↑n ∧ congruence2 ↑n ∧ congruence3 ↑n) (h : ¬↑n ≥ 8) (h₂ : ↑n ≤ 7) (h₃ : congruence1 ↑n) (h₄ : congruence2 ↑n) (h₅ : congruence3 ↑n) : n ≤ 7 := by exact_mod_cast h₂

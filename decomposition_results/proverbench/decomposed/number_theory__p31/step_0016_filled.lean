@@ -1,2 +1,0 @@
-theorem h₉ (x y : ℤ) (hx : 2 < x) (hy : 2 < y) (z : ℤ) (hz : x ^ 2 + 1 = z * (4 ^ 2 - 5)) (h₁✝ : y = 3 → False) (h₁ h₂ : y = 4) (h₃ : x ^ 2 + 1 = z * (4 ^ 2 - 5)) (h₄ : x ^ 2 + 1 = z * 11) (h₅ h₆ h₈ : x % 11 = 0) : x ^ 2 % 11 = 0 := by norm_num [pow_two, Int.mul_emod, h₈]
-  hole

@@ -1,2 +1,0 @@
-theorem h₂₂ (n✝ n : ℕ) (h₁ : 3 ^ n + 2 ^ n = 3 ^ n * (1 + (2 / 3) ^ n)) (h₂₁ : 3 ^ (n + 1) > 0) : 2 / 3 > 0 := by norm_num
-  hole

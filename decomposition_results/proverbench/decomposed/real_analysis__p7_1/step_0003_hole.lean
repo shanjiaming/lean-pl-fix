@@ -1,2 +1,0 @@
-theorem h₂ (x✝ x : ℝ) (hx : x ∈ Set.Ioo 0 8) (h₁ : 0 < x) : x < 8 := by exact hx.2
-  hole

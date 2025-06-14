@@ -1,2 +1,0 @@
-theorem h₁₆ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ h₃ : p ∣ n) (h₄ : p ∣ polynomial n) (h₅ : p ∣ n ^ 8 - n ^ 4 + 1) (h₇ : p ∣ n ^ 8) (h₈ : p ∣ n ^ 4) (h₉ h₁₁ : p ∣ n ^ 8 - n ^ 4 + 1) (h₁₂ : p ∣ n ^ 8) (h₁₃ : p ∣ n ^ 4) (h₁₄ : p ∣ n ^ 8 - n ^ 4) (h₁₅ : p ∣ n ^ 8 - n ^ 4 + 1) : p ∣ n ^ 8 - n ^ 4 + 1 - (n ^ 8 - n ^ 4) := by -- exact Nat.dvd_sub' h₁₅ h₁₄
-  hole

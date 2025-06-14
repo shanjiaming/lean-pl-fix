@@ -1,2 +1,0 @@
-theorem h₂₄ (h₁ : ∫ (x : ℝ) in Set.Icc 2 8, 1 / x + x ^ 2 = (∫ (x : ℝ) in Set.Icc 2 8, 1 / x) + ∫ (x : ℝ) in Set.Icc 2 8, x ^ 2) (h₂₂ : log 8 - log 2 = log (8 / 2)) : ∫ (x : ℝ) in Set.Icc 2 8, 1 / x = ∫ (x : ℝ) in 2 ..8, 1 / x := by
-  simp [intervalIntegral.integral_congr]

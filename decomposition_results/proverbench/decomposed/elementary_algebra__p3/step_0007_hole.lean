@@ -1,3 +1,0 @@
-theorem h₈ (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h1 :  a ^ 2 * (s a b c - a) + b ^ 2 * (s a b c - b) + c ^ 2 * (s a b c - c) =    (a ^ 2 * (b + c - a) + b ^ 2 * (a + c - b) + c ^ 2 * (a + b - c)) / 2) (h₂ : a > 0) (h₃ : b > 0) (h₄ : c > 0) (h₅ : a ^ 3 + b ^ 3 + c ^ 3 + 3 * a * b * c ≥ a ^ 2 * b + a * b ^ 2 + a ^ 2 * c + a * c ^ 2 + b ^ 2 * c + b * c ^ 2) (h₇ :  a ^ 2 * (b + c - a) + b ^ 2 * (a + c - b) + c ^ 2 * (a + b - c) =    a ^ 2 * b + a ^ 2 * c - a ^ 3 + b ^ 2 * a + b ^ 2 * c - b ^ 3 + c ^ 2 * a + c ^ 2 * b - c ^ 3) : a ^ 2 * b + a ^ 2 * c - a ^ 3 + b ^ 2 * a + b ^ 2 * c - b ^ 3 + c ^ 2 * a + c ^ 2 * b - c ^ 3 ≤ 3 * a * b * c := by
-  --  nlinarith [h₅]
-  hole

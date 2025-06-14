@@ -1,1 +1,0 @@
-theorem h₅ (b✝ b : ℕ → ℝ) (h_pos : ∀ (n : ℕ), b n > 0) (h_lim : Tendsto b atTop (𝓝 (1 / 2))) (h_main : Summable fun n => b n ^ n / ↑n) (n : ℕ) (h₃ : cos (↑n * π) = (-1) ^ n) (h₄ : b n > 0) : b n > 0 := by exact_mod_cast h₄

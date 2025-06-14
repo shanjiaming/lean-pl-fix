@@ -1,2 +1,0 @@
-theorem h₃ (R : Type) (inst✝ : Ring R) (h : ∀ (a : R), a ^ 3 = a) (h6 : ∀ (a : R), 6 • a = 0) (a b : R) (h₁ : (a + b) ^ 3 = a + b) (h₂ : (a - b) ^ 3 = a - b) : (a + b) ^ 3 - (a - b) ^ 3 = a + b - (a - b) := by rw [h₁, h₂]
-  hole

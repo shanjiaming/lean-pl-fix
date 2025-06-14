@@ -1,1 +1,0 @@
-theorem imoProblem : a * y + b * z + c * x < S ^ 2 :=

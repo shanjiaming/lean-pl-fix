@@ -1,1 +1,0 @@
-theorem h₁ (α β : ℝ) (h : add_vec (smul α v2) (smul β v3) = v1) : -2 * α + 6 * β = 52 := by have h₂ := congr_arg (fun x => x[0])

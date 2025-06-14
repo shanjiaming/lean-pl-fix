@@ -1,3 +1,0 @@
-theorem h₃₀ (a b c s : ℝ) (h₁ : a ^ 2 * (s - a) + b ^ 2 * (s - b) + c ^ 2 * (s - c) = s * (a ^ 2 + b ^ 2 + c ^ 2) - (a ^ 3 + b ^ 3 + c ^ 3)) (h₂₁ : ¬a = 0) (h₂₂ h₂₃ : ¬False) (h₂₄ : a ^ 2 * (s - a) + b ^ 2 * (s - b) + c ^ 2 * (s - c) = s * (a ^ 2 + b ^ 2 + c ^ 2) - (a ^ 3 + b ^ 3 + c ^ 3)) (h₂₅ : a ≠ 0) (h₂₆ : b ≠ 0) (h₂₇ : c ≠ 0) (h₂₈ h₂₉ : a ^ 2 * (s - a) + b ^ 2 * (s - b) + c ^ 2 * (s - c) = s * (a ^ 2 + b ^ 2 + c ^ 2) - (a ^ 3 + b ^ 3 + c ^ 3)) : a ^ 2 * (s - a) + b ^ 2 * (s - b) + c ^ 2 * (s - c) ≤ 3 / 2 * a * b * c := by
-  nlinarith [sq_pos_of_ne_zero h₂₅, sq_pos_of_ne_zero h₂₆, sq_pos_of_ne_zero h₂₇, sq_nonneg (a - b), sq_nonneg (b - c),
-    sq_nonneg (c - a)]

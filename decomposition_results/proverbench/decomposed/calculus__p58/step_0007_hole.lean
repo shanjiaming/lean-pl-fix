@@ -1,2 +1,0 @@
-theorem h₅ (x : ℝ) (h : f_deriv x = 0) (h₁ : 6 * x ^ 2 - 6 * x - 36 = 0) (h₂ : x ^ 2 - x - 6 = 0) (h₄ : (x + 2) * (x - 3) = 0) : x + 2 = 0 ∨ x - 3 = 0 := by -- apply eq_zero_or_eq_zero_of_mul_eq_zero h₄
-  hole

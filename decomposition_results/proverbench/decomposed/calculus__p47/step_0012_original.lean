@@ -1,2 +1,0 @@
-theorem h₁₃ (x : ℝ) (h₃ : HasDerivAt (fun x => x ^ 2 + 1) (2 * x) x) (h₄ : HasDerivAt (fun x => Real.log (x ^ 2 + 1)) (2 * x / (x ^ 2 + 1)) x) (h₇ : HasDerivAt (fun x => 1 / 2 * Real.log (x ^ 2 + 1)) (1 / 2 * (2 * x / (x ^ 2 + 1))) x) (h₁₀ : HasDerivAt (fun x => 1 / 2 * Real.log (x ^ 2 + 1) + sorry) (1 / 2 * (2 * x / (x ^ 2 + 1)) + 0) x) : 1 / 2 * (2 * x / (x ^ 2 + 1)) + 0 = x / (x ^ 2 + 1) := by
-  field_simp <;> ring <;> field_simp <;> ring

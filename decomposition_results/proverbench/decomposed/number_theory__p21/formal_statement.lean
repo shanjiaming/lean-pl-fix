@@ -1,1 +1,0 @@
-theorem count_not_div_three : ¬(3 ∣ countPoints 2012) :=

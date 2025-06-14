@@ -1,1 +1,0 @@
-theorem h₄ (x y : ℤ) (hx : 2 < x) (hy : 2 < y) (z : ℤ) (hz : x ^ 2 + 1 = z * (4 ^ 2 - 5)) (h₁✝ : y = 3 → False) (h₁ h₂ : y = 4) (h₃ : x ^ 2 + 1 = z * (4 ^ 2 - 5)) : x ^ 2 + 1 = z * 11 := by ring_nf at h₃ ⊢ <;> linarith

@@ -1,2 +1,0 @@
-theorem h₁ (p q r : ℝ) (inst✝² : Fact (p ≠ 0)) (inst✝¹ : Fact (q ≠ 0)) (inst✝ : Fact (r ≠ 0)) (h : p ≠ 0) : p ^ 3 ≠ 0 := by exact pow_ne_zero 3 h
-  hole

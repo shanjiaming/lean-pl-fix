@@ -1,1 +1,0 @@
-theorem series_diverges : ¬ Summable general_term :=

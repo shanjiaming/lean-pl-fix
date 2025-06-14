@@ -1,2 +1,0 @@
-theorem h1 (x : ℝ) : HasDerivAt (fun x => x ^ 3) (3 * x ^ 2) x := by -- simpa using (hasDerivAt_pow 3 x)
-  hole

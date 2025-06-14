@@ -1,2 +1,0 @@
-theorem h₁₅ (h₀₅ : (fun x => (Real.cos (2 * x - 6) - 1) / (x - 3) ^ 2) = fun x => -2 * (Real.sin (x - 3) / (x - 3)) ^ 2) (h₀₇ h₁₀ h₁₃ : Tendsto (fun x => Real.sin (x - 3) / (x - 3)) (𝓝[≠] 3) (𝓝 1)) : Continuous fun y => y ^ 2 := by continuity
-  hole

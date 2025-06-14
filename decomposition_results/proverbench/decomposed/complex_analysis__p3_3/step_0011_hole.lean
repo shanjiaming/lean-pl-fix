@@ -1,2 +1,0 @@
-theorem h₅ (f : ℂ → ℂ) (hf : Entire f) (h : ℂ → 1 ≤ sorry) (h₁ : (Entire fun z => 1 / f z) ∧ (ℂ → sorry ≤ 1)) (h₂ : ∃ C, ℂ → sorry ≤ C) (c : ℂ) (hc : ∀ (z : ℂ), (fun z => 1 / f z) z = c) : ∀ (z : ℂ), 1 / f z = c := by simpa using hc
-  hole

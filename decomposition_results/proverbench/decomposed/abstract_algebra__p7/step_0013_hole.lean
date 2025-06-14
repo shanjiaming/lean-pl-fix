@@ -1,2 +1,0 @@
-theorem h₁₂ (P : Polynomial ℝ) (h : ∀ (x : ℝ), Polynomial.eval x P ^ 2 - 2 = 2 * Polynomial.eval (2 * x ^ 2 - 1) P) (h₂ : ¬P.degree ≤ 0) (h₄ : P.degree ≠ 0) (h₆ : ¬P.degree ≥ 1) (h₇ h₁₀ : P.degree ≤ 0) (h₁₁ : P.degree ≥ 0) : P.degree = 0 := by -- omega
-  hole

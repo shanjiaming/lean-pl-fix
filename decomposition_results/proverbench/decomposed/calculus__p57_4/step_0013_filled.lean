@@ -1,3 +1,0 @@
-theorem h₁₂₅ (x a b : ℝ) (h₂ : a < b) (h₃ : a = (21 - √497) / 4) (h₄ : b = (21 + √497) / 4) (h₅ : ∀ (x : ℝ), deriv (deriv f) x = 0 ↔ x = a ∨ x = b) (h₆ : a < b) (h₇ : a = (21 - √497) / 4) (h₈ : b = (21 + √497) / 4) (h₉ : ∀ (x : ℝ), deriv (deriv f) x = 0 ↔ x = a ∨ x = b) (h₁₀ : a < 0) (h₁₁₁ : deriv (deriv f) (a - 1) = (50 * (a - 1) ^ 2 - 525 * (a - 1) - 175) / (5 * (a - 1) ^ 2 + 35) ^ 2) (h₁₂₁ : (50 * a ^ 2 - 525 * a - 175) / (5 * a ^ 2 + 35) ^ 2 = 0) (h₁₂₂ : deriv (deriv f) a = (50 * a ^ 2 - 525 * a - 175) / (5 * a ^ 2 + 35) ^ 2) (h₁₂₃ : 5 * a ^ 2 + 35 > 0) (h₁₂₄ : 5 * a ^ 2 + 35 ≠ 0) : 50 * a ^ 2 - 525 * a - 175 = 0 := by
-  --  --  field_simp [h₁₂₄] at h₁₂₁ <;> nlinarith [sq_nonneg a, Real.sqrt_nonneg 497, Real.sq_sqrt (show 0 ≤ 497 by norm_num)]
-  hole

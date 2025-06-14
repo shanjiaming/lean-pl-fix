@@ -1,2 +1,0 @@
-theorem h4 (n : ℕ) (R : Type u_1) (inst✝ : CommRing R) (A A' : Matrix (Fin n) (Fin n) R) (i : Fin n) (h1 : D1 A A' i = (A.updateRow i (A i + A' i)).det) (h2 : (A.updateRow i (A i + A' i)).det = (A.updateRow i (A i)).det + (A.updateRow i (A' i)).det) (h3 : A.updateRow i (A i) = A) : (A.updateRow i (A i)).det = D2 A := by rw [h3] <;> rfl
-  hole

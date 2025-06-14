@@ -1,2 +1,0 @@
-theorem h₈ (p : ℕ) (hp : Prime p) (N : ℕ := ∏ k ∈ range (p - 1), (k ^ 2 + 1)) (h₁ : p = 2 → N % p = 0) (h₂ : p = 3 → N % p = 4) (h₃ : p = 5 → N % p = 0) (h h₅ : p = 7) (h₆ : N = 44200) (h₇ : N % p = 44200 % 7) : N % p = 2 := by -- omega
-  hole

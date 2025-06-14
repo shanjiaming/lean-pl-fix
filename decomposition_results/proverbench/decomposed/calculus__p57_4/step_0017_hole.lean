@@ -1,3 +1,0 @@
-theorem h₁₆ (x a b : ℝ) (h₂ : a < b) (h₃ : a = (21 - √497) / 4) (h₄ : b = (21 + √497) / 4) (h₅ : ∀ (x : ℝ), deriv (deriv f) x = 0 ↔ x = a ∨ x = b) (h₆ : a < b) (h₇ : a = (21 - √497) / 4) (h₈ : b = (21 + √497) / 4) (h₉ : ∀ (x : ℝ), deriv (deriv f) x = 0 ↔ x = a ∨ x = b) (h₁₀ : a < 0) (h₁₁₁ : deriv (deriv f) (a - 1) = (50 * (a - 1) ^ 2 - 525 * (a - 1) - 175) / (5 * (a - 1) ^ 2 + 35) ^ 2) (h₁₂ : 50 * a ^ 2 - 525 * a - 175 = 0) (h₁₃ : 50 * (a - 1) ^ 2 - 525 * (a - 1) - 175 = -100 * a + 575) (h₁₄ : -100 * a + 575 > 0) (h₁₅ : 5 * (a - 1) ^ 2 + 35 > 0) : 5 * (a - 1) ^ 2 + 35 ≠ 0 := by
-  --  nlinarith [sq_nonneg (a - 1), Real.sqrt_nonneg 497, Real.sq_sqrt (show 0 ≤ 497 by norm_num)]
-  hole

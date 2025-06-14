@@ -1,4 +1,0 @@
-theorem h₁ (p q r : ℝ) (inst✝² : Fact (p ≠ 0)) (inst✝¹ : Fact (q ≠ 0)) (inst✝ : Fact (r ≠ 0)) (h₀ : q ^ 3 * r ^ 2 * square_expression p q r / (2 * p ^ 3) = 4 * p ^ 4 * q ^ 7 * r ^ 8 / (2 * p ^ 3)) : 4 * p ^ 4 * q ^ 7 * r ^ 8 / (2 * p ^ 3) = 2 * p * q ^ 7 * r ^ 8 :=
-  by
-  have h₂ : (4 * p ^ 4 * q ^ 7 * r ^ 8) / (2 * p ^ 3) = 2 * p * q ^ 7 * r ^ 8 := by sorry
-  rw [h₂]

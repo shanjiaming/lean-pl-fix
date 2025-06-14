@@ -1,1 +1,0 @@
-theorem h₄ (d✝ d : ℤ) (t : ℚ) (h_main : ↑d * t ^ 2 - 1 = 0 ∨ ↑d * t ^ 2 - 1 ≠ 0) (h_case_zero :  ↑d * t ^ 2 - 1 = 0 →    ∃ x y, x = (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1) ∧ y = 2 * t / (↑d * t ^ 2 - 1) ∧ x ^ 2 - ↑d * y ^ 2 = 1) (h₁ h₂ h₃ : ↑d * t ^ 2 - 1 ≠ 0) : ↑d * t ^ 2 - 1 ≠ 0 := by exact_mod_cast h₁

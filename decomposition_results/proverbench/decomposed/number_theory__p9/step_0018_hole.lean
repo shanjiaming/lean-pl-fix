@@ -1,4 +1,0 @@
-theorem h₅₈ (n : ℕ) (m : ℤ) (h : ↑m = 2 + 2 * √(28 * ↑n ^ 2 + 1)) (k : ℤ) (hk : √(28 * ↑n ^ 2 + 1) = ↑k) (h₁ : ↑k = √(28 * ↑n ^ 2 + 1)) (h₂ : ↑k ^ 2 = 28 * ↑n ^ 2 + 1) (h₃ : k ^ 2 = 28 * ↑n ^ 2 + 1) (h₄ : m = 2 + 2 * k) (h₅₁ : ¬k ≥ 0) (h₅₂ : k < 0) (h₅₃ : ↑k < 0) (h₅₄ : √(28 * ↑n ^ 2 + 1) > 0) (h₅₅ h₅₆ : ↑k < √(28 * ↑n ^ 2 + 1)) (h₅₇ : ↑k ≠ √(28 * ↑n ^ 2 + 1)) : False := by
-  --  simp_all [hk, h₁, h₂, h₃, h₄] <;>
-    nlinarith [Real.sqrt_nonneg (28 * (n : ℝ) ^ 2 + 1), Real.sq_sqrt (by positivity : (0 : ℝ) ≤ 28 * (n : ℝ) ^ 2 + 1)]
-  hole

@@ -1,3 +1,0 @@
-theorem h₁₅ (d : ℤ) (x y : ℚ) (h : x ≠ 1) (h₁ : x ^ 2 - ↑d * y ^ 2 = 1) (h₂ : x ≠ 1) (h₃ : y = 0 → x ^ 2 - ↑d * y ^ 2 = 1 → ∃ t, x = (↑d * t ^ 2 + 1) / (↑d * t ^ 2 - 1) ∧ y = 2 * t / (↑d * t ^ 2 - 1)) (h₄ : ¬y = 0) (h₅ : x - 1 ≠ 0) (h₆ : x = (↑d * (y / (x - 1)) ^ 2 + 1) / (↑d * (y / (x - 1)) ^ 2 - 1)) (h₈ : x ^ 2 - ↑d * y ^ 2 = 1) (h₉ : x ≠ 1) (h₁₀ : y ≠ 0) (h₁₁ : x - 1 ≠ 0) (h₁₂ : ↑d * (y / (x - 1)) ^ 2 - 1 = 0) (h₁₃ : ↑d * (y / (x - 1)) ^ 2 = 1) (h₁₄ : x ^ 2 - ↑d * y ^ 2 = 1) : x = 1 := by
-  field_simp [h₅, sub_eq_zero, add_eq_zero_iff_eq_neg] at h₁₃ h₁₄ ⊢ <;> ring_nf at h₁₃ h₁₄ ⊢ <;>
-    nlinarith [sq_pos_of_ne_zero (sub_ne_zero.mpr h₂), sq_pos_of_ne_zero h₁₀]

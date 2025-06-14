@@ -1,9 +1,0 @@
-theorem h1  : false = true := by
-  have h2 : ∃ (k : ℝ), exactly_two_minima k := by sorry
-  obtain ⟨k, hk⟩ := h2
-  obtain ⟨a, b, ha, hb, hab, hfab, hmin⟩ := hk
-  have h3 := hmin a ha
-  have h4 : f k a > f k a ∨ a = b := by sorry
-  cases h4 with
-  | inl h4 => linarith
-  | inr h4 => contradiction

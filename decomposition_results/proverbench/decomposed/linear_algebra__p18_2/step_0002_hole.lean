@@ -1,2 +1,0 @@
-theorem h1 (R : Type u_1) (inst✝² : Field R) (n : Type u_2) (inst✝¹ : Fintype n) (inst✝ : DecidableEq n) (A : Matrix n n R) (ξ : n → R) (k✝ : R) (h : HomogeneousSystem A ξ) (k : R) : A.mulVec (k • ξ) = k • A.mulVec ξ := by apply mulVec_smul
-  hole

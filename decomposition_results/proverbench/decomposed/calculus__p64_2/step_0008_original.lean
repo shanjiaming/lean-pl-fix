@@ -1,1 +1,0 @@
-theorem h₆ (h₁ : 0 < Real.pi) (h₂ : 0 < 2 * Real.pi) (h₃ : 4 * Real.pi / 3 < 2 * Real.pi) (h₄ : 0 ≤ Real.pi / 3) : Real.pi / 3 < Real.pi := by linarith [Real.pi_gt_three]

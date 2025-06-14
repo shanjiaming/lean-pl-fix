@@ -1,1 +1,0 @@
-theorem det_mul (A B : Matrix n n ℝ) : det (A * B) = det A * det B :=

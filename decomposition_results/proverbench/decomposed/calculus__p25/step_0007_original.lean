@@ -1,1 +1,0 @@
-theorem h4 (x : ℝ) (h2 : HasDerivAt (fun x => 3 * x) 3 x) (h3 : HasDerivAt (fun x => x ^ 2) (2 * x) x) : HasDerivAt (fun x => 3 * x + x ^ 2) (3 + 2 * x) x := by convert h2.add h3 using 1 <;> ring

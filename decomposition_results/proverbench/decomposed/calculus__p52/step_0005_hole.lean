@@ -1,4 +1,0 @@
-theorem h₄ (x : ℝ) (h₁ h₂ : ∫ (t : ℝ) in Set.Icc 0 x, 1 / Real.cos t = Real.log |1 / Real.cos x + Real.sin x / Real.cos x| + sorry) (h₃ : ∫ (t : ℝ) in Set.Icc 0 0, 1 / Real.cos t = Real.log |1 / Real.cos 0 + Real.sin 0 / Real.cos 0| + sorry) : ∫ (t : ℝ) in Set.Icc 0 0, 1 / Real.cos t = 0 := by
-  --  simp [Real.volume_Icc, measure_Icc_le_of_le] <;> simp_all [Real.volume_Icc, measure_Icc_le_of_le] <;> norm_num <;>
-    aesop
-  hole

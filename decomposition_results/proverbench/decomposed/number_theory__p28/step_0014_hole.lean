@@ -1,2 +1,0 @@
-theorem h₅ (p : ℕ) (hp : Prime p) (N : ℕ := ∏ k ∈ range (p - 1), (k ^ 2 + 1)) (h₁ : p = 2 → N % p = 0) (h₂ : p = 3 → N % p = 4) (h h₄ : p = 5) : N = 100 := by -- simp [N, h₄, Finset.prod_range_succ] <;> norm_num
-  hole

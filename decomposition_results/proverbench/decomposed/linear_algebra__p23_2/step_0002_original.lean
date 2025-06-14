@@ -1,2 +1,0 @@
-theorem h (m : Type u_1) (n : Type u_2) (inst✝² : Fintype m) (inst✝¹ : Fintype n) (F : Type u_3) (inst✝ : Field F) (A : Matrix m n F) : Aᵀ.rank = A.rank := by
-  rw [Matrix.rank_transpose] <;> simp_all [Matrix.rank_transpose] <;> aesop

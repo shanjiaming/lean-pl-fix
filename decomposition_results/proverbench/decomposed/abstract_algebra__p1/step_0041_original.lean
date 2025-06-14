@@ -1,5 +1,0 @@
-theorem h₃₇ (P : Polynomial ℤ) (z : ℤ) (hz : Polynomial.eval z P = 0) (a b c : ℤ) (hab : a ≠ b) (hbc : b ≠ c) (hac : a ≠ c) (hP_a : Polynomial.eval a P = 1) (hP_b : Polynomial.eval b P = -1) (hP_c : Polynomial.eval c P = 1) (h₁ : a - z = 1 ∨ a - z = -1) (h₂ : b - z = 1 ∨ b - z = -1) (h₃₁ : c - z ∣ 1) (h₃₂ : Polynomial.eval c P - Polynomial.eval z P = 1) (h₃₄ : (c - z).natAbs ∣ Int.natAbs 1) (h₃₆ : (c - z).natAbs ∣ 1) : (c - z).natAbs = 1 := by
-  have h₃₈ : (c - z).natAbs ∣ 1 := h₃₆
-  have h₃₉ : (c - z).natAbs ≤ 1 := Nat.le_of_dvd (by decide) h₃₈
-  have h₄₀ : (c - z).natAbs ≥ 1 := by sorry
-  omega

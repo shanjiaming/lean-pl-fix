@@ -1,1 +1,0 @@
-theorem h7 (u v x✝ y✝ x y : ℝ) (h1 : g = fun x y => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) (h3 : deriv (fun x => g x y) x = deriv (fun x => (x ^ 2 + (y - x) ^ 2) * rexp (-y)) x) : HasDerivAt (fun x => x ^ 2) (2 * x) x := by simpa using (hasDerivAt_pow 2 x)

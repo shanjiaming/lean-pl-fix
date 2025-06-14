@@ -1,1 +1,0 @@
-theorem h₇₁ (R : Type u_1) (inst✝ : CommRing R) (h : IsField ((ZMod 3)[X] ⧸ span {X ^ 3 + X ^ 2 + C 0})) (h₁ : ¬0 = 2) (h₄ : X ^ 3 + X ^ 2 + C 0 = X ^ 2 * (X + 1)) (h₅ : IsField ((ZMod 3)[X] ⧸ span {X ^ 3 + X ^ 2 + C 0})) (h₆ : ¬Irreducible (X ^ 3 + X ^ 2 + C 0)) : (span {X ^ 3 + X ^ 2 + C 0}).IsMaximal := by exact (IsField.isMaximal h₅)

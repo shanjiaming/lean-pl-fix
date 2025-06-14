@@ -1,1 +1,0 @@
-lemma comparison_series_diverges : ¬ Summable comparison_series :=

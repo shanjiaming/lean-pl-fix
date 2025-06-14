@@ -1,1 +1,0 @@
-theorem h₃ (u v x y : ℝ) (h₂ : f 0 0 = 0 ↔ 0 = 0 ∧ 0 = 0) : 0 = 0 ∧ 0 = 0 := by constructor <;> rfl

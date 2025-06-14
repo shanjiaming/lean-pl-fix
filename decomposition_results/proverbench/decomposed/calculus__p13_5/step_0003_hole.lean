@@ -1,2 +1,0 @@
-theorem h₂  : HasDerivAt f (2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3)) (π / 3) := by -- apply derivative_of_f
-  hole

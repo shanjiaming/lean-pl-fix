@@ -1,1 +1,0 @@
-theorem h_main  : countPoints 2012 % 3 = 2 := by rfl

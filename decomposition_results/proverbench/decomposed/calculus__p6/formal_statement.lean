@@ -1,1 +1,0 @@
-theorem cosX3_derivative : deriv (fun x => Real.cos (x^3)) x = -Real.sin (x^3) * (3 * x^2) :=

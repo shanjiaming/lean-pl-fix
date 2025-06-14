@@ -1,2 +1,0 @@
-theorem h3 (R : Type ?u.1622) (inst✝¹ : Ring R) (inst✝ : CharZero R) (e g f : R) (he : IsIdempotentElem e) (hg : IsIdempotentElem g) (hf : IsIdempotentElem f) (hsum h1 : e + g + f = 0) (h2 : f = -(e + g)) : f = -e - g := by rw [h2] <;> ring_nf <;> simp_all [sub_eq_add_neg] <;> linarith
-  hole

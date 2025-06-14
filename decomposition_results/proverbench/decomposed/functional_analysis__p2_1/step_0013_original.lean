@@ -1,1 +1,0 @@
-theorem h₅₃ (b✝ b : ℕ → ℝ) (h_pos : ∀ (n : ℕ), b n > 0) (h_lim : Tendsto b atTop (𝓝 (1 / 2))) (N : ℕ) (hN h₃ : ∀ n ≥ N, b n < 3 / 4) (h₄ : Summable fun n => (3 / 4) ^ n) (n : ℕ) (hn : n ≥ N) (h₅₁ : b n < 3 / 4) (h₅₂ : 0 < b n) : b n ^ n ≤ (3 / 4) ^ n := by exact pow_le_pow_of_le_left (by positivity) (by linarith) n

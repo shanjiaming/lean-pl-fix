@@ -1,7 +1,0 @@
-theorem h₃ (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬∃ n, isSolution q n) (h₂ : ∀ k < m, ¬isSolution p k) (h₀' : Nat.Prime p) (h₀'' : 0 < m) (h₀''' : p ^ 2 ∣ m ^ 4 + 1) : p ≤ 17 := by
-  by_contra h
-  have h₄ : p ≥ 18 := by sorry
-  have h₅ : 17 < p := by sorry
-  have h₆ : ¬(∃ (n : ℕ), isSolution 17 n) := h₁ 17 (by linarith)
-  have h₇ : ∃ (n : ℕ), isSolution 17 n := by sorry
-  exact h₆ h₇

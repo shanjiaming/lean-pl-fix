@@ -1,2 +1,0 @@
-theorem h₂ (n : Type u_1) (inst✝² : Fintype n) (inst✝¹ : DecidableEq n) (R : Type u_2) (inst✝ : CommRing R) (A : Matrix n n R) (i j : n) (h : i ≠ j) (h₁ : False) : (swapRows A i j).det = -A.det := by sorry
-  hole

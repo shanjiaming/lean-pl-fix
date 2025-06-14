@@ -1,3 +1,0 @@
-theorem h3 (u✝ v✝ x y u v : ℝ) (h1 : deriv (fun u => f u v) u = (2 * u - (u ^ 2 + v ^ 2)) * rexp (-(u + v))) (h2 : deriv (fun v => f u v) v = (2 * v - (u ^ 2 + v ^ 2)) * rexp (-(u + v))) : deriv (fun u => f u v) u - deriv (fun v => f u v) v = 2 * (u - v) * rexp (-(u + v)) := by
-  rw [h1, h2] <;> ring_nf <;> field_simp [Real.exp_neg] <;> ring_nf <;> linarith
-  hole

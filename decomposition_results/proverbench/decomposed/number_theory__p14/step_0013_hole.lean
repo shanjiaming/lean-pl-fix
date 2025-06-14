@@ -1,2 +1,0 @@
-theorem h₆ (p : ℤ) (hp : Prime p) (hp_mod_6 : p % 6 = 1) (h_main : p > 0) (h_nat_prime : Nat.Prime p.natAbs) (h_p_eq_natAbs : p = ↑p.natAbs) (h₁ : p > 0) (h₂ : Nat.Prime p.natAbs) (h₃ : p = ↑p.natAbs) (h₅ : p > 0) : p % 6 = 1 := by -- simpa using hp_mod_6
-  hole

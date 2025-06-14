@@ -1,2 +1,0 @@
-theorem h₃ (x : ℝ) (hx : x ∈ Dom) (h₁ : -1 - x ≥ 0) (h₂ : x > 0) : -1 - x < 0 := by -- linarith
-  hole

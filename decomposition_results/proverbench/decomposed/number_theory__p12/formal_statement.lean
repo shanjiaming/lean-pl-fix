@@ -1,1 +1,0 @@
-theorem no_positive_integers_for_expression : ¬ ∃ (k : ℤ), (a^2 + b^2 + c^2 : ℤ) = k * (3 * (a * b + b * c + c * a : ℤ)) :=

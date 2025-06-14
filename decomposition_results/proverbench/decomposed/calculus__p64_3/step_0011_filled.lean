@@ -1,2 +1,0 @@
-theorem h₉ (h₂ : equation 0 = 1) (h₆ : equation 0 = 2 * Real.cos (2 * 0 + Real.pi / 3) - √2) (h₈ : Real.cos (2 * 0 + Real.pi / 3) = Real.cos (Real.pi / 3)) : Real.cos (Real.pi / 3) = 1 / 2 := by -- norm_num [Real.cos_pi_div_three]
-  norm_num

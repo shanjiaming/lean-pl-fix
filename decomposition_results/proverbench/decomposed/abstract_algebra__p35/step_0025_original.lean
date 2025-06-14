@@ -1,1 +1,0 @@
-theorem h₅ (R : Type u_1) (inst✝¹ : Field R) (inst✝ : CharZero R) (P : R[X]) (n : ℕ) (hP : P.degree = ↑n) (hValues : ∀ i ∈ Finset.range (n + 2), eval (↑i + 1) P = 1 / (↑i + 1)) (h₂ : P.natDegree = n) (h₃ : ∀ i < n + 2, eval (↑i + 1) P = 1 / (↑i + 1)) (h₄ : ¬n = 0) : n > 0 := by omega

@@ -1,1 +1,0 @@
-lemma simplify_fraction : (4 * p^4 * q^7 * r^8) / (2 * p^3) = 2 * p * q^7 * r^8 :=

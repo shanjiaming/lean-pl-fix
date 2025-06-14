@@ -1,1 +1,0 @@
-theorem h₅ (h₁ : 2.5 - 2 ≠ 0) (h₃ : (heightFunction 2.5 - heightFunction 2) / (2.5 - 2) = -32) (h₄ : heightFunction 2.5 - heightFunction 2 = -32 * (2.5 - 2)) : heightFunction 2.5 - heightFunction 2 = (2.5 - 2) * -32 := by rw [h₄] <;> ring <;> norm_num

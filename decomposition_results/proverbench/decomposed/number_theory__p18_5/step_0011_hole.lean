@@ -1,2 +1,0 @@
-theorem h₇ (b : ℤ) (hb : b ∈ B) (hneg : b < 0) (h_main : ∃ k, b = -44 + 5 * k) (k : ℤ) (hk h₁ : b = -44 + 5 * k) (h₂ : b < 0) (h₃ : -44 + 5 * k < 0) (h₄ : 5 * k < 44) (h : ¬k ≤ 8) (h₆ : k ≥ 9) : 5 * k ≥ 45 := by -- nlinarith
-  hole

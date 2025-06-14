@@ -1,2 +1,0 @@
-theorem h₁ (f : ℝ → ℝ) (hf : Continuous f) (h_diff : ∀ (x : ℝ), DifferentiableAt ℝ f x) (h_deriv : ∀ (x : ℝ), deriv f x = 1 / 5 * Real.sin (5 * x)) : deriv f 0 = 1 / 5 * Real.sin (5 * 0) := by -- apply h_deriv
-  hole

@@ -1,1 +1,0 @@
-theorem h_main (n : ℕ) (R : Type u_1) (inst✝ : CommRing R) (A A' : Matrix (Fin n) (Fin n) R) (i : Fin n) : D1 A A' i = D2 A + D3 A A' i := by apply row_decomposition <;> simp [D1, D2, D3] <;> aesop

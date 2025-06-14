@@ -1,1 +1,0 @@
-theorem h₁  : heightFunction 2.5 = 40 * 2.5 - 16 * 2.5 ^ 2 := by rfl

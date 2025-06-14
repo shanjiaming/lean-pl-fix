@@ -1,1 +1,0 @@
-lemma modular_arithmetic : (-3 : ZMod 8) = 5 :=

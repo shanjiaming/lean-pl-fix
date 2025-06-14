@@ -1,2 +1,0 @@
-theorem h₄ (x : ℝ) (h : (1 - log x) / x ^ 2 < 0) (h₁ : ¬x > rexp 1) (h₂ : x ≤ rexp 1) (hx : x ≤ 0) (h₃ : log x = 0) : (1 - log x) / x ^ 2 = 1 / x ^ 2 := by -- -- rw [h₃] <;> ring
-  hole

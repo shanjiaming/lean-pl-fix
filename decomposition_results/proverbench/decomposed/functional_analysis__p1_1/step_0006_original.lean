@@ -1,1 +1,0 @@
-theorem h5 (u✝ v✝ x y u v : ℝ) (h1 : deriv (fun u => f u v) u = deriv (fun u => (u ^ 2 + v ^ 2) * rexp (-(u + v))) u) (h3 : HasDerivAt (fun u => u ^ 2 + v ^ 2) (2 * u) u) : HasDerivAt (fun u => -(u + v)) (-1) u := by simpa using (hasDerivAt_id u).add_const v |>.neg

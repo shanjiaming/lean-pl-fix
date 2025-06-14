@@ -1,1 +1,0 @@
-theorem h₆ (x y z : ℝ) (h : x ^ 2 + y ^ 2 + z ^ 2 = 1) (h₀ : f (x, y, z) ≤ 1) (h₂ : f (x, y, z) = 1) (h₃ : x * y + y * z + z * x = 1) (h₄ : (x - y) ^ 2 + (y - z) ^ 2 + (z - x) ^ 2 = 0) (h₅ : x = y) : y = z := by nlinarith [sq_nonneg (x - y), sq_nonneg (y - z), sq_nonneg (z - x)]

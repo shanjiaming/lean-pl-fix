@@ -1,2 +1,0 @@
-theorem h_cos  : cos (π / 3) = 1 / 2 := by -- norm_num [Real.cos_pi_div_three] <;> ring_nf <;> norm_num
-  norm_num

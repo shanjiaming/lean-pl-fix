@@ -1,1 +1,0 @@
-theorem f_domain_empty : Dom = ∅ :=

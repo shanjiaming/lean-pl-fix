@@ -1,2 +1,0 @@
-theorem h  : -3 = 5 := by -- -- norm_num [ZMod.nat_cast_self] <;> rfl
-  hole

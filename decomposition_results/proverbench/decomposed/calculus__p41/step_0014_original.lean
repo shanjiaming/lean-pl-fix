@@ -1,1 +1,0 @@
-theorem h₅₃ (x : ℝ) (h₁ : Tendsto (fun y => (Real.exp y - 1) / y) (𝓝 0) (𝓝 1)) (h₂ : Tendsto (fun x => 8 * x) (𝓝[>] 0) (𝓝 0)) (h₃ h₅₁ : Tendsto (fun x => (Real.exp (8 * x) - 1) / (8 * x)) (𝓝[>] 0) (𝓝 1)) : Continuous fun x => 8 * x := by continuity

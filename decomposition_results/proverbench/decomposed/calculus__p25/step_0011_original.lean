@@ -1,2 +1,0 @@
-theorem h6 (x : ℝ) (h1 h4 : HasDerivAt (fun x => 3 * x + x ^ 2) (3 + 2 * x) x) : HasDerivAt (fun x => cos (3 * x + x ^ 2)) (-sin (3 * x + x ^ 2) * (3 + 2 * x)) x := by
-  convert HasDerivAt.cos h4 using 1 <;> ring_nf

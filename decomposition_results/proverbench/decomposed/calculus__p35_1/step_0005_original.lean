@@ -1,1 +1,0 @@
-theorem h₃ (x : ℝ) (h : f_deriv x = 0) (h₁ : 3 * x ^ 2 - 18 * x + 24 = 0) : x ^ 2 - 6 * x + 8 = 0 := by nlinarith

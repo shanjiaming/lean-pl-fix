@@ -1,5 +1,0 @@
-theorem h₅₅ (h1 : partial_t 2 π = deriv (fun τ => g 2 τ) π) (h₃ : (fun τ => g 2 τ) = fun τ => 2 ^ 2 * cos τ ^ 2 + 2 ^ 3 * τ ^ 3 + 2 ^ 8) (h₅₁ : HasDerivAt (fun τ => 2 ^ 2 * cos τ ^ 2) (2 ^ 2 * (2 * cos π * -sin π)) π) (h₅₂ : HasDerivAt (fun τ => 2 ^ 3 * τ ^ 3) (2 ^ 3 * (3 * π ^ 2)) π) : HasDerivAt (fun τ => 2 ^ 8) 0 π :=
-  by
-  have h₅₆ : HasDerivAt (fun τ => (2 : ℝ) ^ 8 : ℝ → ℝ) 0 π := by sorry
-  --  exact h₅₆
-  hole

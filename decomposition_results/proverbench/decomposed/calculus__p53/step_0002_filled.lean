@@ -1,2 +1,0 @@
-theorem h₁ (a b : ℝ) (h_a : a = 100) (h_b : b = 200) : a = 100 := by -- exact h_a
-  linarith

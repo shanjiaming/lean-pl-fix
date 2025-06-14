@@ -1,1 +1,0 @@
-theorem h₁₁ (f : ℂ → ℂ) (hf : Entire f) (h : ℂ → 1 ≤ sorry) (h₁ : (Entire fun z => 1 / f z) ∧ (ℂ → sorry ≤ 1)) (h₂ : ∃ C, ℂ → sorry ≤ C) (c : ℂ) (hc : ∀ (z : ℂ), (fun z => 1 / f z) z = c) (h₅ : ∀ (z : ℂ), 1 / f z = c) (h₆ : c ≠ 0) (z : ℂ) (h₇ : 1 / f z = c) (h₉ h₁₀ : f z = 0) : sorry = 0 := by simp [h₁₀]

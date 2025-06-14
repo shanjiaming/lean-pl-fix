@@ -1,0 +1,132 @@
+{
+  "problem_id": "putnam_1964_b2",
+  "dataset": "putnam",
+  "timestamp": "2025-06-14T08:06:35.021766",
+  "header_file": "header.lean",
+  "problem_file": "problem.lean",
+  "original_verification_pass": false,
+  "filled_verification_pass": false,
+  "hole_verification_pass": false,
+  "holes": [
+    {
+      "hole_id": "hole_1",
+      "original_proof": "classical\nuse (\u2205 : Set S)\nconstructor\n\u00b7 simp [hP]\n\u00b7 intro U hU\n  simp_all [Finset.ext_iff] <;> aesop",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "classical\nhave h\u2082 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T :=\n  by\n  have h\u2083 : \u2200 (T : Set S), T \u2208 P \u2192 T.Nonempty := by\n    intro T hT\n    by_contra h\n    have h\u2084 : T = \u2205 := by simp_all [Set.nonempty_iff_ne_empty]\n    rw [h\u2084] at hT\n    have h\u2085 : (\u2205 : Set S) \u2208 P := hT\n    have h\u2086 : \u2200 U \u2208 P, (\u2205 : Set S) \u2229 U \u2260 \u2205 := by\n      intro U hU\n      have h\u2087 := hPP (\u2205 : Set S) h\u2085 U hU\n      simpa using h\u2087\n    have h\u2087 : (\u2205 : Set S) \u2229 (\u2205 : Set S) = \u2205 := by simp\n    have h\u2088 : (\u2205 : Set S) \u2229 (\u2205 : Set S) \u2260 \u2205 := h\u2086 (\u2205 : Set S) h\u2085\n    simp_all\n  have h\u2084 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T := by\n    classical\n    have h\u2085 : P.Nonempty := Finset.nonempty_iff_ne_empty.mpr hP\n    have h\u2086 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T := by\n      classical\n      have h\u2087 : \u2200 (T : Set S), T \u2208 P \u2192 T.Nonempty := h\u2083\n      have h\u2088 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T := by\n        classical\n        obtain \u27e8T, hT\u27e9 := h\u2085\n        have h\u2089 : T.Nonempty := h\u2083 T hT\n        obtain \u27e8x, hx\u27e9 := h\u2089\n        refine' \u27e8x, _\u27e9\n        intro U hU\n        have h\u2081\u2080 : x \u2208 T := hx\n        have h\u2081\u2081 : U \u2208 P := hU\n        have h\u2081\u2082 : T \u2229 U \u2260 \u2205 := hPP T hT U h\u2081\u2081\n        have h\u2081\u2083 : x \u2208 U := by\n          by_contra h\n          have h\u2081\u2084 : x \u2209 U := h\n          have h\u2081\u2085 : T \u2229 U = \u2205 := by\n            apply Set.eq_empty_of_forall_not_mem\n            intro y hy\n            have h\u2081\u2086 : y \u2208 T \u2229 U := hy\n            have h\u2081\u2087 : y \u2208 T := Set.mem_of_mem_inter_left h\u2081\u2086\n            have h\u2081\u2088 : y \u2208 U := Set.mem_of_mem_inter_right h\u2081\u2086\n            have h\u2081\u2089 : x \u2208 T := h\u2081\u2080\n            have h\u2082\u2080 : x \u2209 U := h\u2081\u2084\n            have h\u2082\u2081 : y \u2208 U := h\u2081\u2088\n            have h\u2082\u2082 : y \u2208 T := h\u2081\u2087\n            have h\u2082\u2083 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n            simp_all [Set.ext_iff, Set.mem_inter_iff] <;> aesop\n          have h\u2082\u2084 : T \u2229 U = \u2205 := h\u2081\u2085\n          have h\u2082\u2085 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n          contradiction\n        exact h\u2081\u2083\n      exact h\u2088\n    exact h\u2086\n  exact h\u2084\nobtain \u27e8s, hs\u27e9 := h\u2082\nexact \u27e8s, hs\u27e9",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_4",
+      "original_proof": "simp_all [Set.nonempty_iff_ne_empty]",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_5",
+      "original_proof": "simpa using h\u2087",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_6",
+      "original_proof": "simp",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_3",
+      "original_proof": "simp_all",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_7",
+      "original_proof": "classical\nhave h\u2085 : P.Nonempty := Finset.nonempty_iff_ne_empty.mpr hP\nhave h\u2086 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T := by\n  classical\n  have h\u2087 : \u2200 (T : Set S), T \u2208 P \u2192 T.Nonempty := h\u2083\n  have h\u2088 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T := by\n    classical\n    obtain \u27e8T, hT\u27e9 := h\u2085\n    have h\u2089 : T.Nonempty := h\u2083 T hT\n    obtain \u27e8x, hx\u27e9 := h\u2089\n    refine' \u27e8x, _\u27e9\n    intro U hU\n    have h\u2081\u2080 : x \u2208 T := hx\n    have h\u2081\u2081 : U \u2208 P := hU\n    have h\u2081\u2082 : T \u2229 U \u2260 \u2205 := hPP T hT U h\u2081\u2081\n    have h\u2081\u2083 : x \u2208 U := by\n      by_contra h\n      have h\u2081\u2084 : x \u2209 U := h\n      have h\u2081\u2085 : T \u2229 U = \u2205 := by\n        apply Set.eq_empty_of_forall_not_mem\n        intro y hy\n        have h\u2081\u2086 : y \u2208 T \u2229 U := hy\n        have h\u2081\u2087 : y \u2208 T := Set.mem_of_mem_inter_left h\u2081\u2086\n        have h\u2081\u2088 : y \u2208 U := Set.mem_of_mem_inter_right h\u2081\u2086\n        have h\u2081\u2089 : x \u2208 T := h\u2081\u2080\n        have h\u2082\u2080 : x \u2209 U := h\u2081\u2084\n        have h\u2082\u2081 : y \u2208 U := h\u2081\u2088\n        have h\u2082\u2082 : y \u2208 T := h\u2081\u2087\n        have h\u2082\u2083 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n        simp_all [Set.ext_iff, Set.mem_inter_iff] <;> aesop\n      have h\u2082\u2084 : T \u2229 U = \u2205 := h\u2081\u2085\n      have h\u2082\u2085 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n      contradiction\n    exact h\u2081\u2083\n  exact h\u2088\nexact h\u2086",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_8",
+      "original_proof": "classical\nhave h\u2087 : \u2200 (T : Set S), T \u2208 P \u2192 T.Nonempty := h\u2083\nhave h\u2088 : \u2203 (s : S), \u2200 (T : Set S), T \u2208 P \u2192 s \u2208 T := by\n  classical\n  obtain \u27e8T, hT\u27e9 := h\u2085\n  have h\u2089 : T.Nonempty := h\u2083 T hT\n  obtain \u27e8x, hx\u27e9 := h\u2089\n  refine' \u27e8x, _\u27e9\n  intro U hU\n  have h\u2081\u2080 : x \u2208 T := hx\n  have h\u2081\u2081 : U \u2208 P := hU\n  have h\u2081\u2082 : T \u2229 U \u2260 \u2205 := hPP T hT U h\u2081\u2081\n  have h\u2081\u2083 : x \u2208 U := by\n    by_contra h\n    have h\u2081\u2084 : x \u2209 U := h\n    have h\u2081\u2085 : T \u2229 U = \u2205 := by\n      apply Set.eq_empty_of_forall_not_mem\n      intro y hy\n      have h\u2081\u2086 : y \u2208 T \u2229 U := hy\n      have h\u2081\u2087 : y \u2208 T := Set.mem_of_mem_inter_left h\u2081\u2086\n      have h\u2081\u2088 : y \u2208 U := Set.mem_of_mem_inter_right h\u2081\u2086\n      have h\u2081\u2089 : x \u2208 T := h\u2081\u2080\n      have h\u2082\u2080 : x \u2209 U := h\u2081\u2084\n      have h\u2082\u2081 : y \u2208 U := h\u2081\u2088\n      have h\u2082\u2082 : y \u2208 T := h\u2081\u2087\n      have h\u2082\u2083 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n      simp_all [Set.ext_iff, Set.mem_inter_iff] <;> aesop\n    have h\u2082\u2084 : T \u2229 U = \u2205 := h\u2081\u2085\n    have h\u2082\u2085 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n    contradiction\n  exact h\u2081\u2083\nexact h\u2088",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_9",
+      "original_proof": "classical\nobtain \u27e8T, hT\u27e9 := h\u2085\nhave h\u2089 : T.Nonempty := h\u2083 T hT\nobtain \u27e8x, hx\u27e9 := h\u2089\nrefine' \u27e8x, _\u27e9\nintro U hU\nhave h\u2081\u2080 : x \u2208 T := hx\nhave h\u2081\u2081 : U \u2208 P := hU\nhave h\u2081\u2082 : T \u2229 U \u2260 \u2205 := hPP T hT U h\u2081\u2081\nhave h\u2081\u2083 : x \u2208 U := by\n  by_contra h\n  have h\u2081\u2084 : x \u2209 U := h\n  have h\u2081\u2085 : T \u2229 U = \u2205 := by\n    apply Set.eq_empty_of_forall_not_mem\n    intro y hy\n    have h\u2081\u2086 : y \u2208 T \u2229 U := hy\n    have h\u2081\u2087 : y \u2208 T := Set.mem_of_mem_inter_left h\u2081\u2086\n    have h\u2081\u2088 : y \u2208 U := Set.mem_of_mem_inter_right h\u2081\u2086\n    have h\u2081\u2089 : x \u2208 T := h\u2081\u2080\n    have h\u2082\u2080 : x \u2209 U := h\u2081\u2084\n    have h\u2082\u2081 : y \u2208 U := h\u2081\u2088\n    have h\u2082\u2082 : y \u2208 T := h\u2081\u2087\n    have h\u2082\u2083 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n    simp_all [Set.ext_iff, Set.mem_inter_iff] <;> aesop\n  have h\u2082\u2084 : T \u2229 U = \u2205 := h\u2081\u2085\n  have h\u2082\u2085 : T \u2229 U \u2260 \u2205 := h\u2081\u2082\n  contradiction\nexact h\u2081\u2083",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_10",
+      "original_proof": "simp_all [Set.ext_iff, Set.mem_inter_iff]\naesop",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    }
+  ]
+}

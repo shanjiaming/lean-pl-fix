@@ -1,2 +1,0 @@
-theorem h₂ (x y k m n z : ℕ+) (hz : ↑x ^ ↑m + ↑y ^ ↑n = ↑z) (h₁ : 4 * ↑k * ↑x * ↑y ≥ 4) : 4 * ↑k * ↑x * ↑y - 1 ≥ 3 := by -- omega
-  hole

@@ -1,5 +1,0 @@
-theorem h_sq_nonneg (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (h_main : a ^ 3 + b ^ 3 - (a ^ 2 * b + a * b ^ 2) = (a - b) ^ 2 * (a + b)) (h_sum_pos : 0 < a + b) : 0 ≤ (a - b) ^ 2 :=
-  by
-  have h₁ : 0 ≤ (a - b) ^ 2 := by sorry
-  --  exact h₁
-  linarith

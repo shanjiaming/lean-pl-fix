@@ -1,1 +1,0 @@
-theorem h6 (x C : ℝ) (h2 : 1 ≠ 0) (h3 h4 : 1 / 0 = 0) : 0 = 1 := by norm_num at h2 h3 h4 ⊢ <;> simp_all [div_eq_mul_inv] <;> norm_num <;> linarith

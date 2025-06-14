@@ -1,1 +1,0 @@
-theorem h₂ (x✝ x : ℝ) (hx : |x - 2| < 1) (h₁ : f x = x ^ 3 - 9 * x ^ 2 + 24 * x) : f 2 = 20 := by norm_num [f]

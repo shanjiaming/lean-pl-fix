@@ -1,2 +1,0 @@
-theorem h₁ (a b : ℝ) (hab : a < b) (f : ℝ → ℝ) (h_cont : ContinuousOn f (Set.Icc a b)) (h_diff : DifferentiableOn ℝ f (Set.Ioo a b)) (h_eq : f a = f b) : ∃ c ∈ Set.Ioo a b, deriv f c = 0 := by -- apply exists_deriv_eq_zero _ hab h_cont h_diff <;> simp_all [h_eq]
-  hole

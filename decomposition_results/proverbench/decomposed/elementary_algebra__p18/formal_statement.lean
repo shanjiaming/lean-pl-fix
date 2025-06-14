@@ -1,1 +1,0 @@
-theorem partial_fraction_decomposition_value : fraction x = decomposed α β γ x → α - β + γ = 1 :=

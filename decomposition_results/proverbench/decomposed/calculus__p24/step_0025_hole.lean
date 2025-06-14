@@ -1,2 +1,0 @@
-theorem h₁₀ (h₁ : Tendsto (fun x => x + 3 * x ^ 3) atTop atTop) (h₃ : ∀ (x : ℝ), sin (2 * x + x ^ 3) / (x + 3 * x ^ 3) = sin (2 * x + x ^ 3) * (1 / (x + 3 * x ^ 3))) (h₄ : Tendsto (fun x => 1 / (x + 3 * x ^ 3)) atTop (𝓝 0)) (h₆ : ∀ (x : ℝ), |sin (2 * x + x ^ 3)| ≤ 1) (h₈ : Tendsto (fun x => 1 / (x + 3 * x ^ 3)) atTop (𝓝 0)) (h₉ : Tendsto (fun x => sin (2 * x + x ^ 3) * (1 / (x + 3 * x ^ 3))) atTop (𝓝 (sin (2 * 0 + 0 ^ 3) * 0))) : sin (2 * 0 + 0 ^ 3) * 0 = 0 := by -- norm_num
-  hole

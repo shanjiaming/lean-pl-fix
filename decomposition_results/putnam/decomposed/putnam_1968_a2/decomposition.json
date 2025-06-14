@@ -1,0 +1,132 @@
+{
+  "problem_id": "putnam_1968_a2",
+  "dataset": "putnam",
+  "timestamp": "2025-06-14T08:30:55.728924",
+  "header_file": "header.lean",
+  "problem_file": "problem.lean",
+  "original_verification_pass": false,
+  "filled_verification_pass": false,
+  "hole_verification_pass": false,
+  "holes": [
+    {
+      "hole_id": "hole_1",
+      "original_proof": "norm_cast",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "positivity",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_3",
+      "original_proof": "positivity",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_4",
+      "original_proof": "intro h\napply h\u2081\nlinarith",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_5",
+      "original_proof": "obtain \u27e8q, hq\u27e9 := exists_rat_near (\u03b1 := r\u2081) (by positivity : 0 < (\u03b4 : \u211d))",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_6",
+      "original_proof": "obtain \u27e8q, hq\u27e9 := exists_rat_near (\u03b1 := s\u2081) (by positivity : 0 < (\u03b4 : \u211d))",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_7",
+      "original_proof": "calc\n  |(r : \u211d) * a + (s : \u211d) * b - e - \u03b5 / 2| = |(r : \u211d) * a + (s : \u211d) * b - e - \u03b5 / 2| := rfl\n  _ = |((r : \u211d) - r\u2081) * a + ((s : \u211d) - s\u2081) * b| :=\n    by\n    have h\u2085\u2082 : (r\u2081 : \u211d) * a + s\u2081 * b - e - \u03b5 / 2 = 0 := by\n      calc\n        (r\u2081 : \u211d) * a + s\u2081 * b - e - \u03b5 / 2 =\n            ((e + \u03b5 / 2 : \u211d) * d - (f + \u03b5 / 2 : \u211d) * b) / (a * d - b * c : \u211d) * a +\n                  (((a : \u211d) * (f + \u03b5 / 2) - c * (e + \u03b5 / 2)) / (a * d - b * c : \u211d)) * b -\n                e -\n              \u03b5 / 2 :=\n          by rw [hr\u2081_def, hs\u2081_def]\n        _ =\n            ((e + \u03b5 / 2 : \u211d) * d - (f + \u03b5 / 2 : \u211d) * b) * a / (a * d - b * c : \u211d) +\n                  ((a : \u211d) * (f + \u03b5 / 2) - c * (e + \u03b5 / 2)) * b / (a * d - b * c : \u211d) -\n                e -\n              \u03b5 / 2 :=\n          by ring_nf\n        _ =\n            ((e + \u03b5 / 2 : \u211d) * d * a - (f + \u03b5 / 2 : \u211d) * b * a + ((a : \u211d) * (f + \u03b5 / 2) - c * (e + \u03b5 / 2)) * b) /\n                  (a * d - b * c : \u211d) -\n                e -\n              \u03b5 / 2 :=\n          by field_simp [h\u2082] <;> ring_nf\n        _ =\n            ((e + \u03b5 / 2 : \u211d) * d * a - (f + \u03b5 / 2 : \u211d) * b * a + (a : \u211d) * (f + \u03b5 / 2) * b - c * (e + \u03b5 / 2) * b) /\n                  (a * d - b * c : \u211d) -\n                e -\n              \u03b5 / 2 :=\n          by ring_nf\n        _ = ((e + \u03b5 / 2 : \u211d) * d * a - c * (e + \u03b5 / 2) * b) / (a * d - b * c : \u211d) - e - \u03b5 / 2 := by ring_nf\n        _ = ((e + \u03b5 / 2 : \u211d) * (d * a - c * b)) / (a * d - b * c : \u211d) - e - \u03b5 / 2 := by ring_nf\n        _ = ((e + \u03b5 / 2 : \u211d) * (a * d - b * c)) / (a * d - b * c : \u211d) - e - \u03b5 / 2 := by\n          ring_nf <;> field_simp [h\u2082] <;> ring_nf\n        _ = (e + \u03b5 / 2 : \u211d) - e - \u03b5 / 2 := by\n          by_cases h\u2085\u2083 : (a * d - b * c : \u211d) = 0\n          \u00b7 exfalso\n            apply h\u2082\n            linarith\n          \u00b7 field_simp [h\u2085\u2083] <;> ring_nf\n        _ = 0 := by ring\n    have h\u2085\u2084 : (r : \u211d) * a + (s : \u211d) * b - e - \u03b5 / 2 = ((r : \u211d) - r\u2081) * a + ((s : \u211d) - s\u2081) * b := by linarith\n    rw [h\u2085\u2084]\n  _ \u2264 |((r : \u211d) - r\u2081) * a| + |((s : \u211d) - s\u2081) * b| := (abs_add _ _)\n  _ = |(r : \u211d) - r\u2081| * |(a : \u211d)| + |(s : \u211d) - s\u2081| * |(b : \u211d)| := by simp [abs_mul, abs_mul]\n  _ < \u03b4 * |(a : \u211d)| + \u03b4 * |(b : \u211d)| := by\n    gcongr <;> simp_all [abs_of_nonneg, abs_of_nonpos, le_of_lt] <;> norm_num <;> linarith\n  _ \u2264 \u03b4 * (|(a : \u211d)| + |(b : \u211d)|) := by ring_nf <;> nlinarith\n  _ < \u03b5 / 4 :=\n    by\n    have h\u2085\u2085 : (\u03b4 : \u211d) * (|(a : \u211d)| + |(b : \u211d)|) \u2264 (\u03b4 : \u211d) * M := by\n      gcongr <;> (try norm_num) <;>\n              (try linarith [abs_nonneg (a : \u211d), abs_nonneg (b : \u211d), abs_nonneg (c : \u211d), abs_nonneg (d : \u211d)]) <;>\n            (try simp_all [hM_def, h\u03b4_def, M]) <;>\n          (try norm_num) <;>\n        (try linarith)\n    calc\n      (\u03b4 : \u211d) * (|(a : \u211d)| + |(b : \u211d)|) \u2264 (\u03b4 : \u211d) * M := h\u2085\u2085\n      _ = (\u03b5 / (4 * M) : \u211d) * M := by rw [h\u03b4_def]\n      _ = (\u03b5 / 4 : \u211d) := by field_simp [hM_pos.ne'] <;> ring_nf <;> field_simp [hM_pos.ne'] <;> ring_nf\n      _ < \u03b5 / 4 := by linarith [h\u03b5]\n  _ = \u03b5 / 4 := by norm_num\n  _ = \u03b5 / 4 := by norm_num",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_8",
+      "original_proof": "calc\n  (r\u2081 : \u211d) * a + s\u2081 * b - e - \u03b5 / 2 =\n      ((e + \u03b5 / 2 : \u211d) * d - (f + \u03b5 / 2 : \u211d) * b) / (a * d - b * c : \u211d) * a +\n            (((a : \u211d) * (f + \u03b5 / 2) - c * (e + \u03b5 / 2)) / (a * d - b * c : \u211d)) * b -\n          e -\n        \u03b5 / 2 :=\n    by rw [hr\u2081_def, hs\u2081_def]\n  _ =\n      ((e + \u03b5 / 2 : \u211d) * d - (f + \u03b5 / 2 : \u211d) * b) * a / (a * d - b * c : \u211d) +\n            ((a : \u211d) * (f + \u03b5 / 2) - c * (e + \u03b5 / 2)) * b / (a * d - b * c : \u211d) -\n          e -\n        \u03b5 / 2 :=\n    by ring_nf\n  _ =\n      ((e + \u03b5 / 2 : \u211d) * d * a - (f + \u03b5 / 2 : \u211d) * b * a + ((a : \u211d) * (f + \u03b5 / 2) - c * (e + \u03b5 / 2)) * b) /\n            (a * d - b * c : \u211d) -\n          e -\n        \u03b5 / 2 :=\n    by field_simp [h\u2082] <;> ring_nf\n  _ =\n      ((e + \u03b5 / 2 : \u211d) * d * a - (f + \u03b5 / 2 : \u211d) * b * a + (a : \u211d) * (f + \u03b5 / 2) * b - c * (e + \u03b5 / 2) * b) /\n            (a * d - b * c : \u211d) -\n          e -\n        \u03b5 / 2 :=\n    by ring_nf\n  _ = ((e + \u03b5 / 2 : \u211d) * d * a - c * (e + \u03b5 / 2) * b) / (a * d - b * c : \u211d) - e - \u03b5 / 2 := by ring_nf\n  _ = ((e + \u03b5 / 2 : \u211d) * (d * a - c * b)) / (a * d - b * c : \u211d) - e - \u03b5 / 2 := by ring_nf\n  _ = ((e + \u03b5 / 2 : \u211d) * (a * d - b * c)) / (a * d - b * c : \u211d) - e - \u03b5 / 2 := by\n    ring_nf <;> field_simp [h\u2082] <;> ring_nf\n  _ = (e + \u03b5 / 2 : \u211d) - e - \u03b5 / 2 := by\n    by_cases h\u2085\u2083 : (a * d - b * c : \u211d) = 0\n    \u00b7 exfalso\n      apply h\u2082\n      linarith\n    \u00b7 field_simp [h\u2085\u2083] <;> ring_nf\n  _ = 0 := by ring",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_9",
+      "original_proof": "linarith",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_10",
+      "original_proof": "gcongr\ntry norm_num\ntry linarith [abs_nonneg (a : \u211d), abs_nonneg (b : \u211d), abs_nonneg (c : \u211d), abs_nonneg (d : \u211d)]\ntry simp_all [hM_def, h\u03b4_def, M]",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    }
+  ]
+}

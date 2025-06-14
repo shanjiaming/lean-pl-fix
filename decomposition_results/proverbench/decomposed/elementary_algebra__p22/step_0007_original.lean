@@ -1,1 +1,0 @@
-theorem h₃₆ (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h₁ : a ^ 3 + b ^ 3 + c ^ 3 ≥ a ^ 2 * b + b ^ 2 * c + c ^ 2 * a) (h₂ : a ^ 3 + b ^ 3 + c ^ 3 ≥ a * b ^ 2 + b * c ^ 2 + c * a ^ 2) (h₃₁ : 0 < a * b) (h₃₂ : 0 < b * c) (h₃₃ : 0 < c * a) (h₃₄ : 0 < a * b * c) (h₃₅ : 0 < a * b * c * a) : 0 < a * b * c * b := by positivity

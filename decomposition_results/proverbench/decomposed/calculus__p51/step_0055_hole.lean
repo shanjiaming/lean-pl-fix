@@ -1,5 +1,0 @@
-theorem h₄₁ (x : ℝ) (h₃ :  ∀ x ∈ Set.Icc 0 (π / 4),    HasDerivAt (fun x => 18 / 25 * x - 1 / 25 * log (4 * sin x + 3 * cos x))      ((3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x)) x) (h₃₄ :  ∫ (x : ℝ) in Set.Icc 0 (π / 4), (3 * sin x + 2 * cos x) / (4 * sin x + 3 * cos x) =    18 / 25 * (π / 4) - 1 / 25 * log (4 * sin (π / 4) + 3 * cos (π / 4)) -      (18 / 25 * 0 - 1 / 25 * log (4 * sin 0 + 3 * cos 0))) (h₃₆ : 4 * sin (π / 4) + 3 * cos (π / 4) = 7 * √2 / 2) (h₃₇ : 4 * sin 0 + 3 * cos 0 = 3) (h₃₈ : log (7 * √2 / 2) = log 7 + log √2 - log 2) (h₃₉ : log √2 = log 2 / 2) (h₄₀ : log 3 = log 3) : log (7 / 3) = log 7 - log 3 :=
-  by
-  have h₄₂ : Real.log (7 / 3) = Real.log 7 - Real.log 3 := by sorry
-  --  rw [h₄₂]
-  hole

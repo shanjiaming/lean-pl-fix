@@ -1,1 +1,0 @@
-lemma isolate_r : given_equation r ↔ r = (7 : ℝ) :=

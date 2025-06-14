@@ -1,1 +1,0 @@
-theorem h_final (u v x y : ℝ) (h_main : ∀ (p : ℝ × ℝ), f p.1 p.2 ≥ f 0 0) : IsMinOn (fun p => f p.1 p.2) Set.univ (0, 0) := by refine' fun p _ => h_main p

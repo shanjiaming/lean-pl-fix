@@ -1,1 +1,0 @@
-theorem h₁₃ (x✝ x : ℝ) (hx : x ∈ Set.Icc 0 (π / 4)) (h₅ : HasDerivAt (fun x => 18 / 25 * x) (18 / 25) x) (h₇ h₉ : HasDerivAt (fun x => 4 * sin x + 3 * cos x) (4 * cos x - 3 * sin x) x) (h₁₁ : x ∈ Set.Icc 0 (π / 4)) (h₁₂ : 0 ≤ x) : x ≤ π / 4 := by linarith [h₁₁.2]

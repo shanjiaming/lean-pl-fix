@@ -1,1 +1,0 @@
-theorem h₁ (n : Type) (inst✝² : Fintype n) (inst✝¹ : DecidableEq n) (A : Matrix n n ℝ) (inst✝ : Invertible A) : (A * A⁻¹).det = det 1 := by rw [mul_inv_of_invertible] <;> simp [det_identity]

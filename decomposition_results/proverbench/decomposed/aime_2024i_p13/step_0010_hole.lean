@@ -1,2 +1,0 @@
-theorem h₁₂ (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬∃ n, isSolution q n) (h₂ : ∀ k < m, ¬isSolution p k) (h_p_eq_17 : p = 17) (h₁₀ : m ≥ 111) (h₁₁ : isSolution p 110) : 110 < m := by -- omega
-  hole

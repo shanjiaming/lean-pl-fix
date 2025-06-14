@@ -1,2 +1,0 @@
-theorem h₃ (h₀ : 0 ∈ solution_set) (h₁ : equation 0 = 0) (h₂ : equation 0 = 1) : 1 = 0 := by -- linarith
-  linarith

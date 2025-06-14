@@ -1,1 +1,0 @@
-theorem h₁₁ (P : Polynomial ℤ) (z : ℤ) (hz : Polynomial.eval z P = 0) (a b c : ℤ) (hab : a ≠ b) (hbc : b ≠ c) (hac : a ≠ c) (hP_a : Polynomial.eval a P = 1) (hP_b : Polynomial.eval b P = -1) (hP_c : Polynomial.eval c P = 1) : a - z ∣ Polynomial.eval a P - Polynomial.eval z P := by apply Polynomial.sub_dvd_eval_sub

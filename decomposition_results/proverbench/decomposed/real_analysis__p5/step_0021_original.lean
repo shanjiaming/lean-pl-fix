@@ -1,1 +1,0 @@
-theorem h₅ (a b c d : ℝ) (h : a ^ 2 + b ^ 2 + c ^ 2 + d ^ 2 = a * (b + c + d)) (h₁ : a = 0) (h₂ : b = 0) (h₃ : c = 0) (h₄ : d = 0) : a = 0 ∧ b = 0 ∧ c = 0 ∧ d = 0 := by refine' ⟨h₁, h₂, h₃, h₄⟩

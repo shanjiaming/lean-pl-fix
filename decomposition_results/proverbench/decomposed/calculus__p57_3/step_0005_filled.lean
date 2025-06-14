@@ -1,2 +1,0 @@
-theorem h₃ (x✝ x : ℝ) (h₁ : deriv (deriv f) x = (50 * x ^ 2 - 525 * x - 175) / (5 * x ^ 2 + 35) ^ (5 / 2)) (h : (50 * x ^ 2 - 525 * x - 175) / (5 * x ^ 2 + 35) ^ (5 / 2) = 0) : 5 * x ^ 2 + 35 > 0 := by nlinarith [sq_nonneg x]
-  hole

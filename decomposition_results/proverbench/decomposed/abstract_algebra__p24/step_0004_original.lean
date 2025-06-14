@@ -1,1 +1,0 @@
-theorem h_infinite (R : Type u_1) (inst✝¹ : CommRing R) (inst✝ : IsDomain R) (hchar : CharP R 0) (h_charZero : CharZero R) (h_injective : Function.Injective Int.cast) : Infinite R := by exact Infinite.of_injective _ h_injective

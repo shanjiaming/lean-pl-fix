@@ -1,1 +1,0 @@
-theorem h₂ (α : Type) (inst✝ : MeasurableSpace α) (μ : Measure α) (A B : Set α) (hIndep : IndepSet A B μ) (hA : μ A = ↑p_A) (hB : μ B = ↑p_B) (h₁ : prob_A_first_hit μ A B = 15 / 29) : 15 / 29 > 1 / 2 := by norm_num [div_lt_div_iff, NNReal.coe_lt_coe] <;> aesop

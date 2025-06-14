@@ -1,2 +1,0 @@
-theorem h₇ (P : ℤ[X]) (n : ℕ) (hP : P.natDegree = n) (h₁ : ∀ k ≤ 2 * n, eval (2 * Int.ofNat k) P = 1) (h₂ : eval (-1) P = 1) (h₃ h₅ : n = 0) (h₆ : P = 1) : P - 1 = 0 := by -- -- rw [h₆] <;> simp [sub_self]
-  hole

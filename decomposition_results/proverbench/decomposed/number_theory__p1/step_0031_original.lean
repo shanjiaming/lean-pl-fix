@@ -1,1 +1,0 @@
-theorem h₆₆ (n p : ℕ) (hp : Nat.Prime p) (hdiv : p ∣ polynomial n) (h₁ : p ≠ 3) (h₂ : ¬p ∣ n) (h₃ : ∃ d, 0 < d ∧ ↑n ^ d ≡ 1 [ZMOD ↑p]) (h₄ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₅ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) (h₆₁ : ↑n ^ 12 ≡ -1 [ZMOD ↑p]) (h₆₂ : ↑n ^ 24 ≡ 1 [ZMOD ↑p]) (h₆₄ h₆₅ : p = 0) : ¬Nat.Prime p := by simp_all [Nat.Prime]

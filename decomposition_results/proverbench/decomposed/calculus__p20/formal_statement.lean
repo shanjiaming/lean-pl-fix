@@ -1,1 +1,0 @@
-theorem composite_derivative_at_zero : deriv (fun x => u (v x)) 0 = 42 :=

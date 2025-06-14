@@ -1,1 +1,0 @@
-theorem h₁  : cos (π / 3) = 1 / 2 := by norm_num [Real.cos_pi_div_three] <;> linarith [Real.pi_pos]

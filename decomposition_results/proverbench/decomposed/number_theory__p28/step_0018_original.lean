@@ -1,1 +1,0 @@
-theorem h₆ (p : ℕ) (hp : Prime p) (N : ℕ := ∏ k ∈ range (p - 1), (k ^ 2 + 1)) (h₁ : p = 2 → N % p = 0) (h₂ : p = 3 → N % p = 4) (h₃ : p = 5 → N % p = 0) (h h₅ : p = 7) : N = 44200 := by simp [N, h₅, Finset.prod_range_succ] <;> norm_num

@@ -1,2 +1,0 @@
-theorem h₄ (ans : ℚ) (S : Finset ℝ) (h₀ : ∀ (k : ℝ), k ∈ S ↔ ∃! z, (25 + 20 * Complex.I - z).abs = 5 ∧ (z - 4 - ↑k).abs = (z - 3 * Complex.I - ↑k).abs) (answer : ↑ans = ∑ k ∈ S, k) (h₁ : ans = 73 / 4) (h₂ : ans.num = 73) (h₃ : ans.den = 4) : ↑ans.den + ans.num = 77 := by -- -- rw [h₂, h₃] <;> norm_num <;> rfl
-  linarith

@@ -1,1 +1,0 @@
-theorem sum_in_Z8 : f + g = C 2 * X^2 + C 5 :=

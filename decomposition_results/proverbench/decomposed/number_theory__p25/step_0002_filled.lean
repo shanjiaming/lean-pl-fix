@@ -1,2 +1,0 @@
-theorem h₁ (x y : ℕ) (h : 37 ∣ 15 * x + 11 * y) : 37 ∣ 35 * (15 * x + 11 * y) := by -- exact dvd_mul_of_dvd_right h 35
-  omega

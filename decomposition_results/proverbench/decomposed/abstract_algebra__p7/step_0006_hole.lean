@@ -1,2 +1,0 @@
-theorem h₆ (P : Polynomial ℝ) (h : ∀ (x : ℝ), Polynomial.eval x P ^ 2 - 2 = 2 * Polynomial.eval (2 * x ^ 2 - 1) P) (h₂ : ¬P.degree ≤ 0) (h₅ : P.degree = 0) : P.degree ≤ 0 := by -- simp_all [Polynomial.degree_eq_natDegree]
-  hole

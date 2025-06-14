@@ -1,2 +1,0 @@
-theorem h₂ (R : Type u_1) (inst✝ : CommRing R) (c : ZMod 3) (h : c = 2) (h₁ : Irreducible (X ^ 3 + X ^ 2 + C 2)) : (span {X ^ 3 + X ^ 2 + C 2}).IsMaximal := by
-  exact (span_singleton_irreducible_iff_isMaximal.mpr h₁)

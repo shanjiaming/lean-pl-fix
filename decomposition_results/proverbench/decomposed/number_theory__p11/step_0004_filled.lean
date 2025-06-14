@@ -1,2 +1,0 @@
-theorem h₁ (p : ℕ) (hp : Nat.Prime p) (h_main : p = 2 ∨ p ≠ 2) (h_p_eq_2 : p = 2) : 1 ^ 2 + 0 ^ 2 + 1 = 2 := by -- norm_num
-  norm_num

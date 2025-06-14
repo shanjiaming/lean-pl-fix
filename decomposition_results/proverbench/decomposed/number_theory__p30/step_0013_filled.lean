@@ -1,2 +1,0 @@
-theorem h₉ (p k : ℕ) (hp : p = 4 * k - 1) (hp_prime : Nat.Prime p) (a : ℤ) (ha : ∃ x, x ^ 2 ≡ a [ZMOD ↑p]) (b : ℤ) (hb h₂ : b ^ 2 ≡ a [ZMOD ↑p]) (h₃ : a ^ k ≡ (b ^ 2) ^ k [ZMOD ↑p]) (h₄ : (a ^ k) ^ 2 ≡ (b ^ 2) ^ (2 * k) [ZMOD ↑p]) (h₅ : p = 4 * k - 1) (h₆ : 4 * k = p + 1) (h₇ : b ^ p ≡ b [ZMOD ↑p]) (h₈ : b ^ (p + 1) ≡ b ^ 2 [ZMOD ↑p]) : b ^ (2 * k) ≡ b ^ (2 * k) [ZMOD ↑p] := by -- rfl
-  norm_num

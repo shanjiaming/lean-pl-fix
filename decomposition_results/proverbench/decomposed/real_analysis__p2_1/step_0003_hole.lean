@@ -1,2 +1,0 @@
-theorem h₅ (x : ℝ) (h : x ∈ target_interval) (h₂ : x ∈ Set.Ioo (10 ^ (-5.4)) (10 ^ (-2.3))) (h₃ : 10 ^ (-5.4) < x) (h₄ : x < 10 ^ (-2.3)) : 10 ^ (-5.4) > 0 := by -- positivity
-  hole

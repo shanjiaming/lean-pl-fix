@@ -1,1 +1,0 @@
-theorem h₂ (P : ℝ[X]) (hDegree : P.degree ≤ 5) (h : (∀ (x : ℝ), eval x (P %ₘ (X - 1) ^ 3) = -1) ∧ ∀ (x : ℝ), eval x (P %ₘ (X + 1) ^ 3) = 1) : ∀ (x : ℝ), eval x (P %ₘ (X - 1) ^ 3) = -1 := by simpa [sub_eq_add_neg, pow_three] using h.1

@@ -1,2 +1,0 @@
-theorem h1  : partial_t 2 π = deriv (fun τ => g 2 τ) π := by -- rfl
-  hole

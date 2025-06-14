@@ -1,1 +1,0 @@
-lemma transpose_linear_dependence (hAB : A * B = 0) (hB : B ≠ 0) : ¬LinearIndependent ℝ (fun i => Bᵀ i) :=

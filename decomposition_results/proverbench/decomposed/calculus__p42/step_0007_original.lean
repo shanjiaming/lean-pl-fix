@@ -1,2 +1,0 @@
-theorem h5 (x : ℝ) (h4 : HasDerivAt (fun x => cos x) (-sin x) x) : HasDerivAt (fun x => cos x ^ 9) (9 * cos x ^ 8 * -sin x) x := by
-  convert HasDerivAt.pow 9 h4 using 1 <;> ring_nf <;> simp [sin_sq, cos_sq] <;> ring_nf

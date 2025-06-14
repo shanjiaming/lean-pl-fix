@@ -1,1 +1,0 @@
-theorem h₁₀ (x y k m n z : ℕ+) (hz : ↑x ^ ↑m + ↑y ^ ↑n = ↑z) (h₁ : 4 * ↑k * ↑x * ↑y ≥ 4) (h₂ : 4 * ↑k * ↑x * ↑y - 1 ≥ 3) (h₃ : ↑z = ↑x ^ ↑m + ↑y ^ ↑n) (h₅ : ↑x ≥ 1) (h₆ : ↑y ≥ 1) (h₇ : ↑m ≥ 1) (h₈ : ↑n ≥ 1) (h₉ : ↑x ^ ↑m ≥ 1) : ↑y ^ ↑n ≥ 1 := by apply Nat.one_le_pow <;> simp_all [PNat]

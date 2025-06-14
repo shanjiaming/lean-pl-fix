@@ -1,1 +1,0 @@
-theorem h₅ (p m : ℕ) (h₀ : isSolution p m) (h₁ : ∀ q < p, ¬∃ n, isSolution q n) (h₂ : ∀ k < m, ¬isSolution p k) (h₀' : Nat.Prime p) (h₀'' : 0 < m) (h₀''' : p ^ 2 ∣ m ^ 4 + 1) (h : ¬p ≤ 17) (h₄ : p ≥ 18) : 17 < p := by linarith

@@ -1,2 +1,0 @@
-theorem h₁₅ (R : Type u_1) (inst✝¹ : Field R) (inst✝ : CharZero R) (P : R[X]) (n : ℕ) (hP : P.degree = ↑n) (hValues : ∀ i ∈ Finset.range (n + 2), eval (↑i + 1) P = 1 / (↑i + 1)) (h₂ : P.natDegree = n) (h₃ : ∀ i < n + 2, eval (↑i + 1) P = 1 / (↑i + 1)) (h₄ : n = 0) (h₅ : eval (↑0 + 1) P = 1 / (↑0 + 1)) (h₆ : eval (↑1 + 1) P = 1 / (↑1 + 1)) (h₇ : P.natDegree = 0) (h₈ : eval 1 P = 1) (h₉ : eval 2 P = 1 / 2) (h₁₀ : eval 1 P = eval 2 P) (h₁₁ : 1 = 1 / 2) (h₁₂ : 2 = 1) (h₁₄ : 2 ≠ 0) : 1 = 0 := by nlinarith
-  hole

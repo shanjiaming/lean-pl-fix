@@ -1,1 +1,0 @@
-theorem h₄ (h₂ : ∫ (x : ℝ) in Set.Icc 3 9, f x = ∫ (x : ℝ) in 3 ..9, f x) : ∫ (x : ℝ) in 3 ..9, f x = ∫ (x : ℝ) in 3 ..9, x ^ 2 - 3 := by simp [f]
