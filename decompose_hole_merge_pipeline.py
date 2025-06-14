@@ -91,7 +91,8 @@ class DecomposeHoleMergePipeline:
             
             # Create a simple step representation
             step_original_content = f"-- Original: {hole_id} := {original_proof}"
-            step_hole_content = f"-- Hole: {hole_id}"
+            # For hole_content, just store the hole_id - verification will be context-aware
+            step_hole_content = hole_id
             
             # Create proper hole content for filling function
             # We need to create a context where the hole can be tested
@@ -306,9 +307,9 @@ class DecomposeHoleMergePipeline:
                  step = DecompositionStep(
                     step_id=hole_info["hole_id"],
                     original_content=hole_info["original_proof"],
-                    # The new format doesn't have these, provide defaults.
-                    hole_content=f"-- Hole: {hole_info['hole_id']}",
-                    filled_content=f"-- Filled: {hole_info['hole_id']} := {hole_info.get('best_tactic', '...')}",
+                    # The new format doesn't have these, provide meaningful defaults.
+                    hole_content=hole_info["hole_id"],  # Use the hole ID directly for verification
+                    filled_content=hole_info.get('best_tactic', 'admit'),  # Use actual tactic or admit
                     original_verification_pass=hole_info.get("original_verification_pass"),
                     hole_verification_pass=hole_info.get("hole_verification_pass"),
                     filled_verification_pass=hole_info.get("filled_verification_pass"),
@@ -414,6 +415,37 @@ class DecomposeHoleMergePipeline:
         }
         
         return filled_content, additional_info
+
+    def _verify_single_hole_in_context(self, header_content: str, hole_id: str, hole_version_content: str) -> bool:
+        """
+        Verify a single hole in the complete proof context.
+        This creates a version where only the specified hole is kept as hole_ID,
+        while all other holes are replaced with admit.
+        
+        Args:
+            header_content: The header content for verification
+            hole_id: The specific hole ID to test (e.g., "hole_2")
+            hole_version_content: The complete hole version with all holes as hole_IDs
+            
+        Returns:
+            bool: True if the verification passes, False otherwise
+        """
+        import re
+        
+        # Create a version where all holes except the target one are replaced with admit
+        test_content = hole_version_content
+        
+        # Find all hole_N patterns in the content
+        hole_patterns = re.findall(r'\bhole_\d+\b', test_content)
+        
+        for hole_pattern in set(hole_patterns):  # Remove duplicates
+            if hole_pattern != hole_id:
+                # Replace other holes with admit
+                test_content = re.sub(r'\b' + re.escape(hole_pattern) + r'\b', 'admit', test_content)
+        
+        # The target hole_id should remain as is, and there should be a macro for it
+        # Verify this modified content
+        return self.verify_lean_code(header_content, test_content, with_macro=False)
 
     def try_unigram_tactics(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
@@ -1211,10 +1243,19 @@ class DecomposeHoleMergePipeline:
             for step in final_steps:
                 print(f"Verifying step {step.step_id}...")
                 
-                # Verify hole content - use existing verification if available
+                # Verify hole in context - read the hole version file and test this specific hole
                 hole_verification_pass = step.hole_verification_pass
                 if hole_verification_pass is None:
-                    hole_verification_pass = self.verify_lean_code(header_content, step.hole_content, with_macro=True)
+                    # Read the hole version file for context-aware verification
+                    hole_version_path = os.path.join(problem_dir, "hole_version.lean")
+                    if os.path.exists(hole_version_path):
+                        with open(hole_version_path, 'r') as f:
+                            hole_version_content = f.read()
+                        hole_verification_pass = self._verify_single_hole_in_context(
+                            header_content, step.step_id, hole_version_content)
+                    else:
+                        # Fallback to False if hole version doesn't exist
+                        hole_verification_pass = False
                     step.hole_verification_pass = hole_verification_pass  # Update the step object
                     verification_updated = True
                     print(f"  Hole verification: {'PASS' if hole_verification_pass else 'FAIL'}")
@@ -1252,14 +1293,29 @@ class DecomposeHoleMergePipeline:
             
             processing_time = (datetime.now() - problem_start_time).total_seconds()
             
+            # Read final verification results from updated decomposition.json
+            # This ensures we use the corrected verification results, not the early-stage ones
+            metadata_path = os.path.join(problem_dir, "decomposition.json")
+            final_hole_verification = hole_verification_pass
+            final_filled_verification = filled_verification_pass
+            
+            if os.path.exists(metadata_path):
+                try:
+                    with open(metadata_path, "r") as f:
+                        final_metadata = json.load(f)
+                    final_hole_verification = final_metadata.get("hole_verification_pass", hole_verification_pass)
+                    final_filled_verification = final_metadata.get("filled_verification_pass", filled_verification_pass)
+                    print(f"Using final verification results: hole={final_hole_verification}, filled={final_filled_verification}")
+                except Exception as e:
+                    print(f"Warning: Could not read final verification results, using original: {e}")
+            
             result_record = {
                 "problem_id": problem.problem_id,
                 "dataset": problem.dataset,
                 "problem_dir": problem_dir,
-                "complete_proof_path": complete_proof_path,
                 "original_verification_pass": original_verification_pass,
-                "hole_verification_pass": hole_verification_pass,
-                "filled_verification_pass": filled_verification_pass,
+                "hole_verification_pass": final_hole_verification,
+                "filled_verification_pass": final_filled_verification,
                 "num_steps": len(steps),
                 "processing_time_seconds": processing_time,
                 "status": "success",

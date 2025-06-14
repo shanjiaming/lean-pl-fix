@@ -2,137 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
-
-This is a Lean theorem proving automation system called "Lean Enumerator" that automatically fixes errors in Lean mathematical proof code using program synthesis techniques. The system works with multiple datasets (minif2f, proverbench, putnam) and provides unified problem management with automated error detection, classification, and fixing capabilities.
-
-The key now is to decompose a problem and dig holes.
-
-## Key Components
-
-### Core Systems
-- **Program Synthesis** (`decompose_solver.py`): Core solving system with tactic tree analysis
-- **Decomposition Pipeline** (`decompose_hole_merge_pipeline.py`): Main pipeline for decomposing proofs, generating hole versions, and merging back
-- **Unified Problem Manager** (`unified_problem_manager.py`): Centralized management of problems across datasets
-
-### Decomposition Pipeline Architecture
-The `DecomposeHoleMergePipeline` class implements a comprehensive pipeline for:
-
-1. **Proof Decomposition**: Analyzes Lean proofs using tactic tree structure to identify `have` statements with by-blocks
-2. **Hole Generation**: Creates hole versions by replacing proof segments with hole placeholders using precise position information
-3. **Hole Filling**: Provides multiple strategies for filling holes:
-   - `fill_hole_content`: Simple replacement with "admit"
-   - `try_unigram_tactics`: Tries different unigram tactics to find working solutions
-4. **Verification**: Verifies original, hole, and filled versions of proofs using Lean interaction
-5. **Result Management**: Saves results incrementally with comprehensive metadata
-
-### Hole Identification Strategy
-The pipeline uses the following rule for hole identification:
-- **In every by-block, find the last have statement, then convert everything after that last have to the end of the by-block into a single hole**
-- For cases like "have h5 := by norm_num" where the by-block contains no internal have statements, everything from the start of the by-block becomes a hole
-### Dataset Structure
-The system uses a unified structure under `unified_problems/`:
-```
-unified_problems/
-├── dataset_name/
-│   ├── problem_id/
-│   │   ├── header.lean          # Extracted imports/declarations
-│   │   ├── problem.lean         # Original problem file
-│   │   ├── decomposed/          # Decomposed problem versions
-│   │   └── hole/               # Generated hole versions
-```
-
-after running, results are put to `decomposition_results/` with the following structure:
-```
-decomposition_results/
-├── <dataset_name>/                        # Individual dataset results
-│   └── decomposed/
-│       └── <problem_id>/
-│           ├── header.lean                # Extracted header for self-contained verification
-│           ├── problem.lean               # Original problem file
-│           ├── hole_version.lean          # Version with holes and macros
-│           ├── complete_fixed_proof.lean  # Final synthesis result
-│           └── decomposition.json         # Comprehensive metadata per problem
-├── <dataset_name>_pipeline_results.json  # Summary results for entire dataset
-└── <dataset_name>_detailed_failures.json # Detailed failure logs for dataset
-```
-
-For example, after processing minif2f and putnam datasets:
-```
-decomposition_results/
-├── minif2f/
-│   └── decomposed/
-│       ├── aime_1983_p1/
-│       ├── algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7/
-│       └── ... (other problems)
-├── putnam/
-│   └── decomposed/
-│       ├── putnam_1986_a3/
-│       └── ... (other problems)
-├── minif2f_pipeline_results.json
-├── minif2f_detailed_failures.json
-├── putnam_pipeline_results.json
-└── putnam_detailed_failures.json
-```
-
-### Current Focus: Problem Decomposition
-
-The main entry point is `decompose_hole_merge_pipeline.py` with core logic in `decompose_solver.py`. These two files implement the complete decomposition pipeline.
-
-**Important**: The datasets are large, so:
-- Never run whole minif2f, putnam or proverbench without limits
-- Even single problems can be time-consuming
-- Use demo problems and single problem runs for testing
-- Use `limit` parameter for dataset processing
-
-## Development Commands
-
-### Core Operations
-
-#### Problem Management
-```bash
-# Migrate datasets to unified structure
-python dataset_migration.py
-
-# Process all datasets with unified batch processor
-python unified_batch_processor.py migrate
-python unified_batch_processor.py solve
-python unified_batch_processor.py full  # Complete pipeline
-```
-
-#### Decomposition Pipeline Commands
-```bash
-# Process entire dataset (with limits to avoid long runs)
-python decompose_hole_merge_pipeline.py dataset <dataset_name> [limit] [filling_method]
-# Examples:
-python decompose_hole_merge_pipeline.py dataset demo 5          # Demo dataset, 5 problems, simple filling
-python decompose_hole_merge_pipeline.py dataset putnam 10 unigram  # Putnam dataset, 10 problems, unigram tactics
-
-# Process single problem
-python decompose_hole_merge_pipeline.py problem <dataset> <problem_id> [filling_method]
-# Examples:
-python decompose_hole_merge_pipeline.py problem demo demo_complex_p1
-python decompose_hole_merge_pipeline.py problem putnam putnam_1986_a3 unigram
-
-# Filling method options:
-# - simple: Replace holes with "admit"
-# - unigram: Try different unigram tactics (norm_num, linarith, omega, etc.)
-```
-
-#### Pipeline Output Structure
-After running the pipeline, results are organized as:
-- **Individual problem results**: `decomposition_results/<dataset>/decomposed/<problem_id>/`
-  - Contains: `header.lean`, `problem.lean`, `hole_version.lean`, `complete_fixed_proof.lean`, `decomposition.json`
-- **Dataset summary results**: `decomposition_results/<dataset>_pipeline_results.json`
-  - Contains aggregated success/failure statistics and processing times
-- **Dataset failure logs**: `decomposition_results/<dataset>_detailed_failures.json`
-  - Contains detailed error information for failed problems
-
 
 ## Development Guidelines
 
-1. Use English for code, 中文 for communication
-2. Never hide errors with try-except - let them surface for debugging
+Never hide errors with try-except - let them surface for debugging
 
 
 ## RIPER-5
@@ -618,3 +491,168 @@ Yolo模式：[YOLO_MODE]
 *  寻求关键洞见而非表面列举
 *  追求创新思维而非习惯性重复
 *  突破认知限制，调动所有计算资源
+
+
+#### **第一部分：核心编程原则 (Guiding Principles)**
+
+这是我们合作的顶层思想，指导所有具体的行为。
+
+1. **可读性优先 (Readability First)**：始终牢记“代码是写给人看的，只是恰好机器可以执行”。清晰度高于一切。
+2. **DRY (Don't Repeat Yourself)**：绝不复制代码片段。通过抽象（如函数、类、模块）来封装和复用通用逻辑。
+3. **高内聚，低耦合 (High Cohesion, Low Coupling)**：功能高度相关的代码应该放在一起（高内聚），而模块之间应尽量减少依赖（低耦合），以增强模块独立性和可维护性。
+
+#### **第二部分：具体执行指令 (Actionable Instructions)**
+
+这是 Claude 在日常工作中需要严格遵守的具体操作指南。
+
+**沟通与语言规范**
+
+- **默认语言**：请默认使用**简体中文**进行所有交流、解释和思考过程的陈述。
+- **代码与术语**：所有代码实体（变量名、函数名、类名等）及技术术语（如库名、框架名、设计模式等）**必须保持英文原文**。
+- **注释规范**：代码注释应使用中文。
+- **批判性反馈与破框思维 (Critical Feedback & Out-of-the-Box Thinking)**：
+    - **审慎分析**：必须以审视和批判的眼光分析我的输入，主动识别潜在的问题、逻辑谬误或认知偏差。
+    - **坦率直言**：需要明确、直接地指出我思考中的盲点，并提供显著超越我当前思考框架的建议，以挑战我的预设。
+    - **严厉质询 (Tough Questioning)**：当我提出的想法或方案明显不合理、过于理想化或偏离正轨时，必须使用更直接、甚至尖锐的言辞进行反驳和质询，帮我打破思维定式，回归理性。
+
+**开发与调试策略 (Development & Debugging Strategy)**
+
+- **坚韧不拔的解决问题 (Tenacious Problem-Solving)**：当面对编译错误、逻辑不通或多次尝试失败时，绝不允许通过简化或伪造实现来“绕过”问题。
+- **逐个击破 (Incremental Debugging)**：必须坚持对错误和问题进行逐一分析、定位和修复。
+- **探索有效替代方案 (Explore Viable Alternatives)**：如果当前路径确实无法走通，应切换到另一个逻辑完整、功能健全的替代方案来解决问题，而不是退回到一个简化的、虚假的版本。
+- **禁止伪造实现 (No Fake Implementations)**：严禁使用占位符逻辑（如空的循环）、虚假数据或不完整的函数来伪装功能已经实现。所有交付的代码都必须是意图明确且具备真实逻辑的。
+- **战略性搁置 (Strategic Postponement)**：只有当一个问题被证实非常困难，且其当前优先级不高时，才允许被暂时搁置。搁置时，必须以 `TODO` 形式在代码中或任务列表中明确标记，并清晰说明遇到的问题。在核心任务完成后，必须回过头来重新审视并解决这些被搁置的问题。
+- **规范化测试文件管理 (Standardized Test File Management)**：严禁为新功能在根目录或不相关位置创建孤立的测试文件。在添加测试时，必须首先检查项目中已有的测试套件（通常位于 `tests/` 目录下），并将新的测试用例整合到与被测模块最相关的现有测试文件中。只有当确实没有合适的宿主文件时，才允许在 `tests/` 目录下创建符合项目命名规范的新测试文件。
+
+**项目与代码维护 (Project & Code Maintenance)**
+
+- **统一文档维护 (Unified Documentation Maintenance)**：严禁为每个独立任务（如重构、功能实现）创建新的总结文档（例如 `CODE_REFACTORING_SUMMARY.md`）。在任务完成后，必须优先检查项目中已有的相关文档（如 `README.md`、既有的设计文档等），并将新的总结、变更或补充内容直接整合到现有文档中，维护其完整性和时效性。
+- **及时清理 (Timely Cleanup)**：在完成开发任务时，如果发现任何已无用（过时）的代码、文件或注释，应主动提出清理建议。
+
+
+
+## Project Overview
+
+This is a Lean theorem proving automation system called "Lean Enumerator" that automatically fixes errors in Lean mathematical proof code using program synthesis techniques. The system works with multiple datasets (minif2f, proverbench, putnam) and provides unified problem management with automated error detection, classification, and fixing capabilities.
+
+The key now is to decompose a problem and dig holes.
+
+## Key Components
+
+### Core Systems
+- **Program Synthesis** (`decompose_solver.py`): Core solving system with tactic tree analysis
+- **Decomposition Pipeline** (`decompose_hole_merge_pipeline.py`): Main pipeline for decomposing proofs, generating hole versions, and merging back
+- **Unified Problem Manager** (`unified_problem_manager.py`): Centralized management of problems across datasets
+
+### Decomposition Pipeline Architecture
+The `DecomposeHoleMergePipeline` class implements a comprehensive pipeline for:
+
+1. **Proof Decomposition**: Analyzes Lean proofs using tactic tree structure to identify `have` statements with by-blocks
+2. **Hole Generation**: Creates hole versions by replacing proof segments with hole placeholders using precise position information
+3. **Hole Filling**: Provides multiple strategies for filling holes:
+   - `fill_hole_content`: Simple replacement with "admit"
+   - `try_unigram_tactics`: Tries different unigram tactics to find working solutions
+4. **Verification**: Verifies original, hole, and filled versions of proofs using Lean interaction
+5. **Result Management**: Saves results incrementally with comprehensive metadata
+
+### Hole Identification Strategy
+The pipeline uses the following rule for hole identification:
+- **In every by-block, find the last have statement, then convert everything after that last have to the end of the by-block into a single hole**
+- For cases like "have h5 := by norm_num" where the by-block contains no internal have statements, everything from the start of the by-block becomes a hole
+### Dataset Structure
+The system uses a unified structure under `unified_problems/`:
+```
+unified_problems/
+├── dataset_name/
+│   ├── problem_id/
+│   │   ├── header.lean          # Extracted imports/declarations
+│   │   ├── problem.lean         # Original problem file
+│   │   ├── decomposed/          # Decomposed problem versions
+│   │   └── hole/               # Generated hole versions
+```
+
+after running, results are put to `decomposition_results/` with the following structure:
+```
+decomposition_results/
+├── <dataset_name>/                        # Individual dataset results
+│   └── decomposed/
+│       └── <problem_id>/
+│           ├── header.lean                # Extracted header for self-contained verification
+│           ├── problem.lean               # Original problem file
+│           ├── hole_version.lean          # Version with holes and macros
+│           ├── complete_fixed_proof.lean  # Final synthesis result
+│           └── decomposition.json         # Comprehensive metadata per problem
+├── <dataset_name>_pipeline_results.json  # Summary results for entire dataset
+└── <dataset_name>_detailed_failures.json # Detailed failure logs for dataset
+```
+
+For example, after processing minif2f and putnam datasets:
+```
+decomposition_results/
+├── minif2f/
+│   └── decomposed/
+│       ├── aime_1983_p1/
+│       ├── algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7/
+│       └── ... (other problems)
+├── putnam/
+│   └── decomposed/
+│       ├── putnam_1986_a3/
+│       └── ... (other problems)
+├── minif2f_pipeline_results.json
+├── minif2f_detailed_failures.json
+├── putnam_pipeline_results.json
+└── putnam_detailed_failures.json
+```
+
+### Current Focus: Problem Decomposition
+
+The main entry point is `decompose_hole_merge_pipeline.py` with core logic in `decompose_solver.py`. These two files implement the complete decomposition pipeline.
+
+**Important**: The datasets are large, so:
+- Never run whole minif2f, putnam or proverbench without limits
+- Even single problems can be time-consuming
+- Use demo problems and single problem runs for testing
+- Use `limit` parameter for dataset processing
+
+## Development Commands
+
+### Core Operations
+
+#### Problem Management
+```bash
+# Migrate datasets to unified structure
+python dataset_migration.py
+
+# Process all datasets with unified batch processor
+python unified_batch_processor.py migrate
+python unified_batch_processor.py solve
+python unified_batch_processor.py full  # Complete pipeline
+```
+
+#### Decomposition Pipeline Commands
+```bash
+# Process entire dataset (with limits to avoid long runs)
+python decompose_hole_merge_pipeline.py dataset <dataset_name> [limit] [filling_method]
+# Examples:
+python decompose_hole_merge_pipeline.py dataset demo 5          # Demo dataset, 5 problems, simple filling
+python decompose_hole_merge_pipeline.py dataset putnam 10 unigram  # Putnam dataset, 10 problems, unigram tactics
+
+# Process single problem
+python decompose_hole_merge_pipeline.py problem <dataset> <problem_id> [filling_method]
+# Examples:
+python decompose_hole_merge_pipeline.py problem demo demo_complex_p1
+python decompose_hole_merge_pipeline.py problem putnam putnam_1986_a3 unigram
+
+# Filling method options:
+# - simple: Replace holes with "admit"
+# - unigram: Try different unigram tactics (norm_num, linarith, omega, etc.)
+```
+
+#### Pipeline Output Structure
+After running the pipeline, results are organized as:
+- **Individual problem results**: `decomposition_results/<dataset>/decomposed/<problem_id>/`
+  - Contains: `header.lean`, `problem.lean`, `hole_version.lean`, `complete_fixed_proof.lean`, `decomposition.json`
+- **Dataset summary results**: `decomposition_results/<dataset>_pipeline_results.json`
+  - Contains aggregated success/failure statistics and processing times
+- **Dataset failure logs**: `decomposition_results/<dataset>_detailed_failures.json`
+  - Contains detailed error information for failed problems
