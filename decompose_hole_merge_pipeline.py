@@ -731,6 +731,14 @@ class DecomposeHoleMergePipeline:
             start_line_idx = start_pos.line - 1
             end_line_idx = end_pos.line - 1
             
+            # Safety check: ensure indices are within bounds
+            if start_line_idx < 0 or start_line_idx >= len(content_lines):
+                print(f"  ERROR: start_line_idx {start_line_idx} out of bounds (file has {len(content_lines)} lines)")
+                continue
+            if end_line_idx < 0 or end_line_idx >= len(content_lines):
+                print(f"  ERROR: end_line_idx {end_line_idx} out of bounds (file has {len(content_lines)} lines)")
+                continue
+            
             # --- BEGIN LOGGING FOR DEBUGGING ---
             print("-" * 50)
             print(f"Preparing to create hole: {hole_id}")
