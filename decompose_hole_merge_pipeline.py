@@ -427,7 +427,8 @@ class DecomposeHoleMergePipeline:
             Tuple of (best_filled_content, additional_info)
         """
         # Define common single-line unigram tactics to try
-        unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
+        unigrams = []
+        # unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
         
         additional_info = {
             "method": "unigram_tactics",
