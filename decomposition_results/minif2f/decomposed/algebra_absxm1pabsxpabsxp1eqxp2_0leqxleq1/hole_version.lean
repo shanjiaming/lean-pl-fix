@@ -31,12 +31,10 @@ theorem algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1 (x : ℝ)
     · 
       have h₄ : abs (x - 1) = -(x - 1) := by
         hole_4
-        <;> linarith
       have h₅ : abs x = -x := by
         hole_5
       have h₆ : abs (x + 1) = -(x + 1) := by
         hole_6
-        <;> linarith
       rw [h₄, h₅, h₆] at h₀
       
       have h₇ : - (x - 1) + -x + - (x + 1) = x + 2 := by hole_7
@@ -46,7 +44,6 @@ theorem algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1 (x : ℝ)
       have h₄ : x ≥ -1 := by hole_9
       have h₅ : abs (x - 1) = -(x - 1) := by
         hole_10
-        <;> linarith
       have h₆ : abs x = -x := by
         hole_11
       have h₇ : abs (x + 1) = x + 1 := by

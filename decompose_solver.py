@@ -973,24 +973,15 @@ class UnifiedLeanEnvironment:
         """Get or create a cached environment for the given header"""
         if header_content in self._header_envs:
             return self._header_envs[header_content]
-        
-        executor = concurrent.futures.ThreadPoolExecutor()
-        try:
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(self.server.run, Command(cmd=header_content))
             try:
                 result = future.result(timeout=60)  # 60 seconds timeout
-            except Exception:  # Catch any exception, not just TimeoutError
-                # Don't wait for the executor to finish, just abandon it
-                executor.shutdown(wait=False)
+            except concurrent.futures.TimeoutError:
+                future.cancel()
                 self.reset()
-                raise  # Re-raise the original exception
-        finally:
-            # Normal cleanup if no exception occurred
-            if 'result' in locals():
-                executor.shutdown(wait=True)
-            else:
-                # If we got here due to exception, don't wait
-                executor.shutdown(wait=False)
+                raise
         
         # Cache the environment before returning it
         self._header_envs[header_content] = result.env
@@ -1002,30 +993,22 @@ class UnifiedLeanEnvironment:
         # breakpoint()
         env = self.get_or_create_header_env(header_content)
         
-        executor = concurrent.futures.ThreadPoolExecutor()
-        try:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(self.server.run, Command(cmd=input_content, env=env, **kwargs))
             try:
                 ret = future.result(timeout=60)  # 60 seconds timeout
-            except Exception:  # Catch any exception, not just TimeoutError
-                # Don't wait for the executor to finish, just abandon it
-                executor.shutdown(wait=False)
+            except concurrent.futures.TimeoutError:
+                future.cancel()
                 self.reset()
-                raise  # Re-raise the original exception
-        finally:
-            # Normal cleanup if no exception occurred
-            if 'ret' in locals():
-                executor.shutdown(wait=True)
-            else:
-                # If we got here due to exception, don't wait
-                executor.shutdown(wait=False)
+                raise
         
         if env > 15:
             self.reset()
         return ret
     
     def reset(self):
-        self.server.restart()
+        del self.server
+        self.server = LeanServer(self.config)
         self._header_envs.clear()
 
 # Global unified environment instance

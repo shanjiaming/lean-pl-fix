@@ -3,56 +3,53 @@ theorem algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1 (x : ℝ)
   have h₁ : 0 ≤ x := by
     by_contra h
     
-    have h₂ : x < 0 := by linarith
+    have h₂ : x < 0 := by norm_num
     
     by_cases h₃ : x < -1
     · 
       have h₄ : abs (x - 1) = -(x - 1) := by
-        admit
-        <;> linarith
+        norm_num
       have h₅ : abs x = -x := by
-        admit
+        norm_num
       have h₆ : abs (x + 1) = -(x + 1) := by
-        admit
-        <;> linarith
+        norm_num
       rw [h₄, h₅, h₆] at h₀
       
-      have h₇ : - (x - 1) + -x + - (x + 1) = x + 2 := by linarith
-      have h₈ : x = -1 / 2 := by linarith
+      have h₇ : - (x - 1) + -x + - (x + 1) = x + 2 := by norm_num
+      have h₈ : x = -1 / 2 := by norm_num
       linarith
     · 
-      have h₄ : x ≥ -1 := by linarith
+      have h₄ : x ≥ -1 := by norm_num
       have h₅ : abs (x - 1) = -(x - 1) := by
-        admit
-        <;> linarith
+        norm_num
       have h₆ : abs x = -x := by
-        admit
+        norm_num
       have h₇ : abs (x + 1) = x + 1 := by
-        admit
+        norm_num
       rw [h₅, h₆, h₇] at h₀
       
-      have h₈ : - (x - 1) + -x + (x + 1) = x + 2 := by linarith
-      have h₉ : x = 0 := by linarith
-      linarith
+      have h₈ : - (x - 1) + -x + (x + 1) = x + 2 := by norm_num
+      have h₉ : x = 0 := by norm_num
+      norm_num
   
   have h₂ : x ≤ 1 := by
     by_contra h
     
-    have h₃ : x > 1 := by linarith
+    have h₃ : x > 1 := by norm_num
     
     have h₄ : abs (x - 1) = x - 1 := by
-      admit
+      norm_num
     have h₅ : abs x = x := by
-      simpa
+      norm_num
     have h₆ : abs (x + 1) = x + 1 := by
-      admit
+      norm_num
     
     rw [h₄, h₅, h₆] at h₀
     
-    have h₇ : x = 1 := by linarith
-    linarith
+    have h₇ : x = 1 := by norm_num
+    norm_num
   
   have h₃ : 0 ≤ x ∧ x ≤ 1 := by
-    norm_cast
+    norm_num
   
-  simpa
+  norm_num
