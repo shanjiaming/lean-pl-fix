@@ -381,7 +381,7 @@ class DecomposeHoleMergePipeline:
         if with_macro:
             header = header + "\nmacro \"hole\" : tactic => `(tactic| admit)"
         result = self.lean_verifier.run_with_header(header, content)
-        return not result.has_errors()
+        return not getattr(result, 'error', None)
 
     def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
@@ -522,17 +522,20 @@ class DecomposeHoleMergePipeline:
         
         # Log any real errors for information, but do not change control flow.
         # The tactic tree construction should be robust enough to handle malformed parts.
-        if result.has_errors():
-            real_errors = [e for e in result.get_errors() if 'unsolved goals' not in e.data]
-            if real_errors:
-                print(f"INFO: Real Lean errors were detected in the source. Tactic tree generation will proceed and attempt to recover.")
-                # Optionally print detailed errors for debugging
-                # for error in real_errors:
-                #      print(f"  - Error: {error.data.get('text', 'Unknown error')}")
+        if getattr(result, 'error', None):
+            # Check for get_errors method to be safe
+            if hasattr(result, 'get_errors'):
+                real_errors = [e for e in result.get_errors() if 'unsolved goals' not in e.data]
+                if real_errors:
+                    print(f"INFO: Real Lean errors were detected in the source. Tactic tree generation will proceed and attempt to recover.")
+            else:
+                # Fallback for SimpleNamespace which doesn't have get_errors
+                print(f"INFO: Lean interaction failed with error: {result.error}")
 
         # Build tactic tree using the mature logic from decompose_solver.py
         from decompose_solver import _process_tactics_to_tree
-        top_level_nodes = _process_tactics_to_tree(result.tactics)
+        tactics = result.tactics if hasattr(result, 'tactics') else []
+        top_level_nodes = _process_tactics_to_tree(tactics)
         
         print(f"Built tactic tree with {len(top_level_nodes)} top-level nodes")
         
@@ -687,7 +690,7 @@ class DecomposeHoleMergePipeline:
             'original_proof': hole_content,
             'parent_have_tactic': node.tactic.tactic.strip(),
             'start_pos': tactics_to_hole[0].tactic.start_pos,
-            'end_pos': tactics_to_hole[-1].tactic.end_pos,
+            'end_pos': node.end_pos,
             'hole_type': 'after_last_have' if last_have_index >= 0 else 'entire_by_block'
         }
     
