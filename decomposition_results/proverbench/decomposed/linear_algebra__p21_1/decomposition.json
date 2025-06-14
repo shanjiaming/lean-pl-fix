@@ -1,0 +1,36 @@
+{
+  "problem_id": "linear_algebra__p21_1",
+  "dataset": "proverbench",
+  "timestamp": "2025-06-14T17:56:01.584664",
+  "header_file": "header.lean",
+  "problem_file": "problem.lean",
+  "original_verification_pass": false,
+  "filled_verification_pass": false,
+  "hole_verification_pass": false,
+  "holes": [
+    {
+      "hole_id": "hole_1",
+      "original_proof": "intro h_or\ncases h_or with\n| inl h_row =>\n  have hv\u2081 : i \u2260 j := h_row.1\n  have hv\u2082 : \u2200 (m : n), A i m = k * A j m := h_row.2\n  have hv\u2083 : A i = k \u2022 A j := by\n    ext m\n    exact hv\u2082 m\n  have hv\u2084 : det A = 0 := by\n    have h\u2084\u2081 : (A.updateRow i (A j)) = (A.updateRow i (A j)) := rfl\n    have h\u2084\u2082 : A = (A.updateRow i (A j)).updateRow i (k \u2022 (A.updateRow i (A j)) i) :=\n      by\n      ext x y\n      by_cases hx : x = i\n      \u00b7 subst hx\n        simp [Matrix.updateRow_self, hv\u2083, smul_eq_mul, Matrix.updateRow_ne] <;> aesop\n      \u00b7 simp [hx, Matrix.updateRow_ne, hv\u2081] <;> aesop\n    have h\u2084\u2083 : det A = det ((A.updateRow i (A j)).updateRow i (k \u2022 (A.updateRow i (A j)) i)) := by rw [h\u2084\u2082]\n    rw [h\u2084\u2083]\n    have h\u2084\u2084 : det ((A.updateRow i (A j)).updateRow i (k \u2022 (A.updateRow i (A j)) i)) = k \u2022 det (A.updateRow i (A j)) :=\n      by apply Matrix.det_updateRow_smul\n    rw [h\u2084\u2084]\n    have h\u2084\u2085 : det (A.updateRow i (A j)) = 0 := by\n      apply Matrix.det_zero_of_row_eq hv\u2081 <;> simp [Matrix.updateRow_self, Matrix.updateRow_ne, hv\u2081] <;> aesop\n    rw [h\u2084\u2085]\n    simp\n  exact hv\u2084\n| inr h_col =>\n  have hv\u2085 : i \u2260 j := h_col.1\n  have hv\u2086 : \u2200 (m : n), A m i = k * A m j := h_col.2\n  have hv\u2087 : A",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "ext m",
+      "best_tactic": null,
+      "method": "unigram_tactics",
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "tactics_tried": [],
+      "successful_tactics": [],
+      "failed_tactics": []
+    }
+  ]
+}

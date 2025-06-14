@@ -1,0 +1,61 @@
+macro "hole_2" : tactic => `(tactic| admit)
+macro "hole_3" : tactic => `(tactic| admit)
+macro "hole_4" : tactic => `(tactic| admit)
+macro "hole_6" : tactic => `(tactic| admit)
+macro "hole_7" : tactic => `(tactic| admit)
+macro "hole_5" : tactic => `(tactic| admit)
+macro "hole_8" : tactic => `(tactic| admit)
+macro "hole_9" : tactic => `(tactic| admit)
+macro "hole_1" : tactic => `(tactic| admit)
+
+theorem no_division {x y k m n : PNat}
+  (h : ∃ z : PNat, (x : ℕ)^(m : ℕ) + (y : ℕ)^(n : ℕ) = z) :
+  ¬((4 * k * x * y - 1) ∣ z) := by
+  obtain ⟨z, hz⟩ := h
+  have h₁ : (4 * k * x * y : ℕ) ≥ 4 := by
+    have h₂ : (k : ℕ) ≥ 1 := k.2
+    have h₃ : (x : ℕ) ≥ 1 := x.2
+    have h₄ : (y : ℕ) ≥ 1 := y.2
+    hole_2
+  have h₂ : (4 * k * x * y - 1 : ℕ) ≥ 3 := by
+    hole_3
+  have h₃ : (z : ℕ) = (x : ℕ) ^ (m : ℕ) + (y : ℕ) ^ (n : ℕ) := by
+    hole_4
+  have h₄ : (z : ℕ) ≥ 2 := by
+    rw [h₃]
+    have h₅ : (x : ℕ) ≥ 1 := x.2
+    have h₆ : (y : ℕ) ≥ 1 := y.2
+    have h₇ : (m : ℕ) ≥ 1 := m.2
+    have h₈ : (n : ℕ) ≥ 1 := n.2
+    have h₉ : (x : ℕ) ^ (m : ℕ) ≥ 1 := by
+      hole_6
+    have h₁₀ : (y : ℕ) ^ (n : ℕ) ≥ 1 := by
+      hole_7
+    hole_5
+  by_contra h₅
+  have h₆ : (4 * k * x * y - 1 : ℕ) ∣ (z : ℕ) := by hole_8
+  have h₇ : False := by
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    hole_9
+  hole_1

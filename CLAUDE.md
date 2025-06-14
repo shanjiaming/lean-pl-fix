@@ -656,3 +656,142 @@ After running the pipeline, results are organized as:
   - Contains aggregated success/failure statistics and processing times
 - **Dataset failure logs**: `decomposition_results/<dataset>_detailed_failures.json`
   - Contains detailed error information for failed problems
+
+## Lean Code Verification Tool
+
+### Overview
+Claude has access to a powerful Lean code verification interface through the decomposition pipeline. This tool allows Claude to verify any Lean code snippet, check for errors, and get detailed diagnostic information.
+
+### How to Use
+
+#### Basic Verification
+To verify if a piece of Lean code compiles and passes verification:
+
+```python
+python -c "
+from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
+from unified_problem_manager import problem_manager
+
+# Initialize pipeline (includes Lean verifier)
+pipeline = DecomposeHoleMergePipeline()
+
+# Get header content (imports and declarations) for a specific problem
+problem = problem_manager.get_problem('dataset_name', 'problem_id')
+header_content = problem_manager.get_header_content(problem)
+
+# Your Lean code to verify
+lean_code = '''
+theorem example_theorem : 2 + 2 = 4 := by norm_num
+'''
+
+# Verify the code
+result = pipeline.verify_lean_code(header_content, lean_code, with_macro=False)
+print(f'Verification result: {result}')  # True if passes, False if fails
+"
+```
+
+#### Detailed Error Analysis
+To get comprehensive error information when verification fails:
+
+```python
+python -c "
+from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
+from unified_problem_manager import problem_manager
+
+pipeline = DecomposeHoleMergePipeline()
+header_content = 'import Mathlib'  # Use minimal header or specific problem header
+
+lean_code = '''
+theorem broken_theorem : 2 + 2 = 5 := by norm_num  -- This will fail
+'''
+
+# Get detailed Lean interaction result
+result = pipeline.lean_verifier.run_with_header(header_content, lean_code)
+
+print('=== Detailed Verification Analysis ===')
+print(f'Has error: {getattr(result, \"error\", None)}')
+
+if hasattr(result, 'get_errors'):
+    errors = result.get_errors()
+    print(f'Number of errors: {len(errors)}')
+    for i, error in enumerate(errors):
+        print(f'Error {i+1}:')
+        print(f'  Position: Line {error.start_pos.line}, Column {error.start_pos.column}')
+        print(f'  Severity: {error.severity}')
+        print(f'  Message: {error.data}')
+        print()
+"
+```
+
+#### Verifying Problem Files
+To verify existing problem files from the datasets:
+
+```python
+python -c "
+from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
+from unified_problem_manager import problem_manager
+
+pipeline = DecomposeHoleMergePipeline()
+
+# Load a specific problem
+problem = problem_manager.get_problem('putnam', 'putnam_2007_b6')
+header_content = problem_manager.get_header_content(problem)
+problem_content = problem_manager.get_problem_content(problem)
+
+# Verify original problem
+result = pipeline.verify_lean_code(header_content, problem_content, with_macro=False)
+print(f'Original problem verification: {result}')
+
+# Get detailed errors if failed
+if not result:
+    lean_result = pipeline.lean_verifier.run_with_header(header_content, problem_content)
+    if hasattr(lean_result, 'get_errors'):
+        errors = lean_result.get_errors()
+        print(f'Found {len(errors)} errors:')
+        for error in errors[:5]:  # Show first 5 errors
+            print(f'  Line {error.start_pos.line}: {error.data}')
+"
+```
+
+#### Verifying Hole Versions
+To check if hole versions work correctly:
+
+```python
+python -c "
+from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
+from unified_problem_manager import problem_manager
+
+pipeline = DecomposeHoleMergePipeline()
+problem = problem_manager.get_problem('putnam', 'putnam_2007_b6')
+header_content = problem_manager.get_header_content(problem)
+
+# Read hole version file
+with open('decomposition_results/putnam/decomposed/putnam_2007_b6/hole_version.lean', 'r') as f:
+    hole_content = f.read()
+
+# Verify hole version
+result = pipeline.verify_lean_code(header_content, hole_content, with_macro=False)
+print(f'Hole version verification: {result}')
+
+if not result:
+    print('Hole version has errors - analyzing...')
+    lean_result = pipeline.lean_verifier.run_with_header(header_content, hole_content)
+    if hasattr(lean_result, 'get_errors'):
+        errors = lean_result.get_errors()
+        for error in errors:
+            if 'nlinarith' in error.data or 'linarith' in error.data:
+                print(f'Found failing tactic at line {error.start_pos.line}: {error.data}')
+"
+```
+
+### Important Parameters
+
+- **`with_macro`**: Set to `True` if your code uses `hole` placeholders that need the macro definition
+- **`header_content`**: Always provide proper imports and declarations. Use `problem_manager.get_header_content(problem)` for existing problems
+- **Error filtering**: The verifier distinguishes between real errors and "unsolved goals" - check `error.data` content
+
+### Common Use Cases
+
+1. **Debug failing proofs**: Identify exactly which tactics or lines cause verification failures
+2. **Test hole versions**: Verify that hole replacements work correctly
+3. **Validate fixes**: Check if modifications to Lean code resolve previous errors
