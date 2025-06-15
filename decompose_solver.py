@@ -3,6 +3,7 @@ import re
 from typing import Dict, Optional
 from unified_problem_manager import Problem, problem_manager
 import concurrent.futures
+import timeout_decorator
 
 localprojectdir = "../matheye/benchmarks/"
 
@@ -974,14 +975,15 @@ class UnifiedLeanEnvironment:
         if header_content in self._header_envs:
             return self._header_envs[header_content]
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(self.server.run, Command(cmd=header_content))
-            try:
-                result = future.result(timeout=60)  # 60 seconds timeout
-            except concurrent.futures.TimeoutError:
-                future.cancel()
-                self.reset()
-                raise
+        @timeout_decorator.timeout(60, timeout_exception=timeout_decorator.timeout_decorator.TimeoutError)
+        def run_with_timeout():
+            return self.server.run(Command(cmd=header_content))
+
+        try:
+            result = run_with_timeout()
+        except timeout_decorator.timeout_decorator.TimeoutError:
+            self.reset()
+            raise
         
         # Cache the environment before returning it
         self._header_envs[header_content] = result.env
@@ -993,14 +995,15 @@ class UnifiedLeanEnvironment:
         # breakpoint()
         env = self.get_or_create_header_env(header_content)
         
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(self.server.run, Command(cmd=input_content, env=env, **kwargs))
-            try:
-                ret = future.result(timeout=60)  # 60 seconds timeout
-            except concurrent.futures.TimeoutError:
-                future.cancel()
-                self.reset()
-                raise
+        @timeout_decorator.timeout(60, timeout_exception=timeout_decorator.timeout_decorator.TimeoutError)
+        def run_with_timeout():
+            return self.server.run(Command(cmd=input_content, env=env, **kwargs))
+
+        try:
+            ret = run_with_timeout()
+        except timeout_decorator.timeout_decorator.TimeoutError:
+            self.reset()
+            raise
         
         if env > 15:
             self.reset()

@@ -1470,7 +1470,7 @@ class DecomposeHoleMergePipeline:
             self._append_failure_to_file(dataset_name, failure_record)
             self._append_result_to_file(dataset_name, result_record)
 
-    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, hole_filling_function=None):
+    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, hole_filling_function=None, resume: bool = True):
         """
         Process entire dataset through the pipeline
         
@@ -1478,11 +1478,35 @@ class DecomposeHoleMergePipeline:
             dataset_name: Name of the dataset to process
             limit: Maximum number of problems to process
             hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
+            resume: Whether to resume from last run (default: True)
         """
         problems = problem_manager.list_problems(dataset_name)
         if not problems:
             print(f"No problems found in dataset: {dataset_name}")
             return
+        
+        if resume:
+            # Resume mechanism: check for and skip already processed problems
+            results_path = os.path.join(self.output_base_dir, f"{dataset_name}_pipeline_results.json")
+            processed_problem_ids = set()
+            if os.path.exists(results_path):
+                try:
+                    with open(results_path, "r") as f:
+                        content = f.read()
+                        if content:  # Avoid JSONDecodeError on empty file
+                            existing_results = json.loads(content)
+                            for r in existing_results:
+                                if r.get("problem_id"):
+                                    processed_problem_ids.add(r["problem_id"])
+                
+                    if processed_problem_ids:
+                        print(f"Found {len(processed_problem_ids)} already processed problems in results file. They will be skipped.")
+                        original_count = len(problems)
+                        problems = [p for p in problems if p.problem_id not in processed_problem_ids]
+                        print(f"Skipped {original_count - len(problems)} problems. Remaining to process: {len(problems)}.")
+                
+                except (json.JSONDecodeError, IOError) as e:
+                    print(f"Warning: Could not read or parse existing results file '{results_path}'. Processing all problems from scratch. Error: {e}")
         
         if limit:
             problems = problems[:limit]
@@ -1576,8 +1600,9 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python decompose_hole_merge_pipeline.py <command> [args]")
         print("Commands:")
-        print("  dataset <name> [limit] [filling_method] - Process entire dataset")
+        print("  dataset <name> [limit] [filling_method] [--no-resume] - Process entire dataset")
         print("    filling_method options: simple, unigram")
+        print("    --no-resume: Disable resuming from previous run")
         print("  problem <dataset> <problem_id> [filling_method] - Process single problem")
         return
     
@@ -1587,19 +1612,28 @@ def main():
     if command == "dataset":
         dataset_name = sys.argv[2]
         
-        # Smart parameter parsing: check if 3rd argument is a number or method name
+        # Extract flags first, then handle positional arguments
+        args = sys.argv[3:]
+        resume = True
+        if "--no-resume" in args:
+            resume = False
+            args.remove("--no-resume")
+            print("Resume mechanism disabled by command-line flag.")
+        
+        # Smart parameter parsing on remaining args
         limit = None
         filling_method = "simple"
         
-        if len(sys.argv) > 3:
+        if len(args) > 0:
             try:
-                # Try to parse 3rd argument as integer (limit)
-                limit = int(sys.argv[3])
-                # If successful, 4th argument (if exists) is filling_method
-                filling_method = sys.argv[4] if len(sys.argv) > 4 else "simple"
+                # Try to parse 1st remaining argument as integer (limit)
+                limit = int(args[0])
+                # If successful, 2nd remaining argument (if exists) is filling_method
+                if len(args) > 1:
+                    filling_method = args[1]
             except ValueError:
-                # 3rd argument is not a number, treat it as filling_method
-                filling_method = sys.argv[3]
+                # 1st remaining argument is not a number, treat it as filling_method
+                filling_method = args[0]
                 limit = None
         
         # Choose hole filling function based on method
@@ -1608,8 +1642,8 @@ def main():
         else:  # default to simple
             hole_filling_function = pipeline.fill_hole_content
         
-        print(f"Processing dataset: {dataset_name}, limit: {limit}, method: {filling_method}")
-        pipeline.process_dataset(dataset_name, limit, hole_filling_function)
+        print(f"Processing dataset: {dataset_name}, limit: {limit}, method: {filling_method}, resume: {resume}")
+        pipeline.process_dataset(dataset_name, limit, hole_filling_function, resume=resume)
         
     elif command == "problem":
         if len(sys.argv) < 4:

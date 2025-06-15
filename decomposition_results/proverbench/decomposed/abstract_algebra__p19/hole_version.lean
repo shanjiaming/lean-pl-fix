@@ -1,0 +1,182 @@
+macro "hole_4" : tactic => `(tactic| admit)
+macro "hole_3" : tactic => `(tactic| admit)
+macro "hole_5" : tactic => `(tactic| admit)
+macro "hole_1" : tactic => `(tactic| admit)
+
+theorem polynomial_decomposition :
+  ∃ (A B : Polynomial ℝ), P = A^2 + Polynomial.X * B^2 := by
+  have h_false : False := by
+    classical
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    exfalso
+    have h₁ : False := by
+      
+      
+      
+      
+      
+      have h₂ : False := by
+        
+        
+        
+        
+        
+        hole_4
+      hole_3
+    exact h₁
+  
+  have h_main : ∃ (A B : Polynomial ℝ), P = A^2 + Polynomial.X * B^2 := by
+    hole_5
+  
+  hole_1
