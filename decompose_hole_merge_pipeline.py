@@ -608,14 +608,6 @@ class DecomposeHoleMergePipeline:
                 
                 # Check if this is a bullet point that can be converted to a hole
 
-                #FIXME _is_bullet_point_block is buggy
-                elif self._is_bullet_point_block(node):
-                    hole_info = self._analyze_bullet_point_for_hole(node, hole_counter)
-                    if hole_info:
-                        holes_to_create.append(hole_info)
-                        hole_counter += 1
-                        print(f"  Found bullet-point hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
-                
                 # Recursively process children to handle nested structures
                 if node.subhaves:
                     process_nodes_for_holes(node.subhaves)
@@ -727,10 +719,8 @@ class DecomposeHoleMergePipeline:
         # Find the first tactic to include in the hole, skipping initial boundaries
         first_tactic_idx = -1
         for i, tactic_node in enumerate(tactics_after_last_have):
-            tactic_text = tactic_node.tactic.tactic.strip()
-            if not self._is_new_bullet_point_boundary(tactic_text, tactic_node):
-                first_tactic_idx = i
-                break
+            first_tactic_idx = i
+            break
 
         if first_tactic_idx == -1:
             # All remaining tactics are boundaries, so no hole to create
@@ -773,33 +763,6 @@ class DecomposeHoleMergePipeline:
         except Exception:
             pass
             
-        return False
-    
-    def _is_bullet_point_block(self, node) -> bool:
-        """
-        Check if this tactic node represents a bullet point block that can be converted to a hole.
-        Bullet points (·) often contain simple tactics like 'rfl', 'simp', etc.
-        """
-        tactic_text = node.tactic.tactic.strip()
-        
-        # Check if it starts with bullet point
-        if tactic_text.startswith('·'):
-            # Remove the bullet point and check if there's content that could be a hole
-            content = tactic_text[1:].strip()
-            
-            # Check if it's a simple tactic that's suitable for hole generation
-            # Common simple tactics that make good holes
-            simple_tactics = ['rfl', 'simp', 'norm_num', 'linarith', 'omega', 'ring', 'assumption', 'trivial']
-            
-            # Check if the content is a simple tactic or starts with one
-            for tactic in simple_tactics:
-                if content == tactic or content.startswith(tactic + ' '):
-                    return True
-            
-            # Also check if it's a short tactic (likely to be simple)
-            if len(content) > 0 and len(content) <= 50 and not content.startswith('have'):
-                return True
-        
         return False
     
     def _analyze_bullet_point_for_hole(self, node, hole_counter):
