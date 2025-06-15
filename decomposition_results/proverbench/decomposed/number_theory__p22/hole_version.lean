@@ -15,10 +15,20 @@ theorem cos_pi_rational_values (p q : ℤ) (h : ∃ r : ℚ, cos (p * π / q) = 
       have h₂ : (q : ℝ) = 0 := by hole_3
       have h₃ : (p * π / q : ℝ) = 0 := by
         hole_4
+        <;> ring_nf
+        <;> field_simp [h₂]
+        <;> ring_nf
       hole_2
+      <;>
+      simp_all [Real.cos_zero]
     
     have h₂ : ∃ r : ℚ, r ∈ ({0, 1, -1, 1/2, -1/2} : Set ℚ) ∧ cos (p * π / q) = r := by
       hole_5
+      constructor
+      · 
+        norm_num [Set.mem_insert, Set.mem_singleton_iff]
+      · 
+        simpa [h₁] using h₁
       
     exact h₂
   · 
@@ -29,10 +39,18 @@ theorem cos_pi_rational_values (p q : ℤ) (h : ∃ r : ℚ, cos (p * π / q) = 
       · 
         have h₄ : (r : ℝ) = Real.cos (p * Real.pi / q) := by
           hole_7
+          <;> norm_cast
         have h₅ : r = 0 ∨ r = 1 ∨ r = -1 ∨ r = 1 / 2 ∨ r = -1 / 2 := by
           hole_8
         
         have h₆ : r ∈ ({0, 1, -1, 1 / 2, -1 / 2} : Set ℚ) := by
           hole_9
+          <;>
+          (try norm_num) <;>
+          (try aesop) <;>
+          (try ring_nf) <;>
+          (try field_simp) <;>
+          (try norm_num) <;>
+          (try aesop)
         hole_6
     hole_1

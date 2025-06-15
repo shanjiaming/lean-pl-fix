@@ -607,6 +607,8 @@ class DecomposeHoleMergePipeline:
                         print(f"  Found have-by hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
                 
                 # Check if this is a bullet point that can be converted to a hole
+
+                #FIXME _is_bullet_point_block is buggy
                 elif self._is_bullet_point_block(node):
                     hole_info = self._analyze_bullet_point_for_hole(node, hole_counter)
                     if hole_info:
@@ -718,46 +720,37 @@ class DecomposeHoleMergePipeline:
             if child.tactic.tactic.strip().startswith("have"):
                 last_have_index = i
         
-        # Determine what content comes after the last have (or from beginning if no have)
-        if last_have_index == -1:
-            # No nested have statements - all content in this by-block becomes a hole
-            tactics_to_hole = node.subhaves
-        else:
-            # There are nested have statements - only content after the last one becomes a hole
-            tactics_to_hole = node.subhaves[last_have_index + 1:]
-        
-        if not tactics_to_hole:
-            # No content to create a hole from
+        tactics_after_last_have = node.subhaves[last_have_index + 1:]
+        if not tactics_after_last_have:
             return None
-        
-        # Important: Filter tactics to avoid crossing bullet point boundaries
-        # If we encounter a bullet point (·) tactic, we should not include it or subsequent tactics
-        # in the current hole, as they belong to a different structural block
-        filtered_tactics = []
-        for tactic_node in tactics_to_hole:
+
+        # Find the first tactic to include in the hole, skipping initial boundaries
+        first_tactic_idx = -1
+        for i, tactic_node in enumerate(tactics_after_last_have):
             tactic_text = tactic_node.tactic.tactic.strip()
-            # Check if this tactic represents a bullet point boundary
-            if self._is_new_bullet_point_boundary(tactic_text, tactic_node):
-                break  # Stop here to avoid crossing bullet point boundaries
-            filtered_tactics.append(tactic_node)
-        
-        if not filtered_tactics:
+            if not self._is_new_bullet_point_boundary(tactic_text, tactic_node):
+                first_tactic_idx = i
+                break
+
+        if first_tactic_idx == -1:
+            # All remaining tactics are boundaries, so no hole to create
             return None
-            
-        # Collect all content that should become a hole
-        hole_content_parts = []
-        for tactic_node in filtered_tactics:
-            hole_content_parts.append(tactic_node.tactic.tactic.strip())
-        
+
+        # The hole starts at this tactic and goes to the end of the block
+        start_tactic_node = tactics_after_last_have[first_tactic_idx]
+        tactics_in_hole = tactics_after_last_have[first_tactic_idx:]
+
+        # Collect content for the hole
+        hole_content_parts = [t.tactic.tactic.strip() for t in tactics_in_hole]
         hole_content = '\n'.join(hole_content_parts)
-        
+
         return {
             'hole_id': f"hole_{hole_counter}",
             'content': hole_content,
             'original_proof': hole_content,
             'parent_have_tactic': node.tactic.tactic.strip(),
-            'start_pos': filtered_tactics[0].tactic.start_pos,
-            'end_pos': filtered_tactics[-1].tactic.end_pos,  # Use precise end position
+            'start_pos': start_tactic_node.tactic.start_pos,
+            'end_pos': node.end_pos,
             'hole_type': 'after_last_have' if last_have_index >= 0 else 'entire_by_block'
         }
     
@@ -776,16 +769,6 @@ class DecomposeHoleMergePipeline:
         try:
             line_num = tactic_node.tactic.start_pos.line
             col_num = tactic_node.tactic.start_pos.column
-            
-            # Heuristic: If this is 'rfl' and it's at a relatively low column position
-            # (suggesting it's at the top level of a bullet point), it might be a boundary
-            if tactic_text == 'rfl' and col_num <= 12:  # Adjust threshold as needed
-                return True
-                
-            # Additional check: if this is a simple standalone tactic at low indentation
-            simple_bullet_tactics = ['rfl', 'simp', 'trivial', 'assumption', 'constructor']
-            if tactic_text in simple_bullet_tactics and col_num <= 10:
-                return True
                 
         except Exception:
             pass

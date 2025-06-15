@@ -5,7 +5,20 @@ print(config.__dict__)
 
 server = LeanServer(config)
 response = server.run(Command(cmd="""import Mathlib
-theorem ex_mathlib (x : ℝ) (y : ℚ) :
-  ( Irrational x ) -> Irrational ( x + y ) := sorry"""))
-print(response)
-breakpoint()
+theorem eq_comm_demo (x y : ℕ) : x = y ↔ y = x := by
+  constructor
+  · 
+    have a: x = y -> y = x := by
+      intro h 
+      rw [<- h]
+      rw [h]
+      <;>linarith
+    exact a
+  · 
+    rw [a]
+    rw [h]
+
+""", all_tactics=True))
+
+for tactic in response.tactics:
+    print(tactic.tactic + " " + str(tactic.start_pos) + " " + str(tactic.end_pos))
