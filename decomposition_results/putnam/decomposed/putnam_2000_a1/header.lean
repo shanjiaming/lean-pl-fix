@@ -1,8 +1,0 @@
-import Mathlib
-
-open Topology Filter
-
--- (fun A : ℝ => Set.Ioo 0 (A ^ 2))
-/--
-Let $A$ be a positive real number. What are the possible values of $\sum_{j=0}^\infty x_j^2$, given that $x_0,x_1,\ldots$ are positive numbers for which $\sum_{j=0}^\infty x_j=A$?
--/

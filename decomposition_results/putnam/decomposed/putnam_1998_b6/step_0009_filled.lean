@@ -1,2 +1,0 @@
-theorem h₆ (a b c k : ℤ) (hk h₁ :  ↑k =    √(↑(4 + 2 * max (max |a| |b|) |c|) ^ 3 + ↑a * ↑(4 + 2 * max (max |a| |b|) |c|) ^ 2 +          ↑b * ↑(4 + 2 * max (max |a| |b|) |c|) +        ↑c)) (h₂ :  ↑k ^ 2 =    ↑(4 + 2 * max (max |a| |b|) |c|) ^ 3 + ↑a * ↑(4 + 2 * max (max |a| |b|) |c|) ^ 2 +        ↑b * ↑(4 + 2 * max (max |a| |b|) |c|) +      ↑c) (h₃ :  k ^ 2 =    (4 + 2 * max (max |a| |b|) |c|) ^ 3 + a * (4 + 2 * max (max |a| |b|) |c|) ^ 2 +        b * (4 + 2 * max (max |a| |b|) |c|) +      c) : max (max |a| |b|) |c| ≥ 0 := by -- exact Int.ofNat_zero_le _
-  norm_num

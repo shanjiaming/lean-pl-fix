@@ -1,6 +1,0 @@
-theorem h₅₂ (n k : ℕ) (hnk : n > 0 ∧ k > 0) (h₁ : n > 0) (h₂ : k > 0) (h₃ : 2 * k + 1 > 0) (h : n ≤ k + 1) (h₄ h₅ : n ≤ k + 1) (h₆ : ∀ (s : Equiv.Perm (Fin n)), klimited k n s) (h₃₁ : {s | klimited k n s} = univ) (h₃₂ : {s | klimited k n s}.ncard = univ.ncard) (h₃₃ : {s | klimited k n s}.ncard = n !) (h₃₅ : n ≤ k + 1) (h₃₆ : n > 0) (h₃₇ : k > 0) (h₃₈ : n ≤ k + 1) (h₃₉ : n > 0) (h₄₀ : k > 0) (h₄₂ : n ≡ 0 [MOD 2 * k + 1] ∨ n ≡ 1 [MOD 2 * k + 1]) (h₄₄ : n ≤ k + 1) (h₄₅ : k > 0) (h₄₆ : 2 * k + 1 > k + 1) (h₄₇ : n < 2 * k + 1) (h₄₈ h₄₉ : n ≡ 0 [MOD 2 * k + 1]) (h₅₀ : n % (2 * k + 1) = 0) (h₅₁ : n < 2 * k + 1) : n = 0 := by
-  have h₅₃ : n % (2 * k + 1) = 0 := h₅₀
-  have h₅₄ : n < 2 * k + 1 := h₅₁
-  have h₅₅ : n = 0 := by sorry
-  --  exact h₅₅
-  hole

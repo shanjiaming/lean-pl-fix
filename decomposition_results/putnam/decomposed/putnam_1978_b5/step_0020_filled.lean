@@ -1,4 +1,0 @@
-theorem h₄ (S : Set ℝ[X]) (hS : S = {p | p.degree = 4 ∧ ∀ x ∈ Icc (-1) 1, eval x p ∈ Icc 0 1}) (h_main₁ : 4 * X ^ 4 - 4 * X ^ 2 + 1 ∈ S) (p : ℝ[X]) (hp : p ∈ {p | p.degree = 4 ∧ ∀ x ∈ Icc (-1) 1, eval x p ∈ Icc 0 1}) (h₁ : p.degree = 4) (h₂ : ∀ x ∈ Icc (-1) 1, eval x p ∈ Icc 0 1) (h₃ : p.coeff 4 ≤ 4) : (4 * X ^ 4 - 4 * X ^ 2 + 1).coeff 4 = 4 := by
-  --  norm_num [Polynomial.coeff_add, Polynomial.coeff_sub, Polynomial.coeff_mul, Polynomial.coeff_X_pow,
-  --    Polynomial.coeff_C]
-  hole

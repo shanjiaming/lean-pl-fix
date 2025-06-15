@@ -1,2 +1,0 @@
-theorem h₁ (f : ↑(Ioi 1) → ↑(Ioi 1)) (c : ℝ) (hc : c > 0) (hf : ∀ (x : ↑(Ioi 1)), ↑(f x) = ↑x ^ c) (x y : ↑(Ioi 1)) (hxy : ↑x ^ 2 ≤ ↑y ∧ ↑y ≤ ↑x ^ 3) : ↑(f x) = ↑x ^ c := by -- simpa using hf x
-  hole

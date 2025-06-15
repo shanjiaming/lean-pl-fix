@@ -1,1 +1,0 @@
-theorem h₇ (n : ℕ) (P : Finset (Fin 3 → ℝ) → Prop) (P_def : ∀ (S : Finset (Fin 3 → ℝ)), P S ↔ ↑S = {u | ∃ v w, u = (crossProduct ↑v) ↑w}) (h : 0 < n ∧ ∃ S, S.card = n ∧ P S) (h₂ : 0 < n) (S : Finset (Fin 3 → ℝ)) (hS_card : S.card = n) (hS h₄ : P S) (h₅ : P S ↔ ↑S = {u | ∃ v w, u = (crossProduct ↑v) ↑w}) (h₆ : ↑S = {u | ∃ v w, u = (crossProduct ↑v) ↑w}) : n = 1 ∨ n = 7 := by sorry

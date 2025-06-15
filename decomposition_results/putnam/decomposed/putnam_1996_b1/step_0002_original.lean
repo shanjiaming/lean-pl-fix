@@ -1,1 +1,0 @@
-theorem h₁ (selfish : Finset ℕ → Prop) (n : ℕ) (hselfish : ∀ (s : Finset ℕ), selfish s = (s.card ∈ s)) (npos : n ≥ 1) : ∀ (s : Finset ℕ), ↑s ⊆ Set.Icc 1 n ↔ ∀ x ∈ s, 1 ≤ x ∧ x ≤ n := by sorry

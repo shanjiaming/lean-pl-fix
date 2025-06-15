@@ -1,4 +1,0 @@
-theorem h₈ (p : ℝ → Prop) (hp :  ∀ (c : ℝ),    p c ↔      ∀ (P : ℝ[X]),        P.degree = 3 →          (∃ x ∈ Icc 0 1, eval x P = 0) → ∫ (x : ℝ) in 0 ..1, |eval x P| ≤ c * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x P|}) (h₀ : p (5 / 6)) (c : ℝ) (hc :  ∀ (P : ℝ[X]),    P.degree = 3 →      (∃ x ∈ Icc 0 1, eval x P = 0) → ∫ (x : ℝ) in 0 ..1, |eval x P| ≤ c * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x P|}) (h : ¬5 / 6 ≤ c) (h₂ : c < 5 / 6) (h₅ h₆ :  ∫ (x : ℝ) in 0 ..1, |eval x (C (18 / √3) * (X * (X - C 1) * (X - C (1 / 2))))| ≤    c * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x (C (18 / √3) * (X * (X - C 1) * (X - C (1 / 2))))|}) (h₇ : c < 5 / 6) : ∫ (x : ℝ) in 0 ..1, |eval x (C (18 / √3) * (X * (X - C 1) * (X - C (1 / 2))))| >
-    c * sSup {y | ∃ x ∈ Icc 0 1, y = |eval x (C (18 / √3) * (X * (X - C 1) * (X - C (1 / 2))))|} :=
-  by sorry
-  hole

@@ -17,8 +17,8 @@ def query_dpv2(input_content):
         extra_headers={
     },
     extra_body={},
-    model="deepseek/deepseek-prover-v2:free",
-    # model="deepseek/deepseek-prover-v2",
+    # model="deepseek/deepseek-prover-v2:free",
+    model="deepseek/deepseek-prover-v2",
     messages=[
         {
         "role": "user",
@@ -44,7 +44,7 @@ PROOF_CONTENT
 ```
 """
 
-def dpv2_fix(input_content, error_message_str):
+def dpv2_fix(header, input_content, error_message_str):
     prompt = make_prompt_for_dpv2(header, input_content, error_message_str)
     answer = query_dpv2(prompt)
     theorem_content = answer.split("```theorem")[1].split("```")[0]
@@ -60,9 +60,9 @@ def dpv2_fix_unified(problem: Problem, input_content: str, error_message_str: st
     theorem_content = "theorem" + theorem_content
     return theorem_content
 
-def make_single_fix(fix_func):
+def make_single_fix(header, fix_func):
     def fix_single_proof(input_content):
-        run_result = run_with_header_env(input_content)
+        run_result = unified_env.run_with_header(header, input_content)
         print(run_result)
         error_messages = [m.data for m in getattr(run_result, 'messages', []) if m.severity == "error"]
         if not error_messages:
@@ -70,8 +70,8 @@ def make_single_fix(fix_func):
         else:
             error_message_str = "\n\n".join(error_messages)
             # Pass the original input_content and the error_message_str separately
-            theorem_content = fix_func(input_content, error_message_str)
-            run_result = run_with_header_env(theorem_content)
+            theorem_content = fix_func(header, input_content, error_message_str)
+            run_result = unified_env.run_with_header(header, theorem_content)
             error_messages = [m.data for m in getattr(run_result, 'messages', []) if m.severity == "error"]
             if not error_messages:
                 return theorem_content
@@ -80,7 +80,6 @@ def make_single_fix(fix_func):
                 print(f"after_fix: \n{theorem_content}")
                 assert False, "Failed to solve theorem"
                 return theorem_content
-                # return fix_single_proof_dpv2(theorem_content)
     return fix_single_proof
 
 def make_single_fix_unified(problem: Problem, fix_func):

@@ -1,2 +1,0 @@
-theorem h3 (fact h2 : ∫ (x : ℝ) in univ, rexp (-x ^ 2) = √π) : ∫ (x : ℝ) in univ, rexp (-x ^ 2) = √π := by -- simpa using h2
-  linarith

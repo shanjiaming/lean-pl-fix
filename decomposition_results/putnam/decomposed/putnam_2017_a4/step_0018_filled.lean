@@ -1,3 +1,0 @@
-theorem h₈ (N : ℕ) (score : Fin (2 * N) → Fin 11) (hsurj : ∀ (k : Fin 11), ∃ i, score i = k) (havg : (∑ i, ↑↑(score i)) / (2 * ↑N) = 7.4) (hN_pos : N > 0) (h₁ : ∑ i, ↑↑(score i) = 2 * ↑N * 7.4) (h₂ h₄ : ∑ i, ↑↑(score i) = 2 * ↑N * 74 / 10) (h₇ : ∀ (i : Fin (2 * N)), ↑↑(score i) % 10 = ↑↑(score i) % 10) : (∑ i, ↑↑(score i)) % 10 = (∑ i, ↑↑(score i) % 10) % 10 := by
-  --  simp [Int.emod_eq_emod_iff_emod_sub_eq_zero, Finset.sum_int_mod]
-  hole

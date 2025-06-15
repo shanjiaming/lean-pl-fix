@@ -1,5 +1,0 @@
-theorem h2₈ (G : Type u_1) (inst✝ : Group G) (φ : G → G) (hφ : ∀ (g1 g2 g3 h1 h2 h3 : G), g1 * g2 * g3 = 1 ∧ h1 * h2 * h3 = 1 → φ g1 * φ g2 * φ g3 = φ h1 * φ h2 * φ h3) (ψ : G → G := fun g => (φ 1)⁻¹ * φ g) (x y : G) (h1 h2₁ : φ x * φ y * φ (x * y)⁻¹ = φ 1 * φ 1 * φ 1) (h2₂ h2₃ : φ (x * y) * φ (x * y)⁻¹ * φ 1 = φ 1 * φ 1 * φ 1) (h2₄ : φ x * φ y * φ (x * y)⁻¹ = φ 1 * φ 1 * φ 1) (h2₅ h2₆ h2₇ : φ (x * y) * φ (x * y)⁻¹ * φ 1 = φ x * φ y * φ (x * y)⁻¹) : φ (x * y) * (φ (x * y)⁻¹ * φ 1) = φ x * φ y * φ (x * y)⁻¹ := by
-  simp [mul_assoc] at h2₇ ⊢ <;> simp_all [mul_assoc] <;> group <;> simp_all [mul_assoc] <;> group <;>
-      simp_all [mul_assoc] <;>
-    group
-  hole

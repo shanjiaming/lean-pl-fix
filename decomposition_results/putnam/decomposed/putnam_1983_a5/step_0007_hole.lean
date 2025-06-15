@@ -1,2 +1,0 @@
-theorem h₅ (n : ℕ) (hn : n > 0) (h₁ : ⌊(1 / 2) ^ n⌋ = 0) (h₃ : n > 0) : ↑n > 0 := by -- exact_mod_cast h₃
-  hole

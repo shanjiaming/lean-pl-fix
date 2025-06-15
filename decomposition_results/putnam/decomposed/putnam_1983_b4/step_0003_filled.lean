@@ -1,2 +1,0 @@
-theorem h_seq_strict_mono (f : ℕ → ℤ) (a : ℕ → ℕ) (hf : f = fun n => ↑n + ⌊√↑n⌋) (ha0 : a 0 > 0) (han : ∀ (n : ℕ), ↑(a (n + 1)) = f (a n)) (hf_pos : ∀ (n : ℕ), ↑n + ⌊√↑n⌋ ≥ ↑n) : ∀ (n : ℕ), a (n + 1) > a n := by -- sorry
-  hole

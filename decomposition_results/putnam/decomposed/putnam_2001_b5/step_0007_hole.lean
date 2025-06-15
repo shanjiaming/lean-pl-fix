@@ -1,2 +1,0 @@
-theorem h₆ (a b : ℝ) (g : ℝ → ℝ) (abint : 0 < a ∧ a < 1 / 2 ∧ 0 < b ∧ b < 1 / 2) (gcont : Continuous g) (hg : ∀ (x : ℝ), g (g x) = a * g x + b * x) (h₁ : 0 < a) (h₂ : a < 1 / 2) (h₃ : 0 < b) (h₄ : b < 1 / 2) (h₅ : 0 < a ^ 2 + 4 * b) : 0 < √(a ^ 2 + 4 * b) := by -- positivity
-  hole

@@ -1,2 +1,0 @@
-theorem h₃ (lambda : ℝ) (hlambda : lambda > 1 / 2) (u : ℝ → ℝ) (hu : ∀ x ∈ Set.Icc 0 1, u x = 1 + lambda * ∫ (y : ℝ) in Set.Ioo x 1, u y * u (y - x)) (h₂ : u 1 = 1 + lambda * ∫ (y : ℝ) in Set.Ioo 1 1, u y * u (y - 1)) : ∫ (y : ℝ) in Set.Ioo 1 1, u y * u (y - 1) = 0 := by -- simp [Set.Ioo_eq_empty_iff] <;> norm_num
-  hole

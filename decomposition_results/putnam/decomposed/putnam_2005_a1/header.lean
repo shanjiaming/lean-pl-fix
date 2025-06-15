@@ -1,7 +1,0 @@
-import Mathlib
-
-open Nat
-
-/--
-Show that every positive integer is a sum of one or more numbers of the form $2^r 3^s$, where $r$ and $s$ are nonnegative integers and no summand divides another.
--/

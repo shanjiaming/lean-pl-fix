@@ -1,2 +1,0 @@
-theorem h₅ (P : ℕ → Prop) (hP : ∀ (n : ℕ), P n ↔ ∀ (p : ℕ), Nat.Prime p ∧ p ∣ n ^ 2 + 3 → ∃ k, ↑p ∣ ↑k ^ 2 + 3 ∧ k ^ 2 < n) (n : ℕ) (hp : Nat.Prime 2 ∧ 2 ∣ (3 * (n + 1)) ^ 2 + 3) (h₂ : 2 ∣ (3 * (n + 1)) ^ 2 + 3) (h₃ : Nat.Prime 2) : 1 ^ 2 < 3 * (n + 1) := by -- nlinarith [Nat.zero_le n]
-  linarith

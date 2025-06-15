@@ -1,6 +1,0 @@
-theorem h₅₁₂ (h_main : (MvPolynomial.X 1 - 2 * MvPolynomial.X 0) * (MvPolynomial.X 1 - 2 * MvPolynomial.X 0 - 1) ≠ 0) (a : ℝ) (h₁ :  (MvPolynomial.eval fun n => if n = 0 then ↑⌊a⌋ else ↑⌊2 * a⌋)      ((MvPolynomial.X 1 - 2 * MvPolynomial.X 0) * (MvPolynomial.X 1 - 2 * MvPolynomial.X 0 - 1)) =    (↑⌊2 * a⌋ - 2 * ↑⌊a⌋) * (↑⌊2 * a⌋ - 2 * ↑⌊a⌋ - 1)) (h₃ : ↑⌊2 * a⌋ - 2 * ↑⌊a⌋ = ↑⌊2 * a⌋ - 2 * ↑⌊a⌋) (h₅₂ : a - 1 < ↑⌊a⌋) (h₅₃ : ↑⌊a⌋ ≤ a) (h₅₄ : 2 * a < 2 * ↑⌊a⌋ + 2) (h₅₅ h₅₇ : 2 * ↑⌊a⌋ ≤ 2 * a) (h₅₈ : 2 * a < 2 * ↑⌊a⌋ + 2) (h₅₁₀ : 2 * ↑⌊a⌋ ≤ 2 * a) (h₅₁₁ : 2 * a < 2 * ↑⌊a⌋ + 2) : ⌊2 * a⌋ = 2 * ⌊a⌋ ∨ ⌊2 * a⌋ = 2 * ⌊a⌋ + 1 :=
-  by
-  have h₅₁₃ : (⌊(2 : ℝ) * a⌋ : ℤ) = 2 * ⌊a⌋ ∨ (⌊(2 : ℝ) * a⌋ : ℤ) = 2 * ⌊a⌋ + 1 := by sorry
-  cases h₅₁₃ with
-  | inl h₅₂₁ => simp_all [Int.cast_add, Int.cast_mul, Int.cast_ofNat] <;> ring_nf at * <;> norm_num at * <;> omega
-  | inr h₅₂₁ => simp_all [Int.cast_add, Int.cast_mul, Int.cast_ofNat] <;> ring_nf at * <;> norm_num at * <;> omega

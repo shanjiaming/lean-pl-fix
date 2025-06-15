@@ -1,2 +1,0 @@
-theorem h₃ (p : ℕ → ℝ → ℝ) (x✝ y : ℝ) (n✝ : ℕ) (h0 : p 0 = fun x => 1) (hp : ∀ n > 0, p n = fun x => ∏ i ∈ Finset.range n, (x - ↑i)) (n : ℕ) (x : ℝ) (hn : ¬n = 0) (hn' : n > 0) (h₂ : p n = fun x => ∏ i ∈ Finset.range n, (x - ↑i)) : p n x = ∏ i ∈ Finset.range n, (x - ↑i) := by rw [h₂] <;> simp
-  hole

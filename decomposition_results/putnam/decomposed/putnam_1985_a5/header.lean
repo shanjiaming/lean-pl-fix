@@ -1,8 +1,0 @@
-import Mathlib
-
-open Set Filter Topology Real
-
--- {3, 4, 7, 8}
-/--
-Let $I_m = \int_0^{2\pi} \cos(x)\cos(2x)\cdots \cos(mx)\,dx$. For which integers $m$, $1 \leq m \leq 10$ is $I_m \neq 0$?
--/

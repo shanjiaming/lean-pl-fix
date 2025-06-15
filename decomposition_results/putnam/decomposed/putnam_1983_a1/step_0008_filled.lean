@@ -1,2 +1,0 @@
-theorem h₆ (n : ℤ) (hn : n ∈ {n | n > 0 ∧ (n ∣ 10 ^ 40 ∨ n ∣ 20 ^ 30)}) (h₃ : n > 0) (h₄ : n ∣ 10 ^ 40 ∨ n ∣ 20 ^ 30) (h₅ : n ≤ 20 ^ 30) : n ≥ 1 := by -- linarith
-  linarith

@@ -1,2 +1,0 @@
-theorem h3 (f : ℝ → ℝ) (hfdiff : ContDiff ℝ 2 f) (hfbd : ∀ (x : ℝ), |f x| ≤ 1) (hf0 : f 0 ^ 2 + deriv f 0 ^ 2 = 4) (h2 : ContDiff ℝ 1 f) : Differentiable ℝ f := by -- exact h2.differentiable (by norm_num)
-  hole

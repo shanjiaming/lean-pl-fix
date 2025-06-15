@@ -1,2 +1,0 @@
-theorem h5 (p : ℕ) (F : Type u_1) (inst✝¹ : Field F) (inst✝ : Fintype F) (S : Set F) (hp : Odd p ∧ Nat.Prime p) (Fcard : Fintype.card F = p ^ 2) (Snz : ∀ x ∈ S, x ≠ 0) (Scard : ↑S.ncard = (↑p ^ 2 - 1) / 2) (hS : ∀ (a : F), a ≠ 0 → Xor' (a ∈ S) (-a ∈ S)) (h1 : p ≠ 0) (h3 : Nat.Prime p) : ringChar F ∣ Fintype.card F := by exact?
-  hole

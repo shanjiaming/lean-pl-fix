@@ -1,8 +1,0 @@
-theorem h₇ (ABCintcoords ABCintdists ABCall : EuclideanSpace ℝ (Fin 2) → EuclideanSpace ℝ (Fin 2) → EuclideanSpace ℝ (Fin 2) → Prop) (hABCintcoords :  ∀ (A B C : EuclideanSpace ℝ (Fin 2)),    ABCintcoords A B C ↔ ∀ (i : Fin 2), A i = ↑(round (A i)) ∧ B i = ↑(round (B i)) ∧ C i = ↑(round (C i))) (hABCintdists :  ∀ (A B C : EuclideanSpace ℝ (Fin 2)),    ABCintdists A B C ↔ dist A B = ↑(round (dist A B)) ∧ dist A C = ↑(round (dist A C)) ∧ dist B C = ↑(round (dist B C))) (hABCall :  ∀ (A B C : EuclideanSpace ℝ (Fin 2)), ABCall A B C ↔ ¬Collinear ℝ {A, B, C} ∧ ABCintcoords A B C ∧ ABCintdists A B C) (h_main_exists_ABC : ∃ A B C, ABCall A B C ∧ dist A B = 3) (h_main_3_in_set : 3 ∈ {y | ∃ A B C, ABCall A B C ∧ y = dist A B}) (A B C : EuclideanSpace ℝ (Fin 2)) (h₀ h₁ : ABCall A B C) (h₂ : ¬Collinear ℝ {A, B, C}) (h₃ : ABCintcoords A B C) (h₄ : ABCintdists A B C) (h₅ : ∀ (i : Fin 2), A i = ↑(round (A i)) ∧ B i = ↑(round (B i)) ∧ C i = ↑(round (C i))) (h₆ : dist A B = ↑(round (dist A B)) ∧ dist A C = ↑(round (dist A C)) ∧ dist B C = ↑(round (dist B C))) : 3 ≤ dist A B :=
-  by
-  have h₈ : dist A B ≥ 3 := by sorry
-  have h₃₂ : (3 : ℝ) ≤ dist A B := by
-    have h₃₃ : dist A B ≥ 3 := by exact h₈
-    linarith
-  --  exact h₃₂
-  linarith

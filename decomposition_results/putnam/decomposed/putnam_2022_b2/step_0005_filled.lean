@@ -1,5 +1,0 @@
-theorem h₈ (n : ℕ) (P : Finset (Fin 3 → ℝ) → Prop) (P_def : ∀ (S : Finset (Fin 3 → ℝ)), P S ↔ ↑S = {u | ∃ v w, u = (crossProduct ↑v) ↑w}) (h : 0 < n ∧ ∃ S, S.card = n ∧ P S) (h₂ : 0 < n) (S : Finset (Fin 3 → ℝ)) (hS_card : S.card = n) (hS h₄ : P S) (h₅ : P S ↔ ↑S = {u | ∃ v w, u = (crossProduct ↑v) ↑w}) (h₆ : ↑S = {u | ∃ v w, u = (crossProduct ↑v) ↑w}) (h₇ : n = 1 ∨ n = 7) : n ∈ {1, 7} := by
-  cases h₇ with
-  | inl h₇ => simp [h₇, Set.mem_insert, Set.mem_singleton_iff]
-  | inr h₇ => simp [h₇, Set.mem_insert, Set.mem_singleton_iff]
-  hole

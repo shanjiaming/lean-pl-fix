@@ -1,2 +1,0 @@
-theorem h_odd (a : ℕ → ℤ) (abase : a 0 = 1 ∧ a 1 = 2) (arec : ∀ n ≥ 2, a n = 4 * a (n - 1) - a (n - 2)) : Odd 181 := by -- -- norm_num [Nat.odd_iff_not_even, Nat.even_iff, Nat.mod_eq_of_lt] <;> decide
-  norm_cast

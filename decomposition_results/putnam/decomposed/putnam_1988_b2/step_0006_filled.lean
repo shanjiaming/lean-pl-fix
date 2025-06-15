@@ -1,2 +1,0 @@
-theorem h₇ (x y : ℝ) (h : y ≥ 0 ∧ y * (y + 1) ≤ (x + 1) ^ 2) (h₁ : y ≥ 0) (h₂ : y * (y + 1) ≤ (x + 1) ^ 2) (h₃ : ¬y ≤ 1) (h₄ : y > 1) (h₅ : (x + 1) ^ 2 ≥ y * (y + 1)) : (x + 1) ^ 2 ≥ y * (y + 1) := by -- linarith
-  linarith

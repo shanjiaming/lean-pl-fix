@@ -1,3 +1,0 @@
-theorem h₃ (f : MvPolynomial (Fin 2) ℝ) (h₁ : {z | ∃ x, (MvPolynomial.eval x) f = z} = range fun x => (MvPolynomial.eval x) f) (hf : ∀ (x : Fin 2 → ℝ), (MvPolynomial.eval x) f = (MvPolynomial.eval 0) f) (h₂ : (range fun x => (MvPolynomial.eval x) f) = {(MvPolynomial.eval 0) f}) : {(MvPolynomial.eval 0) f} ∈ {x | ∃ x_1, {x_1} = x} := by
-  exact ⟨MvPolynomial.eval (0 : Fin 2 → ℝ) f, by simp⟩
-  hole

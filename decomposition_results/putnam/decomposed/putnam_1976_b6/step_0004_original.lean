@@ -1,1 +1,0 @@
-theorem h₃ (σ : ℕ → ℤ) (hσ : σ = fun N => ∑ d ∈ N.divisors, ↑d) (quasiperfect : ℕ → Prop) (quasiperfect_def : ∀ (N : ℕ), quasiperfect N ↔ σ N = 2 * ↑N + 1) (N : ℕ) (h_quasiperfect : quasiperfect N) (h₂ : σ N = 2 * ↑N + 1) : σ N = ∑ d ∈ N.divisors, ↑d := by rw [hσ] <;> simp

@@ -1,2 +1,0 @@
-theorem h₁ (Γ : ℝ[X] → ℝ) (f : ℝ[X]) (hΓ : Γ = fun p => ∑ k ∈ Finset.range (p.natDegree + 1), p.coeff k ^ 2) (hf : f = 3 * X ^ 2 + 7 * X + 2) (g : ℝ[X] := 6 * X ^ 2 + 5 * X + 1) : eval 0 g = 1 := by -- -- norm_num [g, eval_add, eval_mul, eval_pow, eval_X, eval_C, eval_bit0, eval_one] <;> rfl
-  hole

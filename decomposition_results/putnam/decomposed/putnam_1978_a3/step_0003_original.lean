@@ -1,2 +1,0 @@
-theorem h₄ (p : ℝ[X]) (hp : p = 2 * (X ^ 6 + 1) + 4 * (X ^ 5 + X) + 3 * (X ^ 4 + X ^ 2) + 5 * X ^ 3) (I : ℕ → ℝ) (hI : I = fun k => ∫ (x : ℝ) in Ioi 0, x ^ k / eval x p) (h₂ : (fun k => ∫ (x : ℝ) in Ioi 0, x ^ k / eval x p) = fun k => ∫ (x : ℝ) in Ioi 0, x ^ k / eval x p) (h₃ : p = 2 * (X ^ 6 + 1) + 4 * (X ^ 5 + X) + 3 * (X ^ 4 + X ^ 2) + 5 * X ^ 3) : p = 2 * (X ^ 6 + 1) + 4 * (X ^ 5 + X) + 3 * (X ^ 4 + X ^ 2) + 5 * X ^ 3 :=
-  by rw [hp]

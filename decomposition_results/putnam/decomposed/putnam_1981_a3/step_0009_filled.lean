@@ -1,2 +1,0 @@
-theorem h₆ (f : ℝ → ℝ) (hf : f = fun t => Real.exp (-t) * ∫ (y : ℝ) (x : ℝ) in Ico 0 t, (Real.exp x - Real.exp y) / (x - y)) (h₁ : f = fun t => 0) (L : ℝ) (hL : Tendsto f atTop (𝓝 L)) (h₃ : f = fun t => 0) (h₄ : Tendsto (fun t => 0) atTop (𝓝 L)) (h₅ : L = 0) : False := by simp_all
-  hole

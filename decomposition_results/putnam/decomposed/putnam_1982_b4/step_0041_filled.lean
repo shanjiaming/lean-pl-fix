@@ -1,5 +1,0 @@
-theorem h₆₄ (P : Finset ℤ → Prop) (P_def : ∀ (n : Finset ℤ), P n ↔ n.Nonempty ∧ ∀ (k : ℤ), ∏ i ∈ n, i ∣ ∏ i ∈ n, (i + k)) (h_part_A : ∀ (n : Finset ℤ), P n → 1 ∈ n ∨ -1 ∈ n) (n : Finset ℤ) (hP : P n) (hnpos : ∀ i ∈ n, 0 < i) (h₁ : n.Nonempty) (h₂ : ∀ (k : ℤ), ∏ i ∈ n, i ∣ ∏ i ∈ n, (i + k)) (h₃ : ∀ i ∈ n, 0 < i) (h₄ : 1 ∈ n) (h₅₁ : n.card ≥ 1) (x : ℤ) (hx : x ∈ n) (h₅₃ : 0 < x) (h₅₆ : x > ↑n.card) (h₅₇ h₅₈ : ∏ i ∈ n, i ∣ ∏ i ∈ n, (i + (↑n.card - x))) (h₅₉ : x ∈ n) (h₆₀ : x + (↑n.card - x) = ↑n.card) (h₆₂ : x ∈ n) (h₆₃ : x + (↑n.card - x) = ↑n.card) : ∏ i ∈ n, (i + (↑n.card - x)) = 0 :=
-  by
-  --  apply Finset.prod_eq_zero h₆₂
-  --  --  simp [h₆₃] <;> omega
-  hole

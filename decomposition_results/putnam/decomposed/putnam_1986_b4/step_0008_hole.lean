@@ -1,3 +1,0 @@
-theorem h₁₄ (G : ℝ → ℝ) (hGeq : ∀ (r : ℝ), ∃ m n, G r = |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (hGlb : ∀ (r : ℝ) (m n : ℤ), G r ≤ |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (r : ℝ) (m n : ℤ) (h₄ : G r = |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (h₅ : G r ≤ |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (h₆ : G r = |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (h₇ : G r ≤ G r) (h₈ : G r ≥ 0) (h₁₀ : G r ≤ |r - √(↑m ^ 2 + 2 * ↑n ^ 2)|) (h₁₁ h₁₂ : G r ≤ |r - √(↑0 ^ 2 + 2 * ↑0 ^ 2)|) (h₁₃ : √(↑0 ^ 2 + 2 * ↑0 ^ 2) = 0) : |r - √(↑0 ^ 2 + 2 * ↑0 ^ 2)| = |r| := by
-  --  --  rw [h₁₃] <;> simp [abs_of_nonneg, abs_of_nonpos, sub_zero] <;> norm_num
-  hole

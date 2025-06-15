@@ -1,2 +1,0 @@
-theorem h₇ (assmption : ∀ (p : ℕ), Nat.Prime p ∧ p > 2 → ((∃ m n, ↑p = m ^ 2 + n ^ 2) ↔ p ≡ 1 [MOD 4])) (p : ℕ) (h : Nat.Prime p ∧ p > 2 ∧ ∃ x y, ↑p = x ^ 2 + 16 * y ^ 2) (h₂ : Nat.Prime p) (h₃ : p > 2) (h₅ : Nat.Prime p) (x y : ℤ) (h₄ : ↑p = x ^ 2 + 16 * y ^ 2) : ↑p = x ^ 2 + 16 * y ^ 2 := by -- exact_mod_cast h₄
-  hole

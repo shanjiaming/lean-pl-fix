@@ -1,2 +1,0 @@
-theorem h_r_gt_one (r : ℝ) (z : EuclideanSpace ℝ (Fin 2)) (p : Fin 3 → EuclideanSpace ℝ (Fin 2)) (rpos : r > 0) (pdiff : ∀ (n m : Fin 3), n ≠ m → p n ≠ p m) (pint : ∀ (n : Fin 3) (i : Fin 2), p n i = ↑(round (p n i))) (pcirc : ∀ (n : Fin 3), p n ∈ Metric.sphere z r) (h_r_le_one : ¬r ≤ 1) : r > 1 := by -- linarith
-  linarith

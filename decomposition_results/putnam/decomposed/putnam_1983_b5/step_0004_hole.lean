@@ -1,3 +1,0 @@
-theorem h₅ (dist_fun : ℝ → ℝ) (hdist_fun : dist_fun = fun x => min (x - ↑⌊x⌋) (↑⌈x⌉ - x)) (fact h₁ : Tendsto (fun N => ↑(∏ n ∈ Finset.Icc 1 N, 2 * n / (2 * n - 1) * (2 * n / (2 * n + 1)))) atTop (𝓝 (π / 2))) (h₂ : 3 < π) (h₃ : π ≤ 4) (h₄ : (fun N => ∏ n ∈ Finset.Icc 1 N, 2 * ↑n / (2 * ↑n - 1) * (2 * ↑n / (2 * ↑n + 1))) 1 = 4 / 3) : ∏ n ∈ Finset.Icc 1 1, 2 * ↑n / (2 * ↑n - 1) * (2 * ↑n / (2 * ↑n + 1)) = 4 / 3 := by
-  --  norm_num [Finset.prod_Icc_succ_top, Finset.Icc_self]
-  hole

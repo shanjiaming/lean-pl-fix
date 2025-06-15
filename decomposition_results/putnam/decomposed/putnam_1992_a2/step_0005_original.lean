@@ -1,1 +1,0 @@
-theorem h₃ (C : ℝ → ℝ) (hC : C = fun α => taylorCoeffWithin (fun x => (1 + x) ^ α) 1992 Set.univ 0) (h₁ : ∀ (y : ℝ), ∑ k ∈ Finset.Icc 1 1992, 1 / (y + ↑k) = ∑ k ∈ Finset.Icc 1 1992, 1 / (y + ↑k)) (h₂ : ∀ (y : ℝ), C (-y - 1) = C (-y - 1)) : ∫ (y : ℝ) in 0 ..1, C (-y - 1) * ∑ k ∈ Finset.Icc 1 1992, 1 / (y + ↑k) = 1992 := by sorry

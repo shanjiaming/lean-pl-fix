@@ -1,9 +1,0 @@
-import Mathlib
-
-open Matrix Function Real Topology Filter
-
--- True
-/--
-Suppose that $a_0 = 1$ and that $a_{n+1} = a_n + e^{-a_n}$ for $n=0,1,2,\dots$. Does $a_n - \log n$
-have a finite limit as $n \to \infty$? (Here $\log n = \log_e n = \ln n$.)
--/

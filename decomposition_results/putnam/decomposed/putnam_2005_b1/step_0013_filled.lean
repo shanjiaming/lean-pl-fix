@@ -1,2 +1,0 @@
-theorem h₅₃ (h_main : (MvPolynomial.X 1 - 2 * MvPolynomial.X 0) * (MvPolynomial.X 1 - 2 * MvPolynomial.X 0 - 1) ≠ 0) (a : ℝ) (h₁ :  (MvPolynomial.eval fun n => if n = 0 then ↑⌊a⌋ else ↑⌊2 * a⌋)      ((MvPolynomial.X 1 - 2 * MvPolynomial.X 0) * (MvPolynomial.X 1 - 2 * MvPolynomial.X 0 - 1)) =    (↑⌊2 * a⌋ - 2 * ↑⌊a⌋) * (↑⌊2 * a⌋ - 2 * ↑⌊a⌋ - 1)) (h₃ : ↑⌊2 * a⌋ - 2 * ↑⌊a⌋ = ↑⌊2 * a⌋ - 2 * ↑⌊a⌋) (h₅₂ : a - 1 < ↑⌊a⌋) : ↑⌊a⌋ ≤ a := by -- exact Int.floor_le a
-  hole

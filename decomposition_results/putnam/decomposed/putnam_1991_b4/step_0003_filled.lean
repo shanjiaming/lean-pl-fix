@@ -1,2 +1,0 @@
-theorem h₁ (p : ℕ) (podd : Odd p) (pprime : Prime p) : Nat.Prime p := by -- assumption
-  hole

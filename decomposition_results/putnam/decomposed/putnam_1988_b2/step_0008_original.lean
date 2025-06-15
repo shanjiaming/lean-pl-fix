@@ -1,2 +1,0 @@
-theorem h₁₀ (x y : ℝ) (h : y ≥ 0 ∧ y * (y + 1) ≤ (x + 1) ^ 2) (h₁ : y ≥ 0) (h₂ : y * (y + 1) ≤ (x + 1) ^ 2) (h₃ : ¬y ≤ 1) (h₄ : y > 1) (h₅ h₇ : (x + 1) ^ 2 ≥ y * (y + 1)) (h₉ : √(y * (y + 1)) ≥ 0) : (x + 1) ^ 2 ≥ √(y * (y + 1)) ^ 2 := by
-  nlinarith [Real.sq_sqrt (show 0 ≤ y * (y + 1) by nlinarith)]

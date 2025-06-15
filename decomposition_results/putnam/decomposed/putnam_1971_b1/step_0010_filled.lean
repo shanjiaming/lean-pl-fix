@@ -1,2 +1,0 @@
-theorem h_main (S : Type u_1) (inst✝ : Mul S) (hself : ∀ (x : S), x * x = x) (h2 : ∀ (x y z : S), x * y * z = y * z * x) (h_comm : ∀ (x y : S), x * y = y * x) (h_assoc : ∀ (x y z : S), x * y * z = x * (y * z)) : (∀ (x y z : S), x * y * z = x * (y * z)) ∧ ∀ (x y : S), x * y = y * x := by exact ⟨h_assoc, h_comm⟩
-  hole

@@ -1,8 +1,0 @@
-import Mathlib
-
-open Nat Metric
-open scoped InnerProductSpace
-
-/--
-Given any five points on a sphere, show that some four of them must lie on a closed hemisphere.
--/

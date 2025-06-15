@@ -1,1 +1,0 @@
-theorem h₂ (x : ℝ) (hx : x ∈ Set.uIcc 0 1) : x ∈ Set.Icc 0 1 := by exact hx

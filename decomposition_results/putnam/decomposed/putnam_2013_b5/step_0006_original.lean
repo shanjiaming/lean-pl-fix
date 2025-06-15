@@ -1,1 +1,0 @@
-theorem h5 (n : ℕ) (hn : n ≥ 1) (k : ↑(Icc 1 n)) (fiter : (↑(Icc 1 n) → ↑(Icc 1 n)) → Prop) (hfiter : ∀ (f : ↑(Icc 1 n) → ↑(Icc 1 n)), fiter f ↔ ∀ (x : ↑(Icc 1 n)), ∃ j, f^[j] x ≤ k) (h2 : 1 ≤ 1) (h3 h4 : 1 ≤ n) : 1 ≤ n := by linarith

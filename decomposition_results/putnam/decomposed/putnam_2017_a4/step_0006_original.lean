@@ -1,1 +1,0 @@
-theorem h₆ (N : ℕ) (score : Fin (2 * N) → Fin 11) (hsurj : ∀ (k : Fin 11), ∃ i, score i = k) (havg : (∑ i, ↑↑(score i)) / (2 * ↑N) = 7.4) (h : N ≤ 0) (h₁ : N = 0) (h₂ : 2 * N = 0) (h₃ : Fin (2 * N) ≃ Fin 0) (i : Fin (2 * N)) (hi : score i = ⟨0, ⋯⟩) (h₅ : ↑i < 2 * N) : ↑i < 0 := by simpa [h₂] using h₅

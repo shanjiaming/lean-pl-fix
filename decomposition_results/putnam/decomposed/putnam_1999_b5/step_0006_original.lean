@@ -1,1 +1,0 @@
-theorem h₉ (n : ℕ) (hn : n ≥ 3) (theta : ℝ) (htheta : theta = 2 * Real.pi / ↑n) (A : Matrix (Fin n) (Fin n) ℝ) (hA : A = fun j k => Real.cos ((↑↑j + 1) * theta + (↑↑k + 1) * theta)) (h₂ : n ≥ 3) (h₃ : theta = 2 * Real.pi / ↑n) (h₄ : A = fun j k => Real.cos ((↑↑j + 1) * theta + (↑↑k + 1) * theta)) (h : ¬n = 3) (h₆ : n ≠ 3) (h₇ : ¬n ≥ 4) (h₈ : n < 4) : n = 3 := by omega

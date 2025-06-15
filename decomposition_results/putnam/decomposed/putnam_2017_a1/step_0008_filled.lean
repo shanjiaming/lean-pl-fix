@@ -1,5 +1,0 @@
-theorem h₂₀ (IsQualifying : Set ℤ → Prop) (IsQualifying_def :  ∀ (S : Set ℤ), IsQualifying S ↔ (∀ n ∈ S, 0 < n) ∧ 2 ∈ S ∧ (∀ n > 0, n ^ 2 ∈ S → n ∈ S) ∧ ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (S : Set ℤ) (hS : IsLeast IsQualifying S) (h : 1 ∈ S) (h₂ : IsQualifying S) (h₃ : ∀ n > 0, n ^ 2 ∈ S → n ∈ S) (h₄ : ∀ n ∈ S, (n + 5) ^ 2 ∈ S) (h₅ : (1 + 5) ^ 2 ∈ S) (h₆ : 6 ^ 2 ∈ S) (h₇ : 6 ∈ S) (h₈ : (6 + 5) ^ 2 ∈ S) (h₉ : 11 ^ 2 ∈ S) (h₁₀ : 11 ∈ S) (h₁₁ : (11 + 5) ^ 2 ∈ S) (h₁₂ : 16 ^ 2 ∈ S) (h₁₃ : 16 ∈ S) (h₁₄ : (16 + 5) ^ 2 ∈ S) (h₁₅ : 21 ^ 2 ∈ S) (h₁₆ : 21 ∈ S) (h₁₇ : 5 ∣ 21) (h₁₈ : ∀ n ∈ S, 0 < n) (h₁₉ : 0 < 21) : 5 ∣ 21 → False := by
-  --  intro h
-  have h₂₁ : (5 : ℤ) ∣ 21 := h
-  --  norm_num at h₂₁ <;> omega
-  hole

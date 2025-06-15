@@ -1,1 +1,0 @@
-theorem h₃ (abcvals : ℤ → ℤ → ℤ → Prop) (habcvals : ∀ (a b c : ℤ), abcvals a b c ↔ (a = 0 ∧ b = 0 ∧ c = 0) ∧ |a| < 1000000 ∧ |b| < 1000000 ∧ |c| < 1000000) (h₁ : abcvals 0 0 0) : 10 ^ (-11) > 0 := by positivity

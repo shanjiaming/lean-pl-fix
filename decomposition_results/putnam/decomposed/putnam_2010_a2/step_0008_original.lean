@@ -1,1 +1,0 @@
-theorem h₅₅ (f : ℝ → ℝ) (hf : f ∈ {f | Differentiable ℝ f ∧ ∀ (x : ℝ), ∀ n > 0, deriv f x = (f (x + ↑n) - f x) / ↑n}) (h₁ : Differentiable ℝ f) (h₂ : ∀ (x : ℝ), ∀ n > 0, deriv f x = (f (x + ↑n) - f x) / ↑n) (x✝ x : ℝ) (h₅₃ : deriv f x = (f (x + ↑1) - f x) / ↑1) (h₅₄ : deriv f (x + 1) = (f (x + 1 + ↑1) - f (x + 1)) / ↑1) : deriv f x = (f (x + 1) - f x) / 1 := by simpa using h₅₃

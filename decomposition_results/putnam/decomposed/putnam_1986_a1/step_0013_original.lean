@@ -1,2 +1,0 @@
-theorem h₈₃ (S : Set ℝ) (f : ℝ → ℝ) (hS : S = {x | x ^ 4 + 36 ≤ 13 * x ^ 2}) (hf : f = fun x => x ^ 3 - 3 * x) (h₁ : 18 ∈ {x | ∃ x_1 ∈ S, f x_1 = x}) (x : ℝ) (hx : x ∈ {x | x ^ 4 + 36 ≤ 13 * x ^ 2}) (h₃ : x ^ 4 + 36 ≤ 13 * x ^ 2) (h₄ : x ^ 2 ≤ 9) (h₅ : x ^ 2 ≥ 4) (h₆ : x ≤ 3) (h₇ : x ≥ -3) (hx' : x ≥ 0) (h₈₁ : x ≤ 3) (h₈₂ : x ≥ 0) : x ^ 3 - 3 * x ≤ 18 := by
-  nlinarith [sq_nonneg (x - 3), sq_nonneg (x + 3), sq_nonneg (x - 2), sq_nonneg (x + 2)]

@@ -1,2 +1,0 @@
-theorem h₃ (a b : ℝ) (g : ℝ → ℝ) (abint : 0 < a ∧ a < 1 / 2 ∧ 0 < b ∧ b < 1 / 2) (gcont : Continuous g) (hg : ∀ (x : ℝ), g (g x) = a * g x + b * x) (h₁ : 0 < a) (h₂ : a < 1 / 2) : 0 < b := by -- linarith
-  hole

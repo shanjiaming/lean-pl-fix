@@ -1,9 +1,0 @@
-theorem h₄₂ (a : ℕ → ℕ → ℝ) (ha : ∀ (i j : ℕ), a i j ∈ Icc 0 1) (m n : ℕ) (mnpos : m > 0 ∧ n > 0) (h₁ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j ≤ ↑m * ↑i) (h₂ : ∀ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≤ ↑m) (h₃ h₄₁ : ∑ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≤ ↑m * ↑n) : ∑ i ∈ Finset.Icc 1 n, ∑ j ∈ Finset.Icc 1 (m * i), a i j / ↑i ≥ 0 :=
-  by
-  --  apply Finset.sum_nonneg
-  --  intro i _i
-  --  apply Finset.sum_nonneg
-  --  intro j _j
-  have h₄₃ : a i j / (i : ℝ) ≥ 0 := by sorry
-  --  exact h₄₃
-  hole

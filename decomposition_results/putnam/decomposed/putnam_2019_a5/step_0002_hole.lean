@@ -1,2 +1,0 @@
-theorem h0 (p : ℕ) (q : Polynomial (ZMod p)) (a : ℕ → ZMod p) (npoly : ℕ → Polynomial (ZMod p)) (podd : Odd p) (pprime : Nat.Prime p) (hq : ∀ (k : ℕ), q.coeff k = a k) (ha0 : a 0 = 0 ∧ ∀ k > p - 1, a k = 0) (haother : ∀ (k : ↑(Set.Icc 1 (p - 1))), a ↑k = ↑(↑k ^ ((p - 1) / 2) % p)) (hnpoly : ∀ (n : ℕ) (x : ZMod p), Polynomial.eval x (npoly n) = (x - 1) ^ n) : (p - 1) / 2 ∈ {n | npoly n ∣ q} := by -- sorry
-  hole

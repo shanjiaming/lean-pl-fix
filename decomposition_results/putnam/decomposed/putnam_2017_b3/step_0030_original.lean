@@ -1,5 +1,0 @@
-theorem h₂₆ (f : ℝ → ℝ) (c : ℕ → ℝ) (hc : ∀ (n : ℕ), c n = 0 ∨ c n = 1) (hf : ∀ (x : ℝ), f x = ∑' (n : ℕ), c n * x ^ n) (h₁ : f (2 / 3) = 3 / 2) (h_sum : Summable fun n => c n * (2 / 3) ^ n) (N : ℕ) (h₃ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (hN : ∀ n ≥ N, c n = 0) (h₅ : ∑' (n : ℕ), c n * (2 / 3) ^ n = ∑' (n : ℕ), c n * (2 / 3) ^ n) (h₆ : ∑' (n : ℕ), c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₇ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (h₈ h₉ h₁₀ h₁₁ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₁₂ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = 3 / 2) (h₁₃ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n) (h₁₄ : ∀ n ∈ Finset.range N, c n = 0 ∨ c n = 1) (k : ℕ) (h₁₆ h₁₇ : ∑ n ∈ Finset.range N, c n * (2 / 3) ^ n = ↑k / 3 ^ (N - 1)) (h₁₈ h₁₉ : ↑k / 3 ^ (N - 1) = 3 / 2) (h₂₀ h₂₁ : k = 3 * 3 ^ (N - 1) / 2) (h₂₃ : 3 % 2 = 1) : ∀ n ≥ 1, 3 ^ n % 2 = 1 := by
-  intro n hn
-  induction' hn with n hn IH
-  · norm_num
-  · simp [pow_succ, Nat.mul_mod, IH] <;> norm_num

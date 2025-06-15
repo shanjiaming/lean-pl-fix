@@ -1,2 +1,0 @@
-theorem h₈ (a b : ℝ) (g : ℝ → ℝ) (abint : 0 < a ∧ a < 1 / 2 ∧ 0 < b ∧ b < 1 / 2) (gcont : Continuous g) (hg : ∀ (x : ℝ), g (g x) = a * g x + b * x) (h₁ : 0 < a) (h₂ : a < 1 / 2) (h₃ : 0 < b) (h₄ : b < 1 / 2) (h₅ : 0 < a ^ 2 + 4 * b) (h₆ : 0 < √(a ^ 2 + 4 * b)) (h₇ : (a + √(a ^ 2 + 4 * b)) / 2 > 0) : (a - √(a ^ 2 + 4 * b)) / 2 < 0 := by
-  nlinarith [Real.sqrt_nonneg (a ^ 2 + 4 * b), Real.sq_sqrt (show 0 ≤ a ^ 2 + 4 * b by nlinarith)]
