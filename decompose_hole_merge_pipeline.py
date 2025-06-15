@@ -1,6 +1,6 @@
 import os
 import json
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Union
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -372,11 +372,18 @@ class DecomposeHoleMergePipeline:
         
         return steps
     
-    def verify_lean_code(self, header: str, content: str, with_macro: bool = False) -> bool:
+    def verify_lean_code(self, header: str, content: str, with_macro: bool = False, return_error_string: bool = False) -> Union[bool, Tuple[bool, Optional[str]]]:
         """
         Verify if Lean code has no errors using header form.
         A successful verification means no Lean errors and no unsolved goals.
-        Returns True if no errors, False if there are errors.
+        
+        Args:
+            return_error_string: If True, returns a tuple (bool, Optional[str]). 
+                                 Otherwise, returns a bool.
+        
+        Returns: 
+            - bool if return_error_string is False.
+            - (True, None) or (False, error_message) if return_error_string is True.
         """
         if with_macro:
             header = header + "\nmacro \"hole\" : tactic => `(tactic| admit)"
@@ -384,17 +391,21 @@ class DecomposeHoleMergePipeline:
         result = self.lean_verifier.run_with_header(header, content)
         
         # Check for fatal errors reported directly on the result object.
-        if getattr(result, 'error', None):
-            return False
+        error_msg = getattr(result, 'error', None)
+        if error_msg:
+            return (False, error_msg) if return_error_string else False
             
         # Check for tactical errors or unsolved goals from the message list.
         # An empty list of errors means success.
         if hasattr(result, 'get_errors'):
-            if result.get_errors(): # If the list is not empty
-                return False
+            errors = result.get_errors()
+            if errors: # If the list is not empty
+                # Combine multiple error messages if they exist
+                error_str = "\n".join(str(e.data) for e in errors)
+                return (False, error_str) if return_error_string else False
                 
         # If no errors are found, verification passes.
-        return True
+        return (True, None) if return_error_string else True
 
     def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
@@ -488,7 +499,7 @@ class DecomposeHoleMergePipeline:
             hole_content_with_macros = hole_content
         
         # First check if hole version passes (sanity check)
-        sanity_check = self.verify_lean_code(header_content, hole_content_with_macros, with_macro=False)
+        # sanity_check = self.verify_lean_code(header_content, hole_content_with_macros, with_macro=False)
         
         # Find the hole placeholder to replace (can be "hole" or "hole_N")
         import re
@@ -679,11 +690,11 @@ class DecomposeHoleMergePipeline:
         
         return traverse_ancestor(ancestor)
     
-    def _traverse_tactic_tree(self, nodes):
-        """Traverse tactic tree in depth-first order"""
-        for node in nodes:
-            yield node
-            yield from self._traverse_tactic_tree(node.subhaves)
+    # def _traverse_tactic_tree(self, nodes):
+    #     """Traverse tactic tree in depth-first order"""
+    #     for node in nodes:
+    #         yield node
+    #         yield from self._traverse_tactic_tree(node.subhaves)
     
     def _analyze_have_node_for_holes_comprehensive(self, node, hole_counter):
         """
@@ -1152,7 +1163,40 @@ class DecomposeHoleMergePipeline:
                 
                 return
             
-            original_verification_pass = self.verify_lean_code(header_content, original_content, with_macro=False)
+            # The tree's structure is our "safe zone". No need for line number checks.
+            print(f"Verifying original problem with heartbeat check: {problem.problem_id}")
+            original_verification_pass, verification_error = self.verify_lean_code(header_content, original_content, with_macro=False, return_error_string=True)
+
+            # Check for heartbeat timeout
+            if not original_verification_pass and verification_error and "heartbeats" in verification_error:
+                error_msg = f"Problem {problem.problem_id} skipped: maximum number of heartbeats reached during initial verification."
+                print(f"✗ {error_msg}")
+                processing_time = (datetime.now() - problem_start_time).total_seconds()
+                
+                failure_record = {
+                    "problem_id": problem.problem_id,
+                    "dataset": problem.dataset,
+                    "error_message": error_msg,
+                    "failure_reason": "heartbeat_timeout",
+                    "processing_time_seconds": processing_time,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                result_record = {
+                    "problem_id": problem.problem_id,
+                    "dataset": problem.dataset,
+                    "original_verification_pass": False,
+                    "filled_verification_pass": None,
+                    "status": "skipped_heartbeat_timeout",
+                    "error": error_msg,
+                    "processing_time_seconds": processing_time,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                self._append_result_to_file(dataset_name, result_record)
+                self._append_failure_to_file(dataset_name, failure_record)
+                return
+
             print(f"Original problem verification: {'PASS' if original_verification_pass else 'FAIL'} ({original_lines} lines)")
             
             # Step 1: Decompose
@@ -1255,7 +1299,7 @@ class DecomposeHoleMergePipeline:
             # Step 3.5: Verify hole version
             current_step = "verifying_hole_version"
             print(f"Step 3.5: Verifying hole version...")
-            hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
+            hole_verification_pass, _ = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
             print(f"Hole version verification: {'PASS' if hole_verification_pass else 'FAIL'}")
             
             # Save complete fixed proof  
@@ -1267,7 +1311,7 @@ class DecomposeHoleMergePipeline:
             # Step 4: Verify synthesized proof
             current_step = "verifying_synthesized_proof"
             print(f"Step 4: Verifying synthesized proof...")
-            filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
+            filled_verification_pass, _ = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
             print(f"Synthesized proof verification: {'PASS' if filled_verification_pass else 'FAIL'}")
             
             # Step 4.5: Update metadata with synthesized verification result
