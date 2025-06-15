@@ -1,27 +1,33 @@
-macro "hole_2" : tactic => `(tactic| admit)
-macro "hole_5" : tactic => `(tactic| admit)
-macro "hole_4" : tactic => `(tactic| admit)
-macro "hole_6" : tactic => `(tactic| admit)
+macro "hole_1" : tactic => `(tactic| admit)
+macro "hole_33" : tactic => `(tactic| admit)
+macro "hole_34" : tactic => `(tactic| admit)
 macro "hole_3" : tactic => `(tactic| admit)
+macro "hole_2" : tactic => `(tactic| admit)
+macro "hole_4" : tactic => `(tactic| admit)
+macro "hole_35" : tactic => `(tactic| admit)
+macro "hole_5" : tactic => `(tactic| admit)
+macro "hole_6" : tactic => `(tactic| admit)
+macro "hole_36" : tactic => `(tactic| admit)
 macro "hole_8" : tactic => `(tactic| admit)
+macro "hole_9" : tactic => `(tactic| admit)
 macro "hole_10" : tactic => `(tactic| admit)
+macro "hole_11" : tactic => `(tactic| admit)
 macro "hole_12" : tactic => `(tactic| admit)
 macro "hole_13" : tactic => `(tactic| admit)
 macro "hole_14" : tactic => `(tactic| admit)
 macro "hole_15" : tactic => `(tactic| admit)
 macro "hole_16" : tactic => `(tactic| admit)
 macro "hole_17" : tactic => `(tactic| admit)
+macro "hole_7" : tactic => `(tactic| admit)
 macro "hole_18" : tactic => `(tactic| admit)
 macro "hole_19" : tactic => `(tactic| admit)
 macro "hole_20" : tactic => `(tactic| admit)
+macro "hole_37" : tactic => `(tactic| admit)
 macro "hole_21" : tactic => `(tactic| admit)
-macro "hole_11" : tactic => `(tactic| admit)
 macro "hole_22" : tactic => `(tactic| admit)
 macro "hole_23" : tactic => `(tactic| admit)
-macro "hole_9" : tactic => `(tactic| admit)
-macro "hole_7" : tactic => `(tactic| admit)
+macro "hole_38" : tactic => `(tactic| admit)
 macro "hole_24" : tactic => `(tactic| admit)
-macro "hole_1" : tactic => `(tactic| admit)
 macro "hole_25" : tactic => `(tactic| admit)
 macro "hole_26" : tactic => `(tactic| admit)
 macro "hole_27" : tactic => `(tactic| admit)
@@ -30,10 +36,6 @@ macro "hole_29" : tactic => `(tactic| admit)
 macro "hole_30" : tactic => `(tactic| admit)
 macro "hole_31" : tactic => `(tactic| admit)
 macro "hole_32" : tactic => `(tactic| admit)
-macro "hole_33" : tactic => `(tactic| admit)
-macro "hole_34" : tactic => `(tactic| admit)
-macro "hole_35" : tactic => `(tactic| admit)
-macro "hole_36" : tactic => `(tactic| admit)
 
 theorem putnam_2007_b6
 (f : ℕ → ℕ)
@@ -43,69 +45,85 @@ theorem putnam_2007_b6
     use 1
     intro n hn
     have h₁ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≤ f n := by
-      have h₂ : n ≥ 2 := by hole_2
+      have h₂ : n ≥ 2 := by hole_1
       have h₃ : f n ≥ 1 := by
-        rw [hf]
+        hole_33
         have h₄ : ({(n ! : ℕ)} : Multiset ℕ) ∈ {M : Multiset ℕ | M.sum = n ! ∧ ∀ m ∈ M, ∃ k ∈ Icc 1 n, m = k !} := by
           constructor
-          · simp [Multiset.sum_singleton]
+          · hole_34
           · intro m hm
-            have h₅ : m = n ! := by hole_5
-            hole_4
+            have h₅ : m = n ! := by hole_3
+            hole_2
+            simp [h₅]
         have h₅ : {M : Multiset ℕ | M.sum = n ! ∧ ∀ m ∈ M, ∃ k ∈ Icc 1 n, m = k !}.Nonempty := ⟨{(n ! : ℕ)}, h₄⟩
         have h₆ : {M : Multiset ℕ | M.sum = n ! ∧ ∀ m ∈ M, ∃ k ∈ Icc 1 n, m = k !}.ncard ≥ 1 := by
-          hole_6
-        hole_3
+          hole_4
+          exact ⟨{(n ! : ℕ)}, h₄⟩
+        hole_35
       have h₄ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≤ (1 : ℝ) := by
-        have h₅ : (n : ℝ) ≥ 2 := by hole_8
+        have h₅ : (n : ℝ) ≥ 2 := by hole_5
         have h₆ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≤ (1 : ℝ) := by
           have h₇ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) = Real.exp ((n ^ 2 / 2 - (1 : ℝ) * n) * Real.log n + (-(n ^ 2 : ℝ) / 4)) := by
-            hole_10
-          rw [h₇]
+            hole_6
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> linarith
+          hole_36
           have h₈ : (n ^ 2 / 2 - (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ) ≤ 0 := by
-            have h₉ : (n : ℝ) ≥ 2 := by hole_12
+            have h₉ : (n : ℝ) ≥ 2 := by hole_8
             have h₁₀ : Real.log (n : ℝ) ≥ Real.log 2 := Real.log_le_log (by positivity) h₉
             have h₁₁ : Real.log 2 > 0 := Real.log_pos (by norm_num)
-            have h₁₂ : (n : ℝ) ^ 2 ≥ 4 := by hole_13
+            have h₁₂ : (n : ℝ) ^ 2 ≥ 4 := by hole_9
             have h₁₃ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by
-              hole_14
-            have h₁₄ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_15
-            have h₁₅ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_16
-            have h₁₆ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_17
-            have h₁₇ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_18
-            have h₁₈ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_19
-            have h₁₉ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_20
+              hole_10
+            have h₁₄ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_11
+            have h₁₅ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_12
+            have h₁₆ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_13
+            have h₁₇ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_14
+            have h₁₈ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_15
+            have h₁₉ : (n : ℝ) ^ 2 / 2 - (1 : ℝ) * n ≥ 0 := by hole_16
             
             have h₂₀ : ((n : ℝ) ^ 2 / 2 - (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ) ≤ 0 := by
-              hole_21
-            hole_11
+              hole_17
+            hole_7
           have h₂₁ : Real.exp ((n ^ 2 / 2 - (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ)) ≤ Real.exp 0 := by
-            hole_22
-          have h₂₂ : Real.exp 0 = (1 : ℝ) := by hole_23
-          hole_9
-        hole_7
-      have h₅ : (1 : ℝ) ≤ (f n : ℝ) := by hole_24
-      hole_1
+            hole_18
+          have h₂₂ : Real.exp 0 = (1 : ℝ) := by hole_19
+          linarith
+        exact h₆
+      have h₅ : (1 : ℝ) ≤ (f n : ℝ) := by hole_20
+      hole_37
     have h₂ : f n ≤ (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) := by
-      have h₃ : n ≥ 2 := by hole_25
+      have h₃ : n ≥ 2 := by hole_21
       have h₄ : (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≥ (1 : ℝ) := by
-        have h₅ : (n : ℝ) ≥ 2 := by hole_26
+        have h₅ : (n : ℝ) ≥ 2 := by hole_22
         have h₆ : (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≥ (1 : ℝ) := by
           have h₇ : (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) = Real.exp ((n ^ 2 / 2 + (1 : ℝ) * n) * Real.log n + (-(n ^ 2 : ℝ) / 4)) := by
-            hole_27
-          rw [h₇]
+            hole_23
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> linarith
+          hole_38
           have h₈ : (n ^ 2 / 2 + (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ) ≥ 0 := by
-            have h₉ : (n : ℝ) ≥ 2 := by hole_28
+            have h₉ : (n : ℝ) ≥ 2 := by hole_24
             have h₁₀ : Real.log (n : ℝ) ≥ Real.log 2 := Real.log_le_log (by positivity) h₉
             have h₁₁ : Real.log 2 > 0 := Real.log_pos (by norm_num)
-            have h₁₂ : (n : ℝ) ^ 2 ≥ 4 := by hole_29
-            have h₁₃ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_30
-            have h₁₄ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_31
-            have h₁₅ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_32
-            have h₁₆ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_33
-            have h₁₇ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_34
-            have h₁₈ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_35
-            have h₁₉ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_36
+            have h₁₂ : (n : ℝ) ^ 2 ≥ 4 := by hole_25
+            have h₁₃ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_26
+            have h₁₄ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_27
+            have h₁₅ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_28
+            have h₁₆ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_29
+            have h₁₇ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_30
+            have h₁₈ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_31
+            have h₁₉ : (n : ℝ) ^ 2 / 2 + (1 : ℝ) * n ≥ 0 := by hole_32
             
             have h₂₀ : ((n : ℝ) ^ 2 / 2 + (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ) ≥ 0 := by
               nlinarith [Real.log_le_sub_one_of_pos (by positivity : 0 < (n : ℝ)), Real.log_le_sub_one_of_pos (by positivity : 0 < (2 : ℝ)),

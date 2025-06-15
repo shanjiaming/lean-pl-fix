@@ -8,23 +8,32 @@ theorem putnam_2007_b6
     have h₁ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≤ f n := by
       have h₂ : n ≥ 2 := by admit
       have h₃ : f n ≥ 1 := by
-        rw [hf]
+        admit
         have h₄ : ({(n ! : ℕ)} : Multiset ℕ) ∈ {M : Multiset ℕ | M.sum = n ! ∧ ∀ m ∈ M, ∃ k ∈ Icc 1 n, m = k !} := by
           constructor
-          · simp [Multiset.sum_singleton]
+          · admit
           · intro m hm
             have h₅ : m = n ! := by admit
             admit
+            simp [h₅]
         have h₅ : {M : Multiset ℕ | M.sum = n ! ∧ ∀ m ∈ M, ∃ k ∈ Icc 1 n, m = k !}.Nonempty := ⟨{(n ! : ℕ)}, h₄⟩
         have h₆ : {M : Multiset ℕ | M.sum = n ! ∧ ∀ m ∈ M, ∃ k ∈ Icc 1 n, m = k !}.ncard ≥ 1 := by
           admit
+          exact ⟨{(n ! : ℕ)}, h₄⟩
         admit
       have h₄ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≤ (1 : ℝ) := by
         have h₅ : (n : ℝ) ≥ 2 := by admit
         have h₆ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≤ (1 : ℝ) := by
           have h₇ : (n : ℝ) ^ (n ^ 2 / 2 - (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) = Real.exp ((n ^ 2 / 2 - (1 : ℝ) * n) * Real.log n + (-(n ^ 2 : ℝ) / 4)) := by
             admit
-          rw [h₇]
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> linarith
+          admit
           have h₈ : (n ^ 2 / 2 - (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ) ≤ 0 := by
             have h₉ : (n : ℝ) ≥ 2 := by admit
             have h₁₀ : Real.log (n : ℝ) ≥ Real.log 2 := Real.log_le_log (by positivity) h₉
@@ -45,8 +54,8 @@ theorem putnam_2007_b6
           have h₂₁ : Real.exp ((n ^ 2 / 2 - (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ)) ≤ Real.exp 0 := by
             admit
           have h₂₂ : Real.exp 0 = (1 : ℝ) := by admit
-          admit
-        admit
+          linarith
+        exact h₆
       have h₅ : (1 : ℝ) ≤ (f n : ℝ) := by admit
       admit
     have h₂ : f n ≤ (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) := by
@@ -56,7 +65,14 @@ theorem putnam_2007_b6
         have h₆ : (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) ≥ (1 : ℝ) := by
           have h₇ : (n : ℝ) ^ (n ^ 2 / 2 + (1 : ℝ) * n) * Real.exp (-(n ^ 2 : ℝ) / 4) = Real.exp ((n ^ 2 / 2 + (1 : ℝ) * n) * Real.log n + (-(n ^ 2 : ℝ) / 4)) := by
             admit
-          rw [h₇]
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> field_simp [Real.log_mul, Real.log_rpow, Real.log_pow, Real.log_exp, Real.log_inv, Real.log_div]
+            <;> ring_nf
+            <;> simp_all [Real.exp_neg, Real.exp_log, Real.exp_add, Real.exp_sub, Real.exp_mul, Real.exp_log]
+            <;> linarith
+          admit
           have h₈ : (n ^ 2 / 2 + (1 : ℝ) * n : ℝ) * Real.log n + (-(n ^ 2 : ℝ) / 4 : ℝ) ≥ 0 := by
             have h₉ : (n : ℝ) ≥ 2 := by admit
             have h₁₀ : Real.log (n : ℝ) ≥ Real.log 2 := Real.log_le_log (by positivity) h₉
