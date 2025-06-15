@@ -1299,7 +1299,7 @@ class DecomposeHoleMergePipeline:
             # Step 3.5: Verify hole version
             current_step = "verifying_hole_version"
             print(f"Step 3.5: Verifying hole version...")
-            hole_verification_pass, _ = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
+            hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
             print(f"Hole version verification: {'PASS' if hole_verification_pass else 'FAIL'}")
             
             # Save complete fixed proof  
@@ -1311,7 +1311,7 @@ class DecomposeHoleMergePipeline:
             # Step 4: Verify synthesized proof
             current_step = "verifying_synthesized_proof"
             print(f"Step 4: Verifying synthesized proof...")
-            filled_verification_pass, _ = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
+            filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
             print(f"Synthesized proof verification: {'PASS' if filled_verification_pass else 'FAIL'}")
             
             # Step 4.5: Update metadata with synthesized verification result

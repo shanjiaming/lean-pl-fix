@@ -14,6 +14,4 @@ theorem solve_congruence3 (p : ℕ) : ∃ m : ℕ, (15 * m + 8) % 7 = 1 ∧ m = 
           admit
         admit
       admit
-    · 
-      rfl
   admit

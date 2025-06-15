@@ -21,6 +21,4 @@ theorem solve_congruence3 (p : ℕ) : ∃ m : ℕ, (15 * m + 8) % 7 = 1 ∧ m = 
           hole_5
         hole_3
       hole_2
-    · 
-      rfl
   hole_1
