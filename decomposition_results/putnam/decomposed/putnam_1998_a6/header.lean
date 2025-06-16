@@ -1,0 +1,10 @@
+import Mathlib
+
+open Set Function Metric
+open scoped InnerProductSpace
+
+/--
+Let $A, B, C$ denote distinct points with integer coordinates in $\mathbb R^2$. Prove that if
+\[(|AB|+|BC|)^2<8\cdot [ABC]+1\]
+then $A, B, C$ are three vertices of a square. Here $|XY|$ is the length of segment $XY$ and $[ABC]$ is the area of triangle $ABC$.
+-/

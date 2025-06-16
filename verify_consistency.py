@@ -20,23 +20,40 @@ def load_pipeline_results(dataset_name: str) -> List[Dict]:
         print(f"❌ Error loading {results_path}: {e}")
         return []
 
-def check_verification_consistency(records: List[Dict], dataset_name: str) -> Tuple[List[str], List[str]]:
+def check_verification_consistency(records: List[Dict], dataset_name: str) -> Tuple[List[str], List[str], Dict[str, int]]:
     """
     Check verification consistency rules:
     1. original_verification_pass=True → hole_verification_pass=True
     2. hole_verification_pass=True → filled_verification_pass=True
     
     Returns:
-        Tuple of (rule1_violations, rule2_violations)
+        Tuple of (rule1_violations, rule2_violations, pass_counts)
     """
     rule1_violations = []  # original=True but hole=False
     rule2_violations = []  # hole=True but filled=False
+    pass_counts = {
+        "original": 0,
+        "hole": 0,
+        "filled": 0,
+    }
+    total_records = len(records)
     
-    for record in records:
+    for i, record in enumerate(records):
         problem_id = record.get("problem_id", "unknown")
         original_pass = record.get("original_verification_pass")
         hole_pass = record.get("hole_verification_pass")
         filled_pass = record.get("filled_verification_pass")
+
+        # Update pass counts
+        if original_pass is True:
+            pass_counts["original"] += 1
+        if hole_pass is True:
+            pass_counts["hole"] += 1
+        if filled_pass is True:
+            pass_counts["filled"] += 1
+            
+        # Print progress
+        print(f"\rChecking {dataset_name}: {i+1}/{total_records}", end="")
         
         # Rule 1: original_verification_pass=True → hole_verification_pass=True
         if original_pass is True and hole_pass is not True:
@@ -46,11 +63,25 @@ def check_verification_consistency(records: List[Dict], dataset_name: str) -> Tu
         if hole_pass is True and filled_pass is not True:
             rule2_violations.append(problem_id)
     
-    return rule1_violations, rule2_violations
+    print() # Newline after progress bar
+    return rule1_violations, rule2_violations, pass_counts
 
-def print_violations(rule1_violations: List[str], rule2_violations: List[str], dataset_name: str):
-    """Print violation report"""
-    print(f"\n=== Verification Consistency Report for {dataset_name} ===")
+def print_summary(
+    rule1_violations: List[str], 
+    rule2_violations: List[str], 
+    pass_counts: Dict[str, int], 
+    total_records: int, 
+    dataset_name: str
+):
+    """Print summary report including pass counts and violations"""
+    print(f"\n=== Verification Summary for {dataset_name} ({total_records} problems) ===")
+    
+    # Print pass counts
+    print("📋 Pass Counts:")
+    print(f"   • Original Verified: {pass_counts['original']}")
+    print(f"   • Hole Verified:     {pass_counts['hole']}")
+    print(f"   • Filled Verified:   {pass_counts['filled']}")
+    print()
     
     total_violations = len(rule1_violations) + len(rule2_violations)
     
@@ -59,30 +90,23 @@ def print_violations(rule1_violations: List[str], rule2_violations: List[str], d
         return
     
     print(f"❌ Found {total_violations} consistency violations:")
-    print()
     
     # Rule 1 violations
     if rule1_violations:
-        print(f"📋 Rule 1 Violations ({len(rule1_violations)} problems):")
-        print("   original_verification_pass=True but hole_verification_pass≠True")
-        for problem_id in rule1_violations:
-            print(f"   • {problem_id}")
-        print()
+        print(f"   - Rule 1 Violations ({len(rule1_violations)} problems):")
+        print("     original_verification_pass=True but hole_verification_pass≠True")
     
     # Rule 2 violations
     if rule2_violations:
-        print(f"📋 Rule 2 Violations ({len(rule2_violations)} problems):")
-        print("   hole_verification_pass=True but filled_verification_pass≠True")
-        for problem_id in rule2_violations:
-            print(f"   • {problem_id}")
-        print()
+        print(f"   - Rule 2 Violations ({len(rule2_violations)} problems):")
+        print("     hole_verification_pass=True but filled_verification_pass≠True")
 
 def print_detailed_violations(records: List[Dict], rule1_violations: List[str], rule2_violations: List[str], dataset_name: str):
     """Print detailed violation information"""
     if not rule1_violations and not rule2_violations:
         return
     
-    print(f"=== Detailed Violation Information for {dataset_name} ===")
+    print(f"\n--- Detailed Violation Information for {dataset_name} ---")
     
     # Create a lookup for records
     record_lookup = {r["problem_id"]: r for r in records}
@@ -129,18 +153,23 @@ def verify_all_datasets():
     
     total_rule1_violations = 0
     total_rule2_violations = 0
+    total_pass_counts = {"original": 0, "hole": 0, "filled": 0}
+    total_records_all_datasets = 0
     
     for dataset_name in datasets:
         records = load_pipeline_results(dataset_name)
         if not records:
             continue
         
-        rule1_violations, rule2_violations = check_verification_consistency(records, dataset_name)
+        total_records_all_datasets += len(records)
+        rule1_violations, rule2_violations, pass_counts = check_verification_consistency(records, dataset_name)
         
         total_rule1_violations += len(rule1_violations)
         total_rule2_violations += len(rule2_violations)
+        for key in total_pass_counts:
+            total_pass_counts[key] += pass_counts.get(key, 0)
         
-        print_violations(rule1_violations, rule2_violations, dataset_name)
+        print_summary(rule1_violations, rule2_violations, pass_counts, len(records), dataset_name)
         print_detailed_violations(records, rule1_violations, rule2_violations, dataset_name)
     
     # Overall summary
@@ -148,14 +177,20 @@ def verify_all_datasets():
     print("=== OVERALL SUMMARY ===")
     total_violations = total_rule1_violations + total_rule2_violations
     
+    print(f"Verified {len(datasets)} datasets with a total of {total_records_all_datasets} problems.")
+    print()
+    print("📋 Total Pass Counts:")
+    print(f"   • Original Verified: {total_pass_counts['original']}")
+    print(f"   • Hole Verified:     {total_pass_counts['hole']}")
+    print(f"   • Filled Verified:   {total_pass_counts['filled']}")
+    print()
+
     if total_violations == 0:
         print("🎉 All datasets pass verification consistency checks!")
     else:
         print(f"⚠️  Total violations across all datasets: {total_violations}")
         print(f"   Rule 1 violations: {total_rule1_violations}")
         print(f"   Rule 2 violations: {total_rule2_violations}")
-        
-    print(f"Verified {len(datasets)} datasets")
 
 def main():
     """Main function"""
@@ -165,8 +200,8 @@ def main():
         
         records = load_pipeline_results(dataset_name)
         if records:
-            rule1_violations, rule2_violations = check_verification_consistency(records, dataset_name)
-            print_violations(rule1_violations, rule2_violations, dataset_name)
+            rule1_violations, rule2_violations, pass_counts = check_verification_consistency(records, dataset_name)
+            print_summary(rule1_violations, rule2_violations, pass_counts, len(records), dataset_name)
             print_detailed_violations(records, rule1_violations, rule2_violations, dataset_name)
     else:
         print("Verifying consistency for all datasets...")

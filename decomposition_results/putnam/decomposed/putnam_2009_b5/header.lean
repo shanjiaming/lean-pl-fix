@@ -1,0 +1,12 @@
+import Mathlib
+
+open Topology MvPolynomial Filter Set Metric
+
+/--
+Let $f: (1, \infty) \to \mathbb{R}$ be a differentiable function such that
+\[
+ f'(x) = \frac{x^2 - f(x)^2}{x^2 (f(x)^2 + 1)}
+\qquad \mbox{for all $x>1$.}
+\]
+Prove that $\lim_{x \to \infty} f(x) = \infty$.
+-/

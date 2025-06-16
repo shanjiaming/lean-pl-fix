@@ -1,0 +1,7 @@
+import Mathlib
+
+open MvPolynomial
+
+/--
+Let $a_1,a_2,\dots,a_n$ and $b_1,b_2,\dots,b_n$ be nonnegative real numbers. Show that $(a_1a_2 \cdots a_n)^{1/n}+(b_1b_2 \cdots b_n)^{1/n} \leq [(a_1+b_1)(a_2+b_2) \cdots (a_n+b_n)]^{1/n}$.
+-/
