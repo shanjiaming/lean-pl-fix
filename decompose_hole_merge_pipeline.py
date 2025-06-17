@@ -410,7 +410,7 @@ class DecomposeHoleMergePipeline:
         """
         生成带clear语句的hole版本，解决metavariable依赖问题
         
-        在每个 have ... := by hole_i 结构后面添加：
+        在每个包含hole的have语句后面添加：
         - clear h - 清理掉这个have语句
         - have h : [type] := skip_hole - 重新定义为skip_hole
         
@@ -427,36 +427,79 @@ class DecomposeHoleMergePipeline:
         result_lines = []
         processed_haves = set()  # 跟踪已处理的have变量，避免重复清理
         
+        # 首先找到所有的hole位置
+        hole_positions = {}  # hole_id -> line_number
+        for i, line in enumerate(lines):
+            hole_match = re.match(r'^\s*(hole_\d+)\s*$', line.strip())
+            if hole_match:
+                hole_id = hole_match.group(1)
+                hole_positions[hole_id] = i
+        
+        print(f"Found holes at positions: {hole_positions}")
+        
+        # 对于每个hole，从parent_have_tactic中解析出have语句信息
+        hole_to_have_mapping = {}  # hole_id -> (have_var_name, have_type, have_indent)
+        
+        for hole_info in hole_list:
+            hole_id = hole_info['hole_id']
+            have_statement = hole_info.get('have_statement', '')
+            
+            if hole_id in hole_positions and have_statement:
+                # 解析have_statement来获取have变量名和类型
+                # 格式通常是："have var_name : type := by ..."
+                import re
+                have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', have_statement.strip())
+                
+                if have_match:
+                    have_name = have_match.group(1).strip()
+                    have_type = have_match.group(2).strip()
+                    
+                    # 检查这是否是一个真正的have语句（而不是theorem定义）
+                    if have_statement.strip().startswith('have '):
+                        # 获取hole的缩进作为have语句的缩进
+                        hole_line = hole_positions[hole_id]
+                        
+                        # 向上寻找对应的have语句来获取正确的缩进
+                        found_have = False
+                        for i in range(hole_line - 1, -1, -1):
+                            line = lines[i]
+                            
+                            # 检查是否包含这个have变量名
+                            if f"have {have_name}" in line:
+                                indent = len(line) - len(line.lstrip())
+                                hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
+                                found_have = True
+                                print(f"Mapped {hole_id} to have {have_name} at line {i+1} (from have_statement)")
+                                break
+                        
+                        if not found_have:
+                            print(f"Warning: Could not find have statement for {hole_id} with name {have_name}")
+                    else:
+                        print(f"Skipping {hole_id}: not a have statement (starts with: {have_statement[:50]}...)")
+                else:
+                    print(f"Warning: Could not parse have_statement for {hole_id}: {have_statement[:100]}...")
+        
+        # 现在遍历所有行，添加clear语句
         i = 0
         while i < len(lines):
             line = lines[i]
             result_lines.append(line)
             
-            # 检查当前行是否是have语句的开始
-            have_match = re.match(r'^(\s*)have\s+(\w+)\s*:\s*([^:=]+):=\s*by\s*$', line.strip())
-            if have_match:
-                indent = len(line) - len(line.lstrip())
-                indent_str = ' ' * indent
-                var_name = have_match.group(2).strip()
-                type_expr = have_match.group(3).strip()
+            # 检查当前行是否是hole
+            hole_match = re.match(r'^\s*(hole_\d+)\s*$', line.strip())
+            if hole_match:
+                hole_id = hole_match.group(1)
                 
-                # 检查下一行是否是hole_N
-                if i + 1 < len(lines):
-                    next_line = lines[i + 1]
-                    hole_match = re.match(r'^\s*(hole_\d+)\s*$', next_line.strip())
-                    if hole_match:
-                        hole_id = hole_match.group(1)
-                        
-                        # 添加hole行
-                        result_lines.append(next_line)
-                        i += 1  # 跳过hole行，因为我们已经处理了
-                        
-                        # 如果这个have变量还没有被处理过，添加clear和重新定义
-                        if var_name not in processed_haves:
-                            # 添加clear语句和重新定义（在同一缩进级别）
-                            result_lines.append(f"{indent_str}clear {var_name}")
-                            result_lines.append(f"{indent_str}have {var_name} : {type_expr} := skip_hole")
-                            processed_haves.add(var_name)
+                # 检查这个hole是否需要添加clear语句
+                if hole_id in hole_to_have_mapping:
+                    have_name, have_type, indent = hole_to_have_mapping[hole_id]
+                    
+                    if have_name not in processed_haves:
+                        indent_str = ' ' * indent
+                        result_lines.append(f"{indent_str}clear {have_name}")
+                        result_lines.append(f"{indent_str}have {have_name} : {have_type} := skip_hole")
+                        processed_haves.add(have_name)
+                        print(f"Added clear statements for {have_name} after {hole_id}")
             
             i += 1
         
@@ -1297,6 +1340,8 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": None,  # Not verified due to length
+                    "hole_verification_pass": None,  # Not reached
+                    "clear_verification_pass": None,  # Not reached
                     "filled_verification_pass": None,  # Not reached
                     "status": "skipped_too_long",
                     "error": error_msg,
@@ -1334,6 +1379,8 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": False,
+                    "hole_verification_pass": None,
+                    "clear_verification_pass": None,
                     "filled_verification_pass": None,
                     "status": "skipped_heartbeat_timeout",
                     "error": error_msg,
@@ -1372,6 +1419,8 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": original_verification_pass,
+                    "hole_verification_pass": None,  # Not reached
+                    "clear_verification_pass": None,  # Not reached
                     "filled_verification_pass": None,  # Not reached
                     "status": "error",
                     "error": error_msg,
@@ -1450,6 +1499,33 @@ class DecomposeHoleMergePipeline:
             hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros)
             print(f"Hole version verification: {'PASS' if hole_verification_pass else 'FAIL'}")
             
+            # Step 3.6: Generate and verify clear version
+            current_step = "generating_clear_version"
+            print(f"Step 3.6: Generating clear version...")
+            
+            # 增强hole_list信息以支持clear版本生成
+            enhanced_hole_list = self._enhance_hole_list_with_have_info(hole_list, original_content)
+            
+            # 生成clear版本
+            clear_content = self.generate_clear_version(hole_version_content, enhanced_hole_list)
+            
+            # 为clear版本添加macros
+            clear_macros = hole_macros.copy()
+            clear_macros.append('macro "skip_hole" : term => `(sorry)')
+            clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
+            
+            # 保存clear版本
+            clear_version_path = os.path.join(problem_dir, "clear_version.lean")
+            with open(clear_version_path, "w") as f:
+                f.write(clear_with_macros)
+            print(f"Clear version saved to: {clear_version_path}")
+            
+            # 验证clear版本
+            current_step = "verifying_clear_version"
+            print(f"Step 3.7: Verifying clear version...")
+            clear_verification_pass = self.verify_lean_code(header_content, clear_with_macros)
+            print(f"Clear version verification: {'PASS' if clear_verification_pass else 'FAIL'}")
+            
             # Save complete fixed proof  
             complete_proof_path = os.path.join(problem_dir, "complete_fixed_proof.lean")
             with open(complete_proof_path, "w") as f:
@@ -1469,6 +1545,7 @@ class DecomposeHoleMergePipeline:
                 metadata = json.load(f)
             metadata["filled_verification_pass"] = filled_verification_pass
             metadata["hole_verification_pass"] = hole_verification_pass
+            metadata["clear_verification_pass"] = clear_verification_pass
             with open(metadata_path, "w") as f:
                 json.dump(metadata, f, indent=2)
             print(f"Metadata updated with synthesized verification result")
@@ -1541,6 +1618,7 @@ class DecomposeHoleMergePipeline:
             metadata_path = os.path.join(problem_dir, "decomposition.json")
             final_hole_verification = hole_verification_pass
             final_filled_verification = filled_verification_pass
+            final_clear_verification = clear_verification_pass
             
             if os.path.exists(metadata_path):
                 try:
@@ -1548,7 +1626,8 @@ class DecomposeHoleMergePipeline:
                         final_metadata = json.load(f)
                     final_hole_verification = final_metadata.get("hole_verification_pass", hole_verification_pass)
                     final_filled_verification = final_metadata.get("filled_verification_pass", filled_verification_pass)
-                    print(f"Using final verification results: hole={final_hole_verification}, filled={final_filled_verification}")
+                    final_clear_verification = final_metadata.get("clear_verification_pass", clear_verification_pass)
+                    print(f"Using final verification results: hole={final_hole_verification}, filled={final_filled_verification}, clear={final_clear_verification}")
                 except Exception as e:
                     print(f"Warning: Could not read final verification results, using original: {e}")
             
@@ -1558,6 +1637,7 @@ class DecomposeHoleMergePipeline:
                 "problem_dir": problem_dir,
                 "original_verification_pass": original_verification_pass,
                 "hole_verification_pass": final_hole_verification,
+                "clear_verification_pass": final_clear_verification,
                 "filled_verification_pass": final_filled_verification,
                 "num_steps": len(steps),
                 "processing_time_seconds": processing_time,
@@ -1605,6 +1685,7 @@ class DecomposeHoleMergePipeline:
                 "dataset": problem.dataset,
                 "original_verification_pass": original_verification_pass if 'original_verification_pass' in locals() else None,
                 "hole_verification_pass": hole_verification_pass if 'hole_verification_pass' in locals() else None,
+                "clear_verification_pass": clear_verification_pass if 'clear_verification_pass' in locals() else None,
                 "filled_verification_pass": None,  # Not reached
                 "status": "error",
                 "error": error_summary,
