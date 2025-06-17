@@ -408,26 +408,26 @@ class DecomposeHoleMergePipeline:
 
     def generate_clear_version(self, hole_content: str, hole_list: List[Dict]) -> str:
         """
-        生成带clear语句的hole版本，解决metavariable依赖问题
+        Generate clear version of hole content to solve metavariable dependency issues.
         
-        在每个包含hole的have语句后面添加：
-        - clear h - 清理掉这个have语句
-        - have h : [type] := skip_hole - 重新定义为skip_hole
+        For each have statement containing a hole, add:
+        - clear h - remove the have statement
+        - have h : [type] := skip_hole - redefine with skip_hole
         
         Args:
-            hole_content: 原始的hole版本内容
-            hole_list: hole信息列表，包含有关hole的元数据
+            hole_content: Original hole version content
+            hole_list: List of hole information with metadata
             
         Returns:
-            str: 带clear语句的版本
+            str: Clear version with clear statements added
         """
         import re
         
         lines = hole_content.split('\n')
         result_lines = []
-        processed_haves = set()  # 跟踪已处理的have变量，避免重复清理
+        processed_haves = set()  # Track processed have variables to avoid duplicates
         
-        # 首先找到所有的hole位置
+        # Find all hole positions
         hole_positions = {}  # hole_id -> line_number
         for i, line in enumerate(lines):
             hole_match = re.match(r'^\s*(hole_\d+)\s*$', line.strip())
@@ -437,60 +437,78 @@ class DecomposeHoleMergePipeline:
         
         print(f"Found holes at positions: {hole_positions}")
         
-        # 对于每个hole，从parent_have_tactic中解析出have语句信息
+        # Build hole to have mapping using pre-computed information from hole generation
         hole_to_have_mapping = {}  # hole_id -> (have_var_name, have_type, have_indent)
         
         for hole_info in hole_list:
             hole_id = hole_info['hole_id']
-            have_statement = hole_info.get('have_statement', '')
             
-            if hole_id in hole_positions and have_statement:
-                # 解析have_statement来获取have变量名和类型
-                # 格式通常是："have var_name : type := by ..."
-                import re
-                have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', have_statement.strip())
+            # Use the have information computed during hole generation if available
+            if 'have_name' in hole_info and 'have_type' in hole_info:
+                have_name = hole_info['have_name']
+                have_type = hole_info['have_type']
                 
-                if have_match:
-                    have_name = have_match.group(1).strip()
-                    have_type = have_match.group(2).strip()
+                if hole_id in hole_positions:
+                    hole_line = hole_positions[hole_id]
                     
-                    # 检查这是否是一个真正的have语句（而不是theorem定义）
-                    if have_statement.strip().startswith('have '):
-                        # 获取hole的缩进作为have语句的缩进
-                        hole_line = hole_positions[hole_id]
+                    # Find the corresponding have statement to get correct indentation
+                    found_have = False
+                    for i in range(hole_line - 1, -1, -1):
+                        line = lines[i]
                         
-                        # 向上寻找对应的have语句来获取正确的缩进
-                        found_have = False
-                        for i in range(hole_line - 1, -1, -1):
-                            line = lines[i]
+                        # Check if this line contains the have variable name
+                        if f"have {have_name}" in line:
+                            indent = len(line) - len(line.lstrip())
+                            hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
+                            found_have = True
+                            print(f"Mapped {hole_id} to have {have_name} at line {i+1} (pre-computed)")
+                            break
+                    
+                    if not found_have:
+                        print(f"Warning: Could not find have statement for {hole_id} with name {have_name}")
+            else:
+                # Fallback: parse from have_statement if pre-computed info not available
+                have_statement = hole_info.get('have_statement', '')
+                
+                if have_statement and have_statement.strip().startswith('have '):
+                    have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', have_statement.strip())
+                    
+                    if have_match:
+                        have_name = have_match.group(1).strip()
+                        have_type = have_match.group(2).strip()
+                        
+                        if hole_id in hole_positions:
+                            hole_line = hole_positions[hole_id]
                             
-                            # 检查是否包含这个have变量名
-                            if f"have {have_name}" in line:
-                                indent = len(line) - len(line.lstrip())
-                                hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
-                                found_have = True
-                                print(f"Mapped {hole_id} to have {have_name} at line {i+1} (from have_statement)")
-                                break
-                        
-                        if not found_have:
-                            print(f"Warning: Could not find have statement for {hole_id} with name {have_name}")
+                            # Find corresponding have statement for indentation
+                            found_have = False
+                            for i in range(hole_line - 1, -1, -1):
+                                line = lines[i]
+                                
+                                if f"have {have_name}" in line:
+                                    indent = len(line) - len(line.lstrip())
+                                    hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
+                                    found_have = True
+                                    print(f"Mapped {hole_id} to have {have_name} at line {i+1} (fallback)")
+                                    break
+                            
+                            if not found_have:
+                                print(f"Warning: Could not find have statement for {hole_id} with name {have_name}")
                     else:
-                        print(f"Skipping {hole_id}: not a have statement (starts with: {have_statement[:50]}...)")
-                else:
-                    print(f"Warning: Could not parse have_statement for {hole_id}: {have_statement[:100]}...")
+                        print(f"Warning: Could not parse have_statement for {hole_id}: {have_statement[:100]}...")
         
-        # 现在遍历所有行，添加clear语句
+        # Iterate through all lines and add clear statements
         i = 0
         while i < len(lines):
             line = lines[i]
             result_lines.append(line)
             
-            # 检查当前行是否是hole
+            # Check if current line is a hole
             hole_match = re.match(r'^\s*(hole_\d+)\s*$', line.strip())
             if hole_match:
                 hole_id = hole_match.group(1)
                 
-                # 检查这个hole是否需要添加clear语句
+                # Check if this hole needs clear statements
                 if hole_id in hole_to_have_mapping:
                     have_name, have_type, indent = hole_to_have_mapping[hole_id]
                     
@@ -507,42 +525,39 @@ class DecomposeHoleMergePipeline:
 
     def test_clear_version_generation(self, problem: Problem) -> Dict:
         """
-        测试clear版本生成功能的主要函数
+        Test clear version generation functionality
         
         Args:
-            problem: 要测试的问题
+            problem: Problem to test
             
         Returns:
-            Dict: 包含测试结果的字典
+            Dict: Dictionary containing test results
         """
         print(f"Testing clear version generation for {problem.dataset}/{problem.problem_id}")
         
-        # 获取原始内容
+        # Get original content
         header_content = problem_manager.get_header_content(problem)
         original_content = problem_manager.get_problem_content(problem)
         
-        # 生成hole版本
+        # Generate hole version (now includes have information)
         hole_content, hole_list = self.generate_in_place_holes(problem)
         
-        # 增强hole_list信息以支持clear版本生成
-        enhanced_hole_list = self._enhance_hole_list_with_have_info(hole_list, original_content)
+        # Generate clear version using pre-computed have information
+        clear_content = self.generate_clear_version(hole_content, hole_list)
         
-        # 生成clear版本
-        clear_content = self.generate_clear_version(hole_content, enhanced_hole_list)
-        
-        # 验证所有版本
+        # Verify all versions
         original_verification = self.verify_lean_code(header_content, original_content)
         
-        # 为hole版本生成macros
+        # Generate macros for hole version
         hole_macros = []
-        for hole_info in enhanced_hole_list:
+        for hole_info in hole_list:
             hole_id = hole_info['hole_id']
             hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
         
         hole_with_macros = '\n'.join(hole_macros) + '\n\n' + hole_content if hole_macros else hole_content
         hole_verification = self.verify_lean_code(header_content, hole_with_macros)
         
-        # 为clear版本添加skip_hole macro
+        # Add skip_hole macro for clear version
         clear_macros = hole_macros.copy()
         clear_macros.append('macro "skip_hole" : term => `(sorry)')
         clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
@@ -552,7 +567,7 @@ class DecomposeHoleMergePipeline:
             "original_content": original_content,
             "hole_content": hole_content,
             "clear_content": clear_content,
-            "hole_list": enhanced_hole_list,
+            "hole_list": hole_list,
             "verification": {
                 "original": original_verification,
                 "hole": hole_verification,
@@ -560,43 +575,6 @@ class DecomposeHoleMergePipeline:
             }
         }
 
-    def _enhance_hole_list_with_have_info(self, hole_list: List[Dict], original_content: str) -> List[Dict]:
-        """
-        增强hole_list，添加have语句的名称和类型信息
-        """
-        import re
-        
-        enhanced_list = []
-        
-        for hole_info in hole_list:
-            enhanced_info = hole_info.copy()
-            
-            # 尝试从have_statement中提取have名称和类型
-            have_statement = hole_info.get('have_statement', '')
-            
-            # 匹配have语句的模式：have name : type := ...
-            have_match = re.search(r'have\s+(\w+)\s*:\s*([^:=]+)(?::=|$)', have_statement)
-            if have_match:
-                have_name = have_match.group(1).strip()
-                have_type = have_match.group(2).strip()
-                
-                enhanced_info['have_name'] = have_name
-                enhanced_info['have_type'] = have_type
-                
-                # 还需要获取have语句的位置信息
-                if 'have_start_pos' not in enhanced_info:
-                    # 尝试在原始内容中找到这个have语句的位置
-                    for i, line in enumerate(original_content.split('\n')):
-                        if f"have {have_name}" in line and have_type in line:
-                            # 创建一个简单的位置对象
-                            from collections import namedtuple
-                            Pos = namedtuple('Pos', ['line', 'column'])
-                            enhanced_info['have_start_pos'] = Pos(line=i+1, column=line.find(f"have {have_name}"))
-                            break
-            
-            enhanced_list.append(enhanced_info)
-        
-        return enhanced_list
 
     def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
@@ -1080,14 +1058,32 @@ class DecomposeHoleMergePipeline:
                 # Replace the entire block of original lines with the new block.
                 content_lines = content_lines[:start_line_idx] + replacement_block + content_lines[end_line_idx + 1:]
 
+            # Extract have information directly during hole generation
+            have_name = None
+            have_type = None
+            parent_have_tactic = hole_info.get('parent_have_tactic', '')
+            
+            if parent_have_tactic and parent_have_tactic.strip().startswith('have '):
+                import re
+                have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', parent_have_tactic.strip())
+                if have_match:
+                    have_name = have_match.group(1).strip()
+                    have_type = have_match.group(2).strip()
+            
             # Add hole info to the list that will be returned for decomposition steps.
-            # We use a new list to ensure it matches the number of actual replacements.
-            hole_list_for_decomposition.append({
+            hole_info_dict = {
                 'hole_id': hole_id,
                 'original_proof': hole_info['original_proof'],
-                'have_statement': hole_info.get('parent_have_tactic', ''),
+                'have_statement': parent_have_tactic,
                 'position': len(hole_list_for_decomposition)
-            })
+            }
+            
+            # Add have information if available
+            if have_name and have_type:
+                hole_info_dict['have_name'] = have_name
+                hole_info_dict['have_type'] = have_type
+            
+            hole_list_for_decomposition.append(hole_info_dict)
 
         # Reverse hole_list to maintain original order since we processed in reverse
         hole_list_for_decomposition.reverse()
@@ -1503,24 +1499,21 @@ class DecomposeHoleMergePipeline:
             current_step = "generating_clear_version"
             print(f"Step 3.6: Generating clear version...")
             
-            # 增强hole_list信息以支持clear版本生成
-            enhanced_hole_list = self._enhance_hole_list_with_have_info(hole_list, original_content)
+            # Generate clear version using pre-computed have information from hole generation
+            clear_content = self.generate_clear_version(hole_version_content, hole_list)
             
-            # 生成clear版本
-            clear_content = self.generate_clear_version(hole_version_content, enhanced_hole_list)
-            
-            # 为clear版本添加macros
+            # Add macros for clear version
             clear_macros = hole_macros.copy()
             clear_macros.append('macro "skip_hole" : term => `(sorry)')
             clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
             
-            # 保存clear版本
+            # Save clear version
             clear_version_path = os.path.join(problem_dir, "clear_version.lean")
             with open(clear_version_path, "w") as f:
                 f.write(clear_with_macros)
             print(f"Clear version saved to: {clear_version_path}")
             
-            # 验证clear版本
+            # Verify clear version
             current_step = "verifying_clear_version"
             print(f"Step 3.7: Verifying clear version...")
             clear_verification_pass = self.verify_lean_code(header_content, clear_with_macros)
