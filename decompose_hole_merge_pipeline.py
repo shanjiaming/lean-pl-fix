@@ -627,6 +627,94 @@ class DecomposeHoleMergePipeline:
         # Verify this modified content
         return self.verify_lean_code(header_content, test_content)
 
+    def try_unigram_tactics_proofstep(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
+        """
+        Try unigram tactics using TRUE ProofStep integration with minimal verification.
+        CONSTRAINT: Uses proof state testing, NOT full proof verification for tactics.
+        
+        Args:
+            hole_content: The content containing hole placeholders  
+            header_content: The header content for verification
+            
+        Returns:
+            Tuple of (best_filled_content, additional_info)
+        """
+        from proofstep_lean_integration import MinimalLeanProofStepIntegrator
+        from proofstep_integration import ProofStepIntegrator
+        
+        # Create macros for all holes found in the content
+        import re
+        all_holes = re.findall(r'\bhole(?:_\d+)?\b', hole_content)
+        hole_macros = []
+        for hole in set(all_holes):
+            hole_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
+        
+        # Add skip_hole macro
+        hole_macros.append('macro "skip_hole" : term => `(sorry)')
+        
+        # Create content with macros
+        if hole_macros:
+            macros_str = '\n'.join(hole_macros)
+            hole_content_with_macros = f"""{macros_str}
+
+{hole_content}"""
+        else:
+            hole_content_with_macros = hole_content
+        
+        # Step 1: Use original ProofStep integrator to identify enumerable vs skip indices
+        session_analyzer = ProofStepIntegrator()
+        session = session_analyzer.initialize_session(hole_content_with_macros)
+        enumerable_indices = session.enumerable_indices
+        
+        print(f"🎯 ProofStep enumeration: {len(enumerable_indices)} enumerable holes, {len(session.skip_indices)} skip holes")
+        
+        # Step 2: Use minimal verification integrator for actual tactic testing
+        minimal_integrator = MinimalLeanProofStepIntegrator()
+        
+        try:
+            # Define unigram tactics to try
+            unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
+            
+            # Run ProofStep enumeration with proof states (NO full verifications)
+            results = minimal_integrator.enumerate_tactics_with_proof_states(
+                header_content, hole_content_with_macros, unigrams, enumerable_indices
+            )
+            
+            # Extract information for compatibility with existing interface
+            additional_info = {
+                "method": "minimal_proofstep_integration",
+                "tactics_tried": unigrams,
+                "successful_tactics": list(results['successful_tactics'].values()),
+                "failed_tactics": [],
+                "best_tactic": None,
+                "enumerable_holes": enumerable_indices,
+                "skip_holes": session.skip_indices,
+                "proof_state_tests": results.get('proof_state_tests', 0),
+                "verification_count": minimal_integrator.verification_count
+            }
+            
+            # Create final content with successful tactics
+            final_content = hole_content_with_macros
+            best_tactics_found = len(results['successful_tactics']) > 0
+            
+            if best_tactics_found:
+                # Replace hole macros with successful tactics
+                for sorry_idx, tactic in results['successful_tactics'].items():
+                    # Find corresponding hole_id from session mapping
+                    sorry_info = session.sorry_map.get(sorry_idx)
+                    if sorry_info and sorry_info.hole_id:
+                        # Replace macro definition with successful tactic
+                        old_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| sorry)'
+                        new_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| {tactic})'
+                        final_content = final_content.replace(old_macro, new_macro)
+                
+                additional_info["best_tactic"] = "multiple_tactics_found"
+            
+            return final_content, additional_info
+            
+        finally:
+            minimal_integrator.shutdown_lean_server()
+
     def try_unigram_tactics(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
         Try different unigram tactics to replace holes and find working solutions.
@@ -639,8 +727,7 @@ class DecomposeHoleMergePipeline:
             Tuple of (best_filled_content, additional_info)
         """
         # Define common single-line unigram tactics to try
-        unigrams = []
-        # unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
+        unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
         
         additional_info = {
             "method": "unigram_tactics",
@@ -1861,7 +1948,7 @@ def main():
         
         # Choose hole filling function based on method
         if filling_method == "unigram":
-            hole_filling_function = pipeline.try_unigram_tactics
+            hole_filling_function = pipeline.try_unigram_tactics_proofstep
         else:  # default to simple
             hole_filling_function = pipeline.fill_hole_content
         
@@ -1882,7 +1969,7 @@ def main():
         
         # Choose hole filling function based on method
         if filling_method == "unigram":
-            hole_filling_function = pipeline.try_unigram_tactics
+            hole_filling_function = pipeline.try_unigram_tactics_proofstep
         else:  # default to simple
             hole_filling_function = pipeline.fill_hole_content
 

@@ -1,8 +1,9 @@
-macro "hole_2" : tactic => `(tactic| admit)
-macro "hole_4" : tactic => `(tactic| admit)
-macro "hole_3" : tactic => `(tactic| admit)
-macro "hole_5" : tactic => `(tactic| admit)
-macro "hole_1" : tactic => `(tactic| admit)
+
+macro "hole_2" : tactic => `(tactic| sorry)
+macro "hole_4" : tactic => `(tactic| sorry)
+macro "hole_3" : tactic => `(tactic| sorry)
+macro "hole_5" : tactic => `(tactic| sorry)
+macro "hole_1" : tactic => `(tactic| sorry)
 macro "skip_hole" : term => `(sorry)
 
 theorem complex_have_chain (n : ℕ) (h : n > 0) : n + n ≥ n := by
