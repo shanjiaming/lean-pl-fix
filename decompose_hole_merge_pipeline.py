@@ -141,7 +141,7 @@ class DecomposeHoleMergePipeline:
         
         # Step 3: Verify final filled content
         print(f"Verifying final filled proof...")
-        final_verification = self.verify_lean_code(header_content, filled_content, with_macro=False)
+        final_verification = self.verify_lean_code(header_content, filled_content)
         print(f"Final verification: {'PASS' if final_verification else 'FAIL'}")
         
         print(f"In-place decomposition completed. Generated {len(decomposition_steps)} steps.")
@@ -372,12 +372,14 @@ class DecomposeHoleMergePipeline:
         
         return steps
     
-    def verify_lean_code(self, header: str, content: str, with_macro: bool = False, return_error_string: bool = False) -> Union[bool, Tuple[bool, Optional[str]]]:
+    def verify_lean_code(self, header: str, content: str, return_error_string: bool = False) -> Union[bool, Tuple[bool, Optional[str]]]:
         """
         Verify if Lean code has no errors using header form.
         A successful verification means no Lean errors and no unsolved goals.
         
         Args:
+            header: Header content with imports and declarations
+            content: Lean code content to verify (should include any needed macros)
             return_error_string: If True, returns a tuple (bool, Optional[str]). 
                                  Otherwise, returns a bool.
         
@@ -385,9 +387,6 @@ class DecomposeHoleMergePipeline:
             - bool if return_error_string is False.
             - (True, None) or (False, error_message) if return_error_string is True.
         """
-        if with_macro:
-            header = header + "\nmacro \"hole\" : tactic => `(tactic| admit)"
-        
         result = self.lean_verifier.run_with_header(header, content)
         
         # Check for fatal errors reported directly on the result object.
@@ -489,7 +488,7 @@ class DecomposeHoleMergePipeline:
         clear_content = self.generate_clear_version(hole_content, enhanced_hole_list)
         
         # 验证所有版本
-        original_verification = self.verify_lean_code(header_content, original_content, with_macro=False)
+        original_verification = self.verify_lean_code(header_content, original_content)
         
         # 为hole版本生成macros
         hole_macros = []
@@ -498,13 +497,13 @@ class DecomposeHoleMergePipeline:
             hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
         
         hole_with_macros = '\n'.join(hole_macros) + '\n\n' + hole_content if hole_macros else hole_content
-        hole_verification = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
+        hole_verification = self.verify_lean_code(header_content, hole_with_macros)
         
         # 为clear版本添加skip_hole macro
         clear_macros = hole_macros.copy()
         clear_macros.append('macro "skip_hole" : term => `(sorry)')
         clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
-        clear_verification = self.verify_lean_code(header_content, clear_with_macros, with_macro=False)
+        clear_verification = self.verify_lean_code(header_content, clear_with_macros)
         
         return {
             "original_content": original_content,
@@ -605,7 +604,7 @@ class DecomposeHoleMergePipeline:
         
         # The target hole_id should remain as is, and there should be a macro for it
         # Verify this modified content
-        return self.verify_lean_code(header_content, test_content, with_macro=False)
+        return self.verify_lean_code(header_content, test_content)
 
     def try_unigram_tactics(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
@@ -680,7 +679,7 @@ class DecomposeHoleMergePipeline:
             else:
                 candidate_with_macros = candidate_content
             
-            if self.verify_lean_code(header_content, candidate_with_macros, with_macro=False):
+            if self.verify_lean_code(header_content, candidate_with_macros):
                 additional_info["successful_tactics"].append(tactic)
                 if additional_info["best_tactic"] is None:
                     additional_info["best_tactic"] = tactic
@@ -1314,7 +1313,7 @@ class DecomposeHoleMergePipeline:
             
             # The tree's structure is our "safe zone". No need for line number checks.
             print(f"Verifying original problem with heartbeat check: {problem.problem_id}")
-            original_verification_pass, verification_error = self.verify_lean_code(header_content, original_content, with_macro=False, return_error_string=True)
+            original_verification_pass, verification_error = self.verify_lean_code(header_content, original_content, return_error_string=True)
 
             # Check for heartbeat timeout
             if not original_verification_pass and verification_error and "heartbeats" in verification_error:
@@ -1448,7 +1447,7 @@ class DecomposeHoleMergePipeline:
             # Step 3.5: Verify hole version
             current_step = "verifying_hole_version"
             print(f"Step 3.5: Verifying hole version...")
-            hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
+            hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros)
             print(f"Hole version verification: {'PASS' if hole_verification_pass else 'FAIL'}")
             
             # Save complete fixed proof  
@@ -1460,7 +1459,7 @@ class DecomposeHoleMergePipeline:
             # Step 4: Verify synthesized proof
             current_step = "verifying_synthesized_proof"
             print(f"Step 4: Verifying synthesized proof...")
-            filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof, with_macro=False)
+            filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof)
             print(f"Synthesized proof verification: {'PASS' if filled_verification_pass else 'FAIL'}")
             
             # Step 4.5: Update metadata with synthesized verification result
