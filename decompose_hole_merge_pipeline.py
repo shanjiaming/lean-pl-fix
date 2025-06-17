@@ -918,7 +918,7 @@ class DecomposeHoleMergePipeline:
             'hole_id': f"hole_{hole_counter}",
             'content': hole_content,
             'original_proof': hole_content,
-            'parent_have_tactic': node.tactic.tactic.strip(),
+            'parent_have_tactic': node.tactic.tactic,  # Keep original formatting including newlines
             'start_pos': start_tactic_node.tactic.start_pos,
             'end_pos': node.end_pos,
             'hole_type': 'after_last_have' if last_have_index >= 0 else 'entire_by_block'
@@ -1065,10 +1065,11 @@ class DecomposeHoleMergePipeline:
             
             if parent_have_tactic and parent_have_tactic.strip().startswith('have '):
                 import re
-                have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', parent_have_tactic.strip())
+                # Use DOTALL flag to match across multiple lines
+                have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', parent_have_tactic, re.DOTALL)
                 if have_match:
                     have_name = have_match.group(1).strip()
-                    have_type = have_match.group(2).strip()
+                    have_type = have_match.group(2)  # Keep original multiline formatting for type
             
             # Add hole info to the list that will be returned for decomposition steps.
             hole_info_dict = {
