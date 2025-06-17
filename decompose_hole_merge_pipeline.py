@@ -407,6 +407,155 @@ class DecomposeHoleMergePipeline:
         # If no errors are found, verification passes.
         return (True, None) if return_error_string else True
 
+    def generate_clear_version(self, hole_content: str, hole_list: List[Dict]) -> str:
+        """
+        生成带clear语句的hole版本，解决metavariable依赖问题
+        
+        在每个 have ... := by hole_i 结构后面添加：
+        - clear h - 清理掉这个have语句
+        - have h : [type] := skip_hole - 重新定义为skip_hole
+        
+        Args:
+            hole_content: 原始的hole版本内容
+            hole_list: hole信息列表，包含有关hole的元数据
+            
+        Returns:
+            str: 带clear语句的版本
+        """
+        import re
+        
+        lines = hole_content.split('\n')
+        result_lines = []
+        processed_haves = set()  # 跟踪已处理的have变量，避免重复清理
+        
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            result_lines.append(line)
+            
+            # 检查当前行是否是have语句的开始
+            have_match = re.match(r'^(\s*)have\s+(\w+)\s*:\s*([^:=]+):=\s*by\s*$', line.strip())
+            if have_match:
+                indent = len(line) - len(line.lstrip())
+                indent_str = ' ' * indent
+                var_name = have_match.group(2).strip()
+                type_expr = have_match.group(3).strip()
+                
+                # 检查下一行是否是hole_N
+                if i + 1 < len(lines):
+                    next_line = lines[i + 1]
+                    hole_match = re.match(r'^\s*(hole_\d+)\s*$', next_line.strip())
+                    if hole_match:
+                        hole_id = hole_match.group(1)
+                        
+                        # 添加hole行
+                        result_lines.append(next_line)
+                        i += 1  # 跳过hole行，因为我们已经处理了
+                        
+                        # 如果这个have变量还没有被处理过，添加clear和重新定义
+                        if var_name not in processed_haves:
+                            # 添加clear语句和重新定义（在同一缩进级别）
+                            result_lines.append(f"{indent_str}clear {var_name}")
+                            result_lines.append(f"{indent_str}have {var_name} : {type_expr} := skip_hole")
+                            processed_haves.add(var_name)
+            
+            i += 1
+        
+        return '\n'.join(result_lines)
+
+    def test_clear_version_generation(self, problem: Problem) -> Dict:
+        """
+        测试clear版本生成功能的主要函数
+        
+        Args:
+            problem: 要测试的问题
+            
+        Returns:
+            Dict: 包含测试结果的字典
+        """
+        print(f"Testing clear version generation for {problem.dataset}/{problem.problem_id}")
+        
+        # 获取原始内容
+        header_content = problem_manager.get_header_content(problem)
+        original_content = problem_manager.get_problem_content(problem)
+        
+        # 生成hole版本
+        hole_content, hole_list = self.generate_in_place_holes(problem)
+        
+        # 增强hole_list信息以支持clear版本生成
+        enhanced_hole_list = self._enhance_hole_list_with_have_info(hole_list, original_content)
+        
+        # 生成clear版本
+        clear_content = self.generate_clear_version(hole_content, enhanced_hole_list)
+        
+        # 验证所有版本
+        original_verification = self.verify_lean_code(header_content, original_content, with_macro=False)
+        
+        # 为hole版本生成macros
+        hole_macros = []
+        for hole_info in enhanced_hole_list:
+            hole_id = hole_info['hole_id']
+            hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
+        
+        hole_with_macros = '\n'.join(hole_macros) + '\n\n' + hole_content if hole_macros else hole_content
+        hole_verification = self.verify_lean_code(header_content, hole_with_macros, with_macro=False)
+        
+        # 为clear版本添加skip_hole macro
+        clear_macros = hole_macros.copy()
+        clear_macros.append('macro "skip_hole" : term => `(sorry)')
+        clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
+        clear_verification = self.verify_lean_code(header_content, clear_with_macros, with_macro=False)
+        
+        return {
+            "original_content": original_content,
+            "hole_content": hole_content,
+            "clear_content": clear_content,
+            "hole_list": enhanced_hole_list,
+            "verification": {
+                "original": original_verification,
+                "hole": hole_verification,
+                "clear": clear_verification
+            }
+        }
+
+    def _enhance_hole_list_with_have_info(self, hole_list: List[Dict], original_content: str) -> List[Dict]:
+        """
+        增强hole_list，添加have语句的名称和类型信息
+        """
+        import re
+        
+        enhanced_list = []
+        
+        for hole_info in hole_list:
+            enhanced_info = hole_info.copy()
+            
+            # 尝试从have_statement中提取have名称和类型
+            have_statement = hole_info.get('have_statement', '')
+            
+            # 匹配have语句的模式：have name : type := ...
+            have_match = re.search(r'have\s+(\w+)\s*:\s*([^:=]+)(?::=|$)', have_statement)
+            if have_match:
+                have_name = have_match.group(1).strip()
+                have_type = have_match.group(2).strip()
+                
+                enhanced_info['have_name'] = have_name
+                enhanced_info['have_type'] = have_type
+                
+                # 还需要获取have语句的位置信息
+                if 'have_start_pos' not in enhanced_info:
+                    # 尝试在原始内容中找到这个have语句的位置
+                    for i, line in enumerate(original_content.split('\n')):
+                        if f"have {have_name}" in line and have_type in line:
+                            # 创建一个简单的位置对象
+                            from collections import namedtuple
+                            Pos = namedtuple('Pos', ['line', 'column'])
+                            enhanced_info['have_start_pos'] = Pos(line=i+1, column=line.find(f"have {have_name}"))
+                            break
+            
+            enhanced_list.append(enhanced_info)
+        
+        return enhanced_list
+
     def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
         """
         Convert hole content to filled content with basic information.
