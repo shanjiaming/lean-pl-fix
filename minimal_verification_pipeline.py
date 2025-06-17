@@ -44,11 +44,8 @@ class MinimalVerificationPipeline:
     Leverages existing decomposition results from DecomposeHoleMergePipeline
     """
     
-    def __init__(self, output_base_dir: str = "minimal_verification_results", 
-                 decomposition_base_dir: str = "decomposition_results"):
-        self.output_base_dir = output_base_dir
+    def __init__(self, decomposition_base_dir: str = "decomposition_results"):
         self.decomposition_base_dir = decomposition_base_dir
-        os.makedirs(self.output_base_dir, exist_ok=True)
         
     def process_problem_with_constraint(self, problem: Problem) -> MinimalVerificationResult:
         """
@@ -83,12 +80,16 @@ class MinimalVerificationPipeline:
             # Load existing files
             header_path = os.path.join(decomp_dir, "header.lean")
             clear_version_path = os.path.join(decomp_dir, "clear_version.lean")
+            hole_version_path = os.path.join(decomp_dir, "hole_version.lean")
             
             with open(header_path, 'r') as f:
                 header_content = f.read()
             
             with open(clear_version_path, 'r') as f:
                 clear_with_macros = f.read()
+                
+            with open(hole_version_path, 'r') as f:
+                hole_version_content = f.read()
             
             # Use existing verification results where available (saves verifications!)
             original_verification_pass = decomp_data.get('original_verification_pass', True)
@@ -151,30 +152,43 @@ class MinimalVerificationPipeline:
             successful_tactics = proofstep_results['successful_tactics']
             proof_state_tests = proofstep_results['proof_state_tests']
             
-            # Create filled version based on successful tactics
-            print("📝 Creating filled version from successful tactics...")
-            filled_content = clear_with_macros
+            # Create synthesized version based on hole_version.lean with successful tactics
+            print("📝 Creating synthesized version from hole_version.lean with successful tactics...")
+            synthesized_content = hole_version_content
+            tactics_replaced = 0
             
             for sorry_idx, tactic in successful_tactics.items():
                 # Find corresponding hole_id from session mapping
                 sorry_info = session.sorry_map.get(sorry_idx)
                 if sorry_info and sorry_info.hole_id:
-                    # Replace macro definition with successful tactic
+                    # Replace macro definition in hole_version with successful tactic
                     old_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| admit)'
                     new_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| {tactic})'
-                    filled_content = filled_content.replace(old_macro, new_macro)
-                    print(f"  ✅ {sorry_info.hole_id} -> {tactic}")
+                    if old_macro in synthesized_content:
+                        synthesized_content = synthesized_content.replace(old_macro, new_macro)
+                        tactics_replaced += 1
+                        print(f"  ✅ {sorry_info.hole_id} -> {tactic}")
+                    else:
+                        print(f"  ⚠️  Could not find macro {sorry_info.hole_id} in hole_version.lean")
             
-            # VERIFICATION 3: Final filled proof (only if we have successful tactics)
+            print(f"  📊 Replaced {tactics_replaced}/{len(successful_tactics)} successful tactics")
+            
+            # Save synthesized version to decomposed directory
+            synthesized_path = os.path.join(decomp_dir, "synthesized_proof.lean")
+            with open(synthesized_path, 'w') as f:
+                f.write(synthesized_content)
+            print(f"  💾 Synthesized proof saved to: {synthesized_path}")
+            
+            # VERIFICATION 3: Final synthesized proof (if we have any tactic replacements)
             filled_verification_pass = False
-            if successful_tactics:
-                print("🔍 Verification 3: Final filled proof")
+            if tactics_replaced > 0:
+                print("🔍 Verification 3: Final synthesized proof")
                 filled_verification_pass = integrator.verify_proof_with_limit(
-                    header_content, filled_content, "final filled proof"
+                    header_content, synthesized_content, "final synthesized proof"
                 )
                 print(f"  Result: {'PASS' if filled_verification_pass else 'FAIL'}")
             else:
-                print("⏭️  No successful tactics found, skipping filled proof verification")
+                print("⏭️  No tactics replaced, skipping synthesized proof verification")
             
             # Check constraint satisfaction
             constraint_satisfied = integrator.verification_count <= integrator.max_verifications
@@ -196,10 +210,35 @@ class MinimalVerificationPipeline:
                 constraint_satisfied=constraint_satisfied
             )
             
+            # Save minimal verification result to decomposed directory
+            minimal_result_path = os.path.join(decomp_dir, "minimal_verification.json")
+            minimal_result_data = {
+                "problem_id": result.problem_id,
+                "dataset": result.dataset,
+                "verification_count": result.verification_count,
+                "max_verifications": result.max_verifications,
+                "original_verification_pass": result.original_verification_pass,
+                "hole_verification_pass": result.hole_verification_pass,
+                "clear_verification_pass": result.clear_verification_pass,
+                "filled_verification_pass": result.filled_verification_pass,
+                "synthesized_verification_pass": result.filled_verification_pass,  # alias for clarity
+                "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
+                "proof_state_tests": result.proof_state_tests,
+                "processing_time_seconds": result.processing_time_seconds,
+                "constraint_satisfied": result.constraint_satisfied,
+                "tactics_replaced": tactics_replaced,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            with open(minimal_result_path, 'w') as f:
+                json.dump(minimal_result_data, f, indent=2)
+            print(f"  💾 Minimal verification result saved to: {minimal_result_path}")
+            
             print(f"📊 Results:")
             print(f"  Verifications: {integrator.verification_count}/{integrator.max_verifications}")
             print(f"  Proof state tests: {proof_state_tests}")
             print(f"  Successful tactics: {len(successful_tactics)}")
+            print(f"  Tactics replaced: {tactics_replaced}")
             print(f"  Constraint satisfied: {'✅' if constraint_satisfied else '❌'}")
             print(f"  Processing time: {processing_time:.1f}s")
             
@@ -264,8 +303,8 @@ class MinimalVerificationPipeline:
                 results.append(error_result)
                 constraint_violations += 1
         
-        # Save results
-        self._save_results(dataset_name, results)
+        # Save summary results (dataset level)
+        self._save_dataset_summary(dataset_name, results)
         
         # Print summary
         print(f"\\n{'='*80}")
@@ -286,9 +325,9 @@ class MinimalVerificationPipeline:
         
         return results
     
-    def _save_results(self, dataset_name: str, results: List[MinimalVerificationResult]):
-        """Save results to JSON file"""
-        output_file = os.path.join(self.output_base_dir, f"{dataset_name}_minimal_verification_results.json")
+    def _save_dataset_summary(self, dataset_name: str, results: List[MinimalVerificationResult]):
+        """Save dataset-level summary results to decomposition_results directory"""
+        output_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary.json")
         
         results_data = []
         for result in results:
@@ -308,10 +347,24 @@ class MinimalVerificationPipeline:
                 "timestamp": datetime.now().isoformat()
             })
         
-        with open(output_file, 'w') as f:
-            json.dump(results_data, f, indent=2)
+        # Add summary statistics
+        summary_data = {
+            "dataset": dataset_name,
+            "total_problems": len(results),
+            "constraint_violations": len([r for r in results if not r.constraint_satisfied]),
+            "constraint_satisfaction_rate": len([r for r in results if r.constraint_satisfied]) / len(results) * 100,
+            "successful_problems": len([r for r in results if r.filled_verification_pass]),
+            "total_proof_state_tests": sum(r.proof_state_tests for r in results),
+            "total_verifications": sum(r.verification_count for r in results if r.verification_count < 999),
+            "average_processing_time": sum(r.processing_time_seconds for r in results) / len(results),
+            "timestamp": datetime.now().isoformat(),
+            "results": results_data
+        }
         
-        print(f"💾 Results saved to: {output_file}")
+        with open(output_file, 'w') as f:
+            json.dump(summary_data, f, indent=2)
+        
+        print(f"💾 Dataset summary saved to: {output_file}")
 
 def main():
     """Main function for minimal verification pipeline"""
