@@ -152,26 +152,72 @@ class MinimalVerificationPipeline:
             successful_tactics = proofstep_results['successful_tactics']
             proof_state_tests = proofstep_results['proof_state_tests']
             
-            # Create synthesized version based on hole_version.lean with successful tactics
-            print("📝 Creating synthesized version from hole_version.lean with successful tactics...")
+            # Create synthesized version by directly replacing hole uses with tactics
+            print("📝 Creating synthesized version by directly replacing holes with tactics...")
             synthesized_content = hole_version_content
             tactics_replaced = 0
             
+            # First, remove all hole macro definitions since we'll replace them directly
+            import re
+            
+            # Remove macro definitions for holes that we'll replace
             for sorry_idx, tactic in successful_tactics.items():
-                # Find corresponding hole_id from session mapping
                 sorry_info = session.sorry_map.get(sorry_idx)
                 if sorry_info and sorry_info.hole_id:
-                    # Replace macro definition in hole_version with successful tactic
-                    old_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| admit)'
-                    new_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| {tactic})'
-                    if old_macro in synthesized_content:
-                        synthesized_content = synthesized_content.replace(old_macro, new_macro)
-                        tactics_replaced += 1
-                        print(f"  ✅ {sorry_info.hole_id} -> {tactic}")
-                    else:
-                        print(f"  ⚠️  Could not find macro {sorry_info.hole_id} in hole_version.lean")
+                    # Remove the macro definition line
+                    macro_pattern = f'macro "{sorry_info.hole_id}" : tactic => `\\(tactic\\| [^)]+\\)'
+                    synthesized_content = re.sub(macro_pattern, '', synthesized_content)
             
-            print(f"  📊 Replaced {tactics_replaced}/{len(successful_tactics)} successful tactics")
+            # Now replace direct uses of hole_X with the actual tactics
+            for sorry_idx, tactic in successful_tactics.items():
+                sorry_info = session.sorry_map.get(sorry_idx)
+                if sorry_info and sorry_info.hole_id:
+                    hole_id = sorry_info.hole_id
+                    
+                    # Replace hole usage with direct tactic
+                    # Look for patterns like "    hole_2" (with proper indentation)
+                    hole_pattern = f'(\\s+){hole_id}(\\s*)'
+                    replacement = f'\\g<1>{tactic}\\g<2>'
+                    
+                    old_content = synthesized_content
+                    synthesized_content = re.sub(hole_pattern, replacement, synthesized_content)
+                    
+                    if synthesized_content != old_content:
+                        tactics_replaced += 1
+                        print(f"  ✅ {hole_id} -> {tactic}")
+                    else:
+                        print(f"  ⚠️  Could not find usage of {hole_id} in proof body")
+            
+            # For holes without successful tactics, replace with admit
+            # Remove ALL hole macro definitions and replace usages with admit
+            all_holes_in_session = set()
+            for sorry_info in session.sorry_map.values():
+                if sorry_info.hole_id and sorry_info.should_enumerate:
+                    all_holes_in_session.add(sorry_info.hole_id)
+            
+            # Remove macro definitions for holes that don't have successful tactics
+            for hole_id in all_holes_in_session:
+                if hole_id not in [session.sorry_map[idx].hole_id for idx in successful_tactics.keys() if session.sorry_map.get(idx)]:
+                    # Remove macro definition for this hole
+                    macro_pattern = f'macro "{hole_id}" : tactic => `\\(tactic\\| [^)]+\\)'
+                    synthesized_content = re.sub(macro_pattern, '', synthesized_content)
+                    
+                    # Replace hole usage with admit
+                    hole_pattern = f'(\\s+){hole_id}(\\s*)'
+                    replacement = f'\\g<1>admit\\g<2>'
+                    
+                    old_content = synthesized_content
+                    synthesized_content = re.sub(hole_pattern, replacement, synthesized_content)
+                    
+                    if synthesized_content != old_content:
+                        tactics_replaced += 1
+                        print(f"  🔄 {hole_id} -> admit (fallback)")
+            
+            # Clean up extra empty lines from removed macros
+            synthesized_content = re.sub(r'\n\s*\n\s*\n', '\n\n', synthesized_content)
+            synthesized_content = synthesized_content.strip() + '\n'
+            
+            print(f"  📊 Replaced {tactics_replaced}/{len(all_holes_in_session)} hole usages with tactics/admit")
             
             # Save synthesized version to decomposed directory
             synthesized_path = os.path.join(decomp_dir, "synthesized_proof.lean")

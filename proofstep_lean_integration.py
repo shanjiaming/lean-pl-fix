@@ -177,25 +177,46 @@ class MinimalLeanProofStepIntegrator:
             response = self.lean_server.run(ProofStep(proof_state=proof_state_id, tactic=tactic))
             
             # Check if tactic application was successful
-            # ProofStep returns LeanError if tactic fails, CommandResponse if successful
-            success = not hasattr(response, 'message')  # LeanError has message attribute
-            
-            if success:
-                print(f"    ✅ {tactic} succeeded on proof_state {proof_state_id}")
-                return TacticResult(
-                    success=True,
-                    tactic=tactic,
-                    sorry_index=proof_state.sorry_index,
-                    new_goals=[sorry.goal for sorry in response.sorries] if hasattr(response, 'sorries') else []
-                )
-            else:
-                error_msg = getattr(response, 'message', 'Tactic did not solve goal')
+            # Check if tactic really succeeded
+            if hasattr(response, 'message'):
+                # LeanError - tactic failed completely
+                error_msg = response.message
                 print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: {error_msg[:100]}...")
                 return TacticResult(
                     success=False,
                     tactic=tactic,
                     sorry_index=proof_state.sorry_index,
                     error_message=str(error_msg)
+                )
+            elif hasattr(response, 'proof_status'):
+                # ProofStepResponse - check if proof is actually completed
+                if response.proof_status == 'Completed' and len(response.goals) == 0:
+                    # Tactic fully solved the goal
+                    print(f"    ✅ {tactic} succeeded on proof_state {proof_state_id}")
+                    return TacticResult(
+                        success=True,
+                        tactic=tactic,
+                        sorry_index=proof_state.sorry_index,
+                        new_goals=[]
+                    )
+                else:
+                    # Tactic executed but didn't fully solve the goal
+                    remaining_goals = len(response.goals) if hasattr(response, 'goals') else 'unknown'
+                    print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: {response.proof_status}, {remaining_goals} goals remain")
+                    return TacticResult(
+                        success=False,
+                        tactic=tactic,
+                        sorry_index=proof_state.sorry_index,
+                        error_message=f"Tactic status: {response.proof_status}, goals remain: {remaining_goals}"
+                    )
+            else:
+                # Some other response type - be conservative and mark as failure
+                print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: unexpected response type {type(response)}")
+                return TacticResult(
+                    success=False,
+                    tactic=tactic,
+                    sorry_index=proof_state.sorry_index,
+                    error_message=f"Unexpected response type: {type(response)}"
                 )
                 
         except Exception as e:

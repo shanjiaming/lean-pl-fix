@@ -47,107 +47,65 @@ class DecomposeHoleMergePipeline:
         self.step_counter["count"] += 1
         return f"step_{self.step_counter['count']:04d}"
         
-    def decompose_problem(self, problem: Problem, hole_filling_function=None) -> tuple[List[DecompositionStep], str]:
+    def decompose_problem(self, problem: Problem) -> tuple[List[DecompositionStep], str]:
         """
-        Decompose a problem into substeps with hole versions and get the complete fixed proof
-        Returns (decomposition_steps, complete_fixed_proof)
+        Decompose a problem into substeps with hole versions
+        Returns (decomposition_steps, hole_version_content)
         
-        NEW APPROACH: Uses in-place hole replacement instead of reconstruction
+        Pure decomposition - identifies holes and generates hole version only.
+        No filling or synthesis logic.
         
         Args:
             problem: The problem to decompose
-            hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
         """
         print(f"Decomposing problem: {problem.dataset}/{problem.problem_id}")
+        print("Using pure decomposition approach (no filling)...")
         
-        # Set default hole filling function if none provided
-        if hole_filling_function is None:
-            hole_filling_function = self.fill_hole_content
-        
-        # Get header for verification
-        header_content = problem_manager.get_header_content(problem)
+        # Get problem content for decomposition
+        problem_content = problem_manager.get_problem_content(problem)
         
         print("Using NEW in-place hole replacement approach...")
         
-        # Step 1: Generate hole version using new approach
+        # Step 1: Generate hole version using pure decomposition
         hole_content, hole_list = self.generate_in_place_holes(problem)
         
         if not hole_list:
             print("No holes generated - problem may not contain have statements")
-            return [], ""
+            return [], hole_content
         
-        # Step 2: Create decomposition steps for each hole
+        # Step 2: Create decomposition steps for each hole (metadata only)
         decomposition_steps = []
-        filled_content = hole_content
-        
-        import re
 
         for hole_info in hole_list:
             step_id = self.get_next_step_id()
             hole_id = hole_info['hole_id']
             original_proof = hole_info['original_proof']
             
-            print(f"  Processing {step_id} for {hole_id}: {original_proof}")
+            print(f"  Recording {step_id} for {hole_id}: {original_proof}")
             
-            # Create a simple step representation
-            step_original_content = f"-- Original: {hole_id} := {original_proof}"
-            # For hole_content, just store the hole_id - verification will be context-aware
-            step_hole_content = hole_id
-            
-            # Create proper hole content for filling function
-            # We need to create a context where the hole can be tested
-            # Use regex with word boundaries to avoid replacing parts of other hole IDs
-            hole_test_content = re.sub(r'\b' + re.escape(hole_id) + r'\b', "hole", filled_content, 1)
-            
-            # Use hole filling function to get replacement
-            step_filled_content, additional_info = hole_filling_function(hole_test_content, header_content)
-            
-            # Extract the actual replacement from filled content
-            # Look for what replaced "hole" in the filled content
-            if additional_info.get("best_tactic"):
-                replacement = additional_info["best_tactic"]
-            else:
-                # If no successful unigram tactic found, use admit as fallback
-                # Do NOT use original proof as it may not be a unigram tactic
-                replacement = "admit"
-            
-            # Replace the hole in the main content
-            # Use regex with word boundaries to avoid replacing parts of other hole IDs
-            filled_content = re.sub(r'\b' + re.escape(hole_id) + r'\b', replacement, filled_content, 1)
-            
-            # Verify the step (we'll verify the full content later)
-            step_verification = True  # Simplified for new approach
-            
-            # Create decomposition step
+            # Create decomposition step (metadata only, no filling)
             step = DecompositionStep(
                 step_id=step_id,
-                original_content=step_original_content,
-                hole_content=step_hole_content,
-                filled_content=f"-- Filled: {hole_id} := {replacement}",
-                original_verification_pass=step_verification,
-                hole_verification_pass=step_verification, 
-                filled_verification_pass=step_verification,
+                original_content=f"-- Original: {hole_id} := {original_proof}",
+                hole_content=hole_id,
+                filled_content="",  # No filling in pure decomposition
+                original_verification_pass=True,  # Will be verified by caller
+                hole_verification_pass=True,      # Will be verified by caller
+                filled_verification_pass=True,    # Not applicable in pure decomposition
                 additional_info={
-                    "method": "in_place_hole_replacement",
+                    "method": "pure_decomposition",
                     "hole_id": hole_id,
-                    "original_proof": original_proof,
-                    "replacement": replacement,
-                    **additional_info
+                    "original_proof": original_proof
                 }
             )
             
             decomposition_steps.append(step)
-            print(f"Created decomposition step: {step_id} ({hole_id} -> {replacement})")
+            print(f"Recorded decomposition step: {step_id} ({hole_id})")
         
-        # Step 3: Verify final filled content
-        print(f"Verifying final filled proof...")
-        final_verification = self.verify_lean_code(header_content, filled_content)
-        print(f"Final verification: {'PASS' if final_verification else 'FAIL'}")
+        print(f"Pure decomposition completed. Generated {len(decomposition_steps)} holes.")
+        print(f"Hole version length: {len(hole_content)} chars")
         
-        print(f"In-place decomposition completed. Generated {len(decomposition_steps)} steps.")
-        print(f"Final filled proof length: {len(filled_content)} chars")
-        
-        return decomposition_steps, filled_content
+        return decomposition_steps, hole_content
     
     def _generate_hole_for_step(self, problem: Problem, proof_framework: str) -> str:
         """Generate hole version for a single proof step"""
@@ -576,25 +534,6 @@ class DecomposeHoleMergePipeline:
         }
 
 
-    def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
-        """
-        Convert hole content to filled content with basic information.
-        Simply replaces "hole" with "admit".
-        
-        Args:
-            hole_content: The content containing "hole" placeholders
-            header_content: The header content for context (unused for now)
-            
-        Returns:
-            Tuple of (filled_content, additional_info)
-        """
-        filled_content = hole_content.replace("hole", "admit")
-        
-        additional_info = {
-            "method": "simple_replace"
-        }
-        
-        return filled_content, additional_info
 
     def _verify_single_hole_in_context(self, header_content: str, hole_id: str, hole_version_content: str) -> bool:
         """
@@ -627,182 +566,7 @@ class DecomposeHoleMergePipeline:
         # Verify this modified content
         return self.verify_lean_code(header_content, test_content)
 
-    def try_unigram_tactics_proofstep(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
-        """
-        Try unigram tactics using TRUE ProofStep integration with minimal verification.
-        CONSTRAINT: Uses proof state testing, NOT full proof verification for tactics.
-        
-        Args:
-            hole_content: The content containing hole placeholders  
-            header_content: The header content for verification
-            
-        Returns:
-            Tuple of (best_filled_content, additional_info)
-        """
-        from proofstep_lean_integration import MinimalLeanProofStepIntegrator
-        from proofstep_integration import ProofStepIntegrator
-        
-        # Create macros for all holes found in the content
-        import re
-        all_holes = re.findall(r'\bhole(?:_\d+)?\b', hole_content)
-        hole_macros = []
-        for hole in set(all_holes):
-            hole_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
-        
-        # Add skip_hole macro
-        hole_macros.append('macro "skip_hole" : term => `(sorry)')
-        
-        # Create content with macros
-        if hole_macros:
-            macros_str = '\n'.join(hole_macros)
-            hole_content_with_macros = f"""{macros_str}
 
-{hole_content}"""
-        else:
-            hole_content_with_macros = hole_content
-        
-        # Step 1: Use original ProofStep integrator to identify enumerable vs skip indices
-        session_analyzer = ProofStepIntegrator()
-        session = session_analyzer.initialize_session(hole_content_with_macros)
-        enumerable_indices = session.enumerable_indices
-        
-        print(f"🎯 ProofStep enumeration: {len(enumerable_indices)} enumerable holes, {len(session.skip_indices)} skip holes")
-        
-        # Step 2: Use minimal verification integrator for actual tactic testing
-        minimal_integrator = MinimalLeanProofStepIntegrator()
-        
-        try:
-            # Define unigram tactics to try
-            unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
-            
-            # Run ProofStep enumeration with proof states (NO full verifications)
-            results = minimal_integrator.enumerate_tactics_with_proof_states(
-                header_content, hole_content_with_macros, unigrams, enumerable_indices
-            )
-            
-            # Extract information for compatibility with existing interface
-            additional_info = {
-                "method": "minimal_proofstep_integration",
-                "tactics_tried": unigrams,
-                "successful_tactics": list(results['successful_tactics'].values()),
-                "failed_tactics": [],
-                "best_tactic": None,
-                "enumerable_holes": enumerable_indices,
-                "skip_holes": session.skip_indices,
-                "proof_state_tests": results.get('proof_state_tests', 0),
-                "verification_count": minimal_integrator.verification_count
-            }
-            
-            # Create final content with successful tactics
-            final_content = hole_content_with_macros
-            best_tactics_found = len(results['successful_tactics']) > 0
-            
-            if best_tactics_found:
-                # Replace hole macros with successful tactics
-                for sorry_idx, tactic in results['successful_tactics'].items():
-                    # Find corresponding hole_id from session mapping
-                    sorry_info = session.sorry_map.get(sorry_idx)
-                    if sorry_info and sorry_info.hole_id:
-                        # Replace macro definition with successful tactic
-                        old_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| sorry)'
-                        new_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| {tactic})'
-                        final_content = final_content.replace(old_macro, new_macro)
-                
-                additional_info["best_tactic"] = "multiple_tactics_found"
-            
-            return final_content, additional_info
-            
-        finally:
-            minimal_integrator.shutdown_lean_server()
-
-    def try_unigram_tactics(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
-        """
-        Try different unigram tactics to replace holes and find working solutions.
-        
-        Args:
-            hole_content: The content containing "hole" placeholders (can be "hole" or numbered holes)
-            header_content: The header content for verification
-            
-        Returns:
-            Tuple of (best_filled_content, additional_info)
-        """
-        # Define common single-line unigram tactics to try
-        unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
-        
-        additional_info = {
-            "method": "unigram_tactics",
-            "tactics_tried": unigrams,
-            "successful_tactics": [],
-            "failed_tactics": [],
-            "best_tactic": None
-        }
-        
-        # Create macros for all holes found in the content (for sanity check)
-        import re
-        all_holes = re.findall(r'\bhole(?:_\d+)?\b', hole_content)
-        hole_macros = []
-        for hole in set(all_holes):  # Remove duplicates
-            # Use proper macro syntax without shell-problematic backticks
-            hole_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
-        
-        # Create content with macros for sanity check
-        if hole_macros:
-            macros_str = '\n'.join(hole_macros)
-            hole_content_with_macros = f"""{macros_str}
-
-{hole_content}"""
-        else:
-            hole_content_with_macros = hole_content
-        
-        # First check if hole version passes (sanity check)
-        # sanity_check = self.verify_lean_code(header_content, hole_content_with_macros)
-        
-        # Find the hole placeholder to replace (can be "hole" or "hole_N")
-        import re
-        hole_match = re.search(r'\bhole(?:_\d+)?\b', hole_content)
-        if not hole_match:
-            additional_info["skip_reason"] = "no_hole_found"
-            return hole_content, additional_info
-        
-        hole_placeholder = hole_match.group(0)
-        
-        # Try each unigram tactic
-        for tactic in unigrams:
-            # Use word boundary replacement to avoid replacing parts of other hole names
-            import re
-            candidate_content = re.sub(r'\b' + re.escape(hole_placeholder) + r'\b', tactic, hole_content)
-            
-            # Create macros for remaining holes in candidate content
-            remaining_holes = re.findall(r'\bhole(?:_\d+)?\b', candidate_content)
-            remaining_macros = []
-            for hole in set(remaining_holes):  # Remove duplicates
-                remaining_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
-            
-            # Create candidate content with macros
-            if remaining_macros:
-                remaining_macros_str = '\n'.join(remaining_macros)
-                candidate_with_macros = f"""{remaining_macros_str}
-
-{candidate_content}"""
-            else:
-                candidate_with_macros = candidate_content
-            
-            if self.verify_lean_code(header_content, candidate_with_macros):
-                additional_info["successful_tactics"].append(tactic)
-                if additional_info["best_tactic"] is None:
-                    additional_info["best_tactic"] = tactic
-            else:
-                additional_info["failed_tactics"].append(tactic)
-        
-        # Return best solution or keep hole as fallback
-        if additional_info["best_tactic"]:
-            # Use word boundary replacement to avoid replacing parts of other hole names
-            import re
-            best_content = re.sub(r'\b' + re.escape(hole_placeholder) + r'\b', additional_info["best_tactic"], hole_content)
-            return best_content, additional_info
-        else:
-            # No tactic worked, keep original hole placeholder
-            return hole_content, additional_info
 
     def generate_in_place_holes_from_content(self, content: str, header_content: Optional[str] = None) -> Tuple[str, List[str]]:
         """Generate holes from raw content for testing"""
@@ -1382,14 +1146,11 @@ class DecomposeHoleMergePipeline:
         
         print(f"Failure logged to {failures_path}")
 
-    def process_problem(self, problem: Problem, hole_filling_function=None):
+    def process_problem(self, problem: Problem):
         """
-        Process a single problem through the entire pipeline.
-        This is the core logic for one problem, extracted from process_dataset.
+        Process a single problem through the decomposition pipeline.
+        Pure decomposition only - no filling logic.
         """
-        # Set default hole filling function if none provided
-        if hole_filling_function is None:
-            hole_filling_function = self.fill_hole_content
 
         problem_start_time = datetime.now()
         current_step = "initialization"
@@ -1481,7 +1242,7 @@ class DecomposeHoleMergePipeline:
             # Step 1: Decompose
             current_step = "decomposition"
             print(f"Step 1: Decomposing problem {problem.problem_id}...")
-            steps, complete_fixed_proof = self.decompose_problem(problem, hole_filling_function)
+            steps, hole_version_content = self.decompose_problem(problem)
             
             # Check if decomposition failed (returned empty list)
             if not steps:
@@ -1518,8 +1279,8 @@ class DecomposeHoleMergePipeline:
                 
                 return
             
-            print(f"Decomposition successful: {len(steps)} steps generated")
-            print(f"Complete fixed proof: {len(complete_fixed_proof)} chars")
+            print(f"Decomposition successful: {len(steps)} holes generated")
+            print(f"Hole version: {len(hole_version_content)} chars")
             
             # Step 2: Save decomposition
             current_step = "saving_decomposition"
@@ -1533,36 +1294,29 @@ class DecomposeHoleMergePipeline:
             self.save_decomposition(problem_dir, problem, steps, original_verification_pass, None)
             print(f"Decomposition saved to: {problem_dir}")
             
-            # Step 3: Save both hole version and complete fixed proof
-            current_step = "saving_proofs"
-            print(f"Step 3: Saving hole version and complete fixed proof...")
+            # Step 3: Save hole version
+            current_step = "saving_hole_version"
+            print(f"Step 3: Saving hole version...")
             
-            # Save hole version
+            # Use the hole_version_content from decomposition
             hole_version_path = os.path.join(problem_dir, "hole_version.lean")
-            hole_content, hole_list = self.generate_in_place_holes(problem)
             
-            # Create mapping of hole_id to successful tactics from decomposition steps
-            hole_replacements = {}
+            # Extract hole_list from decomposition steps
+            hole_list = []
             for step in steps:
                 step_info = step.additional_info or {}
                 hole_id = step_info.get("hole_id")
-                best_tactic = step_info.get("best_tactic")
-                if hole_id and best_tactic:
-                    hole_replacements[hole_id] = best_tactic
+                original_proof = step_info.get("original_proof")
+                if hole_id and original_proof:
+                    hole_list.append({'hole_id': hole_id, 'original_proof': original_proof})
             
-            # Generate hole_version.lean: pure hole version with ALL holes kept as hole_N
-            hole_version_content = hole_content
+            # Create macros for all holes
             hole_macros = []
+            for info in hole_list:
+                hole_id = info['hole_id']
+                hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
+                print(f"Created macro for {hole_id} in hole_version.lean")
             
-            if hole_list:
-                # Create macros for ALL holes (both successful and unsuccessful)
-                for info in hole_list:
-                    hole_id = info['hole_id']
-                    hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
-                    print(f"Created macro for {hole_id} in hole_version.lean")
-                
-                # hole_version_content keeps all hole_N as-is, no replacement with tactics
-
             # Combine macros with hole content
             if hole_macros:
                 macros_str = '\n'.join(hole_macros)
@@ -1607,17 +1361,9 @@ class DecomposeHoleMergePipeline:
             clear_verification_pass = self.verify_lean_code(header_content, clear_with_macros)
             print(f"Clear version verification: {'PASS' if clear_verification_pass else 'FAIL'}")
             
-            # Save complete fixed proof  
-            complete_proof_path = os.path.join(problem_dir, "complete_fixed_proof.lean")
-            with open(complete_proof_path, "w") as f:
-                f.write(complete_fixed_proof)
-            print(f"Complete fixed proof saved to: {complete_proof_path}")
-            
-            # Step 4: Verify synthesized proof
-            current_step = "verifying_synthesized_proof"
-            print(f"Step 4: Verifying synthesized proof...")
-            filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof)
-            print(f"Synthesized proof verification: {'PASS' if filled_verification_pass else 'FAIL'}")
+            # Pure decomposition doesn't generate complete fixed proof
+            # filled_verification_pass will be handled by minimal_verification_pipeline
+            filled_verification_pass = False  # Not applicable in pure decomposition
             
             # Step 4.5: Update metadata with synthesized verification result
             print(f"Step 4.5: Updating metadata with synthesized verification result...")
@@ -1780,14 +1526,13 @@ class DecomposeHoleMergePipeline:
             self._append_failure_to_file(dataset_name, failure_record)
             self._append_result_to_file(dataset_name, result_record)
 
-    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, hole_filling_function=None, resume: bool = True):
+    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, resume: bool = True):
         """
-        Process entire dataset through the pipeline
+        Process entire dataset through the pure decomposition pipeline
         
         Args:
             dataset_name: Name of the dataset to process
             limit: Maximum number of problems to process
-            hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
             resume: Whether to resume from last run (default: True)
         """
         problems = problem_manager.list_problems(dataset_name)
@@ -1834,7 +1579,7 @@ class DecomposeHoleMergePipeline:
             # Reset step counter for each new problem
             self.step_counter = {"count": 0}
             
-            self.process_problem(problem, hole_filling_function)
+            self.process_problem(problem)
         
         # Since results are saved incrementally, read final statistics from files
         results_path = os.path.join(self.output_base_dir, f"{dataset_name}_pipeline_results.json")
@@ -1910,10 +1655,9 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python decompose_hole_merge_pipeline.py <command> [args]")
         print("Commands:")
-        print("  dataset <name> [limit] [filling_method] [--no-resume] - Process entire dataset")
-        print("    filling_method options: simple, unigram")
+        print("  dataset <name> [limit] [--no-resume] - Process entire dataset")
         print("    --no-resume: Disable resuming from previous run")
-        print("  problem <dataset> <problem_id> [filling_method] - Process single problem")
+        print("  problem <dataset> <problem_id> - Process single problem")
         return
     
     command = sys.argv[1]
@@ -1930,57 +1674,37 @@ def main():
             args.remove("--no-resume")
             print("Resume mechanism disabled by command-line flag.")
         
-        # Smart parameter parsing on remaining args
+        # Parse remaining args (only limit)
         limit = None
-        filling_method = "simple"
         
         if len(args) > 0:
             try:
-                # Try to parse 1st remaining argument as integer (limit)
                 limit = int(args[0])
-                # If successful, 2nd remaining argument (if exists) is filling_method
-                if len(args) > 1:
-                    filling_method = args[1]
             except ValueError:
-                # 1st remaining argument is not a number, treat it as filling_method
-                filling_method = args[0]
-                limit = None
+                print(f"Error: Invalid limit '{args[0]}', must be an integer")
+                return
         
-        # Choose hole filling function based on method
-        if filling_method == "unigram":
-            hole_filling_function = pipeline.try_unigram_tactics_proofstep
-        else:  # default to simple
-            hole_filling_function = pipeline.fill_hole_content
-        
-        print(f"Processing dataset: {dataset_name}, limit: {limit}, method: {filling_method}, resume: {resume}")
-        pipeline.process_dataset(dataset_name, limit, hole_filling_function, resume=resume)
+        print(f"Processing dataset: {dataset_name}, limit: {limit}, resume: {resume}")
+        pipeline.process_dataset(dataset_name, limit, resume=resume)
         
     elif command == "problem":
         if len(sys.argv) < 4:
-            print("Usage: python decompose_hole_merge_pipeline.py problem <dataset> <problem_id> [filling_method]")
-            print("  filling_method options: simple, unigram (default)")
+            print("Usage: python decompose_hole_merge_pipeline.py problem <dataset> <problem_id>")
             return
             
         dataset_name = sys.argv[2]
         problem_id = sys.argv[3]
-        filling_method = sys.argv[4] if len(sys.argv) > 4 else "unigram"
         
-        print(f"Processing single problem: {dataset_name}/{problem_id} with method: {filling_method}")
+        print(f"Processing single problem: {dataset_name}/{problem_id}")
         
-        # Choose hole filling function based on method
-        if filling_method == "unigram":
-            hole_filling_function = pipeline.try_unigram_tactics_proofstep
-        else:  # default to simple
-            hole_filling_function = pipeline.fill_hole_content
-
         # Get the problem using problem_manager
         problem = problem_manager.get_problem(dataset_name, problem_id)
         if not problem:
             print(f"Error: Problem {dataset_name}/{problem_id} not found")
             return
         
-        # Run the full pipeline on the single problem
-        pipeline.process_problem(problem, hole_filling_function)
+        # Run the pure decomposition pipeline on the single problem
+        pipeline.process_problem(problem)
         
 if __name__ == "__main__":
     main() 
