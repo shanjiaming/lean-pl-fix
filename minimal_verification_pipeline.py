@@ -130,7 +130,7 @@ class MinimalVerificationPipeline:
             print("🧪 ProofStep enumeration phase (proof state testing only)...")
             
             # Identify enumerable vs skip indices using the clear version content
-            session_analyzer = ProofStepIntegrator()
+            session_analyzer = ProofStepIntegrator(header_content)
             session = session_analyzer.initialize_session(clear_with_macros)
             enumerable_indices = session.enumerable_indices
             

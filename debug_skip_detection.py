@@ -4,7 +4,8 @@
 from proofstep_integration import ProofStepIntegrator
 
 def test_skip_detection():
-    integrator = ProofStepIntegrator()
+    # For debug purposes, use a minimal header
+    integrator = ProofStepIntegrator("import Mathlib")
     
     test_code = '''macro "hole_2" : tactic => `(tactic| sorry)
 macro "hole_4" : tactic => `(tactic| sorry)

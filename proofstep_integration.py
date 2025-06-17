@@ -37,10 +37,11 @@ class ProofStepSession:
 class ProofStepIntegrator:
     """Main class for ProofStep integration"""
     
-    def __init__(self):
+    def __init__(self, header_content: str):
         self.pipeline = DecomposeHoleMergePipeline()
         self.lean_server = None
         self.current_session: Optional[ProofStepSession] = None
+        self.header_content = header_content
     
     def setup_lean_server(self):
         """Initialize Lean server with proper configuration"""
@@ -325,9 +326,9 @@ class ProofStepIntegrator:
             return '\n'.join(lines)
     
     def _verify_code(self, lean_code: str) -> bool:
-        """Verify Lean code"""
+        """Verify Lean code with proper header"""
         try:
-            return self.pipeline.verify_lean_code("import Mathlib", lean_code)
+            return self.pipeline.verify_lean_code(self.header_content, lean_code)
         except Exception:
             return False
     
@@ -421,8 +422,11 @@ def demo_proofstep_integration():
     
     print("Generated clear version with macros")
     
+    # Get header content for the problem
+    header_content = problem_manager.get_header_content(problem)
+    
     # Initialize ProofStep integration
-    integrator = ProofStepIntegrator()
+    integrator = ProofStepIntegrator(header_content)
     session = integrator.initialize_session(clear_with_macros)
     
     print(f"\n📊 Session Analysis:")
