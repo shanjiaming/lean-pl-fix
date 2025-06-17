@@ -685,7 +685,7 @@ theorem example_theorem : 2 + 2 = 4 := by norm_num
 '''
 
 # Verify the code
-result = pipeline.verify_lean_code(header_content, lean_code, with_macro=False)
+result = pipeline.verify_lean_code(header_content, lean_code)
 print(f'Verification result: {result}')  # True if passes, False if fails
 "
 ```
@@ -739,7 +739,7 @@ header_content = problem_manager.get_header_content(problem)
 problem_content = problem_manager.get_problem_content(problem)
 
 # Verify original problem
-result = pipeline.verify_lean_code(header_content, problem_content, with_macro=False)
+result = pipeline.verify_lean_code(header_content, problem_content)
 print(f'Original problem verification: {result}')
 
 # Get detailed errors if failed
@@ -770,7 +770,7 @@ with open('decomposition_results/putnam/decomposed/putnam_2007_b6/hole_version.l
     hole_content = f.read()
 
 # Verify hole version
-result = pipeline.verify_lean_code(header_content, hole_content, with_macro=False)
+result = pipeline.verify_lean_code(header_content, hole_content)
 print(f'Hole version verification: {result}')
 
 if not result:

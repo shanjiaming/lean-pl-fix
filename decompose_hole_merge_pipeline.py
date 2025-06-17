@@ -647,7 +647,7 @@ class DecomposeHoleMergePipeline:
             hole_content_with_macros = hole_content
         
         # First check if hole version passes (sanity check)
-        # sanity_check = self.verify_lean_code(header_content, hole_content_with_macros, with_macro=False)
+        # sanity_check = self.verify_lean_code(header_content, hole_content_with_macros)
         
         # Find the hole placeholder to replace (can be "hole" or "hole_N")
         import re
