@@ -46,7 +46,9 @@ class MinimalLeanProofStepIntegrator:
         """Initialize Lean server for proof state operations"""
         if not self.lean_server:
             try:
-                config = LeanREPLConfig()
+                from lean_interact import LocalProject
+                localprojectdir = "../matheye/benchmarks/"
+                config = LeanREPLConfig(verbose=True, project=LocalProject(localprojectdir))
                 self.lean_server = LeanServer(config)
                 self.lean_server.start()
             except Exception as e:

@@ -143,10 +143,9 @@ class MinimalVerificationPipeline:
             # Run ProofStep enumeration with proof states
             unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
             
-            # Use the clear version file directly for ProofStep (need absolute path)
-            absolute_clear_path = os.path.abspath(clear_version_path)
-            proofstep_results = integrator.enumerate_tactics_with_proof_states_file(
-                absolute_clear_path, unigrams, enumerable_indices
+            # Use the clear version content with clear statements for ProofStep
+            proofstep_results = integrator.enumerate_tactics_with_proof_states(
+                header_content, clear_with_macros, unigrams, enumerable_indices
             )
             
             successful_tactics = proofstep_results['successful_tactics']
