@@ -412,7 +412,11 @@ class DecomposeHoleMergePipeline:
             nonlocal hole_counter
             
             for node in nodes:
-                # Check if this is a have statement with by-block
+                # Post-order traversal: first recursively process children to handle nested structures
+                if node.subhaves:
+                    process_nodes_for_holes(node.subhaves)
+                
+                # Then check if this is a have statement with by-block
                 if node.is_have():
                     # Process this have statement for holes
                     hole_info = self._analyze_have_node_for_holes_comprehensive(node, hole_counter)
@@ -424,10 +428,6 @@ class DecomposeHoleMergePipeline:
                         print(f"  Found have-by hole: {hole_info['hole_id']} with content: {hole_info['content'][:50]}...")
                 
                 # Check if this is a bullet point that can be converted to a hole
-
-                # Recursively process children to handle nested structures
-                if node.subhaves:
-                    process_nodes_for_holes(node.subhaves)
         
         process_nodes_for_holes(top_level_nodes)
         
