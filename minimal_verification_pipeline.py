@@ -28,6 +28,7 @@ class MinimalVerificationResult:
     clear_verification_pass: bool
     filled_verification_pass: bool
     successful_tactics: Dict[int, str]
+    tactic_mapping: Dict[str, str]
     proof_state_tests: int
     processing_time_seconds: float
     constraint_satisfied: bool
@@ -195,8 +196,18 @@ class MinimalVerificationPipeline:
             synthesized_content = re.sub(r'\n\s*\n\s*\n', '\n\n', synthesized_content)
             synthesized_content = synthesized_content.strip() + '\n'
             
+            # Create complete tactic mapping for all holes
+            tactic_mapping = {}
+            # Add successful tactics
+            for hole_id, tactic in successful_tactics.items():
+                tactic_mapping[hole_id] = tactic
+            # Add fallback tactics for unsolved holes
+            for hole_id in unsolved_holes:
+                tactic_mapping[hole_id] = "admit"
+            
             tactics_replaced = len(successful_tactics)
             print(f"  📊 Replaced {tactics_replaced}/{len(all_enumerable_holes)} hole usages with tactics/admit")
+            print(f"  🗂️  Complete tactic mapping: {len(tactic_mapping)} holes mapped")
             
             # Save synthesized version to decomposed directory
             synthesized_path = os.path.join(decomp_dir, "synthesized_proof.lean")
@@ -230,6 +241,7 @@ class MinimalVerificationPipeline:
                 clear_verification_pass=clear_verification_pass,
                 filled_verification_pass=filled_verification_pass,
                 successful_tactics=successful_tactics,
+                tactic_mapping=tactic_mapping,
                 proof_state_tests=proof_state_tests,
                 processing_time_seconds=processing_time,
                 constraint_satisfied=constraint_satisfied,
@@ -249,6 +261,7 @@ class MinimalVerificationPipeline:
                 "filled_verification_pass": result.filled_verification_pass,
                 "synthesized_verification_pass": result.filled_verification_pass,  # alias for clarity
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
+                "tactic_mapping": result.tactic_mapping,
                 "proof_state_tests": result.proof_state_tests,
                 "tactic_attempts": result.tactic_attempts,
                 "processing_time_seconds": result.processing_time_seconds,
@@ -323,6 +336,7 @@ class MinimalVerificationPipeline:
                     clear_verification_pass=False,
                     filled_verification_pass=False,
                     successful_tactics={},
+                    tactic_mapping={},
                     proof_state_tests=0,
                     processing_time_seconds=0.0,
                     constraint_satisfied=False,
@@ -369,6 +383,7 @@ class MinimalVerificationPipeline:
                 "clear_verification_pass": result.clear_verification_pass,
                 "filled_verification_pass": result.filled_verification_pass,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
+                "tactic_mapping": result.tactic_mapping,
                 "proof_state_tests": result.proof_state_tests,
                 "tactic_attempts": result.tactic_attempts,
                 "processing_time_seconds": result.processing_time_seconds,
