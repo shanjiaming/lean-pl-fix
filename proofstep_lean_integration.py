@@ -230,6 +230,111 @@ class MinimalLeanProofStepIntegrator:
                 error_message=str(e)
             )
     
+    def test_original_tactics_on_proof_states(self, header: str, clear_version: str,
+                                            original_tactics: Dict[str, str],
+                                            enumerable_indices: List[int],
+                                            sorry_map: Dict[int, 'SorryInfo']) -> Dict[str, Dict]:
+        """
+        Test original hole tactics on their proof states before testing unigrams
+        
+        Args:
+            header: Lean header content
+            clear_version: Clear version with holes
+            original_tactics: Dict mapping hole_id -> original_tactic_content
+            enumerable_indices: List of enumerable sorry indices
+            sorry_map: Mapping of sorry indices to SorryInfo
+            
+        Returns:
+            Dict mapping hole_id -> {'success': bool, 'error_message': str or None}
+        """
+        print(f"🔍 Testing original tactics on proof states")
+        
+        # Extract proof states first
+        server_sorries = self.extract_proof_states_from_sorries(header, clear_version)
+        if not server_sorries:
+            print("❌ Could not extract proof states for original tactics testing")
+            return {}
+        
+        # Match parser sorries with server sorries (same logic as main enumeration)
+        parser_sorries_by_line = {}
+        for idx, info in sorry_map.items():
+            if info.line not in parser_sorries_by_line:
+                parser_sorries_by_line[info.line] = []
+            parser_sorries_by_line[info.line].append({'col': info.column, 'idx': idx})
+        
+        proof_states: Dict[int, ProofState] = {}
+        
+        for server_sorry in server_sorries:
+            server_line = server_sorry.start_pos.line
+            server_col = server_sorry.start_pos.column
+            
+            matched_idx = None
+            if server_line in parser_sorries_by_line and parser_sorries_by_line[server_line]:
+                candidates = parser_sorries_by_line[server_line]
+                best_match = min(candidates, key=lambda c: abs(c['col'] - (server_col - 1)))
+                
+                if abs(best_match['col'] - (server_col - 1)) < 5:
+                    matched_idx = best_match['idx']
+                    proof_state_id = server_sorry.proof_state
+                    
+                    proof_states[matched_idx] = ProofState(
+                        sorry_index=matched_idx,
+                        goals=[server_sorry.goal],
+                        context=f"ProofState_{proof_state_id}",
+                        position_info=f"line_{server_line}_col_{server_col}"
+                    )
+                    
+                    parser_sorries_by_line[server_line].remove(best_match)
+        
+        # Test original tactics
+        original_test_results = {}
+        
+        for sorry_idx in enumerable_indices:
+            if sorry_idx not in proof_states:
+                continue
+                
+            proof_state = proof_states[sorry_idx]
+            sorry_info = sorry_map.get(sorry_idx)
+            if not sorry_info or not sorry_info.hole_id:
+                continue
+            
+            hole_id = sorry_info.hole_id
+            
+            if hole_id not in original_tactics:
+                print(f"  ⚠️  No original tactic found for {hole_id}")
+                original_test_results[hole_id] = {
+                    'success': False,
+                    'error_message': 'No original tactic available'
+                }
+                continue
+            
+            original_tactic = original_tactics[hole_id]
+            print(f"  🧪 Testing original tactic for {hole_id}: {original_tactic[:30]}...")
+            
+            # Handle multi-line tactics by testing them as a sequence
+            cleaned_tactic = original_tactic.strip()
+            
+            if '\n' in cleaned_tactic:
+                # For multi-line tactics, use parentheses format: "(\ntactic1\ntactic2)"
+                parentheses_tactic = f"(\n{cleaned_tactic}\n)"
+                tactic_result = self.test_tactic_on_proof_state(proof_state, parentheses_tactic)
+            else:
+                # Single-line tactic, test as-is
+                tactic_result = self.test_tactic_on_proof_state(proof_state, cleaned_tactic)
+            
+            original_test_results[hole_id] = {
+                'success': tactic_result.success,
+                'error_message': tactic_result.error_message
+            }
+            
+            if tactic_result.success:
+                print(f"    ✅ Original tactic works for {hole_id}")
+            else:
+                print(f"    ❌ Original tactic failed for {hole_id}: {tactic_result.error_message}")
+        
+        print(f"📊 Original tactics test: {sum(1 for r in original_test_results.values() if r['success'])}/{len(original_test_results)} succeeded")
+        return original_test_results
+
     def enumerate_tactics_with_proof_states(self, header: str, clear_version: str, 
                                           tactics: List[str], 
                                           enumerable_indices: List[int],

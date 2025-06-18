@@ -8,8 +8,8 @@ theorem simp_then_have_chain (x y : ℕ) (h : x + 0 = y + 0) : x = y := by
     have h2 : x = y := by
       have h3 : x ≤ y := h_le
       have h4 : y ≤ x := by
+        norm_num
         rw [← h]
-        omega
       omega
     exact h2
   · -- case y ≤ x

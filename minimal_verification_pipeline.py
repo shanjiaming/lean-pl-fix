@@ -29,6 +29,7 @@ class MinimalVerificationResult:
     successful_tactics: Dict[int, str]
     tactic_mapping: Dict[str, str]
     complete_solve_success: bool
+    original_tactics_test: Dict[str, Dict] # hole_id -> {'success': bool, 'error_message': str}
     proof_state_tests: int
     processing_time_seconds: float
     constraint_satisfied: bool
@@ -78,6 +79,16 @@ class MinimalVerificationPipeline:
             print("📋 Loading existing decomposition results...")
             with open(decomp_json_path, 'r') as f:
                 decomp_data = json.load(f)
+            
+            # Extract original tactics from decomposition data
+            original_tactics = {}
+            if 'holes' in decomp_data:
+                for hole_data in decomp_data['holes']:
+                    hole_id = hole_data.get('hole_id')
+                    original_proof = hole_data.get('original_proof')
+                    if hole_id and original_proof:
+                        original_tactics[hole_id] = original_proof
+                print(f"📋 Loaded original tactics for {len(original_tactics)} holes")
             
             # Load existing files
             header_path = os.path.join(decomp_dir, "header.lean")
@@ -135,6 +146,11 @@ class MinimalVerificationPipeline:
                 print(f"    {idx}: {sorry_info.macro_type} ({sorry_info.hole_id}) -> {'ENUM' if sorry_info.should_enumerate else 'SKIP'}")
             
             print(f"  📊 {len(enumerable_indices)} enumerable holes, {len(session.skip_indices)} skip holes")
+            
+            # Test original tactics first
+            original_tactics_test_results = integrator.test_original_tactics_on_proof_states(
+                header_content, hole_version_content, original_tactics, enumerable_indices, session.sorry_map
+            )
             
             # Run ProofStep enumeration with proof states
             unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
@@ -244,6 +260,7 @@ class MinimalVerificationPipeline:
                 successful_tactics=successful_tactics,
                 tactic_mapping=tactic_mapping,
                 complete_solve_success=complete_solve_success,
+                original_tactics_test=original_tactics_test_results,
                 proof_state_tests=proof_state_tests,
                 processing_time_seconds=processing_time,
                 constraint_satisfied=constraint_satisfied,
@@ -262,6 +279,7 @@ class MinimalVerificationPipeline:
                 "filled_verification_pass": result.filled_verification_pass,
                 "synthesized_verification_pass": result.filled_verification_pass,  # alias for clarity
                 "complete_solve_success": result.complete_solve_success,
+                "original_tactics_test": result.original_tactics_test,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
                 "tactic_mapping": result.tactic_mapping,
                 "proof_state_tests": result.proof_state_tests,
@@ -339,6 +357,7 @@ class MinimalVerificationPipeline:
                     successful_tactics={},
                     tactic_mapping={},
                     complete_solve_success=False,
+                    original_tactics_test={},
                     proof_state_tests=0,
                     processing_time_seconds=0.0,
                     constraint_satisfied=False,
@@ -364,6 +383,17 @@ class MinimalVerificationPipeline:
         print(f"Complete solve success (no admits): {len(complete_solve_success_problems)}")
         print(f"Complete solve success rate: {len(complete_solve_success_problems)/len(results)*100:.1f}%")
         
+        # Add original tactics statistics
+        total_original_tests = sum(len(r.original_tactics_test) for r in results if r.original_tactics_test)
+        successful_original_tests = sum(
+            sum(1 for test_result in r.original_tactics_test.values() if test_result.get('success', False))
+            for r in results if r.original_tactics_test
+        )
+        if total_original_tests > 0:
+            print(f"Original tactics tested: {total_original_tests}")
+            print(f"Original tactics successful: {successful_original_tests}")
+            print(f"Original tactics success rate: {successful_original_tests/total_original_tests*100:.1f}%")
+        
         total_proof_state_tests = sum(r.proof_state_tests for r in results)
         total_verifications = sum(r.verification_count for r in results if r.verification_count < 999)
         print(f"Total proof state tests: {total_proof_state_tests}")
@@ -387,6 +417,7 @@ class MinimalVerificationPipeline:
                 "hole_verification_pass": result.hole_verification_pass,
                 "filled_verification_pass": result.filled_verification_pass,
                 "complete_solve_success": result.complete_solve_success,
+                "original_tactics_test": result.original_tactics_test,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
                 "tactic_mapping": result.tactic_mapping,
                 "proof_state_tests": result.proof_state_tests,
@@ -395,6 +426,18 @@ class MinimalVerificationPipeline:
                 "constraint_satisfied": result.constraint_satisfied,
                 "timestamp": datetime.now().isoformat()
             })
+        
+        # Calculate original tactics statistics
+        total_original_tests = 0
+        successful_original_tests = 0
+        for result in results:
+            if result.original_tactics_test:
+                for hole_id, test_result in result.original_tactics_test.items():
+                    total_original_tests += 1
+                    if test_result.get('success', False):
+                        successful_original_tests += 1
+        
+        original_tactics_success_rate = (successful_original_tests / total_original_tests * 100) if total_original_tests > 0 else 0
         
         # Add summary statistics
         summary_data = {
@@ -405,6 +448,9 @@ class MinimalVerificationPipeline:
             "successful_problems": len([r for r in results if r.filled_verification_pass]),
             "complete_solve_success_problems": len([r for r in results if r.complete_solve_success]),
             "complete_solve_success_rate": len([r for r in results if r.complete_solve_success]) / len(results) * 100,
+            "total_original_tactics_tests": total_original_tests,
+            "successful_original_tactics_tests": successful_original_tests,
+            "original_tactics_success_rate": original_tactics_success_rate,
             "total_proof_state_tests": sum(r.proof_state_tests for r in results),
             "total_verifications": sum(r.verification_count for r in results if r.verification_count < 999),
             "average_processing_time": sum(r.processing_time_seconds for r in results) / len(results),
