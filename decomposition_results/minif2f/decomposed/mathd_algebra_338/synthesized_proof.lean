@@ -38,4 +38,4 @@ theorem mathd_algebra_338 (a b c : ℝ) (h₀ : 3 * a + b + c = -3) (h₁ : a + 
   have h₆ : a * b * c = -56 := by
     admit
   
-  admit
+  linarith

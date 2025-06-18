@@ -7,10 +7,10 @@ theorem mathd_numbertheory_559 (x y : ℕ) (h₀ : x % 3 = 2) (h₁ : y % 5 = 4)
           norm_num
         norm_num
       have h₅₂ : (x % 10) % 5 = (y % 10) % 5 := by
-        admit
+        omega
       have h₅₃ : (y % 10) % 5 = 4 := by
-        simpa
-      admit
+        linarith
+      linarith
     have h₆ : x % 10 = 4 ∨ x % 10 = 9 := by
       have h₇ : x % 10 < 10 := Nat.mod_lt _ (by norm_num)
       omega
@@ -25,4 +25,4 @@ theorem mathd_numbertheory_559 (x y : ℕ) (h₀ : x % 3 = 2) (h₁ : y % 5 = 4)
       linarith
     
     omega
-  omega
+  linarith

@@ -3,7 +3,7 @@ theorem mathd_numbertheory_222 (b : ℕ) (h₀ : Nat.lcm 120 b = 3720) (h₁ : N
   have h₂ : 120 * b = 29760 := by
     have h₂₁ : Nat.gcd 120 b * Nat.lcm 120 b = 120 * b := by
       admit
-    admit
+    nlinarith
   
   have h₃ : b = 248 := by
     have h₄ : b = 248 := by
@@ -14,18 +14,18 @@ theorem mathd_numbertheory_222 (b : ℕ) (h₀ : Nat.lcm 120 b = 3720) (h₁ : N
           by_contra h
           
           have h₈ : b ≥ 249 := by
-            admit
+            linarith
           have h₉ : 120 * b ≥ 120 * 249 := by
-            admit
+            linarith
           have h₁₀ : 120 * 249 = 29880 := by norm_num
           have h₁₁ : 120 * b ≥ 29880 := by
-            admit1
+            linarith
           have h₁₂ : 120 * b > 29760 := by
-            admit
-          admit
+            linarith
+          linarith
         
-        admit
-      admit
-    admit
+        linarith
+      linarith
+    linarith
   
-  hole_1
+  linarith

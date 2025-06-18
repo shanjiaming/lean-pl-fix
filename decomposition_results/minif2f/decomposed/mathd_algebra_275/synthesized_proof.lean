@@ -8,10 +8,10 @@ theorem mathd_algebra_275 (x : ℝ) (h : ((11 : ℝ) ^ (1 / 4)) ^ (3 * x - 3) = 
   
   have h₃ : False := by
     have h₄ : (1 : ℝ) = 1 / 5 := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h₄ : ((11 : ℝ) ^ (1 / 4)) ^ (6 * x + 2) = 121 / 25 := by
-    norm_cast
+    linarith
   
-  norm_cast
+  linarith

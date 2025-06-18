@@ -12,9 +12,9 @@ theorem induction_11div10tonmn1ton (n : ℕ) : 11 ∣ 10 ^ n - (-1 : ℤ) ^ n :=
       
       admit
     
-    admit
+    omega
   
   have h_final : 11 ∣ 10 ^ n - (-1 : ℤ) ^ n := by
-    admit
+    omega
   
-  admit
+  omega

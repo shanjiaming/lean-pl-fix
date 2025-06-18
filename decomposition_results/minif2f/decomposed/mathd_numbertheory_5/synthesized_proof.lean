@@ -10,22 +10,22 @@ theorem mathd_numbertheory_5 (n : ℕ) (h₀ : 10 ≤ n) (h₁ : ∃ x, x ^ 2 = 
         have h₇ : t ≤ 2 := h₅
         have h₈ : t ^ 3 ≤ 2 ^ 3 := by
           admit
-        admit
-      have h₉ : n ≤ 8 := by admit
-      admit
+        linarith
+      have h₉ : n ≤ 8 := by linarith
+      linarith
     
     by_cases h₅ : t ≥ 4
     · 
       have h₆ : t ^ 3 ≥ 4 ^ 3 := by
         admit
       have h₇ : n ≥ 64 := by
-        admit
+        linarith
       linarith
     · 
       have h₆ : t = 3 := by
         have h₇ : t < 4 := by linarith
         have h₈ : t ≥ 3 := h₄
-        admit0
+        linarith
       rw [h₆] at ht
       
       have h₇ : n = 27 := by
@@ -38,13 +38,13 @@ theorem mathd_numbertheory_5 (n : ℕ) (h₀ : 10 ≤ n) (h₁ : ∃ x, x ^ 2 = 
         nlinarith
       have h₁₀ : x ≥ 6 := by
         by_contra h
-        have h₁₁ : x ≤ 5 := by admit
-        admit
-      admit
+        have h₁₁ : x ≤ 5 := by linarith
+        nlinarith
+      linarith
   
   have h₄ : 64 ≤ n := by
     rcases h₂ with ⟨t, ht⟩
     have h₅ : 64 ≤ n := h₃ t ht
-    admit
+    linarith
   
-  hole_1
+  linarith

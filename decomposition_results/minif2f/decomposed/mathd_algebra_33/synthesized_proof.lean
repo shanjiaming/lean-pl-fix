@@ -37,6 +37,6 @@ theorem mathd_algebra_33 (x y z : ℝ) (h₀ : x ≠ 0) (h₁ : 2 * x = 5 * y) (
     have h₇₁ : (7 : ℝ) / 25 * x / x = 7 / 25 := by
       have h₇₂ : x ≠ 0 := h₀
       admit
-    admit
+    linarith
   
-  admit
+  linarith

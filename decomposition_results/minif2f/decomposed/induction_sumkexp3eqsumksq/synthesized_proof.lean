@@ -16,29 +16,29 @@ theorem induction_sumkexp3eqsumksq (n : ℕ) :
             have h₅ : n * (n - 1) % 2 = 0 := by
               have h₆ : n % 2 = 0 ∨ n % 2 = 1 := by omega
               admit
-            admit
+            omega
           have h₅ : 2 * (∑ k in Finset.range n, k) = n * (n - 1) := by
             rw [h₃]
             have h₆ : 2 ∣ n * (n - 1) := h₄
             have h₇ : n * (n - 1) / 2 * 2 = n * (n - 1) := by
-              have h₈ : n * (n - 1) % 2 = 0 := by admit1
+              have h₈ : n * (n - 1) % 2 = 0 := by omega
               have h₉ : n * (n - 1) / 2 * 2 = n * (n - 1) := by
                 have h₁₀ : n * (n - 1) = 2 * (n * (n - 1) / 2) := by
-                  admit
-                admit
-              admit
-            admit
+                  omega
+                linarith
+              linarith
+            linarith
           have h₆ : n ^ 3 = 2 * n * (∑ k in Finset.range n, k) + n ^ 2 := by
             have h₇ : 2 * n * (∑ k in Finset.range n, k) = n ^ 2 * (n - 1) := by
               have h₈ : 2 * (∑ k in Finset.range n, k) = n * (n - 1) := h₅
               have h₉ : 2 * n * (∑ k in Finset.range n, k) = n * (n * (n - 1)) := by
-                admit
+                nlinarith
               have h₁₀ : n * (n * (n - 1)) = n ^ 2 * (n - 1) := by linarith
-              admit
+              linarith
             have h₁₁ : n ^ 3 = 2 * n * (∑ k in Finset.range n, k) + n ^ 2 := by
               admit
-            admit
+            linarith
           nlinarith
       admit
-    admit
-  hole_1
+    linarith
+  admit

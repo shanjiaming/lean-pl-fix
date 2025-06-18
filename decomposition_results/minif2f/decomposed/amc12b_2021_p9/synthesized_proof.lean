@@ -10,7 +10,7 @@ theorem amc12b_2021_p9 :
     rw [h₀₂]
     have h₀₃ : Real.log (2 ^ 4) = 4 * Real.log 2 := by
       simp
-    simp
+    linarith
   
   have h₁ : Real.log 40 = 3 * Real.log 2 + Real.log 5 := by
     have h₁₁ : Real.log 40 = Real.log (2 ^ 3 * 5) := by norm_num
@@ -20,17 +20,17 @@ theorem amc12b_2021_p9 :
     rw [h₁₂]
     have h₁₃ : Real.log (2 ^ 3) = 3 * Real.log 2 := by
       simp
-    simp
+    linarith
   
   have h₂ : Real.log 160 = 5 * Real.log 2 + Real.log 5 := by
     have h₂₁ : Real.log 160 = Real.log (2 ^ 5 * 5) := by norm_num
     rw [h₂₁]
     have h₂₂ : Real.log (2 ^ 5 * 5) = Real.log (2 ^ 5) + Real.log 5 := by
-      admit2
+      admit
     rw [h₂₂]
     have h₂₃ : Real.log (2 ^ 5) = 5 * Real.log 2 := by
       simp
-    simp
+    linarith
   
   have h₃ : Real.log 20 = 2 * Real.log 2 + Real.log 5 := by
     have h₃₁ : Real.log 20 = Real.log (2 ^ 2 * 5) := by norm_num
@@ -40,7 +40,7 @@ theorem amc12b_2021_p9 :
     rw [h₃₂]
     have h₃₃ : Real.log (2 ^ 2) = 2 * Real.log 2 := by
       simp
-    simp
+    linarith
   
   have h₄ : Real.log 80 * Real.log 40 = 12 * (Real.log 2)^2 + 7 * Real.log 2 * Real.log 5 + (Real.log 5)^2 := by
     rw [h₀, h₁]
@@ -55,7 +55,7 @@ theorem amc12b_2021_p9 :
     linarith
   
   have h₆ : Real.log 80 * Real.log 40 - Real.log 160 * Real.log 20 = 2 * (Real.log 2)^2 := by
-    admit
+    linarith
   
   have h₇ : Real.log 80 / Real.log 2 / (Real.log 2 / Real.log 40) - Real.log 160 / Real.log 2 / (Real.log 2 / Real.log 20) = 2 := by
     have h₇₁ : Real.log 80 / Real.log 2 / (Real.log 2 / Real.log 40) = (Real.log 80 * Real.log 40) / (Real.log 2) ^ 2 := by
@@ -69,7 +69,7 @@ theorem amc12b_2021_p9 :
     rw [h₇₁, h₇₂]
     have h₇₃ : (Real.log 80 * Real.log 40) / (Real.log 2) ^ 2 - (Real.log 160 * Real.log 20) / (Real.log 2) ^ 2 = 2 := by
       have h₇₄ : Real.log 80 * Real.log 40 - Real.log 160 * Real.log 20 = 2 * (Real.log 2) ^ 2 := by
-        admit
+        linarith
       have h₇₅ : Real.log 2 ≠ 0 := by
         norm_num
       have h₇₆ : (Real.log 80 * Real.log 40) / (Real.log 2) ^ 2 - (Real.log 160 * Real.log 20) / (Real.log 2) ^ 2 = (Real.log 80 * Real.log 40 - Real.log 160 * Real.log 20) / (Real.log 2) ^ 2 := by
@@ -77,7 +77,7 @@ theorem amc12b_2021_p9 :
       rw [h₇₆]
       have h₇₇ : (Real.log 80 * Real.log 40 - Real.log 160 * Real.log 20) / (Real.log 2) ^ 2 = 2 := by
         admit
-      admit
-    admit
+      linarith
+    linarith
   
-  hole_1
+  linarith

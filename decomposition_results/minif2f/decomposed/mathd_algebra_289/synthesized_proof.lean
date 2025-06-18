@@ -38,15 +38,15 @@ theorem mathd_algebra_289 (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (
       have h₅₆ : ((k : ℤ) - (t : ℤ)) * ((k : ℤ) + (t : ℤ) - (m : ℤ)) = 0 := h₄₁
       have h₅₇ : ((k : ℤ) + (t : ℤ) - (m : ℤ)) = 0 := by
         nlinarith
-      admit5
-    have h₅₈ : (m : ℤ) = (k : ℤ) + (t : ℤ) := by admit
-    admit
+      linarith
+    have h₅₈ : (m : ℤ) = (k : ℤ) + (t : ℤ) := by linarith
+    linarith
   
   have h₅ : m = k + t := by
     have h₅₁ : (m : ℤ) = (k : ℤ) + (t : ℤ) := h₄
     have h₅₂ : m = k + t := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h₆ : n = t * k := by
     have h₆₁ : k ^ 2 + n = m * k := by
@@ -56,8 +56,8 @@ theorem mathd_algebra_289 (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (
       linarith
     have h₆₄ : n = t * k := by
       have h₆₅ : m = k + t := h₅
-      admit
-    admit
+      nlinarith
+    linarith
   
   have h₇ : t = 1 := by
     have h₇₁ : n = t * k := h₆
@@ -72,14 +72,14 @@ theorem mathd_algebra_289 (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (
   have h₈ : k = n := by
     have h₈₁ : n = t * k := h₆
     have h₈₂ : t = 1 := h₇
-    admit
+    nlinarith
   
   have h₉ : n = 2 := by
     have h₉₁ : m = k + t := h₅
     have h₉₂ : k = n := h₈
     have h₉₃ : t = 1 := h₇
     have h₉₄ : m = n + 1 := by
-      admit
+      linarith
     have h₉₅ : Nat.Prime m := h₀.1
     have h₉₆ : Nat.Prime n := h₀.2
     have h₉₇ : n = 2 := by
@@ -95,16 +95,16 @@ theorem mathd_algebra_289 (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (
           have h₁₀₁ := h₉₆.two_le
           omega
         · have h₁₀₂ : m % 2 = 0 := by
-            admit
+            omega
           have h₁₀₃ : m = 2 := by
             have h₁₀₄ := h₉₅.eq_two_or_odd
-            admit
+            linarith
           have h₁₀₅ : n = 1 := by
-            admit
+            linarith
           have h₁₀₆ : Nat.Prime n := h₀.2
           have h₁₀₇ := h₁₀₆.eq_two_or_odd
-          admit
-    admit
+          linarith
+    linarith
   
   have h₁₀ : m = 3 := by
     have h₁₀₁ : m = k + t := h₅
@@ -112,18 +112,18 @@ theorem mathd_algebra_289 (k t m n : ℕ) (h₀ : Nat.Prime m ∧ Nat.Prime n) (
     have h₁₀₃ : t = 1 := h₇
     have h₁₀₄ : n = 2 := h₉
     have h₁₀₅ : m = 3 := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h₁₁ : k = 2 := by
     have h₁₁₁ : k = n := h₈
     have h₁₁₂ : n = 2 := h₉
-    admit
+    linarith
   
   have h₁₂ : t = 1 := by
-    admit
+    linarith
   
   have h₁₃ : m ^ n + n ^ m + k ^ t + t ^ k = 20 := by
     admit
   
-  hole_1
+  linarith

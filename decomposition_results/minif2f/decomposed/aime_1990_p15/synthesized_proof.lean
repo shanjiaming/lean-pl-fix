@@ -9,32 +9,32 @@ theorem aime_1990_p15 (a b x y : ℝ) (h₀ : a * x + b * y = 3) (h₁ : a * x ^
     have h₅ : 16 * (x + y) - 7 * (x * y) = 42 := by
       have h₅₁ : a * x ^ 4 + b * y ^ 4 = (x + y) * (a * x ^ 3 + b * y ^ 3) - x * y * (a * x ^ 2 + b * y ^ 2) := by
         linarith
-      admit
+      nlinarith
     have h₆ : x + y = -14 := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h_prod_xy : x * y = -38 := by
     have h₄ : 7 * (x + y) - 3 * (x * y) = 16 := by
       have h₄₁ : a * x ^ 3 + b * y ^ 3 = (x + y) * (a * x ^ 2 + b * y ^ 2) - x * y * (a * x + b * y) := by
         linarith
-      admit
+      nlinarith
     have h₅ : 16 * (x + y) - 7 * (x * y) = 42 := by
       have h₅₁ : a * x ^ 4 + b * y ^ 4 = (x + y) * (a * x ^ 3 + b * y ^ 3) - x * y * (a * x ^ 2 + b * y ^ 2) := by
         linarith
-      admit1
+      linarith
     have h₆ : x * y = -38 := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h_sum_ab : a + b = 49 / 38 := by
     have h₄ : (x + y) * (a * x + b * y) = (a * x ^ 2 + b * y ^ 2) + x * y * (a + b) := by
       linarith
-    admit
+    nlinarith
   
   have h_recurrence : a * x ^ 5 + b * y ^ 5 = 20 := by
     have h₅ : a * x ^ 5 + b * y ^ 5 = (x + y) * (a * x ^ 4 + b * y ^ 4) - x * y * (a * x ^ 3 + b * y ^ 3) := by
       linarith
-    admit
+    nlinarith
   
-  hole_1
+  linarith

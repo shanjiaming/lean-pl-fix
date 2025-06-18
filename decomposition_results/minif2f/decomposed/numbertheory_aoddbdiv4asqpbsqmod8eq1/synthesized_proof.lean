@@ -7,8 +7,8 @@ theorem numbertheory_aoddbdiv4asqpbsqmod8eq1 (a : ℤ) (b : ℕ) (h₀ : Odd a) 
       have h₂₂ : (2 * k + 1 : ℤ) % 8 = 1 ∨ (2 * k + 1 : ℤ) % 8 = 3 ∨ (2 * k + 1 : ℤ) % 8 = 5 ∨ (2 * k + 1 : ℤ) % 8 = 7 := by
         have : (k : ℤ) % 8 = 0 ∨ (k : ℤ) % 8 = 1 ∨ (k : ℤ) % 8 = 2 ∨ (k : ℤ) % 8 = 3 ∨ (k : ℤ) % 8 = 4 ∨ (k : ℤ) % 8 = 5 ∨ (k : ℤ) % 8 = 6 ∨ (k : ℤ) % 8 = 7 := by
           omega
-        admit
-      admit
+        omega
+      omega
     admit
   
   have h₃ : ((b ^ 2 : ℕ) : ℤ) % 8 = 0 := by
@@ -20,29 +20,29 @@ theorem numbertheory_aoddbdiv4asqpbsqmod8eq1 (a : ℤ) (b : ℕ) (h₀ : Odd a) 
         have h₃₅ : b = 4 * k := by linarith
         rw [h₃₅]
         have h₃₆ : (8 : ℕ) ∣ (4 * k : ℕ) ^ 2 := by
-          admit1
-        admit
-      admit
+          admit
+        omega
+      omega
     have h₃₃ : ((b ^ 2 : ℕ) : ℤ) % 8 = 0 := by
       have h₃₄ : (8 : ℕ) ∣ b ^ 2 := h₃₂
       have h₃₅ : ((b ^ 2 : ℕ) : ℤ) % 8 = 0 := by
         have h₃₆ : (b ^ 2 : ℕ) % 8 = 0 := by
-          admit
+          omega
         have h₃₇ : ((b ^ 2 : ℕ) : ℤ) % 8 = 0 := by
-          admit
-        admit
-      admit
-    admit
+          omega
+        linarith
+      linarith
+    linarith
   
   have h₄ : (a ^ 2 + (b ^ 2 : ℤ)) % 8 = 1 := by
     have h₄₁ : (a ^ 2 + (b ^ 2 : ℤ)) % 8 = ((a ^ 2 : ℤ) % 8 + ((b ^ 2 : ℕ) : ℤ) % 8) % 8 := by
       norm_num
-    admit
+    omega
   
   have h₅ : (a ^ 2 + b ^ 2) % 8 = 1 := by
     
     have h₅₁ : (a ^ 2 + b ^ 2 : ℤ) = (a ^ 2 + (b ^ 2 : ℤ)) := by
       norm_num
-    admit
+    linarith
   
-  hole_1
+  linarith

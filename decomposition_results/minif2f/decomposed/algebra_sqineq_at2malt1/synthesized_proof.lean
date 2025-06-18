@@ -9,8 +9,8 @@ theorem algebra_sqineq_at2malt1 (a : ℝ) : a * (2 - a) ≤ 1 := by
   have h₂ : a * (2 - a) ≤ 1 := by
     have h₃ : 2 * a - a ^ 2 ≤ 1 := by
       
-      nlinarith
+      linarith
     
-    nlinarith
+    linarith
 
-  nlinarith
+  linarith

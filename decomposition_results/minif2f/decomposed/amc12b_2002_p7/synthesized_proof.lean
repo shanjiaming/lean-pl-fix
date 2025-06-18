@@ -24,19 +24,19 @@ theorem amc12b_2002_p7 (a b c : ℕ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : 
           have h₆₈ : a * (a + 1) * (a + 2) > 24 * (a + 1) := by
             have h₆₉ : a * (a + 2) ≥ 7 * 9 := by
               nlinarith
-            admit0
-          admit
-        admit
-      admit
+            nlinarith
+          linarith
+        linarith
+      linarith
     admit
   
   have h₇ : b = 5 := by
-    admit
+    linarith
   
   have h₈ : c = 6 := by
-    admit
+    linarith
   
   have h₉ : a ^ 2 + (b ^ 2 + c ^ 2) = 77 := by
-    admit
+    nlinarith
   
-  hole_1
+  linarith

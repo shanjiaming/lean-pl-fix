@@ -24,12 +24,12 @@ theorem algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7 (f z : ℂ) (h�
     have h₆₃ : f.re = -10 := by
       have h₆₄ : z.re = 7 := by
         
-        admit
+        linarith
       
       have h₆₅ : f.re = -10 := by
-        admit
-      admit
-    admit
+        linarith
+      linarith
+    linarith
   
   have h₇ : z.re = 7 := by
     have h₇₁ : f.re + 3 * z.re = 11 := h₄
@@ -37,24 +37,24 @@ theorem algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7 (f z : ℂ) (h�
     have h₇₃ : f.re = -10 := h₆
     have h₇₄ : z.re = 7 := by
       
-      admit1
-    admit
+      linarith
+    linarith
   
   have h₈ : f = -10 := by
     have h₈₁ : f.re = -10 := h₆
     have h₈₂ : f.im = 0 := h₂
     have h₈₃ : f = -10 := by
       admit
-    admit
+    simpa
   
   have h₉ : z = 7 := by
     have h₉₁ : z.re = 7 := h₇
     have h₉₂ : z.im = 0 := h₃
     have h₉₃ : z = 7 := by
       admit
-    admit
+    simpa
   
   have h₁₀ : f = -10 ∧ z = 7 := by
     admit
   
-  hole_1
+  simpa

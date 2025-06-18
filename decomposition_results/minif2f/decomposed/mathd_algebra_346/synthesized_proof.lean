@@ -4,9 +4,9 @@ theorem mathd_algebra_346 (f g : ℝ → ℝ) (h₀ : ∀ x, f x = 2 * x - 3) (h
     admit
   
   have h₃ : f 5 - 1 = 6 := by
-    admit
+    linarith
   
   have h₄ : g (f 5 - 1) = 7 := by
     admit
   
-  admit
+  linarith

@@ -33,15 +33,15 @@ theorem mathd_algebra_129 (a : ℝ) (h₀ : a ≠ 0) (h₁ : 8⁻¹ / 4⁻¹ - a
           
           have h₆₈ : a ≠ 0 := h₆₃
           have h₆₉ : a * a⁻¹ = 1 := by
-            admit
+            field_simp
           rw [h₆₆] at h₆₉
           have h₇₀ : a * (-(1 / 2 : ℝ)) = 1 := by linarith
           have h₇₁ : a = -2 := by
             
             linarith
           linarith
-        admit1
-      admit
-    admit
+        linarith
+      linarith
+    linarith
   
-  hole_1
+  linarith

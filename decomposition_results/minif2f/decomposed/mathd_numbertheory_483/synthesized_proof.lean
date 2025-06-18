@@ -14,43 +14,43 @@ theorem mathd_numbertheory_483 (a : ℕ → ℕ) (h₀ : a 1 = 1) (h₁ : a 2 = 
     have h₅ := h₂ 2
     have h₆ := h₂ 3
     have h₇ := h₂ 4
-    admit
+    linarith
   
   have h₆ : a 5 = 5 := by
     have h₆ := h₂ 3
     have h₇ := h₂ 4
     have h₈ := h₂ 5
-    admit
+    linarith
   
   have h₇ : a 6 = 8 := by
     have h₇ := h₂ 4
     have h₈ := h₂ 5
     have h₉ := h₂ 6
-    admit
+    linarith
   
   have h₈ : a 7 = 13 := by
     have h₈ := h₂ 5
     have h₉ := h₂ 6
     have h₁₀ := h₂ 7
-    admit
+    linarith
   
   have h₉ : a 8 = 21 := by
     have h₉ := h₂ 6
     have h₁₀ := h₂ 7
     have h₁₁ := h₂ 8
-    admit
+    linarith
   
   have h₁₀ : a 9 = 34 := by
     have h₁₀ := h₂ 7
     have h₁₁ := h₂ 8
     have h₁₂ := h₂ 9
-    admit
+    linarith
   
   have h₁₁ : a 10 = 55 := by
     have h₁₁ := h₂ 8
     have h₁₂ := h₂ 9
     have h₁₃ := h₂ 10
-    admit0
+    linarith
   
   have h₁₂ : ∀ n, a (n + 6) % 4 = a n % 4 := by
     intro n
@@ -78,15 +78,15 @@ theorem mathd_numbertheory_483 (a : ℕ → ℕ) (h₀ : a 1 = 1) (h₁ : a 2 = 
           have h₃₀ : (8 * a (n + 1)) % 4 = 0 := by
             have h₃₁ : (8 * a (n + 1)) % 4 = 0 := by
               omega
-            omega
+            linarith
           have h₃₂ : (5 * a n) % 4 = (a n) % 4 := by
             have h₃₃ : (5 * a n) % 4 = (a n) % 4 := by
               omega
-            admit
-          admit
-        admit
-      admit
-    admit
+            linarith
+          omega
+        linarith
+      linarith
+    linarith
   
   have h₁₃ : a 100 % 4 = 3 := by
     have h₁₄ : a 100 % 4 = 3 := by
@@ -112,12 +112,12 @@ theorem mathd_numbertheory_483 (a : ℕ → ℕ) (h₀ : a 1 = 1) (h₁ : a 2 = 
               have h₃₃ := h₁₂ 10
               have h₃₄ := h₁₂ 4
               linarith
-            admit
-          admit
-        admit
+            linarith
+          linarith
+        linarith
       have h₁₅₁ : a 4 % 4 = 3 := by
-        admit
-      admit
-    admit
+        omega
+      linarith
+    linarith
   
-  hole_1
+  linarith

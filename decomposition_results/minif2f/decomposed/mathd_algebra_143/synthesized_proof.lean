@@ -6,4 +6,4 @@ theorem mathd_algebra_143 (f g : ℝ → ℝ) (h₀ : ∀ x, f x = x + 1) (h₁ 
   have h₃ : f (g 2) = 8 := by
     admit
 
-  admit
+  linarith

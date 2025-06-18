@@ -14,20 +14,20 @@ theorem amc12b_2021_p18 (z : ℂ)
       linarith
     have h₁₆ : (z.re + 1) = 0 := by
       admit
-    admit
+    linarith
   
   have h₂ : z.re * z.re + z.im * z.im = 6 := by
     have h₂₁ : Complex.normSq z = z.re * z.re + z.im * z.im := by
       norm_cast
     have h₂₂ : Complex.normSq (z + 2) = (z.re + 2) * (z.re + 2) + z.im * z.im := by
-      admit1
+      admit
     have h₂₃ : Complex.normSq (z ^ 2 + 1) = (z.re * z.re - z.im * z.im + 1) * (z.re * z.re - z.im * z.im + 1) + (2 * z.re * z.im) * (2 * z.re * z.im) := by
       admit
     rw [h₂₁, h₂₂, h₂₃] at h₀
     have h₂₄ : z.re * z.re + z.im * z.im = (z.re * z.re + z.im * z.im) := by norm_num
     have h₂₅ : 12 * (z.re * z.re + z.im * z.im) = 2 * ((z.re + 2) * (z.re + 2) + z.im * z.im) + ((z.re * z.re - z.im * z.im + 1) * (z.re * z.re - z.im * z.im + 1) + (2 * z.re * z.im) * (2 * z.re * z.im)) + 31 := by
       linarith
-    admit
+    nlinarith
   
   have h₃ : z ≠ 0 := by
     admit
@@ -35,10 +35,10 @@ theorem amc12b_2021_p18 (z : ℂ)
   have h₄ : z + 6 / z = -2 := by
     have h₄₁ : z.im = Real.sqrt 5 ∨ z.im = -Real.sqrt 5 := by
       have h₄₂ : z.im * z.im = 5 := by
-        admit
+        nlinarith
       have h₄₃ : z.im = Real.sqrt 5 ∨ z.im = -Real.sqrt 5 := by
         admit
-      admit
+      simpa
     have h₄₅ : z + 6 / z = -2 := by
       cases h₄₁ with
       | inl h₄₁ =>
@@ -61,6 +61,6 @@ theorem amc12b_2021_p18 (z : ℂ)
           
           admit
         exact h₅₀
-    admit
+    simpa
   
-  hole_1
+  simpa

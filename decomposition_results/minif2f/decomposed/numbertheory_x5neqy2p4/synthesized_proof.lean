@@ -8,13 +8,13 @@ theorem numbertheory_x5neqy2p4 (x y : ℤ) : x ^ 5 ≠ y ^ 2 + 4 := by
       have h₄ : (y : ℤ) % 11 = 0 ∨ (y : ℤ) % 11 = 1 ∨ (y : ℤ) % 11 = 2 ∨ (y : ℤ) % 11 = 3 ∨ (y : ℤ) % 11 = 4 ∨ (y : ℤ) % 11 = 5 ∨ (y : ℤ) % 11 = 6 ∨ (y : ℤ) % 11 = 7 ∨ (y : ℤ) % 11 = 8 ∨ (y : ℤ) % 11 = 9 ∨ (y : ℤ) % 11 = 10 := by
         omega
       admit
-    admit
+    omega
   
   have h_final : x ^ 5 ≠ y ^ 2 + 4 := by
     intro h_contra
     have h₁ : (x ^ 5 - (y ^ 2 + 4) : ℤ) % 11 = 0 := by
       omega
     have h₂ : (x ^ 5 - (y ^ 2 + 4) : ℤ) % 11 ≠ 0 := h_main
-    admit
+    omega
   
-  admit
+  omega

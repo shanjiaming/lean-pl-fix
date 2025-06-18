@@ -21,7 +21,7 @@ theorem algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1 (x : ℝ)
     · 
       have h₄ : x ≥ -1 := by linarith
       have h₅ : abs (x - 1) = -(x - 1) := by
-        admit0
+        admit
       have h₆ : abs x = -x := by
         admit
       have h₇ : abs (x + 1) = x + 1 := by
@@ -40,7 +40,7 @@ theorem algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1 (x : ℝ)
     have h₄ : abs (x - 1) = x - 1 := by
       admit
     have h₅ : abs x = x := by
-      admit
+      simpa
     have h₆ : abs (x + 1) = x + 1 := by
       admit
     
@@ -50,6 +50,6 @@ theorem algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1 (x : ℝ)
     linarith
   
   have h₃ : 0 ≤ x ∧ x ≤ 1 := by
-    admit
+    norm_cast
   
-  hole_1
+  simpa

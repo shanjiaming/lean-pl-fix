@@ -23,27 +23,27 @@ theorem mathd_numbertheory_314 (r n : ℕ) (h₀ : r = 1342 % 13) (h₁ : 0 < n)
         have h₁₅ : n < 6710 := h₇
         have h₁₆ : 1342 ∣ n := h₂
         obtain ⟨k, hk⟩ := h₁₆
-        have h₁₇ : n = 1342 * k := by admit
+        have h₁₇ : n = 1342 * k := by linarith
         have h₁₈ : k > 0 := by
           by_contra h
-          have h₁₉ : k = 0 := by admit
-          admit
+          have h₁₉ : k = 0 := by linarith
+          linarith
         have h₂₀ : k < 5 := by
           by_contra h
-          have h₂₁ : k ≥ 5 := by admit1
+          have h₂₁ : k ≥ 5 := by linarith
           have h₂₂ : n ≥ 1342 * 5 := by
-            admit
-          admit
-        admit
+            linarith
+          linarith
+        omega
       omega
     
-    admit
+    omega
   
   have h₇ : 6710 ≤ n := by
     by_contra h₈
     
-    have h₉ : n < 6710 := by admit
+    have h₉ : n < 6710 := by linarith
     
-    admit
+    linarith
   
-  hole_1
+  linarith

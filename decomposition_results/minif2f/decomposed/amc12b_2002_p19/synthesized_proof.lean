@@ -59,8 +59,8 @@ theorem amc12b_2002_p19 (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ :
     have h₈₅ : (a * b * c) ^ 2 = 518400 := by
       admit
     have h₈₆ : a * b * c = 720 := by
-      have h₈₇ : a * b * c > 0 := by admit
+      have h₈₇ : a * b * c > 0 := by linarith
       nlinarith
-    admit
+    linarith
   
-  admit
+  linarith

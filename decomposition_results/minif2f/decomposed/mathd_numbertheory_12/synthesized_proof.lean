@@ -31,10 +31,10 @@ theorem mathd_numbertheory_12 :
       intro h
       have h₁ : x = 20 ∨ x = 40 ∨ x = 60 ∨ x = 80 := by omega
       have h₂ : 15 ≤ x ∧ x ≤ 85 ∧ 20 ∣ x := by
-        norm_cast5
-      admit
+        omega
+      omega
   
   have h_card : Finset.card (Finset.filter (fun x => 20 ∣ x) (Finset.Icc 15 85)) = 4 := by
     norm_cast
   
-  hole_1
+  linarith

@@ -10,6 +10,6 @@ theorem mathd_algebra_44 (s t : ℝ) (h₀ : s = 9 - 2 * t) (h₁ : t = 3 * s + 
     linarith
   
   have h₄ : s = 1 ∧ t = 4 := by
-    admit
+    norm_cast
   
-  admit
+  simpa

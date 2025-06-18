@@ -3,9 +3,9 @@ theorem mathd_numbertheory_185 (n : ℕ) (h₀ : n % 5 = 3) : 2 * n % 5 = 1 := b
     norm_num
   
   have h₂ : (2 * n) % 5 = (2 * 3) % 5 := by
-    admit
+    omega
   
   have h₃ : (2 * n) % 5 = 1 := by
-    admit
+    linarith
   
-  admit
+  linarith

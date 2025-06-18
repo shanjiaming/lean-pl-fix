@@ -20,7 +20,7 @@ theorem numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown (m n : ℕ) (f : ℕ 
         linarith
       have h₈ : (4 : ℕ) ^ k * (6 : ℕ) ^ k + (4 : ℕ) ^ k * (9 : ℕ) ^ k + (6 : ℕ) ^ k * (9 : ℕ) ^ k = (6 : ℕ) ^ k * ((4 : ℕ) ^ k + (9 : ℕ) ^ k) + (4 : ℕ) ^ k * (9 : ℕ) ^ k := by
         linarith
-      admit
+      omega
     have h₇ : (4 : ℕ) ^ k * (6 : ℕ) ^ k + (4 : ℕ) ^ k * (9 : ℕ) ^ k + (6 : ℕ) ^ k * (9 : ℕ) ^ k = (6 : ℕ) ^ k * ((4 : ℕ) ^ k + (6 : ℕ) ^ k + (9 : ℕ) ^ k) := by
       have h₈ : (4 : ℕ) ^ k * (6 : ℕ) ^ k + (4 : ℕ) ^ k * (9 : ℕ) ^ k + (6 : ℕ) ^ k * (9 : ℕ) ^ k = (6 : ℕ) ^ k * ((4 : ℕ) ^ k + (9 : ℕ) ^ k) + (4 : ℕ) ^ k * (9 : ℕ) ^ k := by
         linarith
@@ -38,9 +38,9 @@ theorem numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown (m n : ℕ) (f : ℕ 
             ring
           have h₁₅ : (3 : ℕ) ^ (2 * k) = (3 : ℕ) ^ k * (3 : ℕ) ^ k := by
             ring
-          ring
-        ring
-      admit1
+          nlinarith
+        linarith
+      linarith
     admit
   
   have h_div : ∀ k : ℕ, f k ∣ f (2 * k) := by
@@ -72,12 +72,12 @@ theorem numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown (m n : ℕ) (f : ℕ 
         have h₆ : m ≤ n := h₂
         have h₇ : n - m + m = n := by
           omega
-        admit
-      admit
+        linarith
+      linarith
     obtain ⟨t, ht⟩ := h₃
     have h₄ : f (2 ^ m) ∣ f (2 ^ (m + t)) := h_chain t
     have h₅ : f (2 ^ (m + t)) = f (2 ^ n) := by
       admit
     admit
   
-  hole_1
+  omega

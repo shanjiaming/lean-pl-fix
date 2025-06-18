@@ -12,7 +12,7 @@ theorem mathd_algebra_313 (v i z : ℂ) (h₀ : v = i * z) (h₁ : v = 1 + Compl
       have h₅₃ : (2 - Complex.I : ℂ) ≠ 0 := by
         admit
       have h₅₄ : i * (2 - Complex.I) = (1 + Complex.I) := by
-        admit
+        simpa
       admit
     rw [h₅₂]
     
@@ -20,4 +20,4 @@ theorem mathd_algebra_313 (v i z : ℂ) (h₀ : v = i * z) (h₁ : v = 1 + Compl
       admit
     admit
   
-  admit
+  norm_cast

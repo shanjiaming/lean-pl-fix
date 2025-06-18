@@ -6,13 +6,13 @@ theorem induction_12dvd4expnp1p20 (n : ℕ) : 12 ∣ 4 ^ (n + 1) + 20 := by
   
   have h₂ : (4 ^ (n + 1) + 20) % 12 = 0 := by
     have h₃ : (4 ^ (n + 1) + 20) % 12 = 0 := by
-      admit
-    admit
+      omega
+    linarith
   
   have h₃ : 12 ∣ 4 ^ (n + 1) + 20 := by
     have h₄ : (4 ^ (n + 1) + 20) % 12 = 0 := h₂
     have h₅ : 12 ∣ 4 ^ (n + 1) + 20 := by
-      admit
-    admit
+      omega
+    omega
   
-  admit
+  omega

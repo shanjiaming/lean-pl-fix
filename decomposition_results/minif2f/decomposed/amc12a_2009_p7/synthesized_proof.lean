@@ -11,7 +11,7 @@ theorem amc12a_2009_p7 (x : ℝ) (n : ℕ) (a : ℕ → ℝ)
     have h₅₁ := h₁ 0
     have h₅₂ := h₁ 1
     have h₅₃ := h₁ 2
-    admit
+    linarith
   
   have h_diff : ∀ (m : ℕ), a (m + 1) - a m = (4 : ℝ) := by
     intro m
@@ -22,8 +22,8 @@ theorem amc12a_2009_p7 (x : ℝ) (n : ℕ) (a : ℕ → ℝ)
       admit
     
     have h₂₁ : a 1 - a 0 = (4 : ℝ) := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h_a_formula : ∀ (m : ℕ), a m = (1 : ℝ) + 4 * (m : ℝ) := by
     intro m
@@ -37,7 +37,7 @@ theorem amc12a_2009_p7 (x : ℝ) (n : ℕ) (a : ℕ → ℝ)
     have h₇ : (n : ℝ) = 502 := by
       linarith
     have h₈ : (n : ℕ) = 502 := by
-      admit2
-    admit
+      admit
+    linarith
   
-  hole_1
+  linarith

@@ -14,7 +14,7 @@ theorem mathd_numbertheory_457 (n : ℕ) (h₀ : 0 < n) (h₁ : 80325 ∣ n !) :
       
       admit
     have h₈ : 17 ∣ n ! := h₃
-    admit
+    omega
   
   have h₅ : 17 ≤ n := by
     by_contra h₅
@@ -22,4 +22,4 @@ theorem mathd_numbertheory_457 (n : ℕ) (h₀ : 0 < n) (h₁ : 80325 ∣ n !) :
     have h₇ : False := h₄ h₆
     simpa
   
-  admit
+  linarith

@@ -5,13 +5,13 @@ theorem mathd_numbertheory_227 (x y n : ℕ+) (h₀ : ↑x / (4 : ℝ) + y / 6 =
       have h₄ : (n : ℝ) * ((x : ℝ) / 4 + (y : ℝ) / 6) = (x : ℝ) + (y : ℝ) := by
         admit
       have h₅ : (n : ℝ) * (3 * (x : ℝ) + 2 * (y : ℝ)) = 12 * ((x : ℝ) + (y : ℝ)) := by
-        admit
-      admit
+        linarith
+      linarith
     have h₆ : (n : ℕ) * (3 * (x : ℕ) + 2 * (y : ℕ)) = 12 * ((x : ℕ) + (y : ℕ)) := by
-      have h₇ : (n : ℝ) * (3 * (x : ℝ) + 2 * (y : ℝ)) = 12 * ((x : ℝ) + (y : ℝ)) := by admit
+      have h₇ : (n : ℝ) * (3 * (x : ℝ) + 2 * (y : ℝ)) = 12 * ((x : ℝ) + (y : ℝ)) := by linarith
       have h₈ : (n : ℕ) * (3 * (x : ℕ) + 2 * (y : ℕ)) = 12 * ((x : ℕ) + (y : ℕ)) := by
         admit
-      admit
+      linarith
     have h₇ : (n : ℕ) = 5 := by
       have h₈ : (n : ℕ) > 0 := by norm_num
       have h₉ : (x : ℕ) > 0 := by norm_num
@@ -24,17 +24,17 @@ theorem mathd_numbertheory_227 (x y n : ℕ+) (h₀ : ↑x / (4 : ℝ) + y / 6 =
           have h₁₅ : 3 * (x : ℕ) + 2 * (y : ℕ) > 0 := by norm_num
           have h₁₆ : (x : ℕ) + (y : ℕ) > 0 := by norm_num
           have h₁₇ : (n : ℕ) * (3 * (x : ℕ) + 2 * (y : ℕ)) ≥ 7 * (3 * (x : ℕ) + 2 * (y : ℕ)) := by
-            admit9
+            nlinarith
           have h₁₈ : 12 * ((x : ℕ) + (y : ℕ)) < 7 * (3 * (x : ℕ) + 2 * (y : ℕ)) := by
-            admit
-          admit
-        admit
-      admit
-    admit
+            linarith
+          linarith
+        linarith
+      nlinarith
+    linarith
   
   have h₂ : n = 5 := by
     have h₃ : (n : ℕ) = 5 := h₁
     have h₄ : n = 5 := by
       admit
-    admit
-  hole_1
+    simpa
+  simpa

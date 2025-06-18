@@ -4,7 +4,7 @@ theorem mathd_numbertheory_618 (n : ℕ) (hn : n > 0) (p : ℕ → ℕ) (h₀ : 
     simp only [h₀]
     have h₃ : (n + 1 : ℕ) ^ 2 - (n + 1) + 41 = (n ^ 2 - n + 41) + 2 * n := by
       admit
-    admit
+    linarith
   
   have h₃ : Nat.gcd (p n) (p (n + 1)) = Nat.gcd (p n) (2 * n) := by
     rw [h₂]
@@ -13,7 +13,7 @@ theorem mathd_numbertheory_618 (n : ℕ) (hn : n > 0) (p : ℕ → ℕ) (h₀ : 
     norm_num
   
   have h₄ : 1 < Nat.gcd (p n) (2 * n) := by
-    admit
+    linarith
   
   have h₅ : 41 ≤ n := by
     by_contra h
@@ -22,4 +22,4 @@ theorem mathd_numbertheory_618 (n : ℕ) (hn : n > 0) (p : ℕ → ℕ) (h₀ : 
     have h₇ : n ≤ 40 := by linarith
     admit
   
-  admit
+  linarith

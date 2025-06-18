@@ -15,6 +15,6 @@ theorem mathd_numbertheory_135 (n A B C : ℕ) (h₀ : n = 3 ^ 17 + 3 ^ 10) (h�
     admit
   
   have h₁₁ : 100 * A + 10 * B + C = 129 := by
-    admit
+    linarith
   
-  admit
+  linarith

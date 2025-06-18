@@ -30,19 +30,19 @@ theorem mathd_numbertheory_353 (s : ℕ) (h₀ : s = ∑ k in Finset.Icc 2010 40
     rw [h₂]
     
     have h₃ : (∑ t in Finset.range 2009, (t + 2010 : ℕ)) = (∑ t in Finset.range 2009, t) + ∑ t in Finset.range 2009, 2010 := by
-      admit1
+      norm_num
     rw [h₃]
     
     have h₄ : (∑ t in Finset.range 2009, t) = 2009 * 1004 := by
       
-      admit
+      norm_num
     
     have h₅ : (∑ t in Finset.range 2009, (2010 : ℕ)) = 2009 * 2010 := by
-      admit
+      norm_num
     
-    admit
+    norm_num
   
   have h₂ : s % 2009 = 0 := by
-    admit
+    omega
   
-  hole_1
+  linarith

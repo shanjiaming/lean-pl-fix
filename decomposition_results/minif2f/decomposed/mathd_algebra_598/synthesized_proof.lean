@@ -9,7 +9,7 @@ theorem mathd_algebra_598 (a b c d : ℝ) (h₁ : (4 : ℝ) ^ a = 5) (h₂ : (5 
       norm_num
     have h₅₄ : a = Real.log 5 / Real.log 4 := by
       admit
-    admit
+    linarith
   
   have h₆ : b = Real.log 6 / Real.log 5 := by
     have h₆₁ : Real.log ((5 : ℝ) ^ b) = Real.log 6 := by admit
@@ -19,8 +19,8 @@ theorem mathd_algebra_598 (a b c d : ℝ) (h₁ : (4 : ℝ) ^ a = 5) (h₂ : (5 
       have h₆₄ : Real.log 5 > 0 := Real.log_pos (by norm_num)
       norm_num
     have h₆₄ : b = Real.log 6 / Real.log 5 := by
-      admit1
-    admit
+      admit
+    linarith
   
   have h₇ : c = Real.log 7 / Real.log 6 := by
     have h₇₁ : Real.log ((6 : ℝ) ^ c) = Real.log 7 := by admit
@@ -31,7 +31,7 @@ theorem mathd_algebra_598 (a b c d : ℝ) (h₁ : (4 : ℝ) ^ a = 5) (h₂ : (5 
       norm_num
     have h₇₄ : c = Real.log 7 / Real.log 6 := by
       admit
-    admit
+    linarith
   
   have h₈ : d = Real.log 8 / Real.log 7 := by
     have h₈₁ : Real.log ((7 : ℝ) ^ d) = Real.log 8 := by admit
@@ -42,7 +42,7 @@ theorem mathd_algebra_598 (a b c d : ℝ) (h₁ : (4 : ℝ) ^ a = 5) (h₂ : (5 
       norm_num
     have h₈₄ : d = Real.log 8 / Real.log 7 := by
       admit
-    admit
+    linarith
   
   have h₉ : a * b * c * d = (Real.log 8) / (Real.log 4) := by
     rw [h₅, h₆, h₇, h₈]
@@ -58,14 +58,14 @@ theorem mathd_algebra_598 (a b c d : ℝ) (h₁ : (4 : ℝ) ^ a = 5) (h₂ : (5 
     rw [h₁₀₁]
     have h₁₀₂ : Real.log (2 ^ 3) = 3 * Real.log 2 := by
       simp
-    simp
+    linarith
   
   have h₁₁ : Real.log 4 = 2 * Real.log 2 := by
     have h₁₁₁ : Real.log 4 = Real.log (2 ^ 2) := by norm_num
     rw [h₁₁₁]
     have h₁₁₂ : Real.log (2 ^ 2) = 2 * Real.log 2 := by
       simp
-    simp
+    linarith
   
   have h₁₂ : a * b * c * d = 3 / 2 := by
     rw [h₉]
@@ -77,4 +77,4 @@ theorem mathd_algebra_598 (a b c d : ℝ) (h₁ : (4 : ℝ) ^ a = 5) (h₂ : (5 
       norm_num
     admit
   
-  hole_1
+  linarith

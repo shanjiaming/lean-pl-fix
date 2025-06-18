@@ -6,9 +6,9 @@ theorem mathd_algebra_139 (s : ℝ → ℝ → ℝ)
     have h₁₁ : (11 : ℝ) ≠ 0 := by norm_num
     have h₁₂ : s (3 : ℝ) (11 : ℝ) = (1 / (11 : ℝ) - 1 / (3 : ℝ)) / ((3 : ℝ) - 11) := by
       admit
-    admit
+    linarith
   
   have h₂ : s 3 11 = 1 / 33 := by
-    admit
+    linarith
   
-  admit
+  linarith

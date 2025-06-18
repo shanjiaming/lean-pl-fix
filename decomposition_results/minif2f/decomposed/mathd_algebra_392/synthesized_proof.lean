@@ -20,10 +20,10 @@ theorem mathd_algebra_392 (n : ℕ) (h₀ : Even n)
         have h₃₄ : (n : ℤ) ≥ 65 := by
           linarith
         nlinarith
-      admit
-    admit
+      linarith
+    nlinarith
   
   have h₄ : (↑n - 2) * ↑n * (↑n + 2) / 8 = (32736 : ℤ) := by
     admit
   
-  admit
+  linarith

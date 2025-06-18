@@ -9,7 +9,7 @@ theorem mathd_numbertheory_320 (n : ℕ) (h₀ : n < 101) (h₁ : 101 ∣ 123456
     have h₆ : (123456 - n) % 101 = (123456 % 101 - n % 101) % 101 := by
       have h₇ : (123456 - n) % 101 = (123456 % 101 - n % 101) % 101 := by
         omega
-      admit
+      linarith
     rw [h₆] at h₄
     have h₇ : (123456 % 101 - n % 101) % 101 = 0 := h₄
     have h₈ : (34 - n % 101) % 101 = 0 := by
@@ -23,17 +23,17 @@ theorem mathd_numbertheory_320 (n : ℕ) (h₀ : n < 101) (h₁ : 101 ∣ 123456
           have h₁₄ : 34 - n % 101 > 0 := by
             by_contra h₁₅
             have h₁₆ : 34 - n % 101 = 0 := by linarith
-            admit1
-          positivity
+            omega
+          linarith
         have h₁₅ : (34 - n % 101) % 101 = 34 - n % 101 := by
-          admit
-        admit
-      admit
-    admit
+          omega
+        linarith
+      omega
+    linarith
   
   have h₄ : n = 34 := by
     have h₅ : n % 101 = n := by
-      simpa
-    admit
+      omega
+    linarith
   
-  hole_1
+  linarith

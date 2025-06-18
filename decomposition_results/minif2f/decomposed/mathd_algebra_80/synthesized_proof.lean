@@ -12,7 +12,7 @@ theorem mathd_algebra_80 (x : ℝ) (h₀ : x ≠ -1) (h₁ : (x - 9) / (x + 1) =
     have h₅ : x - 9 = 2 * (x + 1) := h₃
     have h₆ : x = -11 := by
       
-      admit
-    admit
+      linarith
+    linarith
   
-  admit
+  linarith

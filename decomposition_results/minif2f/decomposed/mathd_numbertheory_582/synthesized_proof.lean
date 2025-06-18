@@ -23,4 +23,4 @@ theorem mathd_numbertheory_582 (n : ℕ) (h₀ : 0 < n) (h₁ : 3 ∣ n) :
       omega
     omega
   
-  admit
+  linarith

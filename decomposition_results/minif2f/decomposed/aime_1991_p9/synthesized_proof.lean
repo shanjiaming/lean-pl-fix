@@ -7,7 +7,7 @@ theorem aime_1991_p9 (x : ℝ) (m : ℚ) (h₀ : 1 / Real.cos x + Real.tan x = 2
       admit
     have h₄ : 1 / Real.cos x + Real.tan x = 0 := by
       admit
-    admit
+    linarith
   
   have h_sin_ne_zero : Real.sin x ≠ 0 := by
     by_contra h
@@ -16,13 +16,13 @@ theorem aime_1991_p9 (x : ℝ) (m : ℚ) (h₀ : 1 / Real.cos x + Real.tan x = 2
       admit
     have h₄ : 1 / Real.cos x + Real.tan x = 22 / 7 := h₀
     rw [h₃] at h₄
-    have h₅ : 1 / Real.cos x = 22 / 7 := by admit
+    have h₅ : 1 / Real.cos x = 22 / 7 := by linarith
     have h₆ : Real.cos x = 7 / 22 := by
       have h₇ : Real.cos x ≠ 0 := h_cos_ne_zero
-      admit0
+      admit
     have h₇ : Real.sin x ^ 2 + Real.cos x ^ 2 = 1 := by
       norm_num
-    admit
+    nlinarith
   
   have h₂ : 1 + Real.sin x = (22 / 7 : ℝ) * Real.cos x := by
     have h₃ : 1 / Real.cos x + Real.tan x = 22 / 7 := h₀
@@ -33,21 +33,21 @@ theorem aime_1991_p9 (x : ℝ) (m : ℚ) (h₀ : 1 / Real.cos x + Real.tan x = 2
     have h₆ : (1 + Real.sin x) / Real.cos x = 22 / 7 := by
       have h₇ : 1 / Real.cos x + Real.sin x / Real.cos x = (1 + Real.sin x) / Real.cos x := by
         ring
-      admit
+      linarith
     have h₇ : Real.cos x ≠ 0 := h_cos_ne_zero
     have h₈ : (1 + Real.sin x) = (22 / 7 : ℝ) * Real.cos x := by
       admit
-    admit
+    linarith
   
   have h₃ : Real.sin x = (22 / 7 : ℝ) * Real.cos x - 1 := by
-    admit
+    linarith
   
   have h₄ : Real.cos x = 308 / 533 := by
     have h₅ : Real.sin x ^ 2 + Real.cos x ^ 2 = 1 := Real.sin_sq_add_cos_sq x
     admit
   
   have h₅ : Real.sin x = 435 / 533 := by
-    admit
+    linarith
   
   have h₆ : (m : ℝ) = 841 / 435 := by
     have h₇ : (m : ℝ) = 1 / Real.sin x + 1 / Real.tan x := by
@@ -66,4 +66,4 @@ theorem aime_1991_p9 (x : ℝ) (m : ℚ) (h₀ : 1 / Real.cos x + Real.tan x = 2
   have h₈ : ↑m.den + m.num = 44 := by
     admit
   
-  hole_1
+  linarith

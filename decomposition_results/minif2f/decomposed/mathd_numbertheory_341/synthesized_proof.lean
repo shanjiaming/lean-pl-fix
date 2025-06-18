@@ -19,6 +19,6 @@ theorem mathd_numbertheory_341 (a b c : ℕ) (h₀ : a ≤ 9 ∧ b ≤ 9 ∧ c �
     admit
   
   have h₈ : a + b + c = 13 := by
-    admit
+    linarith
   
-  admit
+  linarith

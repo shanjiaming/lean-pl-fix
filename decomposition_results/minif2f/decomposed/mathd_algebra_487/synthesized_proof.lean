@@ -31,8 +31,8 @@ theorem mathd_algebra_487 (a b c d : ℝ) (h₀ : b = a ^ 2) (h₁ : a + b = 1) 
         linarith
       have h₇₆ : a + c + 1 = 0 := by
         admit
-      admit1
-    admit
+      linarith
+    linarith
   
   have h₈ : a * c = -1 := by
     have h₈₁ : a + c = -1 := h₇
@@ -43,8 +43,8 @@ theorem mathd_algebra_487 (a b c d : ℝ) (h₀ : b = a ^ 2) (h₁ : a + b = 1) 
       rw [h₈₁] at h₈₅
       have h₈₆ : a ^ 2 = -a + 1 := by linarith
       have h₈₇ : c ^ 2 = -c + 1 := by linarith
-      admit
-    admit
+      linarith
+    linarith
   
   have h₉ : (a - c) ^ 2 = 5 := by
     have h₉₁ : (a - c) ^ 2 = 5 := by
@@ -57,9 +57,9 @@ theorem mathd_algebra_487 (a b c d : ℝ) (h₀ : b = a ^ 2) (h₁ : a + b = 1) 
         rw [h₉₇]
         have h₉₈ : a ^ 2 = -a + 1 := by linarith
         have h₉₉ : c ^ 2 = -c + 1 := by linarith
-        admit
-      admit
-    admit
+        linarith
+      linarith
+    linarith
   
   have h₁₀ : (b - d) ^ 2 = 5 := by
     have h₁₀₁ : b - d = -(a - c) := by
@@ -81,15 +81,15 @@ theorem mathd_algebra_487 (a b c d : ℝ) (h₀ : b = a ^ 2) (h₁ : a + b = 1) 
       have h₁₀₃ : (a - c) ^ 2 = 5 := h₉
       have h₁₀₄ : (-(a - c)) ^ 2 = (a - c) ^ 2 := by
         linarith
-      admit
-    admit
+      linarith
+    linarith
   
   have h₁₁ : (a - c) ^ 2 + (b - d) ^ 2 = 10 := by
     have h₁₁₁ : (a - c) ^ 2 = 5 := h₉
     have h₁₁₂ : (b - d) ^ 2 = 5 := h₁₀
-    admit
+    linarith
   
   have h₁₂ : Real.sqrt ((a - c) ^ 2 + (b - d) ^ 2) = Real.sqrt 10 := by
     admit
   
-  hole_1
+  linarith

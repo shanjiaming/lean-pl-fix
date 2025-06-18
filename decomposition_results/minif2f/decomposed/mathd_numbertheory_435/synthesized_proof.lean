@@ -7,4 +7,4 @@ theorem mathd_numbertheory_435 (k : ℕ) (h₀ : 0 < k) (h₁ : ∀ n, Nat.gcd (
     have h₄ : k ≤ 4 := by linarith
     
     admit
-  admit
+  linarith

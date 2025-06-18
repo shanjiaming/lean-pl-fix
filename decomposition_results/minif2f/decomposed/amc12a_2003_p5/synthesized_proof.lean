@@ -42,14 +42,14 @@ theorem amc12a_2003_p5 (A M C : ℕ) (h₀ : A ≤ 9 ∧ M ≤ 9 ∧ C ≤ 9)
       have h₃₅ : C + 10 * M + 100 * A = 617 := by
         linarith
       linarith
-    omega
+    linarith
   
   have h₃ : M = 1 := by
     have h₃₁ : A ≤ 9 := h₀.1
     have h₃₂ : M ≤ 9 := h₀.2.1
     have h₃₃ : C ≤ 9 := h₀.2.2
     have h₃₄ : Nat.ofDigits 10 [0, 1, C, M, A] = 10 + 100 * C + 1000 * M + 10000 * A := by
-      admit9
+      admit
     have h₃₅ : Nat.ofDigits 10 [2, 1, C, M, A] = 12 + 100 * C + 1000 * M + 10000 * A := by
       admit
     rw [h₃₄, h₃₅] at h₁
@@ -63,16 +63,16 @@ theorem amc12a_2003_p5 (A M C : ℕ) (h₀ : A ≤ 9 ∧ M ≤ 9 ∧ C ≤ 9)
       linarith
     rw [h₂] at h₃₉
     have h₄₀ : C + 10 * M = 17 := by
-      omega
+      linarith
     have h₄₁ : M ≤ 1 := by
       by_contra h
       push_neg at h
-      have h₄₂ : M ≥ 2 := by omega
+      have h₄₂ : M ≥ 2 := by linarith
       have h₄₃ : C + 10 * M ≥ 20 := by
         have h₄₄ : C ≥ 0 := by norm_num
-        omega
-      omega
-    omega
+        linarith
+      linarith
+    linarith
   
   have h₄ : C = 7 := by
     have h₄₁ : A ≤ 9 := h₀.1
@@ -91,9 +91,9 @@ theorem amc12a_2003_p5 (A M C : ℕ) (h₀ : A ≤ 9 ∧ M ≤ 9 ∧ C ≤ 9)
       linarith
     have h₄₉ : C + 10 * M + 100 * A = 617 := by
       linarith
-    omega
+    linarith
   
   have h₅ : A + M + C = 14 := by
-    admit
+    linarith
   
-  hole_1
+  linarith

@@ -5,4 +5,4 @@ theorem mathd_numbertheory_293 (n : ℕ) (h₀ : n ≤ 9) (h₁ : 11 ∣ 20 * 10
     have h₄ : 11 ∣ 20 * 100 + 10 * n + 7 := h₁
     
     omega
-  omega
+  linarith

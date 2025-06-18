@@ -3,7 +3,7 @@ theorem mathd_numbertheory_100 (n : ℕ) (h₀ : 0 < n) (h₁ : Nat.gcd n 40 = 1
   have h₃ : n * 40 = 2800 := by
     have h₃₁ : Nat.gcd n 40 * Nat.lcm n 40 = n * 40 := by
       admit
-    admit
+    nlinarith
   
   have h₄ : n = 70 := by
     have h₄₁ : n * 40 = 2800 := h₃
@@ -13,24 +13,24 @@ theorem mathd_numbertheory_100 (n : ℕ) (h₀ : 0 < n) (h₁ : Nat.gcd n 40 = 1
         by_contra h
         
         have h₄₄ : n ≥ 71 := by
-          admit
+          linarith
         have h₄₅ : n * 40 ≥ 71 * 40 := by
-          admit
+          linarith
         have h₄₆ : n * 40 > 2800 := by
-          admit
-        admit
+          linarith
+        linarith
       have h₄₄ : n ≥ 70 := by
         by_contra h
         
         have h₄₅ : n ≤ 69 := by
-          admit1
+          linarith
         have h₄₆ : n * 40 ≤ 69 * 40 := by
-          admit
+          linarith
         have h₄₇ : n * 40 < 2800 := by
-          admit
-        admit
+          linarith
+        linarith
       
-      admit
-    admit
+      linarith
+    linarith
   
-  hole_1
+  linarith

@@ -7,23 +7,23 @@ theorem amc12a_2021_p3 (x y : ℕ) (h₀ : x + y = 17402) (h₁ : 10 ∣ x) (h�
         have h₃₁₃ : x = 10 * (x / 10) := by
           have h₃₁₄ : x / 10 * 10 = x := by
             omega
-          omega
-        omega
-      omega
-    omega
+          linarith
+        linarith
+      linarith
+    linarith
   
   have h₄ : y = 1582 := by
     have h₄₁ : 11 * y = 17402 := by
       have h₄₂ : x = 10 * y := h₃
-      omega
+      linarith
     have h₄₂ : y = 1582 := by
-      omega
-    omega
+      linarith
+    linarith
   
   have h₅ : x = 15820 := by
-    omega
+    linarith
   
   have h₆ : (x : ℤ) - (y : ℤ) = (14238 : ℤ) := by
-    omega
+    linarith
   
-  omega
+  linarith

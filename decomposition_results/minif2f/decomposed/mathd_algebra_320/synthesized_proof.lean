@@ -44,11 +44,11 @@ theorem mathd_algebra_320 (x : ℝ) (a b c : ℕ) (h₀ : 0 < a ∧ 0 < b ∧ 0 
   
   have h₆ : (a : ℝ) > 0 := by
     have h₆₁ : 0 < a := h₀.1
-    admit
+    simpa
   
   have h₇ : (b : ℝ) > 0 := by
     have h₇₁ : 0 < b := h₀.2.1
-    admit
+    simpa
   
   have h₈ : (2 : ℝ) > 0 := by norm_num
   
@@ -61,18 +61,18 @@ theorem mathd_algebra_320 (x : ℝ) (a b c : ℕ) (h₀ : 0 < a ∧ 0 < b ∧ 0 
     have h₁₀₁ : (2 * (a : ℝ) - 4) * Real.sqrt b = 4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ) := by
       have h₁₀₂ : (a : ℝ) ^ 2 + (b : ℝ) + 2 * (a : ℝ) * Real.sqrt b = 4 * (a : ℝ) + 4 * Real.sqrt b + 18 := h₉
       have h₁₀₃ : 2 * (a : ℝ) * Real.sqrt b - 4 * Real.sqrt b = 4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ) := by
-        admit0
+        linarith
       have h₁₀₄ : (2 * (a : ℝ) - 4) * Real.sqrt b = 4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ) := by
-        admit
-      admit
+        linarith
+      linarith
     have h₁₀₅ : (2 * (a : ℝ) - 4) ^ 2 * (b : ℝ) = (4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ)) ^ 2 := by
       have h₁₀₆ : (2 * (a : ℝ) - 4) ^ 2 * (b : ℝ) = ((2 * (a : ℝ) - 4) * Real.sqrt b) ^ 2 := by
         have h₁₀₇ : Real.sqrt b ≥ 0 := Real.sqrt_nonneg _
         have h₁₀₈ : (Real.sqrt b) ^ 2 = (b : ℝ) := by
           norm_num
-        admit
-      admit
-    admit
+        nlinarith
+      nlinarith
+    linarith
   
   have h₁₁ : a = 2 := by
     have h₁₁₁ : a = 2 := by
@@ -82,41 +82,41 @@ theorem mathd_algebra_320 (x : ℝ) (a b c : ℕ) (h₀ : 0 < a ∧ 0 < b ∧ 0 
       have h₁₄ : a ≤ 7 := by
         by_contra h₁₅
         have h₁₅₁ : a ≥ 8 := by linarith
-        have h₁₅₂ : (a : ℝ) ≥ 8 := by admit
+        have h₁₅₂ : (a : ℝ) ≥ 8 := by simpa
         have h₁₅₃ : (2 * (a : ℝ) - 4) ^ 2 * (b : ℝ) = (4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ)) ^ 2 := by
-          admit
-        have h₁₅₄ : (a : ℝ) ≥ 8 := by admit
+          linarith
+        have h₁₅₄ : (a : ℝ) ≥ 8 := by linarith
         have h₁₅₅ : (b : ℝ) > 0 := h₇
         have h₁₅₆ : (b : ℝ) > 0 := h₇
         have h₁₅₇ : (a : ℕ) ≥ 8 := by linarith
         
-        have h₁₅₈ : (a : ℝ) ^ 2 ≥ 64 := by admit
+        have h₁₅₈ : (a : ℝ) ^ 2 ≥ 64 := by nlinarith
         have h₁₅₉ : (4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ)) ≤ 0 := by
-          admit
-        have h₁₅₁₀ : (2 * (a : ℝ) - 4) ^ 2 * (b : ℝ) ≥ 0 := by admit
-        have h₁₅₁₁ : (4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ)) ^ 2 ≥ 0 := by nlinarith
+          nlinarith
+        have h₁₅₁₀ : (2 * (a : ℝ) - 4) ^ 2 * (b : ℝ) ≥ 0 := by nlinarith
+        have h₁₅₁₁ : (4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ)) ^ 2 ≥ 0 := by linarith
         have h₁₅₁₂ : (2 * (a : ℝ) - 4) ^ 2 * (b : ℝ) = (4 * (a : ℝ) + 18 - (a : ℝ) ^ 2 - (b : ℝ)) ^ 2 := by
-          admit
+          linarith
         admit
       
       admit
-    admit
+    linarith
   
   have h₁₂ : b = 22 := by
     have h₁₂₁ : a = 2 := h₁₁
-    have h₁₂₂ : (a : ℝ) = 2 := by admit
+    have h₁₂₂ : (a : ℝ) = 2 := by norm_cast
     rw [h₁₂₂] at h₉ h₁₀
     norm_num at h₉ h₁₀
     have h₁₂₃ : (b : ℝ) = 22 := by
       linarith
     have h₁₂₄ : (b : ℕ) = 22 := by
       admit
-    admit
+    linarith
   
   have h₁₃ : a + b + c = 26 := by
     have h₁₄ : a = 2 := h₁₁
     have h₁₅ : b = 22 := h₁₂
     have h₁₆ : c = 2 := h₃
-    admit
+    linarith
   
-  hole_1
+  linarith

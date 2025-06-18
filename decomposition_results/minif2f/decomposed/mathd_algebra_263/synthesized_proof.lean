@@ -7,11 +7,11 @@ theorem mathd_algebra_263 (y : ℝ) (h₀ : 0 ≤ 19 + 3 * y) (h₁ : Real.sqrt 
     have h₂₂ : (Real.sqrt (19 + 3 * y)) ^ 2 = 19 + 3 * y := by
       field_simp
     
-    admit
+    linarith
   
   have h₃ : y = 10 := by
-    have h₄ : 3 * y = 30 := by admit
-    have h₅ : y = 10 := by admit
-    admit
+    have h₄ : 3 * y = 30 := by linarith
+    have h₅ : y = 10 := by linarith
+    linarith
   
-  admit
+  linarith

@@ -18,6 +18,6 @@ theorem mathd_algebra_513 (a b : ℝ) (h₀ : 3 * a + 2 * b = 5) (h₁ : a + b =
     linarith
   
   have h₄ : a = 1 ∧ b = 1 := by
-    admit
+    norm_cast
   
-  admit
+  simpa

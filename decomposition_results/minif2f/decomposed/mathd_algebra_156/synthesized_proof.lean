@@ -11,26 +11,26 @@ theorem mathd_algebra_156 (x y : ℝ) (f g : ℝ → ℝ) (h₀ : ∀ t, f t = t
     have h₅₁ : f x = g x := h₂
     have h₅₂ : f x = x ^ 4 := by admit
     have h₅₃ : g x = 5 * x ^ 2 - 6 := by admit
-    admit
+    linarith
   
   have h₆ : y ^ 4 - 5 * y ^ 2 + 6 = 0 := by
     have h₆₁ : f y = g y := h₃
     have h₆₂ : f y = y ^ 4 := by admit
     have h₆₃ : g y = 5 * y ^ 2 - 6 := by admit
-    admit
+    linarith
   
   have h₇ : x ^ 2 = 2 ∨ x ^ 2 = 3 := by
     have h₇₁ : x ^ 4 - 5 * x ^ 2 + 6 = 0 := h₅
     have h₇₂ : (x ^ 2 - 2) * (x ^ 2 - 3) = 0 := by
-      admit
+      linarith
     have h₇₃ : x ^ 2 - 2 = 0 ∨ x ^ 2 - 3 = 0 := by
-      admit0
+      admit
     admit
   
   have h₈ : y ^ 2 = 2 ∨ y ^ 2 = 3 := by
     have h₈₁ : y ^ 4 - 5 * y ^ 2 + 6 = 0 := h₆
     have h₈₂ : (y ^ 2 - 2) * (y ^ 2 - 3) = 0 := by
-      admit
+      linarith
     have h₈₃ : y ^ 2 - 2 = 0 ∨ y ^ 2 - 3 = 0 := by
       admit
     admit
@@ -39,9 +39,9 @@ theorem mathd_algebra_156 (x y : ℝ) (f g : ℝ → ℝ) (h₀ : ∀ t, f t = t
     admit
   
   have h₁₀ : y ^ 2 = 3 := by
-    admit
+    nlinarith
   
   have h₁₁ : y ^ 2 - x ^ 2 = 1 := by
-    admit
+    linarith
   
-  hole_1
+  linarith

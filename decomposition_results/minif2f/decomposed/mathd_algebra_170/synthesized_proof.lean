@@ -18,7 +18,7 @@ theorem mathd_algebra_170 (S : Finset ℤ) (h₀ : ∀ n : ℤ, n ∈ S ↔ abs 
         · 
           have h₆ : -(n - 2) ≤ 5 := by
             admit
-          admit
+          linarith
       have h₄ : n ≤ 7 := by
         have h₅ : abs (n - 2) ≤ 5 := h₂
         cases' le_or_lt 0 (n - 2) with h₆ h₆
@@ -28,7 +28,7 @@ theorem mathd_algebra_170 (S : Finset ℤ) (h₀ : ∀ n : ℤ, n ∈ S ↔ abs 
           omega
         · 
           have h₇ : -(n - 2) ≤ 5 := by
-            admit
+            linarith
           linarith
       exact ⟨h₃, h₄⟩
     · intro h
@@ -46,10 +46,10 @@ theorem mathd_algebra_170 (S : Finset ℤ) (h₀ : ∀ n : ℤ, n ∈ S ↔ abs 
         · 
           have h₈ : -(n - 2) ≤ 5 := by
             linarith
-          admit0
-      admit
+          admit
+      omega
   
   have h₂ : S.card = 11 := by
     admit
   
-  hole_1
+  linarith
