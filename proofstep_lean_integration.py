@@ -64,7 +64,7 @@ class MinimalLeanProofStepIntegrator:
                 pass
             self.lean_server = None
     
-    def verify_proof_with_limit(self, header: str, content: str, description: str) -> bool:
+    def verify_proof_with_limit(self, header: str, content: str, description: str, reset_lean_server: bool = False) -> bool:
         """
         Verify proof with strict verification limit
         Only use for critical verifications (original, hole, final)
@@ -78,6 +78,8 @@ class MinimalLeanProofStepIntegrator:
         
         pipeline = DecomposeHoleMergePipeline()
         modified_header = f"{header.strip()}\nset_option debug.skipKernelTC true\n"
+        if reset_lean_server:
+            pipeline.lean_verifier.reset() # this is to solve lean server shutdown after some time.
         return pipeline.verify_lean_code(modified_header, content)
     
     def extract_proof_states_from_sorries(self, header: str, lean_code: str) -> Dict[int, ProofState]:

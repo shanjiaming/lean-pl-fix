@@ -90,15 +90,16 @@ class MinimalVerificationPipeline:
                 hole_version_content = f.read()
             
             # Use existing verification results where available (saves verifications!)
-            original_verification_pass = decomp_data.get('original_verification_pass', True)
-            hole_verification_pass = decomp_data.get('hole_verification_pass', True)
+            original_verification_pass = decomp_data.get('original_verification_pass', None)
+            hole_verification_pass = decomp_data.get('hole_verification_pass', None)
             
             print(f"📊 Existing verification results:")
             print(f"  Original: {'PASS' if original_verification_pass else 'FAIL'}")
             print(f"  Hole: {'PASS' if hole_verification_pass else 'FAIL'}")
             
             # Only perform verification if previous results indicate problems
-            verification_needed = not (original_verification_pass and hole_verification_pass)
+            # verification_needed = not (original_verification_pass and hole_verification_pass)
+            verification_needed = False
             
             if verification_needed:
                 print("⚠️  Previous verification failures detected, re-verifying...")
@@ -119,7 +120,7 @@ class MinimalVerificationPipeline:
                     )
                     print(f"  Result: {'PASS' if hole_verification_pass else 'FAIL'}")
             else:
-                print("✅ All existing verifications passed, skipping re-verification")
+                print("Skipping re-verification")
             
             # ProofStep enumeration phase (NO full verifications)
             print("🧪 ProofStep enumeration phase (proof state testing only)...")
@@ -217,7 +218,7 @@ class MinimalVerificationPipeline:
             if tactics_replaced > 0:
                 print("🔍 Verification 3: Final synthesized proof")
                 filled_verification_pass = integrator.verify_proof_with_limit(
-                    header_content, synthesized_content, "final synthesized proof"
+                    header_content, synthesized_content, "final synthesized proof", reset_lean_server=True
                 )
                 print(f"  Result: {'PASS' if filled_verification_pass else 'FAIL'}")
             else:

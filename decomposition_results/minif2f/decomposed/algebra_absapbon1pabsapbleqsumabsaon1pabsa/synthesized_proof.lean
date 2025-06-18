@@ -54,32 +54,32 @@ theorem algebra_absapbon1pabsapbleqsumabsaon1pabsa (a b : ℝ) :
     have h₁₂ : abs a / (1 + (abs a + abs b)) ≤ abs a / (1 + abs a) := by
       have h₁₃ : 0 ≤ abs a := abs_nonneg a
       have h₁₄ : 0 < 1 + abs a := by linarith
-      have h₁₅ : 0 < 1 + (abs a + abs b) := by admit
-      have h₁₆ : 0 < 1 + abs a + abs b := by admit
+      have h₁₅ : 0 < 1 + (abs a + abs b) := by linarith
+      have h₁₆ : 0 < 1 + abs a + abs b := by linarith
       
       have h₁₇ : 1 + abs a ≤ 1 + (abs a + abs b) := by
-        admit
+        norm_num
       
       have h₁₈ : abs a / (1 + (abs a + abs b)) ≤ abs a / (1 + abs a) := by
         admit
-      admit
+      linarith
     have h₁₃ : abs b / (1 + (abs a + abs b)) ≤ abs b / (1 + abs b) := by
       have h₁₄ : 0 ≤ abs b := abs_nonneg b
-      have h₁₅ : 0 < 1 + abs b := by admit
-      have h₁₆ : 0 < 1 + (abs a + abs b) := by admit
-      have h₁₇ : 0 < 1 + abs a + abs b := by admit
+      have h₁₅ : 0 < 1 + abs b := by linarith
+      have h₁₆ : 0 < 1 + (abs a + abs b) := by linarith
+      have h₁₇ : 0 < 1 + abs a + abs b := by linarith
       
       have h₁₈ : 1 + abs b ≤ 1 + (abs a + abs b) := by
-        admit
+        norm_num
       
       have h₁₉ : abs b / (1 + (abs a + abs b)) ≤ abs b / (1 + abs b) := by
         admit
-      admit
+      linarith
     have h₂₀ : abs a / (1 + (abs a + abs b)) + abs b / (1 + (abs a + abs b)) ≤ abs a / (1 + abs a) + abs b / (1 + abs b) := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h₅ : abs (a + b) / (1 + abs (a + b)) ≤ abs a / (1 + abs a) + abs b / (1 + abs b) := by
-    admit
+    linarith
   
-  admit
+  linarith

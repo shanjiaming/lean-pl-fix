@@ -24,16 +24,16 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
     have h₆ : abs (a - 1 / a) = a - 1 / a := by
       admit
     rw [h₆] at h₂
-    have h₇ : a - 1 / a = 1 := by admit
+    have h₇ : a - 1 / a = 1 := by linarith
     have h₈ : a > 0 := h₀.1
-    have h₉ : a ≠ 0 := by admit
+    have h₉ : a ≠ 0 := by linarith
     have h₁₀ : a ^ 2 - a - 1 = 0 := by
       admit
     have h₁₁ : a = (1 + Real.sqrt 5) / 2 := by
       have h₁₂ : a = (1 + Real.sqrt 5) / 2 ∨ a = (1 - Real.sqrt 5) / 2 := by
         admit
       admit
-    admit
+    linarith
   
   have h₅ : a < 1 → a = (-1 + Real.sqrt 5) / 2 := by
     intro h₅
@@ -46,28 +46,28 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
           have h₆₆ : 0 < a := h₀.1
           have h₆₇ : 1 / a > 1 := by
             admit
-          admit
+          linarith
         have h₆₈ : a - 1 / a < 0 := by
           have h₆₉ : 1 / a > 1 := h₆₄
           have h₆₁₀ : a < 1 := h₅
           have h₆₁₁ : a - 1 / a < 0 := by
-            admit
-          admit
-        admit
-      admit
+            linarith
+          linarith
+        linarith
+      linarith
     have h₇ : abs (a - 1 / a) = -(a - 1 / a) := by
       admit
     rw [h₇] at h₂
-    have h₈ : -(a - 1 / a) = 1 := by admit
+    have h₈ : -(a - 1 / a) = 1 := by linarith
     have h₉ : a > 0 := h₀.1
-    have h₁₀ : a ≠ 0 := by admit
+    have h₁₀ : a ≠ 0 := by linarith
     have h₁₁ : a ^ 2 + a - 1 = 0 := by
       admit
     have h₁₂ : a = (-1 + Real.sqrt 5) / 2 := by
       have h₁₃ : a = (-1 + Real.sqrt 5) / 2 ∨ a = (-1 - Real.sqrt 5) / 2 := by
         admit
       admit
-    admit
+    linarith
   
   have h₆ : b ≥ 1 → b = (1 + Real.sqrt 5) / 2 := by
     intro h₆
@@ -80,21 +80,21 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
           have h₇₅ : b ≥ 1 := h₇₁
           have h₇₆ : 0 < b := h₇₂
           admit
-        admit
-      admit
+        linarith
+      linarith
     have h₈ : abs (b - 1 / b) = b - 1 / b := by
       admit
     rw [h₈] at h₃
-    have h₉ : b - 1 / b = 1 := by admit
+    have h₉ : b - 1 / b = 1 := by linarith
     have h₁₀ : b > 0 := h₀.2
-    have h₁₁ : b ≠ 0 := by admit
+    have h₁₁ : b ≠ 0 := by linarith
     have h₁₂ : b ^ 2 - b - 1 = 0 := by
       admit
     have h₁₃ : b = (1 + Real.sqrt 5) / 2 := by
       have h₁₄ : b = (1 + Real.sqrt 5) / 2 ∨ b = (1 - Real.sqrt 5) / 2 := by
         admit
       admit
-    admit
+    linarith
   
   have h₇ : b < 1 → b = (-1 + Real.sqrt 5) / 2 := by
     intro h₇
@@ -107,28 +107,28 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
           have h₈₆ : 0 < b := h₀.2
           have h₈₇ : 1 / b > 1 := by
             admit
-          admit
+          linarith
         have h₈₈ : b - 1 / b < 0 := by
           have h₈₉ : 1 / b > 1 := h₈₄
           have h₈₁₀ : b < 1 := h₇
           have h₈₁₁ : b - 1 / b < 0 := by
-            admit
-          admit
-        admit
-      admit
+            linarith
+          linarith
+        linarith
+      linarith
     have h₉ : abs (b - 1 / b) = -(b - 1 / b) := by
       admit
     rw [h₉] at h₃
-    have h₁₀ : -(b - 1 / b) = 1 := by admit
+    have h₁₀ : -(b - 1 / b) = 1 := by linarith
     have h₁₁ : b > 0 := h₀.2
-    have h₁₂ : b ≠ 0 := by admit
+    have h₁₂ : b ≠ 0 := by linarith
     have h₁₃ : b ^ 2 + b - 1 = 0 := by
       admit
     have h₁₄ : b = (-1 + Real.sqrt 5) / 2 := by
       have h₁₅ : b = (-1 + Real.sqrt 5) / 2 ∨ b = (-1 - Real.sqrt 5) / 2 := by
         admit
       admit
-    admit
+    linarith
   
   have h₈ : a = (1 + Real.sqrt 5) / 2 ∨ a = (-1 + Real.sqrt 5) / 2 := by
     by_cases h₈ : a ≥ 1
@@ -136,8 +136,8 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
       exact Or.inl h₈₁
     · have h₈₂ : a < 1 := by
         by_contra h₈₂
-        have h₈₃ : a ≥ 1 := by admit
-        admit
+        have h₈₃ : a ≥ 1 := by linarith
+        linarith
       have h₈₄ : a = (-1 + Real.sqrt 5) / 2 := h₅ h₈₂
       admit
   
@@ -147,8 +147,8 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
       exact Or.inl h₉₁
     · have h₉₂ : b < 1 := by
         by_contra h₉₂
-        have h₉₃ : b ≥ 1 := by admit
-        admit
+        have h₉₃ : b ≥ 1 := by linarith
+        linarith
       have h₉₄ : b = (-1 + Real.sqrt 5) / 2 := h₇ h₉₂
       admit
   
@@ -157,4 +157,4 @@ theorem amc12a_2002_p13 (a b : ℝ) (h₀ : 0 < a ∧ 0 < b) (h₁ : a ≠ b) (h
     have h₁₀₂ : b = (1 + Real.sqrt 5) / 2 ∨ b = (-1 + Real.sqrt 5) / 2 := h₉
     admit
   
-  admit
+  linarith
