@@ -6,7 +6,7 @@ theorem complex_have_chain (n : ℕ) (h : n > 0) : n + n ≥ n := by
     have h4 : n + n = n + n := rfl
     have h5 : n + 1 ≤ n + n := by
       linarith
-    norm_num
-  have h6 : n + 1 ≥ n := by
     linarith
+  have h6 : n + 1 ≥ n := by
+    norm_num
   norm_num

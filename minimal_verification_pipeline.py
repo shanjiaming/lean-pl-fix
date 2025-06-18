@@ -31,6 +31,7 @@ class MinimalVerificationResult:
     proof_state_tests: int
     processing_time_seconds: float
     constraint_satisfied: bool
+    tactic_attempts: Optional[Dict] = None
 
 class MinimalVerificationPipeline:
     """
@@ -131,7 +132,7 @@ class MinimalVerificationPipeline:
             
             # Identify enumerable vs skip indices using the clear version content
             session_analyzer = ProofStepIntegrator(header_content)
-            session = session_analyzer.initialize_session(clear_with_macros)
+            session = session_analyzer.initialize_session(header_content, clear_with_macros)
             enumerable_indices = session.enumerable_indices
             
             print(f"  🔍 Found {len(session.sorry_map)} sorry mappings")
@@ -145,11 +146,12 @@ class MinimalVerificationPipeline:
             
             # Use the clear version content with clear statements for ProofStep
             proofstep_results = integrator.enumerate_tactics_with_proof_states(
-                header_content, clear_with_macros, unigrams, enumerable_indices
+                header_content, clear_with_macros, unigrams, enumerable_indices, session.sorry_map
             )
             
             successful_tactics = proofstep_results['successful_tactics']
-            proof_state_tests = proofstep_results['proof_state_tests']
+            tactic_attempts = proofstep_results['tactic_attempts']
+            proof_state_tests = sum(len(attempts) for attempts in tactic_attempts.values())
             
             # Create synthesized version by directly replacing hole uses with tactics
             print("📝 Creating synthesized version by directly replacing holes with tactics...")
@@ -252,7 +254,8 @@ class MinimalVerificationPipeline:
                 successful_tactics=successful_tactics,
                 proof_state_tests=proof_state_tests,
                 processing_time_seconds=processing_time,
-                constraint_satisfied=constraint_satisfied
+                constraint_satisfied=constraint_satisfied,
+                tactic_attempts=tactic_attempts
             )
             
             # Save minimal verification result to decomposed directory
@@ -269,6 +272,7 @@ class MinimalVerificationPipeline:
                 "synthesized_verification_pass": result.filled_verification_pass,  # alias for clarity
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
                 "proof_state_tests": result.proof_state_tests,
+                "tactic_attempts": result.tactic_attempts,
                 "processing_time_seconds": result.processing_time_seconds,
                 "constraint_satisfied": result.constraint_satisfied,
                 "tactics_replaced": tactics_replaced,
@@ -318,7 +322,7 @@ class MinimalVerificationPipeline:
         constraint_violations = 0
         
         for i, problem in enumerate(problems):
-            print(f"\\n--- Processing {i+1}/{len(problems)}: {problem.problem_id} ---")
+            print(f"\n--- Processing {i+1}/{len(problems)}: {problem.problem_id} ---")
             
             try:
                 result = self.process_problem_with_constraint(problem)
@@ -343,7 +347,8 @@ class MinimalVerificationPipeline:
                     successful_tactics={},
                     proof_state_tests=0,
                     processing_time_seconds=0.0,
-                    constraint_satisfied=False
+                    constraint_satisfied=False,
+                    tactic_attempts={}
                 )
                 results.append(error_result)
                 constraint_violations += 1
@@ -352,7 +357,7 @@ class MinimalVerificationPipeline:
         self._save_dataset_summary(dataset_name, results)
         
         # Print summary
-        print(f"\\n{'='*80}")
+        print(f"\n{'='*80}")
         print(f"🎉 MINIMAL VERIFICATION PIPELINE SUMMARY")
         print(f"Dataset: {dataset_name}")
         print(f"Problems processed: {len(results)}")
@@ -387,6 +392,7 @@ class MinimalVerificationPipeline:
                 "filled_verification_pass": result.filled_verification_pass,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
                 "proof_state_tests": result.proof_state_tests,
+                "tactic_attempts": result.tactic_attempts,
                 "processing_time_seconds": result.processing_time_seconds,
                 "constraint_satisfied": result.constraint_satisfied,
                 "timestamp": datetime.now().isoformat()
@@ -429,11 +435,11 @@ def main():
     # Check if all constraints were satisfied
     violations = [r for r in results if not r.constraint_satisfied]
     if not violations:
-        print("\\n🎉 ALL CONSTRAINTS SATISFIED!")
+        print("\n🎉 ALL CONSTRAINTS SATISFIED!")
         print("✅ Maximum 3 verifications per problem maintained")
         print("✅ All tactic testing done via proof state manipulation")
     else:
-        print(f"\\n⚠️  {len(violations)} constraint violations detected")
+        print(f"\n⚠️  {len(violations)} constraint violations detected")
 
 if __name__ == "__main__":
     main()

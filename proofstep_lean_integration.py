@@ -106,32 +106,26 @@ class MinimalLeanProofStepIntegrator:
             
             try:
                 # Get ProofStep response with sorry information
+                print("\n--- Analyzing Lean Code for Proof States ---")
+                print(f"{header}\n\n{lean_code}")
+                print("------------------------------------------")
                 response = self.lean_server.run(FileCommand(path=temp_file))
                 print(f"📊 ProofStep response received: {len(response.sorries)} sorries")
                 
-                proof_states = {}
-                
-                # Map each sorry to its proof_state index
-                for sorry_idx, sorry in enumerate(response.sorries):
-                    proof_state_id = sorry.proof_state
-                    
-                    proof_states[sorry_idx] = ProofState(
-                        sorry_index=sorry_idx,
-                        goals=[sorry.goal],  # The goal text from ProofStep
-                        context=f"ProofState_{proof_state_id}",
-                        position_info=f"line_{sorry.start_pos.line}_col_{sorry.start_pos.column}"
-                    )
-                    
-                    print(f"  Sorry {sorry_idx}: proof_state={proof_state_id}, position=({sorry.start_pos.line}, {sorry.start_pos.column})")
-                
-                return proof_states
+                # Sort server sorries by position to ensure deterministic matching
+                server_sorries = sorted(response.sorries, key=lambda s: (s.start_pos.line, s.start_pos.column))
+                for s in server_sorries:
+                    print(f"  - Server found sorry at position=({s.start_pos.line}, {s.start_pos.column}), proof_state={s.proof_state}")
+
+                return server_sorries
                 
             finally:
                 os.unlink(temp_file)
             
         except Exception as e:
             print(f"Warning: Lean server proof state extraction failed: {e}")
-            return self._simulate_proof_states(lean_code)
+            # On failure, return an empty list instead of simulating
+            return []
     
     def _simulate_proof_states(self, lean_code: str) -> Dict[int, ProofState]:
         """
@@ -180,9 +174,9 @@ class MinimalLeanProofStepIntegrator:
             
             # Check if tactic application was successful
             # Check if tactic really succeeded
-            if hasattr(response, 'message'):
+            if response.get_errors():
                 # LeanError - tactic failed completely
-                error_msg = response.message
+                error_msg = response.get_errors()
                 print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: {error_msg[:100]}...")
                 return TacticResult(
                     success=False,
@@ -262,7 +256,8 @@ class MinimalLeanProofStepIntegrator:
     
     def enumerate_tactics_with_proof_states(self, header: str, clear_version: str, 
                                           tactics: List[str], 
-                                          enumerable_indices: List[int]) -> Dict:
+                                          enumerable_indices: List[int],
+                                          sorry_map: Dict[int, 'SorryInfo']) -> Dict:
         """
         Main enumeration method using proof states
         Satisfies the constraint: maximum 3 full verifications, all testing via proof states
@@ -271,15 +266,76 @@ class MinimalLeanProofStepIntegrator:
         print(f"Enumerable indices: {enumerable_indices}")
         print(f"Tactics to test: {tactics}")
         
-        # Extract proof states (no full verification)
-        proof_states = self.extract_proof_states_from_sorries(header, clear_version)
-        print(f"📊 Extracted {len(proof_states)} proof states")
+        # --- Step 1: Extract proof states from Lean Server ---
+        # This response is a list of sorries sorted by position, from the server's perspective
+        server_sorries = self.extract_proof_states_from_sorries(header, clear_version)
+        if not server_sorries:
+            print("❌ Could not extract any proof states from Lean server. Aborting enumeration.")
+            return { 'successful_tactics': {}, 'tactic_attempts': {}, 'proof_states_extracted': 0 }
+
+        # --- Step 2: Match parser sorries with server sorries ---
+        # Create a map from line number to a list of our parser's sorry info on that line.
+        # This handles multiple sorries on the same line.
+        parser_sorries_by_line = {}
+        for idx, info in sorry_map.items():
+            if info.line not in parser_sorries_by_line:
+                parser_sorries_by_line[info.line] = []
+            # Store 0-indexed column and our original parser index
+            parser_sorries_by_line[info.line].append({'col': info.column, 'idx': idx})
+        
+        # proof_states dictionary will be keyed by our parser's sorry_idx
+        proof_states: Dict[int, ProofState] = {}
+        unmatched_server_sorries = []
+        
+        print("\n--- Matching Parser Sorries to Server Proof States ---")
+        for server_sorry in server_sorries:
+            server_line = server_sorry.start_pos.line
+            server_col = server_sorry.start_pos.column  # 1-indexed
+
+            matched_idx = None
+            if server_line in parser_sorries_by_line and parser_sorries_by_line[server_line]:
+                # Find the best column match on this line. Compare server's 1-indexed col with our 0-indexed col.
+                candidates = parser_sorries_by_line[server_line]
+                best_match = min(candidates, key=lambda c: abs(c['col'] - (server_col - 1)))
+                
+                # Check if the match is reasonable (e.g., within 5 columns)
+                if abs(best_match['col'] - (server_col - 1)) < 5:
+                    matched_idx = best_match['idx']
+                    proof_state_id = server_sorry.proof_state
+                    
+                    proof_states[matched_idx] = ProofState(
+                        sorry_index=matched_idx,
+                        goals=[server_sorry.goal],
+                        context=f"ProofState_{proof_state_id}",
+                        position_info=f"line_{server_line}_col_{server_col}"
+                    )
+                    
+                    # Remove matched candidate to avoid re-matching it
+                    parser_sorries_by_line[server_line].remove(best_match)
+                    print(f"  ✅ Matched parser sorry_idx {matched_idx} (pos {server_line}:{best_match['col']+1}) to server proof_state {proof_state_id}")
+            
+            if matched_idx is None:
+                unmatched_server_sorries.append(server_sorry)
+
+        # Report any sorries that couldn't be matched
+        if unmatched_server_sorries:
+            print(f"⚠️  {len(unmatched_server_sorries)} sorries from Lean server could not be matched:")
+            for s in unmatched_server_sorries:
+                print(f"    - Unmatched server sorry at position=({s.start_pos.line}, {s.start_pos.column})")
+
+        unmatched_parser_count = sum(len(items) for items in parser_sorries_by_line.values())
+        if unmatched_parser_count > 0:
+            print(f"⚠️  {unmatched_parser_count} sorries from our parser could not be matched:")
+            for line, items in parser_sorries_by_line.items():
+                for item in items:
+                     print(f"    - Unmatched parser sorry_idx {item['idx']} at position=({line}, {item['col'] + 1})")
+
+        # --- Step 3: Run Tactic Enumeration ---
+        print(f"📊 Correctly matched {len(proof_states)} proof states for enumeration.")
         
         results = {
-            'successful_tactics': {},
-            'failed_attempts': 0,
-            'successful_attempts': 0,
-            'proof_state_tests': 0,
+            'successful_tactics': {},  # sorry_idx -> first successful tactic
+            'tactic_attempts': {},     # sorry_idx -> list of {'tactic': str, 'success': bool, 'error': str}
             'proof_states_extracted': len(proof_states)
         }
         
@@ -292,123 +348,55 @@ class MinimalLeanProofStepIntegrator:
             proof_state = proof_states[sorry_idx]
             print(f"🎯 Testing tactics on sorry index {sorry_idx}")
             
+            results['tactic_attempts'][sorry_idx] = []
+
             # Test each tactic on this proof state
             for tactic in tactics:
-                results['proof_state_tests'] += 1
-                
                 tactic_result = self.test_tactic_on_proof_state(proof_state, tactic)
+                
+                attempt_details = {
+                    'tactic': tactic,
+                    'success': tactic_result.success,
+                    'error_message': tactic_result.error_message
+                }
+                results['tactic_attempts'][sorry_idx].append(attempt_details)
                 
                 if tactic_result.success:
                     print(f"  ✅ {tactic} succeeded on sorry {sorry_idx}")
                     results['successful_tactics'][sorry_idx] = tactic
-                    results['successful_attempts'] += 1
                     break  # Stop at first successful tactic
                 else:
                     print(f"  ❌ {tactic} failed on sorry {sorry_idx}")
-                    results['failed_attempts'] += 1
         
+        # --- Summary Calculation ---
+        solved_sorries_count = len(results['successful_tactics'])
+        total_tactic_tests = sum(len(attempts) for attempts in results['tactic_attempts'].values())
+        total_sorries_attempted = len(results['tactic_attempts'])
+
         success_rate = 0
-        total_attempts = results['successful_attempts'] + results['failed_attempts']
-        if total_attempts > 0:
-            success_rate = results['successful_attempts'] / total_attempts * 100
+        if total_sorries_attempted > 0:
+            success_rate = solved_sorries_count / total_sorries_attempted * 100
         
         print(f"📈 ProofStep Results:")
-        print(f"  Successful tactics: {len(results['successful_tactics'])}")
-        print(f"  Success rate: {success_rate:.1f}%")
-        print(f"  Total proof state tests: {results['proof_state_tests']}")
-        print(f"  Full verifications used: {self.verification_count}/{self.max_verifications}")
+        print(f"  Solved sorries: {solved_sorries_count}/{total_sorries_attempted}")
+        print(f"  Success rate (per sorry): {success_rate:.1f}%")
+        print(f"  Total proof state tests: {total_tactic_tests}")
         
-        return results
-    
-    def enumerate_tactics_with_proof_states_file(self, file_path: str, 
-                                               tactics: List[str], 
-                                               enumerable_indices: List[int]) -> Dict:
-        """
-        Main enumeration method using proof states from existing file
-        Satisfies the constraint: maximum 3 full verifications, all testing via proof states
-        """
-        print(f"🚀 Starting ProofStep enumeration with file: {file_path}")
-        print(f"Enumerable indices: {enumerable_indices}")
-        print(f"Tactics to test: {tactics}")
+        # Detailed breakdown
+        print("  --- Detailed Tactic Results ---")
+        for sorry_idx, attempts in results['tactic_attempts'].items():
+            if sorry_idx in results['successful_tactics']:
+                tactic = results['successful_tactics'][sorry_idx]
+                print(f"  - Sorry {sorry_idx}: SOLVED with '{tactic}'")
+                for attempt in attempts:
+                    status = "✅" if attempt['success'] else "❌"
+                    print(f"    {status} {attempt['tactic']}")
+            else:
+                print(f"  - Sorry {sorry_idx}: NOT SOLVED")
+                for attempt in attempts:
+                    error_info = f" ({attempt['error_message']})" if attempt['error_message'] else ""
+                    print(f"    ❌ {attempt['tactic']}{error_info}")
         
-        # Extract proof states directly from file (no full verification)
-        if not self.lean_server:
-            self.initialize_lean_server()
-        
-        proof_states = {}
-        
-        if self.lean_server:
-            try:
-                from lean_interact import FileCommand
-                
-                # Get ProofStep response with sorry information
-                response = self.lean_server.run(FileCommand(path=file_path))
-                
-                # Check if response is error or has sorries
-                if hasattr(response, 'message'):  # LeanError
-                    print(f"⚠️  Lean error in file: {response.message[:200]}...")
-                    return {'successful_tactics': {}, 'failed_attempts': 0, 'successful_attempts': 0, 'proof_state_tests': 0}
-                
-                print(f"📊 ProofStep response received: {len(response.sorries)} sorries")
-                
-                # Map each sorry to its proof_state index
-                for sorry_idx, sorry in enumerate(response.sorries):
-                    proof_state_id = sorry.proof_state
-                    
-                    proof_states[sorry_idx] = ProofState(
-                        sorry_index=sorry_idx,
-                        goals=[sorry.goal],  # The goal text from ProofStep
-                        context=f"ProofState_{proof_state_id}",
-                        position_info=f"line_{sorry.start_pos.line}_col_{sorry.start_pos.column}"
-                    )
-                    
-                    print(f"  Sorry {sorry_idx}: proof_state={proof_state_id}, position=({sorry.start_pos.line}, {sorry.start_pos.column})")
-                
-            except Exception as e:
-                print(f"Warning: File-based proof state extraction failed: {e}")
-                return {'successful_tactics': {}, 'failed_attempts': 0, 'successful_attempts': 0, 'proof_state_tests': 0}
-        
-        results = {
-            'successful_tactics': {},
-            'failed_attempts': 0,
-            'successful_attempts': 0,
-            'proof_state_tests': 0,
-            'proof_states_extracted': len(proof_states)
-        }
-        
-        # Test tactics on enumerable proof states only
-        for sorry_idx in enumerable_indices:
-            if sorry_idx not in proof_states:
-                print(f"⚠️  Skipping sorry index {sorry_idx} - no proof state available")
-                continue
-                
-            proof_state = proof_states[sorry_idx]
-            print(f"🎯 Testing tactics on sorry index {sorry_idx} (proof_state {proof_state.context.split('_')[1]})")
-            
-            # Test each tactic on this proof state
-            for tactic in tactics:
-                results['proof_state_tests'] += 1
-                
-                tactic_result = self.test_tactic_on_proof_state(proof_state, tactic)
-                
-                if tactic_result.success:
-                    print(f"  ✅ {tactic} succeeded on sorry {sorry_idx}")
-                    results['successful_tactics'][sorry_idx] = tactic
-                    results['successful_attempts'] += 1
-                    break  # Stop at first successful tactic
-                else:
-                    print(f"  ❌ {tactic} failed on sorry {sorry_idx}")
-                    results['failed_attempts'] += 1
-        
-        success_rate = 0
-        total_attempts = results['successful_attempts'] + results['failed_attempts']
-        if total_attempts > 0:
-            success_rate = results['successful_attempts'] / total_attempts * 100
-        
-        print(f"📈 ProofStep Results:")
-        print(f"  Successful tactics: {len(results['successful_tactics'])}")
-        print(f"  Success rate: {success_rate:.1f}%")
-        print(f"  Total proof state tests: {results['proof_state_tests']}")
         print(f"  Full verifications used: {self.verification_count}/{self.max_verifications}")
         
         return results

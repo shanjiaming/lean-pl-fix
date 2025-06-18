@@ -196,23 +196,34 @@ class ProofStepIntegrator:
         
         return sorry_map
     
-    def initialize_session(self, lean_code: str) -> ProofStepSession:
+    def initialize_session(self, header_content: str, lean_code: str) -> ProofStepSession:
         """
         Initialize a ProofStep session for the given Lean code
         
         Args:
+            header_content: The header part of the file (e.g., imports)
             lean_code: Lean code with hole and skip macros
             
         Returns:
             ProofStepSession object
         """
-        sorry_map = self.create_sorry_map(lean_code)
+        full_code = f"{header_content}\n\n{lean_code}"
+        sorry_map = self.create_sorry_map(full_code)
+        
+        # We need to adjust the line numbers in sorry_map to be relative to lean_code,
+        # but the parsing was done on full_code.
+        # Let's find the line offset.
+        header_lines = len(header_content.split('\n')) + 1 # +1 for the extra newline
+
+        # Re-create the sorry_map with adjusted line numbers for local usage if needed,
+        # but the primary creation is for position matching against the server.
+        # For now, the sorry_map from full_code is what we need for matching.
         
         enumerable_indices = [idx for idx, info in sorry_map.items() if info.should_enumerate]
         skip_indices = [idx for idx, info in sorry_map.items() if not info.should_enumerate]
         
         session = ProofStepSession(
-            lean_code=lean_code,
+            lean_code=lean_code, # Store original lean_code without header
             sorry_map=sorry_map,
             enumerable_indices=enumerable_indices,
             skip_indices=skip_indices,
@@ -427,7 +438,7 @@ def demo_proofstep_integration():
     
     # Initialize ProofStep integration
     integrator = ProofStepIntegrator(header_content)
-    session = integrator.initialize_session(clear_with_macros)
+    session = integrator.initialize_session(header_content, clear_with_macros)
     
     print(f"\n📊 Session Analysis:")
     print(f"Total sorries: {len(session.sorry_map)}")

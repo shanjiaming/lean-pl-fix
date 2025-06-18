@@ -9,8 +9,8 @@ theorem multiline_have_test (n : ℕ) (h : n > 0) : n + n ≥ n := by
     have h5 : n + 1 ≤ 
         n + n := by
       linarith
-    norm_num
+    linarith
   have h6 : n + 1 ≥ 
       n := by
-    linarith
+    norm_num
   norm_num
