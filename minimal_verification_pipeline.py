@@ -29,6 +29,7 @@ class MinimalVerificationResult:
     filled_verification_pass: bool
     successful_tactics: Dict[int, str]
     tactic_mapping: Dict[str, str]
+    complete_solve_success: bool
     proof_state_tests: int
     processing_time_seconds: float
     constraint_satisfied: bool
@@ -209,6 +210,10 @@ class MinimalVerificationPipeline:
             print(f"  📊 Replaced {tactics_replaced}/{len(all_enumerable_holes)} hole usages with tactics/admit")
             print(f"  🗂️  Complete tactic mapping: {len(tactic_mapping)} holes mapped")
             
+            # Calculate complete solve success
+            no_admits_used = all(tactic != "admit" for tactic in tactic_mapping.values())
+            print(f"  🎯 No admits used: {no_admits_used}")
+            
             # Save synthesized version to decomposed directory
             synthesized_path = os.path.join(decomp_dir, "synthesized_proof.lean")
             with open(synthesized_path, 'w') as f:
@@ -226,6 +231,10 @@ class MinimalVerificationPipeline:
             else:
                 print("⏭️  No tactics replaced, skipping synthesized proof verification")
             
+            # Calculate complete solve success: verification passes AND no admits used
+            complete_solve_success = filled_verification_pass and no_admits_used
+            print(f"  ✨ Complete solve success: {complete_solve_success}")
+            
             # Check constraint satisfaction
             constraint_satisfied = integrator.verification_count <= integrator.max_verifications
             
@@ -242,6 +251,7 @@ class MinimalVerificationPipeline:
                 filled_verification_pass=filled_verification_pass,
                 successful_tactics=successful_tactics,
                 tactic_mapping=tactic_mapping,
+                complete_solve_success=complete_solve_success,
                 proof_state_tests=proof_state_tests,
                 processing_time_seconds=processing_time,
                 constraint_satisfied=constraint_satisfied,
@@ -260,6 +270,7 @@ class MinimalVerificationPipeline:
                 "clear_verification_pass": result.clear_verification_pass,
                 "filled_verification_pass": result.filled_verification_pass,
                 "synthesized_verification_pass": result.filled_verification_pass,  # alias for clarity
+                "complete_solve_success": result.complete_solve_success,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
                 "tactic_mapping": result.tactic_mapping,
                 "proof_state_tests": result.proof_state_tests,
@@ -337,6 +348,7 @@ class MinimalVerificationPipeline:
                     filled_verification_pass=False,
                     successful_tactics={},
                     tactic_mapping={},
+                    complete_solve_success=False,
                     proof_state_tests=0,
                     processing_time_seconds=0.0,
                     constraint_satisfied=False,
@@ -357,7 +369,10 @@ class MinimalVerificationPipeline:
         print(f"Constraint satisfaction rate: {(len(results)-constraint_violations)/len(results)*100:.1f}%")
         
         successful_problems = [r for r in results if r.filled_verification_pass]
+        complete_solve_success_problems = [r for r in results if r.complete_solve_success]
         print(f"Successfully filled proofs: {len(successful_problems)}")
+        print(f"Complete solve success (no admits): {len(complete_solve_success_problems)}")
+        print(f"Complete solve success rate: {len(complete_solve_success_problems)/len(results)*100:.1f}%")
         
         total_proof_state_tests = sum(r.proof_state_tests for r in results)
         total_verifications = sum(r.verification_count for r in results if r.verification_count < 999)
@@ -382,6 +397,7 @@ class MinimalVerificationPipeline:
                 "hole_verification_pass": result.hole_verification_pass,
                 "clear_verification_pass": result.clear_verification_pass,
                 "filled_verification_pass": result.filled_verification_pass,
+                "complete_solve_success": result.complete_solve_success,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
                 "tactic_mapping": result.tactic_mapping,
                 "proof_state_tests": result.proof_state_tests,
@@ -398,6 +414,8 @@ class MinimalVerificationPipeline:
             "constraint_violations": len([r for r in results if not r.constraint_satisfied]),
             "constraint_satisfaction_rate": len([r for r in results if r.constraint_satisfied]) / len(results) * 100,
             "successful_problems": len([r for r in results if r.filled_verification_pass]),
+            "complete_solve_success_problems": len([r for r in results if r.complete_solve_success]),
+            "complete_solve_success_rate": len([r for r in results if r.complete_solve_success]) / len(results) * 100,
             "total_proof_state_tests": sum(r.proof_state_tests for r in results),
             "total_verifications": sum(r.verification_count for r in results if r.verification_count < 999),
             "average_processing_time": sum(r.processing_time_seconds for r in results) / len(results),
