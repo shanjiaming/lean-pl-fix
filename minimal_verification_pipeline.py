@@ -399,25 +399,69 @@ def main():
     """Main function for minimal verification pipeline"""
     import sys
     
-    if len(sys.argv) < 2:
-        print("Usage: python minimal_verification_pipeline.py <dataset> [limit]")
-        print("Example: python minimal_verification_pipeline.py demo 3")
+    usage = (
+        "Usage:\n"
+        "  python minimal_verification_pipeline.py dataset <dataset_name> [limit]\n"
+        "  python minimal_verification_pipeline.py problem <dataset_name> <problem_id>\n\n"
+        "Examples:\n"
+        "  python minimal_verification_pipeline.py dataset demo 3\n"
+        "  python minimal_verification_pipeline.py problem demo demo_complex_p2"
+    )
+
+    if len(sys.argv) < 3:
+        print(usage)
         return
     
-    dataset_name = sys.argv[1]
-    limit = int(sys.argv[2]) if len(sys.argv) > 2 else None
+    mode = sys.argv[1]
     
+    if mode not in ["dataset", "problem"]:
+        print(f"Error: Invalid mode '{mode}'. Must be 'dataset' or 'problem'.")
+        print(usage)
+        return
+
     pipeline = MinimalVerificationPipeline()
-    results = pipeline.process_dataset_with_constraint(dataset_name, limit)
-    
-    # Check if all constraints were satisfied
-    violations = [r for r in results if not r.constraint_satisfied]
-    if not violations:
-        print("\n🎉 ALL CONSTRAINTS SATISFIED!")
-        print("✅ Maximum 3 verifications per problem maintained")
-        print("✅ All tactic testing done via proof state manipulation")
-    else:
-        print(f"\n⚠️  {len(violations)} constraint violations detected")
+
+    if mode == "dataset":
+        dataset_name = sys.argv[2]
+        limit = int(sys.argv[3]) if len(sys.argv) > 3 else None
+        results = pipeline.process_dataset_with_constraint(dataset_name, limit)
+        
+        # Check if all constraints were satisfied
+        violations = [r for r in results if not r.constraint_satisfied]
+        if not violations:
+            print("\n🎉 ALL CONSTRAINTS SATISFIED!")
+            print("✅ Maximum 3 verifications per problem maintained")
+            print("✅ All tactic testing done via proof state manipulation")
+        else:
+            print(f"\n⚠️  {len(violations)} constraint violations detected")
+
+    elif mode == "problem":
+        if len(sys.argv) < 4:
+            print("Error: Missing problem_id for 'problem' mode.")
+            print(usage)
+            return
+        
+        problem_dataset = sys.argv[2]
+        problem_id = sys.argv[3]
+        
+        problem = problem_manager.get_problem(problem_dataset, problem_id)
+        if not problem:
+            print(f"Error: Problem '{problem_id}' not found in dataset '{problem_dataset}'.")
+            return
+        
+        try:
+            print(f"🚀 Processing single problem: {problem_dataset}/{problem_id}")
+            result = pipeline.process_problem_with_constraint(problem)
+            
+            if result.constraint_satisfied:
+                print("\n🎉 CONSTRAINT SATISFIED!")
+            else:
+                print(f"\n⚠️  CONSTRAINT VIOLATION: {result.verification_count}/{result.max_verifications} verifications")
+
+        except Exception as e:
+            import traceback
+            print(f"❌ Error processing {problem.problem_id}: {e}")
+            traceback.print_exc()
 
 if __name__ == "__main__":
     main()
