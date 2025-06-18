@@ -41,4 +41,4 @@ theorem imo_1964_p2 (a b c : ℝ) (h₀ : 0 < a ∧ 0 < b ∧ 0 < c) (h₁ : c <
       linarith
     linarith
   
-  admit
+  linarith

@@ -77,13 +77,13 @@ theorem amc12b_2020_p21 (S : Finset ℕ)
         by_contra h
         have h₁₃ : k ≥ 36 := by linarith
         have h₁₄ : (k + 15 : ℕ) ^ 2 > n := by
-          admit
-        admit
-      have h₁₃ : k ≥ 5 ∨ k ≤ 4 := by admit
+          nlinarith
+        linarith
+      have h₁₃ : k ≥ 5 ∨ k ≤ 4 := by omega
       cases h₁₃ with
       | inl h₁₄ =>
         have h₁₅ : k ≥ 5 := h₁₄
-        have h₁₆ : k ≤ 35 := by admit
+        have h₁₆ : k ≤ 35 := by linarith
         interval_cases k <;> norm_num at h₆ h₁₀ h₁₁ h₈ h₉ h₇ ⊢ <;>
           (try omega) <;>
           (try
@@ -197,7 +197,7 @@ theorem amc12b_2020_p21 (S : Finset ℕ)
           (try omega)
       | inr h₁₄ =>
         have h₁₅ : k ≤ 4 := h₁₄
-        have h₁₆ : k ≥ 0 := by admit
+        have h₁₆ : k ≥ 0 := by norm_num
         interval_cases k <;> norm_num at h₆ h₁₀ h₁₁ h₈ h₉ h₇ ⊢ <;>
           (try omega) <;>
           (try
@@ -222,7 +222,7 @@ theorem amc12b_2020_p21 (S : Finset ℕ)
     · 
       intro h
       have h₁ : n = 400 ∨ n = 470 ∨ n = 2290 ∨ n = 2360 ∨ n = 2430 ∨ n = 2500 := by
-        admit
+        omega
       rcases h₁ with (rfl | rfl | rfl | rfl | rfl | rfl)
       · 
         constructor
@@ -230,7 +230,7 @@ theorem amc12b_2020_p21 (S : Finset ℕ)
           norm_num
         · 
           have h₂ : Int.floor (Real.sqrt 400 : ℝ) = 20 := by
-            admit
+            norm_num
           norm_num [h₂]
           <;>
           nlinarith [Real.sqrt_nonneg 400, Real.sq_sqrt (show 0 ≤ (400 : ℝ) by norm_num)]
@@ -280,10 +280,10 @@ theorem amc12b_2020_p21 (S : Finset ℕ)
           norm_num
         · 
           have h₂ : Int.floor (Real.sqrt 2500 : ℝ) = 50 := by
-            admit
-          admit
+            norm_num
+          norm_num
   
   have h_card : S.card = 6 := by
     admit
   
-  admit
+  linarith

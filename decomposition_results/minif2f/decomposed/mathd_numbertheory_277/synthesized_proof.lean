@@ -25,7 +25,7 @@ theorem mathd_numbertheory_277 (m n : ℕ) (h₀ : Nat.gcd m n = 6) (h₁ : Nat.
     by_contra h
     
     have h₇₁ : m + n < 60 := by
-      admit
+      linarith
     
     have h₇₂ : m ≤ 59 := by
       linarith
@@ -35,14 +35,14 @@ theorem mathd_numbertheory_277 (m n : ℕ) (h₀ : Nat.gcd m n = 6) (h₁ : Nat.
     have h₇₄ : m ≥ 6 := by
       by_contra h₇₄
       have h₇₅ : m ≤ 5 := by
-        admit
+        linarith
       have h₇₆ : m = 0 ∨ m = 1 ∨ m = 2 ∨ m = 3 ∨ m = 4 ∨ m = 5 := by
         nlinarith
       nlinarith
     have h₇₅ : n ≥ 6 := by
       by_contra h₇₅
       have h₇₆ : n ≤ 5 := by
-        admit
+        linarith
       have h₇₇ : n = 0 ∨ n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n = 5 := by
         nlinarith
       nlinarith
@@ -55,4 +55,4 @@ theorem mathd_numbertheory_277 (m n : ℕ) (h₀ : Nat.gcd m n = 6) (h₁ : Nat.
       omega
     
     admit
-  admit
+  linarith

@@ -52,4 +52,4 @@ theorem mathd_numbertheory_711 (m n : ℕ) (h₀ : 0 < m ∧ 0 < n) (h₁ : Nat.
           linarith
         linarith
       linarith
-  admit
+  linarith
