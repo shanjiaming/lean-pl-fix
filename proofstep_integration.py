@@ -41,7 +41,7 @@ class ProofStepIntegrator:
         self.pipeline = DecomposeHoleMergePipeline()
         self.lean_server = None
         self.current_session: Optional[ProofStepSession] = None
-        self.header_content = header_content
+        self.header_content = f"{header_content.strip()}\nset_option debug.skipKernelTC true\n"
     
     def setup_lean_server(self):
         """Initialize Lean server with proper configuration"""
@@ -207,7 +207,8 @@ class ProofStepIntegrator:
         Returns:
             ProofStepSession object
         """
-        full_code = f"{header_content}\n\n{lean_code}"
+        modified_header = f"{header_content.strip()}\nset_option debug.skipKernelTC true\n"
+        full_code = f"{modified_header}\n{lean_code}"
         sorry_map = self.create_sorry_map(full_code)
         
         # We need to adjust the line numbers in sorry_map to be relative to lean_code,

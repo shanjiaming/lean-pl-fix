@@ -13,22 +13,22 @@ theorem aime_1990_p4 (x : ℝ) (h₀ : 0 < x) (h₁ : x ^ 2 - 10 * x - 29 ≠ 0)
     have h₉ : (x ^ 2 - 10 * x - 45) * (x ^ 2 - 10 * x - 69) + (x ^ 2 - 10 * x - 29) * (x ^ 2 - 10 * x - 69) - 2 * (x ^ 2 - 10 * x - 29) * (x ^ 2 - 10 * x - 45) = 0 := by
       have h₉₁ : (x ^ 2 - 10 * x - 45) * (x ^ 2 - 10 * x - 69) + (x ^ 2 - 10 * x - 29) * (x ^ 2 - 10 * x - 69) - 2 * (x ^ 2 - 10 * x - 29) * (x ^ 2 - 10 * x - 45) = 0 := by
         admit
-      admit
+      linarith
     have h₁₀ : x ^ 2 - 10 * x = 39 := by
-      admit
-    admit
+      linarith
+    linarith
   
   have h_final : x = 13 := by
     have h₅ : x = 13 := by
       have h₅₁ : x = 13 ∨ x = -3 := by
         have h₅₂ : x ^ 2 - 10 * x - 39 = 0 := by
-          admit
+          linarith
         have h₅₃ : (x - 13) * (x + 3) = 0 := by
-          admit
+          linarith
         have h₅₄ : x - 13 = 0 ∨ x + 3 = 0 := by
           admit
         admit
-      admit
-    admit
+      nlinarith
+    linarith
   
-  admit
+  linarith
