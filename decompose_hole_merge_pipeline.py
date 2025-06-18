@@ -18,10 +18,8 @@ class DecompositionStep:
     step_id: str
     original_content: str
     hole_content: str
-    filled_content: Optional[str] = None
     original_verification_pass: Optional[bool] = None
     hole_verification_pass: Optional[bool] = None
-    filled_verification_pass: Optional[bool] = None
     additional_info: Optional[Dict] = None
 
 
@@ -77,10 +75,8 @@ class DecomposeHoleMergePipeline:
                 step_id=hole_id,
                 original_content=step_original_content,
                 hole_content=step_hole_content,
-                filled_content=None,
                 original_verification_pass=None, # Will be verified later
                 hole_verification_pass=None, # Will be verified later
-                filled_verification_pass=None,
                 additional_info={
                     "method": "in_place_hole_generation",
                     "hole_id": hole_id,
@@ -133,8 +129,7 @@ class DecomposeHoleMergePipeline:
         return hole_content
     
     def save_decomposition(self, problem_dir: str, problem: Problem, steps: List[DecompositionStep], 
-                          original_verification_pass: Optional[bool] = None, 
-                          filled_verification_pass: Optional[bool] = None) -> str:
+                          original_verification_pass: Optional[bool] = None) -> str:
         """Save decomposition steps to files"""
         # Ensure the directory exists
         os.makedirs(problem_dir, exist_ok=True)
@@ -157,7 +152,6 @@ class DecomposeHoleMergePipeline:
             "header_file": "header.lean",
             "problem_file": "problem.lean",
             "original_verification_pass": original_verification_pass,
-            "filled_verification_pass": filled_verification_pass,
             "hole_verification_pass": False,
             "holes": []
         }
@@ -179,28 +173,18 @@ class DecomposeHoleMergePipeline:
                 hole_data = {
                     "hole_id": hole_id,
                     "original_proof": original_proof,
-                    "best_tactic": step.additional_info.get("best_tactic"),
                     "method": step.additional_info.get("method"),
                     "original_verification_pass": step.original_verification_pass,
                     "hole_verification_pass": step.hole_verification_pass,
-                    "filled_verification_pass": step.filled_verification_pass,
-                    "tactics_tried": step.additional_info.get("tactics_tried"),
-                    "successful_tactics": step.additional_info.get("successful_tactics"),
-                    "failed_tactics": step.additional_info.get("failed_tactics"),
                 }
             else:
                 # Fallback for steps without additional_info
                 hole_data = {
                     "hole_id": step.step_id,
                     "original_proof": step.original_content,
-                    "best_tactic": None,
                     "method": None,
                     "original_verification_pass": step.original_verification_pass,
                     "hole_verification_pass": step.hole_verification_pass,
-                    "filled_verification_pass": None, # No longer applicable
-                    "tactics_tried": None,
-                    "successful_tactics": None,
-                    "failed_tactics": None,
                 }
             metadata["holes"].append(hole_data)
         
@@ -250,12 +234,9 @@ class DecomposeHoleMergePipeline:
                  step = DecompositionStep(
                     step_id=hole_info["hole_id"],
                     original_content=hole_info["original_proof"],
-                    # The new format doesn't have these, provide meaningful defaults.
                     hole_content=hole_info["hole_id"],  # Use the hole ID directly for verification
-                    filled_content=hole_info.get('best_tactic', 'admit'),  # Use actual tactic or admit
                     original_verification_pass=hole_info.get("original_verification_pass"),
                     hole_verification_pass=hole_info.get("hole_verification_pass"),
-                    filled_verification_pass=None, # No longer applicable
                     additional_info=additional_info_compat
                 )
             else:
@@ -264,11 +245,9 @@ class DecomposeHoleMergePipeline:
                     step_id=hole_info["hole_id"],
                     original_content=hole_info["original_content"],
                     hole_content=hole_info["hole_content"],
-                    filled_content=hole_info["filled_content"],
                     # Load verification results if available in metadata
                     original_verification_pass=hole_info["original_verification_pass"],
                     hole_verification_pass=hole_info["hole_verification_pass"],
-                    filled_verification_pass=None, # No longer applicable
                     additional_info=hole_info["additional_info"]
                 )
             steps.append(step)
@@ -293,22 +272,14 @@ class DecomposeHoleMergePipeline:
             with open(os.path.join(problem_dir, f"{step_id}_hole.lean"), "r") as f:
                 hole_content = f.read()
             
-            # Check if filled version exists
-            filled_path = os.path.join(problem_dir, f"{step_id}_filled.lean")
-            filled_content = None
-            if os.path.exists(filled_path):
-                with open(filled_path, "r") as f:
-                    filled_content = f.read()
             
             step = DecompositionStep(
                 step_id=step_id,
                 original_content=original_content,
                 hole_content=hole_content,
-                filled_content=filled_content,
                 # Load verification results if available in metadata
                 original_verification_pass=step_info.get("original_verification_pass"),
                 hole_verification_pass=step_info.get("hole_verification_pass"),
-                filled_verification_pass=None, # No longer applicable
                 additional_info=step_info.get("additional_info")
             )
             steps.append(step)
@@ -349,201 +320,6 @@ class DecomposeHoleMergePipeline:
         # If no errors are found, verification passes.
         return (True, None) if return_error_string else True
 
-    def generate_clear_version(self, hole_content: str, hole_list: List[Dict]) -> str:
-        """
-        Generate clear version of hole content to solve metavariable dependency issues.
-        
-        For each have statement containing a hole, add:
-        - clear h - remove the have statement
-        - have h : [type] := skip_hole - redefine with skip_hole
-        
-        Args:
-            hole_content: Original hole version content
-            hole_list: List of hole information with metadata
-            
-        Returns:
-            str: Clear version with clear statements added
-        """
-        import re
-        
-        print("\n--- Debugging generate_clear_version ---")
-        
-        lines = hole_content.split('\n')
-        result_lines = []
-        processed_haves = set()  # Track processed have variables to avoid duplicates
-        
-        # Log incoming data
-        print(f"hole_content received:\n---\n{hole_content}\n---")
-        print(f"hole_list received: {json.dumps(hole_list, indent=2)}")
-        
-        # Find all hole positions by searching within lines, not matching whole lines
-        hole_positions = {}  # hole_id -> line_number
-        for i, line in enumerate(lines):
-            found_holes_in_line = re.findall(r'\b(hole_\d+)\b', line)
-            for hole_id in found_holes_in_line:
-                if hole_id not in hole_positions:  # Store first occurrence
-                    hole_positions[hole_id] = i
-        
-        print(f"Found holes at positions: {hole_positions}")
-        
-        # Build hole to have mapping using pre-computed information from hole generation
-        hole_to_have_mapping = {}  # hole_id -> (have_var_name, have_type, have_indent)
-        
-        print("Building hole_to_have_mapping...")
-        for hole_info in hole_list:
-            hole_id = hole_info['hole_id']
-            print(f"  Processing hole_info for '{hole_id}':")
-            
-            # Use the have information computed during hole generation if available
-            if 'have_name' in hole_info and 'have_type' in hole_info:
-                have_name = hole_info['have_name']
-                have_type = hole_info['have_type']
-                print(f"    Found pre-computed have_name='{have_name}' and have_type='{have_type}'")
-                
-                if hole_id in hole_positions:
-                    hole_line = hole_positions[hole_id]
-                    
-                    # Find the corresponding have statement to get correct indentation
-                    found_have = False
-                    for i in range(hole_line - 1, -1, -1):
-                        line = lines[i]
-                        
-                        # Check if this line contains the have variable name
-                        if f"have {have_name}" in line:
-                            indent = len(line) - len(line.lstrip())
-                            hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
-                            found_have = True
-                            print(f"    Mapped {hole_id} to have '{have_name}' at line {i+1} (pre-computed). Indent: {indent}")
-                            break
-                    
-                    if not found_have:
-                        print(f"    [WARNING] Could not find have statement for {hole_id} with name {have_name}")
-                else:
-                    print(f"    [WARNING] hole_id '{hole_id}' from hole_list not found in hole_content positions.")
-            else:
-                print(f"    No pre-computed have_name/have_type in hole_info.")
-                # Fallback: parse from have_statement if pre-computed info not available
-                have_statement = hole_info.get('have_statement', '')
-                
-                if have_statement and have_statement.strip().startswith('have '):
-                    have_match = re.match(r'have\s+(\w+)\s*:\s*([^:=]+?)(?:\s*:=|$)', have_statement.strip())
-                    
-                    if have_match:
-                        have_name = have_match.group(1).strip()
-                        have_type = have_match.group(2).strip()
-                        print(f"    Fallback parsed have_name='{have_name}' and have_type='{have_type}'")
-                        
-                        if hole_id in hole_positions:
-                            hole_line = hole_positions[hole_id]
-                            
-                            # Find corresponding have statement for indentation
-                            found_have = False
-                            for i in range(hole_line - 1, -1, -1):
-                                line = lines[i]
-                                
-                                if f"have {have_name}" in line:
-                                    indent = len(line) - len(line.lstrip())
-                                    hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
-                                    found_have = True
-                                    print(f"    Mapped {hole_id} to have '{have_name}' at line {i+1} (fallback). Indent: {indent}")
-                                    break
-                            
-                            if not found_have:
-                                print(f"    [WARNING] Could not find have statement for {hole_id} with name {have_name} using fallback.")
-                        else:
-                            print(f"    [WARNING] hole_id '{hole_id}' from hole_list not found in hole_content positions (fallback).")
-                    else:
-                        print(f"    [WARNING] Could not parse have_statement for {hole_id}: {have_statement[:100]}...")
-                else:
-                    print(f"    No have_statement to fallback on.")
-        
-        print(f"Final hole_to_have_mapping: {hole_to_have_mapping}")
-        
-        # Iterate through all lines and add clear statements
-        print("Iterating through lines to generate clear version...")
-        i = 0
-        while i < len(lines):
-            line = lines[i]
-            result_lines.append(line)
-            
-            # Check if current line contains a hole by searching, not matching whole lines
-            found_holes_in_line = re.findall(r'\b(hole_\d+)\b', line)
-            for hole_id in found_holes_in_line:
-                print(f"  Line {i+1}: Found hole '{hole_id}'.")
-                
-                # Check if this hole needs clear statements
-                if hole_id in hole_to_have_mapping:
-                    have_name, have_type, indent = hole_to_have_mapping[hole_id]
-                    print(f"    '{hole_id}' is in mapping. Corresponds to have '{have_name}'.")
-                    
-                    if have_name not in processed_haves:
-                        indent_str = ' ' * indent
-                        result_lines.append(f"{indent_str}clear {have_name}")
-                        result_lines.append(f"{indent_str}have {have_name} : {have_type} := skip_hole")
-                        processed_haves.add(have_name)
-                        print(f"    Added clear statements for '{have_name}' and marked as processed.")
-                    else:
-                        print(f"    Skipping clear statements for '{have_name}' as it was already processed.")
-                else:
-                    print(f"    '{hole_id}' not in mapping. No clear statements added.")
-            
-            i += 1
-        
-        final_content = '\n'.join(result_lines)
-        print("--- End of generate_clear_version debug ---\n")
-        return final_content
-
-    def test_clear_version_generation(self, problem: Problem) -> Dict:
-        """
-        Test clear version generation functionality
-        
-        Args:
-            problem: Problem to test
-            
-        Returns:
-            Dict: Dictionary containing test results
-        """
-        print(f"Testing clear version generation for {problem.dataset}/{problem.problem_id}")
-        
-        # Get original content
-        header_content = problem_manager.get_header_content(problem)
-        original_content = problem_manager.get_problem_content(problem)
-        
-        # Generate hole version (now includes have information)
-        hole_content, hole_list = self.generate_in_place_holes(problem)
-        
-        # Generate clear version using pre-computed have information
-        clear_content = self.generate_clear_version(hole_content, hole_list)
-        
-        # Verify all versions
-        original_verification = self.verify_lean_code(header_content, original_content)
-        
-        # Generate macros for hole version
-        hole_macros = []
-        for hole_info in hole_list:
-            hole_id = hole_info['hole_id']
-            hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
-        
-        hole_with_macros = '\n'.join(hole_macros) + '\n\n' + hole_content if hole_macros else hole_content
-        hole_verification = self.verify_lean_code(header_content, hole_with_macros)
-        
-        # Add skip_hole macro for clear version
-        clear_macros = hole_macros.copy()
-        clear_macros.append('macro "skip_hole" : term => `(sorry)')
-        clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
-        clear_verification = self.verify_lean_code(header_content, clear_with_macros)
-        
-        return {
-            "original_content": original_content,
-            "hole_content": hole_content,
-            "clear_content": clear_content,
-            "hole_list": hole_list,
-            "verification": {
-                "original": original_verification,
-                "hole": hole_verification,
-                "clear": clear_verification
-            }
-        }
 
 
     def _verify_single_hole_in_context(self, header_content: str, hole_id: str, hole_version_content: str) -> bool:
@@ -577,182 +353,6 @@ class DecomposeHoleMergePipeline:
         # Verify this modified content
         return self.verify_lean_code(header_content, test_content)
 
-    def try_unigram_tactics_proofstep(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
-        """
-        Try unigram tactics using TRUE ProofStep integration with minimal verification.
-        CONSTRAINT: Uses proof state testing, NOT full proof verification for tactics.
-        
-        Args:
-            hole_content: The content containing hole placeholders  
-            header_content: The header content for verification
-            
-        Returns:
-            Tuple of (best_filled_content, additional_info)
-        """
-        from proofstep_lean_integration import MinimalLeanProofStepIntegrator
-        from proofstep_integration import ProofStepIntegrator
-        
-        # Create macros for all holes found in the content
-        import re
-        all_holes = re.findall(r'\bhole(?:_\d+)?\b', hole_content)
-        hole_macros = []
-        for hole in set(all_holes):
-            hole_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
-        
-        # Add skip_hole macro
-        hole_macros.append('macro "skip_hole" : term => `(sorry)')
-        
-        # Create content with macros
-        if hole_macros:
-            macros_str = '\n'.join(hole_macros)
-            hole_content_with_macros = f"""{macros_str}
-
-{hole_content}"""
-        else:
-            hole_content_with_macros = hole_content
-        
-        # Step 1: Use original ProofStep integrator to identify enumerable vs skip indices
-        session_analyzer = ProofStepIntegrator(header_content)
-        session = session_analyzer.initialize_session(hole_content_with_macros)
-        enumerable_indices = session.enumerable_indices
-        
-        print(f"🎯 ProofStep enumeration: {len(enumerable_indices)} enumerable holes, {len(session.skip_indices)} skip holes")
-        
-        # Step 2: Use minimal verification integrator for actual tactic testing
-        minimal_integrator = MinimalLeanProofStepIntegrator()
-        
-        try:
-            # Define unigram tactics to try
-            unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
-            
-            # Run ProofStep enumeration with proof states (NO full verifications)
-            results = minimal_integrator.enumerate_tactics_with_proof_states(
-                header_content, hole_content_with_macros, unigrams, enumerable_indices
-            )
-            
-            # Extract information for compatibility with existing interface
-            additional_info = {
-                "method": "minimal_proofstep_integration",
-                "tactics_tried": unigrams,
-                "successful_tactics": list(results['successful_tactics'].values()),
-                "failed_tactics": [],
-                "best_tactic": None,
-                "enumerable_holes": enumerable_indices,
-                "skip_holes": session.skip_indices,
-                "proof_state_tests": results.get('proof_state_tests', 0),
-                "verification_count": minimal_integrator.verification_count
-            }
-            
-            # Create final content with successful tactics
-            final_content = hole_content_with_macros
-            best_tactics_found = len(results['successful_tactics']) > 0
-            
-            if best_tactics_found:
-                # Replace hole macros with successful tactics
-                for sorry_idx, tactic in results['successful_tactics'].items():
-                    # Find corresponding hole_id from session mapping
-                    sorry_info = session.sorry_map.get(sorry_idx)
-                    if sorry_info and sorry_info.hole_id:
-                        # Replace macro definition with successful tactic
-                        old_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| sorry)'
-                        new_macro = f'macro "{sorry_info.hole_id}" : tactic => `(tactic| {tactic})'
-                        final_content = final_content.replace(old_macro, new_macro)
-                
-                additional_info["best_tactic"] = "multiple_tactics_found"
-            
-            return final_content, additional_info
-            
-        finally:
-            minimal_integrator.shutdown_lean_server()
-
-    def try_unigram_tactics(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
-        """
-        Try different unigram tactics to replace holes and find working solutions.
-        
-        Args:
-            hole_content: The content containing "hole" placeholders (can be "hole" or numbered holes)
-            header_content: The header content for verification
-            
-        Returns:
-            Tuple of (best_filled_content, additional_info)
-        """
-        # Define common single-line unigram tactics to try
-        unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
-        
-        additional_info = {
-            "method": "unigram_tactics",
-            "tactics_tried": unigrams,
-            "successful_tactics": [],
-            "failed_tactics": [],
-            "best_tactic": None
-        }
-        
-        # Create macros for all holes found in the content (for sanity check)
-        import re
-        all_holes = re.findall(r'\bhole(?:_\d+)?\b', hole_content)
-        hole_macros = []
-        for hole in set(all_holes):  # Remove duplicates
-            # Use proper macro syntax without shell-problematic backticks
-            hole_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
-        
-        # Create content with macros for sanity check
-        if hole_macros:
-            macros_str = '\n'.join(hole_macros)
-            hole_content_with_macros = f"""{macros_str}
-
-{hole_content}"""
-        else:
-            hole_content_with_macros = hole_content
-        
-        # First check if hole version passes (sanity check)
-        # sanity_check = self.verify_lean_code(header_content, hole_content_with_macros)
-        
-        # Find the hole placeholder to replace (can be "hole" or "hole_N")
-        import re
-        hole_match = re.search(r'\bhole(?:_\d+)?\b', hole_content)
-        if not hole_match:
-            additional_info["skip_reason"] = "no_hole_found"
-            return hole_content, additional_info
-        
-        hole_placeholder = hole_match.group(0)
-        
-        # Try each unigram tactic
-        for tactic in unigrams:
-            # Use word boundary replacement to avoid replacing parts of other hole names
-            import re
-            candidate_content = re.sub(r'\b' + re.escape(hole_placeholder) + r'\b', tactic, hole_content)
-            
-            # Create macros for remaining holes in candidate content
-            remaining_holes = re.findall(r'\bhole(?:_\d+)?\b', candidate_content)
-            remaining_macros = []
-            for hole in set(remaining_holes):  # Remove duplicates
-                remaining_macros.append(f'macro "{hole}" : tactic => `(tactic| sorry)')
-            
-            # Create candidate content with macros
-            if remaining_macros:
-                remaining_macros_str = '\n'.join(remaining_macros)
-                candidate_with_macros = f"""{remaining_macros_str}
-
-{candidate_content}"""
-            else:
-                candidate_with_macros = candidate_content
-            
-            if self.verify_lean_code(header_content, candidate_with_macros):
-                additional_info["successful_tactics"].append(tactic)
-                if additional_info["best_tactic"] is None:
-                    additional_info["best_tactic"] = tactic
-            else:
-                additional_info["failed_tactics"].append(tactic)
-        
-        # Return best solution or keep hole as fallback
-        if additional_info["best_tactic"]:
-            # Use word boundary replacement to avoid replacing parts of other hole names
-            import re
-            best_content = re.sub(r'\b' + re.escape(hole_placeholder) + r'\b', additional_info["best_tactic"], hole_content)
-            return best_content, additional_info
-        else:
-            # No tactic worked, keep original hole placeholder
-            return hole_content, additional_info
 
     def generate_in_place_holes_from_content(self, content: str, header_content: Optional[str] = None) -> Tuple[str, List[str]]:
         """Generate holes from raw content for testing"""
@@ -1371,8 +971,6 @@ class DecomposeHoleMergePipeline:
                     "dataset": problem.dataset,
                     "original_verification_pass": None,  # Not verified due to length
                     "hole_verification_pass": None,  # Not reached
-                    "clear_verification_pass": None,  # Not reached
-                    "filled_verification_pass": None,  # Not reached
                     "status": "skipped_too_long",
                     "error": error_msg,
                     "code_lines": original_lines,
@@ -1410,8 +1008,6 @@ class DecomposeHoleMergePipeline:
                     "dataset": problem.dataset,
                     "original_verification_pass": False,
                     "hole_verification_pass": None,
-                    "clear_verification_pass": None,
-                    "filled_verification_pass": None,
                     "status": "skipped_heartbeat_timeout",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,
@@ -1450,7 +1046,6 @@ class DecomposeHoleMergePipeline:
                     "dataset": problem.dataset,
                     "original_verification_pass": original_verification_pass,
                     "hole_verification_pass": None,  # Not reached
-                    "clear_verification_pass": None,  # Not reached
                     "status": "error",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,
@@ -1513,30 +1108,6 @@ class DecomposeHoleMergePipeline:
             hole_verification_pass = self.verify_lean_code(header_content, hole_with_macros)
             print(f"Hole version verification: {'PASS' if hole_verification_pass else 'FAIL'}")
             
-            # Step 3.6: Generate and verify clear version
-            current_step = "generating_clear_version"
-            print(f"Step 3.6: Generating clear version...")
-            
-            # Generate clear version using pre-computed have information from hole generation
-            clear_content = self.generate_clear_version(hole_content, hole_list)
-            
-            # Add macros for clear version
-            clear_macros = hole_macros.copy()
-            clear_macros.append('macro "skip_hole" : term => `(sorry)')
-            clear_with_macros = '\n'.join(clear_macros) + '\n\n' + clear_content
-            
-            # Save clear version
-            clear_version_path = os.path.join(problem_dir, "clear_version.lean")
-            with open(clear_version_path, "w") as f:
-                f.write(clear_with_macros)
-            print(f"Clear version saved to: {clear_version_path}")
-            
-            # Verify clear version
-            current_step = "verifying_clear_version"
-            print(f"Step 3.7: Verifying clear version...")
-            clear_verification_pass = self.verify_lean_code(header_content, clear_with_macros)
-            print(f"Clear version verification: {'PASS' if clear_verification_pass else 'FAIL'}")
-            
             # Step 4: Update metadata with verification results
             current_step = "updating_metadata"
             print(f"Step 4: Updating metadata with verification results...")
@@ -1544,7 +1115,6 @@ class DecomposeHoleMergePipeline:
             with open(metadata_path, "r") as f:
                 metadata = json.load(f)
             metadata["hole_verification_pass"] = hole_verification_pass
-            metadata["clear_verification_pass"] = clear_verification_pass
             with open(metadata_path, "w") as f:
                 json.dump(metadata, f, indent=2)
             print(f"Metadata updated with verification results")
@@ -1559,7 +1129,6 @@ class DecomposeHoleMergePipeline:
                 "problem_dir": problem_dir,
                 "original_verification_pass": original_verification_pass,
                 "hole_verification_pass": hole_verification_pass,
-                "clear_verification_pass": clear_verification_pass,
                 "num_steps": len(steps),
                 "processing_time_seconds": processing_time,
                 "status": "success",
@@ -1606,7 +1175,6 @@ class DecomposeHoleMergePipeline:
                 "dataset": problem.dataset,
                 "original_verification_pass": original_verification_pass if 'original_verification_pass' in locals() else None,
                 "hole_verification_pass": hole_verification_pass if 'hole_verification_pass' in locals() else None,
-                "clear_verification_pass": clear_verification_pass if 'clear_verification_pass' in locals() else None,
                 "status": "error",
                 "error": error_summary,
                 "processing_time_seconds": processing_time,
@@ -1727,7 +1295,6 @@ class DecomposeHoleMergePipeline:
             "problem_id": metadata.get("problem_id"),
             "dataset": metadata.get("dataset"),
             "original_verification_pass": metadata.get("original_verification_pass"),
-            "filled_verification_pass": metadata.get("filled_verification_pass"),
             "timestamp": metadata.get("timestamp"),
             "num_steps": len(metadata.get("holes", []))
         }
