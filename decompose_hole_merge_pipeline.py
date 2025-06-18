@@ -1,3 +1,4 @@
+from curses import raw
 import os
 import json
 from typing import Dict, List, Tuple, Optional, Union
@@ -18,8 +19,6 @@ class DecompositionStep:
     step_id: str
     original_content: str
     hole_content: str
-    original_verification_pass: Optional[bool] = None
-    hole_verification_pass: Optional[bool] = None
     additional_info: Optional[Dict] = None
 
 
@@ -75,10 +74,7 @@ class DecomposeHoleMergePipeline:
                 step_id=hole_id,
                 original_content=step_original_content,
                 hole_content=step_hole_content,
-                original_verification_pass=None, # Will be verified later
-                hole_verification_pass=None, # Will be verified later
                 additional_info={
-                    "method": "in_place_hole_generation",
                     "hole_id": hole_id,
                     "original_proof": original_proof,
                 }
@@ -149,20 +145,13 @@ class DecomposeHoleMergePipeline:
             "problem_id": problem.problem_id,
             "dataset": problem.dataset,
             "timestamp": datetime.now().isoformat(),
-            "header_file": "header.lean",
-            "problem_file": "problem.lean",
             "original_verification_pass": original_verification_pass,
-            "hole_verification_pass": False,
+            "hole_verification_pass": None,  # Will be updated later
             "holes": []
         }
         
-        all_holes_verified = True
+        # Process each step to extract hole information
         for step in steps:
-            if not step.hole_verification_pass:
-                all_holes_verified = False
-
-            # The user wants a cleaner, more direct JSON structure.
-            # We will flatten the structure and clean up the content.
             if step.additional_info:
                 # Use the meaningful hole_id from additional_info
                 hole_id = step.additional_info.get("hole_id", step.step_id)
@@ -173,23 +162,10 @@ class DecomposeHoleMergePipeline:
                 hole_data = {
                     "hole_id": hole_id,
                     "original_proof": original_proof,
-                    "method": step.additional_info.get("method"),
-                    "original_verification_pass": step.original_verification_pass,
-                    "hole_verification_pass": step.hole_verification_pass,
                 }
             else:
-                # Fallback for steps without additional_info
-                hole_data = {
-                    "hole_id": step.step_id,
-                    "original_proof": step.original_content,
-                    "method": None,
-                    "original_verification_pass": step.original_verification_pass,
-                    "hole_verification_pass": step.hole_verification_pass,
-                }
+                raise ValueError(f"Step {step.step_id} has no additional_info")
             metadata["holes"].append(hole_data)
-        
-        # Set the global hole_verification_pass status
-        metadata["hole_verification_pass"] = all_holes_verified
 
         with open(os.path.join(problem_dir, "decomposition.json"), "w") as f:
             json.dump(metadata, f, indent=2)
@@ -216,40 +192,12 @@ class DecomposeHoleMergePipeline:
             # This part needs to be robust to both old and new formats.
             # For simplicity, we'll assume the new format might not have all old keys.
             # We reconstruct a شبه-additional_info for compatibility if needed.
-
-            is_new_format = "original_proof" in hole_info
-
-            if is_new_format:
-                 # Re-construct a dictionary that resembles the old additional_info
-                 # to maintain compatibility with DecompositionStep structure.
-                 additional_info_compat = {
-                     "hole_id": hole_info.get("hole_id"),
-                     "original_proof": hole_info.get("original_proof"),
-                     "best_tactic": hole_info.get("best_tactic"),
-                     "method": hole_info.get("method"),
-                     "tactics_tried": hole_info.get("tactics_tried"),
-                     "successful_tactics": hole_info.get("successful_tactics"),
-                     "failed_tactics": hole_info.get("failed_tactics"),
-                 }
-                 step = DecompositionStep(
-                    step_id=hole_info["hole_id"],
-                    original_content=hole_info["original_proof"],
-                    hole_content=hole_info["hole_id"],  # Use the hole ID directly for verification
-                    original_verification_pass=hole_info.get("original_verification_pass"),
-                    hole_verification_pass=hole_info.get("hole_verification_pass"),
-                    additional_info=additional_info_compat
-                )
-            else:
-                # Old format loading logic
-                step = DecompositionStep(
-                    step_id=hole_info["hole_id"],
-                    original_content=hole_info["original_content"],
-                    hole_content=hole_info["hole_content"],
-                    # Load verification results if available in metadata
-                    original_verification_pass=hole_info["original_verification_pass"],
-                    hole_verification_pass=hole_info["hole_verification_pass"],
-                    additional_info=hole_info["additional_info"]
-                )
+            step = DecompositionStep(
+                step_id=hole_info["hole_id"],
+                original_content=hole_info["original_content"],
+                hole_content=hole_info["hole_content"],
+                additional_info=hole_info["additional_info"]
+            )
             steps.append(step)
         
         return steps
@@ -277,9 +225,6 @@ class DecomposeHoleMergePipeline:
                 step_id=step_id,
                 original_content=original_content,
                 hole_content=hole_content,
-                # Load verification results if available in metadata
-                original_verification_pass=step_info.get("original_verification_pass"),
-                hole_verification_pass=step_info.get("hole_verification_pass"),
                 additional_info=step_info.get("additional_info")
             )
             steps.append(step)
@@ -640,9 +585,9 @@ class DecomposeHoleMergePipeline:
                 continue
             
             # --- BEGIN LOGGING FOR DEBUGGING ---
-            print("-" * 50)
-            print(f"Preparing to create hole: {hole_id}")
-            print(f"  Coordinates: Start({start_pos.line}, {start_pos.column}) -> End({end_pos.line}, {end_pos.column})")
+            # print("-" * 50)
+            # print(f"Preparing to create hole: {hole_id}")
+            # print(f"  Coordinates: Start({start_pos.line}, {start_pos.column}) -> End({end_pos.line}, {end_pos.column})")
             
             original_text_to_replace = ""
             if start_line_idx == end_line_idx:
@@ -657,7 +602,7 @@ class DecomposeHoleMergePipeline:
                 lines_to_replace.append(content_lines[end_line_idx][:end_pos.column])
                 original_text_to_replace = "\n".join(lines_to_replace)
 
-            print(f"  Text to be replaced:\n---\n{original_text_to_replace}\n---")
+            # print(f"  Text to be replaced:\n---\n{original_text_to_replace}\n---")
             # --- END LOGGING FOR DEBUGGING ---
             
             # The indentation should be based on the column of the content being replaced.
@@ -970,7 +915,6 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": None,  # Not verified due to length
-                    "hole_verification_pass": None,  # Not reached
                     "status": "skipped_too_long",
                     "error": error_msg,
                     "code_lines": original_lines,
@@ -1007,7 +951,6 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": False,
-                    "hole_verification_pass": None,
                     "status": "skipped_heartbeat_timeout",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,
@@ -1045,7 +988,6 @@ class DecomposeHoleMergePipeline:
                     "problem_id": problem.problem_id,
                     "dataset": problem.dataset,
                     "original_verification_pass": original_verification_pass,
-                    "hole_verification_pass": None,  # Not reached
                     "status": "error",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,
@@ -1174,7 +1116,6 @@ class DecomposeHoleMergePipeline:
                 "problem_id": problem.problem_id,
                 "dataset": problem.dataset,
                 "original_verification_pass": original_verification_pass if 'original_verification_pass' in locals() else None,
-                "hole_verification_pass": hole_verification_pass if 'hole_verification_pass' in locals() else None,
                 "status": "error",
                 "error": error_summary,
                 "processing_time_seconds": processing_time,

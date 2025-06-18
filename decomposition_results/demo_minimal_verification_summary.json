@@ -1,18 +1,18 @@
 {
   "dataset": "demo",
-  "total_problems": 2,
-  "constraint_violations": 0,
-  "constraint_satisfaction_rate": 100.0,
-  "successful_problems": 2,
-  "complete_solve_success_problems": 2,
-  "complete_solve_success_rate": 100.0,
-  "total_original_tactics_tests": 6,
-  "successful_original_tactics_tests": 5,
+  "total_problems": 9,
+  "constraint_violations": 1,
+  "constraint_satisfaction_rate": 88.88888888888889,
+  "successful_problems": 7,
+  "complete_solve_success_problems": 7,
+  "complete_solve_success_rate": 77.77777777777779,
+  "total_original_tactics_tests": 30,
+  "successful_original_tactics_tests": 25,
   "original_tactics_success_rate": 83.33333333333334,
-  "total_proof_state_tests": 12,
-  "total_verifications": 2,
-  "average_processing_time": 17.7442735,
-  "timestamp": "2025-06-18T20:33:51.127460",
+  "total_proof_state_tests": 62,
+  "total_verifications": 8,
+  "average_processing_time": 16.099759111111112,
+  "timestamp": "2025-06-18T22:17:33.956407",
   "results": [
     {
       "problem_id": "demo_complex_p1",
@@ -24,44 +24,49 @@
       "filled_verification_pass": true,
       "complete_solve_success": true,
       "original_tactics_test": {
+        "hole_1": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
         "hole_2": {
           "success": true,
-          "error_message": null
-        },
-        "hole_4": {
-          "success": true,
-          "error_message": null
+          "error_message": null,
+          "original_tactic": "omega"
         },
         "hole_3": {
           "success": true,
-          "error_message": null
+          "error_message": null,
+          "original_tactic": "exact h5"
+        },
+        "hole_4": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
         },
         "hole_5": {
           "success": true,
-          "error_message": null
-        },
-        "hole_1": {
-          "success": true,
-          "error_message": null
+          "error_message": null,
+          "original_tactic": "omega"
         }
       },
       "successful_tactics": {
+        "hole_1": "linarith",
         "hole_2": "linarith",
-        "hole_4": "linarith",
         "hole_3": "linarith",
-        "hole_5": "norm_num",
-        "hole_1": "norm_num"
+        "hole_4": "norm_num",
+        "hole_5": "norm_num"
       },
       "tactic_mapping": {
+        "hole_1": "linarith",
         "hole_2": "linarith",
-        "hole_4": "linarith",
         "hole_3": "linarith",
-        "hole_5": "norm_num",
-        "hole_1": "norm_num"
+        "hole_4": "norm_num",
+        "hole_5": "norm_num"
       },
       "proof_state_tests": 8,
       "tactic_attempts": {
-        "hole_2": [
+        "hole_1": [
           {
             "tactic": "norm_num",
             "success": false,
@@ -73,7 +78,7 @@
             "error_message": null
           }
         ],
-        "hole_4": [
+        "hole_2": [
           {
             "tactic": "norm_num",
             "success": false,
@@ -97,14 +102,14 @@
             "error_message": null
           }
         ],
-        "hole_5": [
+        "hole_4": [
           {
             "tactic": "norm_num",
             "success": true,
             "error_message": null
           }
         ],
-        "hole_1": [
+        "hole_5": [
           {
             "tactic": "norm_num",
             "success": true,
@@ -112,9 +117,9 @@
           }
         ]
       },
-      "processing_time_seconds": 18.103856,
+      "processing_time_seconds": 18.420154,
       "constraint_satisfied": true,
-      "timestamp": "2025-06-18T20:33:51.127433"
+      "timestamp": "2025-06-18T22:17:33.956350"
     },
     {
       "problem_id": "demo_complex_p3",
@@ -128,7 +133,8 @@
       "original_tactics_test": {
         "hole_1": {
           "success": false,
-          "error_message": "Lean error:\n<input>:1:18: expected end of input"
+          "error_message": "Lean error:\ntactic 'cases' failed, major premise type is not an inductive type\n  a = 0 \u2192 \u00acb = 0\n\nExplanation: the 'cases' tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.\na b : \u2115\nh : a + b = 0\nh_contra : a = 0 \u2192 \u00acb = 0\n\u22a2 False",
+          "original_tactic": "by_contra h_contra\nsimp at h_contra\ncases' h_contra with ha hb"
         }
       },
       "successful_tactics": {
@@ -162,9 +168,625 @@
           }
         ]
       },
-      "processing_time_seconds": 17.384691,
+      "processing_time_seconds": 17.114593,
       "constraint_satisfied": true,
-      "timestamp": "2025-06-18T20:33:51.127443"
+      "timestamp": "2025-06-18T22:17:33.956363"
+    },
+    {
+      "problem_id": "demo_complex_p4",
+      "dataset": "demo",
+      "verification_count": 1,
+      "max_verifications": 3,
+      "original_verification_pass": false,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "complete_solve_success": true,
+      "original_tactics_test": {
+        "hole_1": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "norm_num\nrw [\u2190 h]"
+        },
+        "hole_2": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_3": {
+          "success": false,
+          "error_message": "Lean error:\nno goals to be solved",
+          "original_tactic": "rw [h]\nomega"
+        },
+        "hole_4": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_5": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h2"
+        }
+      },
+      "successful_tactics": {
+        "hole_1": "linarith",
+        "hole_2": "linarith",
+        "hole_3": "linarith",
+        "hole_4": "linarith",
+        "hole_5": "linarith"
+      },
+      "tactic_mapping": {
+        "hole_1": "linarith",
+        "hole_2": "linarith",
+        "hole_3": "linarith",
+        "hole_4": "linarith",
+        "hole_5": "linarith"
+      },
+      "proof_state_tests": 10,
+      "tactic_attempts": {
+        "hole_1": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_2": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_3": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_4": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_5": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ]
+      },
+      "processing_time_seconds": 18.69479,
+      "constraint_satisfied": true,
+      "timestamp": "2025-06-18T22:17:33.956367"
+    },
+    {
+      "problem_id": "demo_complex_p5",
+      "dataset": "demo",
+      "verification_count": 1,
+      "max_verifications": 3,
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "complete_solve_success": true,
+      "original_tactics_test": {
+        "hole_1": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h6"
+        },
+        "hole_2": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact Nat.lt_of_le_of_ne h9 h10"
+        },
+        "hole_3": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h8"
+        },
+        "hole_4": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h12"
+        },
+        "hole_5": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h_final"
+        }
+      },
+      "successful_tactics": {
+        "hole_1": "linarith",
+        "hole_2": "omega",
+        "hole_3": "linarith",
+        "hole_4": "linarith",
+        "hole_5": "linarith"
+      },
+      "tactic_mapping": {
+        "hole_1": "linarith",
+        "hole_2": "omega",
+        "hole_3": "linarith",
+        "hole_4": "linarith",
+        "hole_5": "linarith"
+      },
+      "proof_state_tests": 12,
+      "tactic_attempts": {
+        "hole_1": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_2": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": false,
+            "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\na b c : \u2115\nh1 : a \u2264 b\nh2 : b \u2264 c\nh : \u00aca = c\nh3 : a \u2264 c\nh7 : a \u2260 c\nh9 : a \u2264 c\nh10 : a \u2260 c\na\u271d : a \u2265 c\n\u22a2 False failed"
+          },
+          {
+            "tactic": "nlinarith",
+            "success": false,
+            "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\na b c : \u2115\nh1 : a \u2264 b\nh2 : b \u2264 c\nh : \u00aca = c\nh3 : a \u2264 c\nh7 : a \u2260 c\nh9 : a \u2264 c\nh10 : a \u2260 c\na\u271d : a \u2265 c\n\u22a2 False failed"
+          },
+          {
+            "tactic": "omega",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_3": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_4": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_5": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ]
+      },
+      "processing_time_seconds": 18.953342,
+      "constraint_satisfied": true,
+      "timestamp": "2025-06-18T22:17:33.956371"
+    },
+    {
+      "problem_id": "demo_complex_p6",
+      "dataset": "demo",
+      "verification_count": 999,
+      "max_verifications": 3,
+      "original_verification_pass": false,
+      "hole_verification_pass": false,
+      "filled_verification_pass": false,
+      "complete_solve_success": false,
+      "original_tactics_test": {},
+      "successful_tactics": {},
+      "tactic_mapping": {},
+      "proof_state_tests": 0,
+      "tactic_attempts": {},
+      "processing_time_seconds": 0.0,
+      "constraint_satisfied": false,
+      "timestamp": "2025-06-18T22:17:33.956375"
+    },
+    {
+      "problem_id": "demo_complex_p2",
+      "dataset": "demo",
+      "verification_count": 1,
+      "max_verifications": 3,
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "complete_solve_success": true,
+      "original_tactics_test": {
+        "hole_1": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_2": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h3"
+        }
+      },
+      "successful_tactics": {
+        "hole_1": "norm_num",
+        "hole_2": "norm_num"
+      },
+      "tactic_mapping": {
+        "hole_1": "norm_num",
+        "hole_2": "norm_num"
+      },
+      "proof_state_tests": 2,
+      "tactic_attempts": {
+        "hole_1": [
+          {
+            "tactic": "norm_num",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_2": [
+          {
+            "tactic": "norm_num",
+            "success": true,
+            "error_message": null
+          }
+        ]
+      },
+      "processing_time_seconds": 17.285357,
+      "constraint_satisfied": true,
+      "timestamp": "2025-06-18T22:17:33.956378"
+    },
+    {
+      "problem_id": "demo_eq_comm",
+      "dataset": "demo",
+      "verification_count": 1,
+      "max_verifications": 3,
+      "original_verification_pass": false,
+      "hole_verification_pass": false,
+      "filled_verification_pass": false,
+      "complete_solve_success": false,
+      "original_tactics_test": {
+        "hole_1": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "intro h\nrw [<- h]"
+        },
+        "hole_2": {
+          "success": false,
+          "error_message": "Lean error:\nno goals to be solved",
+          "original_tactic": "exact a\nrw [a]"
+        }
+      },
+      "successful_tactics": {
+        "hole_1": "omega",
+        "hole_2": "omega"
+      },
+      "tactic_mapping": {
+        "hole_1": "omega",
+        "hole_2": "omega"
+      },
+      "proof_state_tests": 8,
+      "tactic_attempts": {
+        "hole_1": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": false,
+            "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u2115\n\u22a2 False failed"
+          },
+          {
+            "tactic": "nlinarith",
+            "success": false,
+            "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u2115\n\u22a2 False failed"
+          },
+          {
+            "tactic": "omega",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_2": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": false,
+            "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase mp\nx y : \u2115\na : x = y \u2192 y = x\n\u22a2 False failed"
+          },
+          {
+            "tactic": "nlinarith",
+            "success": false,
+            "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase mp\nx y : \u2115\na : x = y \u2192 y = x\n\u22a2 False failed"
+          },
+          {
+            "tactic": "omega",
+            "success": true,
+            "error_message": null
+          }
+        ]
+      },
+      "processing_time_seconds": 17.100014,
+      "constraint_satisfied": true,
+      "timestamp": "2025-06-18T22:17:33.956380"
+    },
+    {
+      "problem_id": "demo_complex_p7",
+      "dataset": "demo",
+      "verification_count": 1,
+      "max_verifications": 3,
+      "original_verification_pass": false,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "complete_solve_success": true,
+      "original_tactics_test": {
+        "hole_1": {
+          "success": false,
+          "error_message": "Lean error:\nno goals to be solved",
+          "original_tactic": "rw [\u2190 h]\nrw [\u2190 h]"
+        },
+        "hole_2": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_3": {
+          "success": false,
+          "error_message": "Lean error:\nno goals to be solved",
+          "original_tactic": "rw [h]\nrw [h]"
+        },
+        "hole_4": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_5": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h2"
+        }
+      },
+      "successful_tactics": {
+        "hole_1": "linarith",
+        "hole_2": "linarith",
+        "hole_3": "linarith",
+        "hole_4": "linarith",
+        "hole_5": "linarith"
+      },
+      "tactic_mapping": {
+        "hole_1": "linarith",
+        "hole_2": "linarith",
+        "hole_3": "linarith",
+        "hole_4": "linarith",
+        "hole_5": "linarith"
+      },
+      "proof_state_tests": 10,
+      "tactic_attempts": {
+        "hole_1": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_2": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_3": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_4": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_5": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ]
+      },
+      "processing_time_seconds": 19.196103,
+      "constraint_satisfied": true,
+      "timestamp": "2025-06-18T22:17:33.956383"
+    },
+    {
+      "problem_id": "demo_multiline_have",
+      "dataset": "demo",
+      "verification_count": 1,
+      "max_verifications": 3,
+      "original_verification_pass": true,
+      "hole_verification_pass": true,
+      "filled_verification_pass": true,
+      "complete_solve_success": true,
+      "original_tactics_test": {
+        "hole_1": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_2": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_3": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "exact h5"
+        },
+        "hole_4": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        },
+        "hole_5": {
+          "success": true,
+          "error_message": null,
+          "original_tactic": "omega"
+        }
+      },
+      "successful_tactics": {
+        "hole_1": "linarith",
+        "hole_2": "linarith",
+        "hole_3": "linarith",
+        "hole_4": "norm_num",
+        "hole_5": "norm_num"
+      },
+      "tactic_mapping": {
+        "hole_1": "linarith",
+        "hole_2": "linarith",
+        "hole_3": "linarith",
+        "hole_4": "norm_num",
+        "hole_5": "norm_num"
+      },
+      "proof_state_tests": 8,
+      "tactic_attempts": {
+        "hole_1": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_2": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_3": [
+          {
+            "tactic": "norm_num",
+            "success": false,
+            "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+          },
+          {
+            "tactic": "linarith",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_4": [
+          {
+            "tactic": "norm_num",
+            "success": true,
+            "error_message": null
+          }
+        ],
+        "hole_5": [
+          {
+            "tactic": "norm_num",
+            "success": true,
+            "error_message": null
+          }
+        ]
+      },
+      "processing_time_seconds": 18.133479,
+      "constraint_satisfied": true,
+      "timestamp": "2025-06-18T22:17:33.956385"
     }
   ]
 }

@@ -304,7 +304,8 @@ class MinimalLeanProofStepIntegrator:
                 print(f"  ⚠️  No original tactic found for {hole_id}")
                 original_test_results[hole_id] = {
                     'success': False,
-                    'error_message': 'No original tactic available'
+                    'error_message': 'No original tactic available',
+                    'original_tactic': None
                 }
                 continue
             
@@ -324,7 +325,8 @@ class MinimalLeanProofStepIntegrator:
             
             original_test_results[hole_id] = {
                 'success': tactic_result.success,
-                'error_message': tactic_result.error_message
+                'error_message': tactic_result.error_message,
+                'original_tactic': original_tactic
             }
             
             if tactic_result.success:

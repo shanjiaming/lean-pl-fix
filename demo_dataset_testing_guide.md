@@ -1,344 +1,189 @@
-# Demo Dataset Testing Guide
+# Demo数据集测试指南
 
-This document provides a complete guide for testing the hole generation and ProofStep integration system on the demo dataset.
+这个指南将帮助你快速测试hole生成和ProofStep集成系统。
 
-## 🎯 Overview
-
-The testing system consists of two main pipelines:
-1. **Decomposition Pipeline** - Generates holes, clear versions, and metadata  
-2. **Minimal Verification Pipeline** - Performs ProofStep enumeration with strict constraints and synthesizes working proofs
-
-## ✅ Recent Fixes & Improvements
-
-The system has been completely fixed and now works perfectly:
-- **Fixed admit macro support**: ProofStep correctly recognizes and processes admit macros
-- **Fixed LeanServer configuration**: Proper project setup ensures all tactics work
-- **Fixed content vs file issue**: Pipeline now uses clear statements content instead of incomplete files
-- **Working synthesis**: Generated proofs now contain real tactics (linarith, norm_num) instead of admit placeholders
-
-## 📋 Prerequisites
-
-Ensure the following files are in place:
-- `decompose_hole_merge_pipeline.py` - Main decomposition system
-- `minimal_verification_pipeline.py` - Constraint-enforced ProofStep integration  
-- `proofstep_integration.py` - ProofStep analysis and enumeration
-- `proofstep_lean_integration.py` - Low-level ProofStep API integration
-- `verify_consistency.py` - Result validation system
-
-## 🚀 Complete Testing Workflow
-
-### Step 1: Generate Decomposition Results
-
-First, run the decomposition pipeline to create basic structure (pure decomposition only):
+## 🚀 快速开始
 
 ```bash
-# Process entire demo dataset (5 problems - pure decomposition)
+# 1. 生成holes
 python decompose_hole_merge_pipeline.py dataset demo 5
 
-# Or process individual problems:
+# 2. 测试原始策略和unigram策略
+python minimal_verification_pipeline.py dataset demo 5
+```
+
+## 📋 系统概述
+
+系统包含两个主要流水线：
+
+1. **分解流水线** - 生成holes和元数据
+2. **最小验证流水线** - 测试原始策略和unigram策略，生成合成证明
+
+## 📝 修改Demo问题
+
+### 添加或修改问题
+
+1. **直接编辑文件**：
+   ```bash
+   # 编辑现有问题
+   vim /home/matheye/lean-pl-fix/demo/demo_complex_p4.lean
+   
+   # 或创建新问题
+   cp demo/demo_complex_p1.lean demo/demo_complex_p8.lean
+   vim demo/demo_complex_p8.lean
+   ```
+
+2. **重新加载到统一结构**：
+   ```bash
+   python migrate_demo.py
+   ```
+
+### 示例：创建多行hole测试用例
+
+```lean
+import Mathlib
+
+theorem multiline_test (x y : ℕ) (h : x + 0 = y + 0) : x = y := by
+  simp at h
+  have h1 : x ≤ y ∨ y ≤ x := le_total x y
+  cases' h1 with h_le h_ge
+  · have h2 : x = y := by
+      have h3 : x ≤ y := h_le
+      have h4 : y ≤ x := by
+        norm_num    -- 这会成为多行hole
+        rw [← h]    -- 与上面一起
+      omega
+    exact h2
+  · exact h  -- 这会成为单行hole
+```
+
+## 🔧 详细流程
+
+### 步骤1：分解流水线
+
+**命令**：
+```bash
+# 处理整个demo数据集
+python decompose_hole_merge_pipeline.py dataset demo 5
+
+# 处理单个问题
 python decompose_hole_merge_pipeline.py problem demo demo_complex_p1
 ```
 
-**Note**: The decomposition pipeline now does **pure decomposition only** - no filling or tactic testing. All synthesis happens in Step 2.
-
-**What this generates:**
+**输出**：
 - `decomposition_results/demo/decomposed/<problem_id>/`
-  - `header.lean` - Extracted imports and declarations
-  - `problem.lean` - Original problem content  
-  - `hole_version.lean` - Problem with hole_X placeholders
-  - `clear_version.lean` - Problem with clear statements and admit macros
-  - `decomposition.json` - Pure decomposition metadata
-- `decomposition_results/demo_pipeline_results.json` - Dataset summary
+  - `header.lean` - 导入和声明
+  - `problem.lean` - 原始问题
+  - `hole_version.lean` - 带hole_X占位符的版本
+  - `decomposition.json` - 包含原始策略信息
 
-### Step 2: Run Minimal Verification Pipeline
+**关键改进**：
+- ✅ **后序遍历** - hole按代码从上到下顺序编号（hole_1, hole_2, hole_3...）
+- ✅ **原始策略保存** - 每个hole的原始内容保存在`decomposition.json`中
 
-Now run the constraint-enforced ProofStep integration and synthesis:
+### 步骤2：最小验证流水线
 
+**命令**：
 ```bash
-# Process entire demo dataset with verification constraints
-python minimal_verification_pipeline.py demo 5
+# 处理整个数据集
+python minimal_verification_pipeline.py dataset demo 5
 
-# Or process specific number of problems:
-python minimal_verification_pipeline.py demo 1
+# 处理单个问题
+python minimal_verification_pipeline.py problem demo demo_complex_p1
 ```
 
-**What this does:**
-- Loads existing decomposition results (no duplication)
-- Skips verification if previous results were PASS (saves verifications)
-- Performs ProofStep enumeration on enumerable holes using **clear statements content**
-- Tests unigram tactics: `["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]`
-- Enforces strict constraint: **maximum 3 full verifications per problem**
-- All tactic testing done via proof state manipulation (no full verification)
-- **NEW**: Synthesizes working proofs by replacing holes with found tactics
+**功能**：
+1. **原始策略测试** - 首先测试hole的原始内容
+2. **Unigram策略测试** - 如果原始策略失败，测试单个策略词
+3. **合成证明生成** - 创建工作的证明文件
 
-**Results saved to:**
-- Individual results: `decomposition_results/<dataset>/decomposed/<problem_id>/minimal_verification.json`
-- Synthesized proofs: `decomposition_results/<dataset>/decomposed/<problem_id>/synthesized_proof.lean`
-- Dataset summary: `decomposition_results/<dataset>_minimal_verification_summary.json`
+**输出**：
+- `minimal_verification.json` - 详细结果
+- `synthesized_proof.lean` - 工作的证明
 
-## 📊 Expected Results
+## 📊 预期结果
 
-### Decomposition Pipeline Results
-```json
-{
-  "problem_id": "demo_complex_p1",
-  "dataset": "demo", 
-  "original_verification_pass": true,
-  "hole_verification_pass": true,
-  "clear_verification_pass": true,
-  "filled_verification_pass": false,
-  "method": "pure_decomposition",
-  "num_steps": 5,
-  "status": "success"
-}
+### 原始策略测试
+```
+🔍 Testing original tactics on proof states
+  🧪 Testing original tactic for hole_3: norm_num\nrw [← h]...
+    ✅ Original tactic works for hole_3
+  🧪 Testing original tactic for hole_5: rw [h]\nomega...
+    ❌ Original tactic failed for hole_5: no goals to be solved
+📊 Original tactics test: 4/5 succeeded
 ```
 
-### Minimal Verification Results
-```json
-{
-  "problem_id": "demo_complex_p1",
-  "verification_count": 1,
-  "max_verifications": 3,
-  "successful_tactics": {
-    "0": "linarith",
-    "1": "linarith", 
-    "2": "linarith",
-    "3": "norm_num",
-    "4": "norm_num"
-  },
-  "proof_state_tests": 8,
-  "constraint_satisfied": true,
-  "tactics_replaced": 5,
-  "synthesized_verification_pass": true
-}
-```
-
-### Synthesized Proof File Structure
-The `synthesized_proof.lean` file is generated by **directly replacing hole placeholders** with tactics:
-```lean
-theorem complex_have_chain (n : ℕ) (h : n > 0) : n + n ≥ n := by
-  have h1 : n ≥ 1 := by
-    linarith  # Was: hole_2, now real tactic!
-  have h2 : n + n ≥ n + 1 := by
-    have h3 : n ≥ 1 := h1
-    have h4 : n + n = n + n := rfl
-    have h5 : n + 1 ≤ n + n := by
-      linarith  # Was: hole_4, now real tactic!
-    linarith    # Was: hole_3, now real tactic!
-  have h6 : n + 1 ≥ n := by
-    norm_num    # Was: hole_5, now real tactic!
-  norm_num      # Was: hole_1, now real tactic!
-```
-
-**Key improvement**: No more macro definitions! Direct tactic replacement ensures clean, readable proofs.
-
-## 🎯 Key Success Metrics
-
-### Constraint Satisfaction
-- ✅ **Verification count ≤ 3** for all problems
-- ✅ **Constraint satisfaction rate: 100%**  
-- ✅ **Dramatic efficiency improvement**: From 55 proof state tests to 8 (7x improvement)
-
-### ProofStep Integration  
-- ✅ **Perfect admit macro support** - Recognizes admit macros as enumerable sorry positions
-- ✅ **Correct sorry detection** - Distinguishes hole_i (enumerate) vs skip_hole (skip)
-- ✅ **Clear statement context** - Uses clear statements for proper variable scoping
-- ✅ **High success rate** - 62.5% tactics succeed (5/8 attempts)
-- ✅ **Real tactic synthesis** - Generates working linarith, norm_num tactics
-
-### Architecture Efficiency
-- ✅ **Pure decomposition separation** - Decompose pipeline does only decomposition
-- ✅ **Synthesis pipeline focus** - Minimal pipeline handles all tactic finding and synthesis
-- ✅ **Zero re-verification** when previous results are PASS
-- ✅ **99%+ verification reduction** compared to traditional approaches
-
-## 🔍 Verification and Consistency Checks
-
-### Result Validation
-```bash
-# Check consistency between decomposition and minimal verification results
-python verify_consistency.py demo
-
-# Verify that synthesized proofs work correctly
-# Rule 4 is now handled by minimal_verification_pipeline
-```
-
-### Manual Verification
-```bash
-# Check generated files exist
-ls decomposition_results/demo/decomposed/demo_complex_p1/
-# Should show: header.lean, problem.lean, hole_version.lean, clear_version.lean, 
-#              decomposition.json, minimal_verification.json, synthesized_proof.lean
-
-# Check dataset-level summary
-ls decomposition_results/demo_*.json
-# Should show: demo_pipeline_results.json, demo_minimal_verification_summary.json
-
-# Verify synthesized proof contains real tactics
-cat decomposition_results/demo/decomposed/demo_complex_p1/synthesized_proof.lean
-# Should show clean proof with linarith, norm_num instead of hole placeholders
-
-# Check successful tactics found
-grep "successful_tactics" decomposition_results/demo/decomposed/demo_complex_p1/minimal_verification.json
-# Should show: "0": "linarith", "1": "linarith", "2": "linarith", "3": "norm_num", "4": "norm_num"
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**1. Missing decomposition results:**
-```
-Error: Decomposition results not found: decomposition_results/demo/decomposed/<problem_id>/decomposition.json
-```
-**Solution:** Run Step 1 (decomposition pipeline) first
-
-**2. ProofStep file path errors:**
-```
-Lean error in file: no such file or directory
-```
-**Solution:** The pipeline automatically uses absolute paths, but ensure file permissions are correct
-
-**3. Constraint violations:**
-```
-⚠️ CONSTRAINT VIOLATION: 4/3 verifications
-```
-**Solution:** This indicates a logic error - review the verification logic in minimal_verification_pipeline.py
-
-**4. Zero successful tactics:**
-```
-📈 ProofStep Results: Successful tactics: 0
-```
-**Solution:** Check that clear statements are being used correctly. Ensure the pipeline uses `enumerate_tactics_with_proof_states()` with content, not file paths.
-
-### Debug Information
-
-The pipeline provides extensive debug output:
-- Sorry mapping detection: `Found 5 sorry mappings`
-- Enumerable vs skip classification: `5 enumerable holes, 0 skip holes`  
-- Individual tactic testing: `✅ linarith succeeded on proof_state 0`
-- Tactic replacement: `✅ hole_2 -> linarith`
-- Verification tracking: `Verifications: 1/3`
-- Synthesis verification: `synthesized_verification_pass: true`
-
-## 📈 Performance Benchmarks
-
-Based on latest testing with demo dataset (demo_complex_p1):
-
-| Metric | Before Fix | After Fix | Improvement |
-|--------|------------|-----------|-------------|
-| Full verifications per problem | 3 | 1 | 67% reduction |
-| Proof state tests | 55 | 8 | 85% reduction |
-| Successful tactics found | 0 | 5 | ∞ improvement |
-| Processing time | 8.1s | 11.1s | Slightly slower but functional |
-| Constraint violations | 0 | 0 | Perfect |
-| Synthesis success rate | 0% | 100% | Perfect synthesis |
-
-## 🎉 Success Confirmation
-
-When everything works correctly, you should see:
-
-```
-🎉 MINIMAL VERIFICATION PIPELINE SUMMARY
-Dataset: demo
-Problems processed: 1
-Constraint violations: 0
-Constraint satisfaction rate: 100.0%
-Successfully filled proofs: 1
-Total proof state tests: 8
-Total full verifications: 1
-Verification efficiency: 8.0 proof state tests per full verification
-
-🎉 ALL CONSTRAINTS SATISFIED!
-✅ Maximum 3 verifications per problem maintained
-✅ All tactic testing done via proof state manipulation
-```
-
-**And most importantly:**
+### 成功的合成
 ```
 📝 Creating synthesized version by directly replacing holes with tactics...
-  ✅ hole_2 -> linarith
-  ✅ hole_4 -> linarith
+  ✅ hole_1 -> linarith
+  ✅ hole_2 -> linarith  
   ✅ hole_3 -> linarith
+  ✅ hole_4 -> norm_num
   ✅ hole_5 -> norm_num
-  ✅ hole_1 -> norm_num
-  📊 Replaced 5/5 hole usages with tactics/admit
 ```
 
-This indicates the system is working perfectly and successfully synthesizing real tactics!
-
-## 🔧 Advanced Usage
-
-### Testing Specific Problems
-```bash
-# Test single problem through complete workflow
-python decompose_hole_merge_pipeline.py problem demo demo_complex_p1
-python minimal_verification_pipeline.py demo 1  # Will process the first available problem
+### JSON结果示例
+```json
+{
+  "original_tactics_test": {
+    "hole_1": {"success": true, "error_message": null},
+    "hole_2": {"success": false, "error_message": "no goals to be solved"}
+  },
+  "complete_solve_success": true,
+  "successful_tactics": {"0": "linarith", "1": "norm_num"},
+  "verification_count": 1,
+  "constraint_satisfied": true
+}
 ```
 
-### Custom Tactic Lists
-Edit `minimal_verification_pipeline.py` line 144 to test different tactics:
-```python
-unigrams = ["norm_num", "omega", "linarith"]  # Reduced list for faster testing
-```
+## 🎯 关键功能
 
-### Different Datasets
-```bash
-# Use same workflow on other datasets (ensure they exist first)
-python decompose_hole_merge_pipeline.py dataset putnam 3
-python minimal_verification_pipeline.py putnam 3
-```
+### 多行策略支持
+- **格式**：使用括号 `(\ntactic1\ntactic2\n)` 测试多行策略
+- **示例**：`norm_num\nrw [← h]` 被测试为 `(\nnorm_num\nrw [← h]\n)`
 
-## 🎉 Complete Workflow Summary
+### 约束满足
+- **最多3次完整验证** 每个问题
+- **所有策略测试** 通过proof state操作（不是完整验证）
+- **高效率**：典型8个proof state测试对1个完整验证
 
-The improved system now provides:
+### 智能Fallback
+- 原始策略失败 → 自动测试unigram策略
+- 保持系统鲁棒性，确保最终证明成功
 
-### **🏗️ Enhanced Architecture**
-1. **Unified File Management**: All results stored in `decomposition_results/` directory
-2. **Synthesized Proof Generation**: Creates `synthesized_proof.lean` with working tactics
-3. **Individual Problem Tracking**: Each problem has its own `minimal_verification.json`
-4. **Rule 4 Consistency**: Verifies that synthesized proofs work when holes work
+## 🔍 文件结构
 
-### **🔄 Complete Testing Commands**
-```bash
-# Step 1: Generate decomposition results (pure decomposition)
-python decompose_hole_merge_pipeline.py dataset demo 5
-
-# Step 2: Run minimal verification with synthesis (finds real tactics!)
-python minimal_verification_pipeline.py demo 5
-
-# Step 3: Verify consistency
-python verify_consistency.py demo
-```
-
-### **📁 Final File Structure**
 ```
 decomposition_results/demo/
 ├── decomposed/
 │   └── demo_complex_p1/
-│       ├── header.lean                    # Imports and declarations
-│       ├── problem.lean                   # Original problem
-│       ├── hole_version.lean              # Problem with hole_X placeholders
-│       ├── clear_version.lean             # Problem with clear statements and admit macros
-│       ├── decomposition.json             # Pure decomposition metadata
-│       ├── synthesized_proof.lean         # ⭐ Working proof with real tactics!
-│       └── minimal_verification.json      # ⭐ Synthesis results with found tactics
-├── demo_pipeline_results.json             # Decomposition summary
-└── demo_minimal_verification_summary.json # ⭐ Synthesis summary with success metrics
+│       ├── header.lean                 # 导入声明
+│       ├── problem.lean                # 原始问题
+│       ├── hole_version.lean           # hole版本
+│       ├── decomposition.json          # 包含原始策略
+│       ├── minimal_verification.json   # 测试结果
+│       └── synthesized_proof.lean      # 工作证明
+├── demo_pipeline_results.json
+└── demo_minimal_verification_summary.json
 ```
 
-### **✅ Success Indicators**
-- **Zero constraint violations**: All problems satisfy ≤3 verification limit
-- **Perfect tactic synthesis**: Real tactics (linarith, norm_num) replace hole placeholders
-- **High success rate**: 62.5% tactics succeed, 100% synthesis success
-- **Clean generated proofs**: Direct tactic replacement, no macro definitions
-- **Verified working proofs**: `synthesized_verification_pass: true`
+## 🎉 成功指标
 
-### **🚀 Quick Start Command**
-```bash
-# Complete demo test in 2 commands:
-python decompose_hole_merge_pipeline.py dataset demo 5
-python minimal_verification_pipeline.py demo 5
+当看到以下输出时，系统工作正常：
+
+```
+📊 Original tactics test: X/Y succeeded
+🎯 No admits used: True
+✨ Complete solve success: True
+🎉 CONSTRAINT SATISFIED!
 ```
 
-This completes the comprehensive testing guide for the demo dataset with the **fully working** hole generation and ProofStep integration system!
+这表明系统成功：
+- ✅ 测试了原始策略
+- ✅ 找到了工作策略  
+- ✅ 生成了完整解决方案
+- ✅ 满足了所有约束
+
+
+nohup python minimal_verification_pipeline.py dataset minif2f > minif2f_pipeline_solve.log 2>&1 &
