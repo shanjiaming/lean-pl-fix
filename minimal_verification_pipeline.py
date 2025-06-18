@@ -25,7 +25,6 @@ class MinimalVerificationResult:
     max_verifications: int
     original_verification_pass: bool
     hole_verification_pass: bool
-    clear_verification_pass: bool
     filled_verification_pass: bool
     successful_tactics: Dict[int, str]
     tactic_mapping: Dict[str, str]
@@ -40,8 +39,8 @@ class MinimalVerificationPipeline:
     Pipeline that processes problems with strict verification constraints
     Maximum 3 full proof verifications per problem:
     1. Original problem verification
-    2. Hole/clear version verification  
-    3. Final filled proof verification
+    2. Hole version verification  
+    3. Final synthesized proof verification
     
     All tactic testing done via proof state manipulation (no full verification)
     Leverages existing decomposition results from DecomposeHoleMergePipeline
@@ -82,14 +81,10 @@ class MinimalVerificationPipeline:
             
             # Load existing files
             header_path = os.path.join(decomp_dir, "header.lean")
-            clear_version_path = os.path.join(decomp_dir, "clear_version.lean")
             hole_version_path = os.path.join(decomp_dir, "hole_version.lean")
             
             with open(header_path, 'r') as f:
                 header_content = f.read()
-            
-            with open(clear_version_path, 'r') as f:
-                clear_with_macros = f.read()
                 
             with open(hole_version_path, 'r') as f:
                 hole_version_content = f.read()
@@ -97,15 +92,13 @@ class MinimalVerificationPipeline:
             # Use existing verification results where available (saves verifications!)
             original_verification_pass = decomp_data.get('original_verification_pass', True)
             hole_verification_pass = decomp_data.get('hole_verification_pass', True)
-            clear_verification_pass = decomp_data.get('clear_verification_pass', True)
             
             print(f"📊 Existing verification results:")
             print(f"  Original: {'PASS' if original_verification_pass else 'FAIL'}")
             print(f"  Hole: {'PASS' if hole_verification_pass else 'FAIL'}")
-            print(f"  Clear: {'PASS' if clear_verification_pass else 'FAIL'}")
             
             # Only perform verification if previous results indicate problems
-            verification_needed = not (original_verification_pass and hole_verification_pass and clear_verification_pass)
+            verification_needed = not (original_verification_pass and hole_verification_pass)
             
             if verification_needed:
                 print("⚠️  Previous verification failures detected, re-verifying...")
@@ -119,12 +112,11 @@ class MinimalVerificationPipeline:
                     print(f"  Result: {'PASS' if original_verification_pass else 'FAIL'}")
                 
                 # VERIFICATION 2: Only verify if needed
-                if not (hole_verification_pass and clear_verification_pass):
-                    print("🔍 Verification 2: Hole/clear version")
+                if not hole_verification_pass:
+                    print("🔍 Verification 2: Hole version")
                     hole_verification_pass = integrator.verify_proof_with_limit(
-                        header_content, clear_with_macros, "hole/clear version"
+                        header_content, hole_version_content, "hole version"
                     )
-                    clear_verification_pass = hole_verification_pass
                     print(f"  Result: {'PASS' if hole_verification_pass else 'FAIL'}")
             else:
                 print("✅ All existing verifications passed, skipping re-verification")
@@ -132,9 +124,9 @@ class MinimalVerificationPipeline:
             # ProofStep enumeration phase (NO full verifications)
             print("🧪 ProofStep enumeration phase (proof state testing only)...")
             
-            # Identify enumerable vs skip indices using the clear version content
+            # Identify enumerable vs skip indices using the hole version content
             session_analyzer = ProofStepIntegrator(header_content)
-            session = session_analyzer.initialize_session(header_content, clear_with_macros)
+            session = session_analyzer.initialize_session(header_content, hole_version_content)
             enumerable_indices = session.enumerable_indices
             
             print(f"  🔍 Found {len(session.sorry_map)} sorry mappings")
@@ -146,9 +138,9 @@ class MinimalVerificationPipeline:
             # Run ProofStep enumeration with proof states
             unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
             
-            # Use the clear version content with clear statements for ProofStep
+            # Use the hole version content for ProofStep
             proofstep_results = integrator.enumerate_tactics_with_proof_states(
-                header_content, clear_with_macros, unigrams, enumerable_indices, session.sorry_map
+                header_content, hole_version_content, unigrams, enumerable_indices, session.sorry_map
             )
             
             successful_tactics = proofstep_results['successful_tactics']
@@ -247,7 +239,6 @@ class MinimalVerificationPipeline:
                 max_verifications=integrator.max_verifications,
                 original_verification_pass=original_verification_pass,
                 hole_verification_pass=hole_verification_pass,
-                clear_verification_pass=clear_verification_pass,
                 filled_verification_pass=filled_verification_pass,
                 successful_tactics=successful_tactics,
                 tactic_mapping=tactic_mapping,
@@ -267,7 +258,6 @@ class MinimalVerificationPipeline:
                 "max_verifications": result.max_verifications,
                 "original_verification_pass": result.original_verification_pass,
                 "hole_verification_pass": result.hole_verification_pass,
-                "clear_verification_pass": result.clear_verification_pass,
                 "filled_verification_pass": result.filled_verification_pass,
                 "synthesized_verification_pass": result.filled_verification_pass,  # alias for clarity
                 "complete_solve_success": result.complete_solve_success,
@@ -344,7 +334,6 @@ class MinimalVerificationPipeline:
                     max_verifications=3,
                     original_verification_pass=False,
                     hole_verification_pass=False,
-                    clear_verification_pass=False,
                     filled_verification_pass=False,
                     successful_tactics={},
                     tactic_mapping={},
@@ -395,7 +384,6 @@ class MinimalVerificationPipeline:
                 "max_verifications": result.max_verifications,
                 "original_verification_pass": result.original_verification_pass,
                 "hole_verification_pass": result.hole_verification_pass,
-                "clear_verification_pass": result.clear_verification_pass,
                 "filled_verification_pass": result.filled_verification_pass,
                 "complete_solve_success": result.complete_solve_success,
                 "successful_tactics": {str(k): v for k, v in result.successful_tactics.items()},
