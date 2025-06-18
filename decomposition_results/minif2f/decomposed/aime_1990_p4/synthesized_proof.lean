@@ -22,7 +22,7 @@ theorem aime_1990_p4 (x : ℝ) (h₀ : 0 < x) (h₁ : x ^ 2 - 10 * x - 29 ≠ 0)
     have h₅ : x = 13 := by
       have h₅₁ : x = 13 ∨ x = -3 := by
         have h₅₂ : x ^ 2 - 10 * x - 39 = 0 := by
-          admit2
+          admit
         have h₅₃ : (x - 13) * (x + 3) = 0 := by
           admit
         have h₅₄ : x - 13 = 0 ∨ x + 3 = 0 := by
@@ -31,4 +31,4 @@ theorem aime_1990_p4 (x : ℝ) (h₀ : 0 < x) (h₁ : x ^ 2 - 10 * x - 29 ≠ 0)
       admit
     admit
   
-  hole_1
+  admit

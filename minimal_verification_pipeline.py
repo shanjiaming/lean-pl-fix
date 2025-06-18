@@ -174,7 +174,7 @@ class MinimalVerificationPipeline:
                 synthesized_content = re.sub(macro_pattern, '', synthesized_content, count=1)
                 
                 # Replace hole usage with direct tactic
-                hole_pattern = f'(\\s+){hole_id}(\\s*)'
+                hole_pattern = f'(\\s+){re.escape(hole_id)}\\b(\\s*)'
                 replacement = f'\\g<1>{tactic}\\g<2>'
                 synthesized_content = re.sub(hole_pattern, replacement, synthesized_content, count=1)
             
@@ -187,7 +187,7 @@ class MinimalVerificationPipeline:
                 synthesized_content = re.sub(macro_pattern, '', synthesized_content, count=1)
                 
                 # Replace hole usage with admit
-                hole_pattern = f'(\\s+){hole_id}(\\s*)'
+                hole_pattern = f'(\\s+){re.escape(hole_id)}\\b(\\s*)'
                 replacement = f'\\g<1>admit\\g<2>'
                 synthesized_content = re.sub(hole_pattern, replacement, synthesized_content, count=1)
 

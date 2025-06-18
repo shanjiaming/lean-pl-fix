@@ -160,7 +160,7 @@ class MinimalLeanProofStepIntegrator:
         """
         if not self.lean_server:
             # Simulate tactic testing when server is not available
-            return self._simulate_tactic_test(proof_state, tactic)
+            raise RuntimeError("Lean server not initialized")
         
         try:
             from lean_interact import ProofStep
@@ -174,9 +174,11 @@ class MinimalLeanProofStepIntegrator:
             
             # Check if tactic application was successful
             # Check if tactic really succeeded
-            if response.get_errors():
+            from lean_interact.interface import LeanError
+
+            if isinstance(response, LeanError):
                 # LeanError - tactic failed completely
-                error_msg = response.get_errors()
+                error_msg = response.message
                 print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: {error_msg[:100]}...")
                 return TacticResult(
                     success=False,
@@ -223,36 +225,6 @@ class MinimalLeanProofStepIntegrator:
                 sorry_index=proof_state.sorry_index,
                 error_message=str(e)
             )
-    
-    def _simulate_tactic_test(self, proof_state: ProofState, tactic: str) -> TacticResult:
-        """
-        Simulate tactic testing when Lean server is not available
-        In real implementation, this would be replaced by actual proof state manipulation
-        """
-        # Simple heuristic simulation for demo purposes
-        # In reality, this would be actual Lean proof state + tactic application
-        
-        success_heuristics = {
-            "norm_num": ["goal_at_sorry_0", "goal_at_sorry_3", "goal_at_sorry_6"],
-            "linarith": ["goal_at_sorry_1", "goal_at_sorry_2", "goal_at_sorry_4", "goal_at_sorry_7"],
-            "omega": ["goal_at_sorry_0", "goal_at_sorry_1", "goal_at_sorry_2", "goal_at_sorry_4"],
-            "simp": ["goal_at_sorry_5", "goal_at_sorry_6"],
-            "simpa": ["goal_at_sorry_0", "goal_at_sorry_5"]
-        }
-        
-        goals = proof_state.goals
-        if goals and len(goals) > 0:
-            goal = goals[0]
-            success = goal in success_heuristics.get(tactic, [])
-        else:
-            success = False
-        
-        return TacticResult(
-            success=success,
-            tactic=tactic,
-            sorry_index=proof_state.sorry_index,
-            error_message=None if success else f"Tactic {tactic} failed on {proof_state.sorry_index}"
-        )
     
     def enumerate_tactics_with_proof_states(self, header: str, clear_version: str, 
                                           tactics: List[str], 
