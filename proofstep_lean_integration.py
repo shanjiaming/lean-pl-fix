@@ -346,9 +346,17 @@ class MinimalLeanProofStepIntegrator:
                 continue
                 
             proof_state = proof_states[sorry_idx]
-            print(f"🎯 Testing tactics on sorry index {sorry_idx}")
             
-            results['tactic_attempts'][sorry_idx] = []
+            # Get hole_id for keying results
+            sorry_info = sorry_map.get(sorry_idx)
+            if not sorry_info or not sorry_info.hole_id:
+                print(f"⚠️  Skipping sorry index {sorry_idx} - no hole_id found in sorry_map")
+                continue
+            
+            hole_id = sorry_info.hole_id
+            print(f"🎯 Testing tactics on sorry index {sorry_idx} (Hole: {hole_id})")
+            
+            results['tactic_attempts'][hole_id] = []
 
             # Test each tactic on this proof state
             for tactic in tactics:
@@ -359,14 +367,14 @@ class MinimalLeanProofStepIntegrator:
                     'success': tactic_result.success,
                     'error_message': tactic_result.error_message
                 }
-                results['tactic_attempts'][sorry_idx].append(attempt_details)
+                results['tactic_attempts'][hole_id].append(attempt_details)
                 
                 if tactic_result.success:
-                    print(f"  ✅ {tactic} succeeded on sorry {sorry_idx}")
-                    results['successful_tactics'][sorry_idx] = tactic
+                    print(f"  ✅ {tactic} succeeded on {hole_id}")
+                    results['successful_tactics'][hole_id] = tactic
                     break  # Stop at first successful tactic
                 else:
-                    print(f"  ❌ {tactic} failed on sorry {sorry_idx}")
+                    print(f"  ❌ {tactic} failed on {hole_id}")
         
         # --- Summary Calculation ---
         solved_sorries_count = len(results['successful_tactics'])
@@ -384,15 +392,15 @@ class MinimalLeanProofStepIntegrator:
         
         # Detailed breakdown
         print("  --- Detailed Tactic Results ---")
-        for sorry_idx, attempts in results['tactic_attempts'].items():
-            if sorry_idx in results['successful_tactics']:
-                tactic = results['successful_tactics'][sorry_idx]
-                print(f"  - Sorry {sorry_idx}: SOLVED with '{tactic}'")
+        for hole_id, attempts in results['tactic_attempts'].items():
+            if hole_id in results['successful_tactics']:
+                tactic = results['successful_tactics'][hole_id]
+                print(f"  - {hole_id}: SOLVED with '{tactic}'")
                 for attempt in attempts:
                     status = "✅" if attempt['success'] else "❌"
                     print(f"    {status} {attempt['tactic']}")
             else:
-                print(f"  - Sorry {sorry_idx}: NOT SOLVED")
+                print(f"  - {hole_id}: NOT SOLVED")
                 for attempt in attempts:
                     error_info = f" ({attempt['error_message']})" if attempt['error_message'] else ""
                     print(f"    ❌ {attempt['tactic']}{error_info}")

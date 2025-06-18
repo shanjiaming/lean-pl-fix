@@ -47,107 +47,50 @@ class DecomposeHoleMergePipeline:
         self.step_counter["count"] += 1
         return f"step_{self.step_counter['count']:04d}"
         
-    def decompose_problem(self, problem: Problem, hole_filling_function=None) -> tuple[List[DecompositionStep], str]:
+    def decompose_problem(self, problem: Problem) -> List[DecompositionStep]:
         """
-        Decompose a problem into substeps with hole versions and get the complete fixed proof
-        Returns (decomposition_steps, complete_fixed_proof)
-        
-        NEW APPROACH: Uses in-place hole replacement instead of reconstruction
-        
-        Args:
-            problem: The problem to decompose
-            hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
+        Decompose a problem into substeps with hole versions.
+        This version does NOT fill holes.
         """
         print(f"Decomposing problem: {problem.dataset}/{problem.problem_id}")
-        
-        # Set default hole filling function if none provided
-        if hole_filling_function is None:
-            hole_filling_function = self.fill_hole_content
-        
-        # Get header for verification
-        header_content = problem_manager.get_header_content(problem)
-        
-        print("Using NEW in-place hole replacement approach...")
-        
+
         # Step 1: Generate hole version using new approach
-        hole_content, hole_list = self.generate_in_place_holes(problem)
-        
+        _hole_content, hole_list = self.generate_in_place_holes(problem)
+
         if not hole_list:
             print("No holes generated - problem may not contain have statements")
-            return [], ""
-        
+            return []
+
         # Step 2: Create decomposition steps for each hole
         decomposition_steps = []
-        filled_content = hole_content
-        
-        import re
 
         for hole_info in hole_list:
-            step_id = self.get_next_step_id()
             hole_id = hole_info['hole_id']
             original_proof = hole_info['original_proof']
-            
-            print(f"  Processing {step_id} for {hole_id}: {original_proof}")
-            
-            # Create a simple step representation
+
+            print(f"  Creating decomposition step for {hole_id}: {original_proof}")
+
             step_original_content = f"-- Original: {hole_id} := {original_proof}"
-            # For hole_content, just store the hole_id - verification will be context-aware
-            step_hole_content = hole_id
-            
-            # Create proper hole content for filling function
-            # We need to create a context where the hole can be tested
-            # Use regex with word boundaries to avoid replacing parts of other hole IDs
-            hole_test_content = re.sub(r'\b' + re.escape(hole_id) + r'\b', "hole", filled_content, 1)
-            
-            # Use hole filling function to get replacement
-            step_filled_content, additional_info = hole_filling_function(hole_test_content, header_content)
-            
-            # Extract the actual replacement from filled content
-            # Look for what replaced "hole" in the filled content
-            if additional_info.get("best_tactic"):
-                replacement = additional_info["best_tactic"]
-            else:
-                # If no successful unigram tactic found, use admit as fallback
-                # Do NOT use original proof as it may not be a unigram tactic
-                replacement = "admit"
-            
-            # Replace the hole in the main content
-            # Use regex with word boundaries to avoid replacing parts of other hole IDs
-            filled_content = re.sub(r'\b' + re.escape(hole_id) + r'\b', replacement, filled_content, 1)
-            
-            # Verify the step (we'll verify the full content later)
-            step_verification = True  # Simplified for new approach
-            
-            # Create decomposition step
+            step_hole_content = hole_id # The hole itself
+
             step = DecompositionStep(
-                step_id=step_id,
+                step_id=hole_id,
                 original_content=step_original_content,
                 hole_content=step_hole_content,
-                filled_content=f"-- Filled: {hole_id} := {replacement}",
-                original_verification_pass=step_verification,
-                hole_verification_pass=step_verification, 
-                filled_verification_pass=step_verification,
+                filled_content=None,
+                original_verification_pass=None, # Will be verified later
+                hole_verification_pass=None, # Will be verified later
+                filled_verification_pass=None,
                 additional_info={
-                    "method": "in_place_hole_replacement",
+                    "method": "in_place_hole_generation",
                     "hole_id": hole_id,
                     "original_proof": original_proof,
-                    "replacement": replacement,
-                    **additional_info
                 }
             )
-            
             decomposition_steps.append(step)
-            print(f"Created decomposition step: {step_id} ({hole_id} -> {replacement})")
-        
-        # Step 3: Verify final filled content
-        print(f"Verifying final filled proof...")
-        final_verification = self.verify_lean_code(header_content, filled_content)
-        print(f"Final verification: {'PASS' if final_verification else 'FAIL'}")
-        
-        print(f"In-place decomposition completed. Generated {len(decomposition_steps)} steps.")
-        print(f"Final filled proof length: {len(filled_content)} chars")
-        
-        return decomposition_steps, filled_content
+
+        print(f"Decomposition created {len(decomposition_steps)} steps without hole filling.")
+        return decomposition_steps
     
     def _generate_hole_for_step(self, problem: Problem, proof_framework: str) -> str:
         """Generate hole version for a single proof step"""
@@ -254,10 +197,10 @@ class DecomposeHoleMergePipeline:
                     "method": None,
                     "original_verification_pass": step.original_verification_pass,
                     "hole_verification_pass": step.hole_verification_pass,
-                    "filled_verification_pass": step.filled_verification_pass,
-                    "tactics_tried": [],
-                    "successful_tactics": [],
-                    "failed_tactics": [],
+                    "filled_verification_pass": None, # No longer applicable
+                    "tactics_tried": None,
+                    "successful_tactics": None,
+                    "failed_tactics": None,
                 }
             metadata["holes"].append(hole_data)
         
@@ -312,7 +255,7 @@ class DecomposeHoleMergePipeline:
                     filled_content=hole_info.get('best_tactic', 'admit'),  # Use actual tactic or admit
                     original_verification_pass=hole_info.get("original_verification_pass"),
                     hole_verification_pass=hole_info.get("hole_verification_pass"),
-                    filled_verification_pass=hole_info.get("filled_verification_pass"),
+                    filled_verification_pass=None, # No longer applicable
                     additional_info=additional_info_compat
                 )
             else:
@@ -325,7 +268,7 @@ class DecomposeHoleMergePipeline:
                     # Load verification results if available in metadata
                     original_verification_pass=hole_info["original_verification_pass"],
                     hole_verification_pass=hole_info["hole_verification_pass"],
-                    filled_verification_pass=hole_info["filled_verification_pass"],
+                    filled_verification_pass=None, # No longer applicable
                     additional_info=hole_info["additional_info"]
                 )
             steps.append(step)
@@ -365,7 +308,7 @@ class DecomposeHoleMergePipeline:
                 # Load verification results if available in metadata
                 original_verification_pass=step_info.get("original_verification_pass"),
                 hole_verification_pass=step_info.get("hole_verification_pass"),
-                filled_verification_pass=step_info.get("filled_verification_pass"),
+                filled_verification_pass=None, # No longer applicable
                 additional_info=step_info.get("additional_info")
             )
             steps.append(step)
@@ -423,30 +366,39 @@ class DecomposeHoleMergePipeline:
         """
         import re
         
+        print("\n--- Debugging generate_clear_version ---")
+        
         lines = hole_content.split('\n')
         result_lines = []
         processed_haves = set()  # Track processed have variables to avoid duplicates
         
-        # Find all hole positions
+        # Log incoming data
+        print(f"hole_content received:\n---\n{hole_content}\n---")
+        print(f"hole_list received: {json.dumps(hole_list, indent=2)}")
+        
+        # Find all hole positions by searching within lines, not matching whole lines
         hole_positions = {}  # hole_id -> line_number
         for i, line in enumerate(lines):
-            hole_match = re.match(r'^\s*(hole_\d+)\s*$', line.strip())
-            if hole_match:
-                hole_id = hole_match.group(1)
-                hole_positions[hole_id] = i
+            found_holes_in_line = re.findall(r'\b(hole_\d+)\b', line)
+            for hole_id in found_holes_in_line:
+                if hole_id not in hole_positions:  # Store first occurrence
+                    hole_positions[hole_id] = i
         
         print(f"Found holes at positions: {hole_positions}")
         
         # Build hole to have mapping using pre-computed information from hole generation
         hole_to_have_mapping = {}  # hole_id -> (have_var_name, have_type, have_indent)
         
+        print("Building hole_to_have_mapping...")
         for hole_info in hole_list:
             hole_id = hole_info['hole_id']
+            print(f"  Processing hole_info for '{hole_id}':")
             
             # Use the have information computed during hole generation if available
             if 'have_name' in hole_info and 'have_type' in hole_info:
                 have_name = hole_info['have_name']
                 have_type = hole_info['have_type']
+                print(f"    Found pre-computed have_name='{have_name}' and have_type='{have_type}'")
                 
                 if hole_id in hole_positions:
                     hole_line = hole_positions[hole_id]
@@ -461,12 +413,15 @@ class DecomposeHoleMergePipeline:
                             indent = len(line) - len(line.lstrip())
                             hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
                             found_have = True
-                            print(f"Mapped {hole_id} to have {have_name} at line {i+1} (pre-computed)")
+                            print(f"    Mapped {hole_id} to have '{have_name}' at line {i+1} (pre-computed). Indent: {indent}")
                             break
                     
                     if not found_have:
-                        print(f"Warning: Could not find have statement for {hole_id} with name {have_name}")
+                        print(f"    [WARNING] Could not find have statement for {hole_id} with name {have_name}")
+                else:
+                    print(f"    [WARNING] hole_id '{hole_id}' from hole_list not found in hole_content positions.")
             else:
+                print(f"    No pre-computed have_name/have_type in hole_info.")
                 # Fallback: parse from have_statement if pre-computed info not available
                 have_statement = hole_info.get('have_statement', '')
                 
@@ -476,6 +431,7 @@ class DecomposeHoleMergePipeline:
                     if have_match:
                         have_name = have_match.group(1).strip()
                         have_type = have_match.group(2).strip()
+                        print(f"    Fallback parsed have_name='{have_name}' and have_type='{have_type}'")
                         
                         if hole_id in hole_positions:
                             hole_line = hole_positions[hole_id]
@@ -489,39 +445,53 @@ class DecomposeHoleMergePipeline:
                                     indent = len(line) - len(line.lstrip())
                                     hole_to_have_mapping[hole_id] = (have_name, have_type, indent)
                                     found_have = True
-                                    print(f"Mapped {hole_id} to have {have_name} at line {i+1} (fallback)")
+                                    print(f"    Mapped {hole_id} to have '{have_name}' at line {i+1} (fallback). Indent: {indent}")
                                     break
                             
                             if not found_have:
-                                print(f"Warning: Could not find have statement for {hole_id} with name {have_name}")
+                                print(f"    [WARNING] Could not find have statement for {hole_id} with name {have_name} using fallback.")
+                        else:
+                            print(f"    [WARNING] hole_id '{hole_id}' from hole_list not found in hole_content positions (fallback).")
                     else:
-                        print(f"Warning: Could not parse have_statement for {hole_id}: {have_statement[:100]}...")
+                        print(f"    [WARNING] Could not parse have_statement for {hole_id}: {have_statement[:100]}...")
+                else:
+                    print(f"    No have_statement to fallback on.")
+        
+        print(f"Final hole_to_have_mapping: {hole_to_have_mapping}")
         
         # Iterate through all lines and add clear statements
+        print("Iterating through lines to generate clear version...")
         i = 0
         while i < len(lines):
             line = lines[i]
             result_lines.append(line)
             
-            # Check if current line is a hole
-            hole_match = re.match(r'^\s*(hole_\d+)\s*$', line.strip())
-            if hole_match:
-                hole_id = hole_match.group(1)
+            # Check if current line contains a hole by searching, not matching whole lines
+            found_holes_in_line = re.findall(r'\b(hole_\d+)\b', line)
+            for hole_id in found_holes_in_line:
+                print(f"  Line {i+1}: Found hole '{hole_id}'.")
                 
                 # Check if this hole needs clear statements
                 if hole_id in hole_to_have_mapping:
                     have_name, have_type, indent = hole_to_have_mapping[hole_id]
+                    print(f"    '{hole_id}' is in mapping. Corresponds to have '{have_name}'.")
                     
                     if have_name not in processed_haves:
                         indent_str = ' ' * indent
                         result_lines.append(f"{indent_str}clear {have_name}")
                         result_lines.append(f"{indent_str}have {have_name} : {have_type} := skip_hole")
                         processed_haves.add(have_name)
-                        print(f"Added clear statements for {have_name} after {hole_id}")
+                        print(f"    Added clear statements for '{have_name}' and marked as processed.")
+                    else:
+                        print(f"    Skipping clear statements for '{have_name}' as it was already processed.")
+                else:
+                    print(f"    '{hole_id}' not in mapping. No clear statements added.")
             
             i += 1
         
-        return '\n'.join(result_lines)
+        final_content = '\n'.join(result_lines)
+        print("--- End of generate_clear_version debug ---\n")
+        return final_content
 
     def test_clear_version_generation(self, problem: Problem) -> Dict:
         """
@@ -575,26 +545,6 @@ class DecomposeHoleMergePipeline:
             }
         }
 
-
-    def fill_hole_content(self, hole_content: str, header_content: str) -> Tuple[str, Dict]:
-        """
-        Convert hole content to filled content with basic information.
-        Simply replaces "hole" with "admit".
-        
-        Args:
-            hole_content: The content containing "hole" placeholders
-            header_content: The header content for context (unused for now)
-            
-        Returns:
-            Tuple of (filled_content, additional_info)
-        """
-        filled_content = hole_content.replace("hole", "admit")
-        
-        additional_info = {
-            "method": "simple_replace"
-        }
-        
-        return filled_content, additional_info
 
     def _verify_single_hole_in_context(self, header_content: str, hole_id: str, hole_version_content: str) -> bool:
         """
@@ -662,7 +612,7 @@ class DecomposeHoleMergePipeline:
             hole_content_with_macros = hole_content
         
         # Step 1: Use original ProofStep integrator to identify enumerable vs skip indices
-        session_analyzer = ProofStepIntegrator()
+        session_analyzer = ProofStepIntegrator(header_content)
         session = session_analyzer.initialize_session(hole_content_with_macros)
         enumerable_indices = session.enumerable_indices
         
@@ -1382,15 +1332,11 @@ class DecomposeHoleMergePipeline:
         
         print(f"Failure logged to {failures_path}")
 
-    def process_problem(self, problem: Problem, hole_filling_function=None):
+    def process_problem(self, problem: Problem):
         """
         Process a single problem through the entire pipeline.
         This is the core logic for one problem, extracted from process_dataset.
         """
-        # Set default hole filling function if none provided
-        if hole_filling_function is None:
-            hole_filling_function = self.fill_hole_content
-
         problem_start_time = datetime.now()
         current_step = "initialization"
         dataset_name = problem.dataset
@@ -1481,7 +1427,7 @@ class DecomposeHoleMergePipeline:
             # Step 1: Decompose
             current_step = "decomposition"
             print(f"Step 1: Decomposing problem {problem.problem_id}...")
-            steps, complete_fixed_proof = self.decompose_problem(problem, hole_filling_function)
+            steps = self.decompose_problem(problem)
             
             # Check if decomposition failed (returned empty list)
             if not steps:
@@ -1505,7 +1451,6 @@ class DecomposeHoleMergePipeline:
                     "original_verification_pass": original_verification_pass,
                     "hole_verification_pass": None,  # Not reached
                     "clear_verification_pass": None,  # Not reached
-                    "filled_verification_pass": None,  # Not reached
                     "status": "error",
                     "error": error_msg,
                     "processing_time_seconds": processing_time,
@@ -1519,7 +1464,6 @@ class DecomposeHoleMergePipeline:
                 return
             
             print(f"Decomposition successful: {len(steps)} steps generated")
-            print(f"Complete fixed proof: {len(complete_fixed_proof)} chars")
             
             # Step 2: Save decomposition
             current_step = "saving_decomposition"
@@ -1530,52 +1474,38 @@ class DecomposeHoleMergePipeline:
                 "decomposed",
                 problem.problem_id.replace('/', '_')
             )
-            self.save_decomposition(problem_dir, problem, steps, original_verification_pass, None)
+            self.save_decomposition(problem_dir, problem, steps, original_verification_pass)
             print(f"Decomposition saved to: {problem_dir}")
             
-            # Step 3: Save both hole version and complete fixed proof
+            # Step 3: Save hole and clear versions
             current_step = "saving_proofs"
-            print(f"Step 3: Saving hole version and complete fixed proof...")
+            print(f"Step 3: Saving hole and clear versions...")
             
             # Save hole version
             hole_version_path = os.path.join(problem_dir, "hole_version.lean")
             hole_content, hole_list = self.generate_in_place_holes(problem)
             
-            # Create mapping of hole_id to successful tactics from decomposition steps
-            hole_replacements = {}
-            for step in steps:
-                step_info = step.additional_info or {}
-                hole_id = step_info.get("hole_id")
-                best_tactic = step_info.get("best_tactic")
-                if hole_id and best_tactic:
-                    hole_replacements[hole_id] = best_tactic
-            
-            # Generate hole_version.lean: pure hole version with ALL holes kept as hole_N
-            hole_version_content = hole_content
+            # Create macros for hole version
             hole_macros = []
             
             if hole_list:
-                # Create macros for ALL holes (both successful and unsuccessful)
+                # Create macros for ALL holes
                 for info in hole_list:
                     hole_id = info['hole_id']
                     hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| admit)')
-                    print(f"Created macro for {hole_id} in hole_version.lean")
                 
-                # hole_version_content keeps all hole_N as-is, no replacement with tactics
-
             # Combine macros with hole content
             if hole_macros:
                 macros_str = '\n'.join(hole_macros)
                 hole_with_macros = f"""{macros_str}
 
-{hole_version_content}"""
+{hole_content}"""
             else:
-                hole_with_macros = hole_version_content
+                hole_with_macros = hole_content
             
             with open(hole_version_path, "w") as f:
                 f.write(hole_with_macros)
             print(f"Hole version saved to: {hole_version_path}")
-            print(f"Pure hole version with {len(hole_macros)} holes (all kept as hole_N)")
             
             # Step 3.5: Verify hole version
             current_step = "verifying_hole_version"
@@ -1588,7 +1518,7 @@ class DecomposeHoleMergePipeline:
             print(f"Step 3.6: Generating clear version...")
             
             # Generate clear version using pre-computed have information from hole generation
-            clear_content = self.generate_clear_version(hole_version_content, hole_list)
+            clear_content = self.generate_clear_version(hole_content, hole_list)
             
             # Add macros for clear version
             clear_macros = hole_macros.copy()
@@ -1607,119 +1537,29 @@ class DecomposeHoleMergePipeline:
             clear_verification_pass = self.verify_lean_code(header_content, clear_with_macros)
             print(f"Clear version verification: {'PASS' if clear_verification_pass else 'FAIL'}")
             
-            # Save complete fixed proof  
-            complete_proof_path = os.path.join(problem_dir, "complete_fixed_proof.lean")
-            with open(complete_proof_path, "w") as f:
-                f.write(complete_fixed_proof)
-            print(f"Complete fixed proof saved to: {complete_proof_path}")
-            
-            # Step 4: Verify synthesized proof
-            current_step = "verifying_synthesized_proof"
-            print(f"Step 4: Verifying synthesized proof...")
-            filled_verification_pass = self.verify_lean_code(header_content, complete_fixed_proof)
-            print(f"Synthesized proof verification: {'PASS' if filled_verification_pass else 'FAIL'}")
-            
-            # Step 4.5: Update metadata with synthesized verification result
-            print(f"Step 4.5: Updating metadata with synthesized verification result...")
+            # Step 4: Update metadata with verification results
+            current_step = "updating_metadata"
+            print(f"Step 4: Updating metadata with verification results...")
             metadata_path = os.path.join(problem_dir, "decomposition.json")
             with open(metadata_path, "r") as f:
                 metadata = json.load(f)
-            metadata["filled_verification_pass"] = filled_verification_pass
             metadata["hole_verification_pass"] = hole_verification_pass
             metadata["clear_verification_pass"] = clear_verification_pass
             with open(metadata_path, "w") as f:
                 json.dump(metadata, f, indent=2)
-            print(f"Metadata updated with synthesized verification result")
+            print(f"Metadata updated with verification results")
             
-            # Step 5: Load decomposition steps for detailed recording
+            # Step 5: Final recording
             current_step = "recording_details"
-            final_steps = self.load_decomposition(problem_dir)
-            
-            # Get header for verification
-            header_content = problem_manager.get_header_content(problem)
-            
-            # Prepare detailed step information with verification
-            detailed_steps = []
-            verification_updated = False
-            for step in final_steps:
-                print(f"Verifying step {step.step_id}...")
-                
-                # Verify hole in context - read the hole version file and test this specific hole
-                hole_verification_pass = step.hole_verification_pass
-                if hole_verification_pass is None:
-                    # Read the hole version file for context-aware verification
-                    hole_version_path = os.path.join(problem_dir, "hole_version.lean")
-                    if os.path.exists(hole_version_path):
-                        with open(hole_version_path, 'r') as f:
-                            hole_version_content = f.read()
-                        hole_verification_pass = self._verify_single_hole_in_context(
-                            header_content, step.step_id, hole_version_content)
-                    else:
-                        # Fallback to False if hole version doesn't exist
-                        hole_verification_pass = False
-                    step.hole_verification_pass = hole_verification_pass  # Update the step object
-                    verification_updated = True
-                    print(f"  Hole verification: {'PASS' if hole_verification_pass else 'FAIL'}")
-                else:
-                    print(f"  Hole verification (cached): {'PASS' if hole_verification_pass else 'FAIL'}")
-                step_info = {
-                    "step_id": step.step_id,
-                    "original_content": step.original_content,
-                    "hole_content": step.hole_content,
-                    "filled_content": step.filled_content,
-                    "original_verification_pass": step.original_verification_pass,
-                    "hole_verification_pass": hole_verification_pass,
-                    "filled_verification_pass": step.filled_verification_pass,
-                    "additional_info": step.additional_info
-                }
-                detailed_steps.append(step_info)
-            
-            # Save updated verification results back to metadata if any verification was performed
-            if verification_updated:
-                metadata_path = os.path.join(problem_dir, "decomposition.json")
-                with open(metadata_path, "r") as f:
-                    metadata = json.load(f)
-                
-                # Update metadata with verification results
-                for i, step in enumerate(final_steps):
-                    if i < len(metadata["holes"]):
-                        metadata["holes"][i]["original_verification_pass"] = step.original_verification_pass
-                        metadata["holes"][i]["hole_verification_pass"] = step.hole_verification_pass
-                        metadata["holes"][i]["filled_verification_pass"] = step.filled_verification_pass
-                
-                # Save updated metadata
-                with open(metadata_path, "w") as f:
-                    json.dump(metadata, f, indent=2)
-                print(f"Updated verification results saved to decomposition.json")
-            
             processing_time = (datetime.now() - problem_start_time).total_seconds()
-            
-            # Read final verification results from updated decomposition.json
-            # This ensures we use the corrected verification results, not the early-stage ones
-            metadata_path = os.path.join(problem_dir, "decomposition.json")
-            final_hole_verification = hole_verification_pass
-            final_filled_verification = filled_verification_pass
-            final_clear_verification = clear_verification_pass
-            
-            if os.path.exists(metadata_path):
-                try:
-                    with open(metadata_path, "r") as f:
-                        final_metadata = json.load(f)
-                    final_hole_verification = final_metadata.get("hole_verification_pass", hole_verification_pass)
-                    final_filled_verification = final_metadata.get("filled_verification_pass", filled_verification_pass)
-                    final_clear_verification = final_metadata.get("clear_verification_pass", clear_verification_pass)
-                    print(f"Using final verification results: hole={final_hole_verification}, filled={final_filled_verification}, clear={final_clear_verification}")
-                except Exception as e:
-                    print(f"Warning: Could not read final verification results, using original: {e}")
-            
+
             result_record = {
                 "problem_id": problem.problem_id,
                 "dataset": problem.dataset,
                 "problem_dir": problem_dir,
                 "original_verification_pass": original_verification_pass,
-                "hole_verification_pass": final_hole_verification,
-                "clear_verification_pass": final_clear_verification,
-                "filled_verification_pass": final_filled_verification,
+                "hole_verification_pass": hole_verification_pass,
+                "clear_verification_pass": clear_verification_pass,
                 "num_steps": len(steps),
                 "processing_time_seconds": processing_time,
                 "status": "success",
@@ -1767,7 +1607,6 @@ class DecomposeHoleMergePipeline:
                 "original_verification_pass": original_verification_pass if 'original_verification_pass' in locals() else None,
                 "hole_verification_pass": hole_verification_pass if 'hole_verification_pass' in locals() else None,
                 "clear_verification_pass": clear_verification_pass if 'clear_verification_pass' in locals() else None,
-                "filled_verification_pass": None,  # Not reached
                 "status": "error",
                 "error": error_summary,
                 "processing_time_seconds": processing_time,
@@ -1780,14 +1619,13 @@ class DecomposeHoleMergePipeline:
             self._append_failure_to_file(dataset_name, failure_record)
             self._append_result_to_file(dataset_name, result_record)
 
-    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, hole_filling_function=None, resume: bool = True):
+    def process_dataset(self, dataset_name: str, limit: Optional[int] = None, resume: bool = True):
         """
         Process entire dataset through the pipeline
         
         Args:
             dataset_name: Name of the dataset to process
             limit: Maximum number of problems to process
-            hole_filling_function: Function to use for filling holes (defaults to fill_hole_content)
             resume: Whether to resume from last run (default: True)
         """
         problems = problem_manager.list_problems(dataset_name)
@@ -1821,12 +1659,7 @@ class DecomposeHoleMergePipeline:
         if limit:
             problems = problems[:limit]
         
-        # Set default hole filling function if none provided
-        if hole_filling_function is None:
-            hole_filling_function = self.fill_hole_content
-        
         print(f"Processing {len(problems)} problems from {dataset_name}")
-        print(f"Using hole filling method: {hole_filling_function.__name__}")
         
         for i, problem in enumerate(problems):
             print(f"\n--- Processing {i+1}/{len(problems)}: {problem.problem_id} ---")
@@ -1834,7 +1667,7 @@ class DecomposeHoleMergePipeline:
             # Reset step counter for each new problem
             self.step_counter = {"count": 0}
             
-            self.process_problem(problem, hole_filling_function)
+            self.process_problem(problem)
         
         # Since results are saved incrementally, read final statistics from files
         results_path = os.path.join(self.output_base_dir, f"{dataset_name}_pipeline_results.json")
@@ -1910,10 +1743,9 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python decompose_hole_merge_pipeline.py <command> [args]")
         print("Commands:")
-        print("  dataset <name> [limit] [filling_method] [--no-resume] - Process entire dataset")
-        print("    filling_method options: simple, unigram")
+        print("  dataset <name> [limit] [--no-resume] - Process entire dataset")
         print("    --no-resume: Disable resuming from previous run")
-        print("  problem <dataset> <problem_id> [filling_method] - Process single problem")
+        print("  problem <dataset> <problem_id> - Process single problem")
         return
     
     command = sys.argv[1]
@@ -1932,47 +1764,29 @@ def main():
         
         # Smart parameter parsing on remaining args
         limit = None
-        filling_method = "simple"
         
         if len(args) > 0:
             try:
                 # Try to parse 1st remaining argument as integer (limit)
                 limit = int(args[0])
-                # If successful, 2nd remaining argument (if exists) is filling_method
-                if len(args) > 1:
-                    filling_method = args[1]
             except ValueError:
-                # 1st remaining argument is not a number, treat it as filling_method
-                filling_method = args[0]
+                # 1st remaining argument is not a number
+                print("Invalid limit provided.")
                 limit = None
         
-        # Choose hole filling function based on method
-        if filling_method == "unigram":
-            hole_filling_function = pipeline.try_unigram_tactics_proofstep
-        else:  # default to simple
-            hole_filling_function = pipeline.fill_hole_content
-        
-        print(f"Processing dataset: {dataset_name}, limit: {limit}, method: {filling_method}, resume: {resume}")
-        pipeline.process_dataset(dataset_name, limit, hole_filling_function, resume=resume)
+        print(f"Processing dataset: {dataset_name}, limit: {limit}, resume: {resume}")
+        pipeline.process_dataset(dataset_name, limit, resume=resume)
         
     elif command == "problem":
         if len(sys.argv) < 4:
-            print("Usage: python decompose_hole_merge_pipeline.py problem <dataset> <problem_id> [filling_method]")
-            print("  filling_method options: simple, unigram (default)")
+            print("Usage: python decompose_hole_merge_pipeline.py problem <dataset> <problem_id>")
             return
             
         dataset_name = sys.argv[2]
         problem_id = sys.argv[3]
-        filling_method = sys.argv[4] if len(sys.argv) > 4 else "unigram"
         
-        print(f"Processing single problem: {dataset_name}/{problem_id} with method: {filling_method}")
+        print(f"Processing single problem: {dataset_name}/{problem_id}")
         
-        # Choose hole filling function based on method
-        if filling_method == "unigram":
-            hole_filling_function = pipeline.try_unigram_tactics_proofstep
-        else:  # default to simple
-            hole_filling_function = pipeline.fill_hole_content
-
         # Get the problem using problem_manager
         problem = problem_manager.get_problem(dataset_name, problem_id)
         if not problem:
@@ -1980,7 +1794,7 @@ def main():
             return
         
         # Run the full pipeline on the single problem
-        pipeline.process_problem(problem, hole_filling_function)
+        pipeline.process_problem(problem)
         
 if __name__ == "__main__":
     main() 
