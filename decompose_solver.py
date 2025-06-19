@@ -1005,7 +1005,7 @@ class UnifiedLeanEnvironment:
             self.reset()
             raise
         
-        if env > 15:
+        if env > 8:
             self.reset()
         return ret
     
