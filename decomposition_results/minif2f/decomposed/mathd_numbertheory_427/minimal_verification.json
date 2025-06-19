@@ -1,0 +1,174 @@
+{
+  "problem_id": "mathd_numbertheory_427",
+  "dataset": "minif2f",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2080]\nrw [show (\u2211 k in Nat.divisors 500, k) = 1092\n    by\n    rw [show (500 : \u2115) = 2 ^ 2 * 5 ^ 3 by norm_num]\n    rw [Nat.divisors_mul, Nat.divisors_prime_pow (by decide : Nat.Prime 2),\n        Nat.divisors_prime_pow (by decide : Nat.Prime 5)] <;>\n      rfl]"
+    },
+    "hole_2": {
+      "success": false,
+      "error_message": "Lean error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information",
+      "original_tactic": "rw [show (1092 : \u2115) = 2 ^ 2 * 3 * 7 * 13 by norm_num]\nrw [Nat.divisors_mul, Nat.divisors_mul, Nat.divisors_mul]\nnorm_num [Nat.divisors_prime_pow, Finset.sum_filter, Finset.sum_range_succ, Nat.divisors]\nrfl"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2082"
+    }
+  },
+  "successful_tactics": {
+    "hole_1": "simpa",
+    "hole_3": "linarith",
+    "hole_4": "linarith"
+  },
+  "tactic_mapping": {
+    "hole_1": "simpa",
+    "hole_3": "linarith",
+    "hole_4": "linarith",
+    "hole_2": "admit"
+  },
+  "proof_state_tests": 23,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\na : \u2115\nh\u2080 : a = \u2211 k \u2208 Nat.divisors 500, k\na\u271d : a < 1092\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\na : \u2115\nh\u2080 : a = \u2211 k \u2208 Nat.divisors 500, k\na\u271d : a < 1092\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 \u2264 b \u2264 1091\nwhere\n b := \u2191(\u2211 k \u2208 Nat.divisors 500, k)"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\na : \u2115\nh\u2080 : a = \u2211 k \u2208 Nat.divisors 500, k\nh\u2081 : a = 1092\na\u271d : \u2211 k \u2208 {x \u2208 Nat.divisors 1092 | Nat.Prime x}, k < 25\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\na : \u2115\nh\u2080 : a = \u2211 k \u2208 Nat.divisors 500, k\nh\u2081 : a = 1092\na\u271d : \u2211 k \u2208 {x \u2208 Nat.divisors 1092 | Nat.Prime x}, k < 25\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 \u2264 b \u2264 24\nwhere\n b := \u2191(\u2211 k \u2208 {x \u2208 Nat.divisors 1092 | Nat.Prime x}, k)"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Lean error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 20.504935,
+  "constraint_satisfied": true,
+  "tactics_replaced": 3,
+  "timestamp": "2025-06-18T23:57:22.846966"
+}
