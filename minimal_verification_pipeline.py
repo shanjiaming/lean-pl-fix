@@ -6,7 +6,7 @@ maximum 3 full proof verifications per problem
 All tactic testing done via ProofStep proof state manipulation
 """
 
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Set
 from dataclasses import dataclass
 from datetime import datetime
 import json
@@ -49,6 +49,56 @@ class MinimalVerificationPipeline:
     
     def __init__(self, decomposition_base_dir: str = "decomposition_results"):
         self.decomposition_base_dir = decomposition_base_dir
+    
+    def _load_existing_results(self, dataset_name: str) -> Set[str]:
+        """
+        Load processed problem IDs from summary JSON
+        
+        Args:
+            dataset_name: Name of the dataset
+            
+        Returns:
+            Set of processed problem IDs
+        """
+        summary_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary.json")
+        
+        if not os.path.exists(summary_file):
+            print(f"📂 Summary file not found, starting from scratch: {summary_file}")
+            return set()
+        
+        try:
+            with open(summary_file, 'r') as f:
+                summary_data = json.load(f)
+            
+            processed_problems = set()
+            if 'results' in summary_data:
+                for result in summary_data['results']:
+                    problem_id = result.get('problem_id')
+                    if problem_id:
+                        processed_problems.add(problem_id)
+            
+            print(f"📂 Loaded {len(processed_problems)} processed problems from summary")
+            return processed_problems
+            
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"⚠️ Summary file format error, starting from scratch: {e}")
+            return set()
+    
+    def _save_incremental_result(self, dataset_name: str, new_result: MinimalVerificationResult, all_results: List[MinimalVerificationResult]):
+        """
+        Incrementally add new problem result to summary JSON
+        
+        Args:
+            dataset_name: Name of the dataset
+            new_result: Newly completed result
+            all_results: List of all results in current session
+        """
+        try:
+            # Regenerate complete summary data
+            self._save_dataset_summary(dataset_name, all_results)
+            print(f"💾 Incremental save successful: {new_result.problem_id}")
+        except Exception as e:
+            print(f"❌ Incremental save failed: {e}")
         
     def process_problem_with_constraint(self, problem: Problem) -> MinimalVerificationResult:
         """
@@ -307,13 +357,15 @@ class MinimalVerificationPipeline:
         finally:
             integrator.shutdown_lean_server()
     
-    def process_dataset_with_constraint(self, dataset_name: str, limit: Optional[int] = None) -> List[MinimalVerificationResult]:
+    def process_dataset_with_constraint(self, dataset_name: str, limit: Optional[int] = None, enable_resume: bool = True, force_reprocess: List[str] = None) -> List[MinimalVerificationResult]:
         """
         Process entire dataset with minimal verification constraint
         
         Args:
             dataset_name: Name of dataset to process
             limit: Maximum number of problems to process
+            enable_resume: Whether to enable checkpoint resume
+            force_reprocess: List of problem IDs to force reprocess
             
         Returns:
             List of MinimalVerificationResult objects
@@ -323,21 +375,76 @@ class MinimalVerificationPipeline:
             print(f"No problems found in dataset: {dataset_name}")
             return []
         
-        if limit:
-            problems = problems[:limit]
+        # Checkpoint resume logic
+        processed_problems = set()
+        existing_results = []
         
-        print(f"🚀 Processing {len(problems)} problems from {dataset_name} with minimal verification constraint")
+        if enable_resume:
+            processed_problems = self._load_existing_results(dataset_name)
+            # Load existing results for incremental updates
+            summary_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary.json")
+            if os.path.exists(summary_file):
+                try:
+                    with open(summary_file, 'r') as f:
+                        summary_data = json.load(f)
+                    if 'results' in summary_data:
+                        # Rebuild existing result objects
+                        for result_data in summary_data['results']:
+                            result = MinimalVerificationResult(
+                                problem_id=result_data.get('problem_id', ''),
+                                dataset=result_data.get('dataset', dataset_name),
+                                verification_count=result_data.get('verification_count', 0),
+                                max_verifications=result_data.get('max_verifications', 3),
+                                original_verification_pass=result_data.get('original_verification_pass', False),
+                                hole_verification_pass=result_data.get('hole_verification_pass', False),
+                                filled_verification_pass=result_data.get('filled_verification_pass', False),
+                                successful_tactics=result_data.get('successful_tactics', {}),
+                                tactic_mapping=result_data.get('tactic_mapping', {}),
+                                complete_solve_success=result_data.get('complete_solve_success', False),
+                                original_tactics_test=result_data.get('original_tactics_test', {}),
+                                proof_state_tests=result_data.get('proof_state_tests', 0),
+                                processing_time_seconds=result_data.get('processing_time_seconds', 0.0),
+                                constraint_satisfied=result_data.get('constraint_satisfied', False),
+                                tactic_attempts=result_data.get('tactic_attempts', {})
+                            )
+                            existing_results.append(result)
+                except Exception as e:
+                    print(f"⚠️ Failed to load existing results: {e}")
+                    existing_results = []
+        
+        # Filter problems to process
+        if force_reprocess:
+            force_reprocess_set = set(force_reprocess)
+            # Remove problems that need forced reprocessing
+            processed_problems = processed_problems - force_reprocess_set
+            # Remove problems from existing results that need forced reprocessing
+            existing_results = [r for r in existing_results if r.problem_id not in force_reprocess_set]
+            print(f"🔄 Force reprocessing {len(force_reprocess_set)} problems")
+        
+        # Filter out problems that need processing
+        problems_to_process = [p for p in problems if p.problem_id not in processed_problems]
+        
+        if limit:
+            problems_to_process = problems_to_process[:limit]
+        
+        print(f"🚀 Dataset {dataset_name}: Total {len(problems)}, Processed {len(processed_problems)}, To process {len(problems_to_process)}")
+        if enable_resume and len(processed_problems) > 0:
+            print(f"📋 Checkpoint resume enabled, skipping {len(processed_problems)} processed problems")
         print("=" * 80)
         
-        results = []
-        constraint_violations = 0
+        # Merge existing results and new results
+        results = existing_results.copy()
+        constraint_violations = len([r for r in existing_results if not r.constraint_satisfied])
         
-        for i, problem in enumerate(problems):
-            print(f"\n--- Processing {i+1}/{len(problems)}: {problem.problem_id} ---")
+        for i, problem in enumerate(problems_to_process):
+            print(f"\n--- Processing {i+1}/{len(problems_to_process)}: {problem.problem_id} ---")
             
             try:
                 result = self.process_problem_with_constraint(problem)
                 results.append(result)
+                
+                # Incremental save of result
+                self._save_incremental_result(dataset_name, result, results)
                 
                 if not result.constraint_satisfied:
                     constraint_violations += 1
@@ -365,9 +472,16 @@ class MinimalVerificationPipeline:
                 )
                 results.append(error_result)
                 constraint_violations += 1
+                
+                # Incremental save of error result
+                self._save_incremental_result(dataset_name, error_result, results)
         
-        # Save summary results (dataset level)
-        self._save_dataset_summary(dataset_name, results)
+        # Final save of summary results (ensure all data is saved)
+        if len(problems_to_process) > 0:
+            print(f"💾 Final save of dataset summary...")
+            self._save_dataset_summary(dataset_name, results)
+        else:
+            print(f"📋 No new problems processed, skipping final save")
         
         # Print summary
         print(f"\n{'='*80}")
@@ -466,33 +580,52 @@ class MinimalVerificationPipeline:
 def main():
     """Main function for minimal verification pipeline"""
     import sys
+    import argparse
     
-    usage = (
-        "Usage:\n"
-        "  python minimal_verification_pipeline.py dataset <dataset_name> [limit]\n"
-        "  python minimal_verification_pipeline.py problem <dataset_name> <problem_id>\n\n"
-        "Examples:\n"
-        "  python minimal_verification_pipeline.py dataset demo 3\n"
-        "  python minimal_verification_pipeline.py problem demo demo_complex_p2"
+    parser = argparse.ArgumentParser(
+        description="Minimal Verification Pipeline with checkpoint resume support",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python minimal_verification_pipeline.py dataset demo 3
+  python minimal_verification_pipeline.py dataset minif2f 10 --no-resume
+  python minimal_verification_pipeline.py dataset demo --force-reprocess demo_complex_p1,demo_complex_p2
+  python minimal_verification_pipeline.py problem demo demo_complex_p2
+"""
     )
-
-    if len(sys.argv) < 3:
-        print(usage)
-        return
     
-    mode = sys.argv[1]
+    subparsers = parser.add_subparsers(dest='mode', help='Processing mode')
     
-    if mode not in ["dataset", "problem"]:
-        print(f"Error: Invalid mode '{mode}'. Must be 'dataset' or 'problem'.")
-        print(usage)
+    # Dataset mode
+    dataset_parser = subparsers.add_parser('dataset', help='Process entire dataset')
+    dataset_parser.add_argument('dataset_name', help='Name of dataset to process')
+    dataset_parser.add_argument('limit', nargs='?', type=int, help='Maximum number of problems to process')
+    dataset_parser.add_argument('--no-resume', action='store_true', help='Disable checkpoint resume (process all problems from scratch)')
+    dataset_parser.add_argument('--force-reprocess', help='Comma-separated list of problem IDs to force reprocess')
+    
+    # Problem mode
+    problem_parser = subparsers.add_parser('problem', help='Process single problem')
+    problem_parser.add_argument('dataset_name', help='Dataset name')
+    problem_parser.add_argument('problem_id', help='Problem ID to process')
+    
+    args = parser.parse_args()
+    
+    if not args.mode:
+        parser.print_help()
         return
 
     pipeline = MinimalVerificationPipeline()
 
-    if mode == "dataset":
-        dataset_name = sys.argv[2]
-        limit = int(sys.argv[3]) if len(sys.argv) > 3 else None
-        results = pipeline.process_dataset_with_constraint(dataset_name, limit)
+    if args.mode == "dataset":
+        enable_resume = not args.no_resume
+        force_reprocess = args.force_reprocess.split(',') if args.force_reprocess else None
+        
+        results = pipeline.process_dataset_with_constraint(
+            args.dataset_name, 
+            args.limit, 
+            enable_resume=enable_resume,
+            force_reprocess=force_reprocess
+        )
         
         # Check if all constraints were satisfied
         violations = [r for r in results if not r.constraint_satisfied]
@@ -503,22 +636,14 @@ def main():
         else:
             print(f"\n⚠️  {len(violations)} constraint violations detected")
 
-    elif mode == "problem":
-        if len(sys.argv) < 4:
-            print("Error: Missing problem_id for 'problem' mode.")
-            print(usage)
-            return
-        
-        problem_dataset = sys.argv[2]
-        problem_id = sys.argv[3]
-        
-        problem = problem_manager.get_problem(problem_dataset, problem_id)
+    elif args.mode == "problem":
+        problem = problem_manager.get_problem(args.dataset_name, args.problem_id)
         if not problem:
-            print(f"Error: Problem '{problem_id}' not found in dataset '{problem_dataset}'.")
+            print(f"Error: Problem '{args.problem_id}' not found in dataset '{args.dataset_name}'.")
             return
         
         try:
-            print(f"🚀 Processing single problem: {problem_dataset}/{problem_id}")
+            print(f"🚀 Processing single problem: {args.dataset_name}/{args.problem_id}")
             result = pipeline.process_problem_with_constraint(problem)
             
             if result.constraint_satisfied:

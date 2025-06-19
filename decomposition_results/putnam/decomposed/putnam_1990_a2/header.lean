@@ -1,8 +1,0 @@
-import Mathlib
-
-open Filter Topology Nat
-
--- True
-/--
-Is $\sqrt{2}$ the limit of a sequence of numbers of the form $\sqrt[3]{n}-\sqrt[3]{m}$ ($n,m=0,1,2,\dots$)?
--/

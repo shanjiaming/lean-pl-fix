@@ -1,8 +1,0 @@
-import Mathlib
-
-open Nat
-
--- (fun k n : ℕ => (-k) ^ n * (n)!)
-/--
-Let $k$ be a fixed positive integer. The $n$-th derivative of $\frac{1}{x^k-1}$ has the form $\frac{P_n(x)}{(x^k-1)^{n+1}}$ where $P_n(x)$ is a polynomial. Find $P_n(1)$.
--/

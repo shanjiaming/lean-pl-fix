@@ -1,8 +1,0 @@
-import Mathlib
-
-open intervalIntegral MvPolynomial Real
-
--- 2020050
-/--
-Say that a polynomial with real coefficients in two variables, $x,y$, is \emph{balanced} if the average value of the polynomial on each circle centered at the origin is $0$. The balanced polynomials of degree at most $2009$ form a vector space $V$ over $\mathbb{R}$. Find the dimension of $V$.
--/

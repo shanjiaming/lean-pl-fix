@@ -1,8 +1,0 @@
-import Mathlib
-
-open Topology MvPolynomial Filter
-
--- True
-/--
-Let $f$ be a real-valued function on the plane such that for every square $ABCD$ in the plane, $f(A)+f(B)+f(C)+f(D)=0$. Does it follow that $f(P)=0$ for all points $P$ in the plane?
--/
