@@ -156,7 +156,8 @@ class ProofStatePickleManager:
             result = integrator.lean_server.run(UnpickleProofState(
                 unpickle_proof_state_from=abs_pickle_file
             ))
-            
+            print("Done with unpickle")
+
             # Detailed error checking
             if hasattr(result, 'error') and result.error:
                 raise RuntimeError(f"Unpickle failed with error: {result.error}")

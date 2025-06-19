@@ -12,12 +12,10 @@ from datetime import datetime
 import json
 import os
 
-from ngram_pipeline_integration import create_ngram_wrapper_for_existing_pipeline
+from ngram_pickle_pipeline import CleanNgramPipeline
 from proofstep_lean_integration import MinimalLeanProofStepIntegrator
 from proofstep_integration import ProofStepIntegrator
 from unified_problem_manager import problem_manager, Problem
-
-create_ngram_wrapper_for_existing_pipeline()
 
 @dataclass
 class MinimalVerificationResult:
@@ -205,14 +203,18 @@ class MinimalVerificationPipeline:
                 header_content, hole_version_content, original_tactics, enumerable_indices, session.sorry_map
             )
             
-            # Run ProofStep enumeration with proof states
-            # Use the hole version content for ProofStep
-            proofstep_results = integrator.enumerate_ngram_tactics_with_proof_states(
+            # Run CleanNgramPipeline for tactic enumeration
+            print("🔍 Starting n-gram search with CleanNgramPipeline...")
+            ngram_pipeline = CleanNgramPipeline(
+                max_depth=2,  # N-gram depth, 2 for 2-gram
+                stop_on_first_success=True
+            )
+
+            proofstep_results = ngram_pipeline.process_problem(
                 header_content=header_content,
                 clear_version=hole_version_content,
                 enumerable_indices=enumerable_indices,
                 sorry_map=session.sorry_map,
-                max_depth=2,  # N-gram depth, 2 for 2-gram
                 problem_id=problem.problem_id  # For checkpointing
             )
             
