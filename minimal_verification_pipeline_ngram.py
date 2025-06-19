@@ -216,7 +216,8 @@ class MinimalVerificationPipeline:
                 clear_version=hole_version_content,
                 enumerable_indices=enumerable_indices,
                 sorry_map=session.sorry_map,
-                problem_id=problem.problem_id  # For checkpointing
+                problem_id=problem.problem_id,
+                dataset=problem.dataset  # Pass dataset info
             )
             
             successful_tactics = proofstep_results['successful_tactics']

@@ -7,7 +7,8 @@ import traceback
 import glob
 
 # Define the base path for the mathlib4 source code
-MATHLIB_BASE_PATH = "/home/matheye/anaconda3/lib/python3.12/site-packages/lean_interact/cache/tmp_projects/v4.19.0-rc2/f2715bd81473367430cfb34866e811377a9add649dc367bc7031a837d7139e8c/.lake/packages/mathlib"
+# MATHLIB_BASE_PATH = "/home/matheye/anaconda3/lib/python3.12/site-packages/lean_interact/cache/tmp_projects/v4.19.0-rc2/f2715bd81473367430cfb34866e811377a9add649dc367bc7031a837d7139e8c/.lake/packages/mathlib"
+MATHLIB_BASE_PATH = "../matheye/benchmarks/.lake/packages/mathlib"
 
 def module_to_path(module_name: str, base_path: str) -> Path | None:
     """Converts a Lean module name (e.g., Mathlib.Data.Nat.Basic) to a file path."""
@@ -59,8 +60,12 @@ def extract_theorems_from_file(file_path: Path) -> set[str]:
         print(f"Error reading or parsing file {file_path}: {e}")
     return theorems
 
-def process_single_json(input_json_path: str, theorems_output_dir: str, modules_output_dir: str, json_output_dir: str):
-    """Processes a single input JSON file and saves theorems to one file and modules to another."""
+def process_single_json(input_json_path: str, output_dir: str | None = None):
+    """
+    Processes a single input JSON file.
+    If output_dir is provided, saves theorems/modules to separate files there.
+    Otherwise, saves a single 'related_theorems.json' in the same directory as the input file.
+    """
     print(f"\n--- Processing file: {input_json_path} ---")
     try:
         with open(input_json_path, 'r') as f:
@@ -83,44 +88,51 @@ def process_single_json(input_json_path: str, theorems_output_dir: str, modules_
             else:
                 modules_not_found.append(module_name)
 
-        # 3. Filter libraries: Keep only those modules where theorems were found
-        selected_modules = set(theorems_found_in_module.keys())
-
-        # 4. Collect all theorems found in the selected modules' files
+        # 3. Collect all theorems found in the selected modules' files
         final_theorems = set()
         for theorems in theorems_found_in_module.values():
             final_theorems.update(theorems)
-        print(f"Collected {len(final_theorems)} unique theorem/lemma names from selected modules for {Path(input_json_path).name}.")
+        print(f"Collected {len(final_theorems)} unique theorem/lemma names from {Path(input_json_path).name}.")
 
-        # 5. Save outputs
-        input_filename_stem = Path(input_json_path).stem
-        
-        # Save theorems to a JSON file in the format compatible with extract_have.py
-        # (a simple list of theorem names)
-        os.makedirs(theorems_output_dir, exist_ok=True)
-        theorems_output_path = os.path.join(theorems_output_dir, f"{input_filename_stem}.json")
-        with open(theorems_output_path, 'w') as f:
-            json.dump(sorted(list(final_theorems)), f, indent=2)
-                
-        # Save modules to a JSON file
-        os.makedirs(modules_output_dir, exist_ok=True)
-        modules_output_path = os.path.join(modules_output_dir, f"{input_filename_stem}.json")
-        with open(modules_output_path, 'w') as f:
-            json.dump(sorted(list(selected_modules)), f, indent=2)
-        
-        # Also save the original JSON output for backward compatibility
-        original_output_data = {
-            "selected_library_modules": sorted(list(selected_modules)),
-            "theorems": sorted(list(final_theorems))
-        }
-        os.makedirs(json_output_dir, exist_ok=True)
-        json_output_path = os.path.join(json_output_dir, f"{input_filename_stem}_static_filtered.json")
-        with open(json_output_path, 'w') as f:
-            json.dump(original_output_data, f, indent=2)
+        # 4. Save outputs based on whether an output_dir is provided
+        if output_dir:
+            # Legacy behavior: save to multiple subdirectories
+            selected_modules = set(theorems_found_in_module.keys())
+            input_filename_stem = Path(input_json_path).stem
+            
+            theorems_output_dir = os.path.join(output_dir, "static_theorems")
+            os.makedirs(theorems_output_dir, exist_ok=True)
+            theorems_output_path = os.path.join(theorems_output_dir, f"{input_filename_stem}.json")
+            with open(theorems_output_path, 'w') as f:
+                json.dump(sorted(list(final_theorems)), f, indent=2)
+            
+            modules_output_dir = os.path.join(output_dir, "static_modules")
+            os.makedirs(modules_output_dir, exist_ok=True)
+            modules_output_path = os.path.join(modules_output_dir, f"{input_filename_stem}.json")
+            with open(modules_output_path, 'w') as f:
+                json.dump(sorted(list(selected_modules)), f, indent=2)
 
-        print(f"Successfully processed {input_json_path}")
-        print(f"Theorems saved to: {theorems_output_path}")
-        print(f"Modules saved to: {modules_output_path}")
+            json_output_dir = os.path.join(output_dir, "static_filtered_theorems_output")
+            os.makedirs(json_output_dir, exist_ok=True)
+            json_output_path = os.path.join(json_output_dir, f"{input_filename_stem}_static_filtered.json")
+            with open(json_output_path, 'w') as f:
+                json.dump({
+                    "selected_library_modules": sorted(list(selected_modules)),
+                    "theorems": sorted(list(final_theorems))
+                }, f, indent=2)
+
+            print(f"Successfully processed {input_json_path}")
+            print(f"Theorems saved to: {theorems_output_path}")
+            print(f"Modules saved to: {modules_output_path}")
+
+        else:
+            # New behavior: save a single related_theorems.json file
+            input_dir = os.path.dirname(input_json_path)
+            output_path = os.path.join(input_dir, "related_theorems.json")
+            with open(output_path, 'w') as f:
+                json.dump(sorted(list(final_theorems)), f, indent=2)
+            print(f"Successfully processed and saved results to: {output_path}")
+
         return True
 
     except FileNotFoundError:
@@ -135,39 +147,29 @@ def process_single_json(input_json_path: str, theorems_output_dir: str, modules_
         return False
 
 def main():
-    parser = argparse.ArgumentParser(description='Filter theorems based on static analysis and save to separate folders.')
-    parser.add_argument('--input-dir', required=True, help='Directory containing input JSON files (identifier -> library_module_path).')
-    parser.add_argument('--output-dir', required=True, help='Base directory to save output files.')
+    parser = argparse.ArgumentParser(description='Generates related_theorems.json for a given problem by statically analyzing its dependencies.')
+    parser.add_argument('--dataset', required=True, help='The dataset name (e.g., "demo", "minif2f").')
+    parser.add_argument('--problem', required=True, help='The problem ID (e.g., "demo_complex_p1").')
     args = parser.parse_args()
 
-    # Find all JSON files in the input directory
-    json_files = sorted(glob.glob(os.path.join(args.input_dir, '*.json')))
-    if not json_files:
-        print(f"No JSON files found in directory: {args.input_dir}")
-        return
-        
-    print(f"Found {len(json_files)} JSON files to process in {args.input_dir}.")
-    success_count = 0
-    fail_count = 0
+    # Construct the path to the input file based on dataset and problem
+    base_path = "decomposition_results"
+    problem_dir = os.path.join(base_path, args.dataset, "decomposed", args.problem)
+    input_file = os.path.join(problem_dir, "identifier_to_module_map.json")
 
-    # Create output directories
-    theorems_output_dir = os.path.join(args.output_dir, "static_theorems")
-    modules_output_dir = os.path.join(args.output_dir, "static_modules")
-    json_output_dir = os.path.join(args.output_dir, "static_filtered_theorems_output")
+    if not os.path.exists(input_file):
+        print(f"Error: Input file not found at {input_file}")
+        print("Please run the 'collectpath.py' script first for this problem.")
+        return
+
+    print(f"Processing input file: {input_file}")
     
-    # Process each JSON file
-    for input_path in json_files:
-        if process_single_json(input_path, theorems_output_dir, modules_output_dir, json_output_dir):
-            success_count += 1
-        else:
-            fail_count += 1
-            
-    print(f"\n--- Batch processing summary ---")
-    print(f"Successfully processed: {success_count} files.")
-    print(f"Failed to process: {fail_count} files.")
-    print(f"Theorems saved in: {theorems_output_dir}")
-    print(f"Modules saved in: {modules_output_dir}")
-    print(f"Combined data saved in: {json_output_dir}")
+    # By passing None for output_dir, process_single_json will save 
+    # 'related_theorems.json' in the same directory as the input file.
+    if process_single_json(input_file, None):
+        print(f"\n--- Successfully completed processing for {args.dataset}/{args.problem} ---")
+    else:
+        print(f"\n--- Failed to process {args.dataset}/{args.problem} ---")
 
 if __name__ == "__main__":
     main() 

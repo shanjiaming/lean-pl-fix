@@ -1,4 +1,4 @@
-from lean_api import repl
+# from lean_api import repl
 import re
 import json
 import time
@@ -6,11 +6,9 @@ import argparse
 import os
 import glob
 from pathlib import Path
+from decompose_solver import unified_env, remove_lean_comments
 
-def extract_identifiers(file_path):
-    with open(file_path, 'r') as file:
-        content = file.read()
-    
+def extract_identifiers(content: str):
     # Extract all potential identifiers (word-like tokens) from the content
     # This regex looks for words that might be theorem names
     identifiers = set(re.findall(r'\b([a-zA-Z][a-zA-Z0-9_]*)\b', content))
@@ -19,47 +17,40 @@ def extract_identifiers(file_path):
 def extract_module_paths(result):
     # Extract module paths from the result
     module_paths = {}
-    if 'messages' in result:
-        for message in result['messages']:
-            # Get the message string from the 'message' key
-            if isinstance(message, dict) and 'message' in message:
-                data = message['message']
-            else:
-                continue
-                
-            # Parse the data field which is expected in format "identifier : module"
-            parts = data.split(' : ')
-            if len(parts) == 2:
-                identifier = parts[0]
-                module_info = parts[1]
-                
-                # Only keep entries with actual module paths (not "none")
-                if module_info.startswith('some ('):
-                    # Extract the module path from inside the parentheses
-                    module_path = module_info[6:-1]  # Remove "some (" and ")"
-                    module_paths[identifier] = module_path
     
+    for message in result.messages:
+        # Get the message string from the 'message' key
+        if message.severity=='error':
+            continue
+        else:
+            data = message.data
+            
+        # Parse the data field which is expected in format "identifier : module"
+        parts = data.split(' : ')
+        if len(parts) == 2:
+            identifier = parts[0]
+            module_info = parts[1]
+            
+            # Only keep entries with actual module paths (not "none")
+            if module_info.startswith('some ('):
+                # Extract the module path from inside the parentheses
+                module_path = module_info[6:-1]  # Remove "some (" and ")"
+                module_paths[identifier] = module_path
+
     return module_paths
 
-def process_batch(identifiers_batch, batch_num):
+def process_batch(identifiers_batch, batch_num, header: str):
     """Process a batch of identifiers and return their module paths."""
     print(f"Processing batch {batch_num} with {len(identifiers_batch)} identifiers...")
     
     # Build Lean code to check the batch of identifiers
-    code_template = """import Mathlib
-import Aesop
-
-set_option maxHeartbeats 0
-
-open BigOperators Real Nat Topology Rat Lean
-
-run_cmd do
+    run_cmd_part = """run_cmd do
   let env ← getEnv
-    """
+"""
 
     # Add each identifier in the batch to the code
     for identifier in identifiers_batch:
-        code_template += f"""
+        run_cmd_part += f"""
   let name := ``{identifier}
   let module? := env.getModuleFor? name
   logInfo m!"{{name}} : {{module?}}"
@@ -68,9 +59,16 @@ run_cmd do
     # Execute the code
     print(f"Executing batch {batch_num}...")
     try:
+        # For debugging: print the exact code being executed
+        print("\n--- Sending to Lean ---")
+        print("--- Header ---")
+        print(header)
+        print("--- Command ---")
+        print(run_cmd_part)
+        print("-----------------------\n")
+
         # Execute using the REPL
-        # print(f"Executing code: {code_template}")
-        result = repl.execute(code_template, env_mode='header')
+        result = unified_env.run_with_header(header, run_cmd_part)
         print(f"Batch {batch_num} execution completed")
         
         # Extract module paths from this batch
@@ -94,167 +92,73 @@ def save_results(all_module_paths, output_file="module_paths_results.json"):
         json.dump(all_module_paths, f, indent=2)
     print(f"Saved {len(all_module_paths)} module paths to {output_file}")
 
-def run_sourcing_lean_env():
-    """Run the lean environment setup if needed"""
-    try:
-        # Check if we need to source lean.sh
-        lean_sh_path = "/data/lean.sh"
-        if not os.path.exists(lean_sh_path):
-            print(f"Lean environment script not found at {lean_sh_path}")
-            return
-
-        # Check if LAKE_ROOT is already set (might indicate env is already sourced)
-        if os.environ.get("LAKE_ROOT"):
-             print("Lean environment likely already sourced (LAKE_ROOT is set).")
-             return
-
-        print(f"Sourcing Lean environment from {lean_sh_path}...")
-        # Using subprocess is generally safer and captures output/errors better
-        # but os.system might be needed if 'source' needs shell context
-        # For simplicity, keep os.system but add error check
-        ret_code = os.system(f"source {lean_sh_path}")
-        if ret_code == 0:
-            print("Lean environment sourced successfully (using os.system).")
-        else:
-             # This might not work as expected as os.system doesn't handle 'source' well
-             print(f"Warning: 'source {lean_sh_path}' command returned non-zero exit code: {ret_code}. Environment might not be set correctly.")
-
-    except Exception as e:
-        print(f"Error sourcing Lean environment: {e}")
-
-def collect_paths_from_file(file_path, output_file, batch_size=40):
-    """Process a single Lean file to collect module paths for identifiers."""
-    print(f"\n--- Processing file: {file_path} ---")
-    try:
-        # Ensure Lean environment is set up (called once per file)
-        # run_sourcing_lean_env() # Called globally in main now
-        
-        # Start the Lean REPL if not already running (idempotent check inside)
-        if not repl.running:
-            print("Starting Lean REPL...")
-            if not repl.start():
-                 print("Failed to start Lean REPL. Aborting for this file.")
-                 return {} # Indicate failure for this file
-        
-        # Extract identifiers from the file
-        print(f"Extracting identifiers from {file_path}...")
-        identifiers = list(extract_identifiers(file_path))
-        print(f"Found {len(identifiers)} identifiers")
-        
-        # Process identifiers in batches
-        all_module_paths = {}
-        
-        for i in range(0, len(identifiers), batch_size):
-            batch_num = i // batch_size + 1
-            end_idx = min(i + batch_size, len(identifiers))
-            current_batch = identifiers[i:end_idx]
-            
-            # Process this batch
-            batch_result = process_batch(current_batch, batch_num)
-            
-            # Merge with overall results
-            all_module_paths.update(batch_result)
-            
-        # Print results for this file
-        print(f"\nResults for {file_path}:")
-        # for identifier, module_path in sorted(all_module_paths.items()):
-        #     print(f"{identifier}: {module_path}")
-        
-        # Final statistics for this file
-        print(f"Total identifiers processed in {file_path}: {len(identifiers)}")
-        print(f"Total module paths found in {file_path}: {len(all_module_paths)}")
-        
-        # Save final results for this file
-        save_results(all_module_paths, output_file)
-        return all_module_paths # Return results for potential aggregation if needed later
-        
-    except Exception as e:
-        print(f"Error processing file {file_path}: {e}")
-        return {} # Indicate failure
-
-def collect_paths_from_directory(directory_path, output_dir, batch_size=40):
-    """Process all Lean files in a directory, saving results individually."""
-    print(f"\n=== Processing directory: {directory_path} ===")
-    print(f"Outputting individual JSON files to: {output_dir}")
-    
-    # Ensure output directory exists
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Find all Lean files
-    lean_files = sorted(glob.glob(os.path.join(directory_path, "*.lean")))
-    print(f"Found {len(lean_files)} Lean files to process.")
-    
-    if not lean_files:
-        print("No .lean files found in the specified directory.")
-        return
-
-    total_files_processed = 0
-    total_files_failed = 0
-
-    # Process each file individually
-    for file_path in lean_files:
-        # Construct output file path
-        file_stem = Path(file_path).stem
-        output_file = os.path.join(output_dir, f"{file_stem}.json")
-        
-        # Process the file
-        result = collect_paths_from_file(file_path, output_file, batch_size)
-        
-        if result is not None: # Assuming collect_paths_from_file returns {} on error
-             total_files_processed += 1
-        else:
-             total_files_failed +=1
-
-
-    print(f"\n=== Directory processing complete ===")
-    print(f"Total files processed: {total_files_processed}")
-    print(f"Total files failed: {total_files_failed}")
-    print(f"Individual JSON results saved in: {output_dir}")
-
-
 def main():
-    parser = argparse.ArgumentParser(description="Collect module paths for identifiers in Lean files")
-    input_group = parser.add_mutually_exclusive_group(required=True)
-    input_group.add_argument("--file", type=str, help="Path to a single Lean file to process")
-    input_group.add_argument("--dir", type=str, help="Path to a directory of Lean files to process")
-    
-    output_group = parser.add_mutually_exclusive_group(required=True)
-    output_group.add_argument("--output", type=str, help="Output file for the module paths (used only with --file)")
-    output_group.add_argument("--output-dir", type=str, help="Output directory for individual JSON files (used only with --dir)")
-
-    parser.add_argument("--batch-size", type=int, default=1, 
-                        help="Number of identifiers to process in each batch")
+    parser = argparse.ArgumentParser(description="Collect module paths for identifiers in Lean files based on dataset and problem ID.")
+    parser.add_argument("--dataset", type=str, required=True, help="The dataset name (e.g., 'demo', 'minif2f').")
+    parser.add_argument("--problem", type=str, required=True, help="The problem ID (e.g., 'demo_complex_p1').")
+    parser.add_argument("--output", type=str, help="Optional: Output file for the module paths. If not provided, defaults to '<problem_dir>/identifier_to_module_map.json'.")
+    parser.add_argument("--batch-size", type=int, default=1, help="Number of identifiers to process in each batch.")
     
     args = parser.parse_args()
     
-    # Validate arguments based on input type
-    if args.file and not args.output:
-         parser.error("--output is required when using --file")
-    if args.dir and not args.output_dir:
-         parser.error("--output-dir is required when using --dir")
+    # --- 1. Construct Paths and Read Files ---
+    base_path = "decomposition_results"
+    problem_dir = os.path.join(base_path, args.dataset, "decomposed", args.problem)
+    
+    # Determine output path
+    if args.output:
+        output_file = args.output
+    else:
+        output_file = os.path.join(problem_dir, "identifier_to_module_map.json")
 
-    try:
-        # Ensure Lean environment is set up (do it once globally)
-        run_sourcing_lean_env()
+    problem_file_path = os.path.join(problem_dir, "problem.lean")
+    header_file_path = os.path.join(problem_dir, "header.lean")
+    
+    if not os.path.exists(problem_file_path) or not os.path.exists(header_file_path):
+        print(f"Error: Could not find 'problem.lean' or 'header.lean' in directory: {problem_dir}")
+        return
+
+    print(f"--- Processing problem: {args.dataset}/{args.problem} ---")
+    
+    with open(problem_file_path, 'r') as f:
+        problem_content = f.read()
         
-        # Start the Lean REPL (it handles being started multiple times)
-        print("Attempting to start Lean REPL globally...")
-        if not repl.start():
-             print("Fatal: Failed to start Lean REPL. Exiting.")
-             return # Exit if REPL can't start
+    with open(header_file_path, 'r') as f:
+        header_content = f.read()
+    
+    # Clean comments from the header first
+    header_content = remove_lean_comments(header_content)
 
-        if args.file:
-            collect_paths_from_file(args.file, args.output, args.batch_size)
-        elif args.dir:
-            collect_paths_from_directory(args.dir, args.output_dir, args.batch_size)
+    # Per user instruction, add "open Lean" to the header
+    header_content += "\nopen Lean\n"
+
+    # --- 2. Process Identifiers ---
+    try:
+        print(f"Extracting identifiers from {problem_file_path}...")
+        identifiers = list(extract_identifiers(problem_content))
+        print(f"Found {len(identifiers)} unique potential identifiers.")
+        
+        all_module_paths = {}
+        for i in range(0, len(identifiers), args.batch_size):
+            batch_num = i // args.batch_size + 1
+            end_idx = min(i + args.batch_size, len(identifiers))
+            current_batch = identifiers[i:end_idx]
             
+            # Process this batch
+            batch_result = process_batch(current_batch, batch_num, header_content)
+            all_module_paths.update(batch_result)
+            
+        # --- 3. Save Results ---
+        print("\n--- Final Results ---")
+        print(f"Total identifiers processed: {len(identifiers)}")
+        print(f"Total module paths found: {len(all_module_paths)}")
+        save_results(all_module_paths, output_file)
+        
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"An unexpected error occurred during processing: {e}")
     finally:
-        # Always make sure to close the REPL properly at the very end
-        if repl.running:
-            print("Closing Lean REPL...")
-            repl.end()
+        # The unified_env object manages its own lifecycle, no explicit end needed
+        pass
 
 # Main execution
 if __name__ == "__main__":

@@ -225,21 +225,17 @@ class CleanNgramPipeline:
                        clear_version: str, 
                        enumerable_indices: List[int],
                        sorry_map: Dict[int, 'SorryInfo'],
-                       problem_id: str = None) -> Dict:
+                       problem_id: str = None,
+                       dataset: str = None) -> Dict:
         """Process entire problem using pickle-based approach"""
         
         start_time = time.time()
         print(f"\n🚀 Starting clean n-gram processing (max_depth={self.max_depth})")
-        print(f"   Problem: {problem_id or 'unknown'}")
+        print(f"   Problem: {dataset or 'unknown'}/{problem_id or 'unknown'}")
         print(f"   Enumerable holes: {len(enumerable_indices)}")
         
         # Initialize pickle manager with problem info
-        if problem_id:
-            # Extract dataset from problem_id if possible, or use 'demo' as default
-            dataset = problem_id.split('_')[0] if '_' in problem_id else 'demo'
-            self.pickle_manager = ProofStatePickleManager(problem_id=problem_id, dataset=dataset)
-        else:
-            self.pickle_manager = ProofStatePickleManager()
+        self.pickle_manager = ProofStatePickleManager(problem_id=problem_id, dataset=dataset)
         
         # Phase 1: Extract and pickle all proof states
         pickle_start = time.time()
@@ -273,8 +269,8 @@ class CleanNgramPipeline:
             'stats': self.stats
         }
 
-        # Only save if problem_id is available (not in demo mode)
-        if problem_id:
+        # Save results for checkpointing
+        if problem_id and dataset:
             self._save_ngram_results(final_results, problem_id, dataset)
 
         return final_results
