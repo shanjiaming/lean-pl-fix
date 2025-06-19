@@ -9,7 +9,6 @@ while providing enhanced search capabilities.
 Key Features:
 - Drop-in replacement for existing unigram enumeration
 - Backward compatibility with existing output formats
-- Progressive enhancement (fallback to unigram if needed)
 - Memory management and checkpoint support
 - Detailed result tracking and analysis
 """
@@ -34,13 +33,11 @@ class NgramPipelineIntegrator:
     def __init__(self, 
                  max_depth: int = 2,
                  enable_checkpoints: bool = True,
-                 enable_memory_management: bool = True,
-                 fallback_to_unigram: bool = True):
+                 enable_memory_management: bool = True):
         
         self.max_depth = max_depth
         self.enable_checkpoints = enable_checkpoints
         self.enable_memory_management = enable_memory_management
-        self.fallback_to_unigram = fallback_to_unigram
         
         # Initialize components
         self.searcher: Optional[NgramTacticSearcher] = None
@@ -51,7 +48,6 @@ class NgramPipelineIntegrator:
         self.integration_stats = {
             'holes_processed': 0,
             'ngram_successes': 0,
-            'unigram_fallbacks': 0,
             'errors': 0,
             'total_processing_time': 0.0
         }
@@ -64,7 +60,7 @@ class NgramPipelineIntegrator:
         if self.enable_memory_management and not self.memory_manager:
             self.memory_manager = MemoryManager(
                 max_nodes_before_restart=500,  # Conservative limit
-                max_memory_mb=2048,
+                max_memory_percent=50.0,
                 max_runtime_hours=1.0
             )
         
@@ -123,19 +119,13 @@ class NgramPipelineIntegrator:
         except Exception as e:
             print(f"❌ N-gram enumeration failed: {e}")
             
-            if self.fallback_to_unigram:
-                print(f"🔄 Falling back to unigram enumeration")
-                return self._fallback_to_unigram_enumeration(
-                    header_content, clear_version, enumerable_indices, sorry_map
-                )
-            else:
-                # Return empty results
-                return {
-                    'successful_tactics': {},
-                    'ngram_attempts': {},
-                    'proof_states_extracted': 0,
-                    'error': str(e)
-                }
+            # Return error results directly
+            return {
+                'successful_tactics': {},
+                'ngram_attempts': {},
+                'proof_states_extracted': 0,
+                'error': str(e)
+            }
         
         finally:
             if self.searcher and self.searcher.lean_integrator:
@@ -319,37 +309,6 @@ class NgramPipelineIntegrator:
         
         return proof_states
     
-    def _fallback_to_unigram_enumeration(self,
-                                       header_content: str,
-                                       clear_version: str,
-                                       enumerable_indices: List[int],
-                                       sorry_map: Dict[int, 'SorryInfo']) -> Dict:
-        """Fallback to original unigram enumeration"""
-        print(f"🔄 Executing unigram fallback")
-        
-        self.integration_stats['unigram_fallbacks'] += 1
-        
-        # Use original unigram implementation
-        integrator = MinimalLeanProofStepIntegrator()
-        
-        try:
-            integrator.initialize_lean_server()
-            
-            unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", 
-                       "simp", "simpa", "field_simp", "positivity", "norm_cast"]
-            
-            results = integrator.enumerate_tactics_with_proof_states(
-                header_content, clear_version, unigrams, enumerable_indices, sorry_map
-            )
-            
-            # Add fallback indicator
-            results['fallback_used'] = True
-            results['fallback_reason'] = 'N-gram enumeration failed'
-            
-            return results
-        
-        finally:
-            integrator.shutdown_lean_server()
 
 
 def create_ngram_wrapper_for_existing_pipeline():
@@ -375,8 +334,7 @@ def create_ngram_wrapper_for_existing_pipeline():
         ngram_integrator = NgramPipelineIntegrator(
             max_depth=max_depth,
             enable_checkpoints=True,
-            enable_memory_management=True,
-            fallback_to_unigram=True
+            enable_memory_management=True
         )
         
         # Execute n-gram enumeration

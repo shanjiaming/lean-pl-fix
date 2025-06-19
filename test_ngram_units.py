@@ -377,7 +377,7 @@ class TestMemoryManager(unittest.TestCase):
         """Set up test fixtures"""
         self.memory_manager = MemoryManager(
             max_nodes_before_restart=100,
-            max_memory_mb=1024,
+            max_memory_percent=75.0,
             max_runtime_hours=1.0
         )
         self.mock_searcher = Mock()
@@ -388,7 +388,7 @@ class TestMemoryManager(unittest.TestCase):
     def test_memory_manager_initialization(self):
         """Test memory manager initialization"""
         self.assertEqual(self.memory_manager.max_nodes_before_restart, 100)
-        self.assertEqual(self.memory_manager.max_memory_mb, 1024)
+        self.assertEqual(self.memory_manager.max_memory_percent, 75.0)
         self.assertEqual(self.memory_manager.max_runtime_hours, 1.0)
         self.assertEqual(self.memory_manager.nodes_executed_since_restart, 0)
     
@@ -424,18 +424,18 @@ class TestMemoryManager(unittest.TestCase):
         self.assertIn("Runtime limit", reason)
         self.assertTrue(self.memory_manager.restart_reasons['time_limit'])
     
-    @patch('ngram_memory_manager.psutil.Process')
-    def test_should_restart_server_memory_limit(self, mock_process):
+    @patch('ngram_memory_manager.psutil.virtual_memory')
+    def test_should_restart_server_memory_limit(self, mock_virtual_memory):
         """Test restart trigger for memory limit"""
-        # Mock high memory usage
-        mock_memory_info = Mock()
-        mock_memory_info.rss = 2048 * 1024 * 1024  # 2048 MB in bytes
-        mock_process.return_value.memory_info.return_value = mock_memory_info
+        # Mock high memory usage (80% > 75% threshold)
+        mock_memory = Mock()
+        mock_memory.percent = 80.0
+        mock_virtual_memory.return_value = mock_memory
         
         should_restart, reason = self.memory_manager.should_restart_server(self.mock_searcher)
         
         self.assertTrue(should_restart)
-        self.assertIn("Memory limit", reason)
+        self.assertIn("System memory usage exceeded", reason)
         self.assertTrue(self.memory_manager.restart_reasons['memory_limit'])
     
     def test_no_restart_needed(self):

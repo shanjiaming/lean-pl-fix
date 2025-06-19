@@ -181,7 +181,7 @@ class NgramTacticSearcher:
         
         # Create root node (empty tactic sequence)
         root_node = TacticNode(
-            node_id=f"{hole_id}_root",
+            node_id="root",
             hole_id=hole_id,
             tactic_sequence=[],
             parent_id=None,
@@ -206,7 +206,7 @@ class NgramTacticSearcher:
         for tactic in self.available_tactics:
             # Create child node
             child_sequence = node.tactic_sequence + [tactic]
-            child_id = f"{node.hole_id}_{'_'.join(child_sequence)}"
+            child_id = '@'.join(child_sequence) if child_sequence else 'root'
             
             # Determine if this tactic is terminal
             is_terminal_tactic = tactic in self.terminal_tactics

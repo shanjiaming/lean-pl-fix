@@ -950,3 +950,14 @@ if not result:
 1. **Debug failing proofs**: Identify exactly which tactics or lines cause verification failures
 2. **Test hole versions**: Verify that hole replacements work correctly
 3. **Validate fixes**: Check if modifications to Lean code resolve previous errors
+
+ProofState Pickling
+```
+from lean_interact import PickleProofState, UnpickleProofState
+
+# Save a proof state
+server.run(PickleProofState(proof_state=2, pickle_to="proof_state.olean"))
+
+# Restore a proof state
+server.run(UnpickleProofState(unpickle_proof_state_from="proof_state.olean", env=1))
+```

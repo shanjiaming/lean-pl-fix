@@ -32,7 +32,7 @@ class MemoryStats:
     timestamp: datetime
     total_nodes: int
     cache_size: int
-    memory_mb: float
+    memory_mb: float  # Now stores system memory percentage (kept name for compatibility)
     lean_server_active: bool
     
     def to_dict(self) -> dict:
@@ -41,7 +41,7 @@ class MemoryStats:
             'timestamp': self.timestamp.isoformat(),
             'total_nodes': self.total_nodes,
             'cache_size': self.cache_size,
-            'memory_mb': self.memory_mb,
+            'memory_mb': self.memory_mb,  # Actually system memory percentage
             'lean_server_active': self.lean_server_active
         }
 
@@ -51,10 +51,10 @@ class MemoryManager:
     
     def __init__(self, 
                  max_nodes_before_restart: int = 1000,
-                 max_memory_mb: float = 4096,
+                 max_memory_percent: float = 50.0,
                  max_runtime_hours: float = 2.0):
         self.max_nodes_before_restart = max_nodes_before_restart
-        self.max_memory_mb = max_memory_mb
+        self.max_memory_percent = max_memory_percent
         self.max_runtime_hours = max_runtime_hours
         
         self.nodes_executed_since_restart = 0
@@ -70,12 +70,10 @@ class MemoryManager:
             'manual': False
         }
     
-    def get_current_memory_usage(self) -> float:
-        """Get current memory usage in MB"""
+    def get_system_memory_percent(self) -> float:
+        """Get system memory usage percentage"""
         try:
-            process = psutil.Process()
-            memory_info = process.memory_info()
-            return memory_info.rss / 1024 / 1024  # Convert to MB
+            return psutil.virtual_memory().percent
         except:
             return 0.0
     
@@ -85,7 +83,7 @@ class MemoryManager:
             timestamp=datetime.now(),
             total_nodes=sum(len(tree.nodes) for tree in searcher.hole_trees.values()),
             cache_size=len(searcher.proof_state_cache),
-            memory_mb=self.get_current_memory_usage(),
+            memory_mb=self.get_system_memory_percent(),
             lean_server_active=searcher.lean_integrator is not None
         )
         
@@ -113,10 +111,10 @@ class MemoryManager:
             return True, f"Node limit reached ({self.nodes_executed_since_restart}/{self.max_nodes_before_restart})"
         
         # Check memory limit
-        current_memory = self.get_current_memory_usage()
-        if current_memory > self.max_memory_mb:
+        current_memory_percent = self.get_system_memory_percent()
+        if current_memory_percent > self.max_memory_percent:
             self.restart_reasons['memory_limit'] = True
-            return True, f"Memory limit exceeded ({current_memory:.1f}MB/{self.max_memory_mb}MB)"
+            return True, f"System memory usage exceeded ({current_memory_percent:.1f}%/{self.max_memory_percent}%)"
         
         # Check time limit
         runtime = datetime.now() - self.last_restart_time
