@@ -26,11 +26,8 @@ python minimal_verification_pipeline.py dataset demo 5
 1. **直接编辑文件**：
    ```bash
    # 编辑现有问题
-   vim /home/matheye/lean-pl-fix/demo/demo_complex_p4.lean
+   例子：编辑或添加 /home/matheye/lean-pl-fix/demo/demo_complex_p4.lean
    
-   # 或创建新问题
-   cp demo/demo_complex_p1.lean demo/demo_complex_p8.lean
-   vim demo/demo_complex_p8.lean
    ```
 
 2. **重新加载到统一结构**：
@@ -144,9 +141,7 @@ python minimal_verification_pipeline.py problem demo demo_complex_p1
 - **示例**：`norm_num\nrw [← h]` 被测试为 `(\nnorm_num\nrw [← h]\n)`
 
 ### 约束满足
-- **最多3次完整验证** 每个问题
 - **所有策略测试** 通过proof state操作（不是完整验证）
-- **高效率**：典型8个proof state测试对1个完整验证
 
 ### 智能Fallback
 - 原始策略失败 → 自动测试unigram策略
@@ -184,6 +179,3 @@ decomposition_results/demo/
 - ✅ 找到了工作策略  
 - ✅ 生成了完整解决方案
 - ✅ 满足了所有约束
-
-
-nohup python minimal_verification_pipeline.py dataset minif2f > minif2f_pipeline_solve.log 2>&1 &
