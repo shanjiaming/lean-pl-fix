@@ -48,8 +48,9 @@ class MinimalVerificationPipeline:
     Leverages existing decomposition results from DecomposeHoleMergePipeline
     """
     
-    def __init__(self, decomposition_base_dir: str = "decomposition_results"):
+    def __init__(self, decomposition_base_dir: str = "decomposition_results", suffix: str = "_ngram"):
         self.decomposition_base_dir = decomposition_base_dir
+        self.suffix = suffix
     
     def _load_existing_results(self, dataset_name: str) -> Set[str]:
         """
@@ -61,7 +62,7 @@ class MinimalVerificationPipeline:
         Returns:
             Set of processed problem IDs
         """
-        summary_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary.json")
+        summary_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary{self.suffix}.json")
         
         if not os.path.exists(summary_file):
             print(f"📂 Summary file not found, starting from scratch: {summary_file}")
@@ -283,7 +284,7 @@ class MinimalVerificationPipeline:
             print(f"  🎯 No admits used: {no_admits_used}")
             
             # Save synthesized version to decomposed directory
-            synthesized_path = os.path.join(decomp_dir, "synthesized_proof.lean")
+            synthesized_path = os.path.join(decomp_dir, f"synthesized_proof{self.suffix}.lean")
             with open(synthesized_path, 'w') as f:
                 f.write(synthesized_content)
             print(f"  💾 Synthesized proof saved to: {synthesized_path}")
@@ -327,7 +328,7 @@ class MinimalVerificationPipeline:
             )
             
             # Save minimal verification result to decomposed directory
-            minimal_result_path = os.path.join(decomp_dir, "minimal_verification.json")
+            minimal_result_path = os.path.join(decomp_dir, f"minimal_verification{self.suffix}.json")
             minimal_result_data = {
                 "problem_id": result.problem_id,
                 "dataset": result.dataset,
@@ -391,7 +392,7 @@ class MinimalVerificationPipeline:
         if enable_resume:
             processed_problems = self._load_existing_results(dataset_name)
             # Load existing results for incremental updates
-            summary_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary.json")
+            summary_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary{self.suffix}.json")
             if os.path.exists(summary_file):
                 try:
                     with open(summary_file, 'r') as f:
@@ -527,7 +528,7 @@ class MinimalVerificationPipeline:
     
     def _save_dataset_summary(self, dataset_name: str, results: List[MinimalVerificationResult]):
         """Save dataset-level summary results to decomposition_results directory"""
-        output_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary.json")
+        output_file = os.path.join(self.decomposition_base_dir, f"{dataset_name}_minimal_verification_summary{self.suffix}.json")
         
         results_data = []
         for result in results:

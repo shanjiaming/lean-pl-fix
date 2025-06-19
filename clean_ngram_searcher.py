@@ -84,8 +84,8 @@ class CleanNgramSearcher:
         self.nodes: Dict[str, SearchNode] = {}
         self.successful_paths: List[List[str]] = []
         self.proofsteps_executed_since_restart = 0
-        self.max_memory_percent = 50.0
-        self.proofstep_check_interval = 200
+        self.max_memory_percent = 1.0
+        self.proofstep_check_interval = 10
         self.lean_integrator: Optional[MinimalLeanProofStepIntegrator] = None
         
         # Memory management & Server Generation
@@ -206,9 +206,6 @@ class CleanNgramSearcher:
                 print(f"         🏁 Stopping early (success found at previous depth)")
                 break
 
-            # Memory check happens inside the loop, before expansion.
-            self._check_and_restart_server(pickle_info, loader_func, root_node)
-
             next_nodes = []
             
             for node in nodes_to_process:
@@ -219,7 +216,7 @@ class CleanNgramSearcher:
                 if node.is_terminal():
                     continue
                 
-                children = self._expand_node(node, pickle_info.hole_id)
+                children = self._expand_node(node, pickle_info.hole_id, pickle_info, loader_func, root_node)
                 next_nodes.extend(children)
                 
                 # Check for success immediately
@@ -279,7 +276,7 @@ class CleanNgramSearcher:
         
         return self.successful_paths.copy(), results_dict
     
-    def _expand_node(self, node: SearchNode, hole_id: str) -> List[SearchNode]:
+    def _expand_node(self, node: SearchNode, hole_id: str, pickle_info: HolePickleInfo, loader_func, root_node: SearchNode) -> List[SearchNode]:
         """Expand a node by trying all available tactics"""
         
         if node.depth >= self.max_depth:
@@ -293,6 +290,13 @@ class CleanNgramSearcher:
             
             if child_id in self.nodes:
                 continue
+
+            # Check for restart BEFORE trying this tactic
+            self._check_and_restart_server(pickle_info, loader_func, root_node)
+
+            # After a potential restart, the parent 'node' we are expanding from might be stale.
+            # We MUST re-validate it before using its proof state.
+            self._ensure_node_state_is_valid(node)
 
             child_node = SearchNode(
                 node_id=child_id,
