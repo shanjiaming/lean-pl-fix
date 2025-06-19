@@ -135,8 +135,9 @@ class ProofStepCacheEntry:
 class NgramTacticSearcher:
     """N-gram tactic sequence searcher with caching and memory management"""
     
-    def __init__(self, max_depth: int = 2):
+    def __init__(self, max_depth: int = 2, stop_on_first_success: bool = True):
         self.max_depth = max_depth
+        self.stop_on_first_success = stop_on_first_success  # Stop search when first success found
         self.hole_trees: Dict[str, HoleSearchTree] = {}
         self.lean_integrator: Optional[MinimalLeanProofStepIntegrator] = None
         self.proof_state_cache: Dict[str, ProofStepCacheEntry] = {}  # Cache ProofStep results
@@ -417,10 +418,22 @@ class NgramTacticSearcher:
                 for node in pending_nodes:
                     node.status = self.execute_tactic_sequence(node, tree.initial_proof_state_id)
                     
-                    # Track successful paths
+                    # Track successful paths (avoid duplicates)
                     if node.status == TacticNodeStatus.SUCCESS:
-                        tree.successful_paths.append(node.tactic_sequence.copy())
-                        print(f"🎉 Found successful path: {' -> '.join(node.tactic_sequence)}")
+                        path = node.tactic_sequence.copy()
+                        if path not in tree.successful_paths:
+                            tree.successful_paths.append(path)
+                            print(f"🎉 Found successful path: {' -> '.join(node.tactic_sequence)}")
+                            
+                            # Early termination option
+                            if self.stop_on_first_success:
+                                print(f"🏁 Stopping search early - first success found (stop_on_first_success=True)")
+                                break
+            
+            # Check if we should stop early due to success
+            if self.stop_on_first_success and tree.successful_paths:
+                print(f"🏁 Search completed for '{hole_id}' - early termination after first success")
+                break
             
             # Check node completion status after executing pending nodes
             for node in tree.nodes.values():
@@ -526,6 +539,7 @@ class NgramTacticSearcher:
                 'timestamp': datetime.now().isoformat(),
                 'searcher_config': {
                     'max_depth': self.max_depth,
+                    'stop_on_first_success': self.stop_on_first_success,
                     'available_tactics': self.available_tactics,
                     'terminal_tactics': list(self.terminal_tactics)
                 }
