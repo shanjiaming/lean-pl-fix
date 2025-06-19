@@ -1,0 +1,157 @@
+{
+  "problem_id": "putnam_1971_a1",
+  "dataset": "putnam",
+  "timestamp": "2025-06-19T06:10:31.584657",
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "holes": [
+    {
+      "hole_id": "hole_1",
+      "original_proof": "by_contra h\nrw [Set.not_nonempty_iff_eq_empty] at h\nrw [h] at hS\nnorm_num at hS"
+    },
+    {
+      "hole_id": "hole_18",
+      "original_proof": "classical\nhave h\u2083 : \u2203 (a : \u2124 \u00d7 \u2124 \u00d7 \u2124), a \u2208 S := by exact Set.nonempty_iff_ne_empty.mpr (by intro h; simp_all)\nobtain \u27e8a, ha\u27e9 := h\u2083\nhave h\u2084 : S.ncard = 9 := hS\nhave h\u2085 : S.Finite := by\n  by_contra h\u2085\n  have h\u2086 : S.Infinite := by simpa using h\u2085\n  have h\u2087 : S.ncard = 0 := by\n    apply Set.Infinite.ncard\n    exact h\u2086\n  linarith\nhave h\u2086 :\n  \u2203 (P Q : \u2124 \u00d7 \u2124 \u00d7 \u2124),\n    P \u2208 S \u2227 Q \u2208 S \u2227 P \u2260 Q \u2227 (P.1 % 2 = Q.1 % 2) \u2227 (P.2.1 % 2 = Q.2.1 % 2) \u2227 (P.2.2 % 2 = Q.2.2 % 2) :=\n  by\n  by_contra h\u2086\n  have h\u2087 : S.Ncard \u2264 8 :=\n    by\n    have h\u2088 :\n      \u2200 (P Q : \u2124 \u00d7 \u2124 \u00d7 \u2124),\n        P \u2208 S \u2192 Q \u2208 S \u2192 P \u2260 Q \u2192 \u00ac((P.1 % 2 = Q.1 % 2) \u2227 (P.2.1 % 2 = Q.2.1 % 2) \u2227 (P.2.2 % 2 = Q.2.2 % 2)) :=\n      by\n      intro P Q hP hQ hPQ hPQ'\n      exact h\u2086 \u27e8P, Q, hP, hQ, hPQ, hPQ'.1, hPQ'.2.1, hPQ'.2.2\u27e9\n    have h\u2089 : S.Ncard \u2264 8 :=\n      by\n      have h\u2081\u2080 : S \u2286 (Set.range (fun (p : Fin 8) => (p.val % 2, p.val / 2 % 2, p.val / 4 % 2) : Fin 8 \u2192 \u2124 \u00d7 \u2124 \u00d7 \u2124)) :=\n        by\n        intro P hP\n        have h\u2081\u2081 : P \u2208 S := hP\n        have h\u2081\u2082 :\n          \u00ac(\u2200 (Q : \u2124 \u00d7 \u2124 \u00d7 \u2124),\n              Q \u2208 S \u2192 Q \u2260 P \u2192 \u00ac((Q.1 % 2 = P.1 % 2) \u2227 (Q.2.1 % 2 = P.2.1 % 2) \u2227 (Q.2.2 % 2 = P.2.2 % 2))) :=\n          by\n          by_contra h\u2081\u2082\n          have h\u2081\u2083 :\n            \u2200 (Q : \u2124 \u00d7 \u2124 \u00d7 \u2124),\n              Q \u2208 S \u2192 Q \u2260 P \u2192 \u00ac((Q.1 % 2 = P.1 % 2) \u2227 (Q.2.1 % 2 = P.2.1 % 2) \u2227 (Q.2.2 % 2 = P.2.2 % 2)) :=\n            by simpa using h\u2081\u2082\n          have h\u2081\u2084 := h\u2081\u2083 P h\u2081\u2081 (by tauto)\n          simp at h\u2081\u2084 <;> aesop\n        have h\u2081\u2085 :\n          \u2203 (Q : \u2124 \u00d7 \u2124 \u00d7 \u2124),\n            Q \u2208 S \u2227 Q \u2260 P \u2227 ((Q.1 % 2 = P.1 % 2) \u2227 (Q.2.1 % 2 = P.2.1 % 2) \u2227 (Q.2.2 % 2 = P.2.2 % 2)) :=\n          by\n          by_contra h\u2081\u2085\n          have h\u2081\u2086 :\n            \u2200 (Q : \u2124 \u00d7 \u2124 \u00d7 \u2124),\n              Q \u2208 S \u2192 Q \u2260 P \u2192 \u00ac((Q.1 % 2 = P.1 % 2) \u2227 (Q.2.1 % 2 = P.2.1 % 2) \u2227 (Q.2.2 % 2 = P.2.2 % 2)) :=\n            by\n            intro Q hQ hQP\n            by_contra h\u2081\u2087\n            have h\u2081\u2088 : Q \u2208 S := hQ\n            have h\u2081\u2089 : Q \u2260 P := hQP\n            have h\u2082\u2080 : ((Q.1 % 2 = P.1 % 2) \u2227 (Q.2.1 % 2 = P.2.1 % 2) \u2227 (Q.2.2 % 2 = P.2.2 % 2)) := by tauto\n            exact h\u2081\u2085 \u27e8Q, h\u2081\u2088, h\u2081\u2089, h\u2082\u2080\u27e9\n          exact h\u2081\u2082 h\u2081\u2086\n        obtain \u27e8Q, hQ, hQP, hQ'\u27e9 := h\u2081\u2085\n        have h\u2081\u2086 := h\u2088 P Q h\u2081\u2081 hQ (by tauto)\n        tauto\n      have h\u2081\u2081 : S.Ncard \u2264 8 := by\n        calc\n          S.Ncard \u2264\n              (Set.range (fun (p : Fin 8) => (p.val % 2, p.val / 2 % 2, p.val / 4 % 2) : Fin 8 \u2192 \u2124 \u00d7 \u2124 \u00d7 \u2124)).Ncard :=\n            by apply Set.Ncard_le_ncard h\u2081\u2080 <;> simp [h\u2085]\n          _ = 8 := by norm_num [Set.Ncard, Set.range, Fin.val_succ] <;> decide\n          _ \u2264 8 := by norm_num\n      exact h\u2081\u2081\n    exact h\u2089\n  have h\u2081\u2080 : S.ncard \u2264 8 := by simpa [Set.Ncard] using h\u2087\n  linarith\nexact h\u2086"
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "exact Set.nonempty_iff_ne_empty.mpr (by intro h; simp_all)"
+    },
+    {
+      "hole_id": "hole_3",
+      "original_proof": "simpa using h\u2085"
+    },
+    {
+      "hole_id": "hole_4",
+      "original_proof": "apply Set.Infinite.ncard\nexact h\u2086"
+    },
+    {
+      "hole_id": "hole_5",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_6",
+      "original_proof": "intro P Q hP hQ hPQ hPQ'\nexact h\u2086 \u27e8P, Q, hP, hQ, hPQ, hPQ'.1, hPQ'.2.1, hPQ'.2.2\u27e9"
+    },
+    {
+      "hole_id": "hole_7",
+      "original_proof": "simpa using h\u2081\u2082"
+    },
+    {
+      "hole_id": "hole_8",
+      "original_proof": "simp at h\u2081\u2084"
+    },
+    {
+      "hole_id": "hole_9",
+      "original_proof": "tauto"
+    },
+    {
+      "hole_id": "hole_10",
+      "original_proof": "exact h\u2081\u2085 \u27e8Q, h\u2081\u2088, h\u2081\u2089, h\u2082\u2080\u27e9"
+    },
+    {
+      "hole_id": "hole_11",
+      "original_proof": "exact h\u2081\u2082 h\u2081\u2086"
+    },
+    {
+      "hole_id": "hole_12",
+      "original_proof": "tauto"
+    },
+    {
+      "hole_id": "hole_13",
+      "original_proof": "calc\n  S.Ncard \u2264 (Set.range (fun (p : Fin 8) => (p.val % 2, p.val / 2 % 2, p.val / 4 % 2) : Fin 8 \u2192 \u2124 \u00d7 \u2124 \u00d7 \u2124)).Ncard := by\n    apply Set.Ncard_le_ncard h\u2081\u2080 <;> simp [h\u2085]\n  _ = 8 := by norm_num [Set.Ncard, Set.range, Fin.val_succ] <;> decide\n  _ \u2264 8 := by norm_num"
+    },
+    {
+      "hole_id": "hole_14",
+      "original_proof": "exact h\u2081\u2081"
+    },
+    {
+      "hole_id": "hole_15",
+      "original_proof": "exact h\u2089"
+    },
+    {
+      "hole_id": "hole_16",
+      "original_proof": "simpa [Set.Ncard] using h\u2087"
+    },
+    {
+      "hole_id": "hole_17",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_19",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_20",
+      "original_proof": "exact h\u2085\u2082"
+    },
+    {
+      "hole_id": "hole_21",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_22",
+      "original_proof": "exact h\u2086\u2082"
+    },
+    {
+      "hole_id": "hole_23",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_24",
+      "original_proof": "exact h\u2087\u2082"
+    },
+    {
+      "hole_id": "hole_25",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_26",
+      "original_proof": "field_simp [h\u2088\u2081]\nring_nf at h\u2088\u2082 \u22a2"
+    },
+    {
+      "hole_id": "hole_27",
+      "original_proof": "exact h\u2088\u2083"
+    },
+    {
+      "hole_id": "hole_28",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_29",
+      "original_proof": "field_simp [h\u2089\u2081]\nring_nf at h\u2089\u2082 \u22a2"
+    },
+    {
+      "hole_id": "hole_30",
+      "original_proof": "exact h\u2089\u2083"
+    },
+    {
+      "hole_id": "hole_31",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_32",
+      "original_proof": "field_simp [h\u2081\u2080\u2081]\nring_nf at h\u2081\u2080\u2082 \u22a2"
+    },
+    {
+      "hole_id": "hole_33",
+      "original_proof": "exact h\u2081\u2080\u2083"
+    },
+    {
+      "hole_id": "hole_34",
+      "original_proof": "refine' \u27e81 / 2, by norm_num [Real.pi_pos.le], _\u27e9\nsimp_all [h\u2088, h\u2089, h\u2081\u2080, mul_comm]"
+    },
+    {
+      "hole_id": "hole_35",
+      "original_proof": "exact h\u2084"
+    },
+    {
+      "hole_id": "hole_36",
+      "original_proof": "obtain \u27e8x, y, z, h\u2084\u27e9 := h\u2083\nrefine' \u27e8x, y, z, P, Q, hP, hQ, hPQ, _\u27e9\nexact h\u2084"
+    },
+    {
+      "hole_id": "hole_37",
+      "original_proof": "obtain \u27e8x, y, z, P, Q, hP, hQ, hPQ, h\u2085\u27e9 := h_main\nrefine' \u27e8x, y, z, P, Q, hP, hQ, hPQ, _\u27e9\nexact h\u2085"
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "problem_id": "putnam_1973_b2",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "filled_verification_pass": false,
+  "synthesized_verification_pass": false,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [mul_comm]\nsimp [zpow_mul, zpow_ofNat]"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simp [star_pow]"
+    },
+    "hole_7": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "calc\n  z ^ (2 * n) - 1 = (z ^ n) ^ 2 - 1 := by rw [h\u2083]\n  _ = z ^ n * z ^ n - 1 := by\n    ring_nf <;> simp [Complex.ext_iff, pow_two, mul_comm, mul_assoc, mul_left_comm] <;> norm_num\n  _ = z ^ n * (z ^ n - (star z) ^ n) :=\n    by\n    have h\u2085 : z ^ n * (z ^ n - (star z) ^ n) = z ^ n * z ^ n - z ^ n * (star z) ^ n := by\n      ring_nf <;> simp [Complex.ext_iff, pow_two, mul_comm, mul_assoc, mul_left_comm] <;> norm_num\n    rw [h\u2085]\n    have h\u2086 : z ^ n * (star z) ^ n = 1 :=\n      by\n      have h\u2087 : z ^ n * (star z) ^ n = 1 := by\n        calc\n          z ^ n * (star z) ^ n = z ^ n * star (z ^ n) := by simp [star_pow]\n          _ = \u2016z ^ n\u2016 ^ 2 := by\n            simp [Complex.norm_eq_abs, Complex.sq_abs, Complex.normSq_mul, Complex.normSq_conj, Complex.normSq_ofReal,\n                    Complex.ext_iff, pow_two, mul_comm, mul_assoc, mul_left_comm] <;>\n                  ring_nf <;>\n                simp [Complex.normSq] <;>\n              ring_nf\n          _ = 1 :=\n            by\n            have h\u2088 : \u2016z ^ n\u2016 = 1 := by\n              calc\n                \u2016z ^ n\u2016 = \u2016z\u2016 ^ n := by simp [norm_zpow]\n                _ = 1 ^ n := by rw [hznorm]\n                _ = 1 := by simp\n            rw [h\u2088] <;> simp\n      exact h\u2087\n    rw [h\u2086] <;> ring_nf <;> simp [Complex.ext_iff, pow_two, mul_comm, mul_assoc, mul_left_comm] <;> norm_num <;>\n        simp [Complex.ext_iff, pow_two, mul_comm, mul_assoc, mul_left_comm] <;>\n      norm_num"
+    },
+    "hole_18": {
+      "success": false,
+      "error_message": "Lean error:\nrcases tactic failed: x\u271d : ?m.13145.2 is not an inductive datatype",
+      "original_tactic": "obtain \u27e8q, hq\u27e9 := h\u2082\nrefine' \u27e8q, _\u27e9\nrw [hq]"
+    },
+    "hole_19": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h_main"
+    }
+  },
+  "successful_tactics": {
+    "hole_2": "norm_num",
+    "hole_19": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_2": "norm_num",
+    "hole_19": "simpa",
+    "hole_18": "admit",
+    "hole_1": "admit",
+    "hole_7": "admit"
+  },
+  "proof_state_tests": 42,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\n\u22a2 z ^ (2 * n) = (z ^ n) ^ 2"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\nh\u2083 : z ^ (2 * n) = (z ^ n) ^ 2\nh\u2084 : star z ^ n = star (z ^ n)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\nh\u2083 : z ^ (2 * n) = (z ^ n) ^ 2\nh\u2084 : star z ^ n = star (z ^ n)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\nh\u2083 : z ^ (2 * n) = (z ^ n) ^ 2\nh\u2084 : star z ^ n = star (z ^ n)\n\u22a2 z ^ (2 * n) - 1 = z ^ n * (z ^ n - (starRingEnd \u2102) z ^ n)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_18": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\nh\u2081 : \u2016z ^ (2 * n) - 1\u2016 = \u2016z ^ n - star z ^ n\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\nh\u2081 : \u2016z ^ (2 * n) - 1\u2016 = \u2016z ^ n - star z ^ n\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nn : \u2124\nh\u2081 : \u2016z ^ (2 * n) - 1\u2016 = \u2016z ^ n - star z ^ n\u2016\n\u22a2 \u2203 q, \u2016z ^ (2 * n) - 1\u2016 = \u2191q"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_19": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nh_main : \u2200 (n : \u2124), \u2203 q, \u2016z ^ (2 * n) - 1\u2016 = \u2191q\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nz : \u2102\nhzrat : \u2203 q1 q2, z.re = \u2191q1 \u2227 z.im = \u2191q2\nhznorm : \u2016z\u2016 = 1\nh_main : \u2200 (n : \u2124), \u2203 q, \u2016z ^ (2 * n) - 1\u2016 = \u2191q\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 20.490802,
+  "constraint_satisfied": true,
+  "tactics_replaced": 2,
+  "timestamp": "2025-06-19T09:33:54.351674"
+}

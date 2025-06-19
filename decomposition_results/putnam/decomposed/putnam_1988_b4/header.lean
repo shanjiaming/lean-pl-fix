@@ -1,0 +1,7 @@
+import Mathlib
+
+open Set Filter Topology
+
+/--
+Prove that if $\sum_{n=1}^\infty a_n$ is a convergent series of positive real numbers, then so is $\sum_{n=1}^\infty (a_n)^{n/(n+1)}$.
+-/

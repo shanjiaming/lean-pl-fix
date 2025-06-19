@@ -1,0 +1,8 @@
+import Mathlib
+
+open Filter Topology Set
+
+-- False
+/--
+Is there a strictly increasing function $f: \mathbb{R} \to \mathbb{R}$ such that $f'(x) = f(f(x))$ for all $x$?
+-/

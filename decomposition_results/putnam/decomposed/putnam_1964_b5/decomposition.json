@@ -1,0 +1,273 @@
+{
+  "problem_id": "putnam_1964_b5",
+  "dataset": "putnam",
+  "timestamp": "2025-06-19T02:41:45.656718",
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "holes": [
+    {
+      "hole_id": "hole_6",
+      "original_proof": "intro n\ninduction n with\n| zero =>\n  have h\u2082 : b 0 = a 0 := hb.1\n  have h\u2083 : a 0 > 0 := ha.2 0\n  rw [h\u2082]\n  exact h\u2083\n| succ n ih =>\n  have h\u2082 : b (n + 1) = lcm (b n) (a (n + 1)) := hb.2 n\n  rw [h\u2082]\n  have h\u2083 : b n > 0 := ih\n  have h\u2084 : a (n + 1) > 0 := ha.2 (n + 1)\n  have h\u2085 : lcm (b n) (a (n + 1)) > 0 := by\n    have h\u2085\u2081 : b n > 0 := h\u2083\n    have h\u2085\u2082 : a (n + 1) > 0 := h\u2084\n    have h\u2085\u2083 : Nat.lcm (b n) (a (n + 1)) > 0 :=\n      by\n      have h\u2085\u2084 : 0 < b n := by linarith\n      have h\u2085\u2085 : 0 < a (n + 1) := by linarith\n      have h\u2085\u2086 : 0 < Nat.lcm (b n) (a (n + 1)) := by apply Nat.lcm_pos h\u2085\u2084 h\u2085\u2085\n      linarith\n    exact h\u2085\u2083\n  exact h\u2085"
+    },
+    {
+      "hole_id": "hole_1",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_3",
+      "original_proof": "apply Nat.lcm_pos h\u2085\u2084 h\u2085\u2085"
+    },
+    {
+      "hole_id": "hole_4",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_5",
+      "original_proof": "exact h\u2085\u2083"
+    },
+    {
+      "hole_id": "hole_7",
+      "original_proof": "exact h\u2081 n"
+    },
+    {
+      "hole_id": "hole_8",
+      "original_proof": "apply Nat.lcm_pos (h_b_pos n) (ha.2 (n + 1))"
+    },
+    {
+      "hole_id": "hole_9",
+      "original_proof": "exact h\u2086"
+    },
+    {
+      "hole_id": "hole_10",
+      "original_proof": "exact h\u2083"
+    },
+    {
+      "hole_id": "hole_14",
+      "original_proof": "intro k\ninduction k with\n| zero =>\n  have h\u2085 : a 0 > 0 := ha.2 0\n  have h\u2086 : a 0 \u2265 1 := by linarith\n  linarith\n| succ k ih =>\n  have h\u2085 : a (k + 1) > a k := h\u2082.lt_iff_lt.mpr (by linarith)\n  have h\u2086 : a k \u2265 k + 1 := ih\n  have h\u2087 : a (k + 1) \u2265 k + 2 :=\n    by\n    have h\u2088 : a (k + 1) > a k := h\u2082.lt_iff_lt.mpr (by linarith)\n    have h\u2089 : a (k + 1) \u2265 a k + 1 := by omega\n    omega\n  omega"
+    },
+    {
+      "hole_id": "hole_11",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_12",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_13",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_15",
+      "original_proof": "exact h\u2084 n"
+    },
+    {
+      "hole_id": "hole_44",
+      "original_proof": "intro n\ninduction n with\n| zero =>\n  have h\u2086 : b 0 = a 0 := hb.1\n  have h\u2087 : a 0 \u2265 1 := by\n    have h\u2088 : a 0 > 0 := ha.2 0\n    linarith\n  have h\u2088 : (b 0 : \u2115) = a 0 := by simp [hb.1]\n  have h\u2089 : (b 0 : \u2115) \u2265 1 := by linarith\n  have h\u2081\u2080 : (2 : \u2115) ^ 0 = 1 := by norm_num\n  have h\u2081\u2081 : (b 0 : \u2115) \u2265 2 ^ 0 := by linarith\n  simpa [h\u2088, h\u2081\u2080] using h\u2081\u2081\n| succ n ih =>\n  have h\u2086 : b (n + 1) = lcm (b n) (a (n + 1)) := hb.2 n\n  have h\u2087 : (b (n + 1) : \u2115) = lcm (b n) (a (n + 1)) := by simp [h\u2086]\n  have h\u2088 : (b n : \u2115) \u2265 2 ^ n := ih\n  have h\u2089 : a (n + 1) \u2265 n + 2 :=\n    by\n    have h\u2081\u2080 : a (n + 1) \u2265 (n + 1) + 1 :=\n      by\n      have h\u2081\u2081 : a (n + 1) \u2265 (n + 1) + 1 :=\n        by\n        have h\u2081\u2082 : a (n + 1) > a n := ha.1.lt_iff_lt.mpr (by linarith)\n        have h\u2081\u2083 : a n \u2265 n + 1 := h\u2081 n\n        omega\n      omega\n    omega\n  have h\u2081\u2080 : (b (n + 1) : \u2115) \u2265 2 ^ (n + 1) :=\n    by\n    have h\u2081\u2081 : (b (n + 1) : \u2115) = lcm (b n) (a (n + 1)) := by simp [h\u2086]\n    rw [h\u2081\u2081]\n    have h\u2081\u2082 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 2 ^ (n + 1) :=\n      by\n      have h\u2081\u2083 : (b n : \u2115) \u2265 2 ^ n := ih\n      have h\u2081\u2084 : (a (n + 1) : \u2115) \u2265 n + 2 := by omega\n      have h\u2081\u2085 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 (b n : \u2115) :=\n        by\n        apply Nat.le_of_dvd\n        \u00b7 exact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\n        \u00b7 exact Nat.dvd_lcm_left _ _\n      have h\u2081\u2086 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 (a (n + 1) : \u2115) :=\n        by\n        apply Nat.le_of_dvd\n        \u00b7 exact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\n        \u00b7 exact Nat.dvd_lcm_right _ _\n      have h\u2081\u2087 : (2 : \u2115) ^ (n + 1) = 2 ^ n * 2 := by ring_nf <;> simp [pow_succ] <;> ring_nf\n      have h\u2081\u2088 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 2 ^ (n + 1) :=\n        by\n        by_cases h : (b n : \u2115) \u2265 2 ^ (n + 1)\n        \u00b7 have h\u2081\u2089 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 (b n : \u2115) :=\n            by\n            apply Nat.le_of_dvd\n            \u00b7 exact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\n            \u00b7 exact Nat.dvd_lcm_left _ _\n          have h\u2082\u2080 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 2 ^ (n + 1) := by linarith\n          exact h\u2082\u2080\n        \u00b7 have h\u2081\u2089 : (b n : \u2115) < 2 ^ (n + 1) := by omega\n          have h\u2082\u2080 : (a (n + 1) : \u2115) \u2265 n + 2 := by omega\n          have h\u2082\u2081 : (lcm (b n) (a (n + 1)) : \u2115) \u2265 (a (n + 1) : \u2115) :=\n            by\n            apply Nat.le_of_dvd\n            \u00b7 exact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\n            \u00b7 exact Nat.dvd_lcm_right _ _\n          have h\u2082\u2082 : (a (n + 1) : \u2115) \u2265 2 ^ (n + 1) :=\n            by\n            have h\u2082\u2083 : a (n + 1) \u2265 n + 2 := by omega\n            have h\u2082\u2084 : (n + 2 : \u2115) \u2265 2 ^ (n + 1) :=\n              by\n              have h\u2082\u2085 : n + 2 \u2265 2 ^ (n + 1) :=\n                by\n                have h\u2082\u2086 : n + 2 \u2265 2 ^ (n + 1) :=\n                  by\n                  have h\u2082\u2087 : n + 2 \u2265 2 ^ (n + 1) :=\n                    by\n                    clear h\u2081 h\u2082 h\u2086 h\u2087 h\u2088 h\u2089 h\u2081\u2080 h\u2081\u2081 h\u2081\u2082 h\u2081\u2083 h\u2081\u2084 h\u2081\u2085 h\u2081\u2086 h\u2081\u2087 h\u2081\u2088 h\u2081\u2089 h\u2082\u2080 h\u2082\u2081\n                    have h\u2082\u2088 : n + 2 \u2265 2 ^ (n + 1) :=\n                      by\n                      have h\u2082\u2089 : \u2200 k : \u2115, k + 2 \u2265 2 ^ (k + 1) := by\n                        intro k\n                        induction k with\n                        | zero => norm_num\n                        | succ k ih => simp_all [Nat.pow_succ, Nat.mul_succ] <;> nlinarith\n                      exact h\u2082\u2089 n\n                    exact h\u2082\u2088\n                  exact h\u2082\u2087\n                exact h\u2082\u2086\n              exact h\u2082\u2085\n            omega\n          omega <;> omega\n      exact h\u2081\u2088\n    exact h\u2081\u2082\n  omega <;> simp_all [Nat.pow_succ, Nat.mul_succ] <;> nlinarith"
+    },
+    {
+      "hole_id": "hole_16",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_17",
+      "original_proof": "simp [hb.1]"
+    },
+    {
+      "hole_id": "hole_18",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_19",
+      "original_proof": "norm_num"
+    },
+    {
+      "hole_id": "hole_20",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_21",
+      "original_proof": "simp [h\u2086]"
+    },
+    {
+      "hole_id": "hole_22",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_23",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_24",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_25",
+      "original_proof": "simp [h\u2086]"
+    },
+    {
+      "hole_id": "hole_26",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_27",
+      "original_proof": "apply Nat.le_of_dvd\nexact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\nexact Nat.dvd_lcm_left _ _"
+    },
+    {
+      "hole_id": "hole_28",
+      "original_proof": "apply Nat.le_of_dvd\nexact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\nexact Nat.dvd_lcm_right _ _"
+    },
+    {
+      "hole_id": "hole_29",
+      "original_proof": "ring_nf"
+    },
+    {
+      "hole_id": "hole_30",
+      "original_proof": "apply Nat.le_of_dvd\nexact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\nexact Nat.dvd_lcm_left _ _"
+    },
+    {
+      "hole_id": "hole_31",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_32",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_33",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_34",
+      "original_proof": "apply Nat.le_of_dvd\nexact Nat.lcm_pos (by linarith [h_b_pos n]) (by linarith [ha.2 (n + 1)])\nexact Nat.dvd_lcm_right _ _"
+    },
+    {
+      "hole_id": "hole_35",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_36",
+      "original_proof": "clear h\u2081 h\u2082 h\u2086 h\u2087 h\u2088 h\u2089 h\u2081\u2080 h\u2081\u2081 h\u2081\u2082 h\u2081\u2083 h\u2081\u2084 h\u2081\u2085 h\u2081\u2086 h\u2081\u2087 h\u2081\u2088 h\u2081\u2089 h\u2082\u2080 h\u2082\u2081"
+    },
+    {
+      "hole_id": "hole_37",
+      "original_proof": "exact h\u2082\u2087"
+    },
+    {
+      "hole_id": "hole_38",
+      "original_proof": "exact h\u2082\u2086"
+    },
+    {
+      "hole_id": "hole_39",
+      "original_proof": "exact h\u2082\u2085"
+    },
+    {
+      "hole_id": "hole_40",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_41",
+      "original_proof": "omega"
+    },
+    {
+      "hole_id": "hole_42",
+      "original_proof": "exact h\u2081\u2088"
+    },
+    {
+      "hole_id": "hole_43",
+      "original_proof": "exact h\u2081\u2082"
+    },
+    {
+      "hole_id": "hole_45",
+      "original_proof": "exact h\u2085 n"
+    },
+    {
+      "hole_id": "hole_46",
+      "original_proof": "exact h\u2083 n"
+    },
+    {
+      "hole_id": "hole_47",
+      "original_proof": "exact h\u2082"
+    },
+    {
+      "hole_id": "hole_48",
+      "original_proof": "norm_cast at h\u2082 \u22a2"
+    },
+    {
+      "hole_id": "hole_49",
+      "original_proof": "exact h\u2083"
+    },
+    {
+      "hole_id": "hole_50",
+      "original_proof": "exact_mod_cast h\u2085\u2081"
+    },
+    {
+      "hole_id": "hole_51",
+      "original_proof": "apply one_div_le_one_div_of_le\npositivity\nlinarith"
+    },
+    {
+      "hole_id": "hole_52",
+      "original_proof": "exact h\u2088"
+    },
+    {
+      "hole_id": "hole_53",
+      "original_proof": "exact h\u2086"
+    },
+    {
+      "hole_id": "hole_54",
+      "original_proof": "simpa [div_eq_mul_inv] using Summable.comp_injective (summable_geometric_two) (fun _ _ h => by simpa using h)"
+    },
+    {
+      "hole_id": "hole_55",
+      "original_proof": "exact h\u2085\u2082"
+    },
+    {
+      "hole_id": "hole_56",
+      "original_proof": "exact h\u2085\u2081"
+    },
+    {
+      "hole_id": "hole_57",
+      "original_proof": "exact h\u2085"
+    },
+    {
+      "hole_id": "hole_58",
+      "original_proof": "exact_mod_cast h\u2085\u2084"
+    },
+    {
+      "hole_id": "hole_59",
+      "original_proof": "positivity"
+    },
+    {
+      "hole_id": "hole_60",
+      "original_proof": "exact h\u2085\u2082"
+    },
+    {
+      "hole_id": "hole_61",
+      "original_proof": "exact h\u2085\u2081"
+    },
+    {
+      "hole_id": "hole_62",
+      "original_proof": "exact h\u2085"
+    },
+    {
+      "hole_id": "hole_63",
+      "original_proof": "exact \u27e8\u2211' n : \u2115, (1 : \u211d) / b n, h\u2084.hasSum.tendsto_sum_nat\u27e9"
+    },
+    {
+      "hole_id": "hole_64",
+      "original_proof": "exact h\u2085"
+    },
+    {
+      "hole_id": "hole_65",
+      "original_proof": "exact h\u2083"
+    },
+    {
+      "hole_id": "hole_66",
+      "original_proof": "exact h_sum_converges"
+    }
+  ]
+}

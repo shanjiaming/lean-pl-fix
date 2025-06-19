@@ -1,0 +1,1151 @@
+{
+  "problem_id": "putnam_2000_b5",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "filled_verification_pass": false,
+  "synthesized_verification_pass": false,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa using hSpos 0"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa using h\u2081\u2083"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa using h\u2081\u2084"
+    },
+    "hole_5": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simp [h\u2081\u2086]"
+    },
+    "hole_6": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa [h\u2081\u2087] using h\u2081\u2085"
+    },
+    "hole_7": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "intro h\u2082\u2081\nexact hSpos 1 s h\u2082\u2081"
+    },
+    "hole_8": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1",
+      "original_tactic": "simp [h\u2082\u2082]"
+    },
+    "hole_9": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa [h\u2081\u2088, h\u2082\u2083] using h\u2081\u2088.mpr h\u2082\u2083"
+    },
+    "hole_10": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.",
+      "original_tactic": "omega"
+    },
+    "hole_11": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2082\u2088"
+    },
+    "hole_12": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 2\nwhere\n a := s",
+      "original_tactic": "omega"
+    },
+    "hole_13": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simp [h\u2082\u2082]"
+    },
+    "hole_14": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa [h\u2081\u2088, h\u2082\u2083] using h\u2081\u2088.mpr h\u2082\u2083"
+    },
+    "hole_15": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.",
+      "original_tactic": "omega"
+    },
+    "hole_16": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2082\u2088"
+    },
+    "hole_17": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 2\nwhere\n a := s",
+      "original_tactic": "omega"
+    },
+    "hole_18": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083\u2081"
+    },
+    "hole_19": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2082\u2081"
+    },
+    "hole_20": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2082"
+    },
+    "hole_21": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2087"
+    },
+    "hole_22": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_27": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "intro n\ninduction n with\n| zero => simpa [h\u2081] using h\u2081\n| succ n\n  ih =>\n  have h\u2083 : S (n + 1) = \u2205 :=\n    by\n    have h\u2084 : \u2200 a, a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n) := by simpa using hSdef n\n    have h\u2085 : S n = \u2205 := ih\n    have h\u2086 : \u2200 a, a \u2209 S (n + 1) := by\n      intro a\n      have h\u2087 := h\u2084 a\n      have h\u2088 : a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n) := h\u2084 a\n      have h\u2089 : S n = \u2205 := ih\n      simp [h\u2089, Xor'] at h\u2088 \u22a2 <;> (try tauto) <;> (try aesop) <;> (try simp_all [Set.ext_iff]) <;> (try omega)\n    have h\u2087 : S (n + 1) = \u2205 := by\n      apply Set.eq_empty_of_forall_not_mem\n      intro a ha\n      have h\u2088 := h\u2086 a\n      contradiction\n    exact h\u2087\n  simpa [h\u2083] using h\u2083"
+    }
+  },
+  "successful_tactics": {
+    "hole_2": "linarith",
+    "hole_3": "simpa",
+    "hole_4": "simpa",
+    "hole_7": "omega",
+    "hole_11": "linarith",
+    "hole_16": "linarith",
+    "hole_18": "simpa",
+    "hole_19": "simpa",
+    "hole_20": "simpa",
+    "hole_21": "linarith",
+    "hole_22": "linarith"
+  },
+  "tactic_mapping": {
+    "hole_2": "linarith",
+    "hole_3": "simpa",
+    "hole_4": "simpa",
+    "hole_7": "omega",
+    "hole_11": "linarith",
+    "hole_16": "linarith",
+    "hole_18": "simpa",
+    "hole_19": "simpa",
+    "hole_20": "simpa",
+    "hole_21": "linarith",
+    "hole_22": "linarith",
+    "hole_17": "admit",
+    "hole_10": "admit",
+    "hole_9": "admit",
+    "hole_29": "admit",
+    "hole_8": "admit",
+    "hole_1": "admit",
+    "hole_6": "admit",
+    "hole_15": "admit",
+    "hole_28": "admit",
+    "hole_14": "admit",
+    "hole_5": "admit",
+    "hole_27": "admit",
+    "hole_13": "admit",
+    "hole_12": "admit"
+  },
+  "proof_state_tests": 186,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  b \u2264 0\n  a \u2265 1\nwhere\n a := s\u271d\n b := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\n\u22a2 \u2200 s \u2208 S 0, 0 < s"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\na\u271d : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) < Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\na\u271d : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) < Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\n\u22a2 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) \u2194 Xor' (s - 1 \u2208 S 0) True"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) True"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 : s \u2208 S 1 \u2192 s > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 : s \u2208 S 1 \u2192 s > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_8": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\n\u22a2 Xor' (s - 1 \u2208 S 0) True"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_9": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 s \u2208 S 1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 h\u2082\u2087 : s > 0\na\u271d : 0 \u2265 s - 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 h\u2082\u2087 : s > 0\na\u271d : 0 \u2265 s - 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 h\u2082\u2087 : s > 0\n\u22a2 1 < s"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nfailed to prove positivity/nonnegativity/nonzeroness"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_12": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2208 S 0\nh\u2083\u2080 h\u2083\u2082 : s - 1 > 0\nh\u2083\u2083 : s - 1 \u2208 S 0\nh\u2083\u2084 : \u2200 s \u2208 S 0, s > 0\nh\u2083\u2085 : s - 1 > 0\nh\u2083\u2086 : s > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2208 S 0\nh\u2083\u2080 h\u2083\u2082 : s - 1 > 0\nh\u2083\u2083 : s - 1 \u2208 S 0\nh\u2083\u2084 : \u2200 s \u2208 S 0, s > 0\nh\u2083\u2085 : s - 1 > 0\nh\u2083\u2086 : s > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 2\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2208 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2208 S 0\nh\u2083\u2080 h\u2083\u2082 : s - 1 > 0\nh\u2083\u2083 : s - 1 \u2208 S 0\nh\u2083\u2084 : \u2200 s \u2208 S 0, s > 0\nh\u2083\u2085 : s - 1 > 0\nh\u2083\u2086 : s > 0\n\u22a2 False"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_13": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\n\u22a2 Xor' (s - 1 \u2208 S 0) True"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_14": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\n\u22a2 s \u2208 S 1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_15": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 h\u2082\u2087 : s > 0\na\u271d : 0 \u2265 s - 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 h\u2082\u2087 : s > 0\na\u271d : 0 \u2265 s - 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 h\u2082\u2087 : s > 0\n\u22a2 1 < s"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nfailed to prove positivity/nonnegativity/nonzeroness"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_16": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_17": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2209 S 0\nh\u2083\u2080 h\u2083\u2082 : s - 1 > 0\nh\u2083\u2083 : s - 1 \u2209 S 0\nh\u2083\u2084 : \u2200 s \u2208 S 0, s > 0\nh\u2083\u2085 : s - 1 > 0\nh\u2083\u2086 : s > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2209 S 0\nh\u2083\u2080 h\u2083\u2082 : s - 1 > 0\nh\u2083\u2083 : s - 1 \u2209 S 0\nh\u2083\u2084 : \u2200 s \u2208 S 0, s > 0\nh\u2083\u2085 : s - 1 > 0\nh\u2083\u2086 : s > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 2\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2209 S 0\nh\u2083\u2080 h\u2083\u2082 : s - 1 > 0\nh\u2083\u2083 : s - 1 \u2209 S 0\nh\u2083\u2084 : \u2200 s \u2208 S 0, s > 0\nh\u2083\u2085 : s - 1 > 0\nh\u2083\u2086 : s > 0\n\u22a2 False"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_18": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase neg\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2209 S 0\nh\u2083\u2080 : s - 1 > 0\nh\u2083\u2081 : False\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase neg\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2082 : s - 1 \u2209 S 0\nh\u2082\u2083 : Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2082\u2084 : s \u2208 S 1\nh\u2082\u2085 : s > 0\nh\u2082\u2086 : s - 1 > 0\nh\u2082\u2089 : s - 1 \u2209 S 0\nh\u2083\u2080 : s - 1 > 0\nh\u2083\u2081 : False\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 2\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_19": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2081 : False\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2083 h\u2081\u2084 : s \u2208 S (0 + 1) \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2085 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (s \u2208 S 0)\nh\u2081\u2086 : s \u2208 S 0\nh\u2081\u2087 : Xor' (s - 1 \u2208 S 0) (s \u2208 S 0) = Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2088 : s \u2208 S 1 \u2194 Xor' (s - 1 \u2208 S 0) (true = true)\nh\u2081\u2089 h\u2082\u2080 : s \u2208 S 1 \u2192 s > 0\nh\u2082\u2081 : False\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_20": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2082 : False\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh : \u00acS 0 = \u2205\ns : \u2124\nhs : s \u2208 S 0\nh\u2083 : s > 0\nh\u2085 : (S 0).Finite\nh\u2086 : \u2200 s \u2208 S 0, s > 0\nh\u2088 : \u00acs \u2264 0\nh\u2089 : s > 0\nh\u2081\u2080 : s \u2208 S 0\nh\u2081\u2081 : s > 0\nh\u2081\u2082 : False\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := s"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_21": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_22": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_27": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh\u2081 : S 0 = \u2205\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh\u2081 : S 0 = \u2205\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nS : \u2115 \u2192 Set \u2124\nhSfin : \u2200 (n : \u2115), (S n).Finite\nhSpos : \u2200 (n : \u2115), \u2200 s \u2208 S n, s > 0\nhSdef : \u2200 (n : \u2115) (a : \u2124), a \u2208 S (n + 1) \u2194 Xor' (a - 1 \u2208 S n) (a \u2208 S n)\nh\u2081 : S 0 = \u2205\n\u22a2 \u2200 (n : \u2115), S n = \u2205"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ]
+  },
+  "processing_time_seconds": 27.011746,
+  "constraint_satisfied": true,
+  "tactics_replaced": 11,
+  "timestamp": "2025-06-19T08:18:21.035117"
+}

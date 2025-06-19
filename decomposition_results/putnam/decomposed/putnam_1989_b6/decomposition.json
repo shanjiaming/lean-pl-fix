@@ -1,0 +1,33 @@
+{
+  "problem_id": "putnam_1989_b6",
+  "dataset": "putnam",
+  "timestamp": "2025-06-19T03:47:43.746575",
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "holes": [
+    {
+      "hole_id": "hole_5",
+      "original_proof": "classical\nuse Polynomial.X ^ n\nconstructor\n\u00b7 simp [Polynomial.degree_X_pow]\nconstructor\n\u00b7 intro t ht\n  have h\u2082 : 0 \u2264 t := by exact ht.1\n  have h\u2083 : t \u2264 1 := by exact ht.2\n  constructor\n  \u00b7 have h\u2084 : 0 \u2264 t ^ n := pow_nonneg h\u2082 n\n    simp [Polynomial.eval_pow, Polynomial.eval_X] <;> linarith\n  \u00b7 have h\u2084 : t ^ n \u2264 1 := pow_le_one n h\u2082 h\u2083\n    simp [Polynomial.eval_pow, Polynomial.eval_X] <;> linarith\n\u00b7 intro f hf\n  have h\u2082 : fprop f := hf\n  rw [hfprop] at h\u2082\n  have h\u2083 : ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0 := h\u2082\n  have h\u2084 : fEV f = (\u222b x in Sx, fxsum f x) / (\u222b x in Sx, 1) := by rw [hfEV]\n  rw [h\u2084]\n  have h\u2085 :\n    (\u222b x in Sx, fxsum f x) / (\u222b x in Sx, 1) = (\u222b t in Set.Ioo 0 1, f t * (Polynomial.X ^ n : Polynomial \u211d).eval t) := by\n    sorry\n  rw [h\u2085] <;> simp [Polynomial.eval_pow, Polynomial.eval_X]"
+    },
+    {
+      "hole_id": "hole_1",
+      "original_proof": "exact ht.1"
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "exact ht.2"
+    },
+    {
+      "hole_id": "hole_3",
+      "original_proof": "rw [hfEV]"
+    },
+    {
+      "hole_id": "hole_4",
+      "original_proof": "sorry"
+    },
+    {
+      "hole_id": "hole_6",
+      "original_proof": "exact h\u2081"
+    }
+  ]
+}

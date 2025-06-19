@@ -1,0 +1,1054 @@
+{
+  "problem_id": "putnam_1993_a1",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num [Real.lt_sqrt, Real.sqrt_lt]"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "nlinarith [Real.sqrt_nonneg 2, Real.sq_sqrt (show 0 \u2264 2 by norm_num)]"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_5": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact hx.1"
+    },
+    "hole_6": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact hx.2"
+    },
+    "hole_7": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2085 : 0 < x\nh\u2083\u2081\u2086 : x < \u221a2 / 3\nh\u2083\u2081\u2087 h\u2083\u2081\u2088 h\u2083\u2081\u2089 : 0 < \u221a2\na\u271d : 4 / 9 - (2 * x - 3 * x ^ 3) > 0\n\u22a2 False failed",
+      "original_tactic": "nlinarith [Real.sq_sqrt (show 0 \u2264 2 by norm_num), Real.sqrt_nonneg 2, mul_pos h\u2083\u2081\u2085 (pow_pos h\u2083\u2081\u2085 2),\n  mul_pos h\u2083\u2081\u2085 (pow_pos h\u2083\u2081\u2085 3), mul_pos (by positivity : (0 : \u211d) < 3) (pow_pos h\u2083\u2081\u2085 3),\n  mul_pos (by positivity : (0 : \u211d) < 3) (pow_pos h\u2083\u2081\u2085 2), mul_pos (by positivity : (0 : \u211d) < 2) (pow_pos h\u2083\u2081\u2085 2),\n  mul_pos (by positivity : (0 : \u211d) < 2) (pow_pos h\u2083\u2081\u2085 3)]"
+    },
+    "hole_8": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [max_eq_right (by linarith)]"
+    },
+    "hole_9": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083\u2081\u2085"
+    },
+    "hole_10": {
+      "success": false,
+      "error_message": "Lean error:\nno goals to be solved",
+      "original_tactic": "apply integral_congr_ae\nfilter_upwards [ae_restrict_mem measurableSet_Ioo] with x hx using h\u2083\u2081\u2081 x hx"
+    },
+    "hole_11": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2083\u2081\u2087]\nsimp [integral_zero]"
+    },
+    "hole_12": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083\u2081\u2086"
+    },
+    "hole_13": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact hx.1"
+    },
+    "hole_14": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact hx.2"
+    },
+    "hole_15": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2085 : 0 < x\nh\u2083\u2082\u2086 : x < \u221a6 / 3\nh\u2083\u2082\u2087 h\u2083\u2082\u2088 h\u2083\u2082\u2089 : 0 < \u221a6\na\u271d : 2 * x - 3 * x ^ 3 - 4 / 9 > 0\n\u22a2 False failed",
+      "original_tactic": "nlinarith [Real.sq_sqrt (show 0 \u2264 6 by norm_num), Real.sqrt_nonneg 6, mul_pos h\u2083\u2082\u2085 (pow_pos h\u2083\u2082\u2085 2),\n  mul_pos h\u2083\u2082\u2085 (pow_pos h\u2083\u2082\u2085 3), mul_pos (by positivity : (0 : \u211d) < 3) (pow_pos h\u2083\u2082\u2085 3),\n  mul_pos (by positivity : (0 : \u211d) < 3) (pow_pos h\u2083\u2082\u2085 2), mul_pos (by positivity : (0 : \u211d) < 2) (pow_pos h\u2083\u2082\u2085 2),\n  mul_pos (by positivity : (0 : \u211d) < 2) (pow_pos h\u2083\u2082\u2085 3)]"
+    },
+    "hole_16": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [max_eq_right (by linarith)]"
+    },
+    "hole_17": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083\u2082\u2085"
+    },
+    "hole_18": {
+      "success": false,
+      "error_message": "Lean error:\nno goals to be solved",
+      "original_tactic": "apply integral_congr_ae\nfilter_upwards [ae_restrict_mem measurableSet_Ioo] with x hx using h\u2083\u2082\u2081 x hx"
+    },
+    "hole_19": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2083\u2082\u2087]\nsimp [integral_zero]"
+    },
+    "hole_20": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083\u2082\u2086"
+    },
+    "hole_21": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2083\u2081, h\u2083\u2082]"
+    },
+    "hole_22": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact \u27e8h\u2081, h\u2082, h\u2083\u27e9"
+    }
+  },
+  "successful_tactics": {
+    "hole_1": "norm_num",
+    "hole_3": "linarith",
+    "hole_4": "linarith",
+    "hole_9": "linarith",
+    "hole_12": "linarith",
+    "hole_17": "linarith",
+    "hole_20": "linarith",
+    "hole_21": "linarith",
+    "hole_22": "norm_cast"
+  },
+  "tactic_mapping": {
+    "hole_1": "norm_num",
+    "hole_3": "linarith",
+    "hole_4": "linarith",
+    "hole_9": "linarith",
+    "hole_12": "linarith",
+    "hole_17": "linarith",
+    "hole_20": "linarith",
+    "hole_21": "linarith",
+    "hole_22": "norm_cast",
+    "hole_10": "admit",
+    "hole_18": "admit",
+    "hole_8": "admit",
+    "hole_6": "admit",
+    "hole_15": "admit",
+    "hole_19": "admit",
+    "hole_16": "admit",
+    "hole_14": "admit",
+    "hole_5": "admit",
+    "hole_7": "admit",
+    "hole_2": "admit",
+    "hole_13": "admit",
+    "hole_11": "admit"
+  },
+  "proof_state_tests": 169,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\na\u271d : 1 \u2265 \u221a2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\na\u271d : 1 \u2265 \u221a2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\n\u22a2 1 < \u221a2"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\na\u271d : 0 \u2265 x\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\na\u271d : 0 \u2265 x\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\n\u22a2 0 < x"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nfailed to prove positivity/nonnegativity/nonzeroness"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\na\u271d : x \u2265 \u221a2 / 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\na\u271d : x \u2265 \u221a2 / 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\n\u22a2 x < \u221a2 / 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2085 : 0 < x\nh\u2083\u2081\u2086 : x < \u221a2 / 3\nh\u2083\u2081\u2087 h\u2083\u2081\u2088 h\u2083\u2081\u2089 : 0 < \u221a2\na\u271d : 4 / 9 - (2 * x - 3 * x ^ 3) > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2085 : 0 < x\nh\u2083\u2081\u2086 : x < \u221a2 / 3\nh\u2083\u2081\u2087 h\u2083\u2081\u2088 h\u2083\u2081\u2089 : 0 < \u221a2\na\u271d : 4 / 9 - (2 * x - 3 * x ^ 3) > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2085 : 0 < x\nh\u2083\u2081\u2086 : x < \u221a2 / 3\nh\u2083\u2081\u2087 h\u2083\u2081\u2088 h\u2083\u2081\u2089 : 0 < \u221a2\n\u22a2 4 / 9 \u2264 2 * x - 3 * x ^ 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_8": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2084 : 4 / 9 - (2 * x - 3 * x ^ 3) \u2264 0\na\u271d : max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2084 : 4 / 9 - (2 * x - 3 * x ^ 3) \u2264 0\na\u271d : max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a2 / 3)\nh\u2083\u2081\u2082 : 0 < x\nh\u2083\u2081\u2083 : x < \u221a2 / 3\nh\u2083\u2081\u2084 : 4 / 9 - (2 * x - 3 * x ^ 3) \u2264 0\n\u22a2 4 / 9 \u2264 2 * x - 3 * x ^ 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_9": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 < \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 < \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\n\u22a2 \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2081\u2087 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2081\u2087 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2081\u2087 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), 0\n\u22a2 \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_12": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_13": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\na\u271d : 0 \u2265 x\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\na\u271d : 0 \u2265 x\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\n\u22a2 0 < x"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nfailed to prove positivity/nonnegativity/nonzeroness"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_14": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\na\u271d : x \u2265 \u221a6 / 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\na\u271d : x \u2265 \u221a6 / 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\n\u22a2 x < \u221a6 / 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_15": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2085 : 0 < x\nh\u2083\u2082\u2086 : x < \u221a6 / 3\nh\u2083\u2082\u2087 h\u2083\u2082\u2088 h\u2083\u2082\u2089 : 0 < \u221a6\na\u271d : 2 * x - 3 * x ^ 3 - 4 / 9 > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2085 : 0 < x\nh\u2083\u2082\u2086 : x < \u221a6 / 3\nh\u2083\u2082\u2087 h\u2083\u2082\u2088 h\u2083\u2082\u2089 : 0 < \u221a6\na\u271d : 2 * x - 3 * x ^ 3 - 4 / 9 > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2085 : 0 < x\nh\u2083\u2082\u2086 : x < \u221a6 / 3\nh\u2083\u2082\u2087 h\u2083\u2082\u2088 h\u2083\u2082\u2089 : 0 < \u221a6\n\u22a2 2 * x \u2264 4 / 9 + 3 * x ^ 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_16": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2084 : 2 * x - 3 * x ^ 3 - 4 / 9 \u2264 0\na\u271d : max (2 * x - 3 * x ^ 3 - 4 / 9) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2084 : 2 * x - 3 * x ^ 3 - 4 / 9 \u2264 0\na\u271d : max (2 * x - 3 * x ^ 3 - 4 / 9) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nx : \u211d\nhx : x \u2208 Set.Ioo 0 (\u221a6 / 3)\nh\u2083\u2082\u2082 : 0 < x\nh\u2083\u2082\u2083 : x < \u221a6 / 3\nh\u2083\u2082\u2084 : 2 * x - 3 * x ^ 3 - 4 / 9 \u2264 0\n\u22a2 2 * x \u2264 4 / 9 + 3 * x ^ 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_17": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_18": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2082\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 < \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2082\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 < \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2082\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0\n\u22a2 \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_19": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2082\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0\nh\u2083\u2082\u2087 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2082\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0\nh\u2083\u2082\u2087 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), 0\na\u271d : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 < 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083\u2081 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 = 0\nh\u2083\u2082\u2081 : \u2200 x \u2208 Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0\nh\u2083\u2082\u2087 : \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), 0\n\u22a2 \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0 = 0"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_20": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_21": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_22": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083 :\n  \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 =\n    \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083 :\n  \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 =\n    \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nh\u2081 : 0 < 4 / 9\nh\u2082 : 4 / 9 < 4 * \u221a2 / 9\nh\u2083 :\n  \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 =\n    \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0\n\u22a2 4 / 9 < 4 * \u221a2 / 9 \u2227\n    \u222b (x : \u211d) in Set.Ioo 0 (\u221a2 / 3), max (4 / 9 - (2 * x - 3 * x ^ 3)) 0 =\n      \u222b (x : \u211d) in Set.Ioo 0 (\u221a6 / 3), max (2 * x - 3 * x ^ 3 - 4 / 9) 0"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 58.80919,
+  "constraint_satisfied": true,
+  "tactics_replaced": 9,
+  "timestamp": "2025-06-19T09:43:47.147214"
+}

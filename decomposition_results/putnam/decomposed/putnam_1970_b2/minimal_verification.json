@@ -1,0 +1,566 @@
+{
+  "problem_id": "putnam_1970_b2",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "filled_verification_pass": false,
+  "synthesized_verification_pass": false,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": false,
+      "error_message": "Lean error:\nunknown constant 'Polynomial.coeff_le_degree'",
+      "original_tactic": "apply Polynomial.funext\nintro x\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul]\nrw [Polynomial.eval_eq_sum_range]\nsimp [Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul, Finset.sum_range_succ]\nring_nf\nnorm_num\nlinarith [Polynomial.coeff_le_degree (p := H)]"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2082]\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.derivative_add, Polynomial.derivative_mul, Polynomial.derivative_C, Polynomial.derivative_X,\n  Polynomial.derivative_pow, Polynomial.derivative_X_pow]\nfield_simp [Real.sqrt_eq_iff_sq_eq, pow_two, pow_three, mul_assoc, mul_comm, mul_left_comm]\nring_nf\nnorm_num\nfield_simp [Real.sqrt_eq_iff_sq_eq, pow_two, pow_three, mul_assoc, mul_comm, mul_left_comm]\nring_nf"
+    },
+    "hole_3": {
+      "success": false,
+      "error_message": "Lean error:\nsimp made no progress",
+      "original_tactic": "rw [intervalIntegral.integral_of_le (by linarith)]\nsimp [Set.Icc, Real.volume_Icc, Real.volume_Icc]\nring_nf\nfield_simp"
+    },
+    "hole_4": {
+      "success": false,
+      "error_message": "Lean error:\nunknown constant 'Polynomial.coeff_le_degree'",
+      "original_tactic": "apply Polynomial.funext\nintro x\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul]\nrw [Polynomial.eval_eq_sum_range]\nsimp [Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul, Finset.sum_range_succ]\nring_nf\nnorm_num\nlinarith [Polynomial.coeff_le_degree (p := H)]"
+    },
+    "hole_5": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information",
+      "original_tactic": "rw [h\u2085]\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.derivative_add, Polynomial.derivative_mul, Polynomial.derivative_C, Polynomial.derivative_X,\n  Polynomial.derivative_pow, Polynomial.derivative_X_pow, intervalIntegral.integral_add,\n  intervalIntegral.integral_mul_left, intervalIntegral.integral_add, intervalIntegral.integral_mul_left,\n  intervalIntegral.integral_add, intervalIntegral.integral_mul_left]\nsimp_all [mul_assoc, mul_comm, mul_left_comm, pow_two, pow_three, mul_assoc, mul_comm, mul_left_comm]"
+    },
+    "hole_6": {
+      "success": false,
+      "error_message": "Lean error:\nsimp made no progress",
+      "original_tactic": "simp [Real.volume_Icc, hT.le]\nring_nf\nfield_simp"
+    },
+    "hole_7": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "rw [h\u2085\u2081]\nsimp [ENNReal.toReal_ofReal, hT.le]"
+    },
+    "hole_9": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "calc\n  \u2a0d t in Set.Icc (-T) T, H.eval t = (\u222b t in Set.Icc (-T) T, H.eval t) / (volume (Set.Icc (-T) T)) := by\n    rw [MeasureTheory.integral_average] <;> simp_all [Real.volume_Icc, hT.le] <;> ring_nf <;> field_simp <;> linarith\n  _ = (\u222b t in (-T : \u211d)..(T : \u211d), H.eval t) / (2 * T) := by rw [h\u2083, h\u2085] <;> ring_nf <;> field_simp <;> linarith\n  _ =\n      (2 * T * Polynomial.eval 0 H +\n          Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)) /\n        (2 * T) :=\n    by rw [h\u2084] <;> ring_nf <;> field_simp <;> linarith\n  _ = Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6) :=\n    by\n    have h\u2086 : T \u2260 0 := by linarith\n    field_simp [h\u2086] <;> ring_nf <;> field_simp [h\u2086] <;> ring_nf <;> linarith\n  _ = Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6) := by rfl"
+    },
+    "hole_10": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2081, h\u2082]"
+    },
+    "hole_11": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2083]"
+    }
+  },
+  "successful_tactics": {
+    "hole_10": "linarith",
+    "hole_11": "linarith"
+  },
+  "tactic_mapping": {
+    "hole_10": "linarith",
+    "hole_11": "linarith",
+    "hole_4": "admit",
+    "hole_9": "admit",
+    "hole_1": "admit",
+    "hole_6": "admit",
+    "hole_5": "admit",
+    "hole_7": "admit",
+    "hole_2": "admit",
+    "hole_3": "admit"
+  },
+  "proof_state_tests": 92,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\n\u22a2 H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2082 :\n  H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3\na\u271d :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 <\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2082 :\n  H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3\na\u271d :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 <\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2082 :\n  H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3\n\u22a2 (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\na\u271d : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H < \u222b (t : \u211d) in -T..T, Polynomial.eval t H\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\na\u271d : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H < \u222b (t : \u211d) in -T..T, Polynomial.eval t H\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\n\u22a2 \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\n\u22a2 H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2085 :\n  H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3\na\u271d :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H <\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2085 :\n  H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3\na\u271d :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H <\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2085 :\n  H =\n    Polynomial.C (H.coeff 0) + Polynomial.C (H.coeff 1) * Polynomial.X + Polynomial.C (H.coeff 2) * Polynomial.X ^ 2 +\n      Polynomial.C (H.coeff 3) * Polynomial.X ^ 3\n\u22a2 \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\na\u271d : sorry < (ENNReal.ofReal (2 * T)).toReal\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\na\u271d : sorry < (ENNReal.ofReal (2 * T)).toReal\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\n\u22a2 sorry () = (ENNReal.ofReal (2 * T)).toReal"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\nh\u2085\u2081 : sorry = (ENNReal.ofReal (2 * T)).toReal\na\u271d : sorry < 2 * T\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\nh\u2085\u2081 : sorry = (ENNReal.ofReal (2 * T)).toReal\na\u271d : sorry < 2 * T\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\nh\u2085\u2081 : sorry = (ENNReal.ofReal (2 * T)).toReal\n\u22a2 sorry () = 2 * T"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_9": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\nh\u2085 : sorry = 2 * T\na\u271d :\n  \u2a0d (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H <\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\nh\u2085 : sorry = 2 * T\na\u271d :\n  \u2a0d (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H <\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nT : \u211d\nH : Polynomial \u211d\nhT : T > 0\nhH : H.degree \u2264 3\nh\u2081 :\n  (Polynomial.eval (-T / \u221a3) H + Polynomial.eval (T / \u221a3) H) / 2 =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)\nh\u2083 : \u222b (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H = \u222b (t : \u211d) in -T..T, Polynomial.eval t H\nh\u2084 :\n  \u222b (t : \u211d) in -T..T, Polynomial.eval t H =\n    2 * T * Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)\nh\u2085 : sorry = 2 * T\n\u22a2 \u2a0d (t : \u211d) in Set.Icc (-T) T, Polynomial.eval t H =\n    Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 34.867143,
+  "constraint_satisfied": true,
+  "tactics_replaced": 2,
+  "timestamp": "2025-06-19T07:27:38.304088"
+}

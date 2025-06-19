@@ -1,0 +1,53 @@
+{
+  "problem_id": "putnam_1970_b2",
+  "dataset": "putnam",
+  "timestamp": "2025-06-19T02:44:17.138718",
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "holes": [
+    {
+      "hole_id": "hole_1",
+      "original_proof": "apply Polynomial.funext\nintro x\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul]\nrw [Polynomial.eval_eq_sum_range]\nsimp [Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul, Finset.sum_range_succ]\nring_nf\nnorm_num\nlinarith [Polynomial.coeff_le_degree (p := H)]"
+    },
+    {
+      "hole_id": "hole_2",
+      "original_proof": "rw [h\u2082]\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.derivative_add, Polynomial.derivative_mul, Polynomial.derivative_C, Polynomial.derivative_X,\n  Polynomial.derivative_pow, Polynomial.derivative_X_pow]\nfield_simp [Real.sqrt_eq_iff_sq_eq, pow_two, pow_three, mul_assoc, mul_comm, mul_left_comm]\nring_nf\nnorm_num\nfield_simp [Real.sqrt_eq_iff_sq_eq, pow_two, pow_three, mul_assoc, mul_comm, mul_left_comm]\nring_nf"
+    },
+    {
+      "hole_id": "hole_3",
+      "original_proof": "rw [intervalIntegral.integral_of_le (by linarith)]\nsimp [Set.Icc, Real.volume_Icc, Real.volume_Icc]\nring_nf\nfield_simp"
+    },
+    {
+      "hole_id": "hole_4",
+      "original_proof": "apply Polynomial.funext\nintro x\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul]\nrw [Polynomial.eval_eq_sum_range]\nsimp [Polynomial.coeff_add, Polynomial.coeff_mul, Polynomial.coeff_X_pow, Polynomial.coeff_C_mul, Finset.sum_range_succ]\nring_nf\nnorm_num\nlinarith [Polynomial.coeff_le_degree (p := H)]"
+    },
+    {
+      "hole_id": "hole_5",
+      "original_proof": "rw [h\u2085]\nsimp [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_C, Polynomial.eval_X,\n  Polynomial.derivative_add, Polynomial.derivative_mul, Polynomial.derivative_C, Polynomial.derivative_X,\n  Polynomial.derivative_pow, Polynomial.derivative_X_pow, intervalIntegral.integral_add,\n  intervalIntegral.integral_mul_left, intervalIntegral.integral_add, intervalIntegral.integral_mul_left,\n  intervalIntegral.integral_add, intervalIntegral.integral_mul_left]\nsimp_all [mul_assoc, mul_comm, mul_left_comm, pow_two, pow_three, mul_assoc, mul_comm, mul_left_comm]"
+    },
+    {
+      "hole_id": "hole_6",
+      "original_proof": "simp [Real.volume_Icc, hT.le]\nring_nf\nfield_simp"
+    },
+    {
+      "hole_id": "hole_7",
+      "original_proof": "rw [h\u2085\u2081]\nsimp [ENNReal.toReal_ofReal, hT.le]"
+    },
+    {
+      "hole_id": "hole_9",
+      "original_proof": "calc\n  \u2a0d t in Set.Icc (-T) T, H.eval t = (\u222b t in Set.Icc (-T) T, H.eval t) / (volume (Set.Icc (-T) T)) := by\n    rw [MeasureTheory.integral_average] <;> simp_all [Real.volume_Icc, hT.le] <;> ring_nf <;> field_simp <;> linarith\n  _ = (\u222b t in (-T : \u211d)..(T : \u211d), H.eval t) / (2 * T) := by rw [h\u2083, h\u2085] <;> ring_nf <;> field_simp <;> linarith\n  _ =\n      (2 * T * Polynomial.eval 0 H +\n          Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 3 / 3)) /\n        (2 * T) :=\n    by rw [h\u2084] <;> ring_nf <;> field_simp <;> linarith\n  _ = Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6) :=\n    by\n    have h\u2086 : T \u2260 0 := by linarith\n    field_simp [h\u2086] <;> ring_nf <;> field_simp [h\u2086] <;> ring_nf <;> linarith\n  _ = Polynomial.eval 0 H + Polynomial.eval 0 (Polynomial.derivative (Polynomial.derivative H)) * (T ^ 2 / 6) := by rfl"
+    },
+    {
+      "hole_id": "hole_8",
+      "original_proof": "linarith"
+    },
+    {
+      "hole_id": "hole_10",
+      "original_proof": "rw [h\u2081, h\u2082]"
+    },
+    {
+      "hole_id": "hole_11",
+      "original_proof": "rw [h\u2083]"
+    }
+  ]
+}

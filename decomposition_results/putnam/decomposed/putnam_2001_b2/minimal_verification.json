@@ -1,0 +1,1359 @@
+{
+  "problem_id": "putnam_2001_b2",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [heq1] at h\u2082\nexact h\u2082"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [heq2] at h\u2083\nexact h\u2083"
+    },
+    "hole_3": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2086 : x \u2260 0\nh\u2087 : y \u2260 0\nh\u2088 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2089 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2081 : x \u2260 0\nh\u2081\u2082 : y \u2260 0\nh\u2081\u2083 : x\u207b\u00b9 + y\u207b\u00b9 * (1 / 2) = x ^ 2 * y ^ 2 * 10 + x ^ 4 * 3 + y ^ 4 * 3\nh\u2081\u2084 : x\u207b\u00b9 + y\u207b\u00b9 * (-1 / 2) = -(x ^ 4 * 2) + y ^ 4 * 2\na\u271d : x + y < 3 ^ (1 / 5)\n\u22a2 False failed",
+      "original_tactic": "ring_nf at h\u2081\u2083 h\u2081\u2084 \u22a2\nnlinarith [sq_pos_of_ne_zero h\u2081\u2081, sq_pos_of_ne_zero h\u2081\u2082, sq_nonneg (x + y), sq_nonneg (x - y),\n  sq_nonneg (x ^ 2 - y ^ 2), sq_nonneg (x ^ 2 + y ^ 2), sq_nonneg (x ^ 2 - 2 * x * y + y ^ 2),\n  sq_nonneg (x ^ 2 + 2 * x * y + y ^ 2)]"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2080"
+    },
+    "hole_5": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2085"
+    },
+    "hole_6": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2087 : x \u2260 0\nh\u2088 : y \u2260 0\nh\u2089 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2080 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2082 : x \u2260 0\nh\u2081\u2083 : y \u2260 0\nh\u2081\u2084 : x\u207b\u00b9 + y\u207b\u00b9 * (1 / 2) = x ^ 2 * y ^ 2 * 10 + x ^ 4 * 3 + y ^ 4 * 3\nh\u2081\u2085 : x\u207b\u00b9 + y\u207b\u00b9 * (-1 / 2) = -(x ^ 4 * 2) + y ^ 4 * 2\na\u271d : x - y < 1\n\u22a2 False failed",
+      "original_tactic": "ring_nf at h\u2081\u2084 h\u2081\u2085 \u22a2\nnlinarith [sq_pos_of_ne_zero h\u2081\u2082, sq_pos_of_ne_zero h\u2081\u2083, sq_nonneg (x + y), sq_nonneg (x - y),\n  sq_nonneg (x ^ 2 - y ^ 2), sq_nonneg (x ^ 2 + y ^ 2), sq_nonneg (x ^ 2 - 2 * x * y + y ^ 2),\n  sq_nonneg (x ^ 2 + 2 * x * y + y ^ 2)]"
+    },
+    "hole_7": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2081"
+    },
+    "hole_8": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2086"
+    },
+    "hole_9": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_10": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2089"
+    },
+    "hole_11": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_12": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2080"
+    },
+    "hole_13": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact \u27e8h\u2086, h\u2087\u27e9"
+    },
+    "hole_14": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "positivity"
+    },
+    "hole_15": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2088]"
+    },
+    "hole_16": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [Real.log_rpow (by norm_num : (3 : \u211d) > 0)]"
+    },
+    "hole_17": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num"
+    },
+    "hole_18": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_19": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "positivity"
+    },
+    "hole_20": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_21": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2086 : 3 ^ (1 / 5) \u2260 1\na\u271d : 3 ^ (1 / 5) * 48 < (3 ^ (1 / 5)) ^ 6 * 16\n\u22a2 False failed",
+      "original_tactic": "field_simp [h\u2085.ne', h\u2086, sub_eq_zero, add_eq_zero_iff_eq_neg]\nring_nf\nnorm_num\nnlinarith [Real.sq_sqrt (show 0 \u2264 3 by norm_num), Real.sqrt_nonneg 3, Real.sq_sqrt (show 0 \u2264 3 by norm_num),\n  Real.sqrt_nonneg 3]"
+    },
+    "hole_22": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2084"
+    },
+    "hole_23": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "positivity"
+    },
+    "hole_24": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2089]"
+    },
+    "hole_25": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [Real.log_rpow (by norm_num : (3 : \u211d) > 0)]"
+    },
+    "hole_26": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num"
+    },
+    "hole_27": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_28": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "positivity"
+    },
+    "hole_29": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_30": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2087 : 3 ^ (1 / 5) \u2260 1\na\u271d : -48 + 3 ^ (1 / 5) * 16 < 3 ^ (1 / 5) * 16 - (3 ^ (1 / 5)) ^ 5 * 16\n\u22a2 False failed",
+      "original_tactic": "field_simp [h\u2086.ne', h\u2087, sub_eq_zero, add_eq_zero_iff_eq_neg]\nring_nf\nnorm_num\nnlinarith [Real.sq_sqrt (show 0 \u2264 3 by norm_num), Real.sqrt_nonneg 3, Real.sq_sqrt (show 0 \u2264 3 by norm_num),\n  Real.sqrt_nonneg 3]"
+    },
+    "hole_31": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2085"
+    },
+    "hole_32": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact \u27e8h\u2083, h\u2084\u27e9"
+    },
+    "hole_33": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h_main]\nconstructor\nrintro \u27e8h\u2081, h\u2082\u27e9\nsimp_all [Set.mem_singleton_iff, Prod.ext_iff]\nrintro h\nsimp_all [Set.mem_singleton_iff, Prod.ext_iff]"
+    },
+    "hole_34": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h_final"
+    }
+  },
+  "successful_tactics": {
+    "hole_4": "linarith",
+    "hole_5": "linarith",
+    "hole_7": "linarith",
+    "hole_8": "linarith",
+    "hole_9": "linarith",
+    "hole_10": "linarith",
+    "hole_11": "linarith",
+    "hole_12": "linarith",
+    "hole_13": "norm_cast",
+    "hole_14": "positivity",
+    "hole_17": "norm_num",
+    "hole_18": "linarith",
+    "hole_19": "linarith",
+    "hole_20": "linarith",
+    "hole_22": "linarith",
+    "hole_23": "positivity",
+    "hole_26": "norm_num",
+    "hole_27": "linarith",
+    "hole_28": "linarith",
+    "hole_29": "linarith",
+    "hole_31": "linarith",
+    "hole_32": "norm_cast",
+    "hole_34": "norm_cast"
+  },
+  "tactic_mapping": {
+    "hole_4": "linarith",
+    "hole_5": "linarith",
+    "hole_7": "linarith",
+    "hole_8": "linarith",
+    "hole_9": "linarith",
+    "hole_10": "linarith",
+    "hole_11": "linarith",
+    "hole_12": "linarith",
+    "hole_13": "norm_cast",
+    "hole_14": "positivity",
+    "hole_17": "norm_num",
+    "hole_18": "linarith",
+    "hole_19": "linarith",
+    "hole_20": "linarith",
+    "hole_22": "linarith",
+    "hole_23": "positivity",
+    "hole_26": "norm_num",
+    "hole_27": "linarith",
+    "hole_28": "linarith",
+    "hole_29": "linarith",
+    "hole_31": "linarith",
+    "hole_32": "norm_cast",
+    "hole_34": "norm_cast",
+    "hole_15": "admit",
+    "hole_1": "admit",
+    "hole_6": "admit",
+    "hole_30": "admit",
+    "hole_25": "admit",
+    "hole_16": "admit",
+    "hole_21": "admit",
+    "hole_2": "admit",
+    "hole_3": "admit",
+    "hole_24": "admit",
+    "hole_33": "admit"
+  },
+  "proof_state_tests": 208,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2082 : eq1\na\u271d : 1 / x + 1 / (2 * y) < (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2082 : eq1\na\u271d : 1 / x + 1 / (2 * y) < (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2082 : eq1\n\u22a2 x\u207b\u00b9 + y\u207b\u00b9 * 2\u207b\u00b9 = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2083 : eq2\na\u271d : 1 / x - 1 / (2 * y) < 2 * (y ^ 4 - x ^ 4)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2083 : eq2\na\u271d : 1 / x - 1 / (2 * y) < 2 * (y ^ 4 - x ^ 4)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2083 : eq2\n\u22a2 x\u207b\u00b9 - y\u207b\u00b9 * 2\u207b\u00b9 = 2 * (y ^ 4 - x ^ 4)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2086 : x \u2260 0\nh\u2087 : y \u2260 0\nh\u2088 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2089 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2081 : x \u2260 0\nh\u2081\u2082 : y \u2260 0\nh\u2081\u2083 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2084 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\na\u271d : x + y < 3 ^ (1 / 5)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2086 : x \u2260 0\nh\u2087 : y \u2260 0\nh\u2088 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2089 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2081 : x \u2260 0\nh\u2081\u2082 : y \u2260 0\nh\u2081\u2083 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2084 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\na\u271d : x + y < 3 ^ (1 / 5)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2086 : x \u2260 0\nh\u2087 : y \u2260 0\nh\u2088 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2089 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2081 : x \u2260 0\nh\u2081\u2082 : y \u2260 0\nh\u2081\u2083 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2084 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\n\u22a2 x + y = 3 ^ 5\u207b\u00b9"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2087 : x \u2260 0\nh\u2088 : y \u2260 0\nh\u2089 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2080 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2082 : x \u2260 0\nh\u2081\u2083 : y \u2260 0\nh\u2081\u2084 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2085 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\na\u271d : x - y < 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2087 : x \u2260 0\nh\u2088 : y \u2260 0\nh\u2089 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2080 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2082 : x \u2260 0\nh\u2081\u2083 : y \u2260 0\nh\u2081\u2084 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2085 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\na\u271d : x - y < 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2087 : x \u2260 0\nh\u2088 : y \u2260 0\nh\u2089 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2080 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2081\u2082 : x \u2260 0\nh\u2081\u2083 : y \u2260 0\nh\u2081\u2084 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2081\u2085 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\n\u22a2 x - y = 1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_8": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_9": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_12": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_13": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2085 : x - y = 1\nh\u2086 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2087 : y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2085 : x - y = 1\nh\u2086 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2087 : y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : eq1 \u2227 eq2\nh\u2081 : 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nh\u2082 : 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh\u2084 : x + y = 3 ^ (1 / 5)\nh\u2085 : x - y = 1\nh\u2086 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2087 : y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 x = (3 ^ 5\u207b\u00b9 + 1) / 2 \u2227 y = (3 ^ 5\u207b\u00b9 - 1) / 2"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_14": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\na\u271d : 0 \u2265 3 ^ (1 / 5)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\na\u271d : 0 \u2265 3 ^ (1 / 5)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 0 < 3 ^ 5\u207b\u00b9"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_15": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2087 h\u2088 : 3 ^ (1 / 5) = 1\na\u271d : Real.log (3 ^ (1 / 5)) < Real.log 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2087 h\u2088 : 3 ^ (1 / 5) = 1\na\u271d : Real.log (3 ^ (1 / 5)) < Real.log 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2087 h\u2088 : 3 ^ (1 / 5) = 1\n\u22a2 3 ^ 5\u207b\u00b9 = 1 \u2228 3 ^ 5\u207b\u00b9 = -1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_16": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2087 h\u2088 : 3 ^ (1 / 5) = 1\nh\u2089 : Real.log (3 ^ (1 / 5)) = Real.log 1\na\u271d : Real.log (3 ^ (1 / 5)) < 1 / 5 * Real.log 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2087 h\u2088 : 3 ^ (1 / 5) = 1\nh\u2089 : Real.log (3 ^ (1 / 5)) = Real.log 1\na\u271d : Real.log (3 ^ (1 / 5)) < 1 / 5 * Real.log 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2087 h\u2088 : 3 ^ (1 / 5) = 1\nh\u2089 : Real.log (3 ^ (1 / 5)) = Real.log 1\n\u22a2 Real.log (3 ^ 5\u207b\u00b9) = 5\u207b\u00b9 * Real.log 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_17": [
+      {
+        "tactic": "norm_num",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_18": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_19": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_20": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_21": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2086 : 3 ^ (1 / 5) \u2260 1\na\u271d :\n  1 / ((3 ^ (1 / 5) + 1) / 2) + 1 / (2 * ((3 ^ (1 / 5) - 1) / 2)) <\n    (((3 ^ (1 / 5) + 1) / 2) ^ 2 + 3 * ((3 ^ (1 / 5) - 1) / 2) ^ 2) *\n      (3 * ((3 ^ (1 / 5) + 1) / 2) ^ 2 + ((3 ^ (1 / 5) - 1) / 2) ^ 2)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2086 : 3 ^ (1 / 5) \u2260 1\na\u271d :\n  1 / ((3 ^ (1 / 5) + 1) / 2) + 1 / (2 * ((3 ^ (1 / 5) - 1) / 2)) <\n    (((3 ^ (1 / 5) + 1) / 2) ^ 2 + 3 * ((3 ^ (1 / 5) - 1) / 2) ^ 2) *\n      (3 * ((3 ^ (1 / 5) + 1) / 2) ^ 2 + ((3 ^ (1 / 5) - 1) / 2) ^ 2)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2085 : 3 ^ (1 / 5) > 0\nh\u2086 : 3 ^ (1 / 5) \u2260 1\n\u22a2 2 / (3 ^ 5\u207b\u00b9 + 1) + 2 / (3 ^ 5\u207b\u00b9 - 1) * 2\u207b\u00b9 =\n    (((3 ^ 5\u207b\u00b9 + 1) / 2) ^ 2 + 3 * ((3 ^ 5\u207b\u00b9 - 1) / 2) ^ 2) * (3 * ((3 ^ 5\u207b\u00b9 + 1) / 2) ^ 2 + ((3 ^ 5\u207b\u00b9 - 1) / 2) ^ 2)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_22": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_23": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\na\u271d : 0 \u2265 3 ^ (1 / 5)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\na\u271d : 0 \u2265 3 ^ (1 / 5)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\n\u22a2 0 < 3 ^ 5\u207b\u00b9"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_24": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2088 h\u2089 : 3 ^ (1 / 5) = 1\na\u271d : Real.log (3 ^ (1 / 5)) < Real.log 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2088 h\u2089 : 3 ^ (1 / 5) = 1\na\u271d : Real.log (3 ^ (1 / 5)) < Real.log 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2088 h\u2089 : 3 ^ (1 / 5) = 1\n\u22a2 3 ^ 5\u207b\u00b9 = 1 \u2228 3 ^ 5\u207b\u00b9 = -1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_25": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2088 h\u2089 : 3 ^ (1 / 5) = 1\nh\u2081\u2080 : Real.log (3 ^ (1 / 5)) = Real.log 1\na\u271d : Real.log (3 ^ (1 / 5)) < 1 / 5 * Real.log 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2088 h\u2089 : 3 ^ (1 / 5) = 1\nh\u2081\u2080 : Real.log (3 ^ (1 / 5)) = Real.log 1\na\u271d : Real.log (3 ^ (1 / 5)) < 1 / 5 * Real.log 3\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2088 h\u2089 : 3 ^ (1 / 5) = 1\nh\u2081\u2080 : Real.log (3 ^ (1 / 5)) = Real.log 1\n\u22a2 Real.log (3 ^ 5\u207b\u00b9) = 5\u207b\u00b9 * Real.log 3"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_26": [
+      {
+        "tactic": "norm_num",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_27": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_28": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_29": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_30": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2087 : 3 ^ (1 / 5) \u2260 1\na\u271d :\n  1 / ((3 ^ (1 / 5) + 1) / 2) - 1 / (2 * ((3 ^ (1 / 5) - 1) / 2)) <\n    2 * (((3 ^ (1 / 5) - 1) / 2) ^ 4 - ((3 ^ (1 / 5) + 1) / 2) ^ 4)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2087 : 3 ^ (1 / 5) \u2260 1\na\u271d :\n  1 / ((3 ^ (1 / 5) + 1) / 2) - 1 / (2 * ((3 ^ (1 / 5) - 1) / 2)) <\n    2 * (((3 ^ (1 / 5) - 1) / 2) ^ 4 - ((3 ^ (1 / 5) + 1) / 2) ^ 4)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2086 : 3 ^ (1 / 5) > 0\nh\u2087 : 3 ^ (1 / 5) \u2260 1\n\u22a2 2 / (3 ^ 5\u207b\u00b9 + 1) - 2 / (3 ^ 5\u207b\u00b9 - 1) * 2\u207b\u00b9 = 2 * (((3 ^ 5\u207b\u00b9 - 1) / 2) ^ 4 - ((3 ^ 5\u207b\u00b9 + 1) / 2) ^ 4)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_31": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_32": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase mpr\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2084 : eq2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase mpr\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2084 : eq2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\ncase mpr\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh : x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh\u2081 : x = (3 ^ (1 / 5) + 1) / 2\nh\u2082 : y = (3 ^ (1 / 5) - 1) / 2\nh\u2083 : eq1\nh\u2084 : eq2\n\u22a2 eq1 \u2227 eq2"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_33": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh_main : eq1 \u2227 eq2 \u2194 x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh_main : eq1 \u2227 eq2 \u2194 x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh_main : eq1 \u2227 eq2 \u2194 x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\n\u22a2 eq1 \u2227 eq2 \u2194 x = (3 ^ 5\u207b\u00b9 + 1) / 2 \u2227 y = (3 ^ 5\u207b\u00b9 - 1) / 2"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_34": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh_main : eq1 \u2227 eq2 \u2194 x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh_final : eq1 \u2227 eq2 \u2194 (x, y) \u2208 {((3 ^ (1 / 5) + 1) / 2, (3 ^ (1 / 5) - 1) / 2)}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh_main : eq1 \u2227 eq2 \u2194 x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh_final : eq1 \u2227 eq2 \u2194 (x, y) \u2208 {((3 ^ (1 / 5) + 1) / 2, (3 ^ (1 / 5) - 1) / 2)}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nx y : \u211d\nhx : x \u2260 0\nhy : y \u2260 0\neq1 eq2 : Prop\nheq1 : eq1 \u2194 1 / x + 1 / (2 * y) = (x ^ 2 + 3 * y ^ 2) * (3 * x ^ 2 + y ^ 2)\nheq2 : eq2 \u2194 1 / x - 1 / (2 * y) = 2 * (y ^ 4 - x ^ 4)\nh_main : eq1 \u2227 eq2 \u2194 x = (3 ^ (1 / 5) + 1) / 2 \u2227 y = (3 ^ (1 / 5) - 1) / 2\nh_final : eq1 \u2227 eq2 \u2194 (x, y) \u2208 {((3 ^ (1 / 5) + 1) / 2, (3 ^ (1 / 5) - 1) / 2)}\n\u22a2 eq1 \u2227 eq2 \u2194 x = (3 ^ 5\u207b\u00b9 + 1) / 2 \u2227 y = (3 ^ 5\u207b\u00b9 - 1) / 2"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 73.550287,
+  "constraint_satisfied": true,
+  "tactics_replaced": 23,
+  "timestamp": "2025-06-19T09:42:47.779495"
+}

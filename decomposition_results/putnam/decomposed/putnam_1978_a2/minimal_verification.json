@@ -1,0 +1,125 @@
+{
+  "problem_id": "putnam_1978_a2",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_2": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "cases n with\n| zero =>\n  exfalso\n  linarith\n| succ n =>\n  cases n with\n  | zero => simp [Fin.prod_univ_succ, Matrix.det_fin_one] <;> field_simp [sub_ne_zero.mpr hab] <;> ring\n  | succ n =>\n    simp_all [Fin.prod_univ_succ, Matrix.det_succ_row_zero, Fin.sum_univ_succ, Fin.succ_zero_eq_one,\n              Fin.succ_one_eq_two] <;>\n            field_simp [sub_ne_zero.mpr hab] <;>\n          ring <;>\n        simp_all [Fin.prod_univ_succ, Matrix.det_succ_row_zero, Fin.sum_univ_succ, Fin.succ_zero_eq_one,\n          Fin.succ_one_eq_two] <;>\n      linarith"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081"
+    }
+  },
+  "successful_tactics": {
+    "hole_1": "linarith",
+    "hole_3": "linarith"
+  },
+  "tactic_mapping": {
+    "hole_1": "linarith",
+    "hole_3": "linarith",
+    "hole_2": "admit"
+  },
+  "proof_state_tests": 15,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nn : \u2115\nnpos : n > 0\na b : \u211d\nhab : a \u2260 b\nc : Fin n \u2192 \u211d\nA : Matrix (Fin n) (Fin n) \u211d\nhA : A = fun i j => if i < j then a else if i > j then b else c i\np : \u211d \u2192 \u211d\nhp : p = fun x => \u220f i, (c i - x)\nh\u2082 : n \u2265 1\na\u271d :\n  (Matrix.det fun i j => if i < j then a else if i > j then b else c i) <\n    (b * (fun x => \u220f i, (c i - x)) a - a * (fun x => \u220f i, (c i - x)) b) / (b - a)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nn : \u2115\nnpos : n > 0\na b : \u211d\nhab : a \u2260 b\nc : Fin n \u2192 \u211d\nA : Matrix (Fin n) (Fin n) \u211d\nhA : A = fun i j => if i < j then a else if i > j then b else c i\np : \u211d \u2192 \u211d\nhp : p = fun x => \u220f i, (c i - x)\nh\u2082 : n \u2265 1\na\u271d :\n  (Matrix.det fun i j => if i < j then a else if i > j then b else c i) <\n    (b * (fun x => \u220f i, (c i - x)) a - a * (fun x => \u220f i, (c i - x)) b) / (b - a)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  d \u2265 1\nwhere\n d := \u2191n"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nn : \u2115\nnpos : n > 0\na b : \u211d\nhab : a \u2260 b\nc : Fin n \u2192 \u211d\nA : Matrix (Fin n) (Fin n) \u211d\nhA : A = fun i j => if i < j then a else if i > j then b else c i\np : \u211d \u2192 \u211d\nhp : p = fun x => \u220f i, (c i - x)\nh\u2082 : n \u2265 1\n\u22a2 (Matrix.det fun i j => if i < j then a else if j < i then b else c i) =\n    (b * \u220f i, (c i - a) - a * \u220f i, (c i - b)) / (b - a)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 32.272393,
+  "constraint_satisfied": true,
+  "tactics_replaced": 2,
+  "timestamp": "2025-06-19T11:04:38.740887"
+}

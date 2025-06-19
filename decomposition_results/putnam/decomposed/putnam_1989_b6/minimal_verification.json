@@ -1,0 +1,151 @@
+{
+  "problem_id": "putnam_1989_b6",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_5": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "classical\nuse Polynomial.X ^ n\nconstructor\n\u00b7 simp [Polynomial.degree_X_pow]\nconstructor\n\u00b7 intro t ht\n  have h\u2082 : 0 \u2264 t := by exact ht.1\n  have h\u2083 : t \u2264 1 := by exact ht.2\n  constructor\n  \u00b7 have h\u2084 : 0 \u2264 t ^ n := pow_nonneg h\u2082 n\n    simp [Polynomial.eval_pow, Polynomial.eval_X] <;> linarith\n  \u00b7 have h\u2084 : t ^ n \u2264 1 := pow_le_one n h\u2082 h\u2083\n    simp [Polynomial.eval_pow, Polynomial.eval_X] <;> linarith\n\u00b7 intro f hf\n  have h\u2082 : fprop f := hf\n  rw [hfprop] at h\u2082\n  have h\u2083 : ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0 := h\u2082\n  have h\u2084 : fEV f = (\u222b x in Sx, fxsum f x) / (\u222b x in Sx, 1) := by rw [hfEV]\n  rw [h\u2084]\n  have h\u2085 :\n    (\u222b x in Sx, fxsum f x) / (\u222b x in Sx, 1) = (\u222b t in Set.Ioo 0 1, f t * (Polynomial.X ^ n : Polynomial \u211d).eval t) := by\n    sorry\n  rw [h\u2085] <;> simp [Polynomial.eval_pow, Polynomial.eval_X]"
+    },
+    "hole_6": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081"
+    }
+  },
+  "successful_tactics": {
+    "hole_6": "norm_cast"
+  },
+  "tactic_mapping": {
+    "hole_6": "norm_cast",
+    "hole_5": "admit"
+  },
+  "proof_state_tests": 22,
+  "tactic_attempts": {
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2115\nSx : Set (Fin n \u2192 \u211d)\nfprop : (\u211d \u2192 \u211d) \u2192 Prop\nxext : (Fin n \u2192 \u211d) \u2192 \u2115 \u2192 \u211d\nfxsum : (\u211d \u2192 \u211d) \u2192 (Fin n \u2192 \u211d) \u2192 \u211d\nfEV : (\u211d \u2192 \u211d) \u2192 \u211d\nhSx : Sx = {x | 0 < x \u2227 StrictMono x \u2227 x < 1}\nhfprop : fprop = fun f => ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0\nhfxsum : fxsum = fun f x => \u2211 i \u2208 Finset.Icc 0 n, (xext x (i + 1) - xext x i) * f (xext x (i + 1))\nhfEV : fEV = fun f => (\u222b (x : Fin n \u2192 \u211d) in Sx, fxsum f x) / \u222b (x : Fin n \u2192 \u211d) in Sx, 1\nnpos : n \u2265 1\nhxext : \u2200 (x : Fin n \u2192 \u211d), xext x 0 = 0 \u2227 xext x (n + 1) = 1 \u2227 \u2200 (i : Fin n), xext x (\u2191i + 1) = x i\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2115\nSx : Set (Fin n \u2192 \u211d)\nfprop : (\u211d \u2192 \u211d) \u2192 Prop\nxext : (Fin n \u2192 \u211d) \u2192 \u2115 \u2192 \u211d\nfxsum : (\u211d \u2192 \u211d) \u2192 (Fin n \u2192 \u211d) \u2192 \u211d\nfEV : (\u211d \u2192 \u211d) \u2192 \u211d\nhSx : Sx = {x | 0 < x \u2227 StrictMono x \u2227 x < 1}\nhfprop : fprop = fun f => ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0\nhfxsum : fxsum = fun f x => \u2211 i \u2208 Finset.Icc 0 n, (xext x (i + 1) - xext x i) * f (xext x (i + 1))\nhfEV : fEV = fun f => (\u222b (x : Fin n \u2192 \u211d) in Sx, fxsum f x) / \u222b (x : Fin n \u2192 \u211d) in Sx, 1\nnpos : n \u2265 1\nhxext : \u2200 (x : Fin n \u2192 \u211d), xext x 0 = 0 \u2227 xext x (n + 1) = 1 \u2227 \u2200 (i : Fin n), xext x (\u2191i + 1) = x i\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := \u2191n"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nn : \u2115\nSx : Set (Fin n \u2192 \u211d)\nfprop : (\u211d \u2192 \u211d) \u2192 Prop\nxext : (Fin n \u2192 \u211d) \u2192 \u2115 \u2192 \u211d\nfxsum : (\u211d \u2192 \u211d) \u2192 (Fin n \u2192 \u211d) \u2192 \u211d\nfEV : (\u211d \u2192 \u211d) \u2192 \u211d\nhSx : Sx = {x | 0 < x \u2227 StrictMono x \u2227 x < 1}\nhfprop : fprop = fun f => ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0\nhfxsum : fxsum = fun f x => \u2211 i \u2208 Finset.Icc 0 n, (xext x (i + 1) - xext x i) * f (xext x (i + 1))\nhfEV : fEV = fun f => (\u222b (x : Fin n \u2192 \u211d) in Sx, fxsum f x) / \u222b (x : Fin n \u2192 \u211d) in Sx, 1\nnpos : n \u2265 1\nhxext : \u2200 (x : Fin n \u2192 \u211d), xext x 0 = 0 \u2227 xext x (n + 1) = 1 \u2227 \u2200 (i : Fin n), xext x (\u2191i + 1) = x i\n\u22a2 \u2203 P,\n    P.degree = \u2191n \u2227\n      (\u2200 (t : \u211d), 0 \u2264 t \u2192 t \u2264 1 \u2192 0 \u2264 Polynomial.eval t P \u2227 Polynomial.eval t P \u2264 1) \u2227\n        \u2200 (f : \u211d \u2192 \u211d), fprop f \u2192 fEV f = \u222b (t : \u211d) in Set.Ioo 0 1, f t * Polynomial.eval t P"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2115\nSx : Set (Fin n \u2192 \u211d)\nfprop : (\u211d \u2192 \u211d) \u2192 Prop\nxext : (Fin n \u2192 \u211d) \u2192 \u2115 \u2192 \u211d\nfxsum : (\u211d \u2192 \u211d) \u2192 (Fin n \u2192 \u211d) \u2192 \u211d\nfEV : (\u211d \u2192 \u211d) \u2192 \u211d\nhSx : Sx = {x | 0 < x \u2227 StrictMono x \u2227 x < 1}\nhfprop : fprop = fun f => ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0\nhfxsum : fxsum = fun f x => \u2211 i \u2208 Finset.Icc 0 n, (xext x (i + 1) - xext x i) * f (xext x (i + 1))\nhfEV : fEV = fun f => (\u222b (x : Fin n \u2192 \u211d) in Sx, fxsum f x) / \u222b (x : Fin n \u2192 \u211d) in Sx, 1\nnpos : n \u2265 1\nhxext : \u2200 (x : Fin n \u2192 \u211d), xext x 0 = 0 \u2227 xext x (n + 1) = 1 \u2227 \u2200 (i : Fin n), xext x (\u2191i + 1) = x i\nh\u2081 :\n  \u2203 P,\n    P.degree = \u2191n \u2227\n      (\u2200 t \u2208 Set.Icc 0 1, 0 \u2264 Polynomial.eval t P \u2227 Polynomial.eval t P \u2264 1) \u2227\n        \u2200 (f : \u211d \u2192 \u211d), fprop f \u2192 fEV f = \u222b (t : \u211d) in Set.Ioo 0 1, f t * Polynomial.eval t P\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2115\nSx : Set (Fin n \u2192 \u211d)\nfprop : (\u211d \u2192 \u211d) \u2192 Prop\nxext : (Fin n \u2192 \u211d) \u2192 \u2115 \u2192 \u211d\nfxsum : (\u211d \u2192 \u211d) \u2192 (Fin n \u2192 \u211d) \u2192 \u211d\nfEV : (\u211d \u2192 \u211d) \u2192 \u211d\nhSx : Sx = {x | 0 < x \u2227 StrictMono x \u2227 x < 1}\nhfprop : fprop = fun f => ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0\nhfxsum : fxsum = fun f x => \u2211 i \u2208 Finset.Icc 0 n, (xext x (i + 1) - xext x i) * f (xext x (i + 1))\nhfEV : fEV = fun f => (\u222b (x : Fin n \u2192 \u211d) in Sx, fxsum f x) / \u222b (x : Fin n \u2192 \u211d) in Sx, 1\nnpos : n \u2265 1\nhxext : \u2200 (x : Fin n \u2192 \u211d), xext x 0 = 0 \u2227 xext x (n + 1) = 1 \u2227 \u2200 (i : Fin n), xext x (\u2191i + 1) = x i\nh\u2081 :\n  \u2203 P,\n    P.degree = \u2191n \u2227\n      (\u2200 t \u2208 Set.Icc 0 1, 0 \u2264 Polynomial.eval t P \u2227 Polynomial.eval t P \u2264 1) \u2227\n        \u2200 (f : \u211d \u2192 \u211d), fprop f \u2192 fEV f = \u222b (t : \u211d) in Set.Ioo 0 1, f t * Polynomial.eval t P\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := \u2191n"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nn : \u2115\nSx : Set (Fin n \u2192 \u211d)\nfprop : (\u211d \u2192 \u211d) \u2192 Prop\nxext : (Fin n \u2192 \u211d) \u2192 \u2115 \u2192 \u211d\nfxsum : (\u211d \u2192 \u211d) \u2192 (Fin n \u2192 \u211d) \u2192 \u211d\nfEV : (\u211d \u2192 \u211d) \u2192 \u211d\nhSx : Sx = {x | 0 < x \u2227 StrictMono x \u2227 x < 1}\nhfprop : fprop = fun f => ContinuousOn f (Set.Icc 0 1) \u2227 f 1 = 0\nhfxsum : fxsum = fun f x => \u2211 i \u2208 Finset.Icc 0 n, (xext x (i + 1) - xext x i) * f (xext x (i + 1))\nhfEV : fEV = fun f => (\u222b (x : Fin n \u2192 \u211d) in Sx, fxsum f x) / \u222b (x : Fin n \u2192 \u211d) in Sx, 1\nnpos : n \u2265 1\nhxext : \u2200 (x : Fin n \u2192 \u211d), xext x 0 = 0 \u2227 xext x (n + 1) = 1 \u2227 \u2200 (i : Fin n), xext x (\u2191i + 1) = x i\nh\u2081 :\n  \u2203 P,\n    P.degree = \u2191n \u2227\n      (\u2200 t \u2208 Set.Icc 0 1, 0 \u2264 Polynomial.eval t P \u2227 Polynomial.eval t P \u2264 1) \u2227\n        \u2200 (f : \u211d \u2192 \u211d), fprop f \u2192 fEV f = \u222b (t : \u211d) in Set.Ioo 0 1, f t * Polynomial.eval t P\n\u22a2 \u2203 P,\n    P.degree = \u2191n \u2227\n      (\u2200 (t : \u211d), 0 \u2264 t \u2192 t \u2264 1 \u2192 0 \u2264 Polynomial.eval t P \u2227 Polynomial.eval t P \u2264 1) \u2227\n        \u2200 (f : \u211d \u2192 \u211d), fprop f \u2192 fEV f = \u222b (t : \u211d) in Set.Ioo 0 1, f t * Polynomial.eval t P"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 24.341194,
+  "constraint_satisfied": true,
+  "tactics_replaced": 1,
+  "timestamp": "2025-06-19T08:58:56.830224"
+}

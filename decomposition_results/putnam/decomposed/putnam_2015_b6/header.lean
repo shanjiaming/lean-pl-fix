@@ -1,0 +1,8 @@
+import Mathlib
+
+open Filter Topology
+
+-- Real.pi ^ 2 / 16
+/--
+For each positive integer $k$, let $A(k)$ be the number of odd divisors of $k$ in the interval $[1,\sqrt{2k})$. Evaluate $\sum_{k=1}^\infty (-1)^{k-1}\frac{A(k)}{k}$.
+-/

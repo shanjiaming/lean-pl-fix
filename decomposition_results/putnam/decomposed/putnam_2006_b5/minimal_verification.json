@@ -1,0 +1,458 @@
+{
+  "problem_id": "putnam_2006_b5",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "filled_verification_pass": false,
+  "synthesized_verification_pass": false,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num [mul_comm]\nring_nf\nnorm_num"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num [mul_comm]\nring_nf\nnorm_num"
+    },
+    "hole_3": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x\ncase h.right\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2082 : \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x = 1 / 8\nh\u2083 : \u222b (x : \u211d) in 0 ..1, x * (fun x => x / 2) x ^ 2 = 1 / 16\n\u22a2 (((fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) fun x => x / 2) -\n      (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) fun x => x / 2) =\n    1 / 16",
+      "original_tactic": "rw [h\u2082, h\u2083]"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact hx.1"
+    },
+    "hole_5": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact hx.2"
+    },
+    "hole_6": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "ring"
+    },
+    "hole_7": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact mul_nonneg h\u2088 (sq_nonneg _)"
+    },
+    "hole_8": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_9": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_10": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2080"
+    },
+    "hole_11": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'apply' failed, failed to unify\n  IntervalIntegrable ?u ?\u03bc ?a ?b\nwith\n  0 \u2264 1\ncase hab\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nh\u2087 : \u2200 x \u2208 Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 \u2264 x ^ 3 / 4\n\u22a2 0 \u2264 1",
+      "original_tactic": "apply intervalIntegral.integral_mono_on\napply Continuous.intervalIntegrable\napply Continuous.intervalIntegrable\ncontinuity"
+    }
+  },
+  "successful_tactics": {
+    "hole_3": "linarith",
+    "hole_6": "linarith",
+    "hole_7": "nlinarith",
+    "hole_8": "linarith",
+    "hole_9": "linarith",
+    "hole_10": "linarith"
+  },
+  "tactic_mapping": {
+    "hole_3": "linarith",
+    "hole_6": "linarith",
+    "hole_7": "nlinarith",
+    "hole_8": "linarith",
+    "hole_9": "linarith",
+    "hole_10": "linarith",
+    "hole_4": "admit",
+    "hole_1": "admit",
+    "hole_5": "admit",
+    "hole_2": "admit",
+    "hole_11": "admit"
+  },
+  "proof_state_tests": 68,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\na\u271d : \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x < 1 / 8\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\na\u271d : \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x < 1 / 8\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\n\u22a2 \u222b (x : \u211d) in 0 ..1, x ^ 2 * (x / 2) = 8\u207b\u00b9"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2082 : \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x = 1 / 8\na\u271d : \u222b (x : \u211d) in 0 ..1, x * (fun x => x / 2) x ^ 2 < 1 / 16\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2082 : \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x = 1 / 8\na\u271d : \u222b (x : \u211d) in 0 ..1, x * (fun x => x / 2) x ^ 2 < 1 / 16\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : I = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : J = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2082 : \u222b (x : \u211d) in 0 ..1, x ^ 2 * (fun x => x / 2) x = 1 / 8\n\u22a2 \u222b (x : \u211d) in 0 ..1, x * (x / 2) ^ 2 = 16\u207b\u00b9"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\na\u271d : 0 > x\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\na\u271d : 0 > x\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\n\u22a2 0 \u2264 x"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nfailed to prove positivity/nonnegativity/nonzeroness"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\nh\u2088 : 0 \u2264 x\na\u271d : x > 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\nh\u2088 : 0 \u2264 x\na\u271d : x > 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\nh\u2088 : 0 \u2264 x\n\u22a2 x \u2264 1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nx : \u211d\nhx : x \u2208 Set.Icc 0 1\nh\u2088 : 0 \u2264 x\nh\u2089 : x \u2264 1\nh\u2081\u2082 : x * f x ^ 2 - x ^ 2 * f x + x ^ 3 / 4 = x * (f x - x / 2) ^ 2\na\u271d : 0 > x * (f x - x / 2) ^ 2\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_8": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_9": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nh\u2087 : \u2200 x \u2208 Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 \u2264 x ^ 3 / 4\na\u271d : \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x - x * f x ^ 2 > \u222b (x : \u211d) in 0 ..1, x ^ 3 / 4\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nh\u2087 : \u2200 x \u2208 Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 \u2264 x ^ 3 / 4\na\u271d : \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x - x * f x ^ 2 > \u222b (x : \u211d) in 0 ..1, x ^ 3 / 4\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nI J : (\u211d \u2192 \u211d) \u2192 \u211d\nhI : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) = fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x\nhJ : (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) = fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2\nh\u2081 :\n  1 / 16 \u2208\n    {y |\n      \u2203 f,\n        ContinuousOn f (Set.Icc 0 1) \u2227\n          (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y}\ny : \u211d\nf : \u211d \u2192 \u211d\nhf_cont : ContinuousOn f (Set.Icc 0 1)\nhf h\u2083 : (fun f => \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x) f - (fun f => \u222b (x : \u211d) in 0 ..1, x * f x ^ 2) f = y\nh\u2087 : \u2200 x \u2208 Set.Icc 0 1, x ^ 2 * f x - x * f x ^ 2 \u2264 x ^ 3 / 4\n\u22a2 \u222b (x : \u211d) in 0 ..1, x ^ 2 * f x - x * f x ^ 2 \u2264 (3 + 1)\u207b\u00b9 / 4"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ]
+  },
+  "processing_time_seconds": 29.876251,
+  "constraint_satisfied": true,
+  "tactics_replaced": 6,
+  "timestamp": "2025-06-19T10:23:04.671746"
+}

@@ -1,0 +1,136 @@
+{
+  "problem_id": "putnam_2005_a1",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'introN' failed, insufficient number of binders\ncase h.left\nn : \u2124\nhn : n > 0\n\u22a2 n = 2 ^ sorry () * 3 ^ sorry ()",
+      "original_tactic": "use 1\nuse fun _ => fun j => if j = 0 then (Nat.log 2 n.natAbs).toNat else (Nat.log 3 n.natAbs).toNat\nconstructor\nsimp [Fin.sum_univ_succ]\nnorm_num\ntry contradiction\ntry {norm_num at hn \u22a2 <;> ring_nf at hn \u22a2 <;> norm_cast at hn \u22a2 <;> simp_all [Fin.forall_fin_one] <;> aesop\n}\ntry {norm_num at hn \u22a2 <;> ring_nf at hn \u22a2 <;> norm_cast at hn \u22a2 <;> simp_all [Fin.forall_fin_one] <;> aesop\n}\nintro i j hij\nfin_cases i\nfin_cases j\nsimp_all (config := { decide := true })"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "obtain \u27e8k, a, h\u2081, h\u2082\u27e9 := h_main\nrefine' \u27e8k, a, _\u27e9\nsimp_all [Fin.sum_univ_cast]"
+    }
+  },
+  "successful_tactics": {
+    "hole_2": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_2": "simpa",
+    "hole_1": "admit"
+  },
+  "proof_state_tests": 19,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2124\nhn : n > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2124\nhn : n > 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := n"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nn : \u2124\nhn : n > 0\n\u22a2 \u2203 k a, n = \u2211 i, 2 ^ a i 0 * 3 ^ a i 1 \u2227 \u2200 (i j : Fin k), \u00aci = j \u2192 \u00ac2 ^ a i 0 * 3 ^ a i 1 \u2223 2 ^ a j 0 * 3 ^ a j 1"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2124\nhn : n > 0\nh_main : \u2203 k a, n = \u2211 i, 2 ^ a i 0 * 3 ^ a i 1 \u2227 \u2200 (i j : Fin k), i \u2260 j \u2192 \u00ac2 ^ a i 0 * 3 ^ a i 1 \u2223 2 ^ a j 0 * 3 ^ a j 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nn : \u2124\nhn : n > 0\nh_main : \u2203 k a, n = \u2211 i, 2 ^ a i 0 * 3 ^ a i 1 \u2227 \u2200 (i j : Fin k), i \u2260 j \u2192 \u00ac2 ^ a i 0 * 3 ^ a i 1 \u2223 2 ^ a j 0 * 3 ^ a j 1\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := \u2211 i, 2 ^ \u22ef.choose i 0 * 3 ^ \u22ef.choose i 1"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 25.846128,
+  "constraint_satisfied": true,
+  "tactics_replaced": 1,
+  "timestamp": "2025-06-19T07:03:35.913258"
+}

@@ -1,0 +1,214 @@
+{
+  "problem_id": "putnam_2012_a4",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1",
+      "original_tactic": "ext s\nsimp [hS, hT, Set.mem_setOf_eq, Set.mem_Icc, Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero, Fin.val_succ]\ntry norm_num\ntry ring_nf\ntry field_simp at *\ntry norm_cast at *\ntry linarith\ntry\n  {by_cases h\u2083 : s = round s <;> by_cases h\u2084 : (round s : \u211d) \u2208 Set.Icc (A 0) (A 1) <;>\n                  by_cases h\u2085 : \u2203 t \u2208 T, r * (round s : \u2124) = t <;>\n                simp_all [hT, hS, Set.mem_setOf_eq, Set.mem_Icc, Fin.forall_fin_succ, Fin.ext_iff, Fin.val_zero,\n                  Fin.val_succ] <;>\n              (try norm_num) <;>\n            (try ring_nf) <;>\n          (try field_simp at *) <;>\n        (try norm_cast at *) <;>\n      (try linarith) <;>\n    (try {aesop\n      })\n}\ntry {aesop\n}"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2082]"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081"
+    }
+  },
+  "successful_tactics": {
+    "hole_3": "norm_cast"
+  },
+  "tactic_mapping": {
+    "hole_3": "norm_cast",
+    "hole_2": "admit",
+    "hole_1": "admit"
+  },
+  "proof_state_tests": 33,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := q"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\n\u22a2 {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {A 0 + 1}"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h.right\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\nh\u2082 : {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x | \u2203 i, x = A 0 + 1 + \u2191\u2191i * 0}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h.right\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\nh\u2082 : {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x | \u2203 i, x = A 0 + 1 + \u2191\u2191i * 0}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := q"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\ncase h.right\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\nh\u2082 : {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x | \u2203 i, x = A 0 + 1 + \u2191\u2191i * 0}\n\u22a2 {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {A 0 + 1}"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\nh\u2081 : \u2203 n a1 d, n > 2 \u2227 {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x | \u2203 i, x = a1 + \u2191\u2191i * d}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\nh\u2081 : \u2203 n a1 d, n > 2 \u2227 {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x | \u2203 i, x = a1 + \u2191\u2191i * d}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  b \u2265 3\n  a \u2265 1\nwhere\n a := q\n b := \u2191h\u2081.choose"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nq r : \u2124\nA B : Fin 2 \u2192 \u211d\nT : Set \u211d\nS : Set \u2124\nqpos : q > 0\nABlt : A 0 < A 1 \u2227 B 0 < B 1\nhT : T = {x | \u2203 b m, \u2191b \u2208 Set.Icc (B 0) (B 1) \u2227 x = \u2191b + \u2191m * \u2191q}\nhS : S = {a | \u2191a \u2208 Set.Icc (A 0) (A 1) \u2227 \u2203 t \u2208 T, \u2191r * \u2191a = t}\nh : (A 1 - A 0) * (B 1 - B 0) < \u2191q\nh\u2081 : \u2203 n a1 d, n > 2 \u2227 {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x | \u2203 i, x = a1 + \u2191\u2191i * d}\n\u22a2 \u2203 n, 2 < n \u2227 \u2203 x x_1, {s | s = \u2191(round s) \u2227 round s \u2208 S} = Set.Icc (A 0) (A 1) \u2229 {x_2 | \u2203 i, x_2 = x + \u2191\u2191i * x_1}"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 25.959463,
+  "constraint_satisfied": true,
+  "tactics_replaced": 1,
+  "timestamp": "2025-06-19T07:29:49.197735"
+}

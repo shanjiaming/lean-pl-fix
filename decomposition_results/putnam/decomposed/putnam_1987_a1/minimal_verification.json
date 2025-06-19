@@ -1,0 +1,262 @@
+{
+  "problem_id": "putnam_1987_a1",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'rewrite' failed, motive is not type correct:\n  fun _a =>\n    {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)} \u2229\n        _a =\n      \u2205\nError: unknown constant 'putnam_1987_a1.match_1'\n\nExplanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.\n\nPossible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\n\u22a2 {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)} \u2229\n      B =\n    \u2205",
+      "original_tactic": "rw [hA, hB]\next \u27e8x, y\u27e9\nsimp only [Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false_iff]\nintro h"
+    },
+    "hole_2": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'rewrite' failed, motive is not type correct:\n  fun _a => {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1} \u2229 _a = \u2205\nError: unknown constant 'putnam_1987_a1.match_1'\n\nExplanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.\n\nPossible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\n\u22a2 {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1} \u2229 D = \u2205",
+      "original_tactic": "rw [hC, hD]\next \u27e8x, y\u27e9\nsimp only [Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false_iff]\nintro h"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2081, h\u2082]"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083"
+    }
+  },
+  "successful_tactics": {
+    "hole_4": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_4": "simpa",
+    "hole_2": "admit",
+    "hole_3": "admit",
+    "hole_1": "admit"
+  },
+  "proof_state_tests": 41,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\n\u22a2 A \u2229 B = \u2205"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\n\u22a2 C \u2229 D = \u2205"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\nh\u2082 : C \u2229 D = \u2205\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\nh\u2082 : C \u2229 D = \u2205\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\nh\u2082 : C \u2229 D = \u2205\n\u22a2 A \u2229 B = C \u2229 D"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\nh\u2082 : C \u2229 D = \u2205\nh\u2083 : A \u2229 B = C \u2229 D\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nA B C D : Set (\u211d \u00d7 \u211d)\nhA :\n  A = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 x ^ 2 - y ^ 2 = x / (x ^ 2 + y ^ 2)}\nhB :\n  B = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 2 + y ^ 2 \u2260 0 \u2227 2 * x * y + y / (x ^ 2 + y ^ 2) = 3}\nhC : C = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => x ^ 3 - 3 * x * y ^ 2 + 3 * y = 1}\nhD : D = {x | @putnam_1987_a1.match_1 (fun x => Prop) x fun x y => 3 * x ^ 2 * y - 3 * x - y ^ 3 = 0}\nh\u2081 : A \u2229 B = \u2205\nh\u2082 : C \u2229 D = \u2205\nh\u2083 : A \u2229 B = C \u2229 D\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 17.870225,
+  "constraint_satisfied": true,
+  "tactics_replaced": 1,
+  "timestamp": "2025-06-19T10:50:00.263919"
+}

@@ -1,0 +1,820 @@
+{
+  "problem_id": "putnam_1999_a5",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "intro h\nrw [h] at hpdeg\nnorm_num [Polynomial.degree_zero] at hpdeg"
+    },
+    "hole_2": {
+      "success": false,
+      "error_message": "Lean error:\ntype mismatch\n  Continuous.intervalIntegrable (Continuous.comp continuous_norm (Polynomial.continuous ?m.29450.872))\nhas type\n  \u2200 (a b : \u211d), IntervalIntegrable ((fun a => \u2016a\u2016) \u2218 fun x => Polynomial.eval x ?m.29450.872) ?m.29450.31 a b : Prop\nbut is expected to have type\n  IntervalIntegrable (fun x => if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p)\n    MeasureTheory.volume (-1) 1 : Prop",
+      "original_tactic": "refine' intervalIntegral.integral_mono_on real.pi_pos.le _ _ _\nexact Continuous.intervalIntegrable (Continuous.comp continuous_norm (Polynomial.continuous _))\nexact\n  Continuous.intervalIntegrable\n    (by\n      by_cases h\u2085 : (p.eval 0 : \u211d) \u2265 0\n      \u00b7 simpa [h\u2085] using Continuous.continuousOn (Polynomial.continuous _)\n      \u00b7 simpa [h\u2085] using Continuous.continuousOn (Continuous.neg (Polynomial.continuous _)))\nintro x _\nby_cases h\u2085 : (p.eval 0 : \u211d) \u2265 0\nsimp_all [abs_of_nonneg, abs_of_nonpos, le_of_lt]\nnorm_num [abs_mul, abs_of_nonneg, abs_of_nonpos, le_of_lt]\ncases' le_total 0 (p.eval x) with h\u2086 h\u2086\ncases' le_total 0 (p.eval 0) with h\u2087 h\u2087\nsimp_all [abs_of_nonneg, abs_of_nonpos, le_of_lt]\nsimp_all [abs_of_nonneg, abs_of_nonpos, le_of_lt]\nnorm_num [abs_mul, abs_of_nonneg, abs_of_nonpos, le_of_lt]\ncases' le_total 0 (p.eval x) with h\u2086 h\u2086\ncases' le_total 0 (p.eval 0) with h\u2087 h\u2087\nsimp_all [abs_of_nonneg, abs_of_nonpos, le_of_lt]\nnlinarith"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rfl"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "congr\next x\nsimp [h\u2089]"
+    },
+    "hole_5": {
+      "success": false,
+      "error_message": "Lean error:\nsimp made no progress",
+      "original_tactic": "simp [Polynomial.eval_sub, Polynomial.eval_one, Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow,\n  Polynomial.eval_C, Polynomial.eval_X]"
+    },
+    "hole_6": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro.intro.h1.h\np : Polynomial \u211d\nq r s : \u211d\nhpdeg : \u2191p.natDegree = 1999\nh\u2083 : \u00acp = 0\nh\u2089 : 0 \u2264 Polynomial.eval 0 p\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = s * 2\nhr : -Polynomial.eval 0 p + Polynomial.eval (-1) p = -r\nhq : -Polynomial.eval 0 p + Polynomial.eval 1 p = q\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = s * 2\nh\u2085 : s * 2 \u2264 \u222b (x : \u211d) in -1 ..1, |Polynomial.eval x p|\na\u271d : s < Polynomial.eval 0 p\n\u22a2 False failed",
+      "original_tactic": "simp_all [Polynomial.degree_eq_natDegree]\nring_nf at *\nnorm_num at *\nlinarith"
+    },
+    "hole_7": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2081\u2085]"
+    },
+    "hole_8": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "congr\next x\nsimp [h\u2089]"
+    },
+    "hole_9": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simp [intervalIntegral.integral_neg]"
+    },
+    "hole_10": {
+      "success": false,
+      "error_message": "Lean error:\nsimp made no progress",
+      "original_tactic": "simp [Polynomial.eval_sub, Polynomial.eval_one, Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_pow,\n  Polynomial.eval_C, Polynomial.eval_X]"
+    },
+    "hole_11": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro.intro.h1.h\np : Polynomial \u211d\nq r s : \u211d\nhpdeg : \u2191p.natDegree = 1999\nh\u2083 : \u00acp = 0\nh\u2089 : Polynomial.eval 0 p < 0\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = s * 2\nhr : -Polynomial.eval 0 p + Polynomial.eval (-1) p = -r\nhq : -Polynomial.eval 0 p + Polynomial.eval 1 p = q\nh\u2081\u2083 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = s * 2\nh\u2081\u2080 : (\u222b (x : \u211d) in -1 ..1, if 0 \u2264 Polynomial.eval 0 p then Polynomial.eval x p else -Polynomial.eval x p) = -(s * 2)\nh\u2085 : -(s * 2) \u2264 \u222b (x : \u211d) in -1 ..1, |Polynomial.eval x p|\na\u271d : s < Polynomial.eval 0 p\n\u22a2 False failed",
+      "original_tactic": "simp_all [Polynomial.degree_eq_natDegree]\nring_nf at *\nnorm_num at *\nlinarith"
+    },
+    "hole_12": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2081\u2086]"
+    },
+    "hole_13": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1",
+      "original_tactic": "rw [h\u2081\u2082]\nsimp [h\u2089, abs_of_nonneg, abs_of_nonpos, le_of_lt]\nnorm_num\ncases' le_total 0 (p.eval 0) with h\u2081\u2083 h\u2081\u2083\nsimp_all [abs_of_nonneg, abs_of_nonpos, le_of_lt]"
+    },
+    "hole_14": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2088]"
+    },
+    "hole_15": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_16": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_17": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_18": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_19": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081"
+    },
+    "hole_20": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h_main"
+    }
+  },
+  "successful_tactics": {
+    "hole_3": "norm_num",
+    "hole_7": "linarith",
+    "hole_9": "norm_num",
+    "hole_12": "linarith",
+    "hole_14": "linarith",
+    "hole_15": "linarith",
+    "hole_16": "linarith",
+    "hole_17": "linarith",
+    "hole_18": "linarith",
+    "hole_19": "linarith",
+    "hole_20": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_3": "norm_num",
+    "hole_7": "linarith",
+    "hole_9": "norm_num",
+    "hole_12": "linarith",
+    "hole_14": "linarith",
+    "hole_15": "linarith",
+    "hole_16": "linarith",
+    "hole_17": "linarith",
+    "hole_18": "linarith",
+    "hole_19": "linarith",
+    "hole_20": "simpa",
+    "hole_4": "admit",
+    "hole_10": "admit",
+    "hole_8": "admit",
+    "hole_1": "admit",
+    "hole_6": "admit",
+    "hole_5": "admit",
+    "hole_2": "admit",
+    "hole_13": "admit",
+    "hole_11": "admit"
+  },
+  "proof_state_tests": 125,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\na\u271d : p = 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\na\u271d : p = 0\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\np : Polynomial \u211d\nhpdeg : p.degree = 1999\n\u22a2 \u00acp = 0"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nfailed to synthesize\n  PartialOrder (Polynomial \u211d)\n\nAdditional diagnostic information may be available using the `set_option diagnostics true` command."
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\na\u271d :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) >\n    \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase a\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\na\u271d :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) >\n    \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\n\u22a2 (\u222b (x : \u211d) in -1 ..1, if 0 \u2264 Polynomial.eval 0 p then Polynomial.eval x p else -Polynomial.eval x p) \u2264\n    \u222b (x : \u211d) in -1 ..1, |Polynomial.eval x p|"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\na\u271d :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) <\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\na\u271d :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) <\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\n\u22a2 (\u222b (x : \u211d) in -1 ..1, if 0 \u2264 Polynomial.eval 0 p then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\na\u271d : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p < Polynomial.eval 1 p - Polynomial.eval (-1) p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\na\u271d : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p < Polynomial.eval 1 p - Polynomial.eval (-1) p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\n\u22a2 \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro.intro.h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p\nh\u2081\u2083 : Polynomial.eval 1 p = Polynomial.eval 1 p\nh\u2081\u2084 : Polynomial.eval (-1) p = Polynomial.eval (-1) p\nq r s : \u211d\nhq : Polynomial.eval 1 p - Polynomial.eval 0 p = q\nhr : Polynomial.eval (-1) p - Polynomial.eval 0 p = -r\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = (1 + 1) * s\nh\u2081\u2089 : p.degree = 1999\nh\u2082\u2080 : p.degree = \u2191p.natDegree\na\u271d : Polynomial.eval 1 p - Polynomial.eval (-1) p < 2 * Polynomial.eval 0 p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro.intro.h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p\nh\u2081\u2083 : Polynomial.eval 1 p = Polynomial.eval 1 p\nh\u2081\u2084 : Polynomial.eval (-1) p = Polynomial.eval (-1) p\nq r s : \u211d\nhq : Polynomial.eval 1 p - Polynomial.eval 0 p = q\nhr : Polynomial.eval (-1) p - Polynomial.eval 0 p = -r\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = (1 + 1) * s\nh\u2081\u2089 : p.degree = 1999\nh\u2082\u2080 : p.degree = \u2191p.natDegree\na\u271d : Polynomial.eval 1 p - Polynomial.eval (-1) p < 2 * Polynomial.eval 0 p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\ncase intro.intro.intro\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : Polynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p\nh\u2081\u2083 : Polynomial.eval 1 p = Polynomial.eval 1 p\nh\u2081\u2084 : Polynomial.eval (-1) p = Polynomial.eval (-1) p\nq r s : \u211d\nhq : Polynomial.eval 1 p - Polynomial.eval 0 p = q\nhr : Polynomial.eval (-1) p - Polynomial.eval 0 p = -r\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = (1 + 1) * s\nh\u2081\u2089 : p.degree = 1999\nh\u2082\u2080 : p.degree = \u2191p.natDegree\n\u22a2 Polynomial.eval 1 p - Polynomial.eval (-1) p = 2 * Polynomial.eval 0 p"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_8": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\na\u271d :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) <\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\na\u271d :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) <\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\n\u22a2 (\u222b (x : \u211d) in -1 ..1, if 0 \u2264 Polynomial.eval 0 p then Polynomial.eval x p else -Polynomial.eval x p) =\n    -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_9": [
+      {
+        "tactic": "norm_num",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\na\u271d : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p < Polynomial.eval 1 p - Polynomial.eval (-1) p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\na\u271d : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p < Polynomial.eval 1 p - Polynomial.eval (-1) p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\n\u22a2 \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro.intro.h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2083 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p\nh\u2081\u2084 : Polynomial.eval 1 p = Polynomial.eval 1 p\nh\u2081\u2085 : Polynomial.eval (-1) p = Polynomial.eval (-1) p\nq r s : \u211d\nhq : Polynomial.eval 1 p - Polynomial.eval 0 p = q\nhr : Polynomial.eval (-1) p - Polynomial.eval 0 p = -r\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = (1 + 1) * s\nh\u2082\u2080 : p.degree = 1999\nh\u2082\u2081 : p.degree = \u2191p.natDegree\na\u271d : Polynomial.eval 1 p - Polynomial.eval (-1) p < 2 * Polynomial.eval 0 p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro.intro.h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2083 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p\nh\u2081\u2084 : Polynomial.eval 1 p = Polynomial.eval 1 p\nh\u2081\u2085 : Polynomial.eval (-1) p = Polynomial.eval (-1) p\nq r s : \u211d\nhq : Polynomial.eval 1 p - Polynomial.eval 0 p = q\nhr : Polynomial.eval (-1) p - Polynomial.eval 0 p = -r\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = (1 + 1) * s\nh\u2082\u2080 : p.degree = 1999\nh\u2082\u2081 : p.degree = \u2191p.natDegree\na\u271d : Polynomial.eval 1 p - Polynomial.eval (-1) p < 2 * Polynomial.eval 0 p\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\ncase intro.intro.intro\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2083 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = Polynomial.eval 1 p - Polynomial.eval (-1) p\nh\u2081\u2084 : Polynomial.eval 1 p = Polynomial.eval 1 p\nh\u2081\u2085 : Polynomial.eval (-1) p = Polynomial.eval (-1) p\nq r s : \u211d\nhq : Polynomial.eval 1 p - Polynomial.eval 0 p = q\nhr : Polynomial.eval (-1) p - Polynomial.eval 0 p = -r\nhs : Polynomial.eval 1 p - Polynomial.eval (-1) p = (1 + 1) * s\nh\u2082\u2080 : p.degree = 1999\nh\u2082\u2081 : p.degree = \u2191p.natDegree\n\u22a2 Polynomial.eval 1 p - Polynomial.eval (-1) p = 2 * Polynomial.eval 0 p"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_12": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_13": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase neg.h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = 2 * Polynomial.eval 0 p\na\u271d : -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p < 2 * \u2016Polynomial.eval 0 p\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase neg.h1.h\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = 2 * Polynomial.eval 0 p\na\u271d : -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p < 2 * \u2016Polynomial.eval 0 p\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\ncase neg\np : Polynomial \u211d\nhpdeg : p.degree = 1999\nh\u2083 : p \u2260 0\nh\u2085 :\n  \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016 \u2265\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2087 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p\nh\u2089 : \u00acPolynomial.eval 0 p \u2265 0\nh\u2081\u2080 :\n  (\u222b (x : \u211d) in -1 ..1, if Polynomial.eval 0 p \u2265 0 then Polynomial.eval x p else -Polynomial.eval x p) =\n    \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p\nh\u2081\u2081 : \u222b (x : \u211d) in -1 ..1, -Polynomial.eval x p = -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p\nh\u2081\u2082 : \u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = 2 * Polynomial.eval 0 p\n\u22a2 -\u222b (x : \u211d) in -1 ..1, Polynomial.eval x p = 2 * |Polynomial.eval 0 p|"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_14": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_15": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_16": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_17": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_18": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_19": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_20": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nh_main :\n  \u2203 C, \u2200 (p : Polynomial \u211d), p.degree = 1999 \u2192 \u2016Polynomial.eval 0 p\u2016 \u2264 C * \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nh_main :\n  \u2203 C, \u2200 (p : Polynomial \u211d), p.degree = 1999 \u2192 \u2016Polynomial.eval 0 p\u2016 \u2264 C * \u222b (x : \u211d) in -1 ..1, \u2016Polynomial.eval x p\u2016\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 32.131726,
+  "constraint_satisfied": true,
+  "tactics_replaced": 11,
+  "timestamp": "2025-06-19T09:24:36.434640"
+}

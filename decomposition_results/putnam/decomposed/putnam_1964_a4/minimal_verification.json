@@ -1,0 +1,715 @@
+{
+  "problem_id": "putnam_1964_a4",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "linarith"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "intro n\nexact (h_bounds n).1"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "intro n\nexact (h_bounds n).2"
+    },
+    "hole_4": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 2",
+      "original_tactic": "intro x hx\nsimp only [Set.mem_Icc, Set.mem_range] at hx \u22a2\nrcases hx with \u27e8n, rfl\u27e9\nconstructor\ntry constructor\ntry constructor\ntry constructor\ntry simp_all [h_bounds]"
+    },
+    "hole_5": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "apply Set.finite_Icc"
+    },
+    "hole_6": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact Set.Finite.subset h\u2081\u2084 h\u2081\u2083"
+    },
+    "hole_7": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2082"
+    },
+    "hole_8": {
+      "success": false,
+      "error_message": "Lean error:\nrcases tactic failed: x\u271d : ?m.12111.9 is not an inductive datatype",
+      "original_tactic": "classical\nobtain \u27e8\u27e8a, b, c, d\u27e9, h\u2081\u2086\u27e9 :=\n  Set.Finite.exists_ne_map_eq_of_mapsTo (Set.finite_univ (\u03b1 := \u2115)) (fun n _ => by exact Set.mem_range_self n)\n    (Set.toFinite _)\nuse 0, 1 <;> simp_all <;> (try omega) <;> (try linarith) <;> (try nlinarith) <;> (try ring_nf at *) <;>\n        (try ring_nf) <;>\n      (try norm_num) <;>\n    (try linarith) <;>\n  (try nlinarith)"
+    },
+    "hole_10": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2081\u2080"
+    },
+    "hole_11": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2087"
+    },
+    "hole_12": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2085"
+    },
+    "hole_13": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2082"
+    },
+    "hole_14": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h_main"
+    }
+  },
+  "successful_tactics": {
+    "hole_1": "linarith",
+    "hole_7": "simpa",
+    "hole_10": "simpa",
+    "hole_11": "simpa",
+    "hole_12": "simpa",
+    "hole_13": "simpa",
+    "hole_14": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_1": "linarith",
+    "hole_7": "simpa",
+    "hole_10": "simpa",
+    "hole_11": "simpa",
+    "hole_12": "simpa",
+    "hole_13": "simpa",
+    "hole_14": "simpa",
+    "hole_4": "admit",
+    "hole_8": "admit",
+    "hole_6": "admit",
+    "hole_5": "admit",
+    "hole_2": "admit",
+    "hole_3": "admit"
+  },
+  "proof_state_tests": 116,
+  "tactic_attempts": {
+    "hole_1": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_2": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  b - c \u2265 1\n  a - b \u2265 0\nwhere\n a := T\n b := B\n c := u n"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\n\u22a2 \u2200 (n : \u2115), B \u2264 u n"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_3": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a - b \u2265 0\n  a - c \u2264 -1\nwhere\n a := T\n b := B\n c := u n"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\n\u22a2 \u2200 (n : \u2115), u n \u2264 T"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_4": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a - b \u2265 0\nwhere\n a := T\n b := B"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\n\u22a2 (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_5": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2083 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2083 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a - b \u2265 0\nwhere\n a := T\n b := B"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2083 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)\n\u22a2 (Set.Icc (B, B, B, B) (T, T, T, T)).Finite"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_6": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2083 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)\nh\u2081\u2084 : (Set.Icc (B, B, B, B) (T, T, T, T)).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2083 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)\nh\u2081\u2084 : (Set.Icc (B, B, B, B) (T, T, T, T)).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a - b \u2265 0\nwhere\n a := T\n b := B"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2083 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))) \u2286 Set.Icc (B, B, B, B) (T, T, T, T)\nh\u2081\u2084 : (Set.Icc (B, B, B, B) (T, T, T, T)).Finite\n\u22a2 (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))).Finite"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_7": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2082 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2082 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a - b \u2265 0\nwhere\n a := T\n b := B"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Lean error:\nsimp made no progress"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_8": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2081 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2081 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))).Finite\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a - b \u2265 0\nwhere\n a := T\n b := B"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": false,
+        "error_message": "Lean error:\ntactic 'assumption' failed\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2081 : (Set.range fun n => (u n, u (n + 1), u (n + 2), u (n + 3))).Finite\n\u22a2 \u2203 N c, 0 < c \u2227 \u2200 (n : \u2115), N \u2264 n \u2192 u (n + c) = u n"
+      },
+      {
+        "tactic": "field_simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "positivity",
+        "success": false,
+        "error_message": "Lean error:\nnot a positivity goal"
+      },
+      {
+        "tactic": "norm_cast",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      }
+    ],
+    "hole_10": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2080 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2088 : \u2200 (n : \u2115), B \u2264 u n\nh\u2089 : \u2200 (n : \u2115), u n \u2264 T\nh\u2081\u2080 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  c \u2265 1\n  a - b \u2265 0\nwhere\n a := T\n b := B\n c := \u2191\u22ef.choose"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_11": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2087 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2086 : B \u2264 T\nh\u2087 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  c \u2265 1\n  a - b \u2265 0\nwhere\n a := T\n b := B\n c := \u2191\u22ef.choose"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_12": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2085 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2083 : \u2200 (n : \u2115), B \u2264 u n\nh\u2084 : \u2200 (n : \u2115), u n \u2264 T\nh\u2085 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  c \u2265 1\n  a - b \u2265 0\nwhere\n a := T\n b := B\n c := \u2191\u22ef.choose"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_13": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2082 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase intro.intro\nu : \u2115 \u2192 \u2124\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nB T : \u2124\nh_bounds : \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nh\u2081 : B \u2264 T\nh\u2082 : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  c \u2265 1\n  a - b \u2265 0\nwhere\n a := T\n b := B\n c := \u2191\u22ef.choose"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ],
+    "hole_14": [
+      {
+        "tactic": "norm_num",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "linarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nboundedu : \u2203 B T, \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nh_main : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "nlinarith",
+        "success": false,
+        "error_message": "Lean error:\nlinarith failed to find a contradiction\nu : \u2115 \u2192 \u2124\nboundedu : \u2203 B T, \u2200 (n : \u2115), B \u2264 u n \u2227 u n \u2264 T\nhu :\n  \u2200 n \u2265 4,\n    \u2191(u n) =\n        (\u2191(u (n - 1)) + \u2191(u (n - 2)) + \u2191(u (n - 3)) * \u2191(u (n - 4))) /\n          (\u2191(u (n - 1)) * \u2191(u (n - 2)) + \u2191(u (n - 3)) + \u2191(u (n - 4))) \u2227\n      u (n - 1) * u (n - 2) + u (n - 3) + u (n - 4) \u2260 0\nh_main : \u2203 N, \u2203 c > 0, \u2200 n \u2265 N, u (n + c) = u n\n\u22a2 False failed"
+      },
+      {
+        "tactic": "omega",
+        "success": false,
+        "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a \u2265 1\nwhere\n a := \u2191\u22ef.choose"
+      },
+      {
+        "tactic": "ring",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "ring_nf",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simp",
+        "success": false,
+        "error_message": "Tactic status: Incomplete: open goals remain, goals remain: 1"
+      },
+      {
+        "tactic": "simpa",
+        "success": true,
+        "error_message": null
+      }
+    ]
+  },
+  "processing_time_seconds": 27.826026,
+  "constraint_satisfied": true,
+  "tactics_replaced": 7,
+  "timestamp": "2025-06-19T11:11:28.661627"
+}
