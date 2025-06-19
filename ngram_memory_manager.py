@@ -206,7 +206,7 @@ class MemoryManager:
             },
             'limits': {
                 'max_nodes_before_restart': self.max_nodes_before_restart,
-                'max_memory_mb': self.max_memory_mb,
+                'max_memory_mb': self.max_memory_percent,
                 'max_runtime_hours': self.max_runtime_hours
             },
             'counters': {
@@ -438,7 +438,7 @@ def demo_memory_management():
     # Create managers
     memory_manager = MemoryManager(
         max_nodes_before_restart=10,  # Low threshold for demo
-        max_memory_mb=100,
+        max_memory_percent=50,
         max_runtime_hours=0.1
     )
     
