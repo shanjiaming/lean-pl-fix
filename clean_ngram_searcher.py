@@ -73,10 +73,7 @@ class CleanNgramSearcher:
         self.stop_on_first_success = stop_on_first_success
         
         # Simple tactic list
-        self.available_tactics = [
-            'norm_num', 'norm_cast', 'simp', 'ring', 'field_simp',
-            'linarith', 'nlinarith', 'omega'
-        ]
+        self.available_tactics = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
         
         self.terminal_tactics = {'linarith', 'nlinarith', 'omega'}
         
@@ -84,8 +81,8 @@ class CleanNgramSearcher:
         self.nodes: Dict[str, SearchNode] = {}
         self.successful_paths: List[List[str]] = []
         self.proofsteps_executed_since_restart = 0
-        self.max_memory_percent = 1.0
-        self.proofstep_check_interval = 10
+        self.max_memory_percent = 70
+        self.proofstep_check_interval = 20
         self.lean_integrator: Optional[MinimalLeanProofStepIntegrator] = None
         
         # Memory management & Server Generation

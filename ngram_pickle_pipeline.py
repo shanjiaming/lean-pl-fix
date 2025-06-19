@@ -384,10 +384,17 @@ class CleanNgramPipeline:
             
             return successful_paths, search_stats
             
+        except Exception as e:
+            print(f"      ❌ Error processing {pickle_info.hole_id}: {e}")
+            import traceback
+            traceback.print_exc()
+            return [], {"error": str(e), "hole_id": pickle_info.hole_id}
+            
         finally:
-            # Always clean up this hole's server
-            integrator.shutdown_lean_server()
-            print(f"      🧹 Cleaned up Lean server for {pickle_info.hole_id}")
+            # Server shutdown is no longer needed here, as the lifecycle is managed
+            # by the parent process or when the whole pipeline is done.
+            # Loading the next pickle is a sufficient reset.
+            pass
     
     def _save_ngram_results(self, results: Dict, problem_id: str, dataset: str):
         """Save final n-gram search results to a file"""
