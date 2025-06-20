@@ -213,8 +213,10 @@ class CleanNgramPipeline:
         # Statistics
         self.stats = {
             'holes_processed': 0,
-            'pickle_time': 0.0,
-            'processing_time': 0.0,
+            'pickle_save_time': 0.0,
+            'pickle_load_time': 0.0,
+            'pickle_load_count': 0,
+            'hole_search_time': 0.0,
             'total_time': 0.0,
             'successes': 0,
             'errors': 0
@@ -242,28 +244,30 @@ class CleanNgramPipeline:
         pickle_infos = self.pickle_manager.extract_and_pickle_all_proof_states(
             header_content, clear_version, sorry_map
         )
-        self.stats['pickle_time'] = time.time() - pickle_start
+        self.stats['pickle_save_time'] = time.time() - pickle_start
         
         # Phase 2: Process each hole independently
         processing_start = time.time()
         all_hole_results, successful_tactics_summary = self._process_holes_independently(
             pickle_infos, enumerable_indices, header_content
         )
-        self.stats['processing_time'] = time.time() - processing_start
         
         # Cleanup
         self.pickle_manager.cleanup_pickle_files(pickle_infos)
         
         self.stats['total_time'] = time.time() - start_time
+        
+        # Final summary print
         print(f"\n🎉 Clean n-gram processing complete!")
         print(f"   Total time: {self.stats['total_time']:.2f}s")
-        print(f"   Pickle time: {self.stats['pickle_time']:.2f}s ({self.stats['pickle_time']/self.stats['total_time']:.1%})")
-        print(f"   Processing time: {self.stats['processing_time']:.2f}s ({self.stats['processing_time']/self.stats['total_time']:.1%})")
+        print(f"   Pickle save time: {self.stats['pickle_save_time']:.2f}s")
+        print(f"   Pickle load time: {self.stats['pickle_load_time']:.2f}s ({self.stats['pickle_load_count']} loads)")
+        print(f"   Hole search time: {self.stats['hole_search_time']:.2f}s")
         print(f"   Successes: {self.stats['successes']}/{self.stats['holes_processed']}")
-
+        
         # Save results
         final_results = {
-            'successful_tactics': successful_tactics_summary, # Use the new summary dict
+            'successful_tactics': successful_tactics_summary,
             'ngram_results': all_hole_results,
             'proof_states_extracted': len(pickle_infos),
             'stats': self.stats
@@ -282,7 +286,7 @@ class CleanNgramPipeline:
         """Process each hole independently, ensuring clean state"""
         
         all_hole_results = {}
-        successful_tactics_summary = {} # New dictionary to hold summarized successful tactics
+        successful_tactics_summary = {}
 
         # Create mapping from sorry_index to pickle_info for efficient lookup
         pickle_map = {info.sorry_index: info for info in pickle_infos}
@@ -300,21 +304,21 @@ class CleanNgramPipeline:
             
             try:
                 # Process this hole in complete isolation
-                successful_paths, hole_results = self._process_single_hole(pickle_info, header_content)
+                tactic_result, search_stats = self._process_single_hole(pickle_info, header_content)
+                
+                # Accumulate pure search time
+                pure_search_time = search_stats.get('search_time_seconds', 0.0) - search_stats.get('server_restart_time', 0.0)
+                self.stats['hole_search_time'] += pure_search_time
                 
                 # Store results
-                all_hole_results[hole_id] = hole_results
+                all_hole_results[hole_id] = search_stats
                 
-                if successful_paths:
+                if tactic_result:
                     # Store first successful path for compatibility in the new summary dict
-                    first_path = successful_paths[0]
-                    if len(first_path) == 1:
-                        successful_tactics_summary[hole_id] = first_path[0]
-                    else:
-                        successful_tactics_summary[hole_id] = ' ; '.join(first_path)
+                    successful_tactics_summary[hole_id] = tactic_result
                     
                     self.stats['successes'] += 1
-                    print(f"      ✅ Found {len(successful_paths)} successful path(s)")
+                    print(f"      ✅ Found successful tactic: {tactic_result}")
                 else:
                     print(f"      ❌ No successful paths found")
                 
@@ -335,7 +339,7 @@ class CleanNgramPipeline:
         
         return all_hole_results, successful_tactics_summary
     
-    def _process_single_hole(self, pickle_info: HolePickleInfo, header_content: str) -> Tuple[List[List[str]], Dict]:
+    def _process_single_hole(self, pickle_info: HolePickleInfo, header_content: str) -> Tuple[Optional[str], Dict]:
         """Process a single hole with completely fresh state"""
         
         print(f"   🔍 Processing hole '{pickle_info.hole_id}'...")
@@ -360,8 +364,11 @@ class CleanNgramPipeline:
             finally:
                 os.unlink(header_file)
 
-            # Load initial proof state from pickle
+            # Restore proof state
+            load_start_time = time.time()
             initial_proof_state_id = self.pickle_manager.load_proof_state_for_hole(pickle_info, integrator)
+            self.stats['pickle_load_time'] += time.time() - load_start_time
+            self.stats['pickle_load_count'] += 1
             
             # Define the loader function for server restarts
             loader_func = lambda p_info, intgr: self.pickle_manager.load_proof_state_for_hole(p_info, intgr)
@@ -373,25 +380,27 @@ class CleanNgramPipeline:
                 loader_func
             )
             
+            # Determine final tactic from successful paths
+            final_tactic = " -> ".join(successful_paths[0]) if successful_paths else None
+            
             # Add pickle information to results
             search_stats['pickle_restored'] = True
             search_stats['original_proof_state_id'] = pickle_info.original_proof_state_id
             search_stats['restored_proof_state_id'] = initial_proof_state_id
             
-            return successful_paths, search_stats
+            return final_tactic, search_stats
             
         except Exception as e:
             print(f"      ❌ Error processing {pickle_info.hole_id}: {e}")
             import traceback
             traceback.print_exc()
-            return [], {"error": str(e), "hole_id": pickle_info.hole_id}
+            return None, {"error": str(e), "hole_id": pickle_info.hole_id}
             
         finally:
-            # Server shutdown is no longer needed here, as the lifecycle is managed
-            # by the parent process or when the whole pipeline is done.
-            # Loading the next pickle is a sufficient reset.
-            pass
-    
+            # Clean up temporary file
+            if header_file and os.path.exists(header_file):
+                os.unlink(header_file)
+
     def _save_ngram_results(self, results: Dict, problem_id: str, dataset: str):
         """Save final n-gram search results to a file"""
         try:
@@ -438,12 +447,13 @@ class CleanNgramPipeline:
                 
                 f.write(f"Performance:\n")
                 f.write(f"  Total time: {self.stats.get('total_time', 0):.2f}s\n")
-                f.write(f"  Pickle time: {self.stats.get('pickle_time', 0):.2f}s\n")
-                f.write(f"  Processing time: {self.stats.get('processing_time', 0):.2f}s\n\n")
+                f.write(f"  Pickle save time: {self.stats.get('pickle_save_time', 0):.2f}s\n")
+                f.write(f"  Pickle load time: {self.stats.get('pickle_load_time', 0):.2f}s\n")
+                f.write(f"  Hole search time: {self.stats.get('hole_search_time', 0):.2f}s\n\n")
                 
                 successful_tactics = results.get('successful_tactics', {})
                 if successful_tactics:
-                    f.write(f"Successful Tactics:\n")
+                    f.write(f"Successful Tactics ({len(successful_tactics)}):\n")
                     for hole_id, tactic in successful_tactics.items():
                         f.write(f"  {hole_id}: {tactic}\n")
                 

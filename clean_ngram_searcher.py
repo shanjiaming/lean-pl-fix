@@ -82,11 +82,12 @@ class CleanNgramSearcher:
         self.successful_paths: List[List[str]] = []
         self.proofsteps_executed_since_restart = 0
         self.max_memory_percent = 70
-        self.proofstep_check_interval = 20
+        self.proofstep_check_interval = 150
         self.lean_integrator: Optional[MinimalLeanProofStepIntegrator] = None
         
         # Memory management & Server Generation
         self.lean_server_generation = 0
+        self.total_restart_time = 0.0
 
         # Detailed search log
         self.explored_nodes_log: List[Dict] = []
@@ -99,6 +100,7 @@ class CleanNgramSearcher:
 
         current_memory_percent = psutil.virtual_memory().percent
         if current_memory_percent > self.max_memory_percent:
+            restart_start_time = time.time()
             print(f"      🧠 Memory usage {current_memory_percent:.1f}% > {self.max_memory_percent}%. Restarting Lean server...")
             
             # 1. Shutdown and restart integrator
@@ -114,6 +116,7 @@ class CleanNgramSearcher:
             new_root_ps_id = loader_func(pickle_info, self.lean_integrator)
             if new_root_ps_id is None:
                 print("      💥 FATAL: Failed to reload pickle after server restart. Aborting search.")
+                self.total_restart_time += time.time() - restart_start_time
                 raise RuntimeError("Failed to reload pickle.")
             
             root_node.proof_state_id = new_root_ps_id
@@ -123,6 +126,7 @@ class CleanNgramSearcher:
             
             # Reset counter
             self.proofsteps_executed_since_restart = 0
+            self.total_restart_time += time.time() - restart_start_time
 
     def _ensure_node_state_is_valid(self, node: SearchNode):
         """Just-In-Time state recovery. Recursively ensures a node's state is valid."""
@@ -158,6 +162,7 @@ class CleanNgramSearcher:
         self.successful_paths.clear()
         self.proofsteps_executed_since_restart = 0
         self.lean_server_generation = 0
+        self.total_restart_time = 0.0
 
         # Initialize results_dict early so it can be returned at any time
         results_dict = {
@@ -165,6 +170,7 @@ class CleanNgramSearcher:
             'successful_paths': self.successful_paths.copy(),
             'total_nodes': 0, # Will be updated before final return
             'search_time_seconds': 0.0, # Will be updated before final return
+            'server_restart_time': 0.0, # Will be updated before final return
             'nodes_by_status': {}, # Will be updated before final return
             'max_depth_reached': 0,
             'search_completed': False,
@@ -229,6 +235,7 @@ class CleanNgramSearcher:
                             results_dict['successful_paths'] = self.successful_paths.copy()
                             results_dict['total_nodes'] = len(self.nodes)
                             results_dict['search_time_seconds'] = time.time() - start_time
+                            results_dict['server_restart_time'] = self.total_restart_time
                             results_dict['nodes_by_status'] = {s.value: sum(1 for n in self.nodes.values() if n.status == s) for s in NodeStatus}
                             results_dict['max_depth_reached'] = max(n.depth for n in self.nodes.values()) if self.nodes else 0
                             results_dict['search_completed'] = True
@@ -263,6 +270,7 @@ class CleanNgramSearcher:
             'successful_paths': self.successful_paths.copy(),
             'total_nodes': len(self.nodes),
             'search_time_seconds': search_time,
+            'server_restart_time': self.total_restart_time,
             'nodes_by_status': status_counts,
             'max_depth_reached': max_depth_reached,
             'search_completed': True,
