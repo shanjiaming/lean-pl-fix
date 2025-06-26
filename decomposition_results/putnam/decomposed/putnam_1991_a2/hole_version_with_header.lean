@@ -1,0 +1,57 @@
+import Mathlib
+
+open Filter Topology
+
+-- False
+/--
+Let $\mathbf{A}$ and $\mathbf{B}$ be different $n \times n$ matrices with real entries. If $\mathbf{A}^3=\mathbf{B}^3$ and $\mathbf{A}^2\mathbf{B}=\mathbf{B}^2\mathbf{A}$, can $\mathbf{A}^2+\mathbf{B}^2$ be invertible?
+-/
+macro "hole_1" : tactic => `(tactic| admit)
+macro "hole_2" : tactic => `(tactic| admit)
+macro "hole_3" : tactic => `(tactic| admit)
+macro "hole_4" : tactic => `(tactic| admit)
+macro "hole_5" : tactic => `(tactic| admit)
+macro "hole_6" : tactic => `(tactic| admit)
+macro "hole_7" : tactic => `(tactic| admit)
+macro "hole_8" : tactic => `(tactic| admit)
+macro "hole_9" : tactic => `(tactic| admit)
+macro "hole_10" : tactic => `(tactic| admit)
+
+theorem putnam_1991_a2
+  (n : ℕ) (hn : 1 ≤ n) :
+  ((False) : Prop ) ↔ (∃ A B : Matrix (Fin n) (Fin n) ℝ,
+    A ≠ B ∧ A ^ 3 = B ^ 3 ∧
+    A ^ 2 * B = B ^ 2 * A ∧
+    Nonempty (Invertible (A ^ 2 + B ^ 2))) := by
+  have h_main : ¬ (∃ (A B : Matrix (Fin n) (Fin n) ℝ), A ≠ B ∧ A ^ 3 = B ^ 3 ∧ A ^ 2 * B = B ^ 2 * A ∧ Nonempty (Invertible (A ^ 2 + B ^ 2))) := by
+    intro h
+    rcases h with ⟨A, B, hA_ne_B, hA3, hA2B, ⟨i⟩⟩
+    
+    have h₁ : (A ^ 2 + B ^ 2) * (A - B) = 0 := by
+      hole_1
+    
+    have h₂ : A - B = 0 := by
+      have h₃ : (A - B : Matrix (Fin n) (Fin n) ℝ) = 0 := by
+        have h₄ : (⅟ (A ^ 2 + B ^ 2) : Matrix (Fin n) (Fin n) ℝ) * (A ^ 2 + B ^ 2) = 1 := by
+          hole_2
+        have h₅ : (⅟ (A ^ 2 + B ^ 2) : Matrix (Fin n) (Fin n) ℝ) * ((A ^ 2 + B ^ 2) * (A - B)) = 0 := by
+          hole_3
+        hole_4
+      hole_5
+    
+    have h₃ : A = B := by
+      have h₄ : A - B = 0 := h₂
+      have h₅ : A = B := by
+        have h₆ : A - B = 0 := h₄
+        have h₇ : A = B := by
+          hole_6
+        hole_7
+      hole_8
+    hole_9
+  constructor
+  · intro h
+    simp_all
+  · intro h
+    exfalso
+    have h₁ := h_main
+    hole_10
