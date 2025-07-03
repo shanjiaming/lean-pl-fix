@@ -6,13 +6,13 @@ theorem simp_then_have_chain (x y : ℕ) (h : x + 0 = y + 0) : x = y := by
     have h2 : x = y := by
       have h3 : x ≤ y := h_le
       have h4 : y ≤ x := by
-        linarith
-      norm_cast
+        admit
+      admit
     exact h2
   · 
     have h2 : x = y := by
       have h3 : y ≤ x := h_ge
       have h4 : x ≤ y := by
-        linarith
-      norm_cast
-    norm_cast
+        admit
+      admit
+    admit

@@ -1,2 +1,2 @@
 theorem nat_cast_add_eq {a b : ℕ} (h : a + b = 10) : (a : ℝ) + b + 1 = 6 + 5 := by 
-  norm_cast ; linarith
+  admit

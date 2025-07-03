@@ -101,7 +101,7 @@ class MinimalLeanProofStepIntegrator:
             pipeline.lean_verifier.reset() # this is to solve lean server shutdown after some time.
         return pipeline.verify_lean_code(modified_header, content)
     
-    def extract_proof_states_from_sorries(self, header: str, lean_code: str) -> Dict[int, ProofState]:
+    def extract_proof_states_from_sorries(self, header: str, lean_code: str) -> List:
         """
         Extract proof states at each sorry position using Lean server
         This is the key method that replaces full proof verification for tactic testing
@@ -112,8 +112,8 @@ class MinimalLeanProofStepIntegrator:
             self.initialize_lean_server()
             
         if not self.lean_server:
-            print("Warning: No Lean server available, falling back to simulation")
-            return self._simulate_proof_states(lean_code)
+            print("Warning: No Lean server available, cannot extract proof states")
+            return []
         
         # Use Lean server to get proof states at sorry positions
         # This doesn't count as full verification since we're just extracting states

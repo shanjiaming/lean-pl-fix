@@ -15,13 +15,6 @@
    - `SearchNode` - 简化的搜索节点
    - `CleanNgramSearcher` - 纯粹的搜索逻辑，无复杂内存管理
 
-### 测试程序
-3. **`test_clean_with_real_holes.py`** - 真实holes测试
-4. **`test_clean_without_pickle.py`** - 核心功能测试
-5. **`test_basic_tactic_execution.py`** - 基础策略执行测试
-6. **`test_clean_searcher_real.py`** - 真实proof states测试
-7. **`test_clean_ngram_pipeline.py`** - 完整pipeline测试
-
 ## 🏗️ 架构设计
 
 ### 两阶段处理模式

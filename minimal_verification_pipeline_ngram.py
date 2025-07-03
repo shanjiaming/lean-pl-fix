@@ -6,7 +6,7 @@ maximum 3 full proof verifications per problem
 All tactic testing done via ProofStep proof state manipulation
 """
 
-from typing import Dict, List, Tuple, Optional, Set
+from typing import Dict, List, Optional, Set
 from dataclasses import dataclass
 from datetime import datetime
 import json
@@ -204,27 +204,43 @@ class MinimalVerificationPipeline:
                 header_content, hole_version_content, original_tactics, enumerable_indices, session.sorry_map
             )
             
-            # Run CleanNgramPipeline for tactic enumeration
-            print("🔍 Starting n-gram search with CleanNgramPipeline...")
-            ngram_pipeline = CleanNgramPipeline(
-                max_depth=2,  # N-gram depth, 2 for 2-gram
-                stop_on_first_success=True
-            )
+            if self.suffix == "_ngram":
 
-            proofstep_results = ngram_pipeline.process_problem(
-                header_content=header_content,
-                clear_version=hole_version_content,
-                enumerable_indices=enumerable_indices,
-                sorry_map=session.sorry_map,
-                problem_id=problem.problem_id,
-                dataset=problem.dataset  # Pass dataset info
-            )
+                # Run CleanNgramPipeline for tactic enumeration
+                print("🔍 Starting n-gram search with CleanNgramPipeline...")
+                ngram_pipeline = CleanNgramPipeline(
+                    max_depth=2,  # N-gram depth, 2 for 2-gram
+                    stop_on_first_success=True
+                )
+
+                proofstep_results = ngram_pipeline.process_problem(
+                    header_content=header_content,
+                    clear_version=hole_version_content,
+                    enumerable_indices=enumerable_indices,
+                    sorry_map=session.sorry_map,
+                    problem_id=problem.problem_id,
+                    dataset=problem.dataset  # Pass dataset info
+                )
+                
+                successful_tactics = proofstep_results['successful_tactics']
+                # In n-gram, 'tactic_attempts' is now 'ngram_attempts'
+                tactic_attempts = proofstep_results.get('ngram_attempts', {})
+                proof_state_tests = sum(len(attempts.get('node_attempts', [])) for attempts in tactic_attempts.values())
             
-            successful_tactics = proofstep_results['successful_tactics']
-            # In n-gram, 'tactic_attempts' is now 'ngram_attempts'
-            tactic_attempts = proofstep_results.get('ngram_attempts', {})
-            proof_state_tests = sum(len(attempts.get('node_attempts', [])) for attempts in tactic_attempts.values())
-            
+            elif self.suffix == "_unigram":
+                # Run ProofStep enumeration with proof states
+                unigrams = ["norm_num", "linarith", "nlinarith", "omega", "ring", "ring_nf", "simp", "simpa", "field_simp", "positivity", "norm_cast"]
+                
+                # Use the hole version content for ProofStep
+                proofstep_results = integrator.enumerate_tactics_with_proof_states(
+                    header_content, hole_version_content, unigrams, enumerable_indices, session.sorry_map
+                )
+                
+                successful_tactics = proofstep_results['successful_tactics']
+                tactic_attempts = proofstep_results['tactic_attempts']
+                proof_state_tests = sum(len(attempts) for attempts in tactic_attempts.values())
+                
+
             # Create synthesized version by directly replacing hole uses with tactics
             print("📝 Creating synthesized version by directly replacing holes with tactics...")
             synthesized_content = hole_version_content
@@ -368,7 +384,7 @@ class MinimalVerificationPipeline:
         finally:
             integrator.shutdown_lean_server()
     
-    def process_dataset_with_constraint(self, dataset_name: str, limit: Optional[int] = None, enable_resume: bool = True, force_reprocess: List[str] = None) -> List[MinimalVerificationResult]:
+    def process_dataset_with_constraint(self, dataset_name: str, limit: Optional[int] = None, enable_resume: bool = True, force_reprocess: Optional[List[str]] = None) -> List[MinimalVerificationResult]:
         """
         Process entire dataset with minimal verification constraint
         
@@ -557,7 +573,7 @@ class MinimalVerificationPipeline:
         successful_original_tests = 0
         for result in results:
             if result.original_tactics_test:
-                for hole_id, test_result in result.original_tactics_test.items():
+                for _, test_result in result.original_tactics_test.items():
                     total_original_tests += 1
                     if test_result.get('success', False):
                         successful_original_tests += 1
@@ -590,7 +606,6 @@ class MinimalVerificationPipeline:
 
 def main():
     """Main function for minimal verification pipeline"""
-    import sys
     import argparse
     
     parser = argparse.ArgumentParser(

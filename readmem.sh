@@ -1,0 +1,4 @@
+(base) sjm@169-231-108-141:/Users/sjm/coding/projects/Newton/lean-pl-fix $ top -l 1 -stats pid,command,cpu,mem | grep 'repl ' | awk '{ mem_str = $NF; unit = substr(mem_str, length(mem_str)); val = substr(mem_str, 1, length(mem_str)-1); if (unit == "K") { bytes = val * 1024; } else if (unit == "M") { bytes = val * 1024 * 1024; } else if (unit == "G") { bytes = val * 1024 * 1024 * 1024; } else { bytes = val; } print bytes; }' | head -n 1
+814743552
+(base) sjm@169-231-108-141:/Users/sjm/coding/projects/Newton/lean-pl-fix $ ps -axo pid,rss,comm | awk '/repl\/\.lake\/build\/bin\/repl/ {print $2 * 1024}'
+3081564160

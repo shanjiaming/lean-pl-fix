@@ -14,7 +14,7 @@ def extract_theorems_from_module(module_path):
         A list of theorem names defined in the module
     """
     # Convert module path to file path
-    file_path = os.path.join("../matheye/benchmarks/.lake/packages/mathlib", 
+    file_path = os.path.join("~/miniconda3/lib/python3.13/site-packages/lean_interact/cache/tmp_projects/v4.21.0-rc3/1e05fd82f2c4fc489117f059ac17237437a6dbc201ad266e76e4f63abf7f4e88/.lake/packages/mathlib", 
                             module_path.replace(".", "/") + ".lean")
     
     # Check if file exists

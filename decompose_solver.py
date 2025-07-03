@@ -5,8 +5,6 @@ from unified_problem_manager import Problem, problem_manager
 import concurrent.futures
 import timeout_decorator
 
-localprojectdir = "../matheye/benchmarks/"
-
 # def throw_head(input_str: str) -> str:
 #     """
 #     remove line that starts with import, set_option, open
@@ -966,7 +964,7 @@ class UnifiedLeanEnvironment:
     """
     
     def __init__(self):
-        self.config = LeanREPLConfig(verbose=True, project=LocalProject(localprojectdir))
+        self.config = LeanREPLConfig(local_repl_path = "/Users/sjm/coding/projects/Newton/repl", lean_version="v4.21.0-rc3", project=TempRequireProject("mathlib"))
         self.server = LeanServer(self.config)
         self._header_envs: Dict[str, str] = {}  # header_content -> env_id
     
