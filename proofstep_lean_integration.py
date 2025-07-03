@@ -47,25 +47,20 @@ class MinimalLeanProofStepIntegrator:
         if not self.lean_server:
             try:
                 from lean_interact import LocalProject
-                # Use an absolute path to avoid issues with CWD.
+                # Use the current project root directory which contains lake-manifest.json
                 script_dir = os.path.dirname(os.path.abspath(__file__))
-                # Assuming this script is in `dev`, and benchmarks are in `dev/matheye/benchmarks`
-                # If the script moves, this path needs to be adjusted.
-                # A more robust solution might involve environment variables or a config file.
-                localprojectdir = os.path.join(script_dir, "matheye", "benchmarks")
                 
-                # A fallback if the above assumption is wrong
-                if not os.path.exists(os.path.join(localprojectdir, "lake-manifest.json")):
-                    # Let's try the original relative path as a fallback
-                    fallback_dir = os.path.join(script_dir, "..", "matheye", "benchmarks")
-                    if os.path.exists(os.path.join(fallback_dir, "lake-manifest.json")):
-                        localprojectdir = fallback_dir
-                    else:
-                        # Final attempt, maybe the CWD is correct
-                        if os.path.exists("matheye/benchmarks/lake-manifest.json"):
-                            localprojectdir = "matheye/benchmarks"
-                        else:
-                             raise FileNotFoundError("Could not locate the matheye/benchmarks project directory.")
+                # Look for lake-manifest.json in the current script directory (project root)
+                if os.path.exists(os.path.join(script_dir, "lake-manifest.json")):
+                    localprojectdir = script_dir
+                # Fallback: try parent directory
+                elif os.path.exists(os.path.join(script_dir, "..", "lake-manifest.json")):
+                    localprojectdir = os.path.join(script_dir, "..")
+                # Fallback: try current working directory
+                elif os.path.exists("lake-manifest.json"):
+                    localprojectdir = "."
+                else:
+                    raise FileNotFoundError("Could not locate lake-manifest.json in project directory.")
                 
                 config = LeanREPLConfig(verbose=True, project=LocalProject(localprojectdir))
                 self.lean_server = LeanServer(config)
