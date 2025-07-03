@@ -1,0 +1,282 @@
+{
+  "problem_id": "putnam_2017_b3",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": false,
+  "filled_verification_pass": false,
+  "synthesized_verification_pass": false,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  c n\ncase refine'_2.inl\nf : \u211d \u2192 \u211d\nc : \u2115 \u2192 \u211d\nhc : \u2200 (n : \u2115), c n = 0 \u2228 c n = 1\nhf : \u2200 (x : \u211d), f x = \u2211' (n : \u2115), c n * x ^ n\nh\u2081 : f (2 / 3) = 3 / 2\nn : \u2115\nh\u2082 : c n = 0\n\u22a2 0 \u2264 ?refine'_3 ^ n",
+      "original_tactic": "refine' Summable.of_nonneg_of_le (fun n => _) (fun n => _) (summable_geometric_of_lt_one (by norm_num) (by norm_num))\ncases' hc n with h\u2082 h\u2082\nrw [h\u2082]\nsimp\nrw [h\u2082]\npositivity\ncases' hc n with h\u2082 h\u2082\nrw [h\u2082]\nsimp\nrw [h\u2082]\nsimp [le_refl]"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [hf]"
+    },
+    "hole_3": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2081] at h\u2084\nlinarith"
+    },
+    "hole_4": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "simpa using h\u2085"
+    },
+    "hole_7": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "classical\nhave h\u2088 : \u2203 (u : \u2115 \u2192 \u2115), StrictMono u \u2227 \u2200 (n : \u2115), c (u n) \u2260 0 :=\n  by\n  choose! u hu\u2081 hu\u2082 using h\u2086\n  have h\u2089 : StrictMono u := by\n    refine' strictMono_nat_of_lt_succ fun n => _\n    specialize hu\u2081 (u n + 1)\n    have h\u2081\u2080 := hu\u2081\n    simp at h\u2081\u2080 \u22a2 <;> omega\n  refine' \u27e8u, h\u2089, _\u27e9\n  intro n\n  specialize hu\u2082 n\n  simp_all\nexact h\u2088"
+    },
+    "hole_9": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "rw [h\u2088]\nsimp"
+    },
+    "hole_11": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "calc\n  (\u2211' n : \u2115, (c n : \u211d) * ((2 / 3 : \u211d) : \u211d) ^ n) = \u2211' n : \u2115, (c n : \u211d) * ((2 / 3 : \u211d) : \u211d) ^ n := rfl\n  _ = \u2211' n : \u2115, if n < N then (c n : \u211d) * ((2 / 3 : \u211d) : \u211d) ^ n else 0 :=\n    by\n    apply tsum_congr\n    intro n\n    split_ifs with h\n    \u00b7 simp_all\n    \u00b7 have h\u2088 : n \u2265 N := by omega\n      have h\u2089 : (c n : \u211d) * ((2 / 3 : \u211d) : \u211d) ^ n = 0 := h\u2087 n h\u2088\n      simp_all\n  _ = \u2211 n in Finset.range N, (c n : \u211d) * ((2 / 3 : \u211d) : \u211d) ^ n := by\n    rw [tsum_eq_sum] <;> simp_all [Finset.sum_range_succ, add_comm] <;> aesop\n  _ = \u2211 n in Finset.range N, (c n : \u211d) * ((2 / 3 : \u211d) : \u211d) ^ n := rfl"
+    },
+    "hole_12": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "linarith"
+    },
+    "hole_13": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "norm_num"
+    },
+    "hole_14": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "norm_num"
+    },
+    "hole_15": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "linarith"
+    },
+    "hole_16": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "intro n h\u2081\u2085\nexact hc n"
+    },
+    "hole_17": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact\n  Finset.sum_nonneg fun n _ => by\n    cases' hc n with h\u2081\u2087 h\u2081\u2087\n    \u00b7 rw [h\u2081\u2087]\n      simp\n    \u00b7 rw [h\u2081\u2087]\n      positivity"
+    },
+    "hole_18": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "positivity"
+    },
+    "hole_19": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "positivity"
+    },
+    "hole_20": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "positivity"
+    },
+    "hole_21": {
+      "success": false,
+      "error_message": "Lean error:\nlinarith failed to find a contradiction\ncase h.h1.h\nf : \u211d \u2192 \u211d\nc : \u2115 \u2192 \u211d\nhc : \u2200 (n : \u2115), c n = 0 \u2228 c n = 1\nhf : \u2200 (x : \u211d), f x = \u2211' (n : \u2115), c n * x ^ n\nh\u2081 : f (2 / 3) = 3 / 2\nh_sum : Summable fun n => c n * (2 / 3) ^ n\nh\u2084 : \u2203 N, \u2200 (n : \u2115), N \u2264 n \u2192 c n = 0\nh\u2081\u2084 : \u2200 n < sorry (), c n = 0 \u2228 c n = 1\nh\u2081\u2087 h\u2081\u2088 h\u2081\u2089 : 0 \u2264 \u2211 x \u2208 Finset.range (sorry ()), c x * (2 / 3) ^ x\nh\u2081\u2086 : 0 \u2264 \u2211 x \u2208 Finset.range (sorry ()), c x * (2 / 3) ^ x\nh\u2081\u2083 : True\nh\u2081\u2082 : \u2211 x \u2208 Finset.range (sorry ()), c x * (2 / 3) ^ x = 3 / 2\nh\u2081\u2081 h\u2081\u2080 h\u2089 h\u2088 : True\nh\u2087 : \u2211 x \u2208 Finset.range (sorry ()), c x * (2 / 3) ^ x = 3 / 2\nh\u2086 : \u2211' (n : \u2115), c n * (2 / 3) ^ n = \u2211 x \u2208 Finset.range (sorry ()), c x * (2 / 3) ^ x\nh\u2083 : \u2211 x \u2208 Finset.range (sorry ()), c x * (2 / 3) ^ x = 3 / 2\na\u271d : (\u2211 x \u2208 Finset.range (sorry ()), c x * (1 / 3) ^ x * 2 ^ x) * 3 ^ (sorry () - 1) < \u2191(sorry ())\n\u22a2 False failed",
+      "original_tactic": "field_simp [h\u2081\u2082]\nring_nf at *\nnorm_num at *\nlinarith"
+    },
+    "hole_22": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2081\u2086"
+    },
+    "hole_23": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "linarith"
+    },
+    "hole_24": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "linarith"
+    },
+    "hole_25": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "field_simp at h\u2082\u2081\nring_nf at h\u2082\u2081 \u22a2\nnorm_cast at h\u2082\u2081 \u22a2\nnorm_num at h\u2082\u2081 \u22a2\ntry omega"
+    },
+    "hole_26": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2082\u2080"
+    },
+    "hole_27": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "norm_num"
+    },
+    "hole_28": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "intro n hn\ninduction' hn with n hn IH\nnorm_num\nsimp [pow_succ, Nat.mul_mod, IH]"
+    },
+    "hole_29": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e \u2265 1\n  d \u2265 0\n  b \u2265 0\n  -1 \u2264 2*b - 3*d \u2264 0\n  a \u2265 0\n  0 \u2264 3*a - 2*b \u2264 1\nwhere\n a := \u21913 ^ (sorry - 1)\n b := \u2191(3 * 3 ^ (sorry - 1)) / 2\n d := \u21913 ^ (sorry - 1)\n e := \u2191sorry",
+      "original_tactic": "omega"
+    },
+    "hole_30": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "simp_all [Finset.sum_range_succ]"
+    },
+    "hole_31": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "omega"
+    },
+    "hole_32": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "omega"
+    },
+    "hole_33": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  h \u2265 1\n  g \u2265 1\n  e \u2265 1\n  d \u2265 0\n  b \u2265 0\n  -1 \u2264 2*b - 3*d \u2264 0\n  a \u2265 0\n  0 \u2264 3*a - 2*b \u2264 1\nwhere\n a := \u21913 ^ (sorry - 1)\n b := \u2191(3 * 3 ^ (sorry - 1)) / 2\n d := \u21913 ^ (sorry - 1)\n e := \u2191sorry\n g := \u2191sorry\n h := \u2191sorry",
+      "original_tactic": "apply h\u2082\u2086\nomega"
+    },
+    "hole_34": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2083\u2084"
+    },
+    "hole_35": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2083\u2082"
+    },
+    "hole_36": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2083\u2080"
+    },
+    "hole_37": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2082\u2085"
+    },
+    "hole_38": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e \u2264 0\n  d \u2265 0\n  b \u2265 0\n  -1 \u2264 2*b - 3*d \u2264 0\n  a \u2265 0\n  0 \u2264 3*a - 2*b \u2264 1\nwhere\n a := \u21913 ^ (sorry - 1)\n b := \u2191(3 * 3 ^ (sorry - 1)) / 2\n d := \u21913 ^ (sorry - 1)\n e := Lean.Omega.bmod_div_term 3 [0, 0, 0, 0, 0, 0, 0, 3, -2]\n  (Lean.Omega.Coeffs.ofList\n    [\u2191k, \u2191(3 * 3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u2191(3 * 3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u21913 ^ (sorry - 1),\n      \u2191(3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u2191(3 * 3 ^ (sorry - 1)) / 2])",
+      "original_tactic": "omega"
+    },
+    "hole_39": {
+      "success": false,
+      "error_message": "Tactic status: Incomplete: contains sorry, goals remain: 0",
+      "original_tactic": "exact h\u2082\u2088"
+    },
+    "hole_40": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e \u2265 0\n  d \u2264 0\n  b \u2265 0\n  2 \u2264 3*b - 4*e \u2264 3\n  a \u2265 0\n  2 \u2264 3*a - 4*e \u2264 3\nwhere\n a := \u21913 ^ (sorry - 1)\n b := \u21913 ^ (sorry - 1)\n d := Lean.Omega.bmod_div_term 3 [0, 0, 0, 0, 0, 3, -2]\n  (Lean.Omega.Coeffs.ofList\n    [\u2191k, \u2191(3 * 3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u2191(3 * 3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u21913 ^ (sorry - 1),\n      \u2191(3 * 3 ^ (sorry - 1)) / 2])\n e := \u2191k / 2",
+      "original_tactic": "omega"
+    },
+    "hole_41": {
+      "success": false,
+      "error_message": "Lean error:\nomega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e \u2265 0\n  d \u2264 0\n  b \u2265 0\n  0 \u2264 3*b - 4*e \u2264 1\n  a \u2265 0\n  0 \u2264 3*a - 4*e \u2264 1\nwhere\n a := \u21913 ^ (sorry - 1)\n b := \u21913 ^ (sorry - 1)\n d := Lean.Omega.bmod_div_term 3 [0, 0, 0, 0, 0, 3, -2]\n  (Lean.Omega.Coeffs.ofList\n    [\u2191k, \u2191(3 * 3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u2191(3 * 3 ^ (sorry - 1)) / 2, \u21913 ^ (sorry - 1), \u21913 ^ (sorry - 1),\n      \u2191(3 * 3 ^ (sorry - 1)) / 2])\n e := \u2191k / 2",
+      "original_tactic": "omega"
+    },
+    "hole_42": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exfalso\nexact h\u2082"
+    },
+    "hole_43": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "exact h\u2083"
+    }
+  },
+  "successful_tactics": {
+    "hole_3": "linarith",
+    "hole_4": "simpa",
+    "hole_9": "simpa",
+    "hole_12": "linarith",
+    "hole_13": "norm_num",
+    "hole_14": "norm_num",
+    "hole_15": "linarith",
+    "hole_17": "linarith",
+    "hole_18": "simpa",
+    "hole_19": "linarith",
+    "hole_20": "linarith",
+    "hole_22": "linarith",
+    "hole_23": "linarith",
+    "hole_24": "linarith",
+    "hole_26": "linarith",
+    "hole_27": "norm_num",
+    "hole_31": "norm_num",
+    "hole_32": "norm_num",
+    "hole_34": "linarith",
+    "hole_35": "linarith",
+    "hole_36": "linarith",
+    "hole_37": "linarith",
+    "hole_39": "linarith",
+    "hole_42": "norm_cast",
+    "hole_43": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_3": "linarith",
+    "hole_4": "simpa",
+    "hole_9": "simpa",
+    "hole_12": "linarith",
+    "hole_13": "norm_num",
+    "hole_14": "norm_num",
+    "hole_15": "linarith",
+    "hole_17": "linarith",
+    "hole_18": "simpa",
+    "hole_19": "linarith",
+    "hole_20": "linarith",
+    "hole_22": "linarith",
+    "hole_23": "linarith",
+    "hole_24": "linarith",
+    "hole_26": "linarith",
+    "hole_27": "norm_num",
+    "hole_31": "norm_num",
+    "hole_32": "norm_num",
+    "hole_34": "linarith",
+    "hole_35": "linarith",
+    "hole_36": "linarith",
+    "hole_37": "linarith",
+    "hole_39": "linarith",
+    "hole_42": "norm_cast",
+    "hole_43": "simpa",
+    "hole_11": "admit",
+    "hole_38": "admit",
+    "hole_40": "admit",
+    "hole_21": "admit",
+    "hole_7": "admit",
+    "hole_1": "admit",
+    "hole_33": "admit",
+    "hole_30": "admit",
+    "hole_29": "admit",
+    "hole_2": "admit",
+    "hole_16": "admit",
+    "hole_41": "admit",
+    "hole_25": "admit",
+    "hole_28": "admit"
+  },
+  "proof_state_tests": 0,
+  "tactic_attempts": {},
+  "processing_time_seconds": 673.805968,
+  "constraint_satisfied": true,
+  "tactics_replaced": 25,
+  "timestamp": "2025-06-20T13:29:01.226107"
+}
