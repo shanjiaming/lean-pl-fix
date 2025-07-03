@@ -1,0 +1,27 @@
+import Mathlib
+
+open Topology Filter
+
+-- (fun p : ℕ => (p - 1) / 2)
+/--
+Let $p$ be an odd prime number, and let $\mathbb{F}_p$ denote the field of integers modulo $p$. Let $\mathbb{F}_p[x]$ be the ring of polynomials over $\mathbb{F}_p$, and let $q(x) \in \mathbb{F}_p[x]$ be given by $q(x)=\sum_{k=1}^{p-1} a_kx^k$, where $a_k=k^{(p-1)/2}\mod{p}$. Find the greatest nonnegative integer $n$ such that $(x-1)^n$ divides $q(x)$ in $\mathbb{F}_p[x]$.
+-/
+theorem putnam_2019_a5
+  (p : ℕ)
+  (q : Polynomial (ZMod p))
+  (a : ℕ → ZMod p)
+  (npoly : ℕ → Polynomial (ZMod p))
+  (podd : Odd p)
+  (pprime : p.Prime)
+  (hq : ∀ k : ℕ, q.coeff k = a k)
+  (ha0 : a 0 = 0 ∧ ∀ k > p - 1, a k = 0)
+  (haother : ∀ (k : Set.Icc 1 (p - 1)), a k = ((k : ℕ) ^ ((p - 1) / 2)) % p)
+  (hnpoly : ∀ n x, (npoly n).eval x = (x - 1) ^ n) :
+  IsGreatest {n | npoly n ∣ q} (((fun z : ℕ => (z - 1) / 2) : ℕ → ℕ ) p) := by
+  have h0 : (p - 1) / 2 ∈ {n : ℕ | npoly n ∣ q} := by
+    sorry
+  have h1 : ∀ n ∈ {n : ℕ | npoly n ∣ q}, n ≤ (p - 1) / 2 := by
+    sorry
+  have h2 : IsGreatest {n : ℕ | npoly n ∣ q} (((fun z : ℕ => (z - 1) / 2) : ℕ → ℕ) p) := by
+    sorry
+  sorry
