@@ -1,0 +1,36 @@
+{
+  "problem_id": "putnam_2005_a1",
+  "dataset": "putnam",
+  "verification_count": 1,
+  "max_verifications": 3,
+  "original_verification_pass": false,
+  "hole_verification_pass": true,
+  "filled_verification_pass": true,
+  "synthesized_verification_pass": true,
+  "complete_solve_success": false,
+  "original_tactics_test": {
+    "hole_1": {
+      "success": false,
+      "error_message": "Lean error:\ntactic 'introN' failed, insufficient number of binders\ncase h.left\nn : \u2124\nhn : n > 0\n\u22a2 n = 2 ^ sorry () * 3 ^ sorry ()",
+      "original_tactic": "use 1\nuse fun _ => fun j => if j = 0 then (Nat.log 2 n.natAbs).toNat else (Nat.log 3 n.natAbs).toNat\nconstructor\nsimp [Fin.sum_univ_succ]\nnorm_num\ntry contradiction\ntry {norm_num at hn \u22a2 <;> ring_nf at hn \u22a2 <;> norm_cast at hn \u22a2 <;> simp_all [Fin.forall_fin_one] <;> aesop\n}\ntry {norm_num at hn \u22a2 <;> ring_nf at hn \u22a2 <;> norm_cast at hn \u22a2 <;> simp_all [Fin.forall_fin_one] <;> aesop\n}\nintro i j hij\nfin_cases i\nfin_cases j\nsimp_all (config := { decide := true })"
+    },
+    "hole_2": {
+      "success": true,
+      "error_message": null,
+      "original_tactic": "obtain \u27e8k, a, h\u2081, h\u2082\u27e9 := h_main\nrefine' \u27e8k, a, _\u27e9\nsimp_all [Fin.sum_univ_cast]"
+    }
+  },
+  "successful_tactics": {
+    "hole_2": "simpa"
+  },
+  "tactic_mapping": {
+    "hole_2": "simpa",
+    "hole_1": "admit"
+  },
+  "proof_state_tests": 0,
+  "tactic_attempts": {},
+  "processing_time_seconds": 58.390566,
+  "constraint_satisfied": true,
+  "tactics_replaced": 1,
+  "timestamp": "2025-06-20T13:29:59.792262"
+}

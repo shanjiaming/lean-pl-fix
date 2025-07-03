@@ -1,8 +1,12 @@
-from lean_interact import Command, LeanServer, LeanREPLConfig, TempRequireProject, LocalProject
+from lean_interact import Command, LeanServer, LeanREPLConfig, TempRequireProject, LocalProject, ProofStep
+
+from proofstep_lean_integration import ProofState
 localprojectdir = "../matheye/benchmarks/"
 config = LeanREPLConfig(verbose=True, project=LocalProject(localprojectdir))
 print(config.__dict__)
-
+import psutil
+current_memory_percent = psutil.virtual_memory().percent
+print(current_memory_percent)
 server = LeanServer(config)
 response = server.run(Command(cmd="""import Mathlib
 theorem eq_comm_demo (x y : ℕ) : x = y ↔ y = x := by
@@ -15,10 +19,24 @@ theorem eq_comm_demo (x y : ℕ) : x = y ↔ y = x := by
       <;>linarith
     exact a
   · 
-    rw [a]
-    rw [h]
+    sorry
 
 """, all_tactics=True))
 
-for tactic in response.tactics:
-    print(tactic.tactic + " " + str(tactic.start_pos) + " " + str(tactic.end_pos))
+current_memory_percent = psutil.virtual_memory().percent
+print(current_memory_percent)
+
+response = server.run(ProofStep(proof_state=0, tactic="""(
+rw [a]
+)""", ))
+current_memory_percent = psutil.virtual_memory().percent
+print(current_memory_percent)
+
+response = server.run(ProofStep(proof_state=0, tactic="""(
+rw [h]
+)"""))
+current_memory_percent = psutil.virtual_memory().percent
+print(current_memory_percent)
+
+# for tactic in response.tactics:
+    # print(tactic.tactic + " " + str(tactic.start_pos) + " " + str(tactic.end_pos))
