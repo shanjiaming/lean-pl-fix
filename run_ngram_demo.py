@@ -8,11 +8,12 @@ import os
 import sys
 import json
 from datetime import datetime
+from typing import Optional
 
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-def run_ngram_on_demo_problem(problem_id: str = None):
+def run_ngram_on_demo_problem(problem_id: Optional[str] = None):
     """Run N-gram pipeline on a specific demo problem"""
     
     try:

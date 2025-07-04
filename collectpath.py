@@ -6,7 +6,8 @@ import argparse
 import os
 import glob
 from pathlib import Path
-from decompose_solver import unified_env, remove_lean_comments
+from decompose_solver import remove_lean_comments
+from unified_lean_environment import unified_env
 
 def extract_identifiers(content: str):
     # Extract all potential identifiers (word-like tokens) from the content

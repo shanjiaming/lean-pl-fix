@@ -8,7 +8,8 @@ from datetime import datetime
 # Add lean verification imports - fix the import to match decompose_solver.py
 from lean_interact import TempRequireProject, LeanREPLConfig, LeanServer, Command
 
-from decompose_solver import solve_theorem_unified, unified_env, TacticNode
+from decompose_solver import solve_theorem_unified, TacticNode
+from unified_lean_environment import unified_env
 # from substep_saver_hole import process_lean_file_holeformat
 from unified_problem_manager import problem_manager, Problem
 
@@ -32,7 +33,6 @@ class DecomposeHoleMergePipeline:
         self.step_counter = {"count": 0}
         
         # Initialize Lean verifier
-        from decompose_solver import unified_env
         self.lean_verifier = unified_env
         
         # Ensure output directory exists

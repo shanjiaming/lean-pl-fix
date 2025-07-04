@@ -17,7 +17,9 @@ def module_to_path(module_name: str, base_path: str) -> Path | None:
         parts = module_name.split('.')
         if any(not part for part in parts):
             return None
-        file_path = Path(base_path).joinpath(*parts).with_suffix('.lean')
+        # Properly expand user path (tilde) before creating Path object
+        expanded_base = Path(base_path).expanduser()
+        file_path = expanded_base.joinpath(*parts).with_suffix('.lean')
         return file_path if file_path.exists() else None
     except ValueError as e:
         print(f"Warning: Could not form path for module '{module_name}': {e}")

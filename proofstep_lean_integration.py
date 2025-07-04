@@ -8,10 +8,12 @@ All tactic testing done via proof state manipulation, not full verification
 import re
 import tempfile
 import os
-from typing import Dict, List, Tuple, Optional, Set
+from typing import Dict, List, Optional, Union, Tuple
 from dataclasses import dataclass
 from lean_interact import LeanREPLConfig, LeanServer, Command
 from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
+from proofstep_integration import SorryInfo
+from proofstate_cache import ProofStateCache
 
 @dataclass
 class ProofState:
@@ -41,6 +43,7 @@ class MinimalLeanProofStepIntegrator:
         self.lean_server = None
         self.verification_count = 0
         self.max_verifications = 3
+        self.proof_state_cache = ProofStateCache(max_states=20)
         
     def initialize_lean_server(self):
         """Initialize Lean server for proof state operations"""
@@ -65,6 +68,9 @@ class MinimalLeanProofStepIntegrator:
                 config = LeanREPLConfig(verbose=True, project=LocalProject(localprojectdir))
                 self.lean_server = LeanServer(config)
                 self.lean_server.start()
+                
+                # Set cache's Lean server reference
+                self.proof_state_cache.set_lean_server(self.lean_server)
             except Exception as e:
                 print(f"Warning: Could not initialize LeanServer: {e}")
                 self.lean_server = None
@@ -73,6 +79,8 @@ class MinimalLeanProofStepIntegrator:
         """Shutdown Lean server"""
         if self.lean_server:
             try:
+                # Clean up cache
+                self.proof_state_cache.clear_cache()
                 self.lean_server.kill()
             except:
                 pass
@@ -94,7 +102,12 @@ class MinimalLeanProofStepIntegrator:
         modified_header = f"{header.strip()}\nset_option debug.skipKernelTC true\n"
         if reset_lean_server:
             pipeline.lean_verifier.reset() # this is to solve lean server shutdown after some time.
-        return pipeline.verify_lean_code(modified_header, content)
+        result = pipeline.verify_lean_code(modified_header, content)
+        # verify_lean_code returns Union[bool, Tuple[bool, Optional[str]]], we only want the bool
+        if isinstance(result, bool):
+            return result
+        else:
+            return result[0]  # Extract bool from tuple
     
     def extract_proof_states_from_sorries(self, header: str, lean_code: str) -> List:
         """
@@ -128,12 +141,22 @@ class MinimalLeanProofStepIntegrator:
                 print(f"{header}\n\n{lean_code}")
                 print("------------------------------------------")
                 response = self.lean_server.run(FileCommand(path=temp_file))
-                print(f"📊 ProofStep response received: {len(response.sorries)} sorries")
+                
+                # Handle response attributes safely
+                sorries = getattr(response, 'sorries', [])
+                print(f"📊 ProofStep response received: {len(sorries)} sorries")
                 
                 # Sort server sorries by position to ensure deterministic matching
-                server_sorries = sorted(response.sorries, key=lambda s: (s.start_pos.line, s.start_pos.column))
+                server_sorries = sorted(sorries, key=lambda s: (
+                    getattr(getattr(s, 'start_pos', None), 'line', 0),
+                    getattr(getattr(s, 'start_pos', None), 'column', 0)
+                ))
                 for s in server_sorries:
-                    print(f"  - Server found sorry at position=({s.start_pos.line}, {s.start_pos.column}), proof_state={s.proof_state}")
+                    start_pos = getattr(s, 'start_pos', None)
+                    line = getattr(start_pos, 'line', 0) if start_pos else 0
+                    column = getattr(start_pos, 'column', 0) if start_pos else 0
+                    proof_state = getattr(s, 'proof_state', 0)
+                    print(f"  - Server found sorry at position=({line}, {column}), proof_state={proof_state}")
 
                 return server_sorries
                 
@@ -186,9 +209,12 @@ class MinimalLeanProofStepIntegrator:
             # Extract proof_state_id from context (format: "ProofState_N")
             proof_state_id = int(proof_state.context.split('_')[1])
             
+            # Ensure state is available in memory
+            available_state_id = self.proof_state_cache.ensure_state_available(proof_state_id)
+            
             # Use ProofStep to apply tactic to specific proof state
             # This follows the pattern: ProofStep(proof_state=N, tactic="tactic_name")
-            response = self.lean_server.run(ProofStep(proof_state=proof_state_id, tactic=tactic))
+            response = self.lean_server.run(ProofStep(proof_state=available_state_id, tactic=tactic))
             
             # Check if tactic application was successful
             # Check if tactic really succeeded
@@ -208,7 +234,7 @@ class MinimalLeanProofStepIntegrator:
                 # ProofStepResponse - check if proof is actually completed
                 if response.proof_status == 'Completed' and len(response.goals) == 0:
                     # Tactic fully solved the goal
-                    print(f"    ✅ {tactic} succeeded on proof_state {proof_state_id}")
+                    print(f"    ✅ {tactic} succeeded on proof_state {available_state_id}")
                     return TacticResult(
                         success=True,
                         tactic=tactic,
@@ -216,9 +242,18 @@ class MinimalLeanProofStepIntegrator:
                         new_goals=[]
                     )
                 else:
-                    # Tactic executed but didn't fully solve the goal
+                    # Tactic executed but didn't fully solve the goal  
+                    # Register newly generated state to cache
+                    if hasattr(response, 'proof_state'):
+                        new_state_id = response.proof_state
+                        self.proof_state_cache.register_state(
+                            new_state_id, 
+                            parent_id=available_state_id, 
+                            tactic=tactic
+                        )
+                    
                     remaining_goals = len(response.goals) if hasattr(response, 'goals') else 'unknown'
-                    print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: {response.proof_status}, {remaining_goals} goals remain")
+                    print(f"    ❌ {tactic} failed on proof_state {available_state_id}: {response.proof_status}, {remaining_goals} goals remain")
                     return TacticResult(
                         success=False,
                         tactic=tactic,
@@ -227,7 +262,7 @@ class MinimalLeanProofStepIntegrator:
                     )
             else:
                 # Some other response type - be conservative and mark as failure
-                print(f"    ❌ {tactic} failed on proof_state {proof_state_id}: unexpected response type {type(response)}")
+                print(f"    ❌ {tactic} failed on proof_state {available_state_id}: unexpected response type {type(response)}")
                 return TacticResult(
                     success=False,
                     tactic=tactic,
@@ -247,7 +282,7 @@ class MinimalLeanProofStepIntegrator:
     def test_original_tactics_on_proof_states(self, header: str, clear_version: str,
                                             original_tactics: Dict[str, str],
                                             enumerable_indices: List[int],
-                                            sorry_map: Dict[int, 'SorryInfo']) -> Dict[str, Dict]:
+                                            sorry_map: Dict[int, SorryInfo]) -> Dict[str, Dict]:
         """
         Test original hole tactics on their proof states before testing unigrams
         
@@ -354,7 +389,7 @@ class MinimalLeanProofStepIntegrator:
     def enumerate_tactics_with_proof_states(self, header: str, clear_version: str, 
                                           tactics: List[str], 
                                           enumerable_indices: List[int],
-                                          sorry_map: Dict[int, 'SorryInfo']) -> Dict:
+                                          sorry_map: Dict[int, SorryInfo]) -> Dict:
         """
         Main enumeration method using proof states
         Satisfies the constraint: maximum 3 full verifications, all testing via proof states
@@ -406,6 +441,9 @@ class MinimalLeanProofStepIntegrator:
                         context=f"ProofState_{proof_state_id}",
                         position_info=f"line_{server_line}_col_{server_col}"
                     )
+                    
+                    # Register initial proof state to cache (marked as root state)
+                    self.proof_state_cache.register_state(proof_state_id, is_root=True)
                     
                     # Remove matched candidate to avoid re-matching it
                     parser_sorries_by_line[server_line].remove(best_match)
@@ -504,6 +542,11 @@ class MinimalLeanProofStepIntegrator:
         
         print(f"  Full verifications used: {self.verification_count}/{self.max_verifications}")
         
+        # Output cache statistics
+        cache_info = self.proof_state_cache.get_cache_info()
+        print(f"  Cache stats: {cache_info['cache_size']}/{cache_info['max_states']} states, "
+              f"hit rate: {cache_info['hit_rate']:.1f}%")
+        
         return results
     
     def reset_verification_count(self):
@@ -554,15 +597,24 @@ theorem test (n : ℕ) : n ≥ n := by
         enumerable_indices = [0, 2]  # Skip indices 1, 3
         tactics = ["norm_num", "linarith", "omega", "simp"]
         
+        # Create a mock sorry_map for the demo
+        from proofstep_integration import SorryInfo
+        mock_sorry_map = {
+            i: SorryInfo(
+                index=i, line=0, column=0, macro_type='hole_i', 
+                hole_id=f'hole_{i+1}', should_enumerate=True, context=''
+            ) for i in enumerable_indices
+        }
+        
         results = integrator.enumerate_tactics_with_proof_states(
-            header, clear_version, tactics, enumerable_indices
+            header, clear_version, tactics, enumerable_indices, mock_sorry_map
         )
         
         # Verification 3: Final filled proof (would be done in main pipeline)
         print("\n🔍 Verification 3: Final filled proof")
         # Create filled version based on successful tactics
         filled_version = clear_version
-        for sorry_idx, tactic in results['successful_tactics'].items():
+        for _, tactic in results['successful_tactics'].items():
             # Replace sorry with successful tactic (simplified)
             filled_version = filled_version.replace("sorry)", f"{tactic})")
         

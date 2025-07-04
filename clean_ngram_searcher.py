@@ -11,17 +11,15 @@ import json
 import time
 from enum import Enum
 from datetime import datetime
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Callable
 from dataclasses import dataclass, field
 
 import psutil
 from proofstep_lean_integration import MinimalLeanProofStepIntegrator
+from theorem_sourcing_interface import get_related_theorems
 
-# Assuming HolePickleInfo is defined elsewhere, or define it here for clarity
-@dataclass
-class HolePickleInfo:
-    hole_id: str
-    pickle_file: str
+# Import unified type definitions
+from ngram_types import HolePickleInfo
 
 class NodeStatus(Enum):
     """Simple node status"""
@@ -41,7 +39,6 @@ class SearchNode:
     children: Set[str] = field(default_factory=set)
     depth: int = 0
     proof_state_id: Optional[int] = None
-    server_generation: int = 0 # Tracks which Lean server instance this state belongs to
     error_message: Optional[str] = None
     remaining_goals: int = 0
     
@@ -68,7 +65,8 @@ class SearchResults:
 class CleanNgramSearcher:
     """Clean n-gram searcher for pickle mode"""
     
-    def __init__(self, max_depth: int = 2, stop_on_first_success: bool = True):
+    def __init__(self, max_depth: int = 2, stop_on_first_success: bool = True, 
+                 theorem_query_func: Optional[Callable[[str, str, str], List[str]]] = None):
         self.max_depth = max_depth
         self.stop_on_first_success = stop_on_first_success
         
@@ -77,81 +75,48 @@ class CleanNgramSearcher:
         
         self.terminal_tactics = {'linarith', 'nlinarith', 'omega'}
         
+        # Theorem query function for dynamic rw[theorem] tactics
+        # it seems that we use self._default_theorem_query for now
+        self.theorem_query_func = theorem_query_func or self._default_theorem_query
+        
         # Current search state
         self.nodes: Dict[str, SearchNode] = {}
         self.successful_paths: List[List[str]] = []
-        self.proofsteps_executed_since_restart = 0
-        self.max_memory_percent = 70
-        self.proofstep_check_interval = 150
         self.lean_integrator: Optional[MinimalLeanProofStepIntegrator] = None
-        
-        # Memory management & Server Generation
-        self.lean_server_generation = 0
-        self.total_restart_time = 0.0
 
         # Detailed search log
         self.explored_nodes_log: List[Dict] = []
     
-    def _check_and_restart_server(self, pickle_info: HolePickleInfo, loader_func, root_node: SearchNode):
-        """Checks memory and restarts the server if needed. Minimal logic here."""
-        self.proofsteps_executed_since_restart += 1
-        if self.proofsteps_executed_since_restart % self.proofstep_check_interval != 0:
-            return
-
-        current_memory_percent = psutil.virtual_memory().percent
-        if current_memory_percent > self.max_memory_percent:
-            restart_start_time = time.time()
-            print(f"      🧠 Memory usage {current_memory_percent:.1f}% > {self.max_memory_percent}%. Restarting Lean server...")
-            
-            # 1. Shutdown and restart integrator
-            if self.lean_integrator:
-                self.lean_integrator.shutdown_lean_server()
-                self.lean_integrator.initialize_lean_server()
-            
-            # 2. Increment server generation
-            self.lean_server_generation += 1
-            print(f"      🔥 New server generation: {self.lean_server_generation}")
-
-            # 3. Reload initial proof state from pickle
-            new_root_ps_id = loader_func(pickle_info, self.lean_integrator)
-            if new_root_ps_id is None:
-                print("      💥 FATAL: Failed to reload pickle after server restart. Aborting search.")
-                self.total_restart_time += time.time() - restart_start_time
-                raise RuntimeError("Failed to reload pickle.")
-            
-            root_node.proof_state_id = new_root_ps_id
-            root_node.server_generation = self.lean_server_generation
-            root_node.status = NodeStatus.PENDING # Ensure root is ready for expansion
-            print(f"      🔄 Server restarted. New root proof state ID: {new_root_ps_id}")
-            
-            # Reset counter
-            self.proofsteps_executed_since_restart = 0
-            self.total_restart_time += time.time() - restart_start_time
+    # Memory management now handled transparently by ProofStateCache, removed complex server restart logic
+    
+    def _default_theorem_query(self, dataset: str, problem_id: str, hole_id: str) -> List[str]:
+        """Default theorem query function - uses real theorem sourcing interface with fallback"""
+        theorems = get_related_theorems(dataset, problem_id, hole_id)
+        return theorems
+    
+    def get_available_tactics_for_hole(self, dataset: str, problem_id: str, hole_id: str) -> List[str]:
+        """Get all available tactics for a specific hole, including dynamic rw[theorem] tactics"""
+        # Start with base tactics
+        tactics = self.available_tactics.copy()
+        
+        # Add dynamic rw[theorem] tactics
+        available_theorems = self.theorem_query_func(dataset, problem_id, hole_id)
+        for theorem in available_theorems:
+            tactics.append(f"rw[{theorem}]")
+        
+        return tactics
 
     def _ensure_node_state_is_valid(self, node: SearchNode):
-        """Just-In-Time state recovery. Recursively ensures a node's state is valid."""
-        # If the node's state is from the current server generation, it's valid.
-        if node.server_generation == self.lean_server_generation and node.proof_state_id is not None:
-            return
+        """Ensure node state is valid - now handled transparently by ProofStateCache"""
+        if node.proof_state_id is None:
+            raise RuntimeError(f"Node {node.node_id} has no proof state ID")
+        
+        # ProofStateCache will automatically handle state availability checking and recovery
+        # We only need to ensure the state ID exists
+        return
 
-        # Cannot recover a node without a parent (the root should be handled by _check_and_restart_server)
-        if node.parent_id is None:
-            if node.proof_state_id is None:
-                 raise RuntimeError(f"Root node {node.node_id} has no valid proof state.")
-            return
-
-        parent = self.nodes.get(node.parent_id)
-        if not parent:
-            raise RuntimeError(f"Could not find parent node {node.parent_id} for node {node.node_id}")
-
-        # Recursively ensure the parent is valid first.
-        self._ensure_node_state_is_valid(parent)
-
-        # Now that the parent is guaranteed to be valid, regenerate the current node's state.
-        print(f"         🔄 JIT Recovery: Re-evaluating {node.node_id} from parent {parent.node_id}")
-        self._execute_single_tactic(node, parent.proof_state_id)
-
-    def search_hole(self, pickle_info: HolePickleInfo, initial_proof_state_id: int, loader_func) -> Tuple[List[List[str]], Dict]:
+    def search_hole(self, pickle_info: HolePickleInfo, initial_proof_state_id: int, loader_func=None, 
+                    dataset: str = "unknown", problem_id: str = "unknown") -> Tuple[List[List[str]], Dict]:
         """Search for solutions to a specific hole"""
         
         print(f"      🔍 Starting n-gram search for {pickle_info.hole_id} (PS_{initial_proof_state_id})")
@@ -160,9 +125,6 @@ class CleanNgramSearcher:
         # Reset state
         self.nodes.clear()
         self.successful_paths.clear()
-        self.proofsteps_executed_since_restart = 0
-        self.lean_server_generation = 0
-        self.total_restart_time = 0.0
 
         # Initialize results_dict early so it can be returned at any time
         results_dict = {
@@ -170,7 +132,6 @@ class CleanNgramSearcher:
             'successful_paths': self.successful_paths.copy(),
             'total_nodes': 0, # Will be updated before final return
             'search_time_seconds': 0.0, # Will be updated before final return
-            'server_restart_time': 0.0, # Will be updated before final return
             'nodes_by_status': {}, # Will be updated before final return
             'max_depth_reached': 0,
             'search_completed': False,
@@ -186,8 +147,7 @@ class CleanNgramSearcher:
             parent_id=None,
             depth=0,
             proof_state_id=initial_proof_state_id,
-            status=NodeStatus.PENDING,
-            server_generation=self.lean_server_generation
+            status=NodeStatus.PENDING
         )
         self.nodes[root_id] = root_node
         self.explored_nodes_log.append({
@@ -212,21 +172,21 @@ class CleanNgramSearcher:
             next_nodes = []
             
             for node in nodes_to_process:
-                # Ensure this node's state is valid before trying to expand it.
+                # Ensure node state is valid (now handled transparently by cache)
                 self._ensure_node_state_is_valid(node)
 
-                # If recovery marked the node as errored, or it's otherwise terminal, skip.
+                # If node is terminal, skip
                 if node.is_terminal():
                     continue
                 
-                children = self._expand_node(node, pickle_info.hole_id, pickle_info, loader_func, root_node)
+                children = self._expand_node(node, pickle_info.hole_id, dataset, problem_id)
                 next_nodes.extend(children)
                 
                 # Check for success immediately
                 for child in children:
                     if child.status == NodeStatus.SUCCESS:
                         self.successful_paths.append(child.tactic_sequence.copy())
-                        print(f"         🎉 Success: {' -> '.join(child.tactic_sequence)}")
+                        print(f"         🎉 Success: {' ; '.join(child.tactic_sequence)}")
                         
                         # If stop_on_first_success, immediately break all loops and return
                         if self.stop_on_first_success:
@@ -235,7 +195,6 @@ class CleanNgramSearcher:
                             results_dict['successful_paths'] = self.successful_paths.copy()
                             results_dict['total_nodes'] = len(self.nodes)
                             results_dict['search_time_seconds'] = time.time() - start_time
-                            results_dict['server_restart_time'] = self.total_restart_time
                             results_dict['nodes_by_status'] = {s.value: sum(1 for n in self.nodes.values() if n.status == s) for s in NodeStatus}
                             results_dict['max_depth_reached'] = max(n.depth for n in self.nodes.values()) if self.nodes else 0
                             results_dict['search_completed'] = True
@@ -270,38 +229,33 @@ class CleanNgramSearcher:
             'successful_paths': self.successful_paths.copy(),
             'total_nodes': len(self.nodes),
             'search_time_seconds': search_time,
-            'server_restart_time': self.total_restart_time,
             'nodes_by_status': status_counts,
             'max_depth_reached': max_depth_reached,
             'search_completed': True,
-            'explored_nodes_log': self.explored_nodes_log # Add the full log
+            'explored_nodes_log': self.explored_nodes_log
         })
         
         print(f"      📈 Search complete: {len(self.successful_paths)} paths, {len(self.nodes)} nodes, {search_time:.2f}s")
         
         return self.successful_paths.copy(), results_dict
     
-    def _expand_node(self, node: SearchNode, hole_id: str, pickle_info: HolePickleInfo, loader_func, root_node: SearchNode) -> List[SearchNode]:
-        """Expand a node by trying all available tactics"""
+    def _expand_node(self, node: SearchNode, hole_id: str, dataset: str = "unknown", problem_id: str = "unknown") -> List[SearchNode]:
+        """Expand a node by trying all available tactics including dynamic rw[theorem] tactics"""
         
         if node.depth >= self.max_depth:
             return []
         
         children = []
         
-        for tactic in self.available_tactics:
+        # Get dynamic tactics for this specific hole
+        available_tactics = self.get_available_tactics_for_hole(dataset, problem_id, hole_id)
+        
+        for tactic in available_tactics:
             child_sequence = node.tactic_sequence + [tactic]
             child_id = f"{hole_id}_{'_'.join(child_sequence)}"
             
             if child_id in self.nodes:
                 continue
-
-            # Check for restart BEFORE trying this tactic
-            self._check_and_restart_server(pickle_info, loader_func, root_node)
-
-            # After a potential restart, the parent 'node' we are expanding from might be stale.
-            # We MUST re-validate it before using its proof state.
-            self._ensure_node_state_is_valid(node)
 
             child_node = SearchNode(
                 node_id=child_id,
@@ -372,8 +326,7 @@ class CleanNgramSearcher:
             node.status = NodeStatus.ERROR
             node.error_message = f"Execution failed: {str(e)}"
         
-        # CRITICAL: Update the node's generation to the current server generation
-        node.server_generation = self.lean_server_generation
+        # State now managed by ProofStateCache, no need to manually track server generation
 
     def _execute_tactic_sequence(self, node: SearchNode, base_proof_state_id: int):
         """
@@ -457,12 +410,25 @@ def demo_clean_searcher():
     print("✅ Clean searcher initialized")
     print(f"   Max depth: {searcher.max_depth}")
     print(f"   Stop on first success: {searcher.stop_on_first_success}")
-    print(f"   Available tactics: {len(searcher.available_tactics)}")
+    print(f"   Base tactics: {len(searcher.available_tactics)}")
     print(f"   Terminal tactics: {searcher.terminal_tactics}")
+    
+    # Demo dynamic tactics
+    demo_tactics = searcher.get_available_tactics_for_hole("putnam", "putnam_1986_b6", "hole_4")
+    rw_tactics = [t for t in demo_tactics if t.startswith('rw[')]
+    print(f"   Dynamic rw[theorem] tactics: {rw_tactics}")
+    print(f"   Total tactics with dynamic: {len(demo_tactics)}")
     
     print(f"\n💡 Usage:")
     print(f"   searcher.lean_integrator = integrator")
-    print(f"   paths, results = searcher.search_hole('hole_1', 42)")
+    print(f"   paths, results = searcher.search_hole(pickle_info, 42, None, 'dataset', 'problem')")
+    
+    print(f"\n🎯 Key Features:")
+    print(f"   - Dynamic rw[theorem] tactic generation")
+    print(f"   - Context-aware theorem selection")
+    print(f"   - Complete state isolation between holes")
+    print(f"   - Automatic cleanup after each hole")
+    print(f"   - Pure pickle-based approach")
 
 
 if __name__ == "__main__":

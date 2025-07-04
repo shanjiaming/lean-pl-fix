@@ -1,5 +1,6 @@
 import os
-from decompose_solver import solve_theorem, run_with_header_env, unified_env
+from decompose_solver import solve_theorem
+from unified_lean_environment import unified_env
 from unified_problem_manager import problem_manager, Problem
 
 def process_lean_file_decompose(problem: Problem, outpath: str):

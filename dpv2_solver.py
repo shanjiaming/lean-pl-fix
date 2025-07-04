@@ -28,7 +28,8 @@ def query_dpv2(input_content):
     )
     return completion.choices[0].message.content
 
-from decompose_solver import solve_theorem, solve_theorem_unified, solve_theorem_by_id, unified_env
+from decompose_solver import solve_theorem, solve_theorem_unified, solve_theorem_by_id
+from unified_lean_environment import unified_env
 from unified_problem_manager import Problem, problem_manager
 
 def make_prompt_for_dpv2(header_content, theorem_content, error_msg):

@@ -7,9 +7,7 @@ Handles sorry indexing, hole vs skip identification, and server state management
 """
 
 import re
-import tempfile
-import os
-from typing import Dict, List, Tuple, Optional, Set
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from lean_interact import LeanREPLConfig, LeanServer
 from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
@@ -53,7 +51,7 @@ class ProofStepIntegrator:
                 print(f"Warning: Could not initialize LeanServer: {e}")
                 self.lean_server = None
     
-    def parse_macro_structure(self, lean_code: str) -> Dict[str, Dict]:
+    def parse_macro_structure(self, lean_code: str) -> Dict[str, Any]:
         """
         Parse the macro structure to understand hole_i vs skip_hole mapping
         
@@ -214,7 +212,7 @@ class ProofStepIntegrator:
         # We need to adjust the line numbers in sorry_map to be relative to lean_code,
         # but the parsing was done on full_code.
         # Let's find the line offset.
-        header_lines = len(header_content.split('\n')) + 1 # +1 for the extra newline
+        _ = len(header_content.split('\n')) + 1 # +1 for the extra newline
 
         # Re-create the sorry_map with adjusted line numbers for local usage if needed,
         # but the primary creation is for position matching against the server.
@@ -340,7 +338,12 @@ class ProofStepIntegrator:
     def _verify_code(self, lean_code: str) -> bool:
         """Verify Lean code with proper header"""
         try:
-            return self.pipeline.verify_lean_code(self.header_content, lean_code)
+            result = self.pipeline.verify_lean_code(self.header_content, lean_code)
+            # Handle Union return type: either bool or Tuple[bool, Optional[str]]
+            if isinstance(result, bool):
+                return result
+            else:
+                return result[0]  # Extract bool from tuple
         except Exception:
             return False
     
@@ -416,21 +419,20 @@ def demo_proofstep_integration():
         print("Demo problem not found")
         return
     
-    # Generate clear version
+    # Generate hole version
     pipeline = DecomposeHoleMergePipeline()
-    hole_content, hole_list = pipeline.generate_in_place_holes(problem)
+    hole_content, hole_positions = pipeline.generate_in_place_holes(problem)
     
-    # Add macros
+    # Add macros based on hole positions
     hole_macros = []
-    for hole_info in hole_list:
-        hole_id = hole_info['hole_id']
+    for i, _ in enumerate(hole_positions):
+        hole_id = f"hole_{i+1}"
         hole_macros.append(f'macro "{hole_id}" : tactic => `(tactic| sorry)')
     
     hole_macros.append('macro "skip_hole" : term => `(sorry)')
     
-    # Generate clear version
-    clear_content = pipeline.generate_clear_version(hole_content, hole_list)
-    clear_with_macros = '\n'.join(hole_macros) + '\n\n' + clear_content
+    # Create clear version with macros
+    clear_with_macros = '\n'.join(hole_macros) + '\n\n' + hole_content
     
     print("Generated clear version with macros")
     
@@ -472,7 +474,7 @@ def demo_proofstep_integration():
             print(f"  {hole_id} (index {hole_idx}): {tactic}")
     
     # Save results
-    with open('/home/matheye/lean-pl-fix/proofstep_integration_demo.lean', 'w') as f:
+    with open('proofstep_integration_demo.lean', 'w') as f:
         f.write(clear_with_macros)
     
     print(f"\n💾 Demo code saved to: proofstep_integration_demo.lean")

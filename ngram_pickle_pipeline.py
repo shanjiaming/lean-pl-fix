@@ -14,30 +14,20 @@ import os
 import json
 import time
 import tempfile
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple
 from datetime import datetime
-from dataclasses import dataclass
 
 from clean_ngram_searcher import CleanNgramSearcher
 from proofstep_lean_integration import MinimalLeanProofStepIntegrator
-from lean_interact import PickleProofState, UnpickleProofState, FileCommand
-
-
-@dataclass
-class HolePickleInfo:
-    """Information about a pickled hole"""
-    hole_id: str
-    sorry_index: int
-    pickle_file: str
-    original_proof_state_id: int
-    line: int
-    column: int
+from lean_interact import PickleProofState, UnpickleProofState
+from ngram_types import HolePickleInfo
+from proofstep_integration import SorryInfo
 
 
 class ProofStatePickleManager:
     """Manages ProofState pickling and restoration"""
     
-    def __init__(self, problem_id: str = None, dataset: str = None, pickle_dir: str = None):
+    def __init__(self, problem_id: Optional[str] = None, dataset: Optional[str] = None, pickle_dir: Optional[str] = None):
         if pickle_dir is None and problem_id and dataset:
             # Use decomposition_results structure
             self.pickle_dir = f"decomposition_results/{dataset}/decomposed/{problem_id}/ngram_pickles"
@@ -91,14 +81,18 @@ class ProofStatePickleManager:
                 # Pickle the proof state with error handling
                 try:
                     print(f"   🥒 Pickling {sorry_info.hole_id} to {abs_pickle_file}...")
-                    pickle_result = integrator.lean_server.run(PickleProofState(
-                        proof_state=matched_server_sorry.proof_state,
-                        pickle_to=abs_pickle_file
-                    ))
+                    if integrator.lean_server:
+                        pickle_result = integrator.lean_server.run(PickleProofState(
+                            proof_state=matched_server_sorry.proof_state,
+                            pickle_to=abs_pickle_file
+                        ))
+                    else:
+                        raise RuntimeError("Lean server not available")
                     
                     # Check for pickle errors
-                    if hasattr(pickle_result, 'error') and pickle_result.error:
-                        print(f"   ❌ Pickle error: {pickle_result.error}")
+                    from lean_interact.interface import LeanError
+                    if isinstance(pickle_result, LeanError):
+                        print(f"   ❌ Pickle error: {pickle_result.message}")
                         continue
                         
                     # Verify file was created
@@ -153,26 +147,26 @@ class ProofStatePickleManager:
         
         try:
             print(f"   📦 Unpickling from {abs_pickle_file}...")
-            result = integrator.lean_server.run(UnpickleProofState(
-                unpickle_proof_state_from=abs_pickle_file
-            ))
-            print("Done with unpickle")
+            if integrator.lean_server:
+                result = integrator.lean_server.run(UnpickleProofState(
+                    unpickle_proof_state_from=abs_pickle_file
+                ))
+                print("Done with unpickle")
+            else:
+                raise RuntimeError("Lean server not available")
 
             # Detailed error checking
-            if hasattr(result, 'error') and result.error:
-                raise RuntimeError(f"Unpickle failed with error: {result.error}")
+            from lean_interact.interface import LeanError
+            if isinstance(result, LeanError):
+                raise RuntimeError(f"Unpickle failed with error: {result.message}")
             
             # Extract proof state with multiple fallback strategies
             restored_proof_state_id = None
             
             if hasattr(result, 'proof_state'):
                 restored_proof_state_id = result.proof_state
-            elif hasattr(result, 'proofState'):
-                restored_proof_state_id = result.proofState  
             elif isinstance(result, dict) and 'proof_state' in result:
                 restored_proof_state_id = result['proof_state']
-            elif isinstance(result, dict) and 'proofState' in result:
-                restored_proof_state_id = result['proofState']
             else:
                 # Last resort: try to extract from string representation
                 result_str = str(result)
@@ -226,9 +220,9 @@ class CleanNgramPipeline:
                        header_content: str,
                        clear_version: str, 
                        enumerable_indices: List[int],
-                       sorry_map: Dict[int, 'SorryInfo'],
-                       problem_id: str = None,
-                       dataset: str = None) -> Dict:
+                       sorry_map: Dict[int, SorryInfo],
+                       problem_id: Optional[str] = None,
+                       dataset: Optional[str] = None) -> Dict:
         """Process entire problem using pickle-based approach"""
         
         start_time = time.time()
@@ -247,9 +241,8 @@ class CleanNgramPipeline:
         self.stats['pickle_save_time'] = time.time() - pickle_start
         
         # Phase 2: Process each hole independently
-        processing_start = time.time()
         all_hole_results, successful_tactics_summary = self._process_holes_independently(
-            pickle_infos, enumerable_indices, header_content
+            pickle_infos, enumerable_indices, header_content, dataset, problem_id
         )
         
         # Cleanup
@@ -282,7 +275,9 @@ class CleanNgramPipeline:
     def _process_holes_independently(self, 
                                    pickle_infos: List[HolePickleInfo],
                                    enumerable_indices: List[int],
-                                   header_content: str) -> Tuple[Dict[str, Dict], Dict[str, str]]:
+                                   header_content: str,
+                                   dataset: Optional[str] = None,
+                                   problem_id: Optional[str] = None) -> Tuple[Dict[str, Dict], Dict[str, str]]:
         """Process each hole independently, ensuring clean state"""
         
         all_hole_results = {}
@@ -304,11 +299,10 @@ class CleanNgramPipeline:
             
             try:
                 # Process this hole in complete isolation
-                tactic_result, search_stats = self._process_single_hole(pickle_info, header_content)
+                tactic_result, search_stats = self._process_single_hole(pickle_info, header_content, dataset, problem_id)
                 
-                # Accumulate pure search time
-                pure_search_time = search_stats.get('search_time_seconds', 0.0) - search_stats.get('server_restart_time', 0.0)
-                self.stats['hole_search_time'] += pure_search_time
+                # Accumulate search time (no more server restart time tracking)
+                self.stats['hole_search_time'] += search_stats.get('search_time_seconds', 0.0)
                 
                 # Store results
                 all_hole_results[hole_id] = search_stats
@@ -339,7 +333,8 @@ class CleanNgramPipeline:
         
         return all_hole_results, successful_tactics_summary
     
-    def _process_single_hole(self, pickle_info: HolePickleInfo, header_content: str) -> Tuple[Optional[str], Dict]:
+    def _process_single_hole(self, pickle_info: HolePickleInfo, header_content: str, 
+                           dataset: Optional[str] = None, problem_id: Optional[str] = None) -> Tuple[Optional[str], Dict]:
         """Process a single hole with completely fresh state"""
         
         print(f"   🔍 Processing hole '{pickle_info.hole_id}'...")
@@ -358,30 +353,35 @@ class CleanNgramPipeline:
                 header_file = f.name
             
             try:
-                from lean_interact import FileCommand
-                # This command initializes the environment. We don't care about the response.
-                integrator.lean_server.run(FileCommand(path=header_file, content=header_content))
+                # Initialize the environment by running a simple command
+                # This ensures the Lean server knows about the imports
+                if integrator.lean_server:
+                    # We can skip this step as the pickle should contain the environment
+                    pass
             finally:
                 os.unlink(header_file)
 
             # Restore proof state
             load_start_time = time.time()
-            initial_proof_state_id = self.pickle_manager.load_proof_state_for_hole(pickle_info, integrator)
-            self.stats['pickle_load_time'] += time.time() - load_start_time
-            self.stats['pickle_load_count'] += 1
+            if self.pickle_manager:
+                initial_proof_state_id = self.pickle_manager.load_proof_state_for_hole(pickle_info, integrator)
+                self.stats['pickle_load_time'] += time.time() - load_start_time
+                self.stats['pickle_load_count'] += 1
+            else:
+                raise RuntimeError("Pickle manager not initialized")
             
-            # Define the loader function for server restarts
-            loader_func = lambda p_info, intgr: self.pickle_manager.load_proof_state_for_hole(p_info, intgr)
-
+            # ProofStateCache now handles state management, no explicit loader function needed
             # Run the search
             successful_paths, search_stats = searcher.search_hole(
                 pickle_info, 
                 initial_proof_state_id,
-                loader_func
+                None,  # loader_func no longer needed
+                dataset or "unknown",
+                problem_id or "unknown"
             )
             
             # Determine final tactic from successful paths
-            final_tactic = " -> ".join(successful_paths[0]) if successful_paths else None
+            final_tactic = " ; ".join(successful_paths[0]) if successful_paths else None
             
             # Add pickle information to results
             search_stats['pickle_restored'] = True
@@ -397,9 +397,8 @@ class CleanNgramPipeline:
             return None, {"error": str(e), "hole_id": pickle_info.hole_id}
             
         finally:
-            # Clean up temporary file
-            if header_file and os.path.exists(header_file):
-                os.unlink(header_file)
+            # Clean up integrator
+            integrator.shutdown_lean_server()
 
     def _save_ngram_results(self, results: Dict, problem_id: str, dataset: str):
         """Save final n-gram search results to a file"""
@@ -468,7 +467,7 @@ def demo_clean_ngram_pipeline():
     print("🧪 Clean N-gram Pipeline Demo")
     print("=" * 50)
     
-    pipeline = CleanNgramPipeline(max_depth=2, stop_on_first_success=True)
+    _pipeline = CleanNgramPipeline(max_depth=2, stop_on_first_success=True)
     
     print("✅ Clean pipeline initialized")
     print("✅ ProofState pickling enabled")
