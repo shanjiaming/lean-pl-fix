@@ -199,9 +199,10 @@ class ProofStatePickleManager:
 class CleanNgramPipeline:
     """Clean n-gram pipeline using ProofState pickling"""
     
-    def __init__(self, max_depth: int = 2, stop_on_first_success: bool = True):
+    def __init__(self, max_depth: int = 2, stop_on_first_success: bool = True, enable_llm_pruning: bool = False):
         self.max_depth = max_depth
         self.stop_on_first_success = stop_on_first_success
+        self.enable_llm_pruning = enable_llm_pruning
         self.pickle_manager = None  # Will be initialized with problem info
         
         # Statistics
@@ -341,7 +342,7 @@ class CleanNgramPipeline:
         # Each hole gets a fresh integrator and searcher
         integrator = MinimalLeanProofStepIntegrator()
         integrator.initialize_lean_server()
-        searcher = CleanNgramSearcher(max_depth=self.max_depth, stop_on_first_success=self.stop_on_first_success)
+        searcher = CleanNgramSearcher(max_depth=self.max_depth, stop_on_first_success=self.stop_on_first_success, enable_llm_pruning=self.enable_llm_pruning)
         searcher.lean_integrator = integrator # This is critical
 
         try:
@@ -467,21 +468,33 @@ def demo_clean_ngram_pipeline():
     print("🧪 Clean N-gram Pipeline Demo")
     print("=" * 50)
     
-    _pipeline = CleanNgramPipeline(max_depth=2, stop_on_first_success=True)
+    # Demo without LLM pruning
+    _pipeline = CleanNgramPipeline(max_depth=2, stop_on_first_success=True, enable_llm_pruning=False)
     
     print("✅ Clean pipeline initialized")
     print("✅ ProofState pickling enabled")
     print("✅ Independent hole processing")
     print("✅ No fallback mechanisms")
     print("✅ Complete state isolation")
+    print(f"✅ LLM pruning: {_pipeline.enable_llm_pruning}")
+    
+    # Demo with LLM pruning
+    try:
+        _pipeline_llm = CleanNgramPipeline(max_depth=2, stop_on_first_success=True, enable_llm_pruning=True)
+        print(f"🤖 LLM-enhanced pipeline initialized")
+        print(f"   LLM pruning: {_pipeline_llm.enable_llm_pruning}")
+    except Exception as e:
+        print(f"❌ LLM pipeline failed to initialize: {e}")
+        print("   Make sure OPENROUTER_API_KEY is set")
     
     print(f"\n💡 Usage:")
-    print(f"   pipeline = CleanNgramPipeline(max_depth=2)")
+    print(f"   pipeline = CleanNgramPipeline(max_depth=2, enable_llm_pruning=True)")
     print(f"   results = pipeline.process_problem(header, clear_version, indices, sorry_map)")
     
     print(f"\n🎯 Key Features:")
     print(f"   - Two-phase processing (pickle + process)")
     print(f"   - Complete state isolation between holes")
+    print(f"   - LLM-based intelligent pruning")
     print(f"   - Automatic cleanup after each hole")
     print(f"   - No memory accumulation")
     print(f"   - Pure pickle-based approach")

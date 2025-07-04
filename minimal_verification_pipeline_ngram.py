@@ -48,9 +48,10 @@ class MinimalVerificationPipeline:
     Leverages existing decomposition results from DecomposeHoleMergePipeline
     """
     
-    def __init__(self, decomposition_base_dir: str = "decomposition_results", suffix: str = "_ngram"):
+    def __init__(self, decomposition_base_dir: str = "decomposition_results", suffix: str = "_ngram", enable_llm_pruning: bool = False):
         self.decomposition_base_dir = decomposition_base_dir
         self.suffix = suffix
+        self.enable_llm_pruning = enable_llm_pruning
     
     def _load_existing_results(self, dataset_name: str) -> Set[str]:
         """
@@ -102,12 +103,13 @@ class MinimalVerificationPipeline:
         except Exception as e:
             print(f"❌ Incremental save failed: {e}")
         
-    def process_problem_with_constraint(self, problem: Problem) -> MinimalVerificationResult:
+    def process_problem_with_constraint(self, problem: Problem, target_hole_id: Optional[str] = None) -> MinimalVerificationResult:
         """
         Process a single problem with strict verification constraint using existing decomposition results
         
         Args:
             problem: Problem to process
+            target_hole_id: Optional specific hole ID to process (if None, processes all holes)
             
         Returns:
             MinimalVerificationResult with constraint satisfaction info
@@ -141,6 +143,16 @@ class MinimalVerificationPipeline:
                     if hole_id and original_proof:
                         original_tactics[hole_id] = original_proof
                 print(f"📋 Loaded original tactics for {len(original_tactics)} holes")
+            
+            # 过滤点1：如果指定了target_hole_id，只保留目标hole的原始策略
+            if target_hole_id:
+                if target_hole_id in original_tactics:
+                    original_tactics = {target_hole_id: original_tactics[target_hole_id]}
+                    print(f"🎯 Filtering to target hole '{target_hole_id}' only")
+                else:
+                    print(f"⚠️  Target hole '{target_hole_id}' not found in decomposition data")
+                    print(f"   Available holes: {list(original_tactics.keys())}")
+                    # 继续执行，但original_tactics将为空
             
             # Load existing files
             header_path = os.path.join(decomp_dir, "header.lean")
@@ -197,6 +209,13 @@ class MinimalVerificationPipeline:
             for idx, sorry_info in session.sorry_map.items():
                 print(f"    {idx}: {sorry_info.macro_type} ({sorry_info.hole_id}) -> {'ENUM' if sorry_info.should_enumerate else 'SKIP'}")
             
+            # 过滤点2：如果指定了target_hole_id，只保留目标hole的sorry_index
+            if target_hole_id:
+                target_sorry_indices = [idx for idx, info in session.sorry_map.items() 
+                                       if info.hole_id == target_hole_id]
+                enumerable_indices = [idx for idx in enumerable_indices if idx in target_sorry_indices]
+                print(f"🎯 Filtered enumerable indices to target hole '{target_hole_id}': {enumerable_indices}")
+            
             print(f"  📊 {len(enumerable_indices)} enumerable holes, {len(session.skip_indices)} skip holes")
             
             # Test original tactics first
@@ -210,7 +229,8 @@ class MinimalVerificationPipeline:
                 print("🔍 Starting n-gram search with CleanNgramPipeline...")
                 ngram_pipeline = CleanNgramPipeline(
                     max_depth=2,  # N-gram depth, 2 for 2-gram
-                    stop_on_first_success=True
+                    stop_on_first_success=True,
+                    enable_llm_pruning=self.enable_llm_pruning
                 )
 
                 proofstep_results = ngram_pipeline.process_problem(
@@ -301,7 +321,8 @@ class MinimalVerificationPipeline:
             print(f"  🎯 No admits used: {no_admits_used}")
             
             # Save synthesized version to decomposed directory
-            synthesized_path = os.path.join(decomp_dir, f"synthesized_proof{self.suffix}.lean")
+            hole_suffix = f"_{target_hole_id}" if target_hole_id else ""
+            synthesized_path = os.path.join(decomp_dir, f"synthesized_proof{self.suffix}{hole_suffix}.lean")
             with open(synthesized_path, 'w') as f:
                 f.write(synthesized_content)
             print(f"  💾 Synthesized proof saved to: {synthesized_path}")
@@ -345,10 +366,11 @@ class MinimalVerificationPipeline:
             )
             
             # Save minimal verification result to decomposed directory
-            minimal_result_path = os.path.join(decomp_dir, f"minimal_verification{self.suffix}.json")
+            minimal_result_path = os.path.join(decomp_dir, f"minimal_verification{self.suffix}{hole_suffix}.json")
             minimal_result_data = {
                 "problem_id": result.problem_id,
                 "dataset": result.dataset,
+                "target_hole_id": target_hole_id,  # 记录处理的目标hole
                 "verification_count": result.verification_count,
                 "max_verifications": result.max_verifications,
                 "original_verification_pass": result.original_verification_pass,
@@ -617,8 +639,13 @@ Examples:
   python minimal_verification_pipeline.py dataset minif2f 10 --no-resume
   python minimal_verification_pipeline.py dataset demo --force-reprocess demo_complex_p1,demo_complex_p2
   python minimal_verification_pipeline.py problem demo demo_complex_p2
+  python minimal_verification_pipeline.py hole demo demo_complex_p1 hole_3
+  python minimal_verification_pipeline.py dataset demo 3 --llm-pruning
 """
     )
+    
+    # Global options
+    parser.add_argument('--llm-pruning', action='store_true', help='Enable LLM-based pruning for n-gram search')
     
     subparsers = parser.add_subparsers(dest='mode', help='Processing mode')
     
@@ -634,13 +661,19 @@ Examples:
     problem_parser.add_argument('dataset_name', help='Dataset name')
     problem_parser.add_argument('problem_id', help='Problem ID to process')
     
+    # Hole mode
+    hole_parser = subparsers.add_parser('hole', help='Process single hole in a problem')
+    hole_parser.add_argument('dataset_name', help='Dataset name')
+    hole_parser.add_argument('problem_id', help='Problem ID to process')
+    hole_parser.add_argument('hole_id', help='Hole ID to process (e.g., hole_3)')
+    
     args = parser.parse_args()
     
     if not args.mode:
         parser.print_help()
         return
 
-    pipeline = MinimalVerificationPipeline()
+    pipeline = MinimalVerificationPipeline(enable_llm_pruning=args.llm_pruning)
 
     if args.mode == "dataset":
         enable_resume = not args.no_resume
@@ -680,6 +713,26 @@ Examples:
         except Exception as e:
             import traceback
             print(f"❌ Error processing {problem.problem_id}: {e}")
+            traceback.print_exc()
+
+    elif args.mode == "hole":
+        problem = problem_manager.get_problem(args.dataset_name, args.problem_id)
+        if not problem:
+            print(f"Error: Problem '{args.problem_id}' not found in dataset '{args.dataset_name}'.")
+            return
+        
+        try:
+            print(f"🎯 Processing single hole: {args.dataset_name}/{args.problem_id}/{args.hole_id}")
+            result = pipeline.process_problem_with_constraint(problem, target_hole_id=args.hole_id)
+            
+            if result.constraint_satisfied:
+                print("\n🎉 CONSTRAINT SATISFIED!")
+            else:
+                print(f"\n⚠️  CONSTRAINT VIOLATION: {result.verification_count}/{result.max_verifications} verifications")
+
+        except Exception as e:
+            import traceback
+            print(f"❌ Error processing {problem.problem_id} hole {args.hole_id}: {e}")
             traceback.print_exc()
 
 if __name__ == "__main__":

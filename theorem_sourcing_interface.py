@@ -11,8 +11,9 @@ import json
 import subprocess
 from typing import List, Optional
 from dynamic_theorem_extractor import DynamicTheoremExtractor
+from functools import lru_cache
 
-
+@lru_cache(maxsize=10)
 def get_related_theorems(dataset: str, problem: str, 
                         hole_id: Optional[str] = None,
                         force_refresh: bool = False) -> List[str]:
