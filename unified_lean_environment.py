@@ -1,4 +1,5 @@
 from lean_interact import LocalProject, TempRequireProject, LeanREPLConfig, LeanServer, Command
+from global_config import project_repl_config
 from typing import Dict
 import timeout_decorator
 
@@ -10,7 +11,7 @@ class UnifiedLeanEnvironment:
     """
     
     def __init__(self):
-        self.config = LeanREPLConfig(local_repl_path = "/Users/sjm/coding/projects/Newton/repl", lean_version="v4.21.0-rc3", project=TempRequireProject("mathlib"))
+        self.config = project_repl_config
         self.server = LeanServer(self.config)
         self._header_envs: Dict[str, str] = {}  # header_content -> env_id
     

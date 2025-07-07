@@ -9,7 +9,7 @@ Based on the #find_in_ns command approach.
 
 from typing import List, Dict
 from lean_interact import Command, LeanServer, LeanREPLConfig, TempRequireProject
-
+from global_config import project_repl_config
 
 class DynamicTheoremExtractor:
     """
@@ -17,13 +17,9 @@ class DynamicTheoremExtractor:
     instead of parsing static files.
     """
     
-    def __init__(self, repl_path: str = "/Users/sjm/coding/projects/Newton/repl"):
+    def __init__(self):
         """Initialize the extractor with lean_interact configuration."""
-        self.config = LeanREPLConfig(
-            local_repl_path=repl_path,
-            lean_version="v4.21.0-rc3",
-            project=TempRequireProject("mathlib")
-        )
+        self.config = project_repl_config
         self.server = None
         self._setup_commands = None
     

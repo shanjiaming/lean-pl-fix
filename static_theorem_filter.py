@@ -5,9 +5,7 @@ import argparse
 from pathlib import Path
 import traceback
 import glob
-
-# Define the base path for the mathlib4 source code
-MATHLIB_BASE_PATH = "~/miniconda3/lib/python3.13/site-packages/lean_interact/cache/tmp_projects/v4.21.0-rc3/1e05fd82f2c4fc489117f059ac17237437a6dbc201ad266e76e4f63abf7f4e88/.lake/packages/mathlib"
+from global_config import MATHLIB_BASE_PATH
 
 def module_to_path(module_name: str, base_path: str) -> Path | None:
     """Converts a Lean module name (e.g., Mathlib.Data.Nat.Basic) to a file path."""
