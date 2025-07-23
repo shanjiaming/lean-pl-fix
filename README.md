@@ -18,6 +18,12 @@ This project is a streamlined Lean 4 theorem proving automation system focused o
 - **Decomposition Strategy**: Structured decomposition based on `have by` blocks
 - **Core Files**: `decompose_hole_merge_pipeline.py`, `decompose_solver.py`, `minimal_verification_pipeline.py`
 
+### 4. Verification
+- **Functionality**: See whether original AI proof can or cannot work in the corresponding hole.
+- **Strategy**: Proofstep(AI proof) on the hole
+- **Core Files**: `minimal_verification_pipeline.py`, `proofstate_cache.py`, `proofstep_integration.py`, `proofstep_lean_integration.py`
+
+
 ## 🏗️ System Architecture
 
 ```
@@ -170,6 +176,8 @@ lean-theorem-prover/
 pip install -r requirements.txt
 ```
 
+Lean4 installation should be done when you are installing lean-interact.
+
 ### API Configuration
 
 Create `.env` file to configure OpenRouter API:
@@ -178,10 +186,8 @@ Create `.env` file to configure OpenRouter API:
 OPENROUTER_API_KEY=your_api_key_here
 ```
 
-### Lean Environment
+This is used to produce AI-generated proof.
 
-Ensure Lean 4 and Lake are installed:
-- Refer to [Lean 4 Installation Guide](https://leanprover.github.io/lean4/doc/setup.html)
 
 ## 🔧 Unified Batch Processor
 
@@ -197,23 +203,3 @@ python unified_batch_processor.py full
 # For specific dataset
 python unified_batch_processor.py dataset --dataset demo --operations migrate decompose
 ```
-
-## ⚠️ Important Notes
-
-- **Streamlined Version**: N-gram enumeration and theorem name correction features have been removed
-- **Supported Datasets**: Only Demo and Putnam datasets are supported
-- **Processing Recommendations**: Use `limit` parameter to limit processing quantity to avoid long processing times
-- **API Limitations**: Proof generation requires API key and has rate limits
-
-## 🎯 Use Cases
-
-- **Research and Learning**: Understand basic workflows of Lean theorem proving automation
-- **Prototype Development**: Use as foundation framework for more complex systems
-- **Teaching Demonstrations**: Showcase core concepts of AI-assisted theorem proving
-- **Quick Verification**: Quick testing on small-scale problem sets
-
-## 📚 Related Resources
-
-- [Lean 4 Documentation](https://leanprover.github.io/lean4/doc/)
-- [Putnam Competition Problems](https://artofproblemsolving.com/wiki/index.php/Putnam_Problems)
-- [DeepSeek Prover V2](https://openrouter.ai/models/deepseek/deepseek-prover-v2)
