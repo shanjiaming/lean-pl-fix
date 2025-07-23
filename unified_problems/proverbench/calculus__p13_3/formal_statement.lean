@@ -1,1 +1,0 @@
-lemma derivative_value_at_pi_over_3 : (2 * (1 / cos (π / 3)) ^ 2 * tan (π / 3)) = 8 * Real.sqrt 3 :=

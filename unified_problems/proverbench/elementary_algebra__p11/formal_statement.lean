@@ -1,1 +1,0 @@
-theorem power_and_factorial_range : ∀ (n : ℕ), n > 0 → (5^n > n.factorial ↔ n ≤ 11) :=

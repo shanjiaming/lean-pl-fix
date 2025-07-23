@@ -1,1 +1,0 @@
-lemma derivative_f : ∀ x ∈ Set.Ioo 0 8, HasDerivAt f ((1/3 : ℝ) * (8 * x - x^2)^(-2/3 : ℝ) * (8 - 2 * x)) x :=

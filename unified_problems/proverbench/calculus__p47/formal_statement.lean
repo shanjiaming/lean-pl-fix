@@ -1,1 +1,0 @@
-theorem integral_of_integrand2 : ∃ F : ℝ → ℝ, ∀ x : ℝ, (deriv F x = integrand x) ∧ F x = (1 / 2) * Real.log (x^2 + 1) + C :=

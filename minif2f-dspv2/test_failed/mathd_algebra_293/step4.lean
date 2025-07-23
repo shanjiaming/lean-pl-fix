@@ -1,1 +1,0 @@
-theorem h₂ (x : NNReal) : 0 ≤ 60 * (↑x : ℝ) := by positivity

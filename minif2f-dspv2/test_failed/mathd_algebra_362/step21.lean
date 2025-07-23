@@ -1,6 +1,0 @@
-theorem h₁₇ (a b : ℝ) (h₀ : a ^ 2 * b ^ 3 = 32 / 27) (h₁ : a / b ^ 3 = 27 / 4) (hb3 : b ≠ 0) (a_eq : a = 27 / 4 * b ^ 3) (b9_eq h₂ : b ^ 9 = (2 / 3) ^ 9) (h₅ : ¬b > 0) (h₇ : ¬b < 0) (h₈ : b ≥ 0) (h₁₀ : ¬b = 0) (h₁₂ : ¬b > 0) (h₁₄ : ¬b < 0) (h₁₅ : b ≥ 0) (h₁₆ : b ≠ 0) : b > 0 := by
-  apply lt_of_le_of_ne
-  · linarith
-  · intro h₁₈
-    apply h₁₆
-    linarith

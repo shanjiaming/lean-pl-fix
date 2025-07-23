@@ -1,1 +1,0 @@
-lemma f_one_eq_zero : Polynomial.IsRoot f 1 :=

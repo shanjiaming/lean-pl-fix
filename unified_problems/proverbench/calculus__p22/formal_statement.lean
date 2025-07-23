@@ -1,1 +1,0 @@
-theorem integral_of_polynomial : ∫ x in Set.Icc 3 9, f x = 216 :=

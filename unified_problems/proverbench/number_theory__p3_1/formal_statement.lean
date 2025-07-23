@@ -1,1 +1,0 @@
-lemma solve_congruence1_and_2 (m : ℕ) : ∃ n : ℕ, congruence1 n ∧ congruence2 n ∧ n = 15 * m + 8 :=

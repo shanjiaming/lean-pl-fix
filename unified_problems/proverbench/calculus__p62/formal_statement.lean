@@ -1,1 +1,0 @@
-theorem integral_f_eq (x C : ℝ):  ∫  x, f x = -Real.sqrt (49 - x^2) + C :=

@@ -1,1 +1,0 @@
-lemma f_differentiable : DifferentiableOn ℝ f (Set.Ioo 0 8) :=

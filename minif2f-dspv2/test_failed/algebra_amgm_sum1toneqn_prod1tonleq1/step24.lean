@@ -1,1 +1,0 @@
-theorem h₃ (a : ℕ → NNReal) (n : ℕ) (h₀ : ∑ x ∈ Finset.range n, a x = (↑n : NNReal)) (h₁ : ∏ x ∈ Finset.range n, (↑(a x) : ℝ) ≤ 1) : (↑(∏ x ∈ Finset.range n, a x) : ℝ) ≤ 1 := by exact h₁

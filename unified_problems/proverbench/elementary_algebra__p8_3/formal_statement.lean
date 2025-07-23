@@ -1,1 +1,0 @@
-lemma simplify_LHS_numerator : 2 * sqrt 13 - 5 * sqrt 65 = (2 - 5 * sqrt 5) * sqrt 13 :=

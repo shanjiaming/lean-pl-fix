@@ -1,1 +1,0 @@
-theorem function_evaluation_example : f 7 1 = 56 :=

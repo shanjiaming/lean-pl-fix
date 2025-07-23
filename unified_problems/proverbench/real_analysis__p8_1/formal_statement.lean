@@ -1,1 +1,0 @@
-lemma positivity_of_square_plus_one (x : ℝ) : 0 < x^2 + 1 :=

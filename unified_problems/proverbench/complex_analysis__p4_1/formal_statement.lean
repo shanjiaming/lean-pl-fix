@@ -1,1 +1,0 @@
-theorem i_pow_73 : I ^ 73 = I :=

@@ -1,1 +1,0 @@
-theorem h₃₁ (m n p q : ℝ) (h₀ : p = 2 ^ m) (h₁ : q = 3 ^ n) (h₂ : p ^ (2 * n) = 2 ^ (m * (2 * n))) : 3 ^ n > 0 := by positivity

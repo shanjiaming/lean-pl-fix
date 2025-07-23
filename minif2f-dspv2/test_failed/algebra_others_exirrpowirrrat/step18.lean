@@ -1,1 +1,0 @@
-theorem h₅₃ (h h₁ : Irrational (√2 ^ √2)) (h₂ : Irrational √2) (h₃ : √2 ^ √2 > 0) (h₄ : (√2 ^ √2) ^ √2 = 2) (h₅₁ h₅₂ : Irrational ((√2 ^ √2) ^ √2)) : Irrational 2 := by simpa [h₄] using h₅₂

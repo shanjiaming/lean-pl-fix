@@ -1,204 +1,219 @@
-# 项目概览
+# Lean Theorem Proving Automation System (Streamlined Version)
 
-本项目是一个正在开发中的流水线，旨在自动化 Lean 4 定理的证明过程。它涵盖了从问题生成到证明分解，再到验证的整个流程。
+This project is a streamlined Lean 4 theorem proving automation system focused on three core functionalities. This version has removed complex enumeration and correction features to maintain system simplicity and maintainability.
 
-## 核心功能
+## 🎯 Three Core Functionalities
 
-### 1. 证明生成
+### 1. Proof Generation
+- **Functionality**: Generate Lean 4 theorem proofs for mathematical problems using AI (DeepSeek Prover V2)
+- **Core Files**: `generate_putnam.py`, `dpv2_solver.py`, `unified_lean_environment.py`
 
-- **功能**: AI 根据给定的问题生成定理证明。
+### 2. Dataset Integration
+- **Functionality**: Unified management of multiple datasets, supporting problem migration and batch processing
+- **Supported Datasets**: Demo dataset, Putnam competition problems
+- **Core Files**: `unified_problem_manager.py`, `dataset_migration.py`, `migrate_demo.py`
 
-### 2. 定理名修正 (待完善)
+### 3. Proof Decomposition
+- **Functionality**: Decompose AI-generated proofs into "skeleton" form and a series of "holes", supporting simple verification pipeline
+- **Decomposition Strategy**: Structured decomposition based on `have by` blocks
+- **Core Files**: `decompose_hole_merge_pipeline.py`, `decompose_solver.py`, `minimal_verification_pipeline.py`
 
-- **功能**: 修复 AI 在生成证明时可能出现的定理名"幻觉"问题。
-- **当前方法**: 基于相关定理的 BLEU 分数进行近义词修复。
+## 🏗️ System Architecture
 
-### 3. 数据集集成
-
-- **功能**: 将已解决的问题及其 AI 生成的证明添加到数据集中。
-
-### 4. 证明分解 (Decomposition)
-
-- **功能**: 将 AI 生成的证明分解为"骨架"形式和一系列待填充的"空洞（hole）"。
-- **当前策略**: 基于 `LeanRepl` 的 `all_tactics` 获取 `have by` 块之间的关系。每个 `by` 块的"空洞"定义为其最后一个子 `have` 块之后的所有单句策略（tactic）。
-
-### 5. 空洞填充与枚举
-
-- **功能**: 针对每个"空洞"，枚举所有可能的证明程序。
-- **当前算法**: 使用 N-gram 搜索算法。
-- **可用策略（tactics）**: `norm_num`, `linarith`, `nlinarith`, `omega`, `ring`, `ring_nf`, `simp`, `simpa`, `field_simp`, `positivity`, `norm_cast` 或 `rw[相关定理]`。
-- **终端策略（Terminal Tactics）**: `linarith`, `nlinarith`, `omega`。这些策略不能出现在"空洞"中非最后一个策略的位置。
-- **实现细节** 采用lean repl的Proofstate来管理枚举到的状态，这样就不用每次都从头跑了。
-
-### 6. 证明状态管理
-
-- **功能**: 使用定制的 Lean REPL 和 Lean Interact 版本清理证明状态，防止搜索过程中出现内存溢出。
-- **优化**: 如果搜索到已遇到的证明状态，则进行剪枝。此外，LLM 会判断当前步骤是否更接近目标，若否，则进行剪枝。
-
-## TODOs
-
-- 增大搜索空间。
-- 改进解析方式（`all_tactic` 的解析存在不足）。
-
-## 如何运行
-
-### 快速开始 (Demo数据集)
-
-如果你想快速测试系统功能，建议使用demo数据集：
-
-```bash
-# 1. 确保demo数据迁移到统一结构
-python migrate_demo.py
-
-# 2. 生成holes（处理前5个问题）
-python decompose_hole_merge_pipeline.py dataset demo 5
-
-# 3. 运行N-gram枚举流水线（处理前3个问题）
-python minimal_verification_pipeline_ngram.py dataset demo 3
+```
+Proof Generation → Dataset Integration → Proof Decomposition → Verification
+       ↓                    ↓                      ↓               ↓
+   AI Generated         Unified                Structured        Simple
+     Proofs           Management              Decomposition    Verification
 ```
 
-这个流程大约需要几分钟时间，会在 `decomposition_results/demo/` 中生成完整的分析结果。
+## 🚀 Quick Start
 
-### 详细步骤
+### End-to-End Workflow (Demo Dataset)
 
-1. **生成 AI 证明**:
-   使用 `generate_putnam.py` 生成 AI 证明。
-   
-   **基本用法**:
-   ```bash
-   python generate_putnam.py
-   ```
-   
-   **注意**:
-   - 该脚本会自动从 `dataset/putnam.jsonl` 读取问题
-   - 生成的证明保存到 `dataset/putnam/` 目录
-   - 如果文件已存在，会自动跳过以避免重复生成
-   - 使用多线程处理，默认最多50个并发请求
-   - 内置API频率限制：每60秒最多50次请求
-   
-   **输出示例**:
-   - 生成的文件：`dataset/putnam/putnam_YYYY_XX.lean`
-   - 控制台会显示跳过和成功生成的文件信息
+Use the Demo dataset to experience the complete workflow:
 
-2. **修复幻觉定理 (待修复)**:
-   使用 `replace_unknown.py` 来修复幻觉定理。
+```bash
+# Method 1: Use unified batch processor for complete workflow
+python unified_batch_processor.py full
 
-3. **数据集迁移**:
-   通过 `migrate_demo.py` 或 `dataset_migration.py` 将问题和 AI 生成的答案添加到数据集中。
-   
-   **Demo数据集迁移** (小规模测试):
-   ```bash
-   python migrate_demo.py
-   ```
-   - 读取 `demo/` 目录中的所有 `.lean` 文件
-   - 自动拆分为 header 和 problem 部分
-   - 输出到 `unified_problems/demo/` 结构
-   
-   **正式数据集迁移** (大规模数据集):
-   ```bash
-   # 迁移 minif2f 数据集
-   python dataset_migration.py minif2f
-   
-   # 迁移 putnam 数据集
-   python dataset_migration.py putnam
-   
-   # 迁移 proverbench 数据集
-   python dataset_migration.py proverbench
-   
-   # 迁移所有数据集
-   python dataset_migration.py all
-   ```
-   
-   **迁移结果**:
-   - 统一存储在 `unified_problems/<dataset_name>/` 目录
-   - 每个问题包含 `header.lean` 和 `problem.lean` 文件
-   - 生成元数据文件 `unified_problems_metadata.json`
+# Method 2: Step-by-step execution
+# 1. Migrate Demo dataset
+python migrate_demo.py
 
-4. **证明分解**:
-   通过 `decompose_hole_merge_pipeline.py` 将 AI 生成的答案分解为骨架加空洞的形式。
-   
-   **处理整个数据集** (建议限制数量以避免耗时过久):
-   ```bash
-   # Demo数据集（处理前5个文件）
-   python decompose_hole_merge_pipeline.py dataset demo 5
-   
-   # Putnam数据集（处理前10个文件）
-   python decompose_hole_merge_pipeline.py dataset putnam 10
-   
-   # Minif2f数据集（处理前3个文件）
-   python decompose_hole_merge_pipeline.py dataset minif2f 3
-   ```
-   
-   **处理单个问题**:
-   ```bash
-   # 处理demo数据集中的特定问题
-   python decompose_hole_merge_pipeline.py problem demo demo_complex_p1
-   
-   # 处理putnam数据集中的特定问题
-   python decompose_hole_merge_pipeline.py problem putnam putnam_2007_b6
-   ```
-   
-   **输出结果**:
-   - 结果保存在 `decomposition_results/<dataset_name>/decomposed/<problem_id>/`
-   - 包含文件：
-     - `header.lean`: 导入和声明
-     - `problem.lean`: 原始问题
-     - `hole_version.lean`: 带hole_X占位符的版本
-     - `decomposition.json`: 包含原始策略信息的元数据
-   - 生成汇总报告：`<dataset_name>_pipeline_results.json`
+# 2. Generate proof decomposition (process first 5 problems)
+python decompose_hole_merge_pipeline.py dataset demo 5
 
-5. **运行对每个hole进行枚举的流水线**:
-   在拥有带空洞形式的数据集后，使用 N-gram 搜索算法填充空洞。
-   
-   **处理整个数据集**:
-   ```bash
-   # Demo数据集（处理前3个问题）
-   python minimal_verification_pipeline_ngram.py dataset demo 3
-   
-   # 启用LLM剪枝功能（可提高效率但增加成本）
-   python minimal_verification_pipeline_ngram.py dataset demo 3 --llm-pruning
-   
-   # 不使用恢复功能（从头开始）
-   python minimal_verification_pipeline_ngram.py dataset demo 3 --no-resume
-   
-   # 强制重新处理特定问题
-   python minimal_verification_pipeline_ngram.py dataset demo --force-reprocess demo_complex_p1,demo_complex_p2
-   ```
-   
-   **处理单个问题**:
-   ```bash
-   # 处理特定问题
-   python minimal_verification_pipeline_ngram.py problem demo demo_complex_p2
-   
-   # 处理putnam问题
-   python minimal_verification_pipeline_ngram.py problem putnam putnam_2007_b6
-   ```
-   
-   **处理单个空洞**:
-   ```bash
-   # 针对特定空洞进行调试
-   python minimal_verification_pipeline_ngram.py hole demo demo_complex_p1 hole_3
-   ```
-   
-   **输出结果**:
-   - N-gram搜索结果：`ngram_search_results/`
-   - 检查点文件：`ngram_checkpoints/<problem_id>_ngram_checkpoint.json`
-   - 汇总报告：`<dataset_name>_minimal_verification_summary_ngram.json`
-   - 详细日志：包含每个空洞的搜索过程和结果
-   
-   **可用选项**:
-   - `--llm-pruning`: 启用LLM基的搜索空间剪枝
-   - `--no-resume`: 禁用检查点恢复功能
-   - `--force-reprocess`: 强制重新处理指定问题（逗号分隔）
-   
-   **查看完整帮助**:
-   ```bash
-   python minimal_verification_pipeline_ngram.py --help
-   ```
+# 3. Run simple verification pipeline
+python minimal_verification_pipeline.py dataset demo 5
+```
 
-## 重要注意事项
+### Individual Function Testing
 
-- **数据集规模很大**：`minif2f`、`putnam`和`proverbench`数据集包含大量文件，全量处理会耗费大量时间
-- **单个问题也耗时**：即使是单个问题的处理也可能需要几分钟到几十分钟
-- **建议使用限制**：在测试阶段使用 `limit` 参数限制处理的文件数量
-- **检查点功能**：系统支持中断恢复，中断后可以从上次停止的地方继续
+```bash
+# Proof generation only (requires API key)
+python generate_putnam.py
+
+# Dataset migration only
+python unified_batch_processor.py migrate
+
+# Proof decomposition only
+python unified_batch_processor.py decompose
+```
+
+## 📋 Detailed Usage Guide
+
+### 1. Proof Generation
+
+Generate proofs for Putnam competition problems using AI:
+
+```bash
+python generate_putnam.py
+```
+
+**Features**:
+- Automatically reads problems from `dataset/putnam.jsonl`
+- Generated proofs saved to `dataset/putnam/` directory
+- Automatically skips existing files to avoid regeneration
+- Supports multi-threading with built-in API rate limiting
+
+### 2. Dataset Integration
+
+**Demo Dataset Migration** (small-scale testing):
+```bash
+python migrate_demo.py
+```
+- Reads all `.lean` files from `demo/` directory
+- Automatically splits into header and problem parts
+- Outputs to `unified_problems/demo/` structure
+
+**Putnam Dataset Migration**:
+```bash
+python dataset_migration.py putnam
+```
+
+**Batch Migration**:
+```bash
+python unified_batch_processor.py migrate
+```
+
+### 3. Proof Decomposition
+
+Decompose AI-generated proofs into structured form:
+
+**Process Entire Dataset** (recommended with limit):
+```bash
+# Demo dataset (process first 5 files)
+python decompose_hole_merge_pipeline.py dataset demo 5
+
+# Putnam dataset (process first 10 files)
+python decompose_hole_merge_pipeline.py dataset putnam 10
+```
+
+**Process Individual Problems**:
+```bash
+# Process specific problem in demo dataset
+python decompose_hole_merge_pipeline.py problem demo demo_complex_p1
+
+# Process specific problem in putnam dataset
+python decompose_hole_merge_pipeline.py problem putnam putnam_2007_b6
+```
+
+**Output Results**:
+- Results saved in `decomposition_results/<dataset_name>/decomposed/<problem_id>/`
+- Contains files:
+  - `header.lean`: Imports and declarations
+  - `problem.lean`: Original problem
+  - `hole_version.lean`: Version with hole_X placeholders
+  - `decomposition.json`: Metadata containing original tactic information
+
+### 4. Simple Verification Pipeline
+
+Run simple verification and testing:
+
+```bash
+# Demo dataset (process first 5 problems)
+python minimal_verification_pipeline.py dataset demo 5
+
+# Process individual problem
+python minimal_verification_pipeline.py problem demo demo_complex_p1
+```
+
+## 📁 Project Structure
+
+```
+lean-theorem-prover/
+├── 📁 Core Functionality
+│   ├── generate_putnam.py           # Proof generation
+│   ├── dpv2_solver.py              # AI solver
+│   ├── unified_problem_manager.py   # Unified problem management
+│   ├── dataset_migration.py         # Dataset migration
+│   ├── decompose_hole_merge_pipeline.py  # Decomposition pipeline
+│   └── minimal_verification_pipeline.py  # Verification pipeline
+├── 📁 Datasets (Retained Only)
+│   ├── demo/                       # Demo dataset
+│   ├── dataset/putnam/             # Putnam dataset
+│   └── unified_problems/           # Unified structure data
+├── 📁 Results Output
+│   └── decomposition_results/      # Decomposition results
+└── 📁 Configuration Files
+    ├── requirements.txt            # Streamlined dependencies
+    ├── lakefile.lean              # Lean project configuration
+    └── lean-toolchain             # Lean toolchain
+```
+
+## ⚙️ Environment Setup
+
+### Dependency Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+### API Configuration
+
+Create `.env` file to configure OpenRouter API:
+
+```env
+OPENROUTER_API_KEY=your_api_key_here
+```
+
+### Lean Environment
+
+Ensure Lean 4 and Lake are installed:
+- Refer to [Lean 4 Installation Guide](https://leanprover.github.io/lean4/doc/setup.html)
+
+## 🔧 Unified Batch Processor
+
+Use `unified_batch_processor.py` for batch operations:
+
+```bash
+# Show system status
+python unified_batch_processor.py status
+
+# Run complete workflow
+python unified_batch_processor.py full
+
+# For specific dataset
+python unified_batch_processor.py dataset --dataset demo --operations migrate decompose
+```
+
+## ⚠️ Important Notes
+
+- **Streamlined Version**: N-gram enumeration and theorem name correction features have been removed
+- **Supported Datasets**: Only Demo and Putnam datasets are supported
+- **Processing Recommendations**: Use `limit` parameter to limit processing quantity to avoid long processing times
+- **API Limitations**: Proof generation requires API key and has rate limits
+
+## 🎯 Use Cases
+
+- **Research and Learning**: Understand basic workflows of Lean theorem proving automation
+- **Prototype Development**: Use as foundation framework for more complex systems
+- **Teaching Demonstrations**: Showcase core concepts of AI-assisted theorem proving
+- **Quick Verification**: Quick testing on small-scale problem sets
+
+## 📚 Related Resources
+
+- [Lean 4 Documentation](https://leanprover.github.io/lean4/doc/)
+- [Putnam Competition Problems](https://artofproblemsolving.com/wiki/index.php/Putnam_Problems)
+- [DeepSeek Prover V2](https://openrouter.ai/models/deepseek/deepseek-prover-v2)

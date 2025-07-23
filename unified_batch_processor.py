@@ -3,8 +3,8 @@
 Unified Batch Processor for Lean Problem Management
 
 This script provides a unified interface for managing all operations on the
-unified problem management system, including migration, solving, hole generation,
-and decomposition.
+unified problem management system, including migration and decomposition.
+Streamlined version supporting only demo and putnam datasets.
 """
 
 import os
@@ -14,26 +14,22 @@ from pathlib import Path
 
 # Import all necessary modules
 from unified_problem_manager import problem_manager
-from dataset_migration import migrate_minif2f, migrate_proverbench, migrate_putnam, show_migration_summary
-from dpv2_batch_solver import batch_fix_unified, batch_fix_dataset
-from substep_saver_hole import generate_holes_for_dataset, generate_holes_for_all
-from substep_saver_decompose import generate_decomposed_for_dataset, generate_decomposed_for_all
+from dataset_migration import migrate_putnam, show_migration_summary
+import migrate_demo
+from decompose_hole_merge_pipeline import DecomposeHoleMergePipeline
 
 
 def migrate_all_datasets():
-    """Migrate all datasets to unified structure"""
-    print("=== Starting Dataset Migration ===")
+    """Migrate all datasets to unified structure - streamlined version"""
+    print("=== Starting Dataset Migration (Demo + Putnam) ===")
     
     # Create backup first
     print("Creating backups...")
     os.makedirs("backups", exist_ok=True)
     
     # Migrate each dataset
-    print("Migrating minif2f...")
-    migrate_minif2f()
-    
-    print("Migrating proverbench...")
-    migrate_proverbench()
+    print("Migrating demo...")
+    migrate_demo.migrate_demo_dataset()
     
     print("Migrating putnam...")
     migrate_putnam()
@@ -48,43 +44,58 @@ def migrate_all_datasets():
     print("=== Migration Complete ===")
 
 
-def solve_all_problems():
-    """Solve all problems using DPv2"""
-    print("=== Starting Problem Solving ===")
-    batch_fix_unified()
-    print("=== Problem Solving Complete ===")
-
-
-def generate_all_holes():
-    """Generate hole versions for all problems"""
-    print("=== Starting Hole Generation ===")
-    generate_holes_for_all()
-    print("=== Hole Generation Complete ===")
-
-
-def generate_all_decomposed():
-    """Generate decomposed versions for all problems"""
-    print("=== Starting Decomposition ===")
-    generate_decomposed_for_all()
-    print("=== Decomposition Complete ===")
+def decompose_all_problems():
+    """Decompose all problems using the streamlined pipeline"""
+    print("=== Starting Problem Decomposition ===")
+    
+    # Initialize pipeline
+    pipeline = DecomposeHoleMergePipeline()
+    
+    # Process problems for each dataset
+    datasets = ['demo', 'putnam']
+    
+    for dataset in datasets:
+        print(f"Decomposing problems for dataset: {dataset}")
+        try:
+            problems = problem_manager.get_problems_by_dataset(dataset)
+            print(f"Found {len(problems)} problems in {dataset}")
+            
+            for problem in problems:
+                result = pipeline.process_problem(problem)
+                print(f"✓ Processed {problem.problem_id}")
+                
+            print(f"✓ Completed decomposition for {dataset}")
+        except Exception as e:
+            print(f"✗ Error decomposing {dataset}: {e}")
+    
+    print("=== Problem Decomposition Complete ===")
 
 
 def process_dataset(dataset_name: str, operations: list):
-    """Process a specific dataset with given operations"""
+    """Process a specific dataset with given operations - streamlined version"""
+    if dataset_name not in ['demo', 'putnam']:
+        print(f"Error: Only 'demo' and 'putnam' datasets are supported")
+        return
+        
     print(f"=== Processing Dataset: {dataset_name} ===")
     
+    # Initialize pipeline
+    pipeline = DecomposeHoleMergePipeline()
+    
     for operation in operations:
-        if operation == "solve":
-            print(f"Solving problems in {dataset_name}...")
-            batch_fix_dataset(dataset_name)
-        elif operation == "holes":
-            print(f"Generating holes for {dataset_name}...")
-            generate_holes_for_dataset(dataset_name)
+        if operation == "migrate":
+            print(f"Migrating {dataset_name}...")
+            if dataset_name == "demo":
+                migrate_demo.migrate_demo_dataset()
+            elif dataset_name == "putnam":
+                migrate_putnam()
         elif operation == "decompose":
-            print(f"Generating decomposed versions for {dataset_name}...")
-            generate_decomposed_for_dataset(dataset_name)
+            print(f"Decomposing problems for {dataset_name}...")
+            problems = problem_manager.get_problems_by_dataset(dataset_name)
+            for problem in problems:
+                pipeline.process_problem(problem)
         else:
-            print(f"Unknown operation: {operation}")
+            print(f"Unknown operation: {operation}. Supported: migrate, decompose")
     
     print(f"=== Dataset {dataset_name} Processing Complete ===")
 
@@ -128,68 +139,51 @@ def show_status():
         print(f"  {dataset}: {holes_count} holes, {decomposed_count} decomposed")
 
 
-def full_pipeline():
-    """Run the complete pipeline: migrate -> solve -> generate holes -> decompose"""
-    print("=== Running Full Pipeline ===")
-    
-    migrate_all_datasets()
-    solve_all_problems()
-    generate_all_holes()
-    generate_all_decomposed()
-    
-    print("=== Full Pipeline Complete ===")
-    show_status()
-
-
 def main():
+    """Main entry point for the streamlined batch processor"""
     parser = argparse.ArgumentParser(
-        description="Unified Batch Processor for Lean Problem Management",
+        description="Streamlined Batch Processor for Lean Problem Management (Demo + Putnam)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python unified_batch_processor.py migrate          # Migrate all datasets
-  python unified_batch_processor.py solve            # Solve all problems
-  python unified_batch_processor.py holes            # Generate holes for all
-  python unified_batch_processor.py decompose        # Generate decomposed for all
+  python unified_batch_processor.py migrate          # Migrate demo + putnam datasets
+  python unified_batch_processor.py decompose        # Decompose all problems
   python unified_batch_processor.py status           # Show system status
   python unified_batch_processor.py full             # Run complete pipeline
-  python unified_batch_processor.py dataset minif2f solve holes  # Process specific dataset
+  python unified_batch_processor.py dataset --dataset demo --operations migrate decompose
         """
     )
     
     parser.add_argument('command', choices=[
-        'migrate', 'solve', 'holes', 'decompose', 'status', 'full', 'dataset'
+        'migrate', 'decompose', 'status', 'full', 'dataset'
     ], help='Command to execute')
     
-    parser.add_argument('dataset_name', nargs='?', 
+    parser.add_argument('--dataset', choices=['demo', 'putnam'],
                        help='Dataset name (required for dataset command)')
     
-    parser.add_argument('operations', nargs='*', 
-                       choices=['solve', 'holes', 'decompose'],
+    parser.add_argument('--operations', nargs='+', choices=['migrate', 'decompose'],
                        help='Operations to perform on dataset')
     
     args = parser.parse_args()
     
     if args.command == 'migrate':
         migrate_all_datasets()
-    elif args.command == 'solve':
-        solve_all_problems()
-    elif args.command == 'holes':
-        generate_all_holes()
     elif args.command == 'decompose':
-        generate_all_decomposed()
+        decompose_all_problems()
     elif args.command == 'status':
         show_status()
     elif args.command == 'full':
-        full_pipeline()
+        print("Running complete streamlined pipeline...")
+        migrate_all_datasets()
+        decompose_all_problems()
+        print("Complete pipeline finished!")
+        show_status()
     elif args.command == 'dataset':
-        if not args.dataset_name:
-            print("Error: dataset_name is required for dataset command")
+        if not args.dataset or not args.operations:
+            print("Error: --dataset and --operations required for dataset command")
+            print("Example: python unified_batch_processor.py dataset --dataset demo --operations migrate decompose")
             sys.exit(1)
-        if not args.operations:
-            print("Error: at least one operation is required for dataset command")
-            sys.exit(1)
-        process_dataset(args.dataset_name, args.operations)
+        process_dataset(args.dataset, args.operations)
     else:
         parser.print_help()
 

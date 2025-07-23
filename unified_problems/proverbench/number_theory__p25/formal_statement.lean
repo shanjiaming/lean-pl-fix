@@ -1,1 +1,0 @@
-theorem divisibility_by_37 (x y : ℕ) (h : 37 ∣ 15 * x + 11 * y) : 37 ∣ 7 * x + 15 * y :=

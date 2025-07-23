@@ -1,1 +1,0 @@
-¬ (Tendsto (fun x => if x ≠ 0 then (1 - Real.cos x) / x^2 else 1/2) (𝓝 0) (𝓝 (1/2)) )
